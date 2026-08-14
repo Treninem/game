@@ -1,290 +1,373 @@
 extends Node3D
 
-const CITY_NPC := preload("res://scripts/city_npc.gd")
+const CAPITAL := preload("res://scripts/capital_data.gd")
 
-var materials: Dictionary = {}
+const CELL_SIZE := 192.0
+const LOAD_RADIUS_CELLS := 2
+const UNLOAD_RADIUS := 620.0
+const MAX_CELL_BUILDS_PER_FRAME := 1
+const CITY_SEED := 470219
+const MODULE_WIDTH := 2.0
+const STORY_HEIGHT := 3.12
+
+const ASSET_ROOT := "res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/"
+const ASSET_PATHS := {
+    "wall_plaster": ASSET_ROOT + "Wall_Plaster_Straight.gltf",
+    "door_plaster": ASSET_ROOT + "Wall_Plaster_Door_Round.gltf",
+    "window_plaster": ASSET_ROOT + "Wall_Plaster_Window_Wide_Round.gltf",
+    "wall_brick": ASSET_ROOT + "Wall_UnevenBrick_Straight.gltf",
+    "door_brick": ASSET_ROOT + "Wall_UnevenBrick_Door_Round.gltf",
+    "window_brick": ASSET_ROOT + "Wall_UnevenBrick_Window_Wide_Round.gltf",
+    "roof": ASSET_ROOT + "Roof_RoundTiles_8x8.gltf",
+    "wagon": ASSET_ROOT + "Prop_Wagon.gltf",
+    "crate": ASSET_ROOT + "Prop_Crate.gltf"
+}
+
+const OPEN_DISTRICTS := {
+    "central": true,
+    "starter": true,
+    "arena": true,
+    "hippodrome": true,
+    "farms": true,
+    "canals": true,
+    "port": true
+}
+
 var player: Node3D
+var materials: Dictionary = {}
+var assets: Dictionary = {}
+var loaded_cells: Dictionary = {}
+var pending_cells: Array[Vector2i] = []
+var queued_cells: Dictionary = {}
+var last_player_cell := Vector2i(999999, 999999)
+var last_location := ""
 
 func _ready() -> void:
     _prepare_materials()
-    _build_surface()
-    _build_south_gate()
-    _build_main_road_and_plaza()
-    _build_market()
-    _build_forge()
-    _build_tavern()
-    _build_guardhouse()
-    _build_houses()
-    _build_fountain()
-    _build_decor()
-    _spawn_people()
+    _load_city_assets()
     player = get_tree().get_first_node_in_group("player") as Node3D
+    call_deferred("_initial_stream")
+
+func _initial_stream() -> void:
+    _resolve_player()
+    if player != null:
+        _refresh_stream(true)
 
 func _process(_delta: float) -> void:
+    _resolve_player()
+    if player == null:
+        return
+
+    _update_location()
+    var current_cell := _cell_for_world(player.global_position)
+    if current_cell != last_player_cell:
+        last_player_cell = current_cell
+        _refresh_stream(false)
+
+    var builds := 0
+    while not pending_cells.is_empty() and builds < MAX_CELL_BUILDS_PER_FRAME:
+        var cell := pending_cells.pop_front()
+        queued_cells.erase(cell)
+        if not loaded_cells.has(cell) and _should_keep_cell(cell):
+            _build_cell(cell)
+            builds += 1
+
+    _unload_far_cells()
+
+func _resolve_player() -> void:
     if player == null or not is_instance_valid(player):
         player = get_tree().get_first_node_in_group("player") as Node3D
+
+func _update_location() -> void:
+    var world_2d := Vector2(player.global_position.x, player.global_position.z)
+    var location := "Окраины Люменграда"
+    if CAPITAL.inside_capital(world_2d):
+        var district: Dictionary = CAPITAL.district_at(world_2d)
+        location = "Люменград"
+        if not district.is_empty():
+            location += " • " + String(district.get("name", "Городской квартал"))
+    if location != last_location:
+        last_location = location
+        if GameState.current_location != location:
+            GameState.set_location(location)
+
+func _refresh_stream(force_current: bool) -> void:
+    if player == null:
         return
-    var inside_city := player.global_position.z < -14.0 and absf(player.global_position.x) < 47.0
-    var location := "Люменград • Южный квартал" if inside_city else "Окраины Люменграда"
-    if GameState.current_location != location:
-        GameState.set_location(location)
+    var world_2d := Vector2(player.global_position.x, player.global_position.z)
+    if not CAPITAL.inside_capital(world_2d):
+        pending_cells.clear()
+        queued_cells.clear()
+        return
 
-func _prepare_materials() -> void:
-    materials["grass"] = _mat(Color(0.17, 0.29, 0.18), 0.96)
-    materials["road"] = _mat(Color(0.28, 0.26, 0.23), 0.94)
-    materials["stone"] = _mat(Color(0.38, 0.40, 0.41), 0.90)
-    materials["stone_dark"] = _mat(Color(0.25, 0.27, 0.29), 0.93)
-    materials["plaster"] = _mat(Color(0.58, 0.52, 0.43), 0.88)
-    materials["plaster_light"] = _mat(Color(0.70, 0.64, 0.53), 0.88)
-    materials["wood"] = _mat(Color(0.27, 0.15, 0.085), 0.94)
-    materials["wood_light"] = _mat(Color(0.43, 0.27, 0.14), 0.92)
-    materials["roof"] = _mat(Color(0.20, 0.08, 0.07), 0.90)
-    materials["roof_blue"] = _mat(Color(0.10, 0.18, 0.26), 0.88)
-    materials["cloth_red"] = _mat(Color(0.52, 0.12, 0.12), 0.82)
-    materials["cloth_blue"] = _mat(Color(0.09, 0.27, 0.42), 0.82)
-    materials["cloth_gold"] = _mat(Color(0.68, 0.45, 0.12), 0.82)
-    materials["metal"] = _mat(Color(0.30, 0.33, 0.35), 0.55, 0.45)
-    materials["water"] = _mat(Color(0.12, 0.42, 0.58), 0.24)
-    materials["leaf"] = _mat(Color(0.12, 0.34, 0.16), 0.96)
-    materials["lamp"] = _emissive_mat(Color(1.0, 0.62, 0.22), 2.0)
+    var current := _cell_for_world(player.global_position)
+    if force_current and not loaded_cells.has(current):
+        _queue_cell(current, true)
 
-func _build_surface() -> void:
-    _mesh_box("GrassSurface", Vector3(118, 0.04, 118), Vector3(0, 0.015, 0), materials["grass"])
-    _mesh_box("CityFloor", Vector3(94, 0.045, 49), Vector3(0, 0.04, -37.5), materials["grass"])
+    for ring in range(0, LOAD_RADIUS_CELLS + 1):
+        for x in range(-ring, ring + 1):
+            for z in range(-ring, ring + 1):
+                if ring > 0 and abs(x) < ring and abs(z) < ring:
+                    continue
+                _queue_cell(current + Vector2i(x, z), false)
 
-func _build_south_gate() -> void:
-    var z := -14.0
-    _static_box("WallLeft", Vector3(36, 5.8, 2.4), Vector3(-30, 2.9, z), materials["stone"])
-    _static_box("WallRight", Vector3(36, 5.8, 2.4), Vector3(30, 2.9, z), materials["stone"])
-    _tower("GateTowerL", Vector3(-9.0, 0, z), 5.6)
-    _tower("GateTowerR", Vector3(9.0, 0, z), 5.6)
-    _static_box("GateLintel", Vector3(12.4, 2.0, 2.6), Vector3(0, 7.2, z), materials["stone_dark"])
-    _static_box("GateDoorL", Vector3(3.6, 6.0, 0.35), Vector3(-1.9, 3.0, z + 0.9), materials["wood"])
-    _static_box("GateDoorR", Vector3(3.6, 6.0, 0.35), Vector3(1.9, 3.0, z + 0.9), materials["wood"])
-    _mesh_box("GateMetalBandL", Vector3(3.8, 0.22, 0.08), Vector3(-1.9, 3.2, z + 0.69), materials["metal"])
-    _mesh_box("GateMetalBandR", Vector3(3.8, 0.22, 0.08), Vector3(1.9, 3.2, z + 0.69), materials["metal"])
-    _static_box("WestWall", Vector3(2.2, 5.4, 44), Vector3(-47, 2.7, -36), materials["stone"])
-    _static_box("EastWall", Vector3(2.2, 5.4, 44), Vector3(47, 2.7, -36), materials["stone"])
-    var title := Label3D.new()
-    title.name = "GateTitle"
-    title.text = "ЛЮМЕНГРАД  •  ЮЖНЫЕ ВОРОТА"
-    title.position = Vector3(0, 9.1, z + 0.2)
-    title.font_size = 34
-    title.outline_size = 8
-    add_child(title)
+func _queue_cell(cell: Vector2i, front: bool) -> void:
+    if loaded_cells.has(cell) or queued_cells.has(cell):
+        return
+    var center := _cell_center(cell)
+    if not CAPITAL.inside_capital(Vector2(center.x, center.z)):
+        return
+    queued_cells[cell] = true
+    if front:
+        pending_cells.push_front(cell)
+    else:
+        pending_cells.append(cell)
 
-func _tower(node_name: String, pos: Vector3, half_size: float) -> void:
-    _static_box(node_name, Vector3(6.4, 8.8, 6.4), pos + Vector3(0, 4.4, 0), materials["stone_dark"])
-    _mesh_box(node_name + "Top", Vector3(7.2, 0.6, 7.2), pos + Vector3(0, 9.0, 0), materials["stone"])
-    for offset in [Vector3(-2.8, 9.8, -2.8), Vector3(2.8, 9.8, -2.8), Vector3(-2.8, 9.8, 2.8), Vector3(2.8, 9.8, 2.8)]:
-        _mesh_box(node_name + "Merlon", Vector3(1.1, 1.5, 1.1), pos + offset, materials["stone"])
+func _should_keep_cell(cell: Vector2i) -> bool:
+    if player == null:
+        return false
+    var center := _cell_center(cell)
+    return Vector2(center.x, center.z).distance_to(Vector2(player.global_position.x, player.global_position.z)) <= UNLOAD_RADIUS
 
-func _build_main_road_and_plaza() -> void:
-    _mesh_box("SouthRoad", Vector3(8.0, 0.06, 45.0), Vector3(0, 0.075, -35.0), materials["road"])
-    _mesh_box("Plaza", Vector3(31.0, 0.07, 21.0), Vector3(0, 0.08, -36.0), materials["road"])
-    _mesh_box("WestLane", Vector3(31.0, 0.055, 5.0), Vector3(-21.0, 0.075, -35.0), materials["road"])
-    _mesh_box("EastLane", Vector3(31.0, 0.055, 5.0), Vector3(21.0, 0.075, -35.0), materials["road"])
+func _unload_far_cells() -> void:
+    if player == null:
+        return
+    var player_2d := Vector2(player.global_position.x, player.global_position.z)
+    var remove: Array[Vector2i] = []
+    for key in loaded_cells.keys():
+        var cell: Vector2i = key
+        var center := _cell_center(cell)
+        if Vector2(center.x, center.z).distance_to(player_2d) > UNLOAD_RADIUS:
+            remove.append(cell)
+    for cell in remove:
+        var root: Node = loaded_cells.get(cell)
+        if is_instance_valid(root):
+            root.queue_free()
+        loaded_cells.erase(cell)
 
-func _build_market() -> void:
-    for i in range(5):
-        var x := -14.0 - float(i % 2) * 7.0
-        var z := -27.0 - float(i / 2) * 7.0
-        var cloth := materials["cloth_red"] if i % 3 == 0 else (materials["cloth_blue"] if i % 3 == 1 else materials["cloth_gold"])
-        _market_stall("Stall%d" % i, Vector3(x, 0, z), cloth)
+func _cell_for_world(pos: Vector3) -> Vector2i:
+    return Vector2i(
+        floori((pos.x + CELL_SIZE * 0.5) / CELL_SIZE),
+        floori((pos.z + CELL_SIZE * 0.5) / CELL_SIZE)
+    )
 
-func _market_stall(node_name: String, pos: Vector3, cloth: StandardMaterial3D) -> void:
-    _mesh_box(node_name + "Counter", Vector3(4.2, 0.25, 2.0), pos + Vector3(0, 1.15, 0), materials["wood_light"])
-    for x in [-1.7, 1.7]:
-        _mesh_box(node_name + "Post", Vector3(0.18, 3.0, 0.18), pos + Vector3(x, 1.5, 0), materials["wood"])
-    _mesh_box(node_name + "Canopy", Vector3(4.8, 0.16, 2.8), pos + Vector3(0, 3.0, 0), cloth)
-    for j in range(4):
-        _mesh_box(node_name + "Goods", Vector3(0.55, 0.35, 0.55), pos + Vector3(-1.1 + j * 0.72, 1.48, -0.1), materials["plaster_light"])
+func _cell_center(cell: Vector2i) -> Vector3:
+    return Vector3(float(cell.x) * CELL_SIZE, 0.0, float(cell.y) * CELL_SIZE)
 
-func _build_forge() -> void:
-    var p := Vector3(24, 0, -29)
-    _house("Forge", p, Vector3(12, 5.8, 9), materials["stone_dark"], materials["roof"])
-    _static_box("ForgeChimney", Vector3(1.8, 7.0, 1.8), p + Vector3(3.5, 5.8, 1.8), materials["stone"])
-    _mesh_box("ForgeAnvilBase", Vector3(2.0, 0.8, 1.1), p + Vector3(-5.5, 0.4, 3.2), materials["stone_dark"])
-    _mesh_box("ForgeAnvil", Vector3(1.9, 0.5, 0.7), p + Vector3(-5.5, 1.05, 3.2), materials["metal"])
-    var sign := Label3D.new()
-    sign.text = "КУЗНИЦА РАДАНА"
-    sign.position = p + Vector3(0, 3.5, 4.75)
-    sign.font_size = 28
-    sign.outline_size = 7
-    add_child(sign)
+func _build_cell(cell: Vector2i) -> void:
+    var root := Node3D.new()
+    root.name = "CityCell_%d_%d" % [cell.x, cell.y]
+    root.position = _cell_center(cell)
+    add_child(root)
+    loaded_cells[cell] = root
 
-func _build_tavern() -> void:
-    var p := Vector3(20, 0, -49)
-    _house("Tavern", p, Vector3(15, 6.8, 10), materials["plaster_light"], materials["roof_blue"])
-    _mesh_box("TavernAwning", Vector3(7.0, 0.18, 2.5), p + Vector3(0, 3.2, 5.3), materials["cloth_blue"])
-    var sign := Label3D.new()
-    sign.text = "ТАВЕРНА «СИНИЙ ФОНАРЬ»"
-    sign.position = p + Vector3(0, 4.2, 5.25)
-    sign.font_size = 26
-    sign.outline_size = 7
-    add_child(sign)
+    _add_static_box(
+        "Ground",
+        Vector3(CELL_SIZE + 0.4, 0.35, CELL_SIZE + 0.4),
+        Vector3(0, -0.19, 0),
+        materials["ground"],
+        root
+    )
+    _add_road_grid(root)
 
-func _build_guardhouse() -> void:
-    var p := Vector3(-22, 0, -20)
-    _house("Guardhouse", p, Vector3(12, 5.4, 8), materials["stone"], materials["roof_blue"])
-    _mesh_box("GuardBanner", Vector3(0.18, 3.2, 1.3), p + Vector3(6.15, 4.0, 0), materials["cloth_blue"])
+    var world_pos := Vector2(root.position.x, root.position.z)
+    var district: Dictionary = CAPITAL.district_at(world_pos)
+    var district_id := String(district.get("id", "city"))
+    _populate_cell(root, cell, district_id)
 
-func _build_houses() -> void:
-    var houses := [
-        [Vector3(-34, 0, -31), Vector3(10, 5.2, 8), "light"],
-        [Vector3(-34, 0, -44), Vector3(11, 6.0, 9), "dark"],
-        [Vector3(-31, 0, -55), Vector3(12, 5.6, 8), "light"],
-        [Vector3(34, 0, -19), Vector3(10, 5.0, 8), "dark"],
-        [Vector3(35, 0, -41), Vector3(11, 5.7, 9), "light"],
-        [Vector3(34, 0, -55), Vector3(12, 6.2, 8), "dark"]
-    ]
-    for i in range(houses.size()):
-        var h: Array = houses[i]
-        var wall_mat := materials["plaster_light"] if h[2] == "light" else materials["plaster"]
-        var roof_mat := materials["roof"] if i % 2 == 0 else materials["roof_blue"]
-        _house("House%d" % i, h[0], h[1], wall_mat, roof_mat)
+func _add_road_grid(root: Node3D) -> void:
+    _add_mesh_box("RoadNS", Vector3(18.0, 0.10, CELL_SIZE + 0.6), Vector3(0, 0.045, 0), materials["road"], root)
+    _add_mesh_box("RoadEW", Vector3(CELL_SIZE + 0.6, 0.10, 18.0), Vector3(0, 0.050, 0), materials["road"], root)
+    _add_mesh_box("WalkNSL", Vector3(4.0, 0.12, CELL_SIZE + 0.6), Vector3(-11.0, 0.065, 0), materials["walk"], root)
+    _add_mesh_box("WalkNSR", Vector3(4.0, 0.12, CELL_SIZE + 0.6), Vector3(11.0, 0.065, 0), materials["walk"], root)
+    _add_mesh_box("WalkEWT", Vector3(CELL_SIZE + 0.6, 0.12, 4.0), Vector3(0, 0.070, -11.0), materials["walk"], root)
+    _add_mesh_box("WalkEWB", Vector3(CELL_SIZE + 0.6, 0.12, 4.0), Vector3(0, 0.070, 11.0), materials["walk"], root)
 
-func _house(node_name: String, pos: Vector3, size: Vector3, wall_mat: StandardMaterial3D, roof_mat: StandardMaterial3D) -> void:
-    _static_box(node_name, size, pos + Vector3(0, size.y * 0.5, 0), wall_mat)
-    _mesh_box(node_name + "Roof", Vector3(size.x + 1.0, 1.0, size.z + 1.0), pos + Vector3(0, size.y + 0.45, 0), roof_mat)
-    _mesh_box(node_name + "Door", Vector3(1.5, 2.6, 0.18), pos + Vector3(0, 1.3, size.z * 0.51), materials["wood"])
-    for x in [-size.x * 0.28, size.x * 0.28]:
-        _mesh_box(node_name + "Window", Vector3(1.2, 1.3, 0.12), pos + Vector3(x, size.y * 0.58, size.z * 0.515), materials["water"])
-    _mesh_box(node_name + "BeamTop", Vector3(size.x + 0.2, 0.18, 0.18), pos + Vector3(0, size.y - 0.6, size.z * 0.525), materials["wood"])
+func _populate_cell(root: Node3D, cell: Vector2i, district_id: String) -> void:
+    var rng := RandomNumberGenerator.new()
+    rng.seed = _cell_seed(cell)
 
-func _build_fountain() -> void:
-    var p := Vector3(0, 0, -36)
-    var basin := CylinderMesh.new()
-    basin.top_radius = 3.1
-    basin.bottom_radius = 3.3
-    basin.height = 0.55
-    basin.radial_segments = 24
-    var basin_node := MeshInstance3D.new()
-    basin_node.name = "FountainBasin"
-    basin_node.mesh = basin
-    basin_node.position = p + Vector3(0, 0.3, 0)
-    basin_node.material_override = materials["stone"]
-    add_child(basin_node)
-    var water := CylinderMesh.new()
-    water.top_radius = 2.65
-    water.bottom_radius = 2.65
-    water.height = 0.08
-    water.radial_segments = 24
-    var water_node := MeshInstance3D.new()
-    water_node.name = "FountainWater"
-    water_node.mesh = water
-    water_node.position = p + Vector3(0, 0.57, 0)
-    water_node.material_override = materials["water"]
-    add_child(water_node)
-    _mesh_box("FountainColumn", Vector3(0.7, 3.2, 0.7), p + Vector3(0, 2.0, 0), materials["stone_dark"])
+    if district_id == "central" or district_id == "starter":
+        _build_plaza_detail(root, rng, district_id)
+        return
+    if district_id == "arena" or district_id == "hippodrome" or district_id == "farms" or district_id == "canals":
+        _build_open_district_detail(root, rng, district_id)
+        return
 
-func _build_decor() -> void:
-    var lamp_positions := [
-        Vector3(-5, 0, -20), Vector3(5, 0, -20), Vector3(-5, 0, -30), Vector3(5, 0, -30),
-        Vector3(-13, 0, -45), Vector3(13, 0, -45), Vector3(-6, 0, -54), Vector3(7, 0, -54)
-    ]
-    for i in range(lamp_positions.size()):
-        _lamp("Lamp%d" % i, lamp_positions[i])
-    var tree_positions := [Vector3(-40, 0, -23), Vector3(-41, 0, -51), Vector3(41, 0, -28), Vector3(42, 0, -49), Vector3(-13, 0, -56), Vector3(10, 0, -57)]
-    for i in range(tree_positions.size()):
-        _city_tree("CityTree%d" % i, tree_positions[i])
-    for i in range(6):
-        _mesh_box("Bench%d" % i, Vector3(2.8, 0.22, 0.65), Vector3(-9.0 + i * 3.6, 0.65, -40.5), materials["wood_light"])
-        _mesh_box("BenchLeg%dA" % i, Vector3(0.18, 0.65, 0.5), Vector3(-9.8 + i * 3.6, 0.33, -40.5), materials["metal"])
-        _mesh_box("BenchLeg%dB" % i, Vector3(0.18, 0.65, 0.5), Vector3(-8.2 + i * 3.6, 0.33, -40.5), materials["metal"])
+    var lots := [Vector3(-52, 0, -52), Vector3(52, 0, -52), Vector3(-52, 0, 52), Vector3(52, 0, 52)]
+    var building_count := 2
+    if district_id == "royal" or district_id == "rich" or district_id == "aristocratic":
+        building_count = 1
+    elif district_id == "market" or district_id == "crafts" or district_id == "old_town" or district_id == "residential":
+        building_count = 3
 
-func _lamp(node_name: String, pos: Vector3) -> void:
-    _mesh_box(node_name + "Post", Vector3(0.16, 3.6, 0.16), pos + Vector3(0, 1.8, 0), materials["metal"])
-    _mesh_box(node_name + "Glow", Vector3(0.42, 0.62, 0.42), pos + Vector3(0, 3.45, 0), materials["lamp"])
-    var light := OmniLight3D.new()
-    light.name = node_name + "Light"
-    light.position = pos + Vector3(0, 3.45, 0)
-    light.light_color = Color(1.0, 0.61, 0.30)
-    light.light_energy = 0.9
-    light.omni_range = 7.0
-    light.shadow_enabled = false
-    add_child(light)
+    var used: Dictionary = {}
+    for i in range(building_count):
+        var lot_index := rng.randi_range(0, lots.size() - 1)
+        var safety := 0
+        while used.has(lot_index) and safety < 8:
+            lot_index = rng.randi_range(0, lots.size() - 1)
+            safety += 1
+        used[lot_index] = true
+        var rotation_step := rng.randi_range(0, 3)
+        _build_medieval_house(root, lots[lot_index], float(rotation_step) * PI * 0.5, district_id, rng)
 
-func _city_tree(node_name: String, pos: Vector3) -> void:
-    var trunk := CylinderMesh.new()
-    trunk.top_radius = 0.28
-    trunk.bottom_radius = 0.38
-    trunk.height = 3.8
-    trunk.radial_segments = 8
-    var trunk_node := MeshInstance3D.new()
-    trunk_node.name = node_name + "Trunk"
-    trunk_node.mesh = trunk
-    trunk_node.position = pos + Vector3(0, 1.9, 0)
-    trunk_node.material_override = materials["wood"]
-    add_child(trunk_node)
-    var crown := SphereMesh.new()
-    crown.radius = 1.65
-    crown.height = 3.0
-    crown.radial_segments = 10
-    crown.rings = 6
-    var crown_node := MeshInstance3D.new()
-    crown_node.name = node_name + "Crown"
-    crown_node.mesh = crown
-    crown_node.position = pos + Vector3(0, 4.6, 0)
-    crown_node.material_override = materials["leaf"]
-    add_child(crown_node)
+    if district_id == "market" or district_id == "crafts" or district_id == "warehouses" or district_id == "port":
+        _instance_asset("wagon", root, Vector3(28, 0.12, -25), Vector3(0, rng.randf_range(-PI, PI), 0))
+        for i in range(3):
+            _instance_asset("crate", root, Vector3(23 + i * 1.4, 0.08, -31), Vector3.ZERO)
 
-func _spawn_people() -> void:
-    _spawn_npc("Радан", "blacksmith", Vector3(18.5, 0, -27.5), Vector3(18.5, 0, -27.5), Vector3(18, 0, -45), Vector3(28, 0, -51), 1)
-    _spawn_npc("Лея", "merchant", Vector3(-13, 0, -31), Vector3(-13, 0, -31), Vector3(-8, 0, -39), Vector3(-32, 0, -52), 3)
-    _spawn_npc("Торен", "guard", Vector3(-2.5, 0, -16.5), Vector3(-2.5, 0, -16.5), Vector3(-18, 0, -20), Vector3(-23, 0, -20), 4)
-    _spawn_npc("Орен", "innkeeper", Vector3(20, 0, -44), Vector3(20, 0, -44), Vector3(20, 0, -44), Vector3(26, 0, -51), 0)
-    _spawn_npc("Мара", "artisan", Vector3(-27, 0, -43), Vector3(-27, 0, -43), Vector3(-8, 0, -36), Vector3(-35, 0, -45), 2)
-    _spawn_npc("Севин", "citizen", Vector3(7, 0, -31), Vector3(9, 0, -30), Vector3(4, 0, -41), Vector3(34, 0, -55), 0)
+func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id: String, rng: RandomNumberGenerator) -> void:
+    var building := Node3D.new()
+    building.name = "House"
+    building.position = pos
+    building.rotation.y = yaw
+    parent.add_child(building)
 
-func _spawn_npc(npc_name: String, npc_role: String, start: Vector3, work: Vector3, evening: Vector3, home: Vector3, palette: int) -> void:
-    var npc = CITY_NPC.new()
-    npc.name = npc_name
-    npc.display_name = npc_name
-    npc.role = npc_role
-    npc.work_position = work
-    npc.evening_position = evening
-    npc.home_position = home
-    npc.palette_index = palette
-    add_child(npc)
-    npc.global_position = start
+    var brick_style := district_id in ["old_town", "guards", "training", "training_mine", "warehouses", "port"]
+    var wall_key := "wall_brick" if brick_style else "wall_plaster"
+    var door_key := "door_brick" if brick_style else "door_plaster"
+    var window_key := "window_brick" if brick_style else "window_plaster"
+    var stories := 1 if district_id in ["warehouses", "port", "stables", "sawmill"] else 2
+    if district_id in ["rich", "aristocratic", "royal"]:
+        stories = 2
 
-func _mat(color: Color, roughness: float = 0.9, metallic: float = 0.0) -> StandardMaterial3D:
-    var mat := StandardMaterial3D.new()
-    mat.albedo_color = color
-    mat.roughness = roughness
-    mat.metallic = metallic
-    return mat
+    for story in range(stories):
+        var y := float(story) * STORY_HEIGHT
+        for i in range(4):
+            var offset := -3.0 + float(i) * MODULE_WIDTH
+            var front_key := wall_key
+            if story == 0 and i == 1:
+                front_key = door_key
+            elif i == 0 or i == 3:
+                front_key = window_key
+            _instance_asset(front_key, building, Vector3(offset, y, 4.0), Vector3.ZERO)
+            _instance_asset(window_key if (i == 1 or i == 2) else wall_key, building, Vector3(offset, y, -4.0), Vector3(0, PI, 0))
+            _instance_asset(window_key if i % 2 == 0 else wall_key, building, Vector3(4.0, y, offset), Vector3(0, PI * 0.5, 0))
+            _instance_asset(window_key if i % 2 == 1 else wall_key, building, Vector3(-4.0, y, offset), Vector3(0, -PI * 0.5, 0))
 
-func _emissive_mat(color: Color, energy: float) -> StandardMaterial3D:
-    var mat := _mat(color, 0.45)
-    mat.emission_enabled = true
-    mat.emission = color
-    mat.emission_energy_multiplier = energy
-    return mat
+    _instance_asset("roof", building, Vector3(0, float(stories) * STORY_HEIGHT, 0), Vector3.ZERO)
+    _add_collision_box(Vector3(8.0, float(stories) * STORY_HEIGHT, 8.0), Vector3(0, float(stories) * STORY_HEIGHT * 0.5, 0), building)
 
-func _mesh_box(node_name: String, size: Vector3, pos: Vector3, material: StandardMaterial3D) -> MeshInstance3D:
-    var mesh := BoxMesh.new()
-    mesh.size = size
-    var node := MeshInstance3D.new()
-    node.name = node_name
-    node.mesh = mesh
+    if rng.randf() < 0.35:
+        _instance_asset("crate", building, Vector3(5.2, 0.08, 3.4), Vector3(0, rng.randf_range(-PI, PI), 0))
+
+func _build_plaza_detail(root: Node3D, rng: RandomNumberGenerator, district_id: String) -> void:
+    _add_mesh_box("PlazaStone", Vector3(116, 0.13, 116), Vector3(0, 0.075, 0), materials["plaza"], root)
+    if district_id == "central":
+        var base := CylinderMesh.new()
+        base.top_radius = 6.0
+        base.bottom_radius = 6.5
+        base.height = 0.8
+        base.radial_segments = 20
+        var base_node := MeshInstance3D.new()
+        base_node.mesh = base
+        base_node.position = Vector3(0, 0.45, 0)
+        base_node.material_override = materials["stone"]
+        root.add_child(base_node)
+    for i in range(4):
+        _instance_asset("crate", root, Vector3(-18 + i * 12, 0.08, 30), Vector3(0, rng.randf_range(-PI, PI), 0))
+
+func _build_open_district_detail(root: Node3D, rng: RandomNumberGenerator, district_id: String) -> void:
+    if district_id == "farms":
+        for i in range(5):
+            _add_mesh_box("Field_%d" % i, Vector3(24, 0.08, 42), Vector3(-60 + i * 30, 0.045, 48), materials["soil"], root)
+    elif district_id == "canals":
+        _add_mesh_box("Canal", Vector3(34, 0.05, CELL_SIZE - 34), Vector3(48, 0.03, 0), materials["water"], root)
+    elif district_id == "hippodrome":
+        _add_mesh_box("Track", Vector3(150, 0.08, 82), Vector3(0, 0.045, 42), materials["track"], root)
+    elif district_id == "arena":
+        _add_mesh_box("ArenaApproach", Vector3(120, 0.08, 74), Vector3(0, 0.045, 42), materials["plaza"], root)
+    if rng.randf() < 0.55:
+        _instance_asset("wagon", root, Vector3(-34, 0.10, 34), Vector3(0, rng.randf_range(-PI, PI), 0))
+
+func _load_city_assets() -> void:
+    for key in ASSET_PATHS.keys():
+        var path := String(ASSET_PATHS[key])
+        if not ResourceLoader.exists(path):
+            continue
+        var resource := load(path)
+        if resource is PackedScene:
+            assets[key] = resource
+
+func _instance_asset(key: String, parent: Node3D, pos: Vector3, rotation: Vector3) -> Node3D:
+    var packed: PackedScene = assets.get(key) as PackedScene
+    if packed == null:
+        return _fallback_asset(parent, pos, rotation)
+    var node := packed.instantiate() as Node3D
+    if node == null:
+        return _fallback_asset(parent, pos, rotation)
     node.position = pos
-    node.material_override = material
-    add_child(node)
+    node.rotation = rotation
+    parent.add_child(node)
     return node
 
-func _static_box(node_name: String, size: Vector3, pos: Vector3, material: StandardMaterial3D) -> StaticBody3D:
+func _fallback_asset(parent: Node3D, pos: Vector3, rotation: Vector3) -> Node3D:
+    var marker := MeshInstance3D.new()
+    var mesh := BoxMesh.new()
+    mesh.size = Vector3(2.0, 3.0, 0.25)
+    mesh.material = materials["fallback"]
+    marker.mesh = mesh
+    marker.position = pos + Vector3(0, 1.5, 0)
+    marker.rotation = rotation
+    parent.add_child(marker)
+    return marker
+
+func _cell_seed(cell: Vector2i) -> int:
+    return abs(CITY_SEED ^ (cell.x * 73856093) ^ (cell.y * 19349663))
+
+func _prepare_materials() -> void:
+    materials["ground"] = _material(Color(0.29, 0.31, 0.25), 0.98)
+    materials["road"] = _material(Color(0.22, 0.205, 0.19), 0.97)
+    materials["walk"] = _material(Color(0.38, 0.36, 0.33), 0.94)
+    materials["plaza"] = _material(Color(0.43, 0.42, 0.40), 0.93)
+    materials["stone"] = _material(Color(0.34, 0.36, 0.38), 0.92)
+    materials["soil"] = _material(Color(0.25, 0.18, 0.11), 0.98)
+    materials["track"] = _material(Color(0.34, 0.24, 0.16), 0.98)
+    materials["water"] = _material(Color(0.08, 0.31, 0.42), 0.24)
+    materials["fallback"] = _material(Color(0.34, 0.22, 0.12), 0.94)
+
+func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
+    var material := StandardMaterial3D.new()
+    material.albedo_color = color
+    material.roughness = roughness_value
+    return material
+
+func _add_mesh_box(node_name: String, size: Vector3, pos: Vector3, material: Material, parent: Node3D) -> MeshInstance3D:
+    var mesh_instance := MeshInstance3D.new()
+    mesh_instance.name = node_name
+    var mesh := BoxMesh.new()
+    mesh.size = size
+    mesh.material = material
+    mesh_instance.mesh = mesh
+    mesh_instance.position = pos
+    parent.add_child(mesh_instance)
+    return mesh_instance
+
+func _add_static_box(node_name: String, size: Vector3, pos: Vector3, material: Material, parent: Node3D) -> StaticBody3D:
     var body := StaticBody3D.new()
     body.name = node_name
     body.position = pos
-    add_child(body)
+    parent.add_child(body)
+
+    var mesh_instance := MeshInstance3D.new()
     var mesh := BoxMesh.new()
     mesh.size = size
-    var visual := MeshInstance3D.new()
-    visual.mesh = mesh
-    visual.material_override = material
-    body.add_child(visual)
+    mesh.material = material
+    mesh_instance.mesh = mesh
+    body.add_child(mesh_instance)
+
+    var collision := CollisionShape3D.new()
+    var shape := BoxShape3D.new()
+    shape.size = size
+    collision.shape = shape
+    body.add_child(collision)
+    return body
+
+func _add_collision_box(size: Vector3, pos: Vector3, parent: Node3D) -> StaticBody3D:
+    var body := StaticBody3D.new()
+    body.position = pos
+    parent.add_child(body)
     var collision := CollisionShape3D.new()
     var shape := BoxShape3D.new()
     shape.size = size
