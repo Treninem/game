@@ -1,0 +1,104 @@
+name: Vendor source-chat B93 real CC0 docks barrels
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b93.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b93
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 dock and barrel sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b93"
+          TMP=".sourcechat_b93_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/docks_src" "$TMP/docks_godot" "$ROOT/models/oga_modular_wooden_docks_176/source" "$ROOT/models/oga_modular_wooden_docks_176/godot_ready"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B93/1.0' \
+            "https://opengameart.org/sites/default/files/woodendock_fbxgltftextures.zip" -o "$TMP/woodendock_fbxgltftextures.zip"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B93/1.0' \
+            "https://opengameart.org/sites/default/files/woodendockset_godot.zip" -o "$TMP/woodendockset_godot.zip"
+          unzip -q "$TMP/woodendock_fbxgltftextures.zip" -d "$TMP/docks_src"
+          unzip -q "$TMP/woodendockset_godot.zip" -d "$TMP/docks_godot"
+          rsync -a "$TMP/docks_src/" "$ROOT/models/oga_modular_wooden_docks_176/source/"
+          rsync -a "$TMP/docks_godot/" "$ROOT/models/oga_modular_wooden_docks_176/godot_ready/"
+          meta "oga_modular_wooden_docks_176" \
+            "https://opengameart.org/content/modular-wooden-docks" \
+            "Modular Wooden Docks" \
+            "woodendock_fbxgltftextures.zip + woodendockset_godot.zip" \
+            "176 modular dock pieces for lakes, swamps and beaches; source page states Godot and Blender setup, no rig/animation. Source and Godot-ready archives both staged."
+
+          mkdir -p "$TMP/barrels" "$ROOT/models/oga_barrels_10_lyricsz"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B93/1.0' \
+            "https://opengameart.org/sites/default/files/10barrels.zip" -o "$TMP/10barrels.zip"
+          unzip -q "$TMP/10barrels.zip" -d "$TMP/barrels"
+          rsync -a "$TMP/barrels/" "$ROOT/models/oga_barrels_10_lyricsz/"
+          meta "oga_barrels_10_lyricsz" \
+            "https://opengameart.org/content/barrels-3" \
+            "Barrels" \
+            "https://opengameart.org/sites/default/files/10barrels.zip" \
+            "10-barrel asset pack with editable Blend and engine-friendly GLB source files."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B93 — real CC0 docks and barrels
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use the dock kit for authored piers, bridges, swamp walkways and waterfront construction. Select barrel variants only where they improve object variety. Preserve source/license metadata when promoting production subsets.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B93 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B93 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b93
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 docks barrels B93"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
