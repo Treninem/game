@@ -988,3 +988,45 @@ Path: `assets/staging/sourcechat_b90/models/`
 Licensing note: the Hats / Clothing / Props source page is currently marked CC0 and its historical comments state problematic third-party-texture items were removed. This batch contains only the currently listed cargo-pants, sweatshirt and work-boots individual files plus separate CC0 glasses/sneakers sources.
 
 Integration rule: adapt selected clothing/accessories to the production humanoid body/skeleton; audit fit, clipping, weights, scale and materials before promotion. Do not wire staging assets directly into gameplay.
+
+## B95 — street furniture / unfinished buildings / chainlink fences
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b95/models/`
+
+- `oga_chainlink_fence_modular_60/`
+- `oga_unfinished_buildings_206plus10/`
+- `oga_lamppost_bench_trashcan/`
+
+Recommended use: industrial/city perimeters, abandoned construction, streets, parks and utility districts. Main chat should deduplicate against earlier road/fence packs and select coherent district-specific subsets.
+
+## B96 — bathrooms / room filler / balloons / themed props
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b96/models/`
+
+- `oga_toilets_33/`
+- `oga_balloons_53_godot/`
+- `oga_room_filler_objects_30/`
+- `oga_halloween_props_128/`
+
+Recommended use: bathrooms, inhabited interiors, festivals/events and abandoned locations. Themed props should remain optional location dressing rather than defining the permanent world style.
+
+## B97 — canyon terrain / foliage
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b97/models/`
+
+- `oga_canyon_terrain_161/`
+- `oga_foliage_1/`
+
+Recommended use: dry/canyon regions, cliffs, rocks, shrubs and vegetation variation. Only independent source geometry was staged; addon-dependent Godot demo content was intentionally not introduced into the runtime project.
+
+## B98 — six houses with complete texture sources
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b98/models/oga_six_houses_textures/`
+
+Six house source models plus the separately distributed texture/atlas archives were staged together so the main chat has a complete editable source set.
+
+Recommended use: authored residential/settlement buildings after art-direction, scale, material and collision review.
