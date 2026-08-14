@@ -1,0 +1,76 @@
+name: Vendor source-chat B45 real CC0 56 monster source pack
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b45.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b45
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 56 monster source pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b45/models/oga_50plus_monsters_pack_3d"
+          TMP=".sourcechat_b45_tmp"
+          rm -rf "assets/staging/sourcechat_b45" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+          URL="https://opengameart.org/sites/default/files/50_monsters_pack_3d_version_1.0.zip"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B45/1.0' "$URL" -o "$TMP/monsters.zip"
+          unzip -q "$TMP/monsters.zip" -d "$TMP/extracted"
+          rsync -a "$TMP/extracted/" "$ROOT/"
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/SOURCE.md" <<'EOF'
+          # Source
+          Pack: 50+ Monsters Pack 3D, version 1.0 (56 static monster models)
+          Source page: https://opengameart.org/content/50-monsters-pack-3d
+          Download: https://opengameart.org/sites/default/files/50_monsters_pack_3d_version_1.0.zip
+          Author: isaiah658
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: Static low-poly models, not rigged or animated. Main chat should treat them as enemy/concept/source meshes and not assume production animation readiness.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          cat > "assets/staging/sourcechat_b45/README.md" <<'EOF'
+          # Source chat B45 — real CC0 56-monster 3D source library
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          This batch intentionally adds a broad static creature library as source material. The main integration chat should shortlist visually compatible monsters, retopologize/rig/animate only selected candidates when useful, and avoid promoting all 56 blindly.
+          EOF
+          rm -rf "$TMP"
+          echo "B45 files:"; find "assets/staging/sourcechat_b45" -type f | wc -l
+          du -sh "assets/staging/sourcechat_b45"
+
+      - name: Commit B45 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b45
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 56 monster source pack B45"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
