@@ -1,0 +1,154 @@
+name: Update source-chat staging index through B48
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b42-b48.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify B42-B48 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b42/models/oga_ant_rigged_animated
+            assets/staging/sourcechat_b42/models/oga_flying_squirrel_rigged
+            assets/staging/sourcechat_b42/models/oga_frog_lowpoly_animated
+            assets/staging/sourcechat_b42/models/oga_goat_lowrez
+            assets/staging/sourcechat_b42/models/oga_rat_godot
+            assets/staging/sourcechat_b42/models/oga_snake_lowpoly_animated
+            assets/staging/sourcechat_b43/models/oga_bee_rigged
+            assets/staging/sourcechat_b43/models/oga_butterfly_animated
+            assets/staging/sourcechat_b43/models/oga_crab_lowpoly_animated
+            assets/staging/sourcechat_b43/models/oga_penguin_rigged_animated
+            assets/staging/sourcechat_b43/models/oga_swamp_limule_rigged_animated
+            assets/staging/sourcechat_b43/models/oga_turtle_rigged
+            assets/staging/sourcechat_b44/models/oga_free_plant_pack
+            assets/staging/sourcechat_b44/models/oga_free_vegetation_lod_pack
+            assets/staging/sourcechat_b44/models/quaternius_stylized_nature_megakit_standard
+            assets/staging/sourcechat_b45/models/oga_50plus_monsters_pack_3d
+            assets/staging/sourcechat_b46/models/quaternius_fantasy_props_megakit_standard
+            assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard
+            assets/staging/sourcechat_b48/models/oga_basic_well_4k
+            assets/staging/sourcechat_b48/models/oga_free_lowpoly_pond_kit
+            assets/staging/sourcechat_b48/models/oga_modular_wooden_docks
+            assets/staging/sourcechat_b48/models/oga_stylized_windmill
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B42 —' "$INDEX"; then
+            echo "B42 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B42 — small wildlife models
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b42/models/`
+
+          - `oga_frog_lowpoly_animated/` — animated frog source.
+          - `oga_snake_lowpoly_animated/` — animated snake source.
+          - `oga_rat_godot/` — Godot-ready animated rat source.
+          - `oga_ant_rigged_animated/` — rigged/animated ant.
+          - `oga_flying_squirrel_rigged/` — rigged flying squirrel.
+          - `oga_goat_lowrez/` — goat source mesh.
+
+          Recommended use: small wildlife, farm edges, caves/swamps/forests and ambient fauna after scale/animation/collision review.
+
+          ## B43 — wetland / coast / insect fauna
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b43/models/`
+
+          - `oga_penguin_rigged_animated/`
+          - `oga_crab_lowpoly_animated/`
+          - `oga_turtle_rigged/`
+          - `oga_butterfly_animated/`
+          - `oga_bee_rigged/`
+          - `oga_swamp_limule_rigged_animated/`
+
+          Recommended use: coasts, ponds, wetlands, cold-region fauna and ambient insects. Verify imported materials and animation clips before promotion.
+
+          ## B44 — vegetation / explicit LOD nature sources
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b44/models/`
+
+          - `quaternius_stylized_nature_megakit_standard/`
+          - `oga_free_plant_pack/`
+          - `oga_free_vegetation_lod_pack/`
+
+          Recommended use: trees, rocks, grasses, ferns, flowers and performance-oriented vegetation LOD candidates. Deduplicate visually against B28 before production promotion.
+
+          ## B45 — 50+ monster source library
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b45/models/oga_50plus_monsters_pack_3d/`
+
+          Real CC0 library of 56 static low-poly monster source models. These are not assumed rigged/animated; shortlist only useful creatures for later production work.
+
+          ## B46 — Fantasy Props MegaKit Standard
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b46/models/quaternius_fantasy_props_megakit_standard/`
+
+          Real CC0 standard pack with 94 source models spanning weapons, tools, vegetables, potions, market stalls, chests, furniture and related fantasy/medieval props.
+
+          Recommended use: markets, homes, workshops, taverns, inventory/world props and settlement dressing after deduplication against older prop libraries.
+
+          ## B47 — Medieval Village MegaKit Standard
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/`
+
+          Real CC0 standard pack with 176 modular village-building models including walls, roofs, stairs, doors, windows, vines and related architecture pieces.
+
+          Recommended use: main settlement construction source. Compare against older medieval kits and keep the strongest coherent building family rather than integrating duplicates.
+
+          ## B48 — pond / docks / well / windmill
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b48/models/`
+
+          - `oga_free_lowpoly_pond_kit/`
+          - `oga_modular_wooden_docks/` — source page lists 176 modular dock objects.
+          - `oga_basic_well_4k/`
+          - `oga_stylized_windmill/`
+
+          Recommended use: ponds, lakes, swamps, shores, docks, farms and villages. Normalize scale/materials/collisions and deduplicate against harbour/nature/medieval sources before promotion.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B42-B48"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
