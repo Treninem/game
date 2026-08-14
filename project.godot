@@ -1,5 +1,5 @@
 ; ImPuls PC — offline single-player RPG
-; Stable 0.10.4: runtime-ready spawn surface, resilient keyboard input, non-blocking capital streaming and viewport-safe HUD
+; Stable 0.10.4 verified: physical WASD mapping, raw ESC, guaranteed spawn ground, non-blocking capital streaming and viewport-safe HUD
 config_version=5
 
 [application]
