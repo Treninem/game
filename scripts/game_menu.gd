@@ -43,6 +43,8 @@ func _unhandled_input(event: InputEvent) -> void:
                 _show_controls()
                 get_viewport().set_input_as_handled()
         return
+    if DialogueManager.is_open:
+        return
     if event.is_action_pressed("pause_menu"):
         if visible:
             close_menu()
@@ -69,9 +71,9 @@ func _build_shell() -> void:
     add_child(backdrop)
 
     panel = PanelContainer.new()
-    panel.custom_minimum_size = Vector2(760, 600)
+    panel.custom_minimum_size = Vector2(820, 640)
     panel.set_anchors_preset(Control.PRESET_CENTER)
-    panel.position = Vector2(-380, -300)
+    panel.position = Vector2(-410, -320)
     panel.add_theme_stylebox_override("panel", _panel_style())
     add_child(panel)
 
@@ -83,7 +85,7 @@ func _build_shell() -> void:
     panel.add_child(margin)
 
     content = VBoxContainer.new()
-    content.add_theme_constant_override("separation", 10)
+    content.add_theme_constant_override("separation", 9)
     margin.add_child(content)
 
 func _clear_content() -> void:
@@ -123,21 +125,21 @@ func _subtitle(text: String) -> Label:
     content.add_child(label)
     return label
 
-func _button(text: String, callback: Callable) -> Button:
+func _button(text: String, callback: Callable, parent: Container = content) -> Button:
     var button := Button.new()
     button.text = text
-    button.custom_minimum_size.y = 44
-    button.add_theme_font_size_override("font_size", 16)
+    button.custom_minimum_size.y = 42
+    button.add_theme_font_size_override("font_size", 15)
     button.add_theme_stylebox_override("normal", _button_style(Color(0.055, 0.075, 0.11, 0.96), Color(0.18, 0.38, 0.55, 0.7)))
     button.add_theme_stylebox_override("hover", _button_style(Color(0.075, 0.12, 0.18, 1.0), Color(0.25, 0.70, 0.92, 0.95)))
     button.add_theme_stylebox_override("pressed", _button_style(Color(0.08, 0.09, 0.17, 1.0), Color(0.48, 0.34, 0.92, 1.0)))
     button.pressed.connect(callback)
-    content.add_child(button)
+    parent.add_child(button)
     return button
 
 func _back_button(callback: Callable) -> void:
     var spacer := Control.new()
-    spacer.custom_minimum_size.y = 6
+    spacer.custom_minimum_size.y = 5
     content.add_child(spacer)
     _button("← Назад", callback)
 
@@ -146,6 +148,9 @@ func _show_main() -> void:
     _brand_header("ГЛАВНОЕ МЕНЮ")
     _subtitle("Версия %s  •  %s" % [String(ProjectSettings.get_setting("application/config/version", "development")), UpdateManager.local_build_tag()])
     _button("Продолжить игру", Callable(self, "close_menu"))
+    _button("Инвентарь и экипировка", Callable(self, "_show_inventory"))
+    _button("Крафт", Callable(self, "_show_crafting"))
+    _button("Журнал заданий", Callable(self, "_show_journal"))
     _button("Сохранения  •  10 слотов", Callable(self, "_show_saves"))
     _button("Настройки", Callable(self, "_show_settings"))
     _button("Проверить обновления", Callable(UpdateManager, "check_for_updates"))
@@ -154,54 +159,133 @@ func _show_main() -> void:
     apply_update_button.visible = UpdateManager.update_available
     _button("Выйти из игры", Callable(get_tree(), "quit"))
 
-func _on_update_status_changed(text: String, available: bool) -> void:
-    if is_instance_valid(update_status):
-        update_status.text = text
-    if is_instance_valid(apply_update_button):
-        apply_update_button.visible = available
+func _show_inventory() -> void:
+    _clear_content()
+    _brand_header("ИНВЕНТАРЬ И ЭКИПИРОВКА")
+    var weapon_id := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
+    var weapon_name := "не выбрано" if weapon_id.is_empty() else String(InventorySystem.item_info(weapon_id).get("name", weapon_id))
+    _subtitle("Оружие: %s  •  бонус атаки +%.0f" % [weapon_name, InventorySystem.attack_bonus()])
+    var scroll := ScrollContainer.new()
+    scroll.custom_minimum_size.y = 440
+    content.add_child(scroll)
+    var list := VBoxContainer.new()
+    list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    list.add_theme_constant_override("separation", 7)
+    scroll.add_child(list)
+    var rows := InventorySystem.inventory_rows()
+    if rows.is_empty():
+        var empty := Label.new()
+        empty.text = "Инвентарь пуст."
+        list.add_child(empty)
+    for info in rows:
+        var row := HBoxContainer.new()
+        row.add_theme_constant_override("separation", 8)
+        list.add_child(row)
+        var text := Label.new()
+        text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+        text.text = "%s ×%d\n%s  •  %s" % [String(info.get("name", "")), int(info.get("amount", 0)), String(info.get("category", "")), String(info.get("description", ""))]
+        row.add_child(text)
+        var item_id := String(info.get("id", ""))
+        if not String(info.get("equip_slot", "")).is_empty():
+            var equip_text := "Экипировано" if InventorySystem.equipped_item(String(info.get("equip_slot", ""))) == item_id else "Экипировать"
+            _button(equip_text, Callable(self, "_equip_item").bind(item_id), row).custom_minimum_size.x = 130
+        elif item_id in ["berries", "water_flask", "raw_meat", "cooked_meat"]:
+            _button("Использовать", Callable(self, "_use_item").bind(item_id), row).custom_minimum_size.x = 120
+    _back_button(Callable(self, "_show_main"))
+
+func _equip_item(item_id: String) -> void:
+    InventorySystem.equip(item_id)
+    _show_inventory()
+
+func _use_item(item_id: String) -> void:
+    if item_id == "cooked_meat":
+        if GameState.remove_item(item_id, 1):
+            GameState.hunger = minf(100.0, GameState.hunger + 45.0)
+            GameState.health = minf(GameState.max_health, GameState.health + 5.0)
+            GameState.survival_changed.emit()
+            GameState.notify("Вы съели жареное мясо.")
+    else:
+        GameState.use_consumable(item_id)
+    _show_inventory()
+
+func _show_crafting() -> void:
+    _clear_content()
+    _brand_header("КРАФТ")
+    _subtitle("Рецепты открываются по мере прогресса. Материалы списываются только при успешном создании.")
+    var scroll := ScrollContainer.new()
+    scroll.custom_minimum_size.y = 440
+    content.add_child(scroll)
+    var list := VBoxContainer.new()
+    list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    list.add_theme_constant_override("separation", 8)
+    scroll.add_child(list)
+    var recipes := InventorySystem.available_recipes()
+    if recipes.is_empty():
+        var empty := Label.new()
+        empty.text = "Пока нет доступных рецептов."
+        list.add_child(empty)
+    for recipe in recipes:
+        var row := HBoxContainer.new()
+        row.add_theme_constant_override("separation", 8)
+        list.add_child(row)
+        var label := Label.new()
+        label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+        label.text = "%s\nНужно: %s" % [String(recipe.get("name", "")), InventorySystem.requirements_text(recipe.get("requirements", {}))]
+        row.add_child(label)
+        var craft_button := _button("Создать", Callable(self, "_craft_recipe").bind(String(recipe.get("id", ""))), row)
+        craft_button.custom_minimum_size.x = 120
+        craft_button.disabled = not bool(recipe.get("can_craft", false))
+    _back_button(Callable(self, "_show_main"))
+
+func _craft_recipe(recipe_id: String) -> void:
+    InventorySystem.craft(recipe_id)
+    _show_crafting()
+
+func _show_journal() -> void:
+    _clear_content()
+    _brand_header("ЖУРНАЛ ЗАДАНИЙ")
+    var status := "Активно"
+    if GameState.quest_stage == 0:
+        status = "Не начато"
+    elif GameState.quest_stage >= 4:
+        status = "Завершено"
+    _subtitle("ПЕРВОЕ УБЕЖИЩЕ  •  %s" % status)
+    var body := Label.new()
+    body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    body.add_theme_font_size_override("font_size", 17)
+    body.text = "Мира помогает освоиться в окрестностях.\n\nТекущая цель:\n%s\n\nПрогресс ресурсов: древесина %d / 8, камень %d / 4.\nПостроено убежище: %s.\nПобеждено существ: %d." % [GameState.quest_text(), int(GameState.inventory.get("wood", 0)), int(GameState.inventory.get("stone", 0)), "да" if GameState.house_built else "нет", GameState.enemies_defeated]
+    content.add_child(body)
+    _back_button(Callable(self, "_show_main"))
 
 func _show_saves() -> void:
     _clear_content()
     _brand_header("СОХРАНЕНИЯ")
     _subtitle("10 независимых слотов: создание, перезапись, загрузка и удаление.")
     var scroll := ScrollContainer.new()
-    scroll.custom_minimum_size.y = 390
+    scroll.custom_minimum_size.y = 420
     content.add_child(scroll)
     var list := VBoxContainer.new()
     list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     list.add_theme_constant_override("separation", 7)
     scroll.add_child(list)
-
     for info in SaveManager.list_slots():
         var slot := int(info["slot"])
         var row := HBoxContainer.new()
         row.add_theme_constant_override("separation", 7)
         list.add_child(row)
-
         var label := Label.new()
         label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-        if bool(info.get("exists", false)):
-            label.text = "Слот %02d  •  %s  •  %s  •  задание %d" % [slot, String(info.get("saved_at", "")), String(info.get("world_time", "--:--")), int(info.get("quest_stage", 0))]
-        else:
-            label.text = "Слот %02d  •  пусто" % slot
+        label.text = "Слот %02d  •  %s  •  %s" % [slot, String(info.get("saved_at", "пусто")) if bool(info.get("exists", false)) else "пусто", String(info.get("world_time", "--:--"))]
         row.add_child(label)
-
-        var save_button := Button.new()
-        save_button.text = "Сохранить" if bool(info.get("exists", false)) else "Создать"
-        save_button.pressed.connect(Callable(self, "_save_to_slot").bind(slot))
-        row.add_child(save_button)
-
-        var load_button := Button.new()
-        load_button.text = "Загрузить"
+        _button("Создать" if not bool(info.get("exists", false)) else "Сохранить", Callable(self, "_save_to_slot").bind(slot), row).custom_minimum_size.x = 92
+        var load_button := _button("Загрузить", Callable(self, "_load_slot").bind(slot), row)
+        load_button.custom_minimum_size.x = 92
         load_button.disabled = not bool(info.get("exists", false))
-        load_button.pressed.connect(Callable(self, "_load_slot").bind(slot))
-        row.add_child(load_button)
-
-        var delete_button := Button.new()
-        delete_button.text = "Удалить"
+        var delete_button := _button("Удалить", Callable(self, "_delete_slot").bind(slot), row)
+        delete_button.custom_minimum_size.x = 82
         delete_button.disabled = not bool(info.get("exists", false))
-        delete_button.pressed.connect(Callable(self, "_delete_slot").bind(slot))
-        row.add_child(delete_button)
     _back_button(Callable(self, "_show_main"))
 
 func _save_to_slot(slot: int) -> void:
@@ -235,7 +319,7 @@ func _show_controls() -> void:
     _brand_header("УПРАВЛЕНИЕ")
     rebinding_label = _subtitle("Нажмите действие, затем новую клавишу или кнопку мыши.")
     var scroll := ScrollContainer.new()
-    scroll.custom_minimum_size.y = 390
+    scroll.custom_minimum_size.y = 430
     content.add_child(scroll)
     var list := VBoxContainer.new()
     list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -264,15 +348,8 @@ func _show_graphics() -> void:
     _brand_header("ГРАФИКА")
     _add_checkbox("Полноэкранный режим", bool(SettingsManager.get_value("graphics", "fullscreen")), Callable(self, "_set_setting_bool").bind("graphics", "fullscreen"))
     _add_checkbox("Вертикальная синхронизация (VSync)", bool(SettingsManager.get_value("graphics", "vsync")), Callable(self, "_set_setting_bool").bind("graphics", "vsync"))
-
-    var resolution_row := HBoxContainer.new()
-    content.add_child(resolution_row)
-    var res_label := Label.new()
-    res_label.text = "Разрешение"
-    res_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    resolution_row.add_child(res_label)
     var resolutions := OptionButton.new()
-    var options := [Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080), Vector2i(2560, 1440)]
+    var options := [Vector2i(1280,720), Vector2i(1600,900), Vector2i(1920,1080), Vector2i(2560,1440)]
     var current := Vector2i(int(SettingsManager.get_value("graphics", "resolution_width")), int(SettingsManager.get_value("graphics", "resolution_height")))
     for i in range(options.size()):
         var r: Vector2i = options[i]
@@ -281,8 +358,7 @@ func _show_graphics() -> void:
         if r == current:
             resolutions.select(i)
     resolutions.item_selected.connect(Callable(self, "_set_resolution").bind(resolutions))
-    resolution_row.add_child(resolutions)
-
+    content.add_child(resolutions)
     _add_slider("Масштаб 3D-рендера", float(SettingsManager.get_value("graphics", "render_scale")), 0.5, 1.5, 0.05, Callable(self, "_set_setting_float").bind("graphics", "render_scale"))
     _add_slider("Масштаб интерфейса", float(SettingsManager.get_value("graphics", "ui_scale")), 0.75, 1.5, 0.05, Callable(self, "_set_setting_float").bind("graphics", "ui_scale"))
     _back_button(Callable(self, "_show_settings"))
@@ -324,7 +400,7 @@ func _add_slider(text: String, value: float, min_value: float, max_value: float,
     slider.max_value = max_value
     slider.step = step
     slider.value = value
-    slider.custom_minimum_size.x = 280
+    slider.custom_minimum_size.x = 300
     slider.value_changed.connect(callback)
     row.add_child(slider)
     var value_label := Label.new()
@@ -339,23 +415,30 @@ func _set_setting_bool(value: bool, section: String, key: String) -> void:
 func _set_setting_float(value: float, section: String, key: String) -> void:
     SettingsManager.set_value(section, key, value)
 
-func _set_resolution(index: int, option: OptionButton) -> void:
-    var size: Vector2i = option.get_item_metadata(index)
-    SettingsManager.set_value("graphics", "resolution_width", size.x)
-    SettingsManager.set_value("graphics", "resolution_height", size.y)
+func _set_resolution(index: int, options: OptionButton) -> void:
+    var resolution: Vector2i = options.get_item_metadata(index)
+    SettingsManager.set_value("graphics", "resolution_width", resolution.x)
+    SettingsManager.set_value("graphics", "resolution_height", resolution.y)
 
 func _reset_settings() -> void:
     SettingsManager.reset_defaults()
     _show_settings()
 
+func _on_update_status_changed(text: String, available: bool) -> void:
+    if is_instance_valid(update_status):
+        update_status.text = text
+    if is_instance_valid(apply_update_button):
+        apply_update_button.visible = available
+
 func _panel_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.025, 0.035, 0.055, 0.98)
-    style.border_color = Color(0.15, 0.50, 0.70, 0.72)
+    style.bg_color = Color(0.018, 0.025, 0.045, 0.98)
+    style.border_color = Color(0.22, 0.68, 0.92, 0.7)
     style.set_border_width_all(1)
-    style.set_corner_radius_all(14)
-    style.shadow_color = Color(0, 0, 0, 0.55)
-    style.shadow_size = 22
+    style.corner_radius_top_left = 18
+    style.corner_radius_top_right = 18
+    style.corner_radius_bottom_left = 18
+    style.corner_radius_bottom_right = 18
     return style
 
 func _button_style(bg: Color, border: Color) -> StyleBoxFlat:
@@ -363,7 +446,10 @@ func _button_style(bg: Color, border: Color) -> StyleBoxFlat:
     style.bg_color = bg
     style.border_color = border
     style.set_border_width_all(1)
-    style.set_corner_radius_all(8)
+    style.corner_radius_top_left = 10
+    style.corner_radius_top_right = 10
+    style.corner_radius_bottom_left = 10
+    style.corner_radius_bottom_right = 10
     style.content_margin_left = 14
     style.content_margin_right = 14
     return style
