@@ -1,10 +1,10 @@
 ; ImPuls PC — offline single-player RPG
-; Stage 9 direct gameplay panels, permanent minimap and selected branding
+; Stage 10 world-first stabilization, local streaming and legacy quest cleanup
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.9.0-stage9"
+config/version="0.10.0-stage10"
 config/icon="res://assets/branding/impuls_icon.png"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
