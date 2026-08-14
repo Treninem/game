@@ -1,0 +1,235 @@
+[gd_scene load_steps=53 format=3 uid="uid://q7pmcysy81uk"]
+
+[ext_resource type="PackedScene" uid="uid://cd84hxdr6ek4k" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_8.tscn" id="1_a3o5u"]
+[ext_resource type="PackedScene" uid="uid://dt8vedft6aqw" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_c.tscn" id="2_rahmc"]
+[ext_resource type="PackedScene" uid="uid://dk4e4t3fk1ppp" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_d.tscn" id="3_y5f2f"]
+[ext_resource type="PackedScene" uid="uid://kfiucmfs5gsy" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_e.tscn" id="4_ucu0g"]
+[ext_resource type="PackedScene" uid="uid://tcsqsot1c108" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_f.tscn" id="5_436cn"]
+[ext_resource type="PackedScene" uid="uid://eyhockwgl74y" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_g.tscn" id="6_xhxkj"]
+[ext_resource type="PackedScene" uid="uid://0auk4jm67qf4" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_h.tscn" id="7_s6pr7"]
+[ext_resource type="PackedScene" uid="uid://byckqp0pgsihs" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_i.tscn" id="8_gagj7"]
+[ext_resource type="PackedScene" uid="uid://j3kd86xqmde0" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_j.tscn" id="9_lg1an"]
+[ext_resource type="PackedScene" uid="uid://7734as0gbev6" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_k.tscn" id="10_tv7s5"]
+[ext_resource type="PackedScene" uid="uid://pdddvvq8o3si" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_l.tscn" id="11_6slx1"]
+[ext_resource type="PackedScene" uid="uid://myqwi2njxh6w" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_m.tscn" id="12_upq1y"]
+[ext_resource type="PackedScene" uid="uid://cxetwgx206u6q" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_n.tscn" id="13_pgedh"]
+[ext_resource type="PackedScene" uid="uid://6bom2mw8sc7a" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_o.tscn" id="14_cy887"]
+[ext_resource type="PackedScene" uid="uid://d3mpkm4y065tt" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_p.tscn" id="15_e816l"]
+[ext_resource type="PackedScene" uid="uid://dlbmj4pdvicu3" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_s.tscn" id="16_gokuf"]
+[ext_resource type="PackedScene" uid="uid://bgyhpea6y1f5d" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_t.tscn" id="17_2rpqy"]
+[ext_resource type="PackedScene" uid="uid://dnl7yuuhafgqv" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_u.tscn" id="18_22do6"]
+[ext_resource type="PackedScene" uid="uid://bbek1r8il82uu" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_v.tscn" id="19_05kbg"]
+[ext_resource type="PackedScene" uid="uid://dbearg2ux4fnp" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_x.tscn" id="20_xf3tp"]
+[ext_resource type="PackedScene" uid="uid://co8rowoqfvk02" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_y.tscn" id="21_444cw"]
+[ext_resource type="PackedScene" uid="uid://crmqyqavavyqg" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_z.tscn" id="22_lb52s"]
+[ext_resource type="PackedScene" uid="uid://caanmp30grctm" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_1.tscn" id="23_5udrk"]
+[ext_resource type="PackedScene" uid="uid://drvorn6be2a5k" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_2.tscn" id="24_tyims"]
+[ext_resource type="PackedScene" uid="uid://cbe5p2m1rjutx" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_3.tscn" id="25_0gqaf"]
+[ext_resource type="PackedScene" uid="uid://bfc1hqih8mq4w" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_4.tscn" id="26_vqt8c"]
+[ext_resource type="PackedScene" uid="uid://c7mxwq4ycxyf4" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_5.tscn" id="27_fgycg"]
+[ext_resource type="PackedScene" uid="uid://ts5iqy4w161r" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_6.tscn" id="28_val1e"]
+[ext_resource type="PackedScene" uid="uid://jah66t322wcv" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_7.tscn" id="29_t7h17"]
+[ext_resource type="PackedScene" uid="uid://dcdy8jae13dgp" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_9.tscn" id="30_vgknl"]
+[ext_resource type="PackedScene" uid="uid://dei03cnluyxhu" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_and.tscn" id="31_80ysu"]
+[ext_resource type="PackedScene" uid="uid://27sai4vwk62k" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_a.tscn" id="32_uvy4n"]
+[ext_resource type="PackedScene" uid="uid://c8w5oxyakux4t" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_b.tscn" id="33_22uo0"]
+[ext_resource type="PackedScene" uid="uid://csp7e8lfn1l7m" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_q.tscn" id="34_ksktg"]
+[ext_resource type="PackedScene" uid="uid://414vgjvlcxul" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_r.tscn" id="35_3dih5"]
+[ext_resource type="PackedScene" uid="uid://daxtyfuvlmk7e" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_0.tscn" id="36_sxqih"]
+[ext_resource type="PackedScene" uid="uid://b426p31i2c37u" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_star.tscn" id="37_gofhb"]
+[ext_resource type="PackedScene" uid="uid://rc3ablikgpww" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_heart.tscn" id="38_udtv4"]
+[ext_resource type="PackedScene" uid="uid://cgqw4m8nawgaf" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_w.tscn" id="39_enqqt"]
+[ext_resource type="PackedScene" uid="uid://bksoetviywvbx" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_balloon.tscn" id="40_tqd8s"]
+[ext_resource type="PackedScene" uid="uid://b57ymjehu6exo" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_poodle.tscn" id="41_gneba"]
+[ext_resource type="PackedScene" uid="uid://vvnjq3tcg5k8" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_sword.tscn" id="42_i4gd6"]
+[ext_resource type="PackedScene" uid="uid://cpvk3trk1pg6b" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_ribbon.tscn" id="43_hw1qr"]
+[ext_resource type="PackedScene" uid="uid://bhqmf617qctov" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_flower_a.tscn" id="44_pav8l"]
+[ext_resource type="PackedScene" uid="uid://basfb7lu4vxp6" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_hat.tscn" id="45_l4syf"]
+[ext_resource type="PackedScene" uid="uid://cjjl8na4q78yc" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_dog.tscn" id="46_nb2ci"]
+[ext_resource type="PackedScene" uid="uid://bgw2ryx33oprh" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_flower_b_stem.tscn" id="47_inec8"]
+[ext_resource type="PackedScene" uid="uid://cv00ni4uggm3w" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_stick_b.tscn" id="48_dtrdh"]
+[ext_resource type="PackedScene" uid="uid://vorq8hfu0hnp" path="res://Assets/LoafbrrAssets/Balloons/scene/Balloons/balloon_stick_a.tscn" id="49_jacd7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_s5b46"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_ecjw4"]
+sky_material = SubResource("ProceduralSkyMaterial_s5b46")
+
+[sub_resource type="Environment" id="Environment_kec0x"]
+background_mode = 2
+sky = SubResource("Sky_ecjw4")
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+
+[node name="Balloon" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kec0x")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.614285, 0.571432, -0.544168, 0, 0.689619, 0.724172, 0.789084, -0.444848, 0.423623, 0, 0, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 500.0
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.449688, 0)
+
+[node name="Balloon_8" parent="Node3D" instance=ExtResource("1_a3o5u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3055, 0.343932, 0)
+
+[node name="Balloon_C" parent="Node3D" instance=ExtResource("2_rahmc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.71836, 0)
+
+[node name="Balloon_D" parent="Node3D" instance=ExtResource("3_y5f2f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.449534, 1.76262, 0)
+
+[node name="Balloon_E" parent="Node3D" instance=ExtResource("4_ucu0g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.362241, 1.69638, 0)
+
+[node name="Balloon_F" parent="Node3D" instance=ExtResource("5_436cn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.723941, 1.73721, 0)
+
+[node name="Balloon_G" parent="Node3D" instance=ExtResource("6_xhxkj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13003, 1.68336, 0)
+
+[node name="Balloon_H" parent="Node3D" instance=ExtResource("7_s6pr7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56807, 1.67876, 0)
+
+[node name="Balloon_I" parent="Node3D" instance=ExtResource("8_gagj7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92813, 1.66433, 0)
+
+[node name="Balloon_J" parent="Node3D" instance=ExtResource("9_lg1an")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.19217, 1.59158, 0)
+
+[node name="Balloon_K" parent="Node3D" instance=ExtResource("10_tv7s5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.943397, 1.19222, 0)
+
+[node name="Balloon_L" parent="Node3D" instance=ExtResource("11_6slx1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.567294, 1.11928, 0)
+
+[node name="Balloon_M" parent="Node3D" instance=ExtResource("12_upq1y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.123879, 1.20925, 0)
+
+[node name="Balloon_N" parent="Node3D" instance=ExtResource("13_pgedh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.357653, 1.19887, 0)
+
+[node name="Balloon_O" parent="Node3D" instance=ExtResource("14_cy887")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.800764, 1.2256, 0)
+
+[node name="Balloon_P" parent="Node3D" instance=ExtResource("15_e816l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.20941, 1.25382, 0)
+
+[node name="Balloon_S" parent="Node3D" instance=ExtResource("16_gokuf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.631, 1.19844, 0)
+
+[node name="Balloon_T" parent="Node3D" instance=ExtResource("17_2rpqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95058, 1.22785, 0)
+
+[node name="Balloon_U" parent="Node3D" instance=ExtResource("18_22do6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.27925, 1.12703, 0)
+
+[node name="Balloon_V" parent="Node3D" instance=ExtResource("19_05kbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00285, 0.645524, 0)
+
+[node name="Balloon_X" parent="Node3D" instance=ExtResource("20_xf3tp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0145291, 0.694824, 0)
+
+[node name="Balloon_Y" parent="Node3D" instance=ExtResource("21_444cw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.357, 0.668829, 0)
+
+[node name="Balloon_Z" parent="Node3D" instance=ExtResource("22_lb52s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.827109, 0.698932, 0)
+
+[node name="Balloon_1" parent="Node3D" instance=ExtResource("23_5udrk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05246, 0.0406327, 0)
+
+[node name="Balloon_2" parent="Node3D" instance=ExtResource("24_tyims")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.687717, 0.0988581, 0)
+
+[node name="Balloon_3" parent="Node3D" instance=ExtResource("25_0gqaf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.351917, 0.0977564, 0)
+
+[node name="Balloon_4" parent="Node3D" instance=ExtResource("26_vqt8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0325949, 0.0586386, 0)
+
+[node name="Balloon_5" parent="Node3D" instance=ExtResource("27_fgycg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.306472, 0.0850691, 0)
+
+[node name="Balloon_6" parent="Node3D" instance=ExtResource("28_val1e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.690574, 0.136962, 0)
+
+[node name="Balloon_7" parent="Node3D" instance=ExtResource("29_t7h17")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01704, 0.175481, 0)
+
+[node name="Balloon_9" parent="Node3D" instance=ExtResource("30_vgknl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58527, 0.13076, 0)
+
+[node name="Balloon_And" parent="Node3D" instance=ExtResource("31_80ysu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.01285, 0.12587, 0)
+
+[node name="Balloon_A" parent="Node3D" instance=ExtResource("32_uvy4n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42373, 1.73283, 0)
+
+[node name="Balloon_B" parent="Node3D" instance=ExtResource("33_22uo0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.920528, 1.7448, 0)
+
+[node name="Balloon_Q" parent="Node3D" instance=ExtResource("34_ksktg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.39157, 0.841593, 0)
+
+[node name="Balloon_R" parent="Node3D" instance=ExtResource("35_3dih5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.86399, 0.750234, -2.38419e-07)
+
+[node name="Balloon_0" parent="Node3D" instance=ExtResource("36_sxqih")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.31404, 0.054212, 0)
+
+[node name="Balloon_Star" parent="Node3D" instance=ExtResource("37_gofhb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.00548, 0.208838, 0)
+instance_shader_parameters/albedo = Color(1, 1, 0.384314, 1)
+
+[node name="Balloon_Heart" parent="Node3D" instance=ExtResource("38_udtv4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.58105, 0.980938, 0)
+instance_shader_parameters/albedo = Color(0.890196, 0, 0, 1)
+
+[node name="Balloon_W" parent="Node3D" instance=ExtResource("39_enqqt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.438217, 0.712675, 0)
+
+[node name="Balloon_Balloon" parent="Node3D" instance=ExtResource("40_tqd8s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.30825, 1.18189, -2.38419e-07)
+instance_shader_parameters/albedo = Color(0.4, 0.72549, 0.156863, 1)
+
+[node name="Balloon_Poodle" parent="Node3D" instance=ExtResource("41_gneba")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32193, 0.508585, 0)
+instance_shader_parameters/albedo = Color(0.545098, 1, 1, 1)
+
+[node name="Balloon_Sword" parent="Node3D" instance=ExtResource("42_i4gd6")]
+transform = Transform3D(-0.562882, 0.160798, 0.810745, 0.677128, -0.472792, 0.563884, 0.473986, 0.866378, 0.157245, 2.34914, 0.260029, 0)
+instance_shader_parameters/albedo = Color(1, 0.47451, 1, 1)
+
+[node name="Balloon_Ribbon" parent="Node3D" instance=ExtResource("43_hw1qr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.29182, 0.82681, 0)
+instance_shader_parameters/albedo = Color(0.705882, 0.333333, 1, 1)
+
+[node name="Balloon_Flower_A" parent="Node3D" instance=ExtResource("44_pav8l")]
+transform = Transform3D(1, 0, 0, 0, -0.0167893, -0.999859, 0, 0.999859, -0.0167893, 1.88721, 0.454882, 0)
+
+[node name="Balloon_Hat" parent="Node3D" instance=ExtResource("45_l4syf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.83532, 0.883835, 0)
+instance_shader_parameters/albedo = Color(1, 0.945098, 0.427451, 1)
+
+[node name="Balloon_Dog" parent="Node3D" instance=ExtResource("46_nb2ci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.90487, 0.625027, 0)
+instance_shader_parameters/albedo = Color(0.490196, 1, 0.6, 1)
+
+[node name="Balloon_Flower_B_stem" parent="Node3D" instance=ExtResource("47_inec8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.54969, 0.989288, 0)
+
+[node name="Balloon_Stick_B" parent="Node3D" instance=ExtResource("48_dtrdh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.87228, 0.0865617, 0)
+instance_shader_parameters/albedo = Color(1, 0.117647, 0.243137, 1)
+
+[node name="Balloon_Stick_A" parent="Node3D" instance=ExtResource("49_jacd7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99239, 0.230675, 0)
+instance_shader_parameters/albedo = Color(0.490196, 1, 1, 1)

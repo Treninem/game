@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://co4uxm1dhu48y"]
+
+[ext_resource type="Material" uid="uid://cgsra0hwxho6v" path="res://Assets/LoafbrrAssets/Balloons/materials/Balloon_Gold.material" id="1_lhfhb"]
+[ext_resource type="Material" uid="uid://03vlmu0wxhcs" path="res://Assets/LoafbrrAssets/Balloons/materials/Balloon_Silver.material" id="2_upoue"]
+[ext_resource type="Material" uid="uid://cfbuwi14qtnru" path="res://Assets/LoafbrrAssets/Balloons/materials/Balloon_White.material" id="3_t47ax"]
+[ext_resource type="PackedScene" uid="uid://do6epltkiap6v" path="res://Assets/LoafbrrAssets/Balloons/glb/Balloon.glb" id="6_vg20x"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_cd3m4"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.409317, 0, -6.35753)
+material_override = ExtResource("1_lhfhb")
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.19782, 0, -6.35753)
+material_override = ExtResource("2_upoue")
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.52342, 0, -6.35753)
+material_override = ExtResource("3_t47ax")
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="Balloon" parent="." instance=ExtResource("6_vg20x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.409317, 0, 0.190775)

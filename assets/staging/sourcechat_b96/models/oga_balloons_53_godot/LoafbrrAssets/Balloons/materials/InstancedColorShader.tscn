@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://dk6li8rya86"]
+
+[ext_resource type="Material" uid="uid://cgsra0hwxho6v" path="res://Assets/LoafbrrAssets/Balloons/materials/Balloon_Gold.material" id="1_6o46w"]
+[ext_resource type="Material" uid="uid://03vlmu0wxhcs" path="res://Assets/LoafbrrAssets/Balloons/materials/Balloon_Silver.material" id="2_eqq0g"]
+[ext_resource type="Material" uid="uid://cfbuwi14qtnru" path="res://Assets/LoafbrrAssets/Balloons/materials/Balloon_White.material" id="3_yt8yi"]
+[ext_resource type="Material" uid="uid://bns0uds6wu4le" path="res://Assets/LoafbrrAssets/Balloons/materials/InstancedBalloonColor.material" id="4_gaa6n"]
+[ext_resource type="Shader" uid="uid://dlfswan7fj1ho" path="res://Assets/LoafbrrAssets/Balloons/scene/Test.tres" id="7_t78wq"]
+[ext_resource type="PackedScene" uid="uid://do6epltkiap6v" path="res://Assets/LoafbrrAssets/Balloons/glb/Balloon.glb" id="8_m350f"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_cd3m4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sb8ru"]
+render_priority = 0
+shader = ExtResource("7_t78wq")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.409317, 0, -6.35753)
+material_override = ExtResource("1_6o46w")
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.19782, 0, -6.35753)
+material_override = ExtResource("2_eqq0g")
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.73926, 0, -6.35753)
+material_override = ExtResource("3_yt8yi")
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.73926, 0, -7.83832)
+material_override = ExtResource("4_gaa6n")
+instance_shader_parameters/albedo = Color(0.735038, 0, 0.234644, 1)
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.61697, 0, -6.35753)
+material_override = SubResource("ShaderMaterial_sb8ru")
+instance_shader_parameters/ColorParameter = Color(0.294118, 0.231373, 1, 1)
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.90289, 0, -6.35753)
+material_override = SubResource("ShaderMaterial_sb8ru")
+instance_shader_parameters/ColorParameter = Color(1, 1, 0.278431, 1)
+mesh = SubResource("BoxMesh_cd3m4")
+skeleton = NodePath("../Balloon")
+
+[node name="Balloon" parent="." instance=ExtResource("8_m350f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.409317, 0, 0.190775)
