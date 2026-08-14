@@ -1,7 +1,8 @@
 extends Node
 
-const VERSION := "0.10.0-stage10"
-const RESPAWN_POSITION := Vector3(0, 2.0, 8)
+const VERSION := "0.10.2-stable"
+const PLAYER_GROUND_CLEARANCE := 0.08
+const RESPAWN_POSITION := Vector3(0, PLAYER_GROUND_CLEARANCE, 8)
 
 @onready var player: CharacterBody3D = $World/Player
 
@@ -46,13 +47,19 @@ func _recover_loaded_player_position() -> void:
         return
     var terrain_y := WorldData.elevation_at(xz)
     if player.global_position.y < terrain_y - 2.0 or player.global_position.y > terrain_y + 250.0:
-        player.global_position.y = terrain_y + 1.2
+        player.global_position.y = terrain_y + PLAYER_GROUND_CLEARANCE
         player.velocity = Vector3.ZERO
+    _arm_player_surface_guard(false)
 
 func _place_player_safely(position: Vector3) -> void:
     var xz := Vector2(position.x, position.z)
-    player.global_position = Vector3(position.x, WorldData.elevation_at(xz) + 1.2, position.z)
+    player.global_position = Vector3(position.x, WorldData.elevation_at(xz) + PLAYER_GROUND_CLEARANCE, position.z)
     player.velocity = Vector3.ZERO
+    _arm_player_surface_guard(true)
+
+func _arm_player_surface_guard(force_snap_to_terrain: bool) -> void:
+    if player.has_method("prepare_for_streamed_surface"):
+        player.call("prepare_for_streamed_surface", force_snap_to_terrain)
 
 func _on_player_died() -> void:
     if respawning:
