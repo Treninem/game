@@ -65,7 +65,7 @@ func _process(_delta: float) -> void:
 
     var builds := 0
     while not pending_cells.is_empty() and builds < MAX_CELL_BUILDS_PER_FRAME:
-        var cell := pending_cells.pop_front()
+        var cell: Vector2i = pending_cells.pop_front()
         queued_cells.erase(cell)
         if not loaded_cells.has(cell) and _should_keep_cell(cell):
             _build_cell(cell)
