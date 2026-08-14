@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+@export var enemy_id: String = ""
 @export var max_health := 70.0
 @export var move_speed := 3.2
 @export var detection_range := 14.0
@@ -14,6 +15,11 @@ var target: CharacterBody3D
 var spawn_position := Vector3.ZERO
 
 func _ready() -> void:
+    if enemy_id.is_empty():
+        enemy_id = String(name)
+    if bool(GameState.get_world_value("enemy:" + enemy_id, false)):
+        queue_free()
+        return
     health = max_health
     spawn_position = global_position
     add_to_group("hostile")
@@ -77,7 +83,7 @@ func take_damage(amount: float, attacker: Node = null) -> void:
         _die()
 
 func _die() -> void:
-    GameState.register_enemy_defeat()
+    GameState.register_enemy_defeat(enemy_id)
     set_physics_process(false)
     visible = false
     var collision := get_node_or_null("CollisionShape3D") as CollisionShape3D
