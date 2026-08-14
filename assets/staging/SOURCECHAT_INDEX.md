@@ -213,6 +213,56 @@ Path: `assets/staging/sourcechat_b16/models/`
 
 Recommended use: source meshes/chunks for destructible props, breakable containers, damaged roads/buildings/rubble and rock/boulder debris. Main chat should inspect topology/scale/materials/collisions, generate optimized GLB production copies where appropriate, and only integrate subsets matching the final art direction/performance target.
 
+## B17 — forest ambience
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b17/audio/`
+
+- `oga_forest_ambience_tinyworlds/`
+- `oga_forest_birds_pauliuw/`
+
+Recommended use: calm forest/woods ambient layer plus individual forest-bird source takes. Combine selectively with B06 biome ambience and B15 wind/rain; clean the noisier raw bird recordings before production promotion.
+
+## B18 — Godot-ready breakable boxes / barrels / jars
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b18/models/oga_breakable_boxes_godot_ready/`
+
+- extracted Godot-ready `.tscn`/`.tres`/GLTF/material/texture content;
+- source FBX/GLTF/Blend/1K texture files;
+- crate/barrel/jar intact and broken pieces plus collision-source meshes.
+
+Recommended use: breakable settlement/interior/world props. Third-party executable scripts were excluded; main chat should connect these assets to ImPuls' own destruction logic rather than importing foreign runtime code.
+
+## B19 — Godot-ready breakable doors and windows
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b19/models/oga_breakable_doors_windows/`
+
+- Godot-ready resource/scene/model/material sources;
+- FBX/GLTF/Blend/1K texture source files;
+- intact and broken door/window variants plus collider meshes.
+
+Recommended use: buildings, interiors, destructible windows/doors and damage states. Third-party executable scripts were excluded; main chat should inspect pivots, collisions and break-piece scale before production promotion.
+
+## B20 — Containers Pack
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b20/models/oga_containers_pack/`
+
+Real Godot-ready and source content for 34 container combinations: propane tanks, oxygen tanks, gas cans, water drums, water jugs and water tanks, with 1K textures and Godot collision setup from the source pack.
+
+Recommended use: settlements, workshops, mines, farms, industry, storage and logistics. Main chat should select only context-appropriate variants and keep dangerous/fuel container gameplay semantics separate from visuals.
+
+## B21 — Mine Object collection
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b21/models/oga_mine_object_collection/`
+
+Real Godot-ready and FBX/GLTF/Blend/texture sources for mine tracks, mine carts, pickaxes, jars, pipes, posts and mining contraptions; source page lists roughly 12.7k total tris and 1K textures.
+
+Recommended use: authored mines/caves, underground industry, minecart routes, mining tools and pipes. Main chat should assemble modular track/pipe sections, verify pivots/collisions/scale, and promote only the pieces needed by each location.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
