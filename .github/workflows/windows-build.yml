@@ -1,34 +1,40 @@
-name: Build Release and Installer
+name: Build Stable Release and Installer
 
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - "assets/ASSET_PACKS.md"
-      - "assets/registry/**"
-      - "docs/**"
+    paths:
+      - "project.godot"
+      - "export_presets.cfg"
+      - "scripts/**"
+      - "scenes/**"
+      - "installer/**"
+      - "tools/**"
+      - "tests/**"
+      - "assets/branding/**"
+      - "assets/ui/**"
+      - ".github/workflows/windows-build.yml"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: impuls-main-release
-  cancel-in-progress: false
+  group: impuls-stable-release
+  cancel-in-progress: true
 
 jobs:
   build-game:
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[stable]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Prepare ImPuls branding
         run: |
           python3 -m pip install --disable-pip-version-check pillow
           python3 tools/make_icon.py installer/impuls.ico
           test -s assets/branding/impuls_icon.png
           test -s installer/impuls.ico
-
       - name: Install Godot 4.7.1 and export templates
         shell: bash
         run: |
@@ -37,33 +43,25 @@ jobs:
           unzip -q godot.zip
           chmod +x Godot_v4.7.1-stable_linux.x86_64
           curl -L -o templates.tpz "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export_templates.tpz"
-          rm -rf templates_unpack
-          mkdir templates_unpack
+          rm -rf templates_unpack && mkdir templates_unpack
           unzip -q templates.tpz -d templates_unpack
           mkdir -p "$HOME/.local/share/godot/export_templates/4.7.1.stable"
           cp -r templates_unpack/templates/* "$HOME/.local/share/godot/export_templates/4.7.1.stable/"
-
       - name: Validate project headlessly
-        shell: bash
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
-
+      - name: Verify stable gameplay boot
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_boot_world.gd
+      - name: Verify UI and save slots
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_ui_and_save.gd
       - name: Verify player traverses the world
-        shell: bash
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd
-
       - name: Export Windows x64
-        shell: bash
         run: |
           mkdir -p build/windows
           ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --export-release "Windows Desktop" build/windows/ImPuls.exe
           test -f build/windows/ImPuls.exe
-
       - name: Package Windows build
-        shell: bash
-        run: |
-          cd build/windows
-          zip -9 -r ../../ImPuls-PC-Windows-x64.zip .
-
+        run: cd build/windows && zip -9 -r ../../ImPuls-PC-Windows-x64.zip .
       - uses: actions/upload-artifact@v4
         with:
           name: game-windows
@@ -76,46 +74,40 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Prepare ImPuls branding
         shell: pwsh
         run: |
           python -m pip install --disable-pip-version-check pillow
           python tools/make_icon.py installer/impuls.ico
           if (-not (Test-Path installer/impuls.ico)) { throw "ImPuls ICO missing" }
-
       - uses: actions/download-artifact@v4
         with:
           name: game-windows
           path: downloaded
-
       - name: Prepare installer payload
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path build/windows | Out-Null
           Copy-Item downloaded/build/windows/* build/windows/ -Recurse -Force
           "build-${{ github.run_number }}" | Set-Content installer/release_tag.txt -Encoding ASCII
-
       - name: Ensure Inno Setup
         shell: pwsh
         run: |
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
           if (-not (Test-Path $iscc)) { throw "Inno Setup compiler not found" }
-
-      - name: Build real Windows installer
+      - name: Build Windows installer
         shell: pwsh
         run: |
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           & $iscc "/DMyBuildTag=build-${{ github.run_number }}" "installer\ImPuls.iss"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
       - uses: actions/upload-artifact@v4
         with:
           name: ImPuls-Setup
           path: installer/output/ImPuls-Setup-*.exe
 
-  publish-release:
+  publish-stable:
     needs: [build-game, build-installer]
     runs-on: ubuntu-latest
     steps:
@@ -128,24 +120,24 @@ jobs:
         with:
           name: ImPuls-Setup
           path: installer-artifact
-      - name: Prepare release files
-        shell: bash
+      - name: Prepare stable release files
         run: |
           python3 -m pip install --disable-pip-version-check pillow
           python3 tools/make_icon.py installer/impuls.ico
           cp game/ImPuls-PC-Windows-x64.zip .
           cp installer-artifact/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
           mkdir -p updater-runtime
-          cp installer/updater.ps1 updater-runtime/
-          cp installer/launcher.vbs updater-runtime/
-          cp installer/install_update_task.ps1 updater-runtime/
-          cp installer/refresh_shortcuts.ps1 updater-runtime/
-          cp installer/impuls.ico updater-runtime/
+          cp installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
           (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
           sha256sum ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip > SHA256SUMS.txt
-      - name: Publish latest automatic build
+      - name: Publish rolling stable channel
         env:
           GH_TOKEN: ${{ github.token }}
-        shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls Stage 10: world-first stabilization. Adaptive pause/gameplay UI, 64x64 km streamed world, canonical 4x4 km capital with 32 gates, verified player traversal, movement recovery, permanent minimap, selected ImPuls branding, and offline-safe updater runtime."
+          BUILD="build-${{ github.run_number }}"
+          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release upload stable ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --clobber --repo "${{ github.repository }}"
+            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Stabilized branding, UI boot state, world visibility, traversal, offline-safe updates and rollback." --repo "${{ github.repository }}"
+          else
+            gh release create stable ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --title "$BUILD" --notes "ImPuls stable channel. Stabilized branding, UI boot state, world visibility, traversal, offline-safe updates and rollback." --repo "${{ github.repository }}"
+          fi
