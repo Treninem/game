@@ -1,0 +1,142 @@
+name: Import verified real wildlife batch 4
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import_real_wildlife_batch4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-real-wildlife-batch4
+  cancel-in-progress: false
+
+jobs:
+  import-wildlife:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sparse partial checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/import_real_wildlife_batch4.yml
+            assets/source_packs/opengameart/individual_animals
+          sparse-checkout-cone-mode: false
+
+      - name: Download verified CC0 wetland and aquatic sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+          mkdir -p "$ROOT/crocodile" "$ROOT/turtle" "$ROOT/shark" "$ROOT/snail" "$ROOT/piranha" "$ROOT/catfish"
+
+          fetch() {
+            local url="$1" out="$2"
+            if [ -s "$out" ]; then echo "Already present: $out"; return 0; fi
+            curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1200 \
+              -A 'ImPuls-CC0-AssetImporter/4.0' "$url" -o "$out"
+            test -s "$out"
+          }
+
+          fetch 'https://opengameart.org/sites/default/files/crocodile.7z' "$ROOT/crocodile/crocodile.7z"
+          fetch 'https://opengameart.org/sites/default/files/Turtle.blend' "$ROOT/turtle/Turtle.blend"
+          fetch 'https://opengameart.org/sites/default/files/turtle%20texture.png' "$ROOT/turtle/turtle_texture.png"
+          fetch 'https://opengameart.org/sites/default/files/Shark.7z' "$ROOT/shark/Shark.7z"
+          fetch 'https://opengameart.org/sites/default/files/snail_tinyworlds.zip' "$ROOT/snail/snail_tinyworlds.zip"
+          fetch 'https://opengameart.org/sites/default/files/piranha_model.zip' "$ROOT/piranha/piranha_model.zip"
+          fetch 'https://opengameart.org/sites/default/files/catfish.zip' "$ROOT/catfish/catfish.zip"
+          fetch 'https://opengameart.org/sites/default/files/catfish_obj.zip' "$ROOT/catfish/catfish_obj.zip"
+
+          find "$ROOT" -type f -size 0 -print -quit | grep -q . && { echo 'ERROR: zero-byte aquatic source'; exit 1; } || true
+
+      - name: Write provenance metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+
+          cat > "$ROOT/crocodile/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/crocodile-0
+          License: CC0
+          Author: br-n518
+          File: crocodile.7z
+          Notes: 918 triangles, 1024 diffuse/normal/specular textures; idle, walk, attack and death animations.
+          EOF
+
+          cat > "$ROOT/turtle/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/turtle-0
+          License: CC0
+          Author: Heathal
+          Files: Turtle.blend, turtle_texture.png
+          Notes: low-poly cartoon turtle with basic rig and walk cycle; texture maps supplied by source.
+          EOF
+
+          cat > "$ROOT/shark/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/shark-low-poly
+          License: CC0
+          Author: STKRudy85
+          File: Shark.7z
+          Notes: low-poly shark, textured and rigged; source archive includes license file.
+          EOF
+
+          cat > "$ROOT/snail/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/snail-3d-model
+          License: CC0
+          Author: TinyWorlds
+          File: snail_tinyworlds.zip
+          Notes: photogrammetric snail-shell model, approximately 3k polygons; useful for close-up forest/wetland detail.
+          EOF
+
+          cat > "$ROOT/piranha/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/piranha
+          License: CC0
+          Author: JamesWhite
+          File: piranha_model.zip
+          Notes: 3D piranha with 256x256 alpha texture.
+          EOF
+
+          cat > "$ROOT/catfish/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/3d-low-poly-catfish
+          License: CC0
+          Author: gfroad
+          Files: catfish.zip, catfish_obj.zip
+          Notes: 284-poly/151-vertex catfish; source includes swim and jump animations in the primary archive plus OBJ export.
+          EOF
+
+      - name: Preserve batch outside worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+          CACHE="/tmp/impuls_wildlife_batch4"
+          rm -rf "$CACHE"; mkdir -p "$CACHE"
+          for d in crocodile turtle shark snail piranha catfish; do cp -a "$ROOT/$d" "$CACHE/"; done
+
+      - name: Commit safely over moving main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ROOT="assets/source_packs/opengameart/individual_animals"
+          CACHE="/tmp/impuls_wildlife_batch4"
+
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main
+            git reset --hard FETCH_HEAD
+            mkdir -p "$ROOT"
+            for d in crocodile turtle shark snail piranha catfish; do
+              rm -rf "$ROOT/$d"
+              cp -a "$CACHE/$d" "$ROOT/"
+            done
+            git add "$ROOT/crocodile" "$ROOT/turtle" "$ROOT/shark" "$ROOT/snail" "$ROOT/piranha" "$ROOT/catfish"
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "assets: vendor fourth verified CC0 wildlife batch"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
