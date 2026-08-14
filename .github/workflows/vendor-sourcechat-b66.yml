@@ -1,0 +1,125 @@
+name: Vendor source-chat B66 real CC0 spider boar wolf werewolf
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b66.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b66
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 spider boar wolf werewolf sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b66"
+          TMP=".sourcechat_b66_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$ROOT/models/oga_spider_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B66/1.0' \
+            "https://opengameart.org/sites/default/files/spider_1.blend" \
+            -o "$ROOT/models/oga_spider_animated/spider.blend"
+          meta "oga_spider_animated" \
+            "https://opengameart.org/content/spider-2" \
+            "Spider" \
+            "https://opengameart.org/sites/default/files/spider_1.blend" \
+            "222-triangle textured animated spider; source page lists Idle, Walk and Attack animations."
+
+          mkdir -p "$ROOT/models/oga_boar_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B66/1.0' \
+            "https://opengameart.org/sites/default/files/boar_0.blend" \
+            -o "$ROOT/models/oga_boar_rigged_animated/boar.blend"
+          meta "oga_boar_rigged_animated" \
+            "https://opengameart.org/content/boar" \
+            "Boar" \
+            "https://opengameart.org/sites/default/files/boar_0.blend" \
+            "Rigged and textured boar around 1k tris with walk and attack animations."
+
+          mkdir -p "$TMP/wolf" "$ROOT/models/oga_wolf_rigged"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B66/1.0' \
+            "https://opengameart.org/sites/default/files/3dwolf_blend.zip" \
+            -o "$TMP/wolf.zip"
+          unzip -q "$TMP/wolf.zip" -d "$TMP/wolf"
+          chmod -R u+rwX "$TMP/wolf" || true
+          rsync -a "$TMP/wolf/" "$ROOT/models/oga_wolf_rigged/"
+          meta "oga_wolf_rigged" \
+            "https://opengameart.org/content/3d-wolf" \
+            "3d wolf" \
+            "https://opengameart.org/sites/default/files/3dwolf_blend.zip" \
+            "Rigged wolf source in Blender format; source page reports 2,923 vertices and 5,358 faces. Animation readiness must be audited before production use."
+
+          mkdir -p "$TMP/werewolf" "$ROOT/models/oga_werewolf_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B66/1.0' \
+            "https://opengameart.org/sites/default/files/werewolf_source.7z" \
+            -o "$TMP/werewolf.7z"
+          7z x -y "$TMP/werewolf.7z" -o"$TMP/werewolf" >/dev/null
+          chmod -R u+rwX "$TMP/werewolf" || true
+          rsync -a "$TMP/werewolf/" "$ROOT/models/oga_werewolf_animated/"
+          meta "oga_werewolf_animated" \
+            "https://opengameart.org/content/werewolf-0" \
+            "Werewolf" \
+            "https://opengameart.org/sites/default/files/werewolf_source.7z" \
+            "892-triangle animated werewolf with 1024 textures; source page lists idle variants, walk, run, attack and death."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B66 — real CC0 spider, boar, wolf and werewolf
+
+          Source-only staging. Nothing here is wired into scenes, scripts or runtime.
+
+          Main integration chat should audit scale, materials, skeletons, animation clips, collision and LOD before promoting selected models. The wolf is rigged but should not be assumed animation-ready without inspection.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B66 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B66 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b66
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 spider boar wolf werewolf B66"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
