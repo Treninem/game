@@ -40,8 +40,6 @@ jobs:
           unzip -q "$TMP/godot.zip" -d "$TMP/godot"
           unzip -q "$TMP/source.zip" -d "$TMP/source"
 
-          # Keep models, textures, materials and scene/resources from the Godot-ready package.
-          # Third-party executable scripts are intentionally excluded in this source-only chat.
           rsync -a --prune-empty-dirs --include='*/' \
             --include='*.tscn' --include='*.tres' --include='*.res' --include='*.material' \
             --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' \
@@ -111,6 +109,15 @@ jobs:
           git add assets/staging/sourcechat_b18
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "assets(staging): vendor real CC0 Godot-ready breakable props B18"
-          git fetch origin main
-          git rebase origin/main
-          git push origin HEAD:main
+
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "B18 push race on attempt $attempt; refreshing main and retrying."
+            sleep $((attempt * 2))
+          done
+          echo "B18 could not push after retries."
+          exit 1
