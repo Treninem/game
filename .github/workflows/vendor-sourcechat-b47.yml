@@ -1,0 +1,78 @@
+name: Vendor source-chat B47 real CC0 medieval village megakit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b47.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b47
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 Medieval Village MegaKit Standard
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard"
+          TMP=".sourcechat_b47_tmp"
+          rm -rf "assets/staging/sourcechat_b47" "$TMP"
+          mkdir -p "$ROOT" "$TMP/extracted"
+          URL="https://opengameart.org/sites/default/files/medieval_village_megakitstandard.zip"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B47/1.0' "$URL" -o "$TMP/pack.zip"
+          unzip -q "$TMP/pack.zip" -d "$TMP/extracted"
+          chmod -R u+rwX "$TMP/extracted" || true
+          rsync -a "$TMP/extracted/" "$ROOT/"
+          chmod -R u+rwX "$ROOT" || true
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/SOURCE.md" <<'EOF'
+          # Source
+          Pack: Quaternius Medieval Village MegaKit — Standard
+          Source page: https://opengameart.org/content/medieval-village-megakit
+          Download: https://opengameart.org/sites/default/files/medieval_village_megakitstandard.zip
+          License: CC0 as stated on the source page.
+          Standard edition: 176 modular models. Source page describes walls with exterior/interior faces, roofs, stairs, doors, windows, vines and other village-building modules.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          cat > "assets/staging/sourcechat_b47/README.md" <<'EOF'
+          # Source chat B47 — real CC0 Medieval Village MegaKit Standard
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should compare this newer modular kit against older medieval sources already staged, retain the strongest compatible architecture, normalize grid/scale/materials, generate collisions/LODs as needed, and avoid integrating duplicate building families blindly.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B47 files:"; find "assets/staging/sourcechat_b47" -type f | wc -l
+          du -sh "assets/staging/sourcechat_b47"
+
+      - name: Commit B47 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b47
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 medieval village megakit B47"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
