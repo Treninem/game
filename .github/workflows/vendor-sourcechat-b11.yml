@@ -1,0 +1,143 @@
+name: Vendor source-chat B11 real CC0 water cooking utility
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b11.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b11
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 water and cooking utility sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b11/audio"
+          TMP=".sourcechat_b11_tmp"
+          rm -rf "$TMP"; mkdir -p "$ROOT" "$TMP"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full >/dev/null
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks this staged asset as CC0/public domain.
+          License: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          one() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$key"; mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 -A 'ImPuls-CC0-SourceChat-B11/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          seven_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 -A 'ImPuls-CC0-SourceChat-B11/1.0' "$url" -o "$work/pack.7z"
+            7z x -y "$work/pack.7z" -o"$work/archive" >/dev/null
+            rsync -a --prune-empty-dirs --include='*/' --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one "oga_dripping_water_loop" "atmosbasement.mp3_.flac" \
+            "https://opengameart.org/sites/default/files/atmosbasement.mp3_.flac" \
+            "https://opengameart.org/content/dripping-water-loop" \
+            "Independent.nu; submitted by qubodup / OpenGameArt" \
+            "CC0 dripping-water loop for caves, cellars, sewers, wells and pipe leaks."
+
+          seven_audio "oga_6_short_water_splashes" \
+            "https://opengameart.org/sites/default/files/ezwa-water_splash.7z" \
+            "https://opengameart.org/content/6-short-water-splashes" \
+            "ezwa; submitted by qubodup / OpenGameArt" \
+            "Six short CC0 water splashes for small object impacts, puddles, shoreline and movement."
+
+          one "oga_boiling_water_loops" "cooking_with_cover_01.ogg" \
+            "https://opengameart.org/sites/default/files/cooking_with_cover_01.ogg" \
+            "https://opengameart.org/content/boiling-water-loops" \
+            "TinyWorlds / OpenGameArt" \
+            "CC0 loopable covered-pot boiling/cooking recording."
+          one "oga_boiling_water_loops" "cooking_without_cover_01.ogg" \
+            "https://opengameart.org/sites/default/files/cooking_without_cover_01_0.ogg" \
+            "https://opengameart.org/content/boiling-water-loops" \
+            "TinyWorlds / OpenGameArt" \
+            "CC0 loopable uncovered-pot boiling/cooking recording."
+
+          one "oga_stove_switch" "switch_strength_stove_01.ogg" \
+            "https://opengameart.org/sites/default/files/switch_strength_stove_01.ogg" \
+            "https://opengameart.org/content/stove-switch" \
+            "TinyWorlds / OpenGameArt" \
+            "CC0 stove/furnace strength-control switch sound."
+          one "oga_stove_switch" "turn_stove_on_01.ogg" \
+            "https://opengameart.org/sites/default/files/turn_stove_on_01_0.ogg" \
+            "https://opengameart.org/content/stove-switch" \
+            "TinyWorlds / OpenGameArt" \
+            "CC0 stove/furnace power switch sound."
+
+          one "oga_adding_salt" "adding_salt_01.ogg" \
+            "https://opengameart.org/sites/default/files/adding_salt_01.ogg" \
+            "https://opengameart.org/content/adding-salt" \
+            "TinyWorlds / OpenGameArt" \
+            "CC0 cooking/seasoning foley for kitchens and taverns."
+
+          for n in 01 02 03 04; do
+            file="wave_${n}_cc0-11505__transitking__wavesound.flac"
+            one "oga_water_waves" "$file" \
+              "https://opengameart.org/sites/default/files/$file" \
+              "https://opengameart.org/content/water-waves" \
+              "transitking; submitted by qubodup / OpenGameArt" \
+              "One of four CC0 water-wave recordings for rivers, shores and water-body layering."
+          done
+
+          rm -rf "$TMP"
+          cat > "assets/staging/sourcechat_b11/README.md" <<'EOF'
+          # Source chat B11 — real CC0 water/cooking utility audio
+
+          Physically staged source files only; no game integration.
+          Coverage: dripping water, six short splashes, two boiling/cooking loops, stove/furnace switches, seasoning foley and four water-wave recordings.
+          Main chat should classify by water scale/source distance and use cooking sounds for taverns, homes, camps and kitchens only where appropriate.
+          EOF
+          find assets/staging/sourcechat_b11 -type f | wc -l
+          du -sh assets/staging/sourcechat_b11
+
+      - name: Commit only B11 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b11
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 water cooking utility B11"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
