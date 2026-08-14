@@ -951,3 +951,25 @@ Path: `assets/staging/sourcechat_b87/models/`
 - `oga_basic_voxel_farm/` — optional voxel farm source/reference set; use only if style is appropriate.
 
 Integration rule: keep crops and farm props as source candidates. Main game chat should promote only the variants needed by actual fields, farms, shops and workshops, then normalize materials, scale, collision and LOD.
+
+## B88 — sewers / mines / caves / concrete pipes
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b88/models/`
+
+- `oga_sewer_tunnels_lowres_2026/` — 2026 low-resolution modular sewer source with reduced texture/poly cost.
+- `oga_mines_and_caves_178/` — large 178-object mine/cave source library with Godot-ready data; third-party scripts removed in this source-only chat.
+- `oga_free_mine_assets_pack/` — broad mine support/rail/rock/lamp/cart/chest source set.
+- `oga_concrete_pipes/` — concrete pipe/infrastructure source preserved as original archive.
+
+## B89 — character bodies / parts / hats / hair
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b89/models/`
+
+- `oga_character_pack_2026/` — 2026 grouped male/female humanoid source archive for NPC variety auditioning.
+- `oga_human_parts_pack_2026/` — modular human heads/faces/arms/legs/hands/feet and related parts.
+- `oga_lowpoly_hats/` — simple low-poly hat source collection.
+- `oga_hair_styles_cc0/` — five separate CC0 male/female hairstyle sources.
+
+Integration rule: B88 and B89 are source libraries only. Main game chat should select one production cave/sewer grid standard and one production humanoid skeleton/body standard, then adapt only chosen meshes/parts and rebuild materials/collision/LOD as needed.
