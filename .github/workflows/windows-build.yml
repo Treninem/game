@@ -75,6 +75,19 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Validate updater PowerShell syntax
+        shell: pwsh
+        run: |
+          $files = @("installer/updater_v4.ps1", "installer/updater.ps1", "installer/install_update_task.ps1", "installer/refresh_shortcuts.ps1")
+          foreach ($file in $files) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error "$file: $($_.Message)" }
+              throw "PowerShell syntax validation failed: $file"
+            }
+          }
       - name: Prepare ImPuls branding
         shell: pwsh
         run: |
@@ -157,7 +170,7 @@ jobs:
           cp installer-artifact/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
 
           mkdir -p updater-runtime
-          cp installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
+          cp installer/updater_v4.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
           (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
 
           FROM_BUILD="${OLD_BUILD:-bootstrap}"
@@ -181,9 +194,9 @@ jobs:
             echo "delta_sum=" >> "$GITHUB_OUTPUT"
           fi
 
-          echo "Full package: $(stat -c%s ImPuls-PC-Windows-x64.zip) bytes"
+          echo "Full first-install package: $(stat -c%s ImPuls-PC-Windows-x64.zip) bytes"
           if [[ -n "$OLD_BUILD" ]]; then
-            echo "Delta package: $(stat -c%s "$DELTA_NAME") bytes"
+            echo "Delta-only update package: $(stat -c%s "$DELTA_NAME") bytes"
           fi
       - name: Publish rolling stable channel
         env:
@@ -200,7 +213,7 @@ jobs:
           fi
           if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload stable "${ASSETS[@]}" --clobber --repo "${{ github.repository }}"
-            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Content-aware delta updates, visible verified update progress, responsive UI alignment, rollback, offline-safe startup." --repo "${{ github.repository }}"
+            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Installed builds update through retained content-aware delta chains only; the full archive is for first installation/manual recovery. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
           else
-            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "ImPuls stable channel. Content-aware delta updates, visible verified update progress, responsive UI alignment, rollback, offline-safe startup." --repo "${{ github.repository }}"
+            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "ImPuls stable channel. Installed builds update through retained content-aware delta chains only; the full archive is for first installation/manual recovery. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
           fi
