@@ -642,3 +642,58 @@ Path: `assets/staging/sourcechat_b57/models/`
 - `oga_camel_basemesh/` — basemesh source explicitly requiring production work.
 
 Recommended use: mixed-readiness fauna source pool. Main integration chat should not treat all four as equally production-ready.
+
+## B58 — animated male deer / elephant / Anklyosaurus
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b58/models/`
+
+- `oga_old_deer_male_animated/` — rigged/animated male deer source with packed material maps.
+- `oga_elephant_lowpoly_animated/` — rigged elephant source with multiple authored animations.
+- `oga_anklyosaurus_static/` — static dinosaur source; not rigged/animated.
+
+Recommended use: production-candidate deer/elephant after Godot import tests; Anklyosaurus only as a source mesh requiring rigging/animation if selected.
+
+## B59 — prehistoric static fauna sources
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b59/models/`
+
+- `oga_pentaceratops_static/`
+- `oga_albertosaurus_static/`
+- `oga_trex_static/`
+
+Recommended use: optional authored prehistoric-region source pool. These are static source meshes and must not be treated as finished animated creatures.
+
+## B60 — bridges / fortified gate
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b60/models/`
+
+- `oga_big_stone_bridge/`
+- `oga_wooden_bridge/`
+- `oga_medieval_gatehouse/`
+
+Recommended use: traversal landmarks, settlement entrances and fortifications after scale/collision/LOD work. Optimize the large stone bridge heavily before production promotion.
+
+## B61 — water-powered sawmill / horse-drawn carriage
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b61/models/`
+
+- `oga_medieval_waterpowered_sawmill/`
+- `oga_horse_drawn_carriage/`
+
+Recommended use: authored river/lumber/industry location and carriage/world-prop source. Carriage materials require repair/replacement before production use.
+
+## B62 — authored NPC archetypes
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b62/models/`
+
+- `oga_bartender_rigged/`
+- `oga_old_lady_rigged/`
+- `oga_monk_rigged_idle/`
+- `oga_goblin_rigged_animated/`
+
+Recommended use: authored settlement/enemy NPC candidates after skeleton/animation/material import checks. Use as distinct archetypes rather than mass-spawning identical models.
