@@ -1,0 +1,126 @@
+name: Vendor source-chat B86 real CC0 market tools medieval props
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b86.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b86
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 market tools medieval prop sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b86"
+          TMP=".sourcechat_b86_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" tmpname="$3"
+            mkdir -p "$TMP/$tmpname" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B86/1.0' "$url" -o "$TMP/$tmpname.zip"
+            unzip -q "$TMP/$tmpname.zip" -d "$TMP/$tmpname"
+            chmod -R u+rwX "$TMP/$tmpname" || true
+            find "$TMP/$tmpname" -type f -iname '*.unitypackage' -delete
+            rsync -a "$TMP/$tmpname/" "$ROOT/models/$name/"
+          }
+
+          stage_zip "kenney_mini_market" "https://opengameart.org/sites/default/files/kenney_mini-market.zip" "market"
+          meta "kenney_mini_market" \
+            "https://opengameart.org/content/mini-market" \
+            "Mini Market" \
+            "https://opengameart.org/sites/default/files/kenney_mini-market.zip" \
+            "Kenney CC0 supermarket/store kit with 20 optimized animated retail objects in FBX/OBJ/GLTF formats."
+
+          mkdir -p "$ROOT/models/oga_medieval_tools_12"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B86/1.0' \
+            "https://opengameart.org/sites/default/files/medieval_tools_pack.7z" -o "$ROOT/models/oga_medieval_tools_12/medieval_tools_pack.7z"
+          meta "oga_medieval_tools_12" \
+            "https://opengameart.org/content/medieval-tools-pack" \
+            "Medieval Tools Pack" \
+            "https://opengameart.org/sites/default/files/medieval_tools_pack.7z" \
+            "CC0 pack of 12 low-poly tools: pitchfork, shovel, hoe, sickle, axe, scythe, rake, broom, saw, pickaxe, hammer and related variants. Original 7z preserved for reliable extraction in main integration workflow."
+
+          stage_zip "oga_medieval_props_pack_1_daniel" "https://opengameart.org/sites/default/files/55083_props1.zip" "props1"
+          meta "oga_medieval_props_pack_1_daniel" \
+            "https://opengameart.org/content/medieval-props-pack-1" \
+            "Medieval Props Pack 1" \
+            "https://opengameart.org/sites/default/files/55083_props1.zip" \
+            "Daniel Andersson CC0 Blender props for a medieval village; useful for peasant/farm/settlement dressing."
+
+          stage_zip "oga_medieval_props_pack_2_daniel" "https://opengameart.org/sites/default/files/55181_props2.zip" "props2"
+          meta "oga_medieval_props_pack_2_daniel" \
+            "https://opengameart.org/content/medieval-props-pack-2" \
+            "Medieval Props Pack 2" \
+            "https://opengameart.org/sites/default/files/55181_props2.zip" \
+            "Daniel Andersson CC0 Blender props for a medieval village; source comments specifically mention towers and wheelbarrows used in peasant fields."
+
+          stage_zip "oga_medieval_props_pack_3_daniel" "https://opengameart.org/sites/default/files/55189_props3.zip" "props3"
+          meta "oga_medieval_props_pack_3_daniel" \
+            "https://opengameart.org/content/medieval-props-pack-3" \
+            "Medieval Props Pack 3" \
+            "https://opengameart.org/sites/default/files/55189_props3.zip" \
+            "Daniel Andersson CC0 Blender props for medieval settlement dressing, including useful fishing-shack/tannery-style props."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B86 — real CC0 market, tools and medieval village props
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use the market/tools/props selectively for shops, farms, fields, workshops, fishing shacks, tanneries and village dressing. Do not promote all historical prop packs blindly if newer packs already cover the same object at better quality.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B86 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B86 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b86
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 market tools medieval props B86"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
