@@ -26,6 +26,8 @@ func _apply_settings() -> void:
     camera.fov = float(SettingsManager.get_value("gameplay", "camera_fov"))
 
 func _unhandled_input(event: InputEvent) -> void:
+    if DialogueManager.is_open:
+        return
     if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
         var sensitivity := float(SettingsManager.get_value("gameplay", "mouse_sensitivity"))
         rotate_y(-event.relative.x * sensitivity)
@@ -88,8 +90,7 @@ func _try_attack() -> void:
         return
     var collider = interaction_ray.get_collider()
     if collider != null and collider.has_method("take_damage"):
-        var bonus := 8.0 if int(GameState.inventory.get("starter_axe", 0)) > 0 else 0.0
-        collider.take_damage(attack_damage + bonus, self)
+        collider.take_damage(attack_damage + InventorySystem.attack_bonus(), self)
 
 func _try_interact() -> void:
     if GameState.is_dead:
