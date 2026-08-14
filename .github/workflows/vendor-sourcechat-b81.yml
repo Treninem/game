@@ -1,0 +1,117 @@
+name: Vendor source-chat B81 real CC0 building road retro urban
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b81.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b81
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 building road retro urban sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b81"
+          TMP=".sourcechat_b81_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" tmpname="$3"
+            mkdir -p "$TMP/$tmpname" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B81/1.0' "$url" -o "$TMP/$tmpname.zip"
+            unzip -q "$TMP/$tmpname.zip" -d "$TMP/$tmpname"
+            chmod -R u+rwX "$TMP/$tmpname" || true
+            find "$TMP/$tmpname" -type f -iname '*.unitypackage' -delete
+            rsync -a "$TMP/$tmpname/" "$ROOT/models/$name/"
+          }
+
+          stage_zip "kenney_building_kit" "https://opengameart.org/sites/default/files/kenney_building-kit.zip" "building"
+          meta "kenney_building_kit" \
+            "https://opengameart.org/content/building-kit" \
+            "Building Kit" \
+            "https://opengameart.org/sites/default/files/kenney_building-kit.zip" \
+            "Kenney CC0 building-construction kit with almost 80 optimized models including walls, windows, roofs and animated doors; source page explicitly lists Godot compatibility."
+
+          stage_zip "kenney_modular_buildings_2024" "https://opengameart.org/sites/default/files/kenney_modular-buildings.zip" "modular"
+          meta "kenney_modular_buildings_2024" \
+            "https://opengameart.org/content/modular-buildings" \
+            "Modular Buildings" \
+            "https://opengameart.org/sites/default/files/kenney_modular-buildings.zip" \
+            "Kenney CC0 modular city/building kit with 100 optimized models for structures, houses and skyscrapers."
+
+          stage_zip "kenney_3d_road_tile_pack_300" "https://opengameart.org/sites/default/files/3D%20Road%20pack.zip" "road300"
+          meta "kenney_3d_road_tile_pack_300" \
+            "https://opengameart.org/content/3d-road-tile-pack" \
+            "3D Road Tile pack" \
+            "https://opengameart.org/sites/default/files/3D%20Road%20pack.zip" \
+            "Kenney CC0 modular pack with 300+ road tiles covering cities, beaches, rivers, tram tracks and highways."
+
+          stage_zip "kenney_retro_urban_kit" "https://opengameart.org/sites/default/files/kenney_retro-urban-kit.zip" "retrourban"
+          meta "kenney_retro_urban_kit" \
+            "https://opengameart.org/content/retro-urban-kit" \
+            "Retro Urban Kit" \
+            "https://opengameart.org/sites/default/files/kenney_retro-urban-kit.zip" \
+            "Kenney CC0 retro early-3D/PSX-style urban source kit with 120 optimized objects and low-resolution textures."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B81 — real CC0 building, road and retro-urban kits
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should prefer B80 City Kits as a coherent modern-city family, use Building/Modular packs for gaps, and use the 300-tile road library selectively. Retro Urban is deliberately stylized and should only be promoted where the art direction accepts that look.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B81 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B81 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b81
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 building road retro urban B81"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
