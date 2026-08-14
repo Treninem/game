@@ -1,0 +1,95 @@
+name: Update source-chat staging index through B29
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b27-b29.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sourcechat-index-b27-b29
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Append verified B27-B29
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d assets/staging/sourcechat_b27/models/oga_traffic_road_assets
+          test -d assets/staging/sourcechat_b27/models/oga_modular_fence_pack
+          test -d assets/staging/sourcechat_b27/models/oga_basic_wooden_fence
+          test -d assets/staging/sourcechat_b28/models/kenney_nature_kit
+          test -d assets/staging/sourcechat_b28/models/quaternius_ultimate_nature_pack
+          test -d assets/staging/sourcechat_b29/models/oga_modular_medieval_building_pack
+          test -d assets/staging/sourcechat_b29/models/oga_medieval_tavern
+          test -d assets/staging/sourcechat_b29/models/oga_medieval_blacksmith
+          test -d assets/staging/sourcechat_b29/models/oga_medieval_tavern_interior
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/staging/SOURCECHAT_INDEX.md')
+          t=p.read_text(encoding='utf-8')
+          if '## B27 — traffic / road furniture / fences' in t:
+              raise SystemExit(0)
+          marker='## Integration rules for the main chat'
+          block='''## B27 — traffic / road furniture / fences
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b27/models/`
+
+          - `oga_traffic_road_assets/` — cones, barriers, manholes, roadblocks, streetlights and hydrants.
+          - `oga_modular_fence_pack/` — two modular fence families including Godot meshlib/gridmap source content.
+          - `oga_basic_wooden_fence/` — farm-style wooden fence Blender source.
+
+          Recommended use: city streets, work zones, farms, property boundaries and settlement dressing after scale/material/collision review.
+
+          ## B28 — large CC0 nature libraries
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b28/models/`
+
+          - `kenney_nature_kit/` — large nature library with trees, rocks, stones, terrain elements, waterfalls, camping equipment and plants.
+          - `quaternius_ultimate_nature_pack/` — broad trees/rocks/pines/forest/flowers source library in common 3D formats.
+
+          Recommended use: regional vegetation/terrain dressing. Main chat should deduplicate overlaps, select consistent biome families, normalize scale/materials, create LOD/Multimesh-friendly production versions and avoid loading whole source packs at runtime.
+
+          ## B29 — modular medieval building system
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b29/models/`
+
+          - `oga_modular_medieval_building_pack/` — modular house bases, windows, doors, balconies, chimneys, stairs, roofs/extensions/signs.
+          - `oga_medieval_tavern/` — standalone tavern building source.
+          - `oga_medieval_blacksmith/` — standalone blacksmith building source.
+          - `oga_medieval_tavern_interior/` — explorable tavern interior source.
+
+          Recommended use: varied capital/village architecture and authored interiors. Main chat should compose optimized production buildings rather than instancing heavy Blend source files directly.
+
+          '''
+          if marker not in t: raise SystemExit('integration marker missing')
+          p.write_text(t.replace(marker,block+marker,1),encoding='utf-8')
+          PY
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches through B29"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
