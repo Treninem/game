@@ -12,6 +12,7 @@ const HUMANOID := preload("res://scripts/humanoid_visual.gd")
 
 var visual: Node3D
 var current_target := Vector3.ZERO
+var footstep_distance_accum := 0.0
 
 func _ready() -> void:
     add_to_group("city_npc")
@@ -28,18 +29,29 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
     if DialogueManager.is_open:
         velocity = Vector3.ZERO
+        footstep_distance_accum = 0.0
         return
     current_target = _scheduled_target()
     var flat_delta := current_target - global_position
     flat_delta.y = 0.0
     if flat_delta.length() < 0.35:
         velocity = Vector3.ZERO
+        footstep_distance_accum = 0.0
         return
     var direction := flat_delta.normalized()
     velocity.x = direction.x * move_speed
     velocity.z = direction.z * move_speed
     rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), 0.12)
+
+    var before := global_position
     move_and_slide()
+    var moved := global_position - before
+    moved.y = 0.0
+    if moved.length() > 0.002 and is_on_floor():
+        footstep_distance_accum += moved.length()
+        if footstep_distance_accum >= 3.0:
+            footstep_distance_accum = 0.0
+            WorldVFX.spawn_footstep(global_position, 0.42, "", direction)
 
 func interact(_player: Node) -> void:
     velocity = Vector3.ZERO
