@@ -15,6 +15,7 @@ extends CharacterBody3D
 @onready var interaction_ray: RayCast3D = $CameraPivot/Camera3D/InteractionRay
 
 var attack_elapsed := 0.0
+var recovery_cooldown := 0.0
 
 func _ready() -> void:
     add_to_group("player")
@@ -26,7 +27,7 @@ func _apply_settings() -> void:
     camera.fov = float(SettingsManager.get_value("gameplay", "camera_fov"))
 
 func _unhandled_input(event: InputEvent) -> void:
-    if DialogueManager.is_open:
+    if DialogueManager.is_open or get_tree().paused:
         return
     if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
         var sensitivity := float(SettingsManager.get_value("gameplay", "mouse_sensitivity"))
@@ -41,29 +42,26 @@ func _unhandled_input(event: InputEvent) -> void:
         velocity.y = jump_velocity
     elif event.is_action_pressed("interact"):
         _try_interact()
-    elif event.is_action_pressed("craft"):
-        GameState.try_craft_building_kit()
-    elif event.is_action_pressed("build"):
-        _try_build_house()
     elif event.is_action_pressed("use_food"):
         GameState.use_consumable("berries")
     elif event.is_action_pressed("use_water"):
         GameState.use_consumable("water_flask")
-    elif event.is_action_pressed("use_meat"):
-        _use_meat_quick()
     elif event.is_action_pressed("quick_save"):
         if SaveManager.save_game(self):
             GameState.notify("Игра сохранена в слот %02d." % SaveManager.current_slot)
     elif event.is_action_pressed("quick_load"):
         if SaveManager.load_game(self):
-            get_tree().call_group("world_root", "spawn_house_from_state")
+            GameState.migrate_to_world_foundation()
+            _recover_to_terrain_if_needed(true)
             GameState.notify("Загружен слот %02d." % SaveManager.current_slot)
 
 func _physics_process(delta: float) -> void:
     attack_elapsed = maxf(0.0, attack_elapsed - delta)
+    recovery_cooldown = maxf(0.0, recovery_cooldown - delta)
     if GameState.is_dead:
         velocity = Vector3.ZERO
         return
+
     if not is_on_floor():
         velocity.y -= gravity * delta
 
@@ -81,6 +79,21 @@ func _physics_process(delta: float) -> void:
     velocity.z = move_toward(velocity.z, target.z, acceleration * delta)
     move_and_slide()
     _enforce_world_bounds()
+    _recover_to_terrain_if_needed(false)
+
+func _recover_to_terrain_if_needed(force_check: bool) -> void:
+    if recovery_cooldown > 0.0 and not force_check:
+        return
+    recovery_cooldown = 0.25
+    var xz := Vector2(global_position.x, global_position.z)
+    if not WorldData.inside_world(xz):
+        return
+    var terrain_y := WorldData.elevation_at(xz)
+    # Streaming collisions are intentionally local. If a frame reaches new
+    # terrain before its collision body is ready, never let the player fall away.
+    if global_position.y < terrain_y - 1.5:
+        global_position.y = terrain_y + 1.15
+        velocity.y = 0.0
 
 func _enforce_world_bounds() -> void:
     var limit := WorldData.WORLD_HALF_SIZE - 24.0
@@ -90,20 +103,7 @@ func _enforce_world_bounds() -> void:
     if before.x != global_position.x or before.z != global_position.z:
         velocity.x = 0.0
         velocity.z = 0.0
-        GameState.notify("Дальше начинается открытое море и граница текущего континента.")
-
-func _use_meat_quick() -> void:
-    if int(GameState.inventory.get("cooked_meat", 0)) > 0:
-        if GameState.remove_item("cooked_meat", 1):
-            GameState.hunger = minf(100.0, GameState.hunger + 45.0)
-            GameState.health = minf(GameState.max_health, GameState.health + 5.0)
-            GameState.survival_changed.emit()
-            GameState.notify("Вы съели жареное мясо.")
-        return
-    if int(GameState.inventory.get("raw_meat", 0)) > 0:
-        GameState.use_consumable("raw_meat")
-        return
-    GameState.notify("В быстром слоте нет еды.")
+        GameState.notify("Дальше начинается граница текущего континента.")
 
 func _try_attack() -> void:
     if GameState.is_dead or attack_elapsed > 0.0:
@@ -129,12 +129,3 @@ func _try_interact() -> void:
         collider.interact(self)
     else:
         GameState.notify("С этим объектом пока нельзя взаимодействовать.")
-
-func _try_build_house() -> void:
-    if GameState.is_dead:
-        return
-    var forward := -global_transform.basis.z
-    var build_position := global_position + Vector3(forward.x, 0.0, forward.z).normalized() * 5.0
-    build_position.y = WorldData.elevation_at(Vector2(build_position.x, build_position.z))
-    if GameState.try_mark_house_built(build_position):
-        get_tree().call_group("world_root", "spawn_house_from_state")
