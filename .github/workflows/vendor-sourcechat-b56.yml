@@ -1,0 +1,95 @@
+name: Vendor source-chat B56 real CC0 hippo oryx auroch whale
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b56.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b56
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 hippo oryx auroch whale
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b56"
+          TMP=".sourcechat_b56_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4" notes="$5"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B56/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            chmod -R u+rwX "$TMP/$name" || true
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            meta "$name" "$page" "$title" "$url" "$notes"
+          }
+
+          stage_zip "oga_hippo_rigged" "https://opengameart.org/sites/default/files/hippo.zip" "https://opengameart.org/content/hippo" "Hippo" "Low-poly hippo; source page states rigged and unwrapped."
+          stage_zip "oga_beisa_oryx_rigged" "https://opengameart.org/sites/default/files/oryx.zip" "https://opengameart.org/content/beisa-oryx-a-type-of-antelope" "Beisa Oryx" "Low-poly oryx; source page states rigged and unwrapped."
+          stage_zip "oga_auroch_male_female" "https://opengameart.org/sites/default/files/auroch.zip" "https://opengameart.org/content/auroch-male-and-female" "Auroch (Male and female)" "Low-poly male and female aurochs; source page states unwrapped."
+
+          mkdir -p "$ROOT/models/oga_whale_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B56/1.0' "https://opengameart.org/sites/default/files/whale_0.blend" -o "$ROOT/models/oga_whale_rigged_animated/whale_0.blend"
+          meta "oga_whale_rigged_animated" "https://opengameart.org/content/whale-lowpoly" "Whale (lowpoly)" "https://opengameart.org/sites/default/files/whale_0.blend" "Rigged whale with simple swim animation; source page states 288 tris."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B56 — real CC0 hippo, oryx, aurochs and whale
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should validate skeletons/animation, recover or replace textures where needed, normalize scale and select biome-appropriate uses. The whale is a lightweight animated aquatic source; hippo/oryx/aurochs are larger land-fauna sources.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B56 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B56 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b56
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 hippo oryx auroch whale B56"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
