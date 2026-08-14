@@ -14,15 +14,19 @@ func _fail(code: int, message: String) -> void:
     get_tree().quit(code)
 
 func _frame_error(frame: Control, available: Vector2, label: String) -> String:
-    if frame.size.x > available.x + 1.0 or frame.size.y > available.y + 1.0:
-        return "%s exceeds viewport; frame_size=%s available=%s" % [label, frame.size, available]
+    var render_scale := Vector2(absf(frame.scale.x), absf(frame.scale.y))
+    if render_scale.x <= 0.0 or render_scale.y <= 0.0:
+        return "%s has invalid render scale; scale=%s" % [label, frame.scale]
+    var visual_size := frame.size * render_scale
+    if visual_size.x > available.x + 1.0 or visual_size.y > available.y + 1.0:
+        return "%s exceeds viewport; visual_size=%s frame_size=%s scale=%s available=%s" % [label, visual_size, frame.size, frame.scale, available]
     if frame.position.x < -1.0 or frame.position.y < -1.0:
-        return "%s has negative drift; position=%s size=%s available=%s" % [label, frame.position, frame.size, available]
-    if frame.position.x + frame.size.x > available.x + 1.0 or frame.position.y + frame.size.y > available.y + 1.0:
-        return "%s extends outside viewport; position=%s size=%s available=%s" % [label, frame.position, frame.size, available]
-    var expected := ((available - frame.size) * 0.5).floor()
+        return "%s has negative drift; position=%s visual_size=%s available=%s" % [label, frame.position, visual_size, available]
+    if frame.position.x + visual_size.x > available.x + 1.0 or frame.position.y + visual_size.y > available.y + 1.0:
+        return "%s extends outside viewport; position=%s visual_size=%s available=%s" % [label, frame.position, visual_size, available]
+    var expected := ((available - visual_size) * 0.5).floor()
     if frame.position.distance_to(expected) > 2.0:
-        return "%s is not centered; got=%s expected=%s size=%s available=%s" % [label, frame.position, expected, frame.size, available]
+        return "%s is not centered; got=%s expected=%s visual_size=%s frame_size=%s scale=%s available=%s" % [label, frame.position, expected, visual_size, frame.size, frame.scale, available]
     return ""
 
 func _sidebar_error(menu: Control, frame: Control) -> String:
@@ -44,6 +48,12 @@ func _run_test() -> void:
     if settings_manager == null or save_manager == null or layout_guard == null:
         _fail(13, "required autoload nodes are missing from normal project tree")
         return
+
+    # Make the smoke deterministic even after a previously interrupted local run.
+    settings_manager.call("set_value", "graphics", "ui_scale", 1.0)
+    for _i in range(4):
+        await tree.process_frame
+    _checkpoint("ui-scale-baseline-restored")
 
     var packed := load("res://scenes/stage1.tscn") as PackedScene
     if packed == null:
@@ -169,5 +179,5 @@ func _run_test() -> void:
         return
 
     _checkpoint("passed")
-    print("UI smoke passed: centralized auto-alignment, 150% UI scaling and 10 save slots are stable")
+    print("UI smoke passed: rendered bounds stay centered, 150% UI scaling adapts safely, and 10 save slots are stable")
     tree.quit(0)
