@@ -74,7 +74,6 @@ jobs:
               -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
             unzip -q "$work/pack.zip" -d "$work/archive"
 
-            # Staging still excludes code/executables. Visuals and audio only.
             rsync -a --prune-empty-dirs \
               --include='*/' \
               --include='*.png' --include='*.PNG' \
@@ -107,42 +106,66 @@ jobs:
             write_meta "$target" "$key" "$source_url" "$author" "$url" "$notes"
           }
 
-          import_zip \
-            "oga_para_particlefx_1" \
+          import_zip "oga_para_particlefx_1" \
             "https://opengameart.org/sites/default/files/para_CC0_particlefx-1.zip" \
             "https://opengameart.org/content/animated-particle-effects-1" \
             "para / OpenGameArt" \
             "14 animated particle-effect variations; 1024x1024 sheets, 128x128 cells, 30 fps, 64 frames. Useful for smoke/fire/general animated effects."
 
-          import_zip \
-            "oga_para_particlefx_2" \
+          import_zip "oga_para_particlefx_2" \
             "https://opengameart.org/sites/default/files/para_CC0_particlefx-2.zip" \
             "https://opengameart.org/content/animated-particle-effects-2" \
             "para / OpenGameArt" \
             "Animated air bubbles, fire/flame and hit-effect sheets. Main chat should select only effects matching final art direction."
 
-          import_zip \
-            "oga_blender_volumetric_effects" \
+          import_zip "oga_blender_volumetric_effects" \
             "https://opengameart.org/sites/default/files/blender-volumetric-particles-effects.zip" \
             "https://opengameart.org/content/25-special-effects-rendered-with-blender" \
             "rubberduck / OpenGameArt" \
-            "40 rendered effects across flame, explosion, ring, shockwave and smoke families. Workflow stages rendered images only; Blender project/source files are intentionally excluded."
+            "40 rendered effects across flame, explosion, ring, shockwave and smoke families. Rendered images only; Blender project/source files excluded."
 
-          import_zip \
-            "oga_cc0_bang_sfx" \
+          import_zip "oga_cc0_bang_sfx" \
             "https://opengameart.org/sites/default/files/25-CC0-bang-sfx.zip" \
             "https://opengameart.org/content/25-cc0-bang-firework-sfx" \
             "rubberduck / OpenGameArt" \
-            "25 CC0 bang/firework/cannon/explosion recordings plus short shot-like sounds. Audio is staged only and not connected to gameplay."
+            "25 CC0 bang/firework/cannon/explosion recordings plus short shot-like sounds. Audio is staged only."
 
-          import_zip \
-            "kenney_splat_pack" \
+          import_zip "kenney_splat_pack" \
             "https://kenney.nl/media/pages/assets/splat-pack/1070534984-1677495350/kenney_splat-pack.zip" \
             "https://kenney.nl/assets/splat-pack" \
             "Kenney" \
-            "30 CC0 splat/VFX textures useful for mud, paint, oil, water, grime, impact residue and other decal candidates."
+            "30 CC0 splat/VFX textures useful for mud, paint, oil, water, grime, impact residue and decal candidates."
 
-          # CC0 smoke/vapor textures are separate files on the source page.
+          import_zip "oga_explosion_animations_1" \
+            "https://opengameart.org/sites/default/files/Free%20-%202D%20Explosion%20Animations.zip" \
+            "https://opengameart.org/content/2d-explosion-animations-frame-by-frame" \
+            "Sinestesia / OpenGameArt" \
+            "Four transparent frame-by-frame explosion atlases with full and half-size variants."
+
+          import_zip "oga_explosion_animations_2" \
+            "https://opengameart.org/sites/default/files/free%20explosion%20animations%202.zip" \
+            "https://opengameart.org/content/2d-explosion-animations-2-frame-by-frame" \
+            "Sinestesia / OpenGameArt" \
+            "Second set of four transparent explosion atlases with full and half-size variants."
+
+          import_zip "oga_water_caustics" \
+            "https://opengameart.org/sites/default/files/Caustics.zip" \
+            "https://opengameart.org/content/water-caustics-effect-small" \
+            "leeor_net / OpenGameArt" \
+            "16-frame pre-rendered CC0 water caustics with raw frames and assembled atlases; useful as a low-cost underwater fallback."
+
+          import_zip "oga_lightning_animation" \
+            "https://opengameart.org/sites/default/files/lightning_1.zip" \
+            "https://opengameart.org/content/lightning-animation" \
+            "Calinou / OpenGameArt" \
+            "CC0 lightning texture animation candidate for storms, electrical faults and distant flashes."
+
+          import_zip "oga_rain_particle" \
+            "https://opengameart.org/sites/default/files/rain_drop.zip" \
+            "https://opengameart.org/content/rain-particle-animated" \
+            "donte / OpenGameArt" \
+            "Tiny five-frame animated rain particle; useful for very low-cost rain/far LOD."
+
           import_file "oga_smoke_vapor" "smoke1.png" \
             "https://opengameart.org/sites/default/files/smoke1.png" \
             "https://opengameart.org/content/smoke-vapor-particles" \
@@ -168,7 +191,19 @@ jobs:
             "https://opengameart.org/sites/default/files/explosion_atlas_512x512.png" \
             "https://opengameart.org/content/explosion-particles-sprite-atlas" \
             "TheJosh + Kenney / OpenGameArt" \
-            "Compact 3x3 CC0 explosion atlas derived from Kenney Smoke Particles; useful as a low-cost explosion flipbook candidate."
+            "Compact 3x3 CC0 explosion atlas derived from Kenney Smoke Particles."
+
+          import_file "oga_water_drop" "water_ball.png" \
+            "https://opengameart.org/sites/default/files/Water%20Ball_1.png" \
+            "https://opengameart.org/content/water-drop-particle" \
+            "davididev / OpenGameArt" \
+            "Loopable additive water-droplet particle sheet; candidate for sprays, leaks, fountains and wet machinery."
+
+          import_file "oga_splash" "splash.png" \
+            "https://opengameart.org/sites/default/files/Splash_0.png" \
+            "https://opengameart.org/content/splash" \
+            "jcpmcdonald / OpenGameArt" \
+            "Simple three-frame CC0 splash animation; candidate for low-cost water impacts and distant splash LOD."
 
           rm -rf "$TMP"
 
@@ -179,14 +214,16 @@ jobs:
 
           Staged families:
           - animated general particles / smoke / fire;
-          - air bubbles and impact sheets;
+          - air bubbles and physical hit sheets;
           - volumetric-rendered flames, explosions, rings and shockwaves;
+          - multiple transparent explosion atlas families;
           - explosion/bang audio recordings;
           - splat/decal candidates for mud, oil, grime, liquids and residues;
           - soft smoke/vapor textures;
-          - compact explosion atlas.
+          - water caustics, drops and splash candidates;
+          - lightning and rain animation candidates.
 
-          Main integration chat should deduplicate against `assets/vfx/third_party/`, choose production-quality subsets, optimize atlases/audio, and only then wire selected assets into gameplay.
+          Main integration chat should deduplicate against production assets, choose production-quality subsets, optimize atlases/audio and only then wire selected assets into gameplay.
           EOF
 
           echo "Staged file counts:"
