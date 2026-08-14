@@ -21,7 +21,6 @@ func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     mouse_force_pass_scroll_events = false
     _build_shell()
-    resized.connect(_apply_responsive_layout)
     call_deferred("_apply_responsive_layout")
     visible = false
 
@@ -182,19 +181,8 @@ func _build_shell() -> void:
     footer.add_child(footer_right)
 
 func _apply_responsive_layout() -> void:
-    if not is_instance_valid(frame):
-        return
-    var viewport_size := size
-    if viewport_size.x <= 1.0 or viewport_size.y <= 1.0:
-        viewport_size = get_viewport_rect().size
-    var margin := 22.0 if viewport_size.x >= 900.0 else 10.0
-    var target := Vector2(
-        minf(1220.0, maxf(360.0, viewport_size.x - margin * 2.0)),
-        minf(820.0, maxf(320.0, viewport_size.y - margin * 2.0))
-    )
-    frame.set_anchors_preset(Control.PRESET_CENTER)
-    frame.size = target
-    frame.position = -target * 0.5
+    # Outer frame geometry is owned exclusively by UILayoutGuard.
+    # This legacy entry point is retained only so old callers remain harmless.
     if visible and not current_section.is_empty():
         _refresh_tabs()
 
