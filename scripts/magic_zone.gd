@@ -12,6 +12,7 @@ var caster: Node3D
 var elapsed := 0.0
 var tick_elapsed := 0.0
 var pulse_elapsed := 0.0
+var sprite_pulse_elapsed := 0.0
 
 func setup(data: Dictionary, source: Node3D) -> void:
     zone_id = String(data.get("id", "magic_zone"))
@@ -25,19 +26,28 @@ func setup(data: Dictionary, source: Node3D) -> void:
     caster = source
     _build_visual(data)
     VFXLibrary.spawn_magic(element, global_position, get_tree().current_scene, 1.25)
+    ThirdPartyVFX.spawn_magic(element, global_position + Vector3.UP * 0.2, get_tree().current_scene, 1.15)
+    if element == "fire":
+        ThirdPartyVFX.spawn_scorch(global_position, get_tree().current_scene, radius * 1.25)
 
 func _physics_process(delta: float) -> void:
     elapsed += delta
     tick_elapsed += delta
     pulse_elapsed += delta
+    sprite_pulse_elapsed += delta
     if elapsed >= duration:
         VFXLibrary.spawn_magic(element, global_position, get_tree().current_scene, 0.60)
+        ThirdPartyVFX.spawn_magic(element, global_position + Vector3.UP * 0.2, get_tree().current_scene, 0.65)
         queue_free()
         return
 
     if pulse_elapsed >= 1.0:
         pulse_elapsed = 0.0
         VFXLibrary.spawn_magic(element, global_position, get_tree().current_scene, 0.40)
+
+    if sprite_pulse_elapsed >= 2.0:
+        sprite_pulse_elapsed = 0.0
+        ThirdPartyVFX.spawn_magic(element, global_position + Vector3.UP * 0.15, get_tree().current_scene, 0.48)
 
     if tick_elapsed < tick_interval:
         return
