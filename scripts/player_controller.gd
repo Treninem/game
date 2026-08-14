@@ -39,7 +39,10 @@ func _unhandled_input(event: InputEvent) -> void:
         _try_attack()
         return
     if event.is_action_pressed("cast_magic"):
-        MagicSystem.cast_selected(self, camera)
+        var spell_id := MagicSystem.selected_spell_id()
+        if MagicSystem.cast_selected(self, camera):
+            var cast_position := camera.global_position + (-camera.global_transform.basis.z) * 0.72
+            ThirdPartyVFX.spawn_spell_cast(spell_id, cast_position, get_tree().current_scene, 0.82)
         return
     if event.is_action_pressed("next_spell"):
         MagicSystem.select_next()
@@ -95,8 +98,6 @@ func _recover_to_terrain_if_needed(force_check: bool) -> void:
     if not WorldData.inside_world(xz):
         return
     var terrain_y := WorldData.elevation_at(xz)
-    # Streaming collisions are intentionally local. If a frame reaches new
-    # terrain before its collision body is ready, never let the player fall away.
     if global_position.y < terrain_y - 1.5:
         global_position.y = terrain_y + 1.15
         velocity.y = 0.0
@@ -122,6 +123,7 @@ func _try_attack() -> void:
     var swing_direction := -camera.global_transform.basis.z
     var swing_position := camera.global_position + swing_direction * 1.35
     VFXLibrary.spawn("melee_swing", swing_position, get_tree().current_scene, Vector3.UP, swing_direction, 1.0)
+    ThirdPartyVFX.spawn_slash(swing_position, get_tree().current_scene, 0.75)
 
     if not interaction_ray.is_colliding():
         return
@@ -130,6 +132,7 @@ func _try_attack() -> void:
     var hit_normal := interaction_ray.get_collision_normal()
     if collider != null and collider.has_method("take_damage"):
         VFXLibrary.spawn("hit_slash", hit_position, get_tree().current_scene, hit_normal, swing_direction, 1.0)
+        ThirdPartyVFX.spawn_slash(hit_position, get_tree().current_scene, 0.55)
         collider.take_damage(attack_damage + InventorySystem.attack_bonus(), self)
     else:
         VFXLibrary.spawn_collision("stone", hit_position, hit_normal, get_tree().current_scene, 0.70)
