@@ -1,0 +1,51 @@
+name: Validate World VFX
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/validate-world-vfx.yml"
+      - "scripts/world_vfx.gd"
+      - "scripts/weather_vfx.gd"
+      - "scripts/player_controller.gd"
+      - "scripts/vfx_library.gd"
+      - "scripts/third_party_vfx.gd"
+      - "scripts/environment_state.gd"
+      - "scripts/world_data.gd"
+      - "project.godot"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-world-vfx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Validate project headlessly
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+
+      - name: Verify world VFX runtime files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s scripts/world_vfx.gd
+          test -s scripts/weather_vfx.gd
+          grep -Fq 'WorldVFX="*res://scripts/world_vfx.gd"' project.godot
+          grep -Fq 'WeatherVFX="*res://scripts/weather_vfx.gd"' project.godot
+          grep -Fq 'spawn_footstep' scripts/player_controller.gd
+          grep -Fq 'spawn_landing' scripts/player_controller.gd
+          grep -Fq 'surface_from_collider' scripts/player_controller.gd
