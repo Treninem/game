@@ -1,0 +1,86 @@
+name: Vendor source-chat B28 real CC0 nature packs
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b28.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b28
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 nature packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b28/models"
+          TMP=".sourcechat_b28_tmp"
+          rm -rf "assets/staging/sourcechat_b28" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-SourceChat-B28/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            find "$ROOT/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip "kenney_nature_kit" "https://opengameart.org/sites/default/files/Nature%20Kit%20%282.1%29.zip" "https://opengameart.org/content/nature-kit" "Kenney Nature Kit 2.1"
+          stage_zip "quaternius_ultimate_nature_pack" "https://opengameart.org/sites/default/files/ultimate_nature_pack_by_quaternius_1.zip" "https://opengameart.org/content/low-poly-nature-pack-1" "Quaternius Low Poly Nature Pack"
+
+          cat > "assets/staging/sourcechat_b28/README.md" <<'EOF'
+          # Source chat B28 — real CC0 nature libraries
+
+          Real extracted source assets only; nothing is connected to gameplay.
+
+          - Kenney Nature Kit 2.1: 330+ nature objects including trees, rocks, stones, terrain pieces, waterfalls, camping equipment and plants.
+          - Quaternius Low Poly Nature Pack: 150 models in FBX/OBJ/Blend families covering trees, rocks, pines, forest and flowers.
+
+          Main chat should deduplicate overlapping trees/rocks, choose regional families, normalize scale/material strategy, generate LODs/Multimesh-friendly production variants and keep only the best subsets in runtime paths.
+          EOF
+          rm -rf "$TMP"
+          echo "B28 files:"; find assets/staging/sourcechat_b28 -type f | wc -l
+          du -sh assets/staging/sourcechat_b28
+
+      - name: Commit B28 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b28
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 nature packs B28"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
