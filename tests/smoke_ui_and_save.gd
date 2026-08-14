@@ -39,6 +39,16 @@ func _sidebar_error(menu: Control, frame: Control) -> String:
         return "sidebar minimum height overflows frame; sidebar_min=%s frame_size=%s" % [sidebar_min, frame.size]
     return ""
 
+func _remove_world_workload(scene: Node) -> void:
+    # World boot and traversal have their own mandatory smoke tests. Keeping the
+    # real UI nodes but removing World/Bootstrap makes this test deterministic
+    # and prevents chunk streaming from masking UI regressions behind long CI runs.
+    for path in ["Bootstrap", "World"]:
+        var node := scene.get_node_or_null(path)
+        if node != null:
+            scene.remove_child(node)
+            node.free()
+
 func _run_test() -> void:
     var tree := get_tree()
     _checkpoint("start")
@@ -49,7 +59,6 @@ func _run_test() -> void:
         _fail(13, "required autoload nodes are missing from normal project tree")
         return
 
-    # Make the smoke deterministic even after a previously interrupted local run.
     settings_manager.call("set_value", "graphics", "ui_scale", 1.0)
     for _i in range(4):
         await tree.process_frame
@@ -60,11 +69,12 @@ func _run_test() -> void:
         _fail(2, "stage scene missing")
         return
     var scene := packed.instantiate()
+    _remove_world_workload(scene)
     tree.root.add_child(scene)
-    _checkpoint("stage-instantiated")
-    for _i in range(10):
+    _checkpoint("stage-ui-instantiated")
+    for _i in range(6):
         await tree.process_frame
-    _checkpoint("stage-warmup-complete")
+    _checkpoint("stage-ui-warmup-complete")
 
     var menu := scene.get_node_or_null("UI/GameMenu") as Control
     var panels := scene.get_node_or_null("UI/GameplayPanels") as Control
@@ -74,8 +84,7 @@ func _run_test() -> void:
 
     _checkpoint("opening-pause-main")
     menu.call("open_menu", "main")
-    _checkpoint("pause-main-open-returned")
-    for _i in range(5):
+    for _i in range(4):
         await tree.process_frame
     _checkpoint("pause-main-settled")
     if not tree.paused or not menu.visible:
@@ -95,15 +104,13 @@ func _run_test() -> void:
         return
     menu.call("close_menu")
     await tree.process_frame
-    _checkpoint("pause-main-closed")
     if tree.paused or menu.visible:
         _fail(7, "pause menu did not restore gameplay")
         return
 
     _checkpoint("opening-inventory")
     panels.call("open_panel", "inventory")
-    _checkpoint("inventory-open-returned")
-    for _i in range(5):
+    for _i in range(4):
         await tree.process_frame
     _checkpoint("inventory-settled")
     if not tree.paused or not panels.visible:
@@ -119,21 +126,19 @@ func _run_test() -> void:
         return
     panels.call("close_panel")
     await tree.process_frame
-    _checkpoint("inventory-closed")
     if tree.paused or panels.visible:
         _fail(10, "gameplay panel did not restore gameplay")
         return
 
     _checkpoint("setting-ui-scale-150")
     settings_manager.call("set_value", "graphics", "ui_scale", 1.5)
-    for _i in range(8):
+    for _i in range(6):
         await tree.process_frame
     _checkpoint("ui-scale-150-settled")
 
     _checkpoint("opening-updates-150")
     menu.call("open_menu", "updates")
-    _checkpoint("updates-150-open-returned")
-    for _i in range(8):
+    for _i in range(6):
         await tree.process_frame
     _checkpoint("updates-150-settled")
     frame = menu.get("frame") as Control
@@ -150,12 +155,10 @@ func _run_test() -> void:
         return
     menu.call("close_menu")
     await tree.process_frame
-    _checkpoint("updates-150-closed")
 
     _checkpoint("opening-map-150")
     panels.call("open_panel", "map")
-    _checkpoint("map-150-open-returned")
-    for _i in range(8):
+    for _i in range(6):
         await tree.process_frame
     _checkpoint("map-150-settled")
     panel_frame = panels.get("frame") as Control
@@ -168,9 +171,8 @@ func _run_test() -> void:
         return
     panels.call("close_panel")
     settings_manager.call("set_value", "graphics", "ui_scale", 1.0)
-    for _i in range(4):
+    for _i in range(3):
         await tree.process_frame
-    _checkpoint("map-closed-scale-restored")
 
     var slots = save_manager.call("list_slots")
     if not (slots is Array) or slots.size() != 10:
