@@ -1,0 +1,108 @@
+name: Vendor Binbun Free Beam VFX
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-binbun-beam-vfx.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-binbun-beam-vfx
+  cancel-in-progress: false
+
+jobs:
+  vendor-beam:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Import explicit free CC0 Beam VFX package
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP=".beam_vendor_tmp"
+          DST="assets/vfx/third_party/binbun_godot4_beam"
+          UPSTREAM_PATH="VFX_Water/BinbunVFXs/GodotBeamVFXFree/assets/BinbunVFX"
+
+          rm -rf "$TMP" "$DST"
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/MeowLabPixel/Songkran-Hazard-4-Lom.git "$TMP"
+          git -C "$TMP" sparse-checkout set "$UPSTREAM_PATH"
+
+          mkdir -p "$DST"
+          rsync -a --prune-empty-dirs \
+            --exclude='*.import' \
+            --exclude='*.uid' \
+            "$TMP/$UPSTREAM_PATH/beam_vfx/" "$DST/beam_vfx/"
+          rsync -a --prune-empty-dirs \
+            --exclude='*.import' \
+            --exclude='*.uid' \
+            "$TMP/$UPSTREAM_PATH/shared/" "$DST/shared/"
+
+          # Re-root the explicit FREE package so it is self-contained in our staged library.
+          while IFS= read -r -d '' file; do
+            sed -i 's#res://assets/BinbunVFX/#res://assets/vfx/third_party/binbun_godot4_beam/#g' "$file"
+          done < <(find "$DST" -type f \( -name '*.tscn' -o -name '*.tres' -o -name '*.gd' -o -name '*.gdshader' \) -print0)
+
+          cat > "$DST/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          Binbun Beam VFX is licensed under Creative Commons Zero (CC0 1.0 Universal). The official asset page permits personal, educational and commercial use without attribution.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+
+          cat > "$DST/SOURCE.md" <<'EOF'
+          # Binbun Beam VFX — explicit free package
+
+          Original author: Binbun / Binbun3D
+          Official page: https://binbun3d.itch.io/beam-vfx
+          Public mirror: https://github.com/MeowLabPixel/Songkran-Hazard-4-Lom
+          Mirror source path: VFX_Water/BinbunVFXs/GodotBeamVFXFree/assets/BinbunVFX
+          License: CC0 1.0 Universal
+
+          The source path explicitly identifies this as `GodotBeamVFXFree`. Only that free package is imported. Godot-generated `.import` and `.uid` files are excluded. No paid preset pack is copied. Internal `res://` paths are rewritten to this staged library directory. This asset is not automatically connected to gameplay.
+          EOF
+
+          if grep -RIl 'res://assets/BinbunVFX/' "$DST"; then
+            echo "Found unpatched upstream Beam VFX path"
+            exit 1
+          fi
+
+          SCENES=$(find "$DST" -type f -name '*.tscn' | wc -l)
+          SHADERS=$(find "$DST" -type f -name '*.gdshader' | wc -l)
+          SCRIPTS=$(find "$DST" -type f -name '*.gd' | wc -l)
+          echo "Beam scenes: $SCENES"
+          echo "Beam shaders: $SHADERS"
+          echo "Beam scripts: $SCRIPTS"
+          test "$SCENES" -ge 1
+          test "$SHADERS" -ge 5
+          test "$SCRIPTS" -ge 1
+          rm -rf "$TMP"
+
+      - name: Safe commit and push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/vfx/third_party/binbun_godot4_beam
+          if git diff --cached --quiet; then
+            echo "No Beam VFX changes."
+            exit 0
+          fi
+          git commit -m "assets(vfx): vendor Binbun free CC0 beam VFX"
+          for attempt in $(seq 1 30); do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
