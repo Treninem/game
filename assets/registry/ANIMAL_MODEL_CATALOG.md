@@ -35,6 +35,22 @@ Format/package: ZIP with Blender model; rigged and animated; diffuse + normal te
 Target: `assets/animals/birds/chicken/opengameart_rooster/`
 Status: VERIFIED dedicated rooster production candidate.
 
+### OpenGameArt — Boar
+Source: https://opengameart.org/content/boar
+License: CC0
+Format: Blender
+Model: rigged/textured wild boar/warthog, about 1k tris; walk and attack animations included.
+Target: `assets/animals/wildlife/boar/opengameart_boar/`
+Status: VERIFIED dedicated wild-boar production candidate.
+
+### OpenGameArt — Low Poly 3D Pig
+Source: https://opengameart.org/content/low-poly-3d-pig
+License: CC0
+Format: Blender
+Model: dedicated low-poly pig; commercial use explicitly permitted by author under CC0.
+Target: `assets/animals/farm/pig/opengameart_low_poly_pig/`
+Status: VERIFIED additional pig model.
+
 ### OpenGameArt — 3D Animals collection
 Source: https://opengameart.org/content/3d-animals
 License: mixed per entry — import ONLY entries whose individual page confirms CC0.
@@ -68,7 +84,7 @@ Target staging: `assets/prototype/kenney_prototype_kit/`
 - [x] Dog — Quaternius + Kenney
 - [x] Cat — Kenney Cube Pets
 - [x] Horse — Quaternius
-- [x] Pig — Quaternius Farm Animal Pack; additional OGA candidate
+- [x] Pig — Quaternius Farm Animal Pack + dedicated OpenGameArt CC0 pig
 - [x] Cow / bull — Quaternius
 - [x] Sheep — Quaternius
 - [x] Rooster — dedicated animated CC0 OpenGameArt model verified
@@ -85,7 +101,7 @@ Target staging: `assets/prototype/kenney_prototype_kit/`
 - [x] Deer / stag — Quaternius
 - [x] Bear — CC0 White Bear model verified; animation still required
 - [~] Hare / rabbit — dedicated candidate located; verify individual license
-- [ ] Wild boar — dedicated verified CC0 model still required
+- [x] Wild boar — dedicated rigged/textured CC0 OpenGameArt model; walk + attack animations
 - [ ] Moose / elk
 - [ ] Squirrel
 - [ ] Badger
@@ -142,4 +158,4 @@ Production animals should support where appropriate: idle, walk, run, eat/graze/
 10. CC0 assets may be modified/rematerialed to maintain coherent ImPuls art direction.
 
 ## Search priority next
-Chicken/hen/chicks individual verification -> duck/duckling verification -> goose/pigeon -> wild boar/piglet -> rabbit/hare -> goats -> birds -> fish/insects.
+Chicken/hen/chicks individual verification -> duck/duckling verification -> goose/pigeon -> piglet -> rabbit/hare -> goats -> birds -> fish/insects.
