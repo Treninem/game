@@ -11,6 +11,8 @@ on:
       - "scripts/game_state.gd"
       - "scripts/settings_manager.gd"
       - "scripts/vfx_library.gd"
+      - "scripts/third_party_vfx.gd"
+      - "scripts/vfx_flipbook_3d.gd"
       - "project.godot"
   workflow_dispatch:
 
@@ -44,7 +46,12 @@ jobs:
           test -s scripts/magic_system.gd
           test -s scripts/magic_projectile.gd
           test -s scripts/magic_zone.gd
+          test -s scripts/magic_hud.gd
+          test -s scripts/third_party_vfx.gd
+          test -s scripts/vfx_flipbook_3d.gd
           grep -Fq 'MagicSystem="*res://scripts/magic_system.gd"' project.godot
+          grep -Fq 'MagicHUD="*res://scripts/magic_hud.gd"' project.godot
+          grep -Fq 'ThirdPartyVFX="*res://scripts/third_party_vfx.gd"' project.godot
           grep -Fq 'cast_magic' scripts/settings_manager.gd
           grep -Fq 'next_spell' scripts/settings_manager.gd
           grep -Fq 'apply_status' scripts/enemy.gd
