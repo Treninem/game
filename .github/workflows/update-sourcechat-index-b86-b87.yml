@@ -1,0 +1,89 @@
+name: Update source-chat staging index through B87
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b86-b87.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify B86-B87 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b86/models/kenney_mini_market
+            assets/staging/sourcechat_b86/models/oga_medieval_props_pack_1_daniel
+            assets/staging/sourcechat_b86/models/oga_medieval_props_pack_2_daniel
+            assets/staging/sourcechat_b86/models/oga_medieval_props_pack_3_daniel
+            assets/staging/sourcechat_b86/models/oga_medieval_tools_12
+            assets/staging/sourcechat_b87/models/quaternius_lowpoly_crops_100plus
+            assets/staging/sourcechat_b87/models/oga_low_poly_corn
+            assets/staging/sourcechat_b87/models/oga_hay_bale_lowpoly
+            assets/staging/sourcechat_b87/models/oga_basic_voxel_farm
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B86 —' "$INDEX"; then
+            echo "B86 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B86 — market / medieval tools / village props
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b86/models/`
+
+          - `kenney_mini_market/` — compact animated retail/shop source kit.
+          - `oga_medieval_tools_12/` — 12 farming/workshop tools preserved as original CC0 archive.
+          - `oga_medieval_props_pack_1_daniel/` — medieval village prop source set.
+          - `oga_medieval_props_pack_2_daniel/` — village/field/utility prop source set.
+          - `oga_medieval_props_pack_3_daniel/` — village/fishing/tannery-style prop source set.
+
+          ## B87 — crops / corn / hay / farm
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b87/models/`
+
+          - `quaternius_lowpoly_crops_100plus/` — 100+ crop models across five growth stages.
+          - `oga_low_poly_corn/` — extremely cheap corn/maize source for fields and harvest props.
+          - `oga_hay_bale_lowpoly/` — low-cost hay-bale field/farmyard prop.
+          - `oga_basic_voxel_farm/` — optional voxel farm source/reference set; use only if style is appropriate.
+
+          Integration rule: keep crops and farm props as source candidates. Main game chat should promote only the variants needed by actual fields, farms, shops and workshops, then normalize materials, scale, collision and LOD.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B86-B87"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
