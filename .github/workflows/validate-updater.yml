@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "installer/updater_v4.ps1"
       - "installer/updater.ps1"
       - "tools/build_delta.py"
       - ".github/workflows/windows-build.yml"
@@ -18,6 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools
       - name: Build and reconstruct synthetic content delta
         shell: bash
         run: |
@@ -85,14 +89,19 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Parse updater with Windows PowerShell
+        with:
+          sparse-checkout: |
+            installer
+      - name: Parse both updater runtimes with Windows PowerShell
         shell: powershell
         run: |
-          $tokens = $null
-          $errors = $null
-          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path "installer/updater.ps1"), [ref]$tokens, [ref]$errors) | Out-Null
-          if ($errors.Count -gt 0) {
-            $errors | ForEach-Object { Write-Error $_.Message }
-            exit 1
+          foreach ($file in @("installer/updater_v4.ps1", "installer/updater.ps1")) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error "$file :: $($_.Message)" }
+              exit 1
+            }
+            Write-Host "$file syntax OK"
           }
-          Write-Host "updater.ps1 syntax OK"
