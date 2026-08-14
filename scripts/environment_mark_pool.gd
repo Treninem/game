@@ -24,6 +24,12 @@ func spawn_scorch_mark(position: Vector3, normal: Vector3, forward: Vector3 = Ve
 func spawn_spill_mark(position: Vector3, normal: Vector3, forward: Vector3 = Vector3.FORWARD, size: Vector2 = Vector2(0.50, 0.50), color: Color = Color(0.23, 0.035, 0.025, 0.58), lifetime: float = 55.0) -> MeshInstance3D:
     return spawn_mark(position, normal, forward, size, 4, color, lifetime)
 
+func spawn_pawprint(position: Vector3, normal: Vector3, forward: Vector3, size: Vector2 = Vector2(0.24, 0.30), lifetime: float = -1.0, color: Color = Color(0.10, 0.08, 0.06, 0.58)) -> MeshInstance3D:
+    return spawn_mark(position, normal, forward, size, 5, color, lifetime)
+
+func spawn_hoofprint(position: Vector3, normal: Vector3, forward: Vector3, size: Vector2 = Vector2(0.28, 0.38), lifetime: float = -1.0, color: Color = Color(0.10, 0.08, 0.06, 0.58)) -> MeshInstance3D:
+    return spawn_mark(position, normal, forward, size, 6, color, lifetime)
+
 func spawn_mark(position: Vector3, normal: Vector3, forward: Vector3, size: Vector2, kind: int, color: Color, lifetime: float = -1.0) -> MeshInstance3D:
     _trim_if_needed()
 
@@ -55,7 +61,7 @@ func spawn_mark(position: Vector3, normal: Vector3, forward: Vector3, size: Vect
 
     var material := ShaderMaterial.new()
     material.shader = TRACK_SHADER
-    material.set_shader_parameter("mark_kind", clampi(kind, 0, 4))
+    material.set_shader_parameter("mark_kind", clampi(kind, 0, 6))
     material.set_shader_parameter("mark_color", color)
     material.set_shader_parameter("mark_alpha", 1.0)
     mesh_instance.material_override = material
