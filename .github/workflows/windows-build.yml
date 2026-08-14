@@ -122,6 +122,7 @@ jobs:
           cp installer/updater.ps1 updater-runtime/
           cp installer/launcher.vbs updater-runtime/
           cp installer/install_update_task.ps1 updater-runtime/
+          cp installer/refresh_shortcuts.ps1 updater-runtime/
           cp installer/impuls.ico updater-runtime/
           (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
           sha256sum ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip > SHA256SUMS.txt
@@ -130,4 +131,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "Automatic Windows build of ImPuls. Offline single-player Stage 4: polished HUD, settings, 10 save slots and in-game self-update."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "Automatic Windows build of ImPuls. Updater refreshes game files, branding icon, desktop and Start Menu shortcuts, then refreshes Windows shell icons."
