@@ -19,6 +19,7 @@ var recovery_cooldown := 0.0
 var stuck_elapsed := 0.0
 var last_horizontal_motion := Vector2.ZERO
 var last_safe_position := Vector3.ZERO
+var footstep_distance_accum := 0.0
 
 func _ready() -> void:
     add_to_group("player")
@@ -79,15 +80,17 @@ func _physics_process(delta: float) -> void:
     if GameState.is_dead:
         velocity = Vector3.ZERO
         last_horizontal_motion = Vector2.ZERO
+        footstep_distance_accum = 0.0
         return
 
-    if not is_on_floor():
+    var grounded_before := is_on_floor()
+    if not grounded_before:
         velocity.y -= gravity * delta
     elif velocity.y < 0.0:
         velocity.y = 0.0
 
     var input_vec := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-    var wants_sprint := Input.is_action_pressed("sprint") and input_vec.length() > 0.0 and is_on_floor()
+    var wants_sprint := Input.is_action_pressed("sprint") and input_vec.length() > 0.0 and grounded_before
     var can_sprint := wants_sprint and GameState.stamina > 1.0
     if can_sprint:
         GameState.stamina = maxf(0.0, GameState.stamina - sprint_stamina_per_second * delta)
@@ -99,6 +102,7 @@ func _physics_process(delta: float) -> void:
     velocity.x = move_toward(velocity.x, target.x, acceleration * delta)
     velocity.z = move_toward(velocity.z, target.z, acceleration * delta)
 
+    var fall_speed_before_move := maxf(0.0, -velocity.y)
     var before := global_position
     move_and_slide()
     _enforce_world_bounds()
@@ -106,8 +110,21 @@ func _physics_process(delta: float) -> void:
 
     var moved := global_position - before
     last_horizontal_motion = Vector2(moved.x, moved.z)
-    if last_horizontal_motion.length() > 0.002 and is_on_floor():
+    var grounded_after := is_on_floor()
+    if last_horizontal_motion.length() > 0.002 and grounded_after:
         last_safe_position = global_position
+
+    if not grounded_before and grounded_after and fall_speed_before_move > 3.4:
+        footstep_distance_accum = 0.0
+        WorldVFX.spawn_landing(global_position, fall_speed_before_move)
+    elif grounded_after and input_vec.length() > 0.08:
+        footstep_distance_accum += last_horizontal_motion.length()
+        var step_distance := 1.75 if can_sprint else 2.35
+        if footstep_distance_accum >= step_distance:
+            footstep_distance_accum = 0.0
+            WorldVFX.spawn_footstep(global_position, 1.10 if can_sprint else 0.72)
+    elif not grounded_after:
+        footstep_distance_accum = 0.0
 
     if input_vec.length() > 0.15 and direction.length() > 0.1 and last_horizontal_motion.length() < 0.0015:
         stuck_elapsed += delta
@@ -189,7 +206,8 @@ func _try_attack() -> void:
         ThirdPartyVFX.spawn_slash(hit_position, get_tree().current_scene, 0.55)
         collider.take_damage(attack_damage + InventorySystem.attack_bonus(), self)
     else:
-        VFXLibrary.spawn_collision("stone", hit_position, hit_normal, get_tree().current_scene, 0.70)
+        var surface := WorldVFX.surface_from_collider(collider, hit_position)
+        WorldVFX.spawn_impact(surface, hit_position, hit_normal, swing_direction, 0.80)
 
 func _try_interact() -> void:
     if GameState.is_dead:
