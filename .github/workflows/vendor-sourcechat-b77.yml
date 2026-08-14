@@ -1,0 +1,128 @@
+name: Vendor source-chat B77 real CC0 furniture industrial
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b77.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b77
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 furniture and industrial sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b77"
+          TMP=".sourcechat_b77_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/kenneyf" "$ROOT/models/kenney_furniture_kit_120"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B77/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_furniturePack.zip" -o "$TMP/kenney_furniturePack.zip"
+          unzip -q "$TMP/kenney_furniturePack.zip" -d "$TMP/kenneyf"
+          chmod -R u+rwX "$TMP/kenneyf" || true
+          find "$TMP/kenneyf" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/kenneyf/" "$ROOT/models/kenney_furniture_kit_120/"
+          meta "kenney_furniture_kit_120" \
+            "https://opengameart.org/content/furniture-kit" \
+            "Furniture Kit" \
+            "https://opengameart.org/sites/default/files/kenney_furniturePack.zip" \
+            "Kenney optimized furniture/building-material kit with 120 objects plus renders; Unity package removed from staging, OBJ/textures/renders retained."
+
+          mkdir -p "$TMP/home" "$ROOT/models/oga_home_interior_assets_2025"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B77/1.0' \
+            "https://opengameart.org/sites/default/files/homeinteriorassets.zip" -o "$TMP/homeinteriorassets.zip"
+          unzip -q "$TMP/homeinteriorassets.zip" -d "$TMP/home"
+          chmod -R u+rwX "$TMP/home" || true
+          rsync -a "$TMP/home/" "$ROOT/models/oga_home_interior_assets_2025/"
+          meta "oga_home_interior_assets_2025" \
+            "https://opengameart.org/content/3d-interior-home-assets" \
+            "3D Interior Home Assets" \
+            "https://opengameart.org/sites/default/files/homeinteriorassets.zip" \
+            "2025 low-poly home interior collection: chairs, stool, shelves, bed, nightstand, sofa, bench, table, vase, frame and books."
+
+          mkdir -p "$TMP/modindustrial" "$ROOT/models/oga_modular_industrial_157"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B77/1.0' \
+            "https://opengameart.org/sites/default/files/modular_industrial_pieces.zip" -o "$TMP/modular_industrial_pieces.zip"
+          unzip -q "$TMP/modular_industrial_pieces.zip" -d "$TMP/modindustrial"
+          chmod -R u+rwX "$TMP/modindustrial" || true
+          rsync -a "$TMP/modindustrial/" "$ROOT/models/oga_modular_industrial_157/"
+          meta "oga_modular_industrial_157" \
+            "https://opengameart.org/content/modular-industrial-kit" \
+            "Modular Industrial Kit" \
+            "https://opengameart.org/sites/default/files/modular_industrial_pieces.zip" \
+            "Low-poly industrial construction kit with 157 optimized meshes using a single texture."
+
+          mkdir -p "$TMP/pbrindustrial" "$ROOT/models/oga_pbr_industrial_a52_2025"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B77/1.0' \
+            "https://opengameart.org/sites/default/files/oga_industrial_a52_version.zip" -o "$TMP/oga_industrial_a52_version.zip"
+          unzip -q "$TMP/oga_industrial_a52_version.zip" -d "$TMP/pbrindustrial"
+          chmod -R u+rwX "$TMP/pbrindustrial" || true
+          rsync -a "$TMP/pbrindustrial/" "$ROOT/models/oga_pbr_industrial_a52_2025/"
+          meta "oga_pbr_industrial_a52_2025" \
+            "https://opengameart.org/content/pbr-industrial-asset-pack" \
+            "PBR Industrial Asset Pack" \
+            "https://opengameart.org/sites/default/files/oga_industrial_a52_version.zip" \
+            "2025 Blender 4/PBR industrial source collection with tanks, pipes, stairs, control panels, containers, garage/vents/ladders and related factory assets."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B77 — real CC0 furniture and industrial kits
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should keep art direction consistent: use Kenney/home packs for selected interiors, and choose between stylized modular industrial pieces and higher-detail PBR industrial assets per location. Do not promote entire libraries blindly.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B77 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B77 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b77
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 furniture industrial B77"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
