@@ -6,6 +6,7 @@ on:
     paths:
       - "scripts/city_district.gd"
       - "scripts/capital_data.gd"
+      - "scripts/capital_landmarks.gd"
       - "scenes/stage1.tscn"
       - "assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/**"
       - ".github/workflows/validate-city.yml"
