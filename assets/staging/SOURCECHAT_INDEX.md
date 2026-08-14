@@ -595,3 +595,50 @@ Path: `assets/staging/sourcechat_b53/models/`
 - `oga_magic_staff_set/` — elemental staff source family.
 
 Recommended use: classify and deduplicate inventory meshes against B36/B38/B46; promote only the strongest production candidates. Treat mine/staff assets as separate location/equipment sources.
+
+## B54 — crystals / target / key collection
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b54/models/`
+
+- `oga_lowpoly_crystals_28/` — 28 low-poly crystal source models.
+- `oga_target_3d_2023/` — target/range prop source with multiple formats/color sets.
+- `oga_key_collection/` — modern/old keys and keyring source.
+
+Recommended use: resource/decor crystals, training/range dressing and quest/lock key props after scale/material/collision review.
+
+## B55 — mammoth / lemur / rhinoceros / snail
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b55/models/`
+
+- `oga_mammoth_lowpoly/`
+- `oga_lemur_animated/`
+- `oga_white_rhinoceros/`
+- `oga_snail_photogrammetry/`
+
+Recommended use: biome-specific fauna sources. Validate animation/material readiness individually; optimize the photogrammetry snail before any runtime promotion.
+
+## B56 — hippo / oryx / aurochs / whale
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b56/models/`
+
+- `oga_hippo_rigged/`
+- `oga_beisa_oryx_rigged/`
+- `oga_auroch_male_female/`
+- `oga_whale_rigged_animated/`
+
+Recommended use: large land fauna and lightweight aquatic fauna after skeleton/material/scale review. Whale includes a simple swim-animation source.
+
+## B57 — gorilla / cobra / shark / camel
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b57/models/`
+
+- `oga_gorilla_male/` — low-poly source; final texture not included by source.
+- `oga_cobra_rigged/` — rigged/posed source, but no animations/final texture.
+- `oga_shark_rigged_textured/` — rigged/textured aquatic source.
+- `oga_camel_basemesh/` — basemesh source explicitly requiring production work.
+
+Recommended use: mixed-readiness fauna source pool. Main integration chat should not treat all four as equally production-ready.
