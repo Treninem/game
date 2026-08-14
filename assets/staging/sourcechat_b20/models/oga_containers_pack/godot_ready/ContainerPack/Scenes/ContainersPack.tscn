@@ -1,0 +1,106 @@
+[gd_scene load_steps=35 format=3 uid="uid://brj2uq3v3kx4a"]
+
+[ext_resource type="PackedScene" uid="uid://dqvkv2gadfngt" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_propane_2.tscn" id="1_dsw80"]
+[ext_resource type="PackedScene" uid="uid://bayb8kaehrqs4" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_propane_1.tscn" id="2_rc1ui"]
+[ext_resource type="PackedScene" uid="uid://c2y0gp7rvvojc" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_propane_3.tscn" id="3_kacp3"]
+[ext_resource type="PackedScene" uid="uid://dks1kbwpad8dy" path="res://Assets/ContainerPack/Scenes/DynamicProps/oxy_tank_1.tscn" id="4_rso04"]
+[ext_resource type="PackedScene" uid="uid://u6n1u3lnwfbu" path="res://Assets/ContainerPack/Scenes/DynamicProps/oxy_tank_2.tscn" id="5_jhghm"]
+[ext_resource type="PackedScene" uid="uid://cb11r52xe5o85" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_7.tscn" id="6_ydvpq"]
+[ext_resource type="PackedScene" uid="uid://daw4ryfh5d7q0" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_6.tscn" id="7_cdnlb"]
+[ext_resource type="PackedScene" uid="uid://cgl5p3glqmkhl" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_4.tscn" id="8_3y8nh"]
+[ext_resource type="PackedScene" uid="uid://4moq8lymdapy" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_5.tscn" id="9_ogydy"]
+[ext_resource type="PackedScene" uid="uid://dkc8vxyq3ria0" path="res://Assets/ContainerPack/Scenes/DynamicProps/oxy_tank_3.tscn" id="10_66j5j"]
+[ext_resource type="PackedScene" uid="uid://b5qtkgk4xqc84" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_9.tscn" id="11_4m7ig"]
+[ext_resource type="PackedScene" uid="uid://dykerflku70o4" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_8.tscn" id="12_e7ep1"]
+[ext_resource type="PackedScene" uid="uid://vpmalhdp04or" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_jerry_can_2.tscn" id="13_mcrh6"]
+[ext_resource type="PackedScene" uid="uid://dnqd6v0x5mb8v" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_jerry_can_1.tscn" id="14_ii7lr"]
+[ext_resource type="PackedScene" uid="uid://xk0pe40jjw1i" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_jerry_can_3.tscn" id="15_cptr1"]
+[ext_resource type="PackedScene" uid="uid://bjlexrxob7hw4" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_7.tscn" id="16_tgdpf"]
+[ext_resource type="PackedScene" uid="uid://car322pqk8fws" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_4.tscn" id="17_edqlk"]
+[ext_resource type="PackedScene" uid="uid://bjbbfe6j1nu5b" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_6.tscn" id="18_ii5ju"]
+[ext_resource type="PackedScene" uid="uid://ceatxsqxvypc3" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_5.tscn" id="19_h4apl"]
+[ext_resource type="PackedScene" uid="uid://cwt0j2kjp70wy" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_drum_1.tscn" id="20_xjrtn"]
+[ext_resource type="PackedScene" uid="uid://p4lsk4ycy1tw" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_drum_2.tscn" id="21_ktifj"]
+[ext_resource type="PackedScene" uid="uid://hck205jp7ie5" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_3.tscn" id="22_wbtos"]
+[ext_resource type="PackedScene" uid="uid://bwogbltqnokm3" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_5.tscn" id="23_s5rc6"]
+[ext_resource type="PackedScene" uid="uid://b7ekl2lhoft7k" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_6.tscn" id="24_q1aub"]
+[ext_resource type="PackedScene" uid="uid://c4xa4byc8uqrx" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_4.tscn" id="25_uvpg1"]
+[ext_resource type="PackedScene" uid="uid://d020jcu2dg8p6" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_jug_1.tscn" id="26_xs6pc"]
+[ext_resource type="PackedScene" uid="uid://go38lxpr8vk8" path="res://Assets/ContainerPack/Scenes/StaticProps/water_jug_4.tscn" id="27_0slo7"]
+[ext_resource type="PackedScene" uid="uid://b7rhc78bkk48w" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_jug_3.tscn" id="28_vtd3r"]
+[ext_resource type="PackedScene" uid="uid://hvdkyvbrbmey" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_jug_2.tscn" id="29_247xq"]
+[ext_resource type="PackedScene" uid="uid://bjy4akm1rh4nj" path="res://Assets/ContainerPack/Scenes/StaticProps/water_jug_5.tscn" id="30_pixi3"]
+[ext_resource type="PackedScene" uid="uid://cck0goiam4oar" path="res://Assets/ContainerPack/Scenes/StaticProps/water_jug_6.tscn" id="31_ftfna"]
+[ext_resource type="PackedScene" uid="uid://wttpwor1djmj" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_tank_1.tscn" id="32_0wgp4"]
+[ext_resource type="PackedScene" uid="uid://crf0stm4l5v1e" path="res://Assets/ContainerPack/Scenes/StaticProps/water_tank_2.tscn" id="33_e18dk"]
+[ext_resource type="PackedScene" uid="uid://7oh87i5a5vw7" path="res://Assets/ContainerPack/Scenes/StaticProps/water_tank_3.tscn" id="34_3uxc8"]
+
+[node name="ContainersPack" type="Node3D"]
+
+[node name="GasPropane_2" parent="." instance=ExtResource("1_dsw80")]
+
+[node name="GasPropane_1" parent="." instance=ExtResource("2_rc1ui")]
+
+[node name="GasPropane_3" parent="." instance=ExtResource("3_kacp3")]
+
+[node name="OxyTank_1" parent="." instance=ExtResource("4_rso04")]
+
+[node name="OxyTank_2" parent="." instance=ExtResource("5_jhghm")]
+
+[node name="OxyTank_7" parent="." instance=ExtResource("6_ydvpq")]
+
+[node name="OxyTank_6" parent="." instance=ExtResource("7_cdnlb")]
+
+[node name="OxyTank_4" parent="." instance=ExtResource("8_3y8nh")]
+
+[node name="OxyTank_5" parent="." instance=ExtResource("9_ogydy")]
+
+[node name="OxyTank_3" parent="." instance=ExtResource("10_66j5j")]
+
+[node name="OxyTank_9" parent="." instance=ExtResource("11_4m7ig")]
+
+[node name="OxyTank_8" parent="." instance=ExtResource("12_e7ep1")]
+
+[node name="GasJerryCan_2" parent="." instance=ExtResource("13_mcrh6")]
+
+[node name="GasJerryCan_1" parent="." instance=ExtResource("14_ii7lr")]
+
+[node name="GasJerryCan_3" parent="." instance=ExtResource("15_cptr1")]
+
+[node name="GasJerryCan_7" parent="." instance=ExtResource("16_tgdpf")]
+
+[node name="GasJerryCan_4" parent="." instance=ExtResource("17_edqlk")]
+
+[node name="GasJerryCan_6" parent="." instance=ExtResource("18_ii5ju")]
+
+[node name="GasJerryCan_5" parent="." instance=ExtResource("19_h4apl")]
+
+[node name="WaterDrum_1" parent="." instance=ExtResource("20_xjrtn")]
+
+[node name="WaterDrum_2" parent="." instance=ExtResource("21_ktifj")]
+
+[node name="WaterDrum_3" parent="." instance=ExtResource("22_wbtos")]
+
+[node name="WaterDrum_5" parent="." instance=ExtResource("23_s5rc6")]
+
+[node name="WaterDrum_6" parent="." instance=ExtResource("24_q1aub")]
+
+[node name="WaterDrum_4" parent="." instance=ExtResource("25_uvpg1")]
+
+[node name="WaterJug_1" parent="." instance=ExtResource("26_xs6pc")]
+
+[node name="WaterJug_4" parent="." instance=ExtResource("27_0slo7")]
+
+[node name="WaterJug_3" parent="." instance=ExtResource("28_vtd3r")]
+
+[node name="WaterJug_2" parent="." instance=ExtResource("29_247xq")]
+
+[node name="WaterJug_5" parent="." instance=ExtResource("30_pixi3")]
+
+[node name="WaterJug_6" parent="." instance=ExtResource("31_ftfna")]
+
+[node name="WaterTank_1" parent="." instance=ExtResource("32_0wgp4")]
+
+[node name="WaterTank_2" parent="." instance=ExtResource("33_e18dk")]
+
+[node name="WaterTank_3" parent="." instance=ExtResource("34_3uxc8")]

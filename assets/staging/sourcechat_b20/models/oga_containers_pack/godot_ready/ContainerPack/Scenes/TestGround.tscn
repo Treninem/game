@@ -1,0 +1,239 @@
+[gd_scene load_steps=42 format=3 uid="uid://bn60bvr4vne0b"]
+
+[ext_resource type="PackedScene" uid="uid://dqvkv2gadfngt" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_propane_2.tscn" id="1_vs68o"]
+[ext_resource type="PackedScene" uid="uid://bayb8kaehrqs4" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_propane_1.tscn" id="2_aopuh"]
+[ext_resource type="PackedScene" uid="uid://c2y0gp7rvvojc" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_propane_3.tscn" id="3_ad0bb"]
+[ext_resource type="PackedScene" uid="uid://dks1kbwpad8dy" path="res://Assets/ContainerPack/Scenes/DynamicProps/oxy_tank_1.tscn" id="4_ri411"]
+[ext_resource type="PackedScene" uid="uid://u6n1u3lnwfbu" path="res://Assets/ContainerPack/Scenes/DynamicProps/oxy_tank_2.tscn" id="5_nwgwj"]
+[ext_resource type="PackedScene" uid="uid://cb11r52xe5o85" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_7.tscn" id="6_ibv0q"]
+[ext_resource type="PackedScene" uid="uid://daw4ryfh5d7q0" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_6.tscn" id="7_uwwtd"]
+[ext_resource type="PackedScene" uid="uid://cgl5p3glqmkhl" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_4.tscn" id="8_5iy1k"]
+[ext_resource type="PackedScene" uid="uid://4moq8lymdapy" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_5.tscn" id="9_r74x6"]
+[ext_resource type="PackedScene" uid="uid://dkc8vxyq3ria0" path="res://Assets/ContainerPack/Scenes/DynamicProps/oxy_tank_3.tscn" id="10_5m5im"]
+[ext_resource type="PackedScene" uid="uid://b5qtkgk4xqc84" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_9.tscn" id="11_wvdht"]
+[ext_resource type="PackedScene" uid="uid://dykerflku70o4" path="res://Assets/ContainerPack/Scenes/StaticProps/oxy_tank_8.tscn" id="12_v3phy"]
+[ext_resource type="PackedScene" uid="uid://vpmalhdp04or" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_jerry_can_2.tscn" id="13_c0nib"]
+[ext_resource type="PackedScene" uid="uid://dnqd6v0x5mb8v" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_jerry_can_1.tscn" id="14_us8xl"]
+[ext_resource type="PackedScene" uid="uid://xk0pe40jjw1i" path="res://Assets/ContainerPack/Scenes/DynamicProps/gas_jerry_can_3.tscn" id="15_nfidw"]
+[ext_resource type="PackedScene" uid="uid://bjlexrxob7hw4" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_7.tscn" id="16_ggi8k"]
+[ext_resource type="PackedScene" uid="uid://car322pqk8fws" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_4.tscn" id="17_phyba"]
+[ext_resource type="PackedScene" uid="uid://bjbbfe6j1nu5b" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_6.tscn" id="18_shye5"]
+[ext_resource type="PackedScene" uid="uid://ceatxsqxvypc3" path="res://Assets/ContainerPack/Scenes/StaticProps/gas_jerry_can_5.tscn" id="19_rf7ri"]
+[ext_resource type="PackedScene" uid="uid://cwt0j2kjp70wy" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_drum_1.tscn" id="20_8c8ek"]
+[ext_resource type="PackedScene" uid="uid://p4lsk4ycy1tw" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_drum_2.tscn" id="21_1o5c7"]
+[ext_resource type="PackedScene" uid="uid://hck205jp7ie5" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_3.tscn" id="22_t63xi"]
+[ext_resource type="PackedScene" uid="uid://bwogbltqnokm3" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_5.tscn" id="23_eqfcc"]
+[ext_resource type="PackedScene" uid="uid://b7ekl2lhoft7k" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_6.tscn" id="24_sapjr"]
+[ext_resource type="PackedScene" uid="uid://c4xa4byc8uqrx" path="res://Assets/ContainerPack/Scenes/StaticProps/water_drum_4.tscn" id="25_k4xds"]
+[ext_resource type="PackedScene" uid="uid://d020jcu2dg8p6" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_jug_1.tscn" id="26_xv5oj"]
+[ext_resource type="PackedScene" uid="uid://go38lxpr8vk8" path="res://Assets/ContainerPack/Scenes/StaticProps/water_jug_4.tscn" id="27_ygsnu"]
+[ext_resource type="PackedScene" uid="uid://b7rhc78bkk48w" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_jug_3.tscn" id="28_x3d1q"]
+[ext_resource type="PackedScene" uid="uid://hvdkyvbrbmey" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_jug_2.tscn" id="29_eecmh"]
+[ext_resource type="PackedScene" uid="uid://bjy4akm1rh4nj" path="res://Assets/ContainerPack/Scenes/StaticProps/water_jug_5.tscn" id="30_121qe"]
+[ext_resource type="PackedScene" uid="uid://cck0goiam4oar" path="res://Assets/ContainerPack/Scenes/StaticProps/water_jug_6.tscn" id="31_grj2i"]
+[ext_resource type="PackedScene" uid="uid://wttpwor1djmj" path="res://Assets/ContainerPack/Scenes/DynamicProps/water_tank_1.tscn" id="32_knrhv"]
+[ext_resource type="PackedScene" uid="uid://crf0stm4l5v1e" path="res://Assets/ContainerPack/Scenes/StaticProps/water_tank_2.tscn" id="33_tkp1f"]
+[ext_resource type="PackedScene" uid="uid://7oh87i5a5vw7" path="res://Assets/ContainerPack/Scenes/StaticProps/water_tank_3.tscn" id="34_04rv1"]
+[ext_resource type="Material" uid="uid://yawo165t2k6d" path="res://Tutorial/Asset/new_standard_material_3d.tres" id="35_u8ogd"]
+[ext_resource type="Material" uid="uid://chnjmbv236fax" path="res://Tutorial/Asset/new_standard_material_3d2.tres" id="36_prkna"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h6w1c"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_6sjy0"]
+sky_material = SubResource("ProceduralSkyMaterial_h6w1c")
+
+[sub_resource type="Environment" id="Environment_pgyy6"]
+background_mode = 2
+sky = SubResource("Sky_6sjy0")
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_1cwcu"]
+size = Vector3(30, 1, 30)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7w2ku"]
+data = PackedVector3Array(-15, 0.5, 15, 15, 0.5, 15, -15, -0.5, 15, 15, 0.5, 15, 15, -0.5, 15, -15, -0.5, 15, 15, 0.5, -15, -15, 0.5, -15, 15, -0.5, -15, -15, 0.5, -15, -15, -0.5, -15, 15, -0.5, -15, 15, 0.5, 15, 15, 0.5, -15, 15, -0.5, 15, 15, 0.5, -15, 15, -0.5, -15, 15, -0.5, 15, -15, 0.5, -15, -15, 0.5, 15, -15, -0.5, -15, -15, 0.5, 15, -15, -0.5, 15, -15, -0.5, -15, 15, 0.5, 15, -15, 0.5, 15, 15, 0.5, -15, -15, 0.5, 15, -15, 0.5, -15, 15, 0.5, -15, -15, -0.5, 15, 15, -0.5, 15, -15, -0.5, -15, 15, -0.5, 15, 15, -0.5, -15, -15, -0.5, -15)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5, -0.401226, 0.767475, 0, 0.886204, 0.463296, -0.866025, -0.231648, 0.443102, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_pgyy6")
+
+[node name="ContainersPack" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.53145, 0, 4.00589)
+
+[node name="GasPropane_2" parent="ContainersPack" instance=ExtResource("1_vs68o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.78676, 0, -0.541837)
+
+[node name="GasPropane_1" parent="ContainersPack" instance=ExtResource("2_aopuh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0537477, 2.9005, -0.401897)
+
+[node name="GasPropane_3" parent="ContainersPack" instance=ExtResource("3_ad0bb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.14559, -9.53674e-07, -1.95172)
+
+[node name="OxyTank_1" parent="ContainersPack" instance=ExtResource("4_ri411")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9005, 0)
+
+[node name="OxyTank_2" parent="ContainersPack" instance=ExtResource("5_nwgwj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9005, 0)
+
+[node name="OxyTank_7" parent="ContainersPack" instance=ExtResource("6_ibv0q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7404, 0, -2.15789)
+
+[node name="OxyTank_6" parent="ContainersPack" instance=ExtResource("7_uwwtd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.69387, 9.53674e-07, -2.80714)
+
+[node name="OxyTank_4" parent="ContainersPack" instance=ExtResource("8_5iy1k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.19187, 9.53674e-07, -3.00135)
+
+[node name="OxyTank_5" parent="ContainersPack" instance=ExtResource("9_r74x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.16255, -9.53674e-07, -0.982151)
+
+[node name="OxyTank_3" parent="ContainersPack" instance=ExtResource("10_5m5im")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9005, 0)
+
+[node name="OxyTank_9" parent="ContainersPack" instance=ExtResource("11_wvdht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.76646, 0, -1.08977)
+
+[node name="OxyTank_8" parent="ContainersPack" instance=ExtResource("12_v3phy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.03507, 0, -2.71337)
+
+[node name="GasJerryCan_2" parent="ContainersPack" instance=ExtResource("13_c0nib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.63202, 2.9005, 2.12369)
+
+[node name="GasJerryCan_1" parent="ContainersPack" instance=ExtResource("14_us8xl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.25423, 2.9005, 1.68136)
+
+[node name="GasJerryCan_3" parent="ContainersPack" instance=ExtResource("15_nfidw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.44025, 2.9005, 0.867989)
+
+[node name="GasJerryCan_7" parent="ContainersPack" instance=ExtResource("16_ggi8k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.81472, 0.161094, 0.467993)
+
+[node name="GasJerryCan_4" parent="ContainersPack" instance=ExtResource("17_phyba")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.60995, 0, 0.325515)
+
+[node name="GasJerryCan_6" parent="ContainersPack" instance=ExtResource("18_shye5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.98301, 0, 1.51483)
+
+[node name="GasJerryCan_5" parent="ContainersPack" instance=ExtResource("19_rf7ri")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45047, 0, 1.08757)
+
+[node name="WaterDrum_1" parent="ContainersPack" instance=ExtResource("20_8c8ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59071, 2.9005, 2.33303)
+
+[node name="WaterDrum_2" parent="ContainersPack" instance=ExtResource("21_1o5c7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.16471, 2.9005, 2.38243)
+
+[node name="WaterDrum_3" parent="ContainersPack" instance=ExtResource("22_t63xi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.59128, 0, -3.04077)
+
+[node name="WaterDrum_5" parent="ContainersPack" instance=ExtResource("23_eqfcc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.980552, 0, -3.14643)
+
+[node name="WaterDrum_6" parent="ContainersPack" instance=ExtResource("24_sapjr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.94432, 0.0451106, -0.293118)
+
+[node name="WaterDrum_4" parent="ContainersPack" instance=ExtResource("25_k4xds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56943, 9.53674e-07, -0.746383)
+
+[node name="WaterJug_1" parent="ContainersPack" instance=ExtResource("26_xv5oj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11732, 2.90049, -1.49567)
+
+[node name="WaterJug_4" parent="ContainersPack" instance=ExtResource("27_ygsnu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8477, 0.326437, 1.03793)
+
+[node name="WaterJug_3" parent="ContainersPack" instance=ExtResource("28_x3d1q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.11042, 2.9005, 0.317251)
+
+[node name="WaterJug_2" parent="ContainersPack" instance=ExtResource("29_eecmh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.63539, 2.9005, -2.35171)
+
+[node name="WaterJug_5" parent="ContainersPack" instance=ExtResource("30_121qe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.568456, 0, 0.917888)
+
+[node name="WaterJug_6" parent="ContainersPack" instance=ExtResource("31_grj2i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46612, 0, 1.24084)
+
+[node name="WaterTank_1" parent="ContainersPack" instance=ExtResource("32_knrhv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.95816, 2.90049, -5.11391)
+
+[node name="WaterTank_2" parent="ContainersPack" instance=ExtResource("33_tkp1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74907, 0, -4.52565)
+
+[node name="WaterTank_3" parent="ContainersPack" instance=ExtResource("34_04rv1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.187081, -9.53674e-07, -6.9848)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.209, -0.5, 0)
+material_override = ExtResource("35_u8ogd")
+mesh = SubResource("BoxMesh_1cwcu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7w2ku")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -21.3304, -8.27038, 0)
+material_override = ExtResource("36_prkna")
+mesh = SubResource("BoxMesh_1cwcu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7w2ku")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 8.05389, -8.27038, 0)
+material_override = ExtResource("36_prkna")
+mesh = SubResource("BoxMesh_1cwcu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D3/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7w2ku")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, 12.1008, -8.27038, -17.582)
+mesh = SubResource("BoxMesh_1cwcu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D4/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7w2ku")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -17.7003, -8.27038, -16.6561)
+material_override = ExtResource("36_prkna")
+mesh = SubResource("BoxMesh_1cwcu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D5"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D5/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7w2ku")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -20.2831, -8.27038, 12.9765)
+mesh = SubResource("BoxMesh_1cwcu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D6"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D6/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7w2ku")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -0.987991, -8.27038, 13.7919)
+mesh = SubResource("BoxMesh_1cwcu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D7"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D7/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_7w2ku")
