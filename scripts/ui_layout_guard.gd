@@ -13,6 +13,8 @@ var watched: Dictionary = {}
 var _reflow_queued := false
 var _last_viewport_size := Vector2.ZERO
 var _last_ui_scale := -1.0
+var _geometry_lock: Dictionary = {}
+var _bound_frames: Dictionary = {}
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -32,9 +34,6 @@ func _process(_delta: float) -> void:
     if viewport_size != _last_viewport_size or not is_equal_approx(ui_scale, _last_ui_scale):
         _queue_reflow()
 
-    # Menu scripts may rebuild content while paused, but they are not allowed to
-    # move the outer frame. Correct geometry immediately whenever visible drift
-    # is detected.
     var stale: Array[int] = []
     for instance_id in watched:
         var ref: WeakRef = watched[instance_id]
@@ -64,6 +63,17 @@ func _discover() -> void:
 
 func _on_control_changed(control: Control) -> void:
     call_deferred("_fit_control", control)
+
+func _on_frame_rect_changed(control: Control) -> void:
+    if control != null and is_instance_valid(control) and control.visible:
+        _enforce_frame_geometry(control)
+
+func _bind_frame_guard(frame: Control, control: Control) -> void:
+    var frame_id := frame.get_instance_id()
+    if _bound_frames.has(frame_id):
+        return
+    _bound_frames[frame_id] = weakref(frame)
+    frame.item_rect_changed.connect(Callable(self, "_on_frame_rect_changed").bind(control))
 
 func _queue_reflow() -> void:
     if _reflow_queued:
@@ -99,15 +109,15 @@ func _fit_control(control: Control) -> void:
     if not is_instance_valid(frame):
         return
 
+    _bind_frame_guard(frame, control)
     control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     var available := _available_size(control)
     if available.x <= 1.0 or available.y <= 1.0:
         return
 
-    # Legacy menu scripts still calculate their own internal responsive state.
-    # Let them do that first. The centralized guard then performs compaction and
-    # is the final/only authority for outer-frame geometry. The previous order
-    # let the legacy method undo 150% UI compaction after the guard had applied it.
+    # Legacy menu scripts may still calculate internal responsive state. They can
+    # change fonts and minimum sizes, but the outer frame belongs only to this
+    # guard. frame.item_rect_changed immediately cancels any legacy drift.
     if control.has_method("_apply_responsive_layout"):
         control.call("_apply_responsive_layout")
 
@@ -118,8 +128,6 @@ func _fit_control(control: Control) -> void:
         _fit_gameplay_panels(control, available)
 
     _enforce_frame_geometry(control, true)
-    # Containers can finish minimum-size negotiation later in the same frame.
-    # Reassert once deferred so no negative CENTER offset survives that pass.
     call_deferred("_enforce_frame_geometry", control, true)
 
 func _available_size(control: Control) -> Vector2:
@@ -141,6 +149,9 @@ func _desired_frame_geometry(control: Control, available: Vector2) -> Dictionary
 
 func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
     if control == null or not is_instance_valid(control):
+        return
+    var control_id := control.get_instance_id()
+    if _geometry_lock.has(control_id):
         return
     var frame_variant = control.get("frame")
     if not (frame_variant is Control):
@@ -166,6 +177,7 @@ func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
     if not force and not anchors_wrong and not size_wrong and not position_wrong:
         return
 
+    _geometry_lock[control_id] = true
     frame.custom_minimum_size = Vector2.ZERO
     frame.clip_contents = true
     frame.anchor_left = 0.0
@@ -174,6 +186,7 @@ func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
     frame.anchor_bottom = 0.0
     frame.size = target
     frame.position = target_position
+    _geometry_lock.erase(control_id)
 
 func _fit_game_menu(control: Control, available: Vector2) -> void:
     var scale := _ui_scale()
