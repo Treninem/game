@@ -63,11 +63,11 @@ jobs:
       - name: Validate project headlessly
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
       - name: Verify stable gameplay boot
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_boot_world.gd
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn
       - name: Verify UI and save slots
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_ui_and_save.gd
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn
       - name: Verify player traverses the world
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn
       - name: Export Windows x64
         run: |
           mkdir -p build/windows
@@ -98,7 +98,7 @@ jobs:
       - name: Validate updater PowerShell syntax
         shell: powershell
         run: |
-          $files = @("installer/updater_bootstrap.ps1", "installer/updater_v4.ps1", "installer/updater.ps1", "installer/install_update_task.ps1", "installer/refresh_shortcuts.ps1")
+          $files = @("installer/updater_bootstrap.ps1", "installer/updater_v4.ps1", "installer/repair_sync.ps1", "installer/updater.ps1", "installer/install_update_task.ps1", "installer/refresh_shortcuts.ps1")
           foreach ($file in $files) {
             $tokens = $null
             $errors = $null
@@ -193,10 +193,12 @@ jobs:
           python3 -m pip install --disable-pip-version-check pillow
           python3 tools/make_icon.py installer/impuls.ico
           cp game/ImPuls-PC-Windows-x64.zip .
+          cp game/build/windows/ImPuls.exe ./ImPuls.exe
+          cp game/build/windows/ImPuls.pck ./ImPuls.pck
           cp installer-artifact/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
 
           mkdir -p updater-runtime
-          cp installer/updater_bootstrap.ps1 installer/updater_v4.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
+          cp installer/updater_bootstrap.ps1 installer/updater_v4.ps1 installer/repair_sync.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
           (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
 
           FROM_BUILD="${OLD_BUILD:-bootstrap}"
@@ -209,7 +211,7 @@ jobs:
             --output "$DELTA_NAME" \
             --manifest ImPuls-File-Manifest.json
 
-          sha256sum ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json > SHA256SUMS.txt
+          sha256sum ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json > SHA256SUMS.txt
           if [[ -n "$OLD_BUILD" ]]; then
             sha256sum "$DELTA_NAME" > "$DELTA_NAME.sha256"
             echo "delta_name=$DELTA_NAME" >> "$GITHUB_OUTPUT"
@@ -221,6 +223,8 @@ jobs:
           fi
 
           echo "Full first-install package: $(stat -c%s ImPuls-PC-Windows-x64.zip) bytes"
+          echo "Repair asset exe: $(stat -c%s ImPuls.exe) bytes"
+          echo "Repair asset pck: $(stat -c%s ImPuls.pck) bytes"
           if [[ -n "$OLD_BUILD" ]]; then
             echo "Delta-only update package: $(stat -c%s "$DELTA_NAME") bytes"
           fi
@@ -233,13 +237,13 @@ jobs:
         run: |
           set -euo pipefail
           BUILD="build-${{ github.run_number }}"
-          ASSETS=(ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json SHA256SUMS.txt)
+          ASSETS=(ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json SHA256SUMS.txt)
           if [[ -n "$DELTA_NAME" && -f "$DELTA_NAME" ]]; then
             ASSETS+=("$DELTA_NAME" "$DELTA_SUM")
           fi
           if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload stable "${ASSETS[@]}" --clobber --repo "${{ github.repository }}"
-            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Installed builds update through retained content-aware delta chains only; the full archive is for first installation/manual recovery. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
+            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Normal installed builds update through retained content-aware delta chains; missing core files are repaired individually from signed manifest data. The full archive is for first installation/manual recovery only. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
           else
-            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "ImPuls stable channel. Installed builds update through retained content-aware delta chains only; the full archive is for first installation/manual recovery. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
+            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "ImPuls stable channel. Normal installed builds update through retained content-aware delta chains; missing core files are repaired individually from signed manifest data. The full archive is for first installation/manual recovery only. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
           fi
