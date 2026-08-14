@@ -1,0 +1,136 @@
+name: Vendor CC0 buildings and interiors staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-buildings-interiors-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-buildings-interiors-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-buildings-interiors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 building packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP=".buildings_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP"
+
+          write_meta() {
+            local target="$1" key="$2" source="$3" download="$4" notes="$5"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Source page: $source
+          Download used: $download
+          License: Creative Commons CC0 1.0 Universal as stated by Kenney.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          The source page identifies this pack as Creative Commons CC0.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md with the staged assets.
+          EOF
+          }
+
+          import_zip() {
+            local key="$1" url="$2" source="$3" target="$4" notes="$5"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs \
+              --include='*/' \
+              --include='*.glb' --include='*.GLB' \
+              --include='*.gltf' --include='*.GLTF' \
+              --include='*.bin' --include='*.BIN' \
+              --include='*.obj' --include='*.OBJ' \
+              --include='*.mtl' --include='*.MTL' \
+              --include='*.fbx' --include='*.FBX' \
+              --include='*.dae' --include='*.DAE' \
+              --include='*.blend' --include='*.BLEND' \
+              --include='*.png' --include='*.PNG' \
+              --include='*.jpg' --include='*.JPG' \
+              --include='*.jpeg' --include='*.JPEG' \
+              --include='*.webp' --include='*.WEBP' \
+              --include='*.svg' --include='*.SVG' \
+              --include='*.json' --include='*.JSON' \
+              --include='*.txt' --include='*.TXT' \
+              --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            write_meta "$target" "$key" "$source" "$url" "$notes"
+          }
+
+          import_zip "kenney_building_kit" \
+            "https://kenney.nl/media/pages/assets/building-kit/0de7aaa492-1743244741/kenney_building-kit.zip" \
+            "https://kenney.nl/assets/building-kit" \
+            "assets/staging/buildings/kenney_building_kit" \
+            "80 CC0 3D building/structure/house files with animation support."
+
+          import_zip "kenney_modular_buildings" \
+            "https://kenney.nl/media/pages/assets/modular-buildings/3253b4219a-1707397411/kenney_modular-buildings.zip" \
+            "https://kenney.nl/assets/modular-buildings" \
+            "assets/staging/buildings/kenney_modular_buildings" \
+            "100 CC0 modular city/town/house files with variations."
+
+          import_zip "kenney_city_roads" \
+            "https://www.kenney.nl/media/pages/assets/city-kit-roads/74288c9459-1741864740/kenney_city-kit-roads.zip" \
+            "https://www.kenney.nl/assets/city-kit-roads" \
+            "assets/staging/world/roads/kenney_city_kit_roads" \
+            "70 CC0 3D road/city/town assets with variations."
+
+          import_zip "kenney_factory_kit" \
+            "https://kenney.nl/media/pages/assets/factory-kit/edaac9d4f6-1777639602/kenney_factory-kit_3.0.zip" \
+            "https://kenney.nl/assets/factory-kit" \
+            "assets/staging/machines/kenney_factory_kit" \
+            "140 CC0 3D conveyor/industrial/warehouse/factory files with variations and animation."
+
+          import_zip "kenney_furniture_kit" \
+            "https://kenney.nl/media/pages/assets/furniture-kit/440e0608a4-1677580847/kenney_furniture-kit.zip" \
+            "https://kenney.nl/assets/furniture-kit" \
+            "assets/staging/interiors/kenney_furniture_kit" \
+            "140 CC0 3D furniture/interior files including tables, chairs and beds."
+
+          rm -rf "$TMP"
+
+          cat > assets/staging/BUILDINGS_INTERIORS_MANIFEST.md <<'EOF'
+          # Buildings / roads / factory / furniture source-only staging
+
+          Physically downloaded source packs for later selection by the main integration chat.
+          No gameplay scenes, scripts, project settings or runtime integration are modified here.
+          EOF
+
+      - name: Commit staged building assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/buildings assets/staging/world/roads assets/staging/machines assets/staging/interiors assets/staging/BUILDINGS_INTERIORS_MANIFEST.md
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 buildings roads factory and furniture"
+          git pull --rebase origin main
+          git push origin HEAD:main
