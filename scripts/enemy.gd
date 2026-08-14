@@ -13,6 +13,8 @@ var health := 70.0
 var attack_elapsed := 0.0
 var target: CharacterBody3D
 var spawn_position := Vector3.ZERO
+var statuses: Dictionary = {}
+var status_tick_elapsed := 0.0
 
 func _ready() -> void:
     if enemy_id.is_empty():
@@ -27,6 +29,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
     if health <= 0.0:
         return
+    _update_statuses(delta)
+    if health <= 0.0:
+        return
+
     attack_elapsed = maxf(0.0, attack_elapsed - delta)
     if not is_on_floor():
         velocity.y -= gravity * delta
@@ -45,19 +51,21 @@ func _physics_process(delta: float) -> void:
         _idle_return(delta)
         return
 
+    var current_speed := move_speed * _status_speed_multiplier()
     if distance > attack_range:
         var direction := flat_to_player.normalized()
-        velocity.x = direction.x * move_speed
-        velocity.z = direction.z * move_speed
+        velocity.x = direction.x * current_speed
+        velocity.z = direction.z * current_speed
         if direction.length_squared() > 0.001:
             look_at(global_position + direction, Vector3.UP)
         move_and_slide()
     else:
-        velocity.x = move_toward(velocity.x, 0.0, move_speed * 4.0 * delta)
-        velocity.z = move_toward(velocity.z, 0.0, move_speed * 4.0 * delta)
+        velocity.x = move_toward(velocity.x, 0.0, current_speed * 4.0 * delta)
+        velocity.z = move_toward(velocity.z, 0.0, current_speed * 4.0 * delta)
         move_and_slide()
         if attack_elapsed <= 0.0:
-            attack_elapsed = attack_interval
+            var interval_multiplier := 1.35 if statuses.has("shocked") else 1.0
+            attack_elapsed = attack_interval * interval_multiplier
             var impact_direction := -flat_to_player.normalized() if flat_to_player.length_squared() > 0.001 else Vector3.UP
             VFXLibrary.spawn("hit_blunt", target.global_position + Vector3.UP * 0.9, get_tree().current_scene, impact_direction, flat_to_player.normalized(), 0.85)
             GameState.apply_damage(attack_damage)
@@ -65,24 +73,75 @@ func _physics_process(delta: float) -> void:
 func _idle_return(delta: float) -> void:
     var flat_home := spawn_position - global_position
     flat_home.y = 0.0
+    var current_speed := move_speed * _status_speed_multiplier()
     if flat_home.length() > 1.0:
         var direction := flat_home.normalized()
-        velocity.x = direction.x * move_speed * 0.6
-        velocity.z = direction.z * move_speed * 0.6
+        velocity.x = direction.x * current_speed * 0.6
+        velocity.z = direction.z * current_speed * 0.6
     else:
-        velocity.x = move_toward(velocity.x, 0.0, move_speed * delta)
-        velocity.z = move_toward(velocity.z, 0.0, move_speed * delta)
+        velocity.x = move_toward(velocity.x, 0.0, current_speed * delta)
+        velocity.z = move_toward(velocity.z, 0.0, current_speed * delta)
     move_and_slide()
 
-func take_damage(amount: float, attacker: Node = null) -> void:
+func take_damage(amount: float, attacker: Node = null, silent: bool = false) -> void:
     if health <= 0.0:
         return
     if attacker is CharacterBody3D:
         target = attacker
     health = maxf(0.0, health - maxf(amount, 0.0))
-    GameState.notify("Попадание: %.0f урона. Враг: %.0f HP" % [amount, health])
+    if not silent:
+        GameState.notify("Попадание: %.0f урона. Враг: %.0f HP" % [amount, health])
     if health <= 0.0:
         _die()
+
+func apply_status(status_name: String, duration: float, source: Node = null) -> void:
+    if health <= 0.0 or status_name.is_empty() or duration <= 0.0:
+        return
+    var was_active := statuses.has(status_name)
+    statuses[status_name] = maxf(float(statuses.get(status_name, 0.0)), duration)
+    if source is CharacterBody3D:
+        target = source
+    if was_active:
+        return
+    match status_name:
+        "burning":
+            VFXLibrary.spawn("magic_fire", global_position + Vector3.UP * 0.8, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 0.65)
+        "poisoned":
+            VFXLibrary.spawn("magic_poison", global_position + Vector3.UP * 0.8, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 0.65)
+        "frozen":
+            VFXLibrary.spawn("magic_frost", global_position + Vector3.UP * 0.8, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 0.65)
+        "shocked":
+            VFXLibrary.spawn("magic_lightning", global_position + Vector3.UP * 0.8, get_tree().current_scene, Vector3.UP, Vector3.UP, 0.65)
+
+func _update_statuses(delta: float) -> void:
+    for status_name in statuses.keys():
+        var remaining := maxf(0.0, float(statuses[status_name]) - delta)
+        if remaining <= 0.0:
+            statuses.erase(status_name)
+        else:
+            statuses[status_name] = remaining
+
+    status_tick_elapsed += delta
+    if status_tick_elapsed < 1.0:
+        return
+    status_tick_elapsed = 0.0
+
+    if statuses.has("burning"):
+        take_damage(5.0, null, true)
+        if health > 0.0:
+            VFXLibrary.spawn("magic_fire", global_position + Vector3.UP * 0.7, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 0.35)
+    if health > 0.0 and statuses.has("poisoned"):
+        take_damage(3.5, null, true)
+        if health > 0.0:
+            VFXLibrary.spawn("magic_poison", global_position + Vector3.UP * 0.7, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 0.30)
+
+func _status_speed_multiplier() -> float:
+    var multiplier := 1.0
+    if statuses.has("frozen"):
+        multiplier *= 0.48
+    if statuses.has("shocked"):
+        multiplier *= 0.72
+    return multiplier
 
 func _die() -> void:
     VFXLibrary.spawn("death_burst", global_position + Vector3.UP * 0.75, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 1.0)
