@@ -157,6 +157,20 @@ Path: `assets/staging/sourcechat_b12/audio/`
 
 Recommended use: metal filing/scrapes, heavy resonant impacts, object-size clang variation, door/trap springs, steam/industrial generators, clocks/timers and clockwork machinery. Deduplicate against B03/B07 by selecting the best sound for each object mass and mechanism.
 
+## B13 — physical world interactions
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b13/audio/`
+
+- `oga_shovel_dirt/`
+- `oga_object_into_water/`
+- `oga_stone_rock_wood_move/`
+- `oga_moving_boulder/`
+- `oga_qubodup_impact_palette/`
+- `oga_cannon_wall_crash/`
+
+Recommended use: digging and soil work, heavy objects entering water, dragging/moving stone or timber, boulder drops/scrapes, multi-material hard/soft/wet impacts, and large structural/cliff crash source layers. CC-BY-only rock-breaking/falling-rock candidates were deliberately excluded from this CC0 source batch.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
