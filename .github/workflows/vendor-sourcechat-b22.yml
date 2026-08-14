@@ -1,0 +1,114 @@
+name: Vendor source-chat B22 real CC0 roads factory furniture props
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b22.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b22
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and stage real CC0 B22 packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b22"
+          TMP=".sourcechat_b22_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+          command -v 7z >/dev/null || { sudo apt-get update -y && sudo apt-get install -y p7zip-full; }
+
+          fetch_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 600 -A 'ImPuls-CC0-SourceChat-B22/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            find "$ROOT/models/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 1.0 / Creative Commons Zero, as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          fetch_7z() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 600 -A 'ImPuls-CC0-SourceChat-B22/1.0' "$url" -o "$TMP/$name.7z"
+            7z x -y -o"$TMP/$name" "$TMP/$name.7z" >/dev/null
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            find "$ROOT/models/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 1.0 / Creative Commons Zero, as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          fetch_zip "kenney_city_kit_roads" "https://opengameart.org/sites/default/files/kenney_city-kit-roads.zip" "https://opengameart.org/content/city-kit-roads" "Kenney City Kit (Roads)"
+          fetch_zip "kenney_factory_kit" "https://opengameart.org/sites/default/files/kenney_factory-kit_3.0.zip" "https://opengameart.org/content/factory-kit" "Kenney Factory Kit"
+          fetch_zip "oga_3td_furniture_pack" "https://opengameart.org/sites/default/files/3TD_FurniturePack.zip" "https://opengameart.org/content/3td-furniture-pack" "3TD Furniture Pack"
+          fetch_7z "oga_medieval_props_pack" "https://opengameart.org/sites/default/files/medieval_props_pack.7z" "https://opengameart.org/content/medieval-props-pack" "Medieval Props Pack"
+
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B22 — real CC0 roads, factory, furniture and medieval props
+
+          Real downloaded/extracted source assets only. Nothing here is wired into gameplay.
+
+          Packs:
+          - Kenney City Kit (Roads): 70 optimized road/barrier objects.
+          - Kenney Factory Kit: 140+ optimized factory/warehouse/conveyor objects.
+          - 3TD Furniture Pack: bookshelf, hutch, cupboard, desk, tables and workbench with textures.
+          - Medieval Props Pack: 19 low-poly props including chest, bench, brazier, campfire, cart, basket, bed, hay, trough, logs, barrel and hitching post.
+
+          Main chat should inspect scale/material consistency, select subsets, convert/promote to production GLB where needed, and preserve SOURCE.md/LICENSE.txt.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B22 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B22 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b22
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 roads factory furniture props B22"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
