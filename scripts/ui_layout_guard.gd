@@ -1,13 +1,8 @@
 extends Node
 
-# Single geometry authority for full-screen menus. Dynamic menu scripts can
-# rebuild their controls at runtime, so this guard always performs the final
-# compaction + centering after resolution/fullscreen/UI-scale changes.
-#
-# Important: geometry is enforced from the frame loop, not from item_rect_changed.
-# Reacting to item_rect_changed by changing the same rect can recursively re-enter
-# Control layout on some Windows/Godot configurations. One-frame correction is
-# visually instantaneous and cannot recurse.
+# The only authority for outer menu/panel geometry.
+# Legacy menu scripts still choose their inner content, but their old resize
+# callbacks are disconnected so two systems can never fight over the same rect.
 
 const WATCH_GROUPS := ["game_menu", "gameplay_panels"]
 const MIN_SAFE_MARGIN := 8.0
@@ -60,13 +55,18 @@ func _discover() -> void:
             if control == null or watched.has(control.get_instance_id()):
                 continue
             watched[control.get_instance_id()] = weakref(control)
-            control.resized.connect(Callable(self, "_on_control_changed").bind(control))
-            control.visibility_changed.connect(Callable(self, "_on_control_changed").bind(control))
+            _disable_legacy_outer_layout(control)
+            control.resized.connect(_queue_reflow)
+            control.visibility_changed.connect(_queue_reflow)
             call_deferred("_fit_control", control)
     _queue_reflow()
 
-func _on_control_changed(control: Control) -> void:
-    call_deferred("_fit_control", control)
+func _disable_legacy_outer_layout(control: Control) -> void:
+    if not control.has_method("_apply_responsive_layout"):
+        return
+    var legacy := Callable(control, "_apply_responsive_layout")
+    if control.resized.is_connected(legacy):
+        control.resized.disconnect(legacy)
 
 func _queue_reflow() -> void:
     if _reflow_queued:
@@ -107,17 +107,10 @@ func _fit_control(control: Control) -> void:
     if available.x <= 1.0 or available.y <= 1.0:
         return
 
-    # Existing menu scripts remain responsible for internal font/button sizing.
-    # The outer frame geometry is overwritten here afterwards and on every visible
-    # frame, so legacy centering math can never accumulate drift.
-    if control.has_method("_apply_responsive_layout"):
-        control.call("_apply_responsive_layout")
-
     if control.is_in_group("game_menu"):
         _fit_game_menu(control, available)
     else:
         _fit_gameplay_panels(control, available)
-
     _enforce_frame_geometry(control, true)
 
 func _available_size(control: Control) -> Vector2:
@@ -129,12 +122,12 @@ func _available_size(control: Control) -> Vector2:
     return available
 
 func _desired_frame_geometry(control: Control, available: Vector2) -> Dictionary:
-    var is_game_menu: bool = control.is_in_group("game_menu")
-    var preferred: Vector2 = Vector2(1120.0, 760.0) if is_game_menu else Vector2(1220.0, 820.0)
+    var game_menu: bool = control.is_in_group("game_menu")
+    var preferred: Vector2 = Vector2(1120.0, 760.0) if game_menu else Vector2(1220.0, 820.0)
     var margin: float = clampf(minf(available.x, available.y) * 0.025, MIN_SAFE_MARGIN, MAX_SAFE_MARGIN)
     var usable := Vector2(maxf(1.0, available.x - margin * 2.0), maxf(1.0, available.y - margin * 2.0))
-    var target: Vector2 = Vector2(minf(preferred.x, usable.x), minf(preferred.y, usable.y)).floor()
-    var position: Vector2 = ((available - target) * 0.5).floor()
+    var target := Vector2(minf(preferred.x, usable.x), minf(preferred.y, usable.y)).floor()
+    var position := ((available - target) * 0.5).floor()
     return {"size": target, "position": position}
 
 func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
@@ -156,7 +149,7 @@ func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
     var desired: Dictionary = _desired_frame_geometry(control, available)
     var target: Vector2 = desired["size"]
     var target_position: Vector2 = desired["position"]
-    var anchors_wrong: bool = (
+    var anchors_wrong := (
         not is_zero_approx(frame.anchor_left)
         or not is_zero_approx(frame.anchor_top)
         or not is_zero_approx(frame.anchor_right)
@@ -198,13 +191,12 @@ func _fit_game_menu(control: Control, available: Vector2) -> void:
             var side_panel := side_margin.get_parent() as PanelContainer
             if side_panel != null:
                 side_panel.custom_minimum_size.x = 142.0 if tight else (168.0 if compact else 210.0)
-
         for child in sidebar.get_children():
             if child is Button:
                 var button := child as Button
-                var is_close: bool = button.text == "Вернуться в игру"
-                button.custom_minimum_size.y = 32.0 if tight else (36.0 if compact else (44.0 if is_close else 40.0))
-                button.add_theme_font_size_override("font_size", 10 if tight else (11 if compact else (14 if is_close else 13)))
+                var close_button: bool = button.text == "Вернуться в игру"
+                button.custom_minimum_size.y = 32.0 if tight else (36.0 if compact else (44.0 if close_button else 40.0))
+                button.add_theme_font_size_override("font_size", 10 if tight else (11 if compact else (14 if close_button else 13)))
             elif child is Label:
                 var label := child as Label
                 if label.text == "ImPuls":
@@ -229,8 +221,7 @@ func _fit_game_menu(control: Control, available: Vector2) -> void:
 
     var content_variant = control.get("content")
     if content_variant is VBoxContainer:
-        var content := content_variant as VBoxContainer
-        content.add_theme_constant_override("separation", 7 if tight else (8 if compact else 10))
+        (content_variant as VBoxContainer).add_theme_constant_override("separation", 7 if tight else (8 if compact else 10))
 
 func _fit_gameplay_panels(control: Control, available: Vector2) -> void:
     var scale: float = _ui_scale()
@@ -260,8 +251,7 @@ func _fit_gameplay_panels(control: Control, available: Vector2) -> void:
 
     var content_variant = control.get("content")
     if content_variant is VBoxContainer:
-        var content := content_variant as VBoxContainer
-        content.add_theme_constant_override("separation", 7 if tight else (9 if compact else 11))
+        (content_variant as VBoxContainer).add_theme_constant_override("separation", 7 if tight else (9 if compact else 11))
 
 func _ui_scale() -> float:
     return clampf(float(SettingsManager.get_value("graphics", "ui_scale")), 0.75, 1.5)
