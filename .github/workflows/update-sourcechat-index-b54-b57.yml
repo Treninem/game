@@ -1,0 +1,118 @@
+name: Update source-chat staging index through B57
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b54-b57.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify B54-B57 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b54/models/oga_key_collection
+            assets/staging/sourcechat_b54/models/oga_lowpoly_crystals_28
+            assets/staging/sourcechat_b54/models/oga_target_3d_2023
+            assets/staging/sourcechat_b55/models/oga_lemur_animated
+            assets/staging/sourcechat_b55/models/oga_mammoth_lowpoly
+            assets/staging/sourcechat_b55/models/oga_snail_photogrammetry
+            assets/staging/sourcechat_b55/models/oga_white_rhinoceros
+            assets/staging/sourcechat_b56/models/oga_auroch_male_female
+            assets/staging/sourcechat_b56/models/oga_beisa_oryx_rigged
+            assets/staging/sourcechat_b56/models/oga_hippo_rigged
+            assets/staging/sourcechat_b56/models/oga_whale_rigged_animated
+            assets/staging/sourcechat_b57/models/oga_camel_basemesh
+            assets/staging/sourcechat_b57/models/oga_cobra_rigged
+            assets/staging/sourcechat_b57/models/oga_gorilla_male
+            assets/staging/sourcechat_b57/models/oga_shark_rigged_textured
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B54 —' "$INDEX"; then
+            echo "B54 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B54 — crystals / target / key collection
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b54/models/`
+
+          - `oga_lowpoly_crystals_28/` — 28 low-poly crystal source models.
+          - `oga_target_3d_2023/` — target/range prop source with multiple formats/color sets.
+          - `oga_key_collection/` — modern/old keys and keyring source.
+
+          Recommended use: resource/decor crystals, training/range dressing and quest/lock key props after scale/material/collision review.
+
+          ## B55 — mammoth / lemur / rhinoceros / snail
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b55/models/`
+
+          - `oga_mammoth_lowpoly/`
+          - `oga_lemur_animated/`
+          - `oga_white_rhinoceros/`
+          - `oga_snail_photogrammetry/`
+
+          Recommended use: biome-specific fauna sources. Validate animation/material readiness individually; optimize the photogrammetry snail before any runtime promotion.
+
+          ## B56 — hippo / oryx / aurochs / whale
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b56/models/`
+
+          - `oga_hippo_rigged/`
+          - `oga_beisa_oryx_rigged/`
+          - `oga_auroch_male_female/`
+          - `oga_whale_rigged_animated/`
+
+          Recommended use: large land fauna and lightweight aquatic fauna after skeleton/material/scale review. Whale includes a simple swim-animation source.
+
+          ## B57 — gorilla / cobra / shark / camel
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b57/models/`
+
+          - `oga_gorilla_male/` — low-poly source; final texture not included by source.
+          - `oga_cobra_rigged/` — rigged/posed source, but no animations/final texture.
+          - `oga_shark_rigged_textured/` — rigged/textured aquatic source.
+          - `oga_camel_basemesh/` — basemesh source explicitly requiring production work.
+
+          Recommended use: mixed-readiness fauna source pool. Main integration chat should not treat all four as equally production-ready.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B54-B57"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
