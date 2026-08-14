@@ -928,3 +928,26 @@ Path: `assets/staging/sourcechat_b85/models/`
 - `oga_detailed_food_bread_cheese_sausage/` — smaller detailed bread/cheese/sausage source with texture maps.
 
 Integration rule: these remain source libraries. Main game chat should choose coherent subsets per actual location and normalize scale, materials, collisions, animation rigs and LOD before promotion. Do not wire staging libraries directly into gameplay.
+
+## B86 — market / medieval tools / village props
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b86/models/`
+
+- `kenney_mini_market/` — compact animated retail/shop source kit.
+- `oga_medieval_tools_12/` — 12 farming/workshop tools preserved as original CC0 archive.
+- `oga_medieval_props_pack_1_daniel/` — medieval village prop source set.
+- `oga_medieval_props_pack_2_daniel/` — village/field/utility prop source set.
+- `oga_medieval_props_pack_3_daniel/` — village/fishing/tannery-style prop source set.
+
+## B87 — crops / corn / hay / farm
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b87/models/`
+
+- `quaternius_lowpoly_crops_100plus/` — 100+ crop models across five growth stages.
+- `oga_low_poly_corn/` — extremely cheap corn/maize source for fields and harvest props.
+- `oga_hay_bale_lowpoly/` — low-cost hay-bale field/farmyard prop.
+- `oga_basic_voxel_farm/` — optional voxel farm source/reference set; use only if style is appropriate.
+
+Integration rule: keep crops and farm props as source candidates. Main game chat should promote only the variants needed by actual fields, farms, shops and workshops, then normalize materials, scale, collision and LOD.
