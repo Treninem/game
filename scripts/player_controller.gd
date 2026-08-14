@@ -49,6 +49,8 @@ func _unhandled_input(event: InputEvent) -> void:
         GameState.use_consumable("berries")
     elif event.is_action_pressed("use_water"):
         GameState.use_consumable("water_flask")
+    elif event.is_action_pressed("use_meat"):
+        _use_meat_quick()
     elif event.is_action_pressed("quick_save"):
         if SaveManager.save_game(self):
             GameState.notify("Игра сохранена в слот %02d." % SaveManager.current_slot)
@@ -89,6 +91,19 @@ func _enforce_world_bounds() -> void:
         velocity.x = 0.0
         velocity.z = 0.0
         GameState.notify("Дальше начинается открытое море и граница текущего континента.")
+
+func _use_meat_quick() -> void:
+    if int(GameState.inventory.get("cooked_meat", 0)) > 0:
+        if GameState.remove_item("cooked_meat", 1):
+            GameState.hunger = minf(100.0, GameState.hunger + 45.0)
+            GameState.health = minf(GameState.max_health, GameState.health + 5.0)
+            GameState.survival_changed.emit()
+            GameState.notify("Вы съели жареное мясо.")
+        return
+    if int(GameState.inventory.get("raw_meat", 0)) > 0:
+        GameState.use_consumable("raw_meat")
+        return
+    GameState.notify("В быстром слоте нет еды.")
 
 func _try_attack() -> void:
     if GameState.is_dead or attack_elapsed > 0.0:
