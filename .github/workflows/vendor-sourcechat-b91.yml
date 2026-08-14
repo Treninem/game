@@ -1,0 +1,122 @@
+name: Vendor source-chat B91 real CC0 hospital medical packaging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b91.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b91
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 hospital and medical packaging sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b91"
+          TMP=".sourcechat_b91_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/hospital" "$ROOT/models/oga_hospital_medical_center_moscow_2025"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B91/1.0' \
+            "https://opengameart.org/sites/default/files/hospital-medical-center-from-moscow.zip" \
+            -o "$TMP/hospital.zip"
+          unzip -q "$TMP/hospital.zip" -d "$TMP/hospital"
+          chmod -R u+rwX "$TMP/hospital" || true
+          rsync -a "$TMP/hospital/" "$ROOT/models/oga_hospital_medical_center_moscow_2025/"
+          meta "oga_hospital_medical_center_moscow_2025" \
+            "https://opengameart.org/content/hospital-medical-center-from-moscow" \
+            "Hospital (Medical Center) from Moscow" \
+            "https://opengameart.org/sites/default/files/hospital-medical-center-from-moscow.zip" \
+            "2025 CC0 hospital/ambulance-substation building source for modern/abandoned/survival locations. Main chat should audit textures, scale and collision before promotion."
+
+          mkdir -p "$ROOT/models/oga_medical_packaging_1"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B91/1.0' \
+            "https://opengameart.org/sites/default/files/Medi1..blend" \
+            -o "$ROOT/models/oga_medical_packaging_1/Medi1.blend"
+          meta "oga_medical_packaging_1" \
+            "https://opengameart.org/content/medical-packaging-1" \
+            "Medical Packaging 1" \
+            "https://opengameart.org/sites/default/files/Medi1..blend" \
+            "Neutral low-poly medical/pharmacy packaging source."
+
+          mkdir -p "$ROOT/models/oga_medical_packaging_2"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B91/1.0' \
+            "https://opengameart.org/sites/default/files/Medi2..blend" \
+            -o "$ROOT/models/oga_medical_packaging_2/Medi2.blend"
+          meta "oga_medical_packaging_2" \
+            "https://opengameart.org/content/medical-packaging-2" \
+            "Medical Packaging 2" \
+            "https://opengameart.org/sites/default/files/Medi2..blend" \
+            "Neutral low-poly medical/pharmacy packaging source."
+
+          mkdir -p "$ROOT/models/oga_medical_packaging_3"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B91/1.0' \
+            "https://opengameart.org/sites/default/files/Medi3..blend" \
+            -o "$ROOT/models/oga_medical_packaging_3/Medi3.blend"
+          meta "oga_medical_packaging_3" \
+            "https://opengameart.org/content/medical-packaging-3" \
+            "Medical Packaging 3" \
+            "https://opengameart.org/sites/default/files/Medi3..blend" \
+            "Neutral low-poly medical/pharmacy packaging source."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' -o -iname '*.unitypackage' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B91 — real CC0 hospital and medical packaging
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use the hospital as a location candidate and medical packaging as pharmacy/hospital/loot dressing. Assets using protected humanitarian emblems were intentionally not included in this batch; create a fictional in-game medical symbol instead.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B91 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B91 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b91
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 hospital medical packaging B91"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
