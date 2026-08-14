@@ -1,0 +1,122 @@
+name: Vendor source-chat B90 real CC0 glasses clothing footwear
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b90.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b90
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 glasses clothing footwear sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b90"
+          TMP=".sourcechat_b90_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page at staging time.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/glasses" "$ROOT/models/oga_lowpoly_glasses_29"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B90/1.0' \
+            "https://opengameart.org/sites/default/files/lowpoly_glasses.zip" -o "$TMP/glasses.zip"
+          unzip -q "$TMP/glasses.zip" -d "$TMP/glasses"
+          chmod -R u+rwX "$TMP/glasses" || true
+          rsync -a "$TMP/glasses/" "$ROOT/models/oga_lowpoly_glasses_29/"
+          meta "oga_lowpoly_glasses_29" \
+            "https://opengameart.org/content/lowpoly-glasses-pack" \
+            "LowPoly Glasses Pack" \
+            "https://opengameart.org/sites/default/files/lowpoly_glasses.zip" \
+            "29 low-poly glasses/sunglasses models in FBX, OBJ and Blend formats."
+
+          mkdir -p "$TMP/sneakers" "$ROOT/models/oga_sneakers"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B90/1.0' \
+            "https://opengameart.org/sites/default/files/sneakers.zip" -o "$TMP/sneakers.zip"
+          unzip -q "$TMP/sneakers.zip" -d "$TMP/sneakers"
+          chmod -R u+rwX "$TMP/sneakers" || true
+          rsync -a "$TMP/sneakers/" "$ROOT/models/oga_sneakers/"
+          meta "oga_sneakers" \
+            "https://opengameart.org/content/sneakers" \
+            "Sneakers" \
+            "https://opengameart.org/sites/default/files/sneakers.zip" \
+            "CC0 footwear source, about 1.5k triangles plus texture."
+
+          stage_clothing() {
+            local name="$1" file="$2" title="$3" notes="$4"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B90/1.0' \
+              "https://opengameart.org/sites/default/files/$file" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            chmod -R u+rwX "$TMP/$name" || true
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            meta "$name" \
+              "https://opengameart.org/content/hats-clothing-props" \
+              "$title" \
+              "https://opengameart.org/sites/default/files/$file" \
+              "$notes"
+          }
+
+          stage_clothing "oga_cargo_pants" "cargo_pants_e.zip" "Cargo Pants" "Individual CC0 clothing source from the currently-listed Hats / Clothing / Props files; FBX/texture-style source package for NPC customization."
+          stage_clothing "oga_sweatshirt" "sweatshirt_e.zip" "Sweatshirt" "Individual CC0 clothing source from the currently-listed Hats / Clothing / Props files for NPC customization."
+          stage_clothing "oga_work_boots" "work_boots.zip" "Work Boots" "Individual CC0 footwear source from the currently-listed Hats / Clothing / Props files for NPC customization."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' -o -iname '*.unitypackage' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B90 — real CC0 glasses, clothing and footwear
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should adapt selected pieces to the production humanoid skeleton/body and verify fit, weighting, material scale and clipping. The Hats / Clothing / Props page previously had a third-party-texture issue; its page comments state the problematic items were removed. This batch stages only currently listed individual CC0 files and preserves source-page metadata.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B90 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B90 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b90
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 glasses clothing footwear B90"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
