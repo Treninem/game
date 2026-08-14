@@ -1,0 +1,145 @@
+name: Vendor source-chat B12 real CC0 metal clockwork mechanical
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b12.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b12
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 metal and clockwork sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b12/audio"
+          TMP=".sourcechat_b12_tmp"
+          rm -rf "$TMP"; mkdir -p "$ROOT" "$TMP"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full >/dev/null
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks this staged asset as CC0/public domain.
+          License: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          seven_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 -A 'ImPuls-CC0-SourceChat-B12/1.0' "$url" -o "$work/pack.7z"
+            7z x -y "$work/pack.7z" -o"$work/archive" >/dev/null
+            rsync -a --prune-empty-dirs --include='*/' --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 -A 'ImPuls-CC0-SourceChat-B12/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$key"; mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 -A 'ImPuls-CC0-SourceChat-B12/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          seven_audio "oga_31_metal_pings_scrapes" \
+            "https://opengameart.org/sites/default/files/pings_and_scrapes.7z" \
+            "https://opengameart.org/content/31-pings-and-metal-filing-sounds" \
+            "bart / OpenGameArt" \
+            "31 CC0 metal pings, filing and scrape sounds for tools, blades, machinery, traps and object contact."
+
+          seven_audio "oga_33_cast_iron_clangs" \
+            "https://opengameart.org/sites/default/files/cast_iron_clangs.7z" \
+            "https://opengameart.org/content/33-metal-clang-sounds-cast-iron-pans" \
+            "bart / OpenGameArt" \
+            "33 CC0 resonant cast-iron clangs for heavy metal impacts and environment props."
+
+          zip_audio "oga_metal_clang_pitches" \
+            "https://opengameart.org/sites/default/files/clangs.zip" \
+            "https://opengameart.org/content/metal-clang-sounds" \
+            "bart / OpenGameArt" \
+            "CC0 metal clangs at several pitches, useful for varied object size/resonance layers."
+
+          seven_audio "oga_door_spring_sounds" \
+            "https://opengameart.org/sites/default/files/door_springs.7z" \
+            "https://opengameart.org/content/spring-sounds" \
+            "bart / OpenGameArt" \
+            "CC0 door-spring boings for mechanisms, traps, old doors and mechanical props."
+
+          one "oga_steam_boiler_loop" "generator_loop.wav" \
+            "https://opengameart.org/sites/default/files/generator_loop.wav" \
+            "https://opengameart.org/content/steam-boiler-sound-loop" \
+            "bart / OpenGameArt" \
+            "CC0 synthesized generator/steam-boiler loop for industrial machinery."
+
+          one "oga_clockwork_ticking" "ticking_clock.wav" \
+            "https://opengameart.org/sites/default/files/ticking_clock.wav" \
+            "https://opengameart.org/content/ticking-clock" \
+            "bart / OpenGameArt" \
+            "CC0 eight-tick clockwork loop for clocks, timers and mechanisms."
+          zip_audio "oga_clockwork_ticking" \
+            "https://opengameart.org/sites/default/files/ticks.zip" \
+            "https://opengameart.org/content/ticking-clock" \
+            "bart / OpenGameArt" \
+            "CC0 individual tick samples accompanying the clockwork loop."
+
+          rm -rf "$TMP"
+          cat > "assets/staging/sourcechat_b12/README.md" <<'EOF'
+          # Source chat B12 — real CC0 metal/clockwork/mechanical audio
+
+          Physically staged source files only; no runtime integration.
+          Coverage: metal pings/scrapes/filing, heavy cast-iron clangs, pitched clangs, door springs, steam-boiler/generator loop and clockwork ticks.
+          Main chat should use this as a material/mechanism palette, deduplicate against B03/B07, and choose sounds by object mass/material.
+          EOF
+          find assets/staging/sourcechat_b12 -type f | wc -l
+          du -sh assets/staging/sourcechat_b12
+
+      - name: Commit only B12 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b12
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 metal clockwork mechanical B12"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
