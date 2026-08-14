@@ -1,0 +1,126 @@
+name: Vendor source-chat B41 real CC0 deer tiger crocodile bear
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b41.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b41
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 large wildlife models
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b41/models"
+          TMP=".sourcechat_b41_tmp"
+          rm -rf "assets/staging/sourcechat_b41" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+          command -v 7z >/dev/null || { sudo apt-get update -y && sudo apt-get install -y p7zip-full; }
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B41/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_7z() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B41/1.0' "$url" -o "$TMP/$name.7z"
+            7z x -y -o"$TMP/$name" "$TMP/$name.7z" >/dev/null
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_single() {
+            local name="$1" url="$2" page="$3" title="$4" filename="$5"
+            mkdir -p "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B41/1.0' "$url" -o "$ROOT/$name/$filename"
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_single "oga_deer_female" "https://opengameart.org/sites/default/files/doe.blend" "https://opengameart.org/content/deer-female" "Deer Female" "doe.blend"
+          stage_zip "oga_tiger_lowpoly_rigged" "https://opengameart.org/sites/default/files/tiger.zip" "https://opengameart.org/content/tiger" "Tiger by Micket"
+          stage_7z "oga_crocodile_animated" "https://opengameart.org/sites/default/files/crocodile.7z" "https://opengameart.org/content/crocodile-0" "Crocodile by br-n518"
+          stage_7z "oga_white_bear_lowpoly" "https://opengameart.org/sites/default/files/Bear.7z" "https://opengameart.org/content/white-bear-low-poly" "White Bear Low Poly"
+
+          cat > "assets/staging/sourcechat_b41/README.md" <<'EOF'
+          # Source chat B41 — real CC0 deer, tiger, crocodile and bear 3D sources
+
+          Real species-specific 3D source assets only; nothing is connected to gameplay.
+
+          - Deer Female: rigged/animated textured deer source.
+          - Tiger: low-poly rigged/unwrapped tiger source.
+          - Crocodile: textured animated source with idle/walk/attack/death.
+          - White Bear: textured low-poly bear source; not rigged.
+
+          Main chat should verify scale/orientation and animation import, create missing bear rig/animations only if this model is selected, and promote optimized production copies rather than raw source files.
+          EOF
+          rm -rf "$TMP"
+          echo "B41 files:"; find assets/staging/sourcechat_b41 -type f | wc -l
+          du -sh assets/staging/sourcechat_b41
+      - name: Commit B41 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b41
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 deer tiger crocodile bear B41"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*4))
+          done
+          exit 1
