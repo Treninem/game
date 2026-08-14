@@ -1,0 +1,136 @@
+name: Vendor source-chat B89 real CC0 character customization
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b89.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b89
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 character customization sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b89"
+          TMP=".sourcechat_b89_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/chars" "$ROOT/models/oga_character_pack_2026"
+          for spec in \
+            "bravos_game_br_part_3.zip|part3" \
+            "bravos_game_br_2023.zip|y2023" \
+            "bravos_game_br_2024.zip|y2024"; do
+            IFS='|' read -r file sub <<< "$spec"
+            mkdir -p "$TMP/chars/$sub"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B89/1.0' \
+              "https://opengameart.org/sites/default/files/$file" -o "$TMP/$file"
+            unzip -q "$TMP/$file" -d "$TMP/chars/$sub"
+          done
+          chmod -R u+rwX "$TMP/chars" || true
+          rsync -a "$TMP/chars/" "$ROOT/models/oga_character_pack_2026/"
+          meta "oga_character_pack_2026" \
+            "https://opengameart.org/content/3d-character-pack" \
+            "3D Character Pack" \
+            "bravos_game_br_part_3.zip + bravos_game_br_2023.zip + bravos_game_br_2024.zip" \
+            "2026 CC0 regrouped character archive with multiple male/female low-poly/stylized humanoid sources. Intended for auditioning NPC variety and interchangeable-skin experiments, not direct bulk runtime import."
+
+          mkdir -p "$TMP/humanparts" "$ROOT/models/oga_human_parts_pack_2026"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B89/1.0' \
+            "https://opengameart.org/sites/default/files/3d_human_parts_pack.zip" -o "$TMP/humanparts.zip"
+          unzip -q "$TMP/humanparts.zip" -d "$TMP/humanparts"
+          chmod -R u+rwX "$TMP/humanparts" || true
+          rsync -a "$TMP/humanparts/" "$ROOT/models/oga_human_parts_pack_2026/"
+          meta "oga_human_parts_pack_2026" \
+            "https://opengameart.org/content/3d-human-parts-pack" \
+            "3D Human Parts Pack" \
+            "https://opengameart.org/sites/default/files/3d_human_parts_pack.zip" \
+            "2026 CC0 modular human heads/faces/arms/legs/hands/feet and other parts for character creation/customization experiments."
+
+          mkdir -p "$ROOT/models/oga_lowpoly_hats"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B89/1.0' \
+            "https://opengameart.org/sites/default/files/hats.blend" -o "$ROOT/models/oga_lowpoly_hats/hats.blend"
+          meta "oga_lowpoly_hats" \
+            "https://opengameart.org/content/hats" \
+            "Hats" \
+            "https://opengameart.org/sites/default/files/hats.blend" \
+            "Small CC0 low-polygon hat collection with simple textures."
+
+          mkdir -p "$ROOT/models/oga_hair_styles_cc0"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B89/1.0' \
+            "https://opengameart.org/sites/default/files/female_hair_ponytail2.blend" -o "$ROOT/models/oga_hair_styles_cc0/female_hair_ponytail2.blend"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B89/1.0' \
+            "https://opengameart.org/sites/default/files/female_hair_short_punk.blend" -o "$ROOT/models/oga_hair_styles_cc0/female_hair_short_punk.blend"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B89/1.0' \
+            "https://opengameart.org/sites/default/files/upcomb_hair.blend" -o "$ROOT/models/oga_hair_styles_cc0/upcomb_hair.blend"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B89/1.0' \
+            "https://opengameart.org/sites/default/files/side_parting_hair.blend" -o "$ROOT/models/oga_hair_styles_cc0/side_parting_hair.blend"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B89/1.0' \
+            "https://opengameart.org/sites/default/files/long_flat_hair.blend" -o "$ROOT/models/oga_hair_styles_cc0/long_flat_hair.blend"
+          meta "oga_hair_styles_cc0" \
+            "https://opengameart.org/content/cc0-character-customization" \
+            "CC0 humanoid hairstyle sources" \
+            "female_hair_ponytail2.blend + female_hair_short_punk.blend + upcomb_hair.blend + side_parting_hair.blend + long_flat_hair.blend" \
+            "Five separate low-poly CC0 hairstyle sources for male/female NPC variation. These were authored to fit older low-poly base meshes, so scale/head fit must be adapted at integration time."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B89 — real CC0 character customization sources
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should audition the 2026 character archives, establish one production skeleton/body standard, and adapt selected human parts/hair/hats to that standard. These are source components, not a finished modular character system.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B89 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B89 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b89
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 character customization B89"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
