@@ -1,0 +1,94 @@
+name: Vendor source-chat B59 real CC0 prehistoric fauna
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b59.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b59
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 prehistoric fauna sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b59"
+          TMP=".sourcechat_b59_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4" notes="$5"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B59/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            chmod -R u+rwX "$TMP/$name" || true
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            meta "$name" "$page" "$title" "$url" "$notes"
+          }
+
+          stage_zip "oga_pentaceratops_static" "https://opengameart.org/sites/default/files/Pentaceratops.zip" "https://opengameart.org/content/pentaceratops" "Pentaceratops" "Static/not-rigged dinosaur source with FBX, Blend, UV layout and quick texture; source page lists 1316 verts / 1202 faces / 2626 tris."
+          stage_zip "oga_albertosaurus_static" "https://opengameart.org/sites/default/files/Albertosaurus.zip" "https://opengameart.org/content/albertosaurus" "Albertosaurus" "Static/not-rigged dinosaur source with FBX, Blend, UV layout and quick texture; source page lists 698 verts / 686 faces / 1364 tris."
+
+          mkdir -p "$ROOT/models/oga_trex_static"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B59/1.0' "https://opengameart.org/sites/default/files/trex.blend" -o "$ROOT/models/oga_trex_static/trex.blend"
+          meta "oga_trex_static" "https://opengameart.org/content/t-rex" "t-rex" "https://opengameart.org/sites/default/files/trex.blend" "Static T-Rex source created from memory; source page states no textures or animations and 680 tris."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B59 — real CC0 prehistoric fauna sources
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Includes Pentaceratops, Albertosaurus and T-Rex static source meshes. These are not production-ready animated creatures. Main integration chat should shortlist only species useful for authored regions, then rig/animate/retexture selected candidates rather than promoting all files blindly.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B59 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B59 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b59
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 prehistoric fauna B59"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
