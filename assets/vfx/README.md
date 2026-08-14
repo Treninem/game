@@ -1,6 +1,6 @@
 # ImPuls VFX Core Pack
 
-This folder documents the physically integrated project-owned VFX layer implemented by `scripts/vfx_library.gd`.
+This folder contains the project-owned runtime VFX layer plus physically imported CC0 enhancement packs.
 
 ## Current physically integrated presets
 
@@ -50,6 +50,19 @@ VFXLibrary.spawn_collision("metal", position, hit_normal)
 
 All helpers accept a `strength` value so gameplay can scale visual intensity without duplicating assets.
 
+## Physically imported CC0 packs
+
+Stored in `assets/vfx/third_party/` with `SOURCE.md` and `LICENSE.txt` beside each pack:
+
+1. `kenney_particle_pack` — general magic/fire/smoke/sparks/slash/scorch/trace particle sprites.
+2. `kenney_smoke_particles` — smoke and explosion sprites.
+3. `oga_2d_spell_effects` — fire/lightning/explosion/rain spell effects by Mikodrak.
+4. `oga_earth_impact` — earth/stone magic impacts by Cethiel.
+5. `oga_weapon_slash` — animated slash/hit variants by Cethiel.
+6. `oga_arcane_magic` — arcane spell/projectile effects by Cethiel.
+
+These imported textures are enhancement material for the shared semantic VFX system. The procedural core remains the fallback so gameplay never depends on one third-party texture layout.
+
 ## Performance rules
 
 - Effects are short-lived and self-delete.
@@ -57,21 +70,8 @@ All helpers accept a `strength` value so gameplay can scale visual intensity wit
 - No expensive true reflections or persistent lights are created.
 - Flash lights have shadows disabled.
 - Keep routine combat effects below large-explosion density.
-- Future sprite/flipbook packs should replace or decorate these emitters, not create duplicate gameplay systems.
-
-## External CC0 enhancement packs
-
-The following are approved enhancement sources, but must not be called physically imported until their binary files are actually committed under `assets/vfx/third_party/` with license/source metadata:
-
-1. Kenney Particle Pack — CC0, general particle sprites including magic, fire, smoke, sparks, slashes, scorch marks and traces.
-   Source: https://www.kenney.nl/assets/particle-pack
-2. Kenney Smoke Particles — CC0, smoke/explosion VFX sprites.
-   Source: https://www.kenney.nl/assets/smoke-particles
-3. OpenGameArt 2D Spell Effects by Mikodrak — CC0; spell effects including fire/lightning/explosion/rain.
-   Source: https://opengameart.org/content/2d-spell-effects
-4. OpenGameArt Earth Impact - Magic Effect by Cethiel — CC0; earth impact variations.
-   Source: https://opengameart.org/content/earth-impact-magic-effect
+- Imported sprite/flipbook packs should decorate existing emitters, not create duplicate gameplay systems.
 
 ## License
 
-The procedural VFX code and project-owned preset composition in this repository are part of the ImPuls project. Third-party assets retain their own source licenses and require their original license/source files beside imported content.
+The procedural VFX code and project-owned preset composition are part of the ImPuls project. Imported third-party packs are CC0 according to their source pages; each imported folder preserves source/license metadata.
