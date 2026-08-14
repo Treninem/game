@@ -1,0 +1,166 @@
+name: Import verified real wildlife batch 2
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import_real_wildlife_batch2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-real-wildlife-batch2
+  cancel-in-progress: false
+
+jobs:
+  import-wildlife:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 wildlife sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+          mkdir -p \
+            "$ROOT/raven" \
+            "$ROOT/flying_squirrel" \
+            "$ROOT/deer" \
+            "$ROOT/butterfly" \
+            "$ROOT/fish_quaternius" \
+            "$ROOT/frog" \
+            "$ROOT/wasp" \
+            "$ROOT/shrike"
+
+          fetch() {
+            local url="$1" out="$2"
+            if [ -s "$out" ]; then
+              echo "Already present: $out"
+              return 0
+            fi
+            curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 900 \
+              -A 'ImPuls-CC0-AssetImporter/2.0' "$url" -o "$out"
+            test -s "$out"
+          }
+
+          fetch 'https://opengameart.org/sites/default/files/raven.blend' \
+            "$ROOT/raven/raven.blend"
+          fetch 'https://opengameart.org/sites/default/files/squirrel.blend' \
+            "$ROOT/flying_squirrel/squirrel.blend"
+          fetch 'https://opengameart.org/sites/default/files/Deer%28Updated%29.zip' \
+            "$ROOT/deer/Deer_Updated.zip"
+          fetch 'https://opengameart.org/sites/default/files/Butterfly.zip' \
+            "$ROOT/butterfly/Butterfly.zip"
+          fetch 'https://opengameart.org/sites/default/files/Animated%20Fish%20Pack%20by%20%40Quaternius.zip' \
+            "$ROOT/fish_quaternius/Animated_Fish_Pack_by_Quaternius.zip"
+          fetch 'https://opengameart.org/sites/default/files/frog.tar.gz' \
+            "$ROOT/frog/frog.tar.gz"
+          fetch 'https://opengameart.org/sites/default/files/wasp.zip' \
+            "$ROOT/wasp/wasp.zip"
+          fetch 'https://opengameart.org/sites/default/files/bird_yellow_billed_shrike.zip' \
+            "$ROOT/shrike/bird_yellow_billed_shrike.zip"
+
+          find "$ROOT" -type f \
+            \( -name '*.zip' -o -name '*.7z' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' -o -name '*.gz' \) \
+            -size 0 -print -quit | grep -q . && { echo 'ERROR: zero-byte source asset detected'; exit 1; } || true
+
+      - name: Write provenance metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+
+          cat > "$ROOT/raven/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/raven-0
+          License: CC0
+          Author: Teh_Bucket
+          File: raven.blend
+          Notes: ~2k tris, rudimentary texture, rig and demo flight animation.
+          EOF
+
+          cat > "$ROOT/flying_squirrel/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/flying-squirrel
+          License: CC0
+          Author: shikah
+          File: squirrel.blend
+          Notes: rigged flying squirrel; source author describes the rig as rough, so main chat should inspect before production use.
+          EOF
+
+          cat > "$ROOT/deer/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/deer-low-poly-rigged
+          License: CC0
+          Author: crownjoshua
+          File: Deer_Updated.zip
+          Notes: low-poly deer with rigged and non-rigged versions; OBJ/3DS/Blend sources included by author.
+          EOF
+
+          cat > "$ROOT/butterfly/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/butterfly-animated
+          License: CC0
+          Author: CDmir / TinyWorlds
+          File: Butterfly.zip
+          Notes: low-poly butterfly, rigged and animated, with diffuse texture.
+          EOF
+
+          cat > "$ROOT/fish_quaternius/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/animated-fish
+          License: CC0
+          Author: Quaternius
+          File: Animated_Fish_Pack_by_Quaternius.zip
+          Notes: low-poly animated fish pack; Blend, OBJ and FBX included.
+          EOF
+
+          cat > "$ROOT/frog/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/frog-low-poly-animated-3d-model
+          License: CC0
+          Author: methodical pixel
+          File: frog.tar.gz
+          Notes: Blender format, rigged and animated, about 600 triangles.
+          EOF
+
+          cat > "$ROOT/wasp/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/3d-hornetwasp
+          License: CC0
+          Author: MikeMoon
+          File: wasp.zip
+          Notes: 3D hornet/wasp, rigged for animation; source author notes rig quality may need cleanup.
+          EOF
+
+          cat > "$ROOT/shrike/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/bird-yellow-billed-shrike
+          License: CC0
+          Author: pistachio
+          File: bird_yellow_billed_shrike.zip
+          Notes: 996-triangle low-poly bird, IK rigged, UVed, with 2K diffuse/alpha/AO/normal/roughness/SSS textures.
+          EOF
+
+          find assets/source_packs/opengameart -type f \
+            \( -name '*.zip' -o -name '*.7z' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' -o -name '*.gz' \) \
+            -print0 | sort -z | xargs -0 sha256sum > assets/source_packs/opengameart/SHA256SUMS.txt
+
+      - name: Commit downloaded wildlife sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/source_packs/opengameart/individual_animals assets/source_packs/opengameart/SHA256SUMS.txt
+          if git diff --cached --quiet; then
+            echo "No wildlife source changes to commit."
+            exit 0
+          fi
+          git commit -m "assets: vendor second verified CC0 wildlife batch"
+
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          echo "ERROR: could not push wildlife source commit after retries"
+          exit 1
