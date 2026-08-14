@@ -3,7 +3,7 @@
 #endif
 
 #define MyAppName "ImPuls"
-#define MyAppVersion "0.5.0"
+#define MyAppVersion "0.5.1"
 #define MyAppPublisher "Treninem"
 
 [Setup]
@@ -26,11 +26,11 @@ ArchitecturesAllowed=x64compatible
 DisableProgramGroupPage=yes
 CloseApplications=yes
 RestartApplications=no
-VersionInfoVersion=0.5.0.0
+VersionInfoVersion=0.5.1.0
 VersionInfoCompany=Treninem
 VersionInfoDescription=ImPuls PC Installer
 VersionInfoProductName=ImPuls
-VersionInfoProductVersion=0.5.0.0
+VersionInfoProductVersion=0.5.1.0
 
 [Dirs]
 Name: "{app}\current"
@@ -40,6 +40,7 @@ Source: "..\build\windows\*"; DestDir: "{app}\current"; Flags: ignoreversion rec
 Source: "updater.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "launcher.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "install_update_task.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "refresh_shortcuts.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "impuls.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release_tag.txt"; DestDir: "{app}"; Flags: ignoreversion
 
@@ -49,6 +50,7 @@ Name: "{group}\ImPuls"; Filename: "{sys}\wscript.exe"; Parameters: """{app}\laun
 
 [Run]
 Filename: "powershell.exe"; Parameters: "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File ""{app}\install_update_task.ps1"" -InstallDir ""{app}"""; Flags: runhidden waituntilterminated
+Filename: "powershell.exe"; Parameters: "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File ""{app}\refresh_shortcuts.ps1"" -InstallDir ""{app}"""; Flags: runhidden waituntilterminated
 Filename: "{sys}\wscript.exe"; Parameters: """{app}\launcher.vbs"""; Description: "Запустить ImPuls"; Flags: postinstall nowait skipifsilent
 
 [UninstallRun]
