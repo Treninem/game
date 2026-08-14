@@ -32,6 +32,13 @@ func _sidebar_error(menu: Control, frame: Control) -> String:
     return ""
 
 func _run_test() -> void:
+    var settings_manager := root.get_node_or_null("SettingsManager")
+    var save_manager := root.get_node_or_null("SaveManager")
+    var layout_guard := root.get_node_or_null("UILayoutGuard")
+    if settings_manager == null or save_manager == null or layout_guard == null:
+        _fail(13, "required autoload nodes are missing from standalone test tree")
+        return
+
     var packed := load("res://scenes/stage1.tscn") as PackedScene
     if packed == null:
         _fail(2, "stage scene missing")
@@ -46,11 +53,8 @@ func _run_test() -> void:
     if menu == null or panels == null:
         _fail(3, "menu nodes missing")
         return
-    if root.get_node_or_null("UILayoutGuard") == null:
-        _fail(13, "centralized UI layout guard is not loaded")
-        return
 
-    menu.open_menu("main")
+    menu.call("open_menu", "main")
     for _i in range(5):
         await process_frame
     if not paused or not menu.visible:
@@ -68,13 +72,13 @@ func _run_test() -> void:
     if not error.is_empty():
         _fail(14, error)
         return
-    menu.close_menu()
+    menu.call("close_menu")
     await process_frame
     if paused or menu.visible:
         _fail(7, "pause menu did not restore gameplay")
         return
 
-    panels.open_panel("inventory")
+    panels.call("open_panel", "inventory")
     for _i in range(5):
         await process_frame
     if not paused or not panels.visible:
@@ -88,18 +92,17 @@ func _run_test() -> void:
     if not error.is_empty():
         _fail(9, error)
         return
-    panels.close_panel()
+    panels.call("close_panel")
     await process_frame
     if paused or panels.visible:
         _fail(10, "gameplay panel did not restore gameplay")
         return
 
-    # Maximum supported UI scale used to reintroduce the offset/overflow bug.
-    SettingsManager.set_value("graphics", "ui_scale", 1.5)
+    settings_manager.call("set_value", "graphics", "ui_scale", 1.5)
     for _i in range(8):
         await process_frame
 
-    menu.open_menu("updates")
+    menu.call("open_menu", "updates")
     for _i in range(8):
         await process_frame
     frame = menu.get("frame") as Control
@@ -114,10 +117,10 @@ func _run_test() -> void:
     if not error.is_empty():
         _fail(15, "150 percent %s" % error)
         return
-    menu.close_menu()
+    menu.call("close_menu")
     await process_frame
 
-    panels.open_panel("map")
+    panels.call("open_panel", "map")
     for _i in range(8):
         await process_frame
     panel_frame = panels.get("frame") as Control
@@ -128,13 +131,15 @@ func _run_test() -> void:
     if not error.is_empty():
         _fail(16, error)
         return
-    panels.close_panel()
-    SettingsManager.set_value("graphics", "ui_scale", 1.0)
+    panels.call("close_panel")
+    settings_manager.call("set_value", "graphics", "ui_scale", 1.0)
     for _i in range(4):
         await process_frame
 
-    if SaveManager.list_slots().size() != 10:
-        _fail(11, "save slot count regressed; count=%s" % SaveManager.list_slots().size())
+    var slots = save_manager.call("list_slots")
+    if not (slots is Array) or slots.size() != 10:
+        var count := slots.size() if slots is Array else -1
+        _fail(11, "save slot count regressed; count=%s" % count)
         return
 
     print("UI smoke passed: centralized auto-alignment, 150% UI scaling and 10 save slots are stable")
