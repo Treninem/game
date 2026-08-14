@@ -8,69 +8,34 @@ Root: `assets/staging/vfx_nonmagic/`
 
 ## Physically staged and verified in repository
 
-### `kenney_splat_pack`
-- Source: Kenney Splat Pack.
-- License: CC0.
-- Contents: splat/VFX textures suitable as candidates for mud, paint, oil, water, grime, dirt, stains and impact residue.
-- Recommended production use: decals/material-state overlays after visual review.
+All entries below have real files present in the repository, not registry-only placeholders. Each staged family keeps `SOURCE.md` and `LICENSE.txt`.
 
-### `oga_blender_volumetric_effects`
-- Source: OpenGameArt — 25 special effects rendered with Blender, rubberduck.
-- License: CC0.
-- Contents: rendered flame, explosion, ring, shockwave and smoke families.
-- Staging policy: rendered visual files only; Blender/source project files are intentionally excluded.
-- Recommended production use: flipbooks/impostors for fire, explosions, smoke and shockwaves.
+### Fire / smoke / fog
 
-### `oga_cc0_bang_sfx`
-- Source: OpenGameArt — 25 CC0 bang / firework SFX, rubberduck.
-- License: CC0.
-- Contents: explosion, firework, cannon and short bang recordings.
-- Recommended production use: explosion/destruction/industrial impact audio after loudness normalization and duplicate review.
+- `oga_burning_fire_40f` — OpenGameArt, Mikodrak, CC0. Real looping burning-fire assets including GIF previews and a directory of individual transparent PNG frames. Recommended: campfire, fireplace, furnace, torch and burning-object source material.
+- `oga_fire_smoke_animations` — OpenGameArt, Reactorcore, CC0. Real fire/flame/smoke sprite families including preview sheets and separate animation-frame directories such as FireBlast, FireBurst, FirePlume, OilyFireball and SmokeGas. Recommended: main chat selects suitable subsets by art direction.
+- `oga_smoke_vapor` — OpenGameArt, Fupi, CC0. Four soft smoke/vapor textures. Recommended: smoke, steam, dust, cloud wisps, fog wisps, gas and industrial emissions.
+- `oga_fog_animation` — OpenGameArt, AntumDeluge, CC0. Real tileable `fog.png` texture for moving/layered fog and cloud banks.
+- `oga_thick_fog` — OpenGameArt, LFA, CC0. Real horizontally tileable `fog01.png` texture for thick fog, haze and distant smoke banks.
+- `oga_blender_volumetric_effects` — OpenGameArt, rubberduck, CC0. Rendered flame, explosion, ring, shockwave and smoke families; rendered visual files only are staged.
 
-### `oga_explosion_atlas`
-- Source: OpenGameArt — Explosion particles sprite atlas, TheJosh + Kenney-derived source.
-- License: CC0.
-- Contents: compact 3x3 explosion atlas.
-- Recommended production use: low-cost/distant explosion LOD or UI/preview effects.
+### Weather / water
 
-### `oga_para_particlefx_1`
-- Source: OpenGameArt — Animated particle effects #1, para.
-- License: CC0.
-- Contents: 14 animated particle-effect variations; large sprite sheets with regular frame grids.
-- Recommended production use: smoke/fire/general particle flipbooks after atlas inspection.
+- `oga_lightning_animation` — OpenGameArt, Calinou, CC0. Real lightning animation files staged for storms/electrical faults/distant lightning.
+- `oga_rain_particle` — OpenGameArt, donte, CC0. Real five-frame rain animation (`rain_drop_0.png` through `rain_drop_4.png`) for low-cost rain/far LOD.
+- `oga_water_caustics` — OpenGameArt, leeor_net, CC0. Real caustic atlas files plus individual frame directory; useful for underwater light movement/fallback caustics.
+- `oga_water_drop` — OpenGameArt, davididev, CC0. Real `water_ball.png` additive water-droplet candidate for spray, leaks, fountains and wet machinery.
+- `oga_splash` — OpenGameArt, jcpmcdonald, CC0. Real `splash.png` low-cost splash animation candidate.
+- `oga_para_particlefx_2` — OpenGameArt, para, CC0. Animated air bubbles plus fire/flame and physical hit-style sheets.
 
-### `oga_para_particlefx_2`
-- Source: OpenGameArt — Animated particle effects #2, para.
-- License: CC0.
-- Contents: air bubbles, flame/fire and physical hit-style animated sheets among the pack contents.
-- Recommended production use: water bubbles, fire, impact feedback and low-cost environmental effects.
+### Explosions / impacts / residues
 
-### `oga_smoke_vapor`
-- Source: OpenGameArt — Smoke Vapor Particles, Fupi.
-- License: CC0.
-- Contents: four soft smoke/vapor textures.
-- Recommended production use: smoke, steam, dust, cloud wisps, fog wisps, gas and industrial emissions.
-
-## Extended staging batch requested by workflow
-
-The following families are configured in `.github/workflows/vendor-vfx-staging.yml`. Treat them as **pending physical staging until their folders are confirmed in the repository after the workflow completes**:
-
-- `oga_explosion_animations_1` — transparent frame-by-frame explosion atlases.
-- `oga_explosion_animations_2` — second transparent explosion-atlas family.
-- `oga_water_caustics` — pre-rendered water caustic frames/atlases.
-- `oga_lightning_animation` — lightning animation candidate for storms/electrical faults.
-- `oga_rain_particle` — tiny animated rain particle for low/far LOD.
-- `oga_water_drop` — additive looping water-droplet candidate for spray/leaks/fountains.
-- `oga_splash` — small low-cost water splash animation.
-
-Do not call these physically staged until directory presence is verified after the workflow run.
-
-## Additional verified source candidates for later staging
-
-These are verified CC0 source candidates but are not physically staged by this registry entry:
-
-- OpenGameArt Fog Animation — tileable 640x480 fog/cloud animation, 40-frame preview sequence; candidate for moving fog/cloud layers.
-- OpenGameArt Thick Fog — 1024x512 horizontally tileable fog texture; candidate for rolling fog, smoke banks and distant haze.
+- `oga_explosion_animations_1` — OpenGameArt, Sinestesia, CC0. Transparent frame-by-frame explosion atlas family.
+- `oga_explosion_animations_2` — OpenGameArt, Sinestesia, CC0. Second transparent explosion-atlas family.
+- `oga_explosion_atlas` — OpenGameArt, TheJosh + Kenney-derived source, CC0. Compact 3x3 explosion atlas.
+- `oga_para_particlefx_1` — OpenGameArt, para, CC0. 14 animated particle-effect variations in regular frame grids; candidates for smoke/fire/general effects.
+- `kenney_splat_pack` — Kenney, CC0. Splat/VFX textures suitable for mud, paint, oil, water, grime, dirt, stains and impact residue.
+- `oga_cc0_bang_sfx` — OpenGameArt, rubberduck, CC0. Explosion/firework/cannon/short bang recordings for later audio selection and normalization.
 
 ## Main integration chat checklist
 
