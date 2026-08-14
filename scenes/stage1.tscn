@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/city_gate_controller.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/world_streamer.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/gameplay_panels.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/capital_perimeter.gd" id="11"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -28,6 +29,9 @@ shadow_enabled = true
 
 [node name="WorldStreamer" type="Node3D" parent="World"]
 script = ExtResource("9")
+
+[node name="CapitalPerimeter" type="Node3D" parent="World"]
+script = ExtResource("11")
 
 [node name="CityDistrict" type="Node3D" parent="World"]
 script = ExtResource("6")
