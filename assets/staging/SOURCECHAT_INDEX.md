@@ -697,3 +697,25 @@ Path: `assets/staging/sourcechat_b62/models/`
 - `oga_goblin_rigged_animated/`
 
 Recommended use: authored settlement/enemy NPC candidates after skeleton/animation/material import checks. Use as distinct archetypes rather than mass-spawning identical models.
+
+## B63 — rigged skeleton / Forest Monster / gibs
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b63/models/`
+
+- `oga_skeleton_with_rig/` — simple rigged skeleton source.
+- `oga_forest_monster_rigged_animated/` — rigged/animated creature with diffuse, normal and AO maps.
+- `oga_forest_monster_gibs/` — matching separated body/gib source pieces.
+
+Recommended use: authored enemy candidates after Godot skeleton/animation/material checks. Use gibs only if the final corpse/destruction direction needs them.
+
+## B64 — Mudeater / Undead Squirrel / Daemon Statue
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b64/models/`
+
+- `oga_mudeater_rigged_animated/` — rigged/animated humanoid creature with packed texture maps.
+- `oga_undead_squirrel_animated/` — rigged/animated undead wildlife source.
+- `oga_daemon_statue_rigged_animated/` — rigged statue/daemon with attack, die, spell and idle source animations.
+
+Recommended use: distinct authored enemy archetypes only where they match final art direction; validate import, scale, materials and collisions before production promotion.
