@@ -1,4 +1,4 @@
-extends SceneTree
+extends Node
 
 const MIN_DISTANCE := 0.75
 const WARMUP_FRAMES := 45
@@ -7,19 +7,21 @@ const RECOVERY_FRAMES := 45
 const SURFACE_TOLERANCE := 0.70
 const VOID_DROP := 25.0
 
-func _initialize() -> void:
+func _ready() -> void:
+    process_mode = Node.PROCESS_MODE_ALWAYS
     call_deferred("_run_test")
 
 func _fail(code: int, message: String) -> void:
     var clean := message.replace("\r", " ").replace("\n", " ")
     print("::error title=Player surface smoke::%s" % clean)
     push_error("Movement smoke failed: %s" % message)
-    quit(code)
+    get_tree().quit(code)
 
 func _run_test() -> void:
-    var world_data := root.get_node_or_null("WorldData")
+    var tree := get_tree()
+    var world_data := get_node_or_null("/root/WorldData")
     if world_data == null:
-        _fail(12, "WorldData autoload node is missing from standalone test tree")
+        _fail(12, "WorldData autoload node is missing from normal project tree")
         return
 
     var packed := load("res://scenes/stage1.tscn") as PackedScene
@@ -28,9 +30,9 @@ func _run_test() -> void:
         return
 
     var scene := packed.instantiate()
-    root.add_child(scene)
+    tree.root.add_child(scene)
     for _i in range(WARMUP_FRAMES):
-        await physics_frame
+        await tree.physics_frame
 
     var player := scene.get_node_or_null("World/Player") as CharacterBody3D
     if player == null:
@@ -50,11 +52,13 @@ func _run_test() -> void:
         _fail(6, "player spawn height is outside terrain tolerance; player_y=%s terrain_y=%s" % [player.global_position.y, spawn_terrain_y])
         return
 
+    # Reproduce the historical void bug deliberately. A valid runtime must put
+    # the player back on a physical surface and re-arm streaming protection.
     var before_void := player.global_position
     player.global_position.y = spawn_terrain_y - VOID_DROP
     player.velocity = Vector3(0.0, -20.0, 0.0)
     for _i in range(RECOVERY_FRAMES):
-        await physics_frame
+        await tree.physics_frame
 
     var recovered_xz := Vector2(player.global_position.x, player.global_position.z)
     var recovered_terrain_y := float(world_data.call("elevation_at", recovered_xz))
@@ -75,9 +79,9 @@ func _run_test() -> void:
     var start := Vector2(player.global_position.x, player.global_position.z)
     Input.action_press("move_forward", 1.0)
     for _i in range(MOVE_FRAMES):
-        await physics_frame
+        await tree.physics_frame
     Input.action_release("move_forward")
-    await physics_frame
+    await tree.physics_frame
 
     var finish := Vector2(player.global_position.x, player.global_position.z)
     var distance := start.distance_to(finish)
@@ -85,8 +89,9 @@ func _run_test() -> void:
     if distance < MIN_DISTANCE:
         _fail(4, "player walked in place after surface recovery; distance=%s" % distance)
         return
+
     print("Movement + surface + void recovery smoke passed")
-    quit(0)
+    tree.quit(0)
 
 func _assert_surface_under_player(player: CharacterBody3D, world_data: Node, phase: String) -> bool:
     var xz := Vector2(player.global_position.x, player.global_position.z)
