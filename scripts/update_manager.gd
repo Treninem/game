@@ -31,9 +31,10 @@ func install_latest_update() -> bool:
         status_changed.emit("Новых стабильных обновлений нет.", false)
         return false
     var root := _install_root()
+    var bootstrap := root.path_join("updater_bootstrap.ps1")
     var updater_v4 := root.path_join("updater_v4.ps1")
     var updater_legacy := root.path_join("updater.ps1")
-    var updater := updater_v4 if FileAccess.file_exists(updater_v4) else updater_legacy
+    var updater := bootstrap if FileAccess.file_exists(bootstrap) else (updater_v4 if FileAccess.file_exists(updater_v4) else updater_legacy)
     if not FileAccess.file_exists(updater):
         status_changed.emit("Updater не найден. Переустановите ImPuls последним стабильным установщиком.", false)
         return false
