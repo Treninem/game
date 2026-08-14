@@ -1,0 +1,122 @@
+name: Vendor source-chat B99 real CC0 bridges terrain
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b99.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b99
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 bridge and terrain sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b99"
+          TMP=".sourcechat_b99_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          download_zip() {
+            local name="$1" url="$2" file="$3" page="$4" title="$5" notes="$6"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 3000 -A 'ImPuls-CC0-B99/1.0' "$url" -o "$TMP/$file"
+            unzip -q "$TMP/$file" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            meta "$name" "$page" "$title" "$url" "$notes"
+          }
+
+          download_zip "oga_stone_bridge_classic" \
+            "https://opengameart.org/sites/default/files/005_stone_bridge.zip" "005_stone_bridge.zip" \
+            "https://opengameart.org/content/stone-bridge-0" "Stone Bridge" \
+            "Classic textured stone bridge source with Blend file."
+
+          download_zip "oga_wooden_bridge_classic" \
+            "https://opengameart.org/sites/default/files/003_bridge.zip" "003_bridge.zip" \
+            "https://opengameart.org/content/wooden-bridge-0" "Wooden Bridge" \
+            "Small textured wooden bridge source with Blend file."
+
+          download_zip "oga_stone_bridge_2" \
+            "https://opengameart.org/sites/default/files/stone_bridge_2.1.zip" "stone_bridge_2.1.zip" \
+            "https://opengameart.org/content/stone-bridge-2" "Stone bridge 2" \
+            "Blend source plus OBJ exports of modular bridge pieces; source page states all included files are CC0."
+
+          download_zip "oga_canal_bridge_pbr" \
+            "https://opengameart.org/sites/default/files/canal%20bridge.zip" "canal_bridge.zip" \
+            "https://opengameart.org/content/canal-bridge" "Canal bridge" \
+            "Mossy stone canal bridge with Blend, FBX, OBJ and PBR textures."
+
+          download_zip "oga_concrete_bridge" \
+            "https://opengameart.org/sites/default/files/concrete_bridge.zip" "concrete_bridge.zip" \
+            "https://opengameart.org/content/concrete-bridge" "Concrete bridge" \
+            "Simple low-poly concrete bridge for roads/highways/city infrastructure."
+
+          download_zip "oga_bridges_and_stuff" \
+            "https://opengameart.org/sites/default/files/Bridging.zip" "Bridging.zip" \
+            "https://opengameart.org/content/bridges-and-stuff" "Bridges and Stuff" \
+            "Low-poly bridges, pier, ladder and steps with basic textures."
+
+          download_zip "oga_modular_hilly_terrain" \
+            "https://opengameart.org/sites/default/files/modular_terrain_collections.zip" "modular_terrain_collections.zip" \
+            "https://opengameart.org/content/modular-hilly-terrain-3d-models" "Modular Terrain" \
+            "Modular wooded hilly terrain split into Hilly, Cliff and Beach collections; OBJ-based source set."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B99 — real CC0 bridges and modular terrain
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should choose bridge families by region and road width, normalize scale/collisions, and combine the modular terrain source only where it matches the final biome art direction. Keep bridge gameplay/navigation logic separate from source art.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B99 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B99 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b99
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 bridges terrain B99"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
