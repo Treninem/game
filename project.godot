@@ -1,10 +1,10 @@
 ; ImPuls PC — offline single-player RPG
-; Stable release candidate 0.10.1: world visibility, traversal, clean UI boot and rolling stable updates
+; Stable 0.10.2: delta-only installed updates, visible progress and centralized UI auto-alignment
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.10.1-stable"
+config/version="0.10.2-stable"
 config/icon="res://assets/branding/impuls_icon.png"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
@@ -16,6 +16,7 @@ boot_splash/fullsize=false
 GameState="*res://scripts/game_state.gd"
 SaveManager="*res://scripts/save_manager.gd"
 SettingsManager="*res://scripts/settings_manager.gd"
+UILayoutGuard="*res://scripts/ui_layout_guard.gd"
 UpdateManager="*res://scripts/update_manager.gd"
 InventorySystem="*res://scripts/inventory_system.gd"
 DialogueManager="*res://scripts/dialogue_manager.gd"
