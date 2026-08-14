@@ -49,7 +49,6 @@ func _ready() -> void:
     mouse_force_pass_scroll_events = false
     _build_shell()
     UpdateManager.status_changed.connect(_on_update_status_changed)
-    resized.connect(_apply_responsive_layout)
     call_deferred("_apply_responsive_layout")
     visible = false
 
@@ -210,24 +209,12 @@ func _build_shell() -> void:
     content_margin.add_child(content)
 
 func _apply_responsive_layout() -> void:
+    # Outer frame position/size is intentionally NOT changed here.
+    # UILayoutGuard is the sole geometry authority and keeps the menu centered
+    # across resolution, fullscreen and 75-150% UI scale changes.
     if not is_instance_valid(frame):
         return
-    var viewport_size := size
-    if viewport_size.x <= 1.0 or viewport_size.y <= 1.0:
-        viewport_size = get_viewport_rect().size
-    var target := Vector2(
-        minf(1120.0, maxf(520.0, viewport_size.x - 32.0)),
-        minf(760.0, maxf(380.0, viewport_size.y - 32.0))
-    )
-    if viewport_size.x < 760.0:
-        target.x = maxf(320.0, viewport_size.x - 18.0)
-    if viewport_size.y < 520.0:
-        target.y = maxf(300.0, viewport_size.y - 18.0)
-    frame.set_anchors_preset(Control.PRESET_CENTER)
-    frame.size = target
-    frame.position = -target * 0.5
-
-    var compact := target.x < 760.0
+    var compact := frame.size.x > 1.0 and frame.size.x < 760.0
     if is_instance_valid(sidebar) and sidebar.get_parent() != null and sidebar.get_parent().get_parent() is PanelContainer:
         var panel := sidebar.get_parent().get_parent() as PanelContainer
         panel.custom_minimum_size.x = 160.0 if compact else 210.0
