@@ -78,6 +78,17 @@ func _physics_process(delta: float) -> void:
     velocity.x = move_toward(velocity.x, target.x, acceleration * delta)
     velocity.z = move_toward(velocity.z, target.z, acceleration * delta)
     move_and_slide()
+    _enforce_world_bounds()
+
+func _enforce_world_bounds() -> void:
+    var limit := WorldData.WORLD_HALF_SIZE - 24.0
+    var before := global_position
+    global_position.x = clampf(global_position.x, -limit, limit)
+    global_position.z = clampf(global_position.z, -limit, limit)
+    if before.x != global_position.x or before.z != global_position.z:
+        velocity.x = 0.0
+        velocity.z = 0.0
+        GameState.notify("Дальше начинается открытое море и граница текущего континента.")
 
 func _try_attack() -> void:
     if GameState.is_dead or attack_elapsed > 0.0:
@@ -109,6 +120,6 @@ func _try_build_house() -> void:
         return
     var forward := -global_transform.basis.z
     var build_position := global_position + Vector3(forward.x, 0.0, forward.z).normalized() * 5.0
-    build_position.y = 0.0
+    build_position.y = WorldData.elevation_at(Vector2(build_position.x, build_position.z))
     if GameState.try_mark_house_built(build_position):
         get_tree().call_group("world_root", "spawn_house_from_state")
