@@ -60,6 +60,7 @@ jobs:
           mkdir -p build/windows
           ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --export-release "Windows Desktop" build/windows/ImPuls.exe
           test -f build/windows/ImPuls.exe
+          test -f build/windows/ImPuls.pck
       - name: Package Windows build
         run: cd build/windows && zip -9 -r ../../ImPuls-PC-Windows-x64.zip .
       - uses: actions/upload-artifact@v4
@@ -120,24 +121,86 @@ jobs:
         with:
           name: ImPuls-Setup
           path: installer-artifact
-      - name: Prepare stable release files
+      - name: Capture previous stable build
+        id: previous
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
+          set -euo pipefail
+          mkdir -p previous/windows
+          OLD_BUILD=""
+          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            OLD_BUILD="$(gh release view stable --repo "${{ github.repository }}" --json name --jq .name)"
+            if [[ "$OLD_BUILD" =~ ^build-[0-9]+$ ]]; then
+              gh release download stable --repo "${{ github.repository }}" --pattern "ImPuls-PC-Windows-x64.zip" --dir previous || true
+              if [[ -f previous/ImPuls-PC-Windows-x64.zip ]]; then
+                unzip -q previous/ImPuls-PC-Windows-x64.zip -d previous/windows
+              else
+                OLD_BUILD=""
+              fi
+            else
+              OLD_BUILD=""
+            fi
+          fi
+          echo "old_build=$OLD_BUILD" >> "$GITHUB_OUTPUT"
+      - name: Prepare stable release files and content delta
+        id: delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          BUILD="build-${{ github.run_number }}"
+          OLD_BUILD="${{ steps.previous.outputs.old_build }}"
           python3 -m pip install --disable-pip-version-check pillow
           python3 tools/make_icon.py installer/impuls.ico
           cp game/ImPuls-PC-Windows-x64.zip .
           cp installer-artifact/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
+
           mkdir -p updater-runtime
           cp installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
           (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
-          sha256sum ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip > SHA256SUMS.txt
+
+          FROM_BUILD="${OLD_BUILD:-bootstrap}"
+          DELTA_NAME="ImPuls-Delta-${FROM_BUILD}-to-${BUILD}.zip"
+          python3 tools/build_delta.py \
+            --old-dir previous/windows \
+            --new-dir game/build/windows \
+            --from-build "$FROM_BUILD" \
+            --to-build "$BUILD" \
+            --output "$DELTA_NAME" \
+            --manifest ImPuls-File-Manifest.json
+
+          sha256sum ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json > SHA256SUMS.txt
+          if [[ -n "$OLD_BUILD" ]]; then
+            sha256sum "$DELTA_NAME" > "$DELTA_NAME.sha256"
+            echo "delta_name=$DELTA_NAME" >> "$GITHUB_OUTPUT"
+            echo "delta_sum=$DELTA_NAME.sha256" >> "$GITHUB_OUTPUT"
+          else
+            rm -f "$DELTA_NAME"
+            echo "delta_name=" >> "$GITHUB_OUTPUT"
+            echo "delta_sum=" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "Full package: $(stat -c%s ImPuls-PC-Windows-x64.zip) bytes"
+          if [[ -n "$OLD_BUILD" ]]; then
+            echo "Delta package: $(stat -c%s "$DELTA_NAME") bytes"
+          fi
       - name: Publish rolling stable channel
         env:
           GH_TOKEN: ${{ github.token }}
+          DELTA_NAME: ${{ steps.delta.outputs.delta_name }}
+          DELTA_SUM: ${{ steps.delta.outputs.delta_sum }}
+        shell: bash
         run: |
+          set -euo pipefail
           BUILD="build-${{ github.run_number }}"
+          ASSETS=(ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json SHA256SUMS.txt)
+          if [[ -n "$DELTA_NAME" && -f "$DELTA_NAME" ]]; then
+            ASSETS+=("$DELTA_NAME" "$DELTA_SUM")
+          fi
           if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            gh release upload stable ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --clobber --repo "${{ github.repository }}"
-            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Stabilized branding, UI boot state, world visibility, traversal, offline-safe updates and rollback." --repo "${{ github.repository }}"
+            gh release upload stable "${ASSETS[@]}" --clobber --repo "${{ github.repository }}"
+            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Content-aware delta updates, visible verified update progress, responsive UI alignment, rollback, offline-safe startup." --repo "${{ github.repository }}"
           else
-            gh release create stable ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --title "$BUILD" --notes "ImPuls stable channel. Stabilized branding, UI boot state, world visibility, traversal, offline-safe updates and rollback." --repo "${{ github.repository }}"
+            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "ImPuls stable channel. Content-aware delta updates, visible verified update progress, responsive UI alignment, rollback, offline-safe startup." --repo "${{ github.repository }}"
           fi
