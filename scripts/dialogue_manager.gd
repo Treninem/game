@@ -43,8 +43,18 @@ func choose(index: int) -> void:
                 open_dialogue("Мира", "Материалов пока не хватает. Проверь журнал задания — там указано точное количество.", [{"text": "Продолжу поиски.", "action": "close"}])
         "complete_intro":
             if GameState.complete_intro_quest():
-                open_dialogue("Мира", "Убежище готово. Возьми этот топор. Дальше тебе придётся освоиться самостоятельно.", [{"text": "Спасибо.", "action": "close"}])
+                open_dialogue("Мира", "Убежище готово. Возьми этот топор. Южные ворота Люменграда уже рядом — там найдёшь работу и новых людей.", [{"text": "Отправляюсь в город.", "action": "close"}])
             else:
                 close_dialogue()
+        "start_city_quest":
+            if GameState.start_city_quest():
+                open_dialogue("Радан", "Материалы нужны крепкие: 6 камня и 4 древесины. Вернёшься — сразу пущу их на ремонт ворот.", [{"text": "Сделаю.", "action": "close"}])
+            else:
+                close_dialogue()
+        "complete_city_quest":
+            if GameState.complete_city_quest():
+                open_dialogue("Радан", "Вот это дело. Скобы и подпорки подготовлю сам. Держи оплату — 35 монет. Стража запомнит, кто помог Южному кварталу.", [{"text": "Рад помочь.", "action": "close"}])
+            else:
+                open_dialogue("Радан", "Материалов не хватает. Нужно ровно 6 камня и 4 древесины.", [{"text": "Вернусь позже.", "action": "close"}])
         _:
             close_dialogue()
