@@ -41,6 +41,7 @@ const DEFAULT_BINDINGS := {
     "build": {"type": "key", "code": KEY_B},
     "use_food": {"type": "key", "code": KEY_1},
     "use_water": {"type": "key", "code": KEY_2},
+    "use_meat": {"type": "key", "code": KEY_3},
     "open_inventory": {"type": "key", "code": KEY_I},
     "open_map": {"type": "key", "code": KEY_M},
     "open_journal": {"type": "key", "code": KEY_J},
