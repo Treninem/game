@@ -6,7 +6,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Repo = "Treninem/game"
-$Headers = @{ "User-Agent" = "ImPuls-Updater/1.2" }
+$Headers = @{ "User-Agent" = "ImPuls-Updater/1.3" }
 $Api = "https://api.github.com/repos/$Repo/releases/latest"
 $TagFile = Join-Path $InstallDir "release_tag.txt"
 $CurrentDir = Join-Path $InstallDir "current"
@@ -97,17 +97,26 @@ try {
     Set-Content -Path $TagFile -Value $RemoteTag -Encoding ASCII
 
     if (Test-Path $RuntimeDir) {
-        foreach ($Name in @("launcher.vbs", "install_update_task.ps1", "impuls.ico", "updater.ps1")) {
+        foreach ($Name in @("launcher.vbs", "install_update_task.ps1", "refresh_shortcuts.ps1", "impuls.ico", "updater.ps1")) {
             $Source = Join-Path $RuntimeDir $Name
             if (Test-Path $Source) {
                 Copy-Item $Source (Join-Path $InstallDir $Name) -Force
             }
         }
+
         $TaskInstaller = Join-Path $InstallDir "install_update_task.ps1"
         if (Test-Path $TaskInstaller) {
             Start-Process -FilePath "powershell.exe" -ArgumentList @(
                 "-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass",
                 "-File", $TaskInstaller, "-InstallDir", $InstallDir
+            ) -WindowStyle Hidden -Wait
+        }
+
+        $ShortcutRefresh = Join-Path $InstallDir "refresh_shortcuts.ps1"
+        if (Test-Path $ShortcutRefresh) {
+            Start-Process -FilePath "powershell.exe" -ArgumentList @(
+                "-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass",
+                "-File", $ShortcutRefresh, "-InstallDir", $InstallDir
             ) -WindowStyle Hidden -Wait
         }
     }
