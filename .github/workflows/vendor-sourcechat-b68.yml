@@ -1,0 +1,118 @@
+name: Vendor source-chat B68 real CC0 humanoid bases soldier
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b68.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b68
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 humanoid source models
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b68"
+          TMP=".sourcechat_b68_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/base" "$ROOT/models/oga_stylized_humanoid_base_yw"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B68/1.0' \
+            "https://opengameart.org/sites/default/files/basemesh_a1_human_yw_by_girush_2.7z" \
+            -o "$TMP/base.7z"
+          7z x -y "$TMP/base.7z" -o"$TMP/base" >/dev/null
+          chmod -R u+rwX "$TMP/base" || true
+          rsync -a "$TMP/base/" "$ROOT/models/oga_stylized_humanoid_base_yw/"
+          meta "oga_stylized_humanoid_base_yw" \
+            "https://opengameart.org/content/base-rigged-stylized-humanoid-character-yw" \
+            "Base Rigged Stylized Humanoid Character (YW)" \
+            "https://opengameart.org/sites/default/files/basemesh_a1_human_yw_by_girush_2.7z" \
+            "2026 stylized textured humanoid base with skeletal rig; intended as an editable base for NPC/player variants."
+
+          mkdir -p "$TMP/soldier" "$ROOT/models/oga_medieval_soldier_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B68/1.0' \
+            "https://opengameart.org/sites/default/files/medieval-soldier.zip" \
+            -o "$TMP/soldier.zip"
+          unzip -q "$TMP/soldier.zip" -d "$TMP/soldier"
+          chmod -R u+rwX "$TMP/soldier" || true
+          rsync -a "$TMP/soldier/" "$ROOT/models/oga_medieval_soldier_rigged_animated/"
+          meta "oga_medieval_soldier_rigged_animated" \
+            "https://opengameart.org/content/low-poly-psx-style-medieval-soldier-rigged-animated" \
+            "low-poly PSX Style Medieval Soldier [Rigged + Animated]" \
+            "https://opengameart.org/sites/default/files/medieval-soldier.zip" \
+            "Low-poly spearman/guard prototype with walk, alert, hit and additional animations according to the source page."
+
+          mkdir -p "$TMP/simple" "$ROOT/models/oga_simple_rigged_character_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B68/1.0' \
+            "https://opengameart.org/sites/default/files/simple_char.zip" \
+            -o "$TMP/simple.zip"
+          unzip -q "$TMP/simple.zip" -d "$TMP/simple"
+          chmod -R u+rwX "$TMP/simple" || true
+          rsync -a "$TMP/simple/" "$ROOT/models/oga_simple_rigged_character_animated/"
+          meta "oga_simple_rigged_character_animated" \
+            "https://opengameart.org/content/simple-3d-rigged-character-with-animation" \
+            "simple 3d rigged character with animation" \
+            "https://opengameart.org/sites/default/files/simple_char.zip" \
+            "Textured rigged Blender character with idle, walk and jump animations; useful as a retargeting/prototyping source."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B68 — real CC0 humanoid bases and medieval soldier
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should audit skeleton compatibility, scale, materials and animation quality. Prefer the universal animation library/production rigs for retargeting rather than coupling gameplay to source skeletons.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B68 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B68 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b68
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 humanoid bases soldier B68"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
