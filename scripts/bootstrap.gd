@@ -60,6 +60,10 @@ func _place_player_safely(position: Vector3) -> void:
 func _arm_player_surface_guard(force_snap_to_terrain: bool) -> void:
     if player.has_method("prepare_for_streamed_surface"):
         player.call("prepare_for_streamed_surface", force_snap_to_terrain)
+    elif player.has_method("_begin_ground_guard"):
+        # Compatibility with the current controller while the guard remains an
+        # internal method. Every bootstrap teleport must reactivate it.
+        player.call("_begin_ground_guard", force_snap_to_terrain)
 
 func _on_player_died() -> void:
     if respawning:
