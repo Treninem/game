@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/resource_node.gd" id="3"]
 [ext_resource type="Script" path="res://scripts/quest_npc.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="5"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -12,6 +13,14 @@ height = 1.8
 [sub_resource type="CapsuleMesh" id="PlayerMesh"]
 radius = 0.45
 height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="EnemyShape"]
+radius = 0.5
+height = 1.6
+
+[sub_resource type="CapsuleMesh" id="EnemyMesh"]
+radius = 0.5
+height = 1.6
 
 [node name="Bootstrap" type="Node"]
 script = ExtResource("1")
@@ -23,7 +32,7 @@ rotation_degrees = Vector3(-55, -30, 0)
 shadow_enabled = true
 
 [node name="Ground" type="CSGBox3D" parent="World"]
-size = Vector3(80, 0.5, 80)
+size = Vector3(120, 0.5, 120)
 position = Vector3(0, -0.25, 0)
 use_collision = true
 
@@ -49,6 +58,7 @@ current = true
 [node name="InteractionRay" type="RayCast3D" parent="World/Player/CameraPivot/Camera3D"]
 target_position = Vector3(0, 0, -7)
 enabled = true
+collide_with_areas = true
 
 [node name="Mira" type="CSGBox3D" parent="World"]
 position = Vector3(0, 1, -4)
@@ -66,6 +76,16 @@ resource_id = "wood"
 display_name = "дерево"
 uses = 12
 
+[node name="Tree2" type="CSGCylinder3D" parent="World"]
+position = Vector3(-9, 1.5, -8)
+radius = 0.55
+height = 3.0
+use_collision = true
+script = ExtResource("3")
+resource_id = "wood"
+display_name = "дерево"
+uses = 10
+
 [node name="Rock" type="CSGSphere3D" parent="World"]
 position = Vector3(4, 0.8, 0)
 radius = 0.9
@@ -75,18 +95,85 @@ resource_id = "stone"
 display_name = "камень"
 uses = 8
 
+[node name="Rock2" type="CSGSphere3D" parent="World"]
+position = Vector3(10, 0.65, -7)
+radius = 0.75
+use_collision = true
+script = ExtResource("3")
+resource_id = "stone"
+display_name = "камень"
+uses = 6
+
+[node name="BerryBush" type="CSGSphere3D" parent="World"]
+position = Vector3(-7, 0.65, 7)
+radius = 0.7
+use_collision = true
+script = ExtResource("3")
+resource_id = "berries"
+display_name = "ягоды"
+amount_per_use = 1
+uses = 6
+
+[node name="Well" type="CSGCylinder3D" parent="World"]
+position = Vector3(7, 0.65, 7)
+radius = 1.1
+height = 1.3
+use_collision = true
+script = ExtResource("3")
+resource_id = "water_flask"
+display_name = "фляга воды"
+amount_per_use = 1
+uses = 12
+
+[node name="Raider1" type="CharacterBody3D" parent="World"]
+position = Vector3(-14, 0.1, -15)
+script = ExtResource("5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Raider1"]
+position = Vector3(0, 0.8, 0)
+shape = SubResource("EnemyShape")
+
+[node name="Body" type="MeshInstance3D" parent="World/Raider1"]
+position = Vector3(0, 0.8, 0)
+mesh = SubResource("EnemyMesh")
+
+[node name="Raider2" type="CharacterBody3D" parent="World"]
+position = Vector3(15, 0.1, -18)
+script = ExtResource("5")
+max_health = 90.0
+move_speed = 3.6
+attack_damage = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Raider2"]
+position = Vector3(0, 0.8, 0)
+shape = SubResource("EnemyShape")
+
+[node name="Body" type="MeshInstance3D" parent="World/Raider2"]
+position = Vector3(0, 0.8, 0)
+mesh = SubResource("EnemyMesh")
+
+[node name="RuinWall1" type="CSGBox3D" parent="World"]
+position = Vector3(-14, 1.25, -9)
+size = Vector3(8, 2.5, 0.6)
+use_collision = true
+
+[node name="RuinWall2" type="CSGBox3D" parent="World"]
+position = Vector3(13, 1.25, -11)
+size = Vector3(0.6, 2.5, 9)
+use_collision = true
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Panel" type="PanelContainer" parent="UI"]
 offset_left = 20.0
 offset_top = 20.0
-offset_right = 760.0
-offset_bottom = 150.0
+offset_right = 1080.0
+offset_bottom = 180.0
 
 [node name="VBox" type="VBoxContainer" parent="UI/Panel"]
 
 [node name="Title" type="Label" parent="UI/Panel/VBox"]
-text = "ImPuls PC — Stage 1"
+text = "ImPuls PC — Stage 2 Combat & Survival"
 theme_override_font_sizes/font_size = 22
 
 [node name="Inventory" type="Label" parent="UI/Panel/VBox"]
@@ -98,12 +185,30 @@ text = "Задание"
 [node name="Vitals" type="Label" parent="UI/Panel/VBox"]
 text = "Состояние"
 
+[node name="Combat" type="Label" parent="UI/Panel/VBox"]
+text = "Бой"
+
+[node name="Crosshair" type="Label" parent="UI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -14.0
+offset_right = 8.0
+offset_bottom = 14.0
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 24
+
 [node name="Notice" type="Label" parent="UI"]
 anchors_preset = 12
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 40.0
-offset_top = -80.0
+offset_top = -90.0
 offset_right = -40.0
 offset_bottom = -30.0
 horizontal_alignment = 1
