@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>RonMain</author>
+      <authoring_tool>OpenCOLLADA for 3ds Max;  Version: 1.2.5;  Revision: 673;  Platform: Win32;  Configuration: Release Max9</authoring_tool>
+      <source_data>file:///E:/3TDS%20Torque%20Model%20Library/Furniture/3TD_FurniturePack_02/Office%20Divider/OfficeDivider_02_Final_phy.max</source_data>
+    </contributor>
+    <created>2013-09-09T12:40:17</created>
+    <modified>2013-09-09T12:40:17</modified>
+    <unit name="centimeter" meter="0.01"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="Divider02_Frame">
+      <profile_COMMON>
+        <newparam sid="_TD_DividerPaint_Gray_01_jpg-surface">
+          <surface type="2D">
+            <init_from>_TD_DividerPaint_Gray_01_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="_TD_DividerPaint_Gray_01_jpg-sampler">
+          <sampler2D>
+            <source>_TD_DividerPaint_Gray_01_jpg-surface</source>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <blinn>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0.5882353 0.5882353 0.5882353 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="_TD_DividerPaint_Gray_01_jpg-sampler" texcoord="CHANNEL1"/>
+            </diffuse>
+            <specular>
+              <color>0.9 0.9 0.9 1</color>
+            </specular>
+            <shininess>
+              <float>9.999999</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <transparent opaque="A_ONE">
+              <color>1 1 1 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </blinn>
+        </technique>
+      </profile_COMMON>
+      <extra>
+        <technique profile="OpenCOLLADA3dsMax">
+          <extended_shader>
+            <apply_reflection_dimming>0</apply_reflection_dimming>
+            <dim_level>0</dim_level>
+            <falloff_type>0</falloff_type>
+            <index_of_refraction>1.5</index_of_refraction>
+            <opacity_type>0</opacity_type>
+            <reflection_level>3</reflection_level>
+            <wire_size>1</wire_size>
+            <wire_units>0</wire_units>
+          </extended_shader>
+          <shader>
+            <ambient_diffuse_lock>1</ambient_diffuse_lock>
+            <ambient_diffuse_texture_lock>1</ambient_diffuse_texture_lock>
+            <diffuse_specular_lock>0</diffuse_specular_lock>
+            <soften>0.1</soften>
+            <use_self_illum_color>0</use_self_illum_color>
+          </shader>
+        </technique>
+      </extra>
+    </effect>
+    <effect id="Divider02Wall">
+      <profile_COMMON>
+        <newparam sid="_TD_Divider_Wall_01_Blue_jpg-surface">
+          <surface type="2D">
+            <init_from>_TD_Divider_Wall_01_Blue_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="_TD_Divider_Wall_01_Blue_jpg-sampler">
+          <sampler2D>
+            <source>_TD_Divider_Wall_01_Blue_jpg-surface</source>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <blinn>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0.5882353 0.5882353 0.5882353 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="_TD_Divider_Wall_01_Blue_jpg-sampler" texcoord="CHANNEL1"/>
+            </diffuse>
+            <specular>
+              <color>0.9 0.9 0.9 1</color>
+            </specular>
+            <shininess>
+              <float>9.999999</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <transparent opaque="A_ONE">
+              <color>1 1 1 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </blinn>
+        </technique>
+      </profile_COMMON>
+      <extra>
+        <technique profile="OpenCOLLADA3dsMax">
+          <extended_shader>
+            <apply_reflection_dimming>0</apply_reflection_dimming>
+            <dim_level>0</dim_level>
+            <falloff_type>0</falloff_type>
+            <index_of_refraction>1.5</index_of_refraction>
+            <opacity_type>0</opacity_type>
+            <reflection_level>3</reflection_level>
+            <wire_size>1</wire_size>
+            <wire_units>0</wire_units>
+          </extended_shader>
+          <shader>
+            <ambient_diffuse_lock>1</ambient_diffuse_lock>
+            <ambient_diffuse_texture_lock>1</ambient_diffuse_texture_lock>
+            <diffuse_specular_lock>0</diffuse_specular_lock>
+            <soften>0.1</soften>
+            <use_self_illum_color>0</use_self_illum_color>
+          </shader>
+        </technique>
+      </extra>
+    </effect>
+    <effect id="ColColor">
+      <profile_COMMON>
+        <technique sid="common">
+          <blinn>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0.5882353 0.5882353 0.5882353 1</color>
+            </ambient>
+            <diffuse>
+              <color>0.5882353 0.5882353 0.5882353 1</color>
+            </diffuse>
+            <specular>
+              <color>0.9 0.9 0.9 1</color>
+            </specular>
+            <shininess>
+              <float>9.999999</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <transparent opaque="A_ONE">
+              <color>1 1 1 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </blinn>
+        </technique>
+      </profile_COMMON>
+      <extra>
+        <technique profile="OpenCOLLADA3dsMax">
+          <extended_shader>
+            <apply_reflection_dimming>0</apply_reflection_dimming>
+            <dim_level>0</dim_level>
+            <falloff_type>0</falloff_type>
+            <index_of_refraction>1.5</index_of_refraction>
+            <opacity_type>0</opacity_type>
+            <reflection_level>3</reflection_level>
+            <wire_size>1</wire_size>
+            <wire_units>0</wire_units>
+          </extended_shader>
+          <shader>
+            <ambient_diffuse_lock>1</ambient_diffuse_lock>
+            <ambient_diffuse_texture_lock>1</ambient_diffuse_texture_lock>
+            <diffuse_specular_lock>0</diffuse_specular_lock>
+            <soften>0.1</soften>
+            <use_self_illum_color>0</use_self_illum_color>
+          </shader>
+        </technique>
+      </extra>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="Divider02_Frame-material" name="Divider02_Frame">
+      <instance_effect url="#Divider02_Frame"/>
+    </material>
+    <material id="Divider02Wall-material" name="Divider02Wall">
+      <instance_effect url="#Divider02Wall"/>
+    </material>
+    <material id="ColColor-material" name="ColColor">
+      <instance_effect url="#ColColor"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="geom-OfficeDividerTwo300" name="OfficeDividerTwo300">
+      <mesh>
+        <source id="geom-OfficeDividerTwo300-positions">
+          <float_array id="geom-OfficeDividerTwo300-positions-array" count="168">-3.140489 62.52465 2.887475 3.252247 62.52465 2.887475 -3.140489 66.76747 2.887475 3.252247 66.76747 2.887475 -3.14049 62.52465 75.95894 3.252247 62.52465 75.95894 -3.14049 66.76747 75.95894 3.252247 66.76747 75.95894 -3.175168 -66.81295 -2.282419 3.321353 -66.81295 -2.282419 -3.17517 66.89069 -2.282421 3.321351 66.89069 -2.282421 -3.175168 -66.81295 2.862198 3.321353 -66.81295 2.862198 -3.17517 66.89069 2.862195 3.321351 66.89069 2.862195 -16.94623 54.76532 -3.287346 17.39252 54.76532 -3.287346 -16.94623 58.47762 -3.287346 17.39252 58.47762 -3.287346 -16.94623 54.76532 -2.359268 17.39252 54.76532 -2.359268 -16.94623 58.47762 -2.359268 17.39252 58.47762 -2.359268 -17.39252 -59.62147 -3.287344 16.94623 -59.62147 -3.287344 -17.39252 -55.90919 -3.287344 16.94623 -55.90919 -3.287344 -17.39252 -59.62147 -2.359266 16.94623 -59.62147 -2.359266 -17.39252 -55.90919 -2.359266 16.94623 -55.90919 -2.359266 -3.140495 -66.89068 2.88747 3.252242 -66.89068 2.88747 -3.140495 -62.64785 2.88747 3.252242 -62.64785 2.88747 -3.140495 -66.89069 75.95894 3.252242 -66.89069 75.95894 -3.140495 -62.64787 75.95894 3.252242 -62.64787 75.95894 -3.175168 -66.81297 75.92592 3.321353 -66.81297 75.92592 -3.17517 66.89069 75.92592 3.321351 66.89069 75.92592 -2.457177 -66.81297 79.61403 2.487866 -66.81297 79.61403 -2.457179 66.89069 79.61403 2.487864 66.89069 79.61403 -2.680958 -63.81258 2.028028 2.897157 -63.81258 2.028028 -2.68096 63.61559 2.028024 2.897155 63.61559 2.028024 -2.680958 -63.81257 76.16928 2.897157 -63.81257 76.16928 -2.68096 63.61559 76.16928 2.897155 63.61559 76.16928</float_array>
+          <technique_common>
+            <accessor source="#geom-OfficeDividerTwo300-positions-array" count="56" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-OfficeDividerTwo300-normals">
+          <float_array id="geom-OfficeDividerTwo300-normals-array" count="504">0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 3.26281e-9 1 0 3.26281e-9 1 0 3.26281e-9 1 0 3.26281e-9 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 -3.26281e-9 -1 0 -3.26281e-9 -1 0 -3.26281e-9 -1 0 -3.26281e-9 0 -1.42655e-8 -1 0 -1.42655e-8 -1 0 -1.42655e-8 -1 0 -1.42655e-8 -1 0 2.13982e-8 1 0 2.13982e-8 1 0 2.13982e-8 1 0 2.13982e-8 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 1.42655e-8 0 1 1.42655e-8 0 1 1.42655e-8 0 1 1.42655e-8 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 -1.42655e-8 0 -1 -1.42655e-8 0 -1 -1.42655e-8 0 -1 -1.42655e-8 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 0 -0.9999999 0 0 -1 0 0 -0.9999999 0 0 -1 0 0 0.9999999 0 0 1 0 0 0.9999999 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -0.9999999 -2.0882e-7 0 -1 -2.0882e-7 0 -0.9999999 -2.0882e-7 0 -1 -2.0882e-7 1 0 0 1 0 0 1 0 0 1 0 0 0 0.9999999 2.0882e-7 0 1 2.0882e-7 0 0.9999999 2.0882e-7 0 1 2.0882e-7 -0.9999999 0 0 -0.9999999 0 0 -0.9999999 0 0 -0.9999999 0 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -0.9999999 0 0 -1 0 0 -0.9999999 0 0 -1 0 0.9754019 1.39146e-8 0.2204339 0.9754019 1.39146e-8 0.2204339 0.9754019 1.39146e-8 0.2204339 0.9754019 1.39146e-8 0.2204339 0 1 0 0 0.9999999 0 0 1 0 0 0.9999999 0 -0.9815726 -1.40026e-8 0.1910898 -0.9815725 -1.40026e-8 0.1910897 -0.9815726 -1.40026e-8 0.1910898 -0.9815725 -1.40026e-8 0.1910897 0 -2.99361e-8 -0.9999999 0 -2.99361e-8 -1 0 -2.99361e-8 -0.9999999 0 -2.99361e-8 -1 0 0 0.9999999 0 0 1 0 0 0.9999999 0 0 1 0 -1 2.05807e-7 0 -1 2.05807e-7 0 -1 2.05807e-7 0 -1 2.05807e-7 1 1.4968e-8 -2.04711e-15 1 1.4968e-8 0 1 1.4968e-8 -1.03342e-15 0.9999999 1.4968e-8 -3.08053e-15 0 1 0 0 1 0 0 1 0 0 1 0 -1 -1.4968e-8 1.03342e-15 -1 -1.4968e-8 3.08053e-15 -0.9999999 -1.4968e-8 2.04711e-15 -1 -1.4968e-8 0</float_array>
+          <technique_common>
+            <accessor source="#geom-OfficeDividerTwo300-normals-array" count="168" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-OfficeDividerTwo300-map1">
+          <float_array id="geom-OfficeDividerTwo300-map1-array" count="504">0.5628093 2.171984 -0.7182518 0.4349546 2.171984 -0.7182518 0.5628093 2.25684 -0.7182518 0.4349546 2.25684 -0.7182518 0.4371907 2.171984 0.7431774 0.5650454 2.171984 0.7431774 0.4371907 2.25684 0.7431774 0.5650454 2.25684 0.7431774 0.5635036 -0.4147681 -0.8216498 0.4335731 -0.4147681 -0.8216498 0.563503 2.259305 -0.8216498 0.4335725 2.259305 -0.8216498 0.4364964 -0.4147681 -0.7187574 0.5664269 -0.4147681 -0.7187574 0.4364971 2.259305 -0.7187575 0.5664275 2.259305 -0.7187575 0.8389241 2.016797 -0.8417482 0.1521492 2.016797 -0.8417482 0.8389241 2.091043 -0.8417482 0.1521492 2.091043 -0.8417482 0.1610759 2.016797 -0.8231868 0.8478508 2.016797 -0.8231868 0.1610759 2.091043 -0.8231868 0.8478508 2.091043 -0.8231868 0.8478505 -0.2709385 -0.8417482 0.1610756 -0.2709385 -0.8417482 0.8478504 -0.1966928 -0.8417482 0.1610756 -0.1966928 -0.8417482 0.1521495 -0.2709385 -0.8231866 0.8389244 -0.2709385 -0.8231866 0.1521495 -0.1966928 -0.8231866 0.8389244 -0.1966928 -0.8231866 0.5628101 -0.4163226 -0.7182519 0.4349554 -0.4163226 -0.7182519 0.5628101 -0.3314661 -0.7182519 0.4349553 -0.3314661 -0.7182519 0.4371899 -0.4163231 0.7431774 0.5650446 -0.4163231 0.7431774 0.4371899 -0.3314663 0.7431774 0.5650446 -0.3314663 0.7431774 0.5635036 -0.4147683 0.742517 0.4335731 -0.4147683 0.742517 0.563503 2.259305 0.742517 0.4335725 2.259305 0.742517 0.4508563 -0.4147683 0.8162792 0.5497571 -0.4147683 0.8162792 0.4508569 2.259305 0.8162792 0.5497577 2.259305 0.8162792 0.4371907 -0.7182518 2.171984 0.5650454 -0.7182518 2.171984 0.5650454 0.7431774 2.171984 0.4371907 0.7431774 2.171984 2.171984 -0.7182518 0.5650454 2.25684 -0.7182518 0.5650454 2.25684 0.7431774 0.5650454 2.171984 0.7431774 0.5650454 0.4349546 -0.7182518 2.25684 0.5628093 -0.7182518 2.25684 0.5628093 0.7431774 2.25684 0.4349546 0.7431774 2.25684 -1.25684 -0.7182518 0.4371907 -1.171984 -0.7182518 0.4371907 -1.171984 0.7431774 0.4371907 -1.25684 0.7431774 0.4371907 0.4364964 -0.8216498 -0.4147681 0.5664269 -0.8216498 -0.4147681 0.5664269 -0.7187574 -0.4147681 0.4364964 -0.7187574 -0.4147681 -0.4147681 -0.8216498 0.5664269 2.259305 -0.8216498 0.5664275 2.259305 -0.7187575 0.5664275 -0.4147681 -0.7187574 0.5664269 0.4335725 -0.8216498 2.259305 0.563503 -0.8216498 2.259305 0.563503 -0.7187575 2.259305 0.4335725 -0.7187575 2.259305 -1.259305 -0.8216498 0.4364971 1.414768 -0.8216498 0.4364964 1.414768 -0.7187574 0.4364964 -1.259305 -0.7187575 0.4364971 0.1610759 -0.8417482 2.016797 0.8478508 -0.8417482 2.016797 0.8478508 -0.8231868 2.016797 0.1610759 -0.8231868 2.016797 2.016797 -0.8417482 0.8478508 2.091043 -0.8417482 0.8478508 2.091043 -0.8231868 0.8478508 2.016797 -0.8231868 0.8478508 0.1521492 -0.8417482 2.091043 0.8389241 -0.8417482 2.091043 0.8389241 -0.8231868 2.091043 0.1521492 -0.8231868 2.091043 -1.091043 -0.8417482 0.1610759 -1.016797 -0.8417482 0.1610759 -1.016797 -0.8231868 0.1610759 -1.091043 -0.8231868 0.1610759 0.1521495 -0.8417482 -0.2709385 0.8389244 -0.8417482 -0.2709385 0.8389244 -0.8231866 -0.2709385 0.1521495 -0.8231866 -0.2709385 -0.2709385 -0.8417482 0.8389244 -0.1966928 -0.8417482 0.8389244 -0.1966928 -0.8231866 0.8389244 -0.2709385 -0.8231866 0.8389244 0.1610756 -0.8417482 -0.1966928 0.8478504 -0.8417482 -0.1966928 0.8478504 -0.8231866 -0.1966928 0.1610756 -0.8231866 -0.1966928 1.196693 -0.8417482 0.1521495 1.270939 -0.8417482 0.1521495 1.270939 -0.8231866 0.1521495 1.196693 -0.8231866 0.1521495 0.4371899 -0.7182519 -0.4163226 0.5650446 -0.7182519 -0.4163226 0.5650446 0.7431774 -0.4163231 0.4371899 0.7431774 -0.4163231 -0.4163226 -0.7182519 0.5650446 -0.3314661 -0.7182519 0.5650446 -0.3314663 0.7431774 0.5650446 -0.4163231 0.7431774 0.5650446 0.4349553 -0.7182519 -0.3314661 0.5628101 -0.7182519 -0.3314661 0.5628101 0.7431774 -0.3314663 0.4349553 0.7431774 -0.3314663 1.331466 -0.7182519 0.4371899 1.416323 -0.7182519 0.4371899 1.416323 0.7431774 0.4371899 1.331466 0.7431774 0.4371899 0.4364964 0.742517 -0.4147683 0.5664269 0.742517 -0.4147683 0.5497571 0.8162792 -0.4147683 0.4508563 0.8162792 -0.4147683 -0.4147683 0.742517 0.5664269 2.259305 0.742517 0.5664275 2.259305 0.8162792 0.5497577 -0.4147683 0.8162792 0.5497571 0.4335725 0.742517 2.259305 0.563503 0.742517 2.259305 0.5491431 0.8162792 2.259305 0.4502423 0.8162792 2.259305 -1.259305 0.742517 0.4364971 1.414768 0.742517 0.4364964 1.414768 0.8162792 0.4508563 -1.259305 0.8162792 0.4508569 0.5556706 -0.3541566 -0.7478266 0.4441083 -0.3541566 -0.7478266 0.55567 2.194407 -0.7478266 0.4441077 2.194407 -0.7478266 0.4443294 -0.3541563 0.7349985 0.5558917 -0.3541563 0.7349985 0.44433 2.194407 0.7349985 0.5558923 2.194407 0.7349985 0.4443294 -0.7478266 -0.3541566 0.5558917 -0.7478266 -0.3541566 0.5558917 0.7349985 -0.3541563 0.4443294 0.7349985 -0.3541563 -0.3541566 -0.7478266 0.5558917 2.194407 -0.7478266 0.5558923 2.194407 0.7349985 0.5558923 -0.3541563 0.7349985 0.5558917 0.4441077 -0.7478266 2.194407 0.55567 -0.7478266 2.194407 0.55567 0.7349985 2.194407 0.4441077 0.7349985 2.194407 -1.194407 -0.7478266 0.44433 1.354157 -0.7478266 0.4443294 1.354156 0.7349985 0.4443294 -1.194407 0.7349985 0.44433</float_array>
+          <technique_common>
+            <accessor source="#geom-OfficeDividerTwo300-map1-array" count="168" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-OfficeDividerTwo300-map1-textangents">
+          <float_array id="geom-OfficeDividerTwo300-map1-textangents-array" count="504">-1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1.42655e-8 1 4.45795e-9 -1.42655e-8 1 -1.42655e-8 -1.42655e-8 1 4.45795e-9 -1.42655e-8 1 2.31814e-8 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1.42655e-8 -1 -4.45798e-9 1.42655e-8 -1 1.42655e-8 1.42655e-8 -1 -4.45798e-9 1.42655e-8 -1 -2.31814e-8 -1 -3.47157e-7 0 -1 -3.47157e-7 0 -1 -3.47157e-7 0 -1 -3.47157e-7 0 1 3.47157e-7 0 1 3.47157e-7 0 1 3.47157e-7 0 1 3.47157e-7 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1.42655e-8 1 -3.71166e-16 -1.42655e-8 1 0 -1.42655e-8 1 -3.71166e-16 -1.42655e-8 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1.42655e-8 -1 -3.73666e-16 1.42655e-8 -1 0 1.42655e-8 -1 -3.73666e-16 1.42655e-8 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1.4968e-8 1 -1.4968e-8 -1.4968e-8 1 -2.99361e-8 -1.4968e-8 1 -1.4968e-8 -1.4968e-8 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1.4968e-8 -1 1.4968e-8 1.4968e-8 -1 2.99361e-8 1.4968e-8 -1 1.4968e-8 1.4968e-8 -1 0</float_array>
+          <technique_common>
+            <accessor source="#geom-OfficeDividerTwo300-map1-textangents-array" count="168" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-OfficeDividerTwo300-map1-texbinormals">
+          <float_array id="geom-OfficeDividerTwo300-map1-texbinormals-array" count="504">0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 3.26281e-9 0 -1 3.26281e-9 0 -1 3.26281e-9 0 -1 3.26281e-9 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 3.26281e-9 0 -1 3.26281e-9 0 -1 3.26281e-9 0 -1 3.26281e-9 0 -1 0 -1 1.42655e-8 0 -1 1.42655e-8 0 -1 1.42655e-8 0 -1 1.42655e-8 0 -1 2.13982e-8 0 -1 2.13982e-8 0 -1 2.13982e-8 0 -1 2.13982e-8 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 4.45795e-9 -1 0 -1.42655e-8 -1 0 4.45795e-9 -1 -3.30694e-16 2.31814e-8 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 4.45798e-9 -1 0 -1.42655e-8 -1 0 4.45798e-9 -1 -3.30695e-16 2.31814e-8 -1 3.47157e-7 -1 0 3.47157e-7 -1 0 3.47157e-7 -1 0 3.47157e-7 -1 0 3.47157e-7 -1 0 3.47157e-7 -1 0 3.47157e-7 -1 0 3.47157e-7 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 2.0882e-7 -1 0 2.0882e-7 -1 0 2.0882e-7 -1 0 2.0882e-7 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 2.0882e-7 -1 0 2.0882e-7 -1 0 2.0882e-7 -1 0 2.0882e-7 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0.2204339 3.1446e-9 -0.9754019 0.2204339 3.1446e-9 -0.9754019 0.2204339 3.1446e-9 -0.9754019 0.2204339 3.1446e-9 -0.9754019 0 0 -1 0 0 -1 0 0 -1 0 0 -1 -0.1910898 -2.72599e-9 -0.9815726 -0.1910898 -2.72599e-9 -0.9815726 -0.1910898 -2.72599e-9 -0.9815726 -0.1910898 -2.72599e-9 -0.9815726 0 -1 2.99361e-8 0 -1 2.99361e-8 0 -1 2.99361e-8 0 -1 2.99361e-8 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -2.05807e-7 -1 0 -2.05807e-7 -1 0 -2.05807e-7 -1 0 -2.05807e-7 -1 -1.82307e-15 -1.4968e-8 -1 4.48084e-16 -2.99361e-8 -1 -8.09373e-16 -1.4968e-8 -1 -3.08053e-15 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 -8.09373e-16 -1.4968e-8 -1 -2.63244e-15 -2.99361e-8 -1 -1.82307e-15 -1.4968e-8 -1 0 0 -1</float_array>
+          <technique_common>
+            <accessor source="#geom-OfficeDividerTwo300-map1-texbinormals-array" count="168" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="geom-OfficeDividerTwo300-vertices">
+          <input semantic="POSITION" source="#geom-OfficeDividerTwo300-positions"/>
+        </vertices>
+        <triangles material="Divider02_Frame_6" count="12">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>0 0 0 0 2 1 2 1 3 2 3 2 3 2 3 2 1 3 1 3 0 0 0 0 8 24 8 24 10 25 10 25 11 26 11 26 11 26 11 26 9 27 9 27 8 24 8 24 16 48 16 48 18 49 18 49 19 50 19 50 19 50 19 50 17 51 17 51 16 48 16 48 24 72 24 72 26 73 26 73 27 74 27 74 27 74 27 74 25 75 25 75 24 72 24 72 32 96 32 96 34 97 34 97 35 98 35 98 35 98 35 98 33 99 33 99 32 96 32 96 40 120 40 120 42 121 42 121 43 122 43 122 43 122 43 122 41 123 41 123 40 120 40 120</p>
+        </triangles>
+        <triangles material="Divider02_Frame_6" count="12">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>4 4 4 4 5 5 5 5 7 6 7 6 7 6 7 6 6 7 6 7 4 4 4 4 12 28 12 28 13 29 13 29 15 30 15 30 15 30 15 30 14 31 14 31 12 28 12 28 20 52 20 52 21 53 21 53 23 54 23 54 23 54 23 54 22 55 22 55 20 52 20 52 28 76 28 76 29 77 29 77 31 78 31 78 31 78 31 78 30 79 30 79 28 76 28 76 36 100 36 100 37 101 37 101 39 102 39 102 39 102 39 102 38 103 38 103 36 100 36 100 44 124 44 124 45 125 45 125 47 126 47 126 47 126 47 126 46 127 46 127 44 124 44 124</p>
+        </triangles>
+        <triangles material="Divider02_Frame_6" count="12">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>0 8 48 8 1 9 49 9 5 10 50 10 5 10 50 10 4 11 51 11 0 8 48 8 8 32 64 32 9 33 65 33 13 34 66 34 13 34 66 34 12 35 67 35 8 32 64 32 16 56 80 56 17 57 81 57 21 58 82 58 21 58 82 58 20 59 83 59 16 56 80 56 24 80 96 80 25 81 97 81 29 82 98 82 29 82 98 82 28 83 99 83 24 80 96 80 32 104 112 104 33 105 113 105 37 106 114 106 37 106 114 106 36 107 115 107 32 104 112 104 40 128 128 128 41 129 129 129 45 130 130 130 45 130 130 130 44 131 131 131 40 128 128 128</p>
+        </triangles>
+        <triangles material="Divider02_Frame_6" count="12">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>1 12 52 12 3 13 53 13 7 14 54 14 7 14 54 14 5 15 55 15 1 12 52 12 9 36 68 36 11 37 69 37 15 38 70 38 15 38 70 38 13 39 71 39 9 36 68 36 17 60 84 60 19 61 85 61 23 62 86 62 23 62 86 62 21 63 87 63 17 60 84 60 25 84 100 84 27 85 101 85 31 86 102 86 31 86 102 86 29 87 103 87 25 84 100 84 33 108 116 108 35 109 117 109 39 110 118 110 39 110 118 110 37 111 119 111 33 108 116 108 41 132 132 132 43 133 133 133 47 134 134 134 47 134 134 134 45 135 135 135 41 132 132 132</p>
+        </triangles>
+        <triangles material="Divider02_Frame_6" count="12">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>3 16 56 16 2 17 57 17 6 18 58 18 6 18 58 18 7 19 59 19 3 16 56 16 11 40 72 40 10 41 73 41 14 42 74 42 14 42 74 42 15 43 75 43 11 40 72 40 19 64 88 64 18 65 89 65 22 66 90 66 22 66 90 66 23 67 91 67 19 64 88 64 27 88 104 88 26 89 105 89 30 90 106 90 30 90 106 90 31 91 107 91 27 88 104 88 35 112 120 112 34 113 121 113 38 114 122 114 38 114 122 114 39 115 123 115 35 112 120 112 43 136 136 136 42 137 137 137 46 138 138 138 46 138 138 138 47 139 139 139 43 136 136 136</p>
+        </triangles>
+        <triangles material="Divider02_Frame_6" count="12">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>2 20 60 20 0 21 61 21 4 22 62 22 4 22 62 22 6 23 63 23 2 20 60 20 10 44 76 44 8 45 77 45 12 46 78 46 12 46 78 46 14 47 79 47 10 44 76 44 18 68 92 68 16 69 93 69 20 70 94 70 20 70 94 70 22 71 95 71 18 68 92 68 26 92 108 92 24 93 109 93 28 94 110 94 28 94 110 94 30 95 111 95 26 92 108 92 34 116 124 116 32 117 125 117 36 118 126 118 36 118 126 118 38 119 127 119 34 116 124 116 42 140 140 140 40 141 141 141 44 142 142 142 44 142 142 142 46 143 143 143 42 140 140 140</p>
+        </triangles>
+        <triangles material="Divider02Wall_6" count="2">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>48 144 144 144 50 145 146 145 51 146 147 146 51 146 147 146 49 147 145 147 48 144 144 144</p>
+        </triangles>
+        <triangles material="Divider02Wall_6" count="2">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>52 148 148 148 53 149 149 149 55 150 151 150 55 150 151 150 54 151 150 151 52 148 148 148</p>
+        </triangles>
+        <triangles material="Divider02Wall_6" count="2">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>48 152 152 152 49 153 153 153 53 154 154 154 53 154 154 154 52 155 155 155 48 152 152 152</p>
+        </triangles>
+        <triangles material="Divider02Wall_6" count="2">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>49 156 156 156 51 157 157 157 55 158 158 158 55 158 158 158 53 159 159 159 49 156 156 156</p>
+        </triangles>
+        <triangles material="Divider02Wall_6" count="2">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>51 160 160 160 50 161 161 161 54 162 162 162 54 162 162 162 55 163 163 163 51 160 160 160</p>
+        </triangles>
+        <triangles material="Divider02Wall_6" count="2">
+          <input semantic="VERTEX" source="#geom-OfficeDividerTwo300-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-OfficeDividerTwo300-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-OfficeDividerTwo300-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-OfficeDividerTwo300-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-OfficeDividerTwo300-map1-texbinormals" offset="3" set="1"/>
+          <p>50 164 164 164 48 165 165 165 52 166 166 166 52 166 166 166 54 167 167 167 50 164 164 164</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="geom-collision-1" name="collision-1">
+      <mesh>
+        <source id="geom-collision-1-positions">
+          <float_array id="geom-collision-1-positions-array" count="24">-4.408353 -68.28146 0 4.408353 -68.28146 0 -4.408353 66.91046 0 4.408353 66.91046 0 -4.408353 -68.28146 83.06264 4.408353 -68.28146 83.06264 -4.408353 66.91046 83.06264 4.408353 66.91046 83.06264</float_array>
+          <technique_common>
+            <accessor source="#geom-collision-1-positions-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-collision-1-normals">
+          <float_array id="geom-collision-1-normals-array" count="72">0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -0.9999999 0 0 -1 0 0 -0.9999999 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 0.9999999 0 0 1 0 0 0.9999999 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0</float_array>
+          <technique_common>
+            <accessor source="#geom-collision-1-normals-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-collision-1-map1">
+          <float_array id="geom-collision-1-map1-array" count="72">1 0 0 0 0 0 1 1 0 0 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0</float_array>
+          <technique_common>
+            <accessor source="#geom-collision-1-map1-array" count="24" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-collision-1-map1-textangents">
+          <float_array id="geom-collision-1-map1-textangents-array" count="72">-1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0</float_array>
+          <technique_common>
+            <accessor source="#geom-collision-1-map1-textangents-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-collision-1-map1-texbinormals">
+          <float_array id="geom-collision-1-map1-texbinormals-array" count="72">0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1</float_array>
+          <technique_common>
+            <accessor source="#geom-collision-1-map1-texbinormals-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="geom-collision-1-vertices">
+          <input semantic="POSITION" source="#geom-collision-1-positions"/>
+        </vertices>
+        <triangles material="ColColor_1" count="12">
+          <input semantic="VERTEX" source="#geom-collision-1-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-collision-1-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-collision-1-map1" offset="2" set="1"/>
+          <input semantic="TEXTANGENT" source="#geom-collision-1-map1-textangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#geom-collision-1-map1-texbinormals" offset="3" set="1"/>
+          <p>0 0 0 0 2 1 2 1 3 2 3 2 3 2 3 2 1 3 1 3 0 0 0 0 4 4 4 4 5 5 5 5 7 6 7 6 7 6 7 6 6 7 6 7 4 4 4 4 0 8 8 8 1 9 9 9 5 10 11 10 5 10 11 10 4 11 10 11 0 8 8 8 1 12 12 12 3 13 13 13 7 14 15 14 7 14 15 14 5 15 14 15 1 12 12 12 3 16 16 16 2 17 17 17 6 18 19 18 6 18 19 18 7 19 18 19 3 16 16 16 2 20 20 20 0 21 21 21 4 22 23 22 4 22 23 22 6 23 22 23 2 20 20 20</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_lights>
+    <light id="EnvironmentAmbientLight" name="EnvironmentAmbientLight">
+      <technique_common>
+        <ambient>
+          <color>0 0 0</color>
+        </ambient>
+      </technique_common>
+    </light>
+    <light id="Sky01-light" name="Sky01">
+      <technique_common>
+        <point>
+          <color>0.95 0.95 1</color>
+          <constant_attenuation>1</constant_attenuation>
+          <linear_attenuation>0</linear_attenuation>
+          <quadratic_attenuation>0</quadratic_attenuation>
+        </point>
+      </technique_common>
+      <extra>
+        <technique profile="OpenCOLLADA3dsMax">
+          <skylight>
+            <cast_shadows>1</cast_shadows>
+            <color_map_amount>100</color_map_amount>
+            <color_map_on>1</color_map_on>
+            <intensity_on>1</intensity_on>
+            <mode>1</mode>
+            <multiplier>1</multiplier>
+            <ray_bias>0.004999995</ray_bias>
+            <rays_per_sample>20</rays_per_sample>
+          </skylight>
+        </technique>
+      </extra>
+    </light>
+  </library_lights>
+  <library_images>
+    <image id="_TD_Divider_Wall_01_Blue_jpg">
+      <init_from>file:///E:/Torque_3.0/My%20Projects/FurnitureRoom_PhysX/game/art/shapes/3TD_OfficePack_01/OfficeDivider_02/images/3TD_Divider%20Wall_01_Blue.jpg</init_from>
+    </image>
+    <image id="_TD_DividerPaint_Gray_01_jpg">
+      <init_from>file:///E:/Torque_3.0/My%20Projects/FurnitureRoom_PhysX/game/art/shapes/3TD_OfficePack_01/OfficeDivider_02/images/3TD_DividerPaint_Gray_01.jpg</init_from>
+    </image>
+  </library_images>
+  <library_visual_scenes>
+    <visual_scene id="MaxScene">
+      <node name="EnvironmentAmbientLight">
+        <instance_light url="#EnvironmentAmbientLight"/>
+      </node>
+      <node id="node-Sky01" name="Sky01">
+        <translate>-78.19025 -0.6960557 0</translate>
+        <instance_light url="#Sky01-light"/>
+      </node>
+      <node id="node-Base01" name="Base01">
+        <translate>0.6960557 0.2320186 0</translate>
+        <node id="node-Start01" name="Start01">
+          <node id="node-OfficeDividerTwo300" name="OfficeDividerTwo300">
+            <translate>-0.7013265 -0.507828 -28.86963</translate>
+            <scale>1.841725 1.841725 1.841725</scale>
+            <instance_geometry url="#geom-OfficeDividerTwo300">
+              <bind_material>
+                <technique_common>
+                  <instance_material symbol="Divider02_Frame_6" target="#Divider02_Frame-material">
+                    <bind_vertex_input semantic="CHANNEL1" input_semantic="TEXCOORD" input_set="1"/>
+                  </instance_material>
+                  <instance_material symbol="Divider02Wall_6" target="#Divider02Wall-material">
+                    <bind_vertex_input semantic="CHANNEL1" input_semantic="TEXCOORD" input_set="1"/>
+                  </instance_material>
+                </technique_common>
+              </bind_material>
+            </instance_geometry>
+          </node>
+          <node id="node-collision-1" name="collision-1">
+            <translate>-0.6944945 0.8251193 -34.92402</translate>
+            <scale>1.841725 1.841725 1.841725</scale>
+            <instance_geometry url="#geom-collision-1">
+              <bind_material>
+                <technique_common>
+                  <instance_material symbol="ColColor_1" target="#ColColor-material"/>
+                </technique_common>
+              </bind_material>
+            </instance_geometry>
+          </node>
+        </node>
+        <node id="node-detail300" name="detail300"/>
+        <node id="node-col-1" name="col-1"/>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#MaxScene"/>
+  </scene>
+</COLLADA>
