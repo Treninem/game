@@ -1,0 +1,139 @@
+name: Vendor verified CC0 VFX packs
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-vfx-assets.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-vfx-assets
+  cancel-in-progress: false
+
+jobs:
+  vendor-vfx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and sanitize verified CC0 VFX packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .vfx_vendor_tmp
+          mkdir -p .vfx_vendor_tmp assets/vfx/third_party
+
+          import_zip() {
+            local key="$1"
+            local url="$2"
+            local source_url="$3"
+            local author="$4"
+            local target="assets/vfx/third_party/$key"
+            local work=".vfx_vendor_tmp/$key"
+            mkdir -p "$work/archive" "$target"
+            echo "Downloading $key"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 \
+              -A 'ImPuls-CC0-Asset-Vendor/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+
+            # Only vendor visual assets and human-readable metadata. Never copy executables or scripts.
+            rsync -a --prune-empty-dirs \
+              --include='*/' \
+              --include='*.png' --include='*.PNG' \
+              --include='*.jpg' --include='*.JPG' \
+              --include='*.jpeg' --include='*.JPEG' \
+              --include='*.webp' --include='*.WEBP' \
+              --include='*.gif' --include='*.GIF' \
+              --include='*.svg' --include='*.SVG' \
+              --include='*.txt' --include='*.TXT' \
+              --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source_url
+          Download used by vendor workflow: $url
+          License: CC0 1.0 Universal / public-domain dedication as stated by the source page.
+          Imported by: .github/workflows/vendor-vfx-assets.yml
+
+          Only image files and human-readable metadata are copied from the downloaded archive. Executables and scripts are excluded.
+          EOF
+
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          This asset pack is recorded by its source page as CC0. The original author has waived copyright and related rights to the extent permitted by law under the Creative Commons CC0 1.0 Universal public-domain dedication.
+
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside the imported files.
+          EOF
+          }
+
+          import_zip \
+            "kenney_particle_pack" \
+            "https://www.kenney.nl/media/pages/assets/particle-pack/f8fe0f8cb8-1677578741/kenney_particle-pack.zip" \
+            "https://www.kenney.nl/assets/particle-pack" \
+            "Kenney"
+
+          import_zip \
+            "kenney_smoke_particles" \
+            "https://www.kenney.nl/media/pages/assets/smoke-particles/23249a0d35-1677695171/kenney_smoke-particles.zip" \
+            "https://www.kenney.nl/assets/smoke-particles" \
+            "Kenney"
+
+          import_zip \
+            "oga_2d_spell_effects" \
+            "https://opengameart.org/sites/default/files/FX.zip" \
+            "https://opengameart.org/content/2d-spell-effects" \
+            "Mikodrak / OpenGameArt"
+
+          import_zip \
+            "oga_earth_impact" \
+            "https://opengameart.org/sites/default/files/Earth%20Impact%20-%20Magic%20Effect.zip" \
+            "https://opengameart.org/content/earth-impact-magic-effect" \
+            "Cethiel / OpenGameArt"
+
+          import_zip \
+            "oga_weapon_slash" \
+            "https://opengameart.org/sites/default/files/Everything_0.zip" \
+            "https://opengameart.org/content/weapon-slash-effect" \
+            "Cethiel / OpenGameArt"
+
+          import_zip \
+            "oga_arcane_magic" \
+            "https://opengameart.org/sites/default/files/Arcane_Effect.zip" \
+            "https://opengameart.org/content/arcane-magic-effect" \
+            "Cethiel / OpenGameArt"
+
+          rm -rf .vfx_vendor_tmp
+
+          echo "Imported file counts:"
+          for dir in assets/vfx/third_party/*; do
+            [ -d "$dir" ] || continue
+            printf '%s: ' "$dir"
+            find "$dir" -type f | wc -l
+          done
+
+      - name: Commit VFX assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/vfx/third_party
+          if git diff --cached --quiet; then
+            echo "No new VFX assets to commit."
+            exit 0
+          fi
+          git commit -m "assets(vfx): vendor verified CC0 magic combat packs"
+          git pull --rebase origin main
+          git push origin HEAD:main
