@@ -28,7 +28,7 @@ func _ready() -> void:
         GameState.revive()
         _place_player_safely(RESPAWN_POSITION)
 
-    GameState.notify("Мир ImPuls • фундамент мира и столицы • Esc — пауза • I/M/K/J — игровые панели")
+    GameState.notify("Мир ImPuls • ЛКМ — оружие • ПКМ — магия • Q — следующее заклинание • I/M/K/J — игровые панели")
 
 func _process(delta: float) -> void:
     if not GameState.is_dead:
