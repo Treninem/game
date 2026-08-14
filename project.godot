@@ -21,6 +21,7 @@ InventorySystem="*res://scripts/inventory_system.gd"
 DialogueManager="*res://scripts/dialogue_manager.gd"
 WorldData="*res://scripts/world_data.gd"
 MapSystem="*res://scripts/map_system.gd"
+VFXLibrary="*res://scripts/vfx_library.gd"
 
 [display]
 window/size/viewport_width=1280
