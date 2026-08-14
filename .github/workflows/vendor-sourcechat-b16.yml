@@ -1,0 +1,128 @@
+name: Vendor source-chat B16 real CC0 destructible 3D sources
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b16.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b16
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 destructible 3D source packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b16/models"
+          TMP=".sourcechat_b16_tmp"
+          rm -rf "$TMP"; mkdir -p "$ROOT" "$TMP"
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks this staged asset as CC0/public domain.
+          License: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          zip_models() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 360 -A 'ImPuls-CC0-SourceChat-B16/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.blend' --include='*.BLEND' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+              --include='*.fbx' --include='*.FBX' --include='*.gltf' --include='*.GLTF' --include='*.glb' --include='*.GLB' \
+              --include='*.dae' --include='*.DAE' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' \
+              --include='*.jpeg' --include='*.JPEG' --include='*.tga' --include='*.TGA' --include='*.dds' --include='*.DDS' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one_model() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$key"; mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 -A 'ImPuls-CC0-SourceChat-B16/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_models "oga_destructible_cartoon_box" \
+            "https://opengameart.org/sites/default/files/destruct_-_cartoonbox_-_hernandack.zip" \
+            "https://opengameart.org/content/low-poly-destructible-cartoon-box-4-variants" \
+            "hernandack / OpenGameArt" \
+            "Four CC0 destructible box variants. Source page states OBJ base models and GLB/GLTF destructible chunk models; tested conceptually with Godot 4 rigid bodies."
+
+          one_model "oga_breakable_crates_barrels" "Low Poly Crates And Barrels.blend" \
+            "https://opengameart.org/sites/default/files/Low%20Poly%20Crates%20And%20Barrels.blend" \
+            "https://opengameart.org/content/low-poly-crates-and-barrels" \
+            "Alexmax / OpenGameArt" \
+            "CC0 Blender source containing low-poly crates/barrels and breakable versions."
+
+          zip_models "oga_destroyed_city_assets" \
+            "https://opengameart.org/sites/default/files/Destroyed_City_Assets.zip" \
+            "https://opengameart.org/content/destroyed-city-assets" \
+            "Fleurman / OpenGameArt" \
+            "CC0 source pack: three destroyed buildings, two damaged road segments and six rock/rubble blocks. Not low-poly; main chat should use for selected ruins/debris or source extraction only."
+
+          one_model "oga_realistic_rocks_boulders" "rocksrealistic.blend" \
+            "https://opengameart.org/sites/default/files/rocksrealistic.blend" \
+            "https://opengameart.org/content/realistic-rocksboulders" \
+            "WeaponGuy / OpenGameArt" \
+            "Small CC0 Blender source of editable multitextured rocks/boulders for debris and breakage source meshes."
+
+          rm -rf "$TMP"
+          cat > "assets/staging/sourcechat_b16/README.md" <<'EOF'
+          # Source chat B16 — real CC0 destructible 3D sources
+
+          Physically staged source files only; no runtime/game-scene integration.
+
+          Coverage:
+          - chunked destructible box variants;
+          - low-poly crate/barrel source with breakable versions;
+          - destroyed buildings, damaged roads and rubble blocks;
+          - editable realistic rock/boulder source.
+
+          Main integration chat should inspect topology, scale, materials and collisions, generate/optimize GLB production copies, and select only pieces matching ImPuls art direction/performance targets.
+          EOF
+          find assets/staging/sourcechat_b16 -type f | wc -l
+          du -sh assets/staging/sourcechat_b16
+
+      - name: Commit only B16 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b16
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 destructible 3D sources B16"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
