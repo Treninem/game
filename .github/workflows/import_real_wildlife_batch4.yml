@@ -38,7 +38,7 @@ jobs:
             local url="$1" out="$2"
             if [ -s "$out" ]; then echo "Already present: $out"; return 0; fi
             curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1200 \
-              -A 'ImPuls-CC0-AssetImporter/4.1' "$url" -o "$out"
+              -A 'ImPuls-CC0-AssetImporter/4.2' "$url" -o "$out"
             test -s "$out"
           }
 
@@ -49,7 +49,6 @@ jobs:
           fetch 'https://opengameart.org/sites/default/files/snail_tinyworlds_0.zip' "$ROOT/snail/snail_tinyworlds.zip"
           fetch 'https://opengameart.org/sites/default/files/piranha_model.zip' "$ROOT/piranha/piranha_model.zip"
           fetch 'https://opengameart.org/sites/default/files/catfish.zip' "$ROOT/catfish/catfish.zip"
-          fetch 'https://opengameart.org/sites/default/files/catfish_obj.zip' "$ROOT/catfish/catfish_obj.zip"
 
           find "$ROOT" -type f -size 0 -print -quit | grep -q . && { echo 'ERROR: zero-byte aquatic source'; exit 1; } || true
 
@@ -104,8 +103,8 @@ jobs:
           Source: https://opengameart.org/content/3d-low-poly-catfish
           License: CC0
           Author: gfroad
-          Files: catfish.zip, catfish_obj.zip
-          Notes: 284-poly/151-vertex catfish; source includes swim and jump animations in the primary archive plus OBJ export.
+          File: catfish.zip
+          Notes: 284-poly/151-vertex low-poly catfish; primary archive contains swim and jump animations.
           EOF
 
       - name: Preserve batch outside worktree
