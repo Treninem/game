@@ -1,8 +1,10 @@
 extends CanvasLayer
 
-# Lightweight screen-space feedback shared by combat, falls, explosions and storms.
-# It deliberately avoids post-processing shaders so GL Compatibility remains safe.
+# Lightweight screen-space feedback shared by combat, falls, explosions, storms
+# and environment transitions. It deliberately avoids heavy post-processing so
+# GL Compatibility remains safe.
 
+var environment_rect: ColorRect
 var flash_rect: ColorRect
 var shake_strength := 0.0
 var shake_time := 0.0
@@ -10,15 +12,28 @@ var shake_duration := 0.0
 var active_camera: Camera3D
 var base_h_offset := 0.0
 var base_v_offset := 0.0
+var environment_tween: Tween
 
 func _ready() -> void:
     layer = 95
+
+    environment_rect = ColorRect.new()
+    environment_rect.name = "EnvironmentTint"
+    environment_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    environment_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    environment_rect.color = Color(0.06, 0.30, 0.42, 0.0)
+    add_child(environment_rect)
+
     flash_rect = ColorRect.new()
     flash_rect.name = "ScreenFlash"
     flash_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     flash_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
     flash_rect.color = Color(1.0, 1.0, 1.0, 0.0)
     add_child(flash_rect)
+
+    if not EnvironmentState.underwater_changed.is_connected(_on_underwater_changed):
+        EnvironmentState.underwater_changed.connect(_on_underwater_changed)
+    _set_underwater_tint(EnvironmentState.is_underwater, false)
     set_process(true)
 
 func _process(delta: float) -> void:
@@ -83,6 +98,25 @@ func lightning_flash(strength: float = 1.0) -> void:
     var s := clampf(strength, 0.15, 1.5)
     flash(Color(0.82, 0.90, 1.0, 1.0), 0.12 + 0.20 * s, 0.12)
     shake(0.006 + 0.012 * s, 0.10)
+
+func _on_underwater_changed(value: bool) -> void:
+    _set_underwater_tint(value, true)
+    if value:
+        flash(Color(0.30, 0.70, 0.90, 1.0), 0.14, 0.20)
+    else:
+        flash(Color(0.72, 0.90, 1.0, 1.0), 0.10, 0.16)
+
+func _set_underwater_tint(value: bool, animate: bool) -> void:
+    if environment_rect == null:
+        return
+    var target := Color(0.035, 0.28, 0.42, 0.18 if value else 0.0)
+    if environment_tween != null and environment_tween.is_valid():
+        environment_tween.kill()
+    if not animate:
+        environment_rect.color = target
+        return
+    environment_tween = create_tween()
+    environment_tween.tween_property(environment_rect, "color", target, 0.28 if value else 0.20)
 
 func _restore_camera_offset() -> void:
     if active_camera != null and is_instance_valid(active_camera):
