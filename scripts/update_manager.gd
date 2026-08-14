@@ -38,15 +38,18 @@ func install_latest_update() -> bool:
     if not FileAccess.file_exists(updater):
         status_changed.emit("Updater не найден. Переустановите ImPuls последним стабильным установщиком.", false)
         return false
+    # Manual update must always show the updater UI. Background checks remain
+    # hidden through the scheduled-task path, but the player explicitly pressing
+    # Update gets a visible percentage/bytes/status window.
     var args := PackedStringArray([
-        "-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass",
+        "-NoProfile", "-ExecutionPolicy", "Bypass",
         "-File", updater, "-InstallDir", root, "-WaitForGameExit"
     ])
     var pid := OS.create_process("powershell.exe", args, false)
     if pid <= 0:
         status_changed.emit("Не удалось запустить обновление.", false)
         return false
-    status_changed.emit("Открывается окно обновления. Загружаются только недостающие данные.", true)
+    status_changed.emit("Открывается видимое окно обновления. Загружаются только недостающие данные.", true)
     await get_tree().create_timer(0.45).timeout
     get_tree().quit()
     return true
