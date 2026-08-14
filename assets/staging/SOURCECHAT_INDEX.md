@@ -263,6 +263,56 @@ Real Godot-ready and FBX/GLTF/Blend/texture sources for mine tracks, mine carts,
 
 Recommended use: authored mines/caves, underground industry, minecart routes, mining tools and pipes. Main chat should assemble modular track/pipe sections, verify pivots/collisions/scale, and promote only the pieces needed by each location.
 
+## B22 — roads / factory / furniture / medieval props
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b22/models/`
+
+- `kenney_city_kit_roads/` — modular optimized road and barrier source assets.
+- `kenney_factory_kit/` — large factory/warehouse/conveyor source kit.
+- `oga_3td_furniture_pack/` — household/workshop furniture sources.
+- `oga_medieval_props_pack/` — chest, bench, brazier, campfire, cart, basket, bed, hay, trough, logs, barrel and other settlement props.
+
+Recommended use: roads and city approaches, warehouses/factories, interiors, workshops, farms, taverns and settlement clutter. Main chat should normalize scale/materials and promote coherent subsets rather than whole libraries.
+
+## B23 — cave environment source pack
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b23/models/oga_3td_cave_pack_pro/`
+
+Real extracted cave chambers, junctions, rock/cliff/boulder/stalagmite/stalactite pieces, cave plants and textures.
+
+Recommended use: authored caves, mines and underground regions. Main chat should build modular collision/LOD rules and combine selectively with B21 mine props.
+
+## B24 — PBR industrial source pack
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52/`
+
+Real editable industrial sources covering tanks, pipes, stairs, control panels, containers, chimneys, vents, ladders, garages and related PBR assets.
+
+Recommended use: factories, utility areas, mines, workshops, industrial districts and infrastructure. Export optimized production GLB copies after material/scale review.
+
+## B25 — harbour / fantasy ruins
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b25/models/`
+
+- `oga_3td_harbour_pack/` — dock, lighthouse/splitrock, wharf, stand, industrial shack and textures.
+- `oga_3td_fantasy_ruins_pack/` — ruined cathedral, foundations, walls, arches, columns, temple pieces, speaking stones and textures.
+
+Recommended use: coast/port locations, abandoned settlements, ruins, dungeons and landmark dressing. Main chat should verify scale/collisions and only promote art-direction-compatible variants.
+
+## B26 — animated farm animals / food kit
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b26/models/`
+
+- `quaternius_farm_animals/` — real animated low-poly pig, cow, horse, llama, pug/dog and sheep source assets.
+- `kenney_food_kit/` — large optimized food/kitchen object library for homes, markets, taverns and camps.
+
+Recommended use: farms/pastures/stables and settlement life, plus food/kitchen/market clutter. Main chat should test Godot animation import and normalize animal skeleton/scale before production promotion.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
