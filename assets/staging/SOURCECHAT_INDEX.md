@@ -171,6 +171,48 @@ Path: `assets/staging/sourcechat_b13/audio/`
 
 Recommended use: digging and soil work, heavy objects entering water, dragging/moving stone or timber, boulder drops/scrapes, multi-material hard/soft/wet impacts, and large structural/cliff crash source layers. CC-BY-only rock-breaking/falling-rock candidates were deliberately excluded from this CC0 source batch.
 
+## B14 — species / fauna audio
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b14/audio/`
+
+- `oga_donkey_bray/`
+- `oga_bear_growls/`
+- `oga_bat_screeches/`
+- `oga_crow_caw/`
+- `oga_crows_singing/`
+- `oga_penguin_sounds/`
+- `oga_rabbit_eating/`
+- `oga_large_wings_flap/`
+
+Recommended use: farm/pack animals, bears, cave/night bats, crow calls/ambience, cold-region birds, close rabbit feeding behavior and large flying-animal wing movement. Non-CC0 goat/chicken/gull/horse-gallop candidates were intentionally excluded from this batch.
+
+## B15 — weather / cavern ambience
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b15/audio/`
+
+- `oga_loopable_rain/`
+- `oga_rain_gutter_loop/`
+- `oga_short_wind/`
+- `oga_wind_whoosh_loop/`
+- `oga_wind1_family/`
+- `oga_dark_cavern_ambient/`
+
+Recommended use: multiple rain intensities/loops, rain heard from roofs/gutters, short gusts, high-frequency wind, five long wind layers, and underground/cavern atmosphere. Layer by shelter, region, storm intensity and underground state rather than playing everything together.
+
+## B16 — destructible 3D source models
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b16/models/`
+
+- `oga_destructible_cartoon_box/`
+- `oga_breakable_crates_barrels/`
+- `oga_destroyed_city_assets/`
+- `oga_realistic_rocks_boulders/`
+
+Recommended use: source meshes/chunks for destructible props, breakable containers, damaged roads/buildings/rubble and rock/boulder debris. Main chat should inspect topology/scale/materials/collisions, generate optimized GLB production copies where appropriate, and only integrate subsets matching the final art direction/performance target.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
