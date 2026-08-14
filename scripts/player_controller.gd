@@ -112,11 +112,21 @@ func _try_attack() -> void:
         GameState.notify("Недостаточно выносливости.")
         return
     attack_elapsed = attack_cooldown
+
+    var swing_direction := -camera.global_transform.basis.z
+    var swing_position := camera.global_position + swing_direction * 1.35
+    VFXLibrary.spawn("melee_swing", swing_position, get_tree().current_scene, Vector3.UP, swing_direction, 1.0)
+
     if not interaction_ray.is_colliding():
         return
     var collider = interaction_ray.get_collider()
+    var hit_position := interaction_ray.get_collision_point()
+    var hit_normal := interaction_ray.get_collision_normal()
     if collider != null and collider.has_method("take_damage"):
+        VFXLibrary.spawn("hit_slash", hit_position, get_tree().current_scene, hit_normal, swing_direction, 1.0)
         collider.take_damage(attack_damage + InventorySystem.attack_bonus(), self)
+    else:
+        VFXLibrary.spawn_collision("stone", hit_position, hit_normal, get_tree().current_scene, 0.70)
 
 func _try_interact() -> void:
     if GameState.is_dead:
