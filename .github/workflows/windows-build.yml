@@ -3,6 +3,10 @@ name: Build Release and Installer
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "assets/ASSET_PACKS.md"
+      - "assets/registry/**"
+      - "docs/**"
   workflow_dispatch:
 
 permissions:
