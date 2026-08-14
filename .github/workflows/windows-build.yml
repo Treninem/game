@@ -13,6 +13,8 @@ on:
       - "tests/**"
       - "assets/branding/**"
       - "assets/ui/**"
+      - "assets/vfx/**"
+      - "assets/staging/sourcechat_b47/**"
       - ".github/workflows/windows-build.yml"
   workflow_dispatch:
 
@@ -29,6 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts
+            scenes
+            tests
+            tools
+            installer
+            assets/branding
+            assets/ui
+            assets/vfx
+            assets/staging/sourcechat_b47
       - name: Prepare ImPuls branding
         run: |
           python3 -m pip install --disable-pip-version-check pillow
@@ -61,6 +74,9 @@ jobs:
           ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --export-release "Windows Desktop" build/windows/ImPuls.exe
           test -f build/windows/ImPuls.exe
           test -f build/windows/ImPuls.pck
+      - name: Report compact package size
+        run: |
+          du -h build/windows/ImPuls.exe build/windows/ImPuls.pck
       - name: Package Windows build
         run: cd build/windows && zip -9 -r ../../ImPuls-PC-Windows-x64.zip .
       - uses: actions/upload-artifact@v4
@@ -75,6 +91,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools
+            installer
+            assets/branding
       - name: Validate updater PowerShell syntax
         shell: pwsh
         run: |
@@ -126,6 +147,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools
+            installer
+            assets/branding
       - uses: actions/download-artifact@v4
         with:
           name: game-windows
