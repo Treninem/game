@@ -12,6 +12,8 @@ on:
       - "scripts/city_district.gd"
       - "scripts/settings_manager.gd"
       - "scripts/ui_layout_guard.gd"
+      - "scripts/game_menu.gd"
+      - "scripts/gameplay_panels.gd"
       - "scenes/stage1.tscn"
       - "tests/smoke_player_movement.gd"
       - "tests/smoke_player_movement.tscn"
