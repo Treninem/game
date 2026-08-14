@@ -1,5 +1,6 @@
 extends Node3D
 
+const STREAMED_RESOURCE := preload("res://scripts/streamed_resource.gd")
 const CHUNK_SIZE := 512.0
 const GRID_RESOLUTION := 16
 const ACTIVE_RADIUS := 2
@@ -14,11 +15,13 @@ var trunk_material: StandardMaterial3D
 var foliage_materials: Dictionary = {}
 var rock_material: StandardMaterial3D
 var water_material: StandardMaterial3D
+var location_elapsed := 0.0
 
 func _ready() -> void:
+    process_priority = 50
     _prepare_materials()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
     if player == null or not is_instance_valid(player):
         player = get_tree().get_first_node_in_group("player") as Node3D
         if player == null:
@@ -31,6 +34,10 @@ func _process(_delta: float) -> void:
     if center != current_center:
         current_center = center
         _refresh_streaming(center)
+
+    location_elapsed += delta
+    if location_elapsed >= 1.0:
+        location_elapsed = 0.0
         _update_wilderness_location()
 
     if not generation_queue.is_empty():
@@ -89,6 +96,7 @@ func _generate_chunk(coord: Vector2i) -> void:
     if _chunk_needs_water(coord):
         _add_water(chunk)
     _add_vegetation(chunk, coord, biome)
+    _add_gatherables(chunk, coord, biome)
     _add_landmark_if_needed(chunk, coord)
 
 func _build_terrain_mesh(coord: Vector2i) -> ArrayMesh:
@@ -168,6 +176,42 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         _spawn_tree_multimeshes(chunk, transforms, biome)
     else:
         _spawn_rock_multimesh(chunk, transforms)
+
+func _add_gatherables(chunk: Node3D, coord: Vector2i, biome: String) -> void:
+    if biome == "ocean":
+        return
+    var rng := RandomNumberGenerator.new()
+    rng.seed = abs(hash("gather:%d:%d:%d" % [coord.x, coord.y, WorldData.WORLD_SEED]))
+    var origin := _chunk_origin(coord)
+    var count := 5
+    if biome in ["forest", "taiga", "marsh"]:
+        count = 8
+    elif biome in ["mountains", "drylands"]:
+        count = 7
+    for i in range(count):
+        var lx := rng.randf_range(18.0, CHUNK_SIZE - 18.0)
+        var lz := rng.randf_range(18.0, CHUNK_SIZE - 18.0)
+        var world := origin + Vector2(lx, lz)
+        if world.length() < 700.0:
+            continue
+        var height := WorldData.elevation_at(world)
+        if height < WorldData.SEA_LEVEL + 0.4:
+            continue
+        var type := "wood"
+        match biome:
+            "mountains", "drylands", "tundra": type = "stone" if rng.randf() < 0.78 else "wood"
+            "marsh": type = "berries" if rng.randf() < 0.62 else "wood"
+            "plains":
+                var roll := rng.randf()
+                type = "berries" if roll < 0.34 else ("stone" if roll < 0.56 else "wood")
+            _:
+                type = "wood" if rng.randf() < 0.76 else "berries"
+        var resource = STREAMED_RESOURCE.new()
+        resource.name = "Gatherable_%d" % i
+        resource.configure("chunk_%d_%d_%d" % [coord.x, coord.y, i], type, rng.randi_range(4, 10))
+        resource.position = Vector3(lx, height, lz)
+        resource.rotation.y = rng.randf_range(-PI, PI)
+        chunk.add_child(resource)
 
 func _spawn_tree_multimeshes(chunk: Node3D, transforms: Array[Transform3D], biome: String) -> void:
     var trunk_mesh := CylinderMesh.new()
