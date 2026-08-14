@@ -1,0 +1,81 @@
+name: Vendor source-chat B50 real CC0 medieval interiors props
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b50.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b50
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 medieval interiors and props
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b50"
+          rm -rf "$ROOT"
+          mkdir -p "$ROOT/models"
+
+          stage_file() {
+            local name="$1" url="$2" page="$3" title="$4" filename="$5" notes="$6"
+            mkdir -p "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B50/1.0' "$url" -o "$ROOT/models/$name/$filename"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_file "oga_medieval_church_interior" "https://opengameart.org/sites/default/files/church.blend" "https://opengameart.org/content/medieval-church-interior" "Medieval Church Interior" "church.blend" "Fully explorable cathedral/temple-style interior; source page lists 28870 verts / 48167 tris."
+          stage_file "oga_medieval_blacksmith_interior" "https://opengameart.org/sites/default/files/medievalblacksmith.blend" "https://opengameart.org/content/medieval-blacksmith-interior" "Medieval Blacksmith Interior" "medievalblacksmith.blend" "Fully explorable two-floor blacksmith interior; source page lists 18099 verts / 31760 tris."
+          stage_file "oga_medieval_candles" "https://opengameart.org/sites/default/files/medievalcandles.blend" "https://opengameart.org/content/medieval-candles" "Medieval Candles" "medievalcandles.blend" "Interior candle props; source page lists 1018 verts / 1872 tris."
+          stage_file "oga_medieval_signs" "https://opengameart.org/sites/default/files/medievalsigns.blend" "https://opengameart.org/content/medieval-signs" "Medieval Signs" "medievalsigns.blend" "Very low-poly sign posts; source page lists 100 verts / 148 tris."
+
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B50 — real CC0 medieval interiors and props
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should compare these authored interiors with B29/B47 building shells, choose compatible combinations, validate doors/windows/pivots/materials/collisions, and use candle/sign props selectively rather than duplicating generic prop families.
+          EOF
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          echo "B50 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B50 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b50
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 medieval interiors props B50"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
