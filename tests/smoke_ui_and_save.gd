@@ -19,6 +19,18 @@ func _frame_is_inside_and_centered(frame: Control, available: Vector2, label: St
         return false
     return true
 
+func _sidebar_fits(menu: Control, frame: Control) -> bool:
+    var sidebar_value = menu.get("sidebar")
+    if not (sidebar_value is VBoxContainer):
+        push_error("UI smoke: sidebar missing")
+        return false
+    var sidebar := sidebar_value as VBoxContainer
+    var sidebar_min := sidebar.get_combined_minimum_size()
+    if sidebar_min.y > frame.size.y - 12.0:
+        push_error("UI smoke: sidebar minimum height overflows frame: %s > %s" % [sidebar_min.y, frame.size.y])
+        return false
+    return true
+
 func _run_test() -> void:
     var packed := load("res://scenes/stage1.tscn") as PackedScene
     if packed == null:
@@ -36,9 +48,13 @@ func _run_test() -> void:
         push_error("UI smoke: menu nodes missing")
         quit(3)
         return
+    if root.get_node_or_null("UILayoutGuard") == null:
+        push_error("UI smoke: centralized UI layout guard is not loaded")
+        quit(13)
+        return
 
     menu.open_menu("main")
-    for _i in range(3):
+    for _i in range(4):
         await process_frame
     if not paused or not menu.visible:
         push_error("UI smoke: pause menu did not pause/show")
@@ -49,9 +65,11 @@ func _run_test() -> void:
         push_error("UI smoke: pause frame missing")
         quit(5)
         return
-    var menu_space := menu.size
-    if not _frame_is_inside_and_centered(frame, menu_space, "pause menu"):
+    if not _frame_is_inside_and_centered(frame, menu.size, "pause menu"):
         quit(6)
+        return
+    if not _sidebar_fits(menu, frame):
+        quit(14)
         return
     menu.close_menu()
     await process_frame
@@ -61,7 +79,7 @@ func _run_test() -> void:
         return
 
     panels.open_panel("inventory")
-    for _i in range(3):
+    for _i in range(4):
         await process_frame
     if not paused or not panels.visible:
         push_error("UI smoke: gameplay panel failed to open")
@@ -78,26 +96,41 @@ func _run_test() -> void:
         quit(10)
         return
 
-    # UI scale changes used to reintroduce the offset bug. Force a reflow through
-    # the global guard and prove the geometry is still valid afterwards.
-    SettingsManager.set_value("graphics", "ui_scale", 1.25)
-    for _i in range(4):
+    # Maximum supported UI scale used to reintroduce the offset/overflow bug.
+    # Force 150%, open both menu families and prove the guard realigns them.
+    SettingsManager.set_value("graphics", "ui_scale", 1.5)
+    for _i in range(6):
         await process_frame
+
     menu.open_menu("updates")
-    for _i in range(3):
+    for _i in range(5):
         await process_frame
     frame = menu.get("frame") as Control
-    if frame == null or not _frame_is_inside_and_centered(frame, menu.size, "scaled pause menu"):
+    if frame == null or not _frame_is_inside_and_centered(frame, menu.size, "150 percent pause menu"):
         quit(12)
         return
+    if not _sidebar_fits(menu, frame):
+        quit(15)
+        return
     menu.close_menu()
-    SettingsManager.set_value("graphics", "ui_scale", 1.0)
     await process_frame
+
+    panels.open_panel("map")
+    for _i in range(5):
+        await process_frame
+    panel_frame = panels.get("frame") as Control
+    if panel_frame == null or not _frame_is_inside_and_centered(panel_frame, panels.size, "150 percent gameplay panel"):
+        quit(16)
+        return
+    panels.close_panel()
+    SettingsManager.set_value("graphics", "ui_scale", 1.0)
+    for _i in range(3):
+        await process_frame
 
     if SaveManager.list_slots().size() != 10:
         push_error("UI smoke: save slot count regressed")
         quit(11)
         return
 
-    print("UI smoke passed: centered responsive menus, UI scaling and 10 save slots are stable")
+    print("UI smoke passed: centralized auto-alignment, 150% UI scaling and 10 save slots are stable")
     quit(0)
