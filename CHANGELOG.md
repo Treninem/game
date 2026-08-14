@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.8.0-stage8 — 2026-08-14
+- Expanded the target playable world to a 64 × 64 km first continent.
+- Added deterministic terrain streaming in 512 m chunks around the player instead of loading the whole continent at once.
+- Added layered procedural elevation with a flattened capital area, hills and mountain ridges.
+- Added continent edges that descend into sea level and streamed water surfaces where terrain falls below the sea.
+- Added biome classification for plains, forests, taiga, tundra, drylands, marshes, mountains and ocean.
+- Added biome-specific procedural vegetation and boulder MultiMeshes to keep the large world lightweight.
+- Added major distant world landmarks distributed across the continent.
+- Scaled fog-of-war exploration from the prototype map to the full continent using persistent 256 m exploration cells.
+- Added continent map rendering with explored biome colors, major POIs, player marker and explored area in km².
+- Added a local 2.4 km map inset so the capital and nearby POIs remain readable even on the huge continent map.
+- Kept Люменград as the detailed starter district inside the streamed world.
+
 ## 0.7.0-stage7 — 2026-08-14
 - Rebuilt the pause/navigation menu into a game-style sidebar layout.
 - Saves, settings, map, inventory, crafting, journal and updates are now always visible from the pause menu.
@@ -11,14 +24,14 @@
 - Kept the 10-slot save system, control rebinding, graphics, audio, gameplay settings and in-game update controls in the new menu.
 
 ## 0.6.0-stage6 — 2026-08-14
-- Added the first playable city district: Lюмengrad South Quarter.
+- Added the first playable city district: Люменград South Quarter.
 - Added southern wall and gate, gate towers, main road, plaza, market stalls, forge, tavern, guardhouse, houses, fountain, lamps, trees and city decor.
 - Added modular procedural humanoid visuals for the player and NPCs instead of primitive capsule/box placeholders.
 - Added procedural walking animation for arms, legs and body movement.
 - Added scheduled city NPCs with work/evening/home positions.
 - Added blacksmith, merchant, guard, innkeeper, artisan and citizen roles with distinct dialogue.
 - Added the first city quest from blacksmith Radan.
-- Added city coins and Lюмengrad reputation progression.
+- Added city coins and Люменград reputation progression.
 - Added dynamic location tracking between the outskirts and South Quarter.
 - Added location, coins and city reputation to the HUD.
 - Moved hostile raiders and ruins outside the protected starter city area.
