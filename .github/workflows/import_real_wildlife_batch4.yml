@@ -38,7 +38,7 @@ jobs:
             local url="$1" out="$2"
             if [ -s "$out" ]; then echo "Already present: $out"; return 0; fi
             curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1200 \
-              -A 'ImPuls-CC0-AssetImporter/4.0' "$url" -o "$out"
+              -A 'ImPuls-CC0-AssetImporter/4.1' "$url" -o "$out"
             test -s "$out"
           }
 
@@ -46,7 +46,7 @@ jobs:
           fetch 'https://opengameart.org/sites/default/files/Turtle.blend' "$ROOT/turtle/Turtle.blend"
           fetch 'https://opengameart.org/sites/default/files/turtle%20texture.png' "$ROOT/turtle/turtle_texture.png"
           fetch 'https://opengameart.org/sites/default/files/Shark.7z' "$ROOT/shark/Shark.7z"
-          fetch 'https://opengameart.org/sites/default/files/snail_tinyworlds.zip' "$ROOT/snail/snail_tinyworlds.zip"
+          fetch 'https://opengameart.org/sites/default/files/snail_tinyworlds_0.zip' "$ROOT/snail/snail_tinyworlds.zip"
           fetch 'https://opengameart.org/sites/default/files/piranha_model.zip' "$ROOT/piranha/piranha_model.zip"
           fetch 'https://opengameart.org/sites/default/files/catfish.zip' "$ROOT/catfish/catfish.zip"
           fetch 'https://opengameart.org/sites/default/files/catfish_obj.zip' "$ROOT/catfish/catfish_obj.zip"
@@ -88,6 +88,7 @@ jobs:
           License: CC0
           Author: TinyWorlds
           File: snail_tinyworlds.zip
+          Original download filename at source: snail_tinyworlds_0.zip
           Notes: photogrammetric snail-shell model, approximately 3k polygons; useful for close-up forest/wetland detail.
           EOF
 
