@@ -2,7 +2,7 @@ extends Node
 
 signal status_changed(text: String, update_available: bool)
 
-const API_URL := "https://api.github.com/repos/Treninem/game/releases/latest"
+const API_URL := "https://api.github.com/repos/Treninem/game/releases/tags/stable"
 
 var latest_tag := ""
 var latest_name := ""
@@ -20,34 +20,30 @@ func check_for_updates() -> void:
         return
     checking = true
     update_available = false
-    status_changed.emit("Проверка обновлений...", false)
-    var err := _request.request(API_URL, PackedStringArray(["User-Agent: ImPuls-Updater/1.0", "Accept: application/vnd.github+json"]))
+    status_changed.emit("Проверка стабильного канала обновлений...", false)
+    var err := _request.request(API_URL, PackedStringArray(["User-Agent: ImPuls-Updater/2.0", "Accept: application/vnd.github+json"]))
     if err != OK:
         checking = false
         status_changed.emit("Не удалось начать проверку обновлений.", false)
 
 func install_latest_update() -> bool:
     if not update_available:
-        status_changed.emit("Новых обновлений нет.", false)
+        status_changed.emit("Новых стабильных обновлений нет.", false)
         return false
     var root := _install_root()
     var updater := root.path_join("updater.ps1")
     if not FileAccess.file_exists(updater):
-        status_changed.emit("Updater не найден. Переустановите ImPuls последним установщиком.", false)
+        status_changed.emit("Updater не найден. Переустановите ImPuls последним стабильным установщиком.", false)
         return false
     var args := PackedStringArray([
-        "-NoProfile",
-        "-WindowStyle", "Hidden",
-        "-ExecutionPolicy", "Bypass",
-        "-File", updater,
-        "-InstallDir", root,
-        "-WaitForGameExit"
+        "-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass",
+        "-File", updater, "-InstallDir", root, "-WaitForGameExit"
     ])
     var pid := OS.create_process("powershell.exe", args, false)
     if pid <= 0:
         status_changed.emit("Не удалось запустить обновление.", false)
         return false
-    status_changed.emit("Обновление запускается. Игра будет закрыта и обновлена.", true)
+    status_changed.emit("Устанавливается стабильное обновление. Игра будет перезапущена.", true)
     await get_tree().create_timer(0.35).timeout
     get_tree().quit()
     return true
@@ -63,26 +59,42 @@ func local_build_tag() -> String:
 func _on_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
     checking = false
     if response_code != 200:
-        status_changed.emit("Проверка обновлений недоступна. Игра продолжит работать офлайн.", false)
+        status_changed.emit("Стабильный канал сейчас недоступен. Игра продолжит работать офлайн.", false)
         return
     var parsed = JSON.parse_string(body.get_string_from_utf8())
     if typeof(parsed) != TYPE_DICTIONARY:
         status_changed.emit("Получен некорректный ответ сервера обновлений.", false)
         return
-    latest_tag = String(parsed.get("tag_name", ""))
-    latest_name = String(parsed.get("name", latest_tag))
+    latest_tag = String(parsed.get("tag_name", "stable"))
+    latest_name = String(parsed.get("name", ""))
     var local := local_build_tag()
-    update_available = _is_remote_newer(local, latest_tag)
+    update_available = _is_remote_newer(local, latest_name)
     if update_available:
-        status_changed.emit("Доступно обновление: %s (установлено: %s)" % [latest_tag, local], true)
+        status_changed.emit("Доступно стабильное обновление: %s (установлено: %s)" % [latest_name, local], true)
     else:
-        status_changed.emit("Установлена последняя версия: %s" % local, false)
+        status_changed.emit("Установлена последняя стабильная версия: %s" % local, false)
+
+func _build_number(value: String) -> int:
+    var marker := "build-"
+    var pos := value.find(marker)
+    if pos < 0:
+        return -1
+    var tail := value.substr(pos + marker.length())
+    var digits := ""
+    for ch in tail:
+        if ch >= "0" and ch <= "9":
+            digits += ch
+        else:
+            break
+    return int(digits) if not digits.is_empty() else -1
 
 func _is_remote_newer(local: String, remote: String) -> bool:
     if remote.is_empty():
         return false
-    if local.begins_with("build-") and remote.begins_with("build-"):
-        return int(remote.trim_prefix("build-")) > int(local.trim_prefix("build-"))
+    var local_build := _build_number(local)
+    var remote_build := _build_number(remote)
+    if local_build >= 0 and remote_build >= 0:
+        return remote_build > local_build
     return remote != local and local != "development"
 
 func _install_root() -> String:
