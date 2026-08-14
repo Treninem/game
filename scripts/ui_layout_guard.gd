@@ -1,13 +1,14 @@
 extends Node
 
-# The only authority for outer menu/panel geometry.
-# Legacy menu scripts still choose their inner content, but their old resize
-# callbacks are disconnected so two systems can never fight over the same rect.
+# Central authority for outer menu/panel geometry.
+# Controls keep their intrinsic minimum size, while this guard scales the whole
+# outer frame only when needed so rendered bounds can never leave the viewport.
 
 const WATCH_GROUPS := ["game_menu", "gameplay_panels"]
 const MIN_SAFE_MARGIN := 8.0
 const MAX_SAFE_MARGIN := 24.0
 const GEOMETRY_EPSILON := 0.5
+const SCALE_EPSILON := 0.001
 
 var watched: Dictionary = {}
 var _reflow_queued := false
@@ -114,6 +115,8 @@ func _fit_control(control: Control) -> void:
     _enforce_frame_geometry(control, true)
 
 func _available_size(control: Control) -> Vector2:
+    # The Control's own logical size is the authoritative coordinate space.
+    # This matters when root.content_scale_factor changes for 75-150% UI scale.
     var available: Vector2 = control.size
     if available.x <= 1.0 or available.y <= 1.0:
         var viewport := get_viewport()
@@ -121,14 +124,28 @@ func _available_size(control: Control) -> Vector2:
             available = viewport.get_visible_rect().size
     return available
 
-func _desired_frame_geometry(control: Control, available: Vector2) -> Dictionary:
+func _desired_frame_geometry(control: Control, frame: Control, available: Vector2) -> Dictionary:
     var game_menu: bool = control.is_in_group("game_menu")
     var preferred: Vector2 = Vector2(1120.0, 760.0) if game_menu else Vector2(1220.0, 820.0)
     var margin: float = clampf(minf(available.x, available.y) * 0.025, MIN_SAFE_MARGIN, MAX_SAFE_MARGIN)
     var usable := Vector2(maxf(1.0, available.x - margin * 2.0), maxf(1.0, available.y - margin * 2.0))
     var target := Vector2(minf(preferred.x, usable.x), minf(preferred.y, usable.y)).floor()
-    var position := ((available - target) * 0.5).floor()
-    return {"size": target, "position": position}
+
+    # PanelContainer cannot be made smaller than the combined minimum of its
+    # children. Preserve that internal size and fit its rendered bounds instead
+    # of fighting the container every frame and producing negative drift.
+    var minimum := frame.get_combined_minimum_size().ceil()
+    var base_size := Vector2(maxf(target.x, minimum.x), maxf(target.y, minimum.y))
+    var fit_scale := minf(1.0, minf(target.x / maxf(base_size.x, 1.0), target.y / maxf(base_size.y, 1.0)))
+    fit_scale = maxf(fit_scale, 0.01)
+    var visual_size := base_size * fit_scale
+    var position := ((available - visual_size) * 0.5).floor()
+    return {
+        "size": base_size,
+        "scale": fit_scale,
+        "visual_size": visual_size,
+        "position": position
+    }
 
 func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
     if control == null or not is_instance_valid(control):
@@ -146,8 +163,9 @@ func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
     var available: Vector2 = _available_size(control)
     if available.x <= 1.0 or available.y <= 1.0:
         return
-    var desired: Dictionary = _desired_frame_geometry(control, available)
+    var desired: Dictionary = _desired_frame_geometry(control, frame, available)
     var target: Vector2 = desired["size"]
+    var target_scale: float = float(desired["scale"])
     var target_position: Vector2 = desired["position"]
     var anchors_wrong := (
         not is_zero_approx(frame.anchor_left)
@@ -156,8 +174,9 @@ func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
         or not is_zero_approx(frame.anchor_bottom)
     )
     var size_wrong: bool = frame.size.distance_to(target) > GEOMETRY_EPSILON
+    var scale_wrong: bool = absf(frame.scale.x - target_scale) > SCALE_EPSILON or absf(frame.scale.y - target_scale) > SCALE_EPSILON
     var position_wrong: bool = frame.position.distance_to(target_position) > GEOMETRY_EPSILON
-    if not force and not anchors_wrong and not size_wrong and not position_wrong:
+    if not force and not anchors_wrong and not size_wrong and not scale_wrong and not position_wrong:
         return
 
     _geometry_lock[control_id] = true
@@ -167,7 +186,9 @@ func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
     frame.anchor_top = 0.0
     frame.anchor_right = 0.0
     frame.anchor_bottom = 0.0
+    frame.pivot_offset = Vector2.ZERO
     frame.size = target
+    frame.scale = Vector2(target_scale, target_scale)
     frame.position = target_position
     _geometry_lock.erase(control_id)
 
