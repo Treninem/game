@@ -1,0 +1,107 @@
+name: Vendor source-chat B42 real CC0 small wildlife
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b42.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b42
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 small wildlife sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b42"
+          TMP=".sourcechat_b42_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          write_meta() {
+            local name="$1" page="$2" title="$3" download="$4"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_targz() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B42/1.0' "$url" -o "$TMP/$name.tar.gz"
+            tar -xzf "$TMP/$name.tar.gz" -C "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            write_meta "$name" "$page" "$title" "$url"
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B42/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            write_meta "$name" "$page" "$title" "$url"
+          }
+
+          stage_file() {
+            local name="$1" url="$2" page="$3" title="$4" filename="$5"
+            mkdir -p "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B42/1.0' "$url" -o "$ROOT/models/$name/$filename"
+            write_meta "$name" "$page" "$title" "$url"
+          }
+
+          stage_targz "oga_frog_lowpoly_animated" "https://opengameart.org/sites/default/files/frog.tar_0.gz" "https://opengameart.org/content/frog-low-poly-animated-3d-model" "Frog low poly animated 3D model"
+          stage_targz "oga_snake_lowpoly_animated" "https://opengameart.org/sites/default/files/snake.tar.gz" "https://opengameart.org/content/snake-low-poly-animated-3d-model" "Snake low poly animated 3D model"
+          stage_zip "oga_rat_godot" "https://opengameart.org/sites/default/files/rat_godot.zip" "https://opengameart.org/content/rat-0" "Rat - Godot-ready animated source"
+          stage_file "oga_ant_rigged_animated" "https://opengameart.org/sites/default/files/ant.blend" "https://opengameart.org/content/ant-3d-model-rigging-animated-low-poly-ish" "Ant 3D Model + Rigging + Animated" "ant.blend"
+          stage_file "oga_flying_squirrel_rigged" "https://opengameart.org/sites/default/files/squirrel.blend" "https://opengameart.org/content/flying-squirrel" "Flying Squirrel" "squirrel.blend"
+          stage_file "oga_goat_lowrez" "https://opengameart.org/sites/default/files/goatlowrez.obj" "https://opengameart.org/content/goat" "Goat" "goatlowrez.obj"
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B42 — real CC0 small wildlife
+
+          Source-only staging. Nothing in this batch is connected to gameplay.
+
+          Includes frog, snake, rat, ant, flying squirrel and goat source models. Main integration chat should normalize scale/materials, verify imported animation clips and collisions, and promote only production-ready subsets.
+          EOF
+          rm -rf "$TMP"
+          echo "B42 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B42 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b42
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 small wildlife B42"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
