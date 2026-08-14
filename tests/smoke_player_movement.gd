@@ -17,6 +17,11 @@ func _fail(code: int, message: String) -> void:
     quit(code)
 
 func _run_test() -> void:
+    var world_data := root.get_node_or_null("WorldData")
+    if world_data == null:
+        _fail(12, "WorldData autoload node is missing from standalone test tree")
+        return
+
     var packed := load("res://scenes/stage1.tscn") as PackedScene
     if packed == null:
         _fail(2, "main stage scene could not be loaded")
@@ -35,18 +40,16 @@ func _run_test() -> void:
     if bool(player.get("ground_guard_active")):
         _fail(10, "spawn guard never acquired a real physical surface")
         return
-    if not _assert_surface_under_player(player, "spawn"):
+    if not _assert_surface_under_player(player, world_data, "spawn"):
         _fail(5, "no physical world surface below player at spawn")
         return
 
     var spawn_xz := Vector2(player.global_position.x, player.global_position.z)
-    var spawn_terrain_y := WorldData.elevation_at(spawn_xz)
+    var spawn_terrain_y := float(world_data.call("elevation_at", spawn_xz))
     if player.global_position.y < spawn_terrain_y - 0.10 or player.global_position.y > spawn_terrain_y + SURFACE_TOLERANCE:
         _fail(6, "player spawn height is outside terrain tolerance; player_y=%s terrain_y=%s" % [player.global_position.y, spawn_terrain_y])
         return
 
-    # Reproduce the old regression deliberately: place the body deep below the
-    # authoritative surface and prove that runtime recovery returns it to world.
     var before_void := player.global_position
     player.global_position.y = spawn_terrain_y - VOID_DROP
     player.velocity = Vector3(0.0, -20.0, 0.0)
@@ -54,7 +57,7 @@ func _run_test() -> void:
         await physics_frame
 
     var recovered_xz := Vector2(player.global_position.x, player.global_position.z)
-    var recovered_terrain_y := WorldData.elevation_at(recovered_xz)
+    var recovered_terrain_y := float(world_data.call("elevation_at", recovered_xz))
     print("Void recovery smoke: before=", before_void, " recovered=", player.global_position, " terrain_y=", recovered_terrain_y)
     if bool(player.get("ground_guard_active")):
         _fail(11, "void recovery returned to coordinates but never reacquired physical ground")
@@ -65,7 +68,7 @@ func _run_test() -> void:
     if recovered_xz.distance_to(Vector2(before_void.x, before_void.z)) > 2.0:
         _fail(8, "void recovery moved player to unrelated XZ; distance=%s" % recovered_xz.distance_to(Vector2(before_void.x, before_void.z)))
         return
-    if not _assert_surface_under_player(player, "recovery"):
+    if not _assert_surface_under_player(player, world_data, "recovery"):
         _fail(9, "no physical world surface below player after void recovery")
         return
 
@@ -85,9 +88,9 @@ func _run_test() -> void:
     print("Movement + surface + void recovery smoke passed")
     quit(0)
 
-func _assert_surface_under_player(player: CharacterBody3D, phase: String) -> bool:
+func _assert_surface_under_player(player: CharacterBody3D, world_data: Node, phase: String) -> bool:
     var xz := Vector2(player.global_position.x, player.global_position.z)
-    var terrain_y := WorldData.elevation_at(xz)
+    var terrain_y := float(world_data.call("elevation_at", xz))
     var from := player.global_position + Vector3.UP * 1.0
     var to := Vector3(player.global_position.x, minf(player.global_position.y - 0.2, terrain_y - 2.5), player.global_position.z)
     var query := PhysicsRayQueryParameters3D.create(from, to)
