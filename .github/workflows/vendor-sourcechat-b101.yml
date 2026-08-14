@@ -1,0 +1,149 @@
+name: Vendor source-chat B101 real CC0 water village infrastructure
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b101.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b101
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 water and village infrastructure sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b101"
+          TMP=".sourcechat_b101_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/wellmed" "$ROOT/models/oga_medieval_well_638tris"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/Medieval%20Well.zip" -o "$TMP/Medieval_Well.zip"
+          unzip -q "$TMP/Medieval_Well.zip" -d "$TMP/wellmed"
+          rsync -a "$TMP/wellmed/" "$ROOT/models/oga_medieval_well_638tris/"
+          meta "oga_medieval_well_638tris" \
+            "https://opengameart.org/content/medieval-well-0" "Medieval Well" \
+            "https://opengameart.org/sites/default/files/Medieval%20Well.zip" \
+            "Medieval well with low-poly bucket; source page states 638 tris and includes Blend/FBX/OBJ/3DS."
+
+          mkdir -p "$TMP/wellbasic" "$ROOT/models/oga_basic_well_4k"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/Well.zip" -o "$TMP/Well.zip"
+          unzip -q "$TMP/Well.zip" -d "$TMP/wellbasic"
+          rsync -a "$TMP/wellbasic/" "$ROOT/models/oga_basic_well_4k/"
+          meta "oga_basic_well_4k" \
+            "https://opengameart.org/content/basic-well" "Basic Well" \
+            "https://opengameart.org/sites/default/files/Well.zip" \
+            "Well source in FBX/OBJ/STL/3DS with 4K albedo, metallic-smoothness and normal textures."
+
+          mkdir -p "$TMP/sawmill" "$ROOT/models/oga_medieval_waterpowered_sawmill"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/75340_WaterPoweredSawmillUpload_blend.zip" -o "$TMP/sawmill.zip"
+          unzip -q "$TMP/sawmill.zip" -d "$TMP/sawmill"
+          rsync -a "$TMP/sawmill/" "$ROOT/models/oga_medieval_waterpowered_sawmill/"
+          meta "oga_medieval_waterpowered_sawmill" \
+            "https://opengameart.org/content/medieval-waterpowered-sawmill" "Medieval Waterpowered Sawmill" \
+            "https://opengameart.org/sites/default/files/75340_WaterPoweredSawmillUpload_blend.zip" \
+            "Water-powered medieval sawmill/village source model in Blend format."
+
+          mkdir -p "$TMP/fishing" "$ROOT/models/oga_lowpoly_fishing_boat"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/myBoat.zip" -o "$TMP/myBoat.zip"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/boatStand.zip" -o "$TMP/boatStand.zip"
+          unzip -q "$TMP/myBoat.zip" -d "$TMP/fishing/boat"
+          unzip -q "$TMP/boatStand.zip" -d "$TMP/fishing/stand"
+          rsync -a "$TMP/fishing/" "$ROOT/models/oga_lowpoly_fishing_boat/"
+          meta "oga_lowpoly_fishing_boat" \
+            "https://opengameart.org/content/fishing-boat-low-poly" "Fishing Boat - low poly" \
+            "myBoat.zip + boatStand.zip" \
+            "Basic 772-poly fishing boat with Blend/OBJ/FBX/DAE plus separate boat stand."
+
+          mkdir -p "$ROOT/models/oga_medieval_rowboat"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/medievalboatexport.blend" -o "$ROOT/models/oga_medieval_rowboat/medievalboatexport.blend"
+          meta "oga_medieval_rowboat" \
+            "https://opengameart.org/content/medieval-boat" "Medieval Boat" \
+            "https://opengameart.org/sites/default/files/medievalboatexport.blend" \
+            "Simple medieval rowboat source; source page states 188 verts / 356 tris."
+
+          mkdir -p "$TMP/waterfall" "$ROOT/models/oga_toon_waterfall_2025"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/waterfall1.glb_.zip" -o "$TMP/waterfall1.glb_.zip"
+          unzip -q "$TMP/waterfall1.glb_.zip" -d "$TMP/waterfall"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/waterfall_fx.png" -o "$TMP/waterfall/waterfall_fx.png"
+          rsync -a "$TMP/waterfall/" "$ROOT/models/oga_toon_waterfall_2025/"
+          meta "oga_toon_waterfall_2025" \
+            "https://opengameart.org/content/toon-waterfall" "Toon Waterfall" \
+            "waterfall1.glb_.zip + waterfall_fx.png" \
+            "2025 toon waterfall source; source page notes UV-Y scrolling is needed for animated water effect, but no runtime shader is added by this chat."
+
+          mkdir -p "$ROOT/models/oga_lowpoly_water_tower"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B101/1.0' \
+            "https://opengameart.org/sites/default/files/Low%20Poly%20Water%20Tower.blend" -o "$ROOT/models/oga_lowpoly_water_tower/Low_Poly_Water_Tower.blend"
+          meta "oga_lowpoly_water_tower" \
+            "https://opengameart.org/content/low-poly-water-tower" "Low Poly Water Tower" \
+            "https://opengameart.org/sites/default/files/Low%20Poly%20Water%20Tower.blend" \
+            "Simple low-poly wooden water-tower source."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B101 — real CC0 water and village infrastructure
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat can use these for wells, rural industry, boatyards, fishing areas, waterfalls and utility landmarks. Water animation/shaders, buoyancy, collisions and interaction remain runtime integration tasks outside this chat.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B101 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B101 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b101
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 water village infrastructure B101"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
