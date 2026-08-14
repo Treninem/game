@@ -29,13 +29,14 @@ All entries below have real files present in the repository, not registry-only p
 - `oga_splash` — OpenGameArt, jcpmcdonald, CC0. Real `splash.png` low-cost splash animation candidate.
 - `oga_para_particlefx_2` — OpenGameArt, para, CC0. Animated air bubbles plus fire/flame and physical hit-style sheets.
 
-### Explosions / impacts / residues
+### Explosions / impacts / residues / masks
 
 - `oga_explosion_animations_1` — OpenGameArt, Sinestesia, CC0. Transparent frame-by-frame explosion atlas family.
 - `oga_explosion_animations_2` — OpenGameArt, Sinestesia, CC0. Second transparent explosion-atlas family.
 - `oga_explosion_atlas` — OpenGameArt, TheJosh + Kenney-derived source, CC0. Compact 3x3 explosion atlas.
 - `oga_para_particlefx_1` — OpenGameArt, para, CC0. 14 animated particle-effect variations in regular frame grids; candidates for smoke/fire/general effects.
 - `kenney_splat_pack` — Kenney, CC0. Splat/VFX textures suitable for mud, paint, oil, water, grime, dirt, stains and impact residue.
+- `oga_particle_masks_small` — OpenGameArt, Starry Skydancer, CC0. Real small PNG masks: `bishie_sparkle_1.png`, `bishie_sparkle_2.png`, `9_pointed_star.png`, `mudpaint.png`. Candidate uses: lightweight spark/glint masks and mud/paint/residue particles.
 - `oga_cc0_bang_sfx` — OpenGameArt, rubberduck, CC0. Explosion/firework/cannon/short bang recordings for later audio selection and normalization.
 
 ## Main integration chat checklist
