@@ -1,0 +1,79 @@
+name: Vendor source-chat B24 real CC0 PBR industrial pack
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b24.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b24
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 PBR industrial pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52"
+          TMP=".sourcechat_b24_tmp"
+          rm -rf "assets/staging/sourcechat_b24" "$TMP"
+          mkdir -p "$ROOT" "$TMP/extract"
+          URL="https://opengameart.org/sites/default/files/oga_industrial_a52_version_0.zip"
+          PAGE="https://opengameart.org/content/pbr-industrial-asset-pack"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-SourceChat-B24/1.0' "$URL" -o "$TMP/industrial.zip"
+          unzip -q "$TMP/industrial.zip" -d "$TMP/extract"
+          rsync -a "$TMP/extract/" "$ROOT/"
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/SOURCE.md" <<EOF
+          # Source
+          Pack: PBR Industrial Asset Pack
+          Author: a52, based on rubberduck's industrial asset pack
+          Source page: $PAGE
+          Download: $URL
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+
+          Source page describes tanks, pipes, staircases, control panels, containers, chimneys, vents, ladders, garages and other industrial assets with modern Blender 4 PBR materials.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page explicitly marks this pack CC0.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          cat > "assets/staging/sourcechat_b24/README.md" <<'EOF'
+          # Source chat B24 — real CC0 PBR industrial source pack
+
+          Full editable PBR industrial source archive has been downloaded and extracted. Nothing is connected to the game here.
+          Main chat should select production subsets, validate scale/materials, export optimized GLB copies when useful, and keep this directory as source provenance.
+          EOF
+          rm -rf "$TMP"
+          echo "B24 files:"; find assets/staging/sourcechat_b24 -type f | wc -l
+          du -sh assets/staging/sourcechat_b24
+
+      - name: Commit B24 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b24
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 PBR industrial pack B24"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
