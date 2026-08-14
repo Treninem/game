@@ -1,0 +1,109 @@
+name: Vendor source-chat B55 real CC0 mammoth lemur rhino snail
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b55.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b55
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 mammoth lemur rhino snail
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b55"
+          TMP=".sourcechat_b55_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/mammoth" "$ROOT/models/oga_mammoth_lowpoly"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B55/1.0' "https://opengameart.org/sites/default/files/Mammouth.7z" -o "$TMP/mammoth.7z"
+          if ! command -v 7z >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq p7zip-full
+          fi
+          7z x -y -o"$TMP/mammoth" "$TMP/mammoth.7z" >/dev/null
+          chmod -R u+rwX "$TMP/mammoth" || true
+          rsync -a "$TMP/mammoth/" "$ROOT/models/oga_mammoth_lowpoly/"
+          meta "oga_mammoth_lowpoly" "https://opengameart.org/content/mammuth-low-poly" "Mammuth (Low poly)" "https://opengameart.org/sites/default/files/Mammouth.7z" "Cartoon/textured mammoth source; source page includes license.txt and marks the asset CC0."
+
+          mkdir -p "$TMP/lemur" "$ROOT/models/oga_lemur_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B55/1.0' "https://opengameart.org/sites/default/files/Lemur_Blend_Fbx_Obj.zip" -o "$TMP/lemur.zip"
+          unzip -q "$TMP/lemur.zip" -d "$TMP/lemur"
+          chmod -R u+rwX "$TMP/lemur" || true
+          rsync -a "$TMP/lemur/" "$ROOT/models/oga_lemur_animated/"
+          meta "oga_lemur_animated" "https://opengameart.org/content/lemur" "Lemur" "https://opengameart.org/sites/default/files/Lemur_Blend_Fbx_Obj.zip" "Low-poly lemur; source tags include FBX, Blend, OBJ and animation. The author clarified the OGA release is CC0 in the source-page comments."
+
+          mkdir -p "$TMP/rhino" "$ROOT/models/oga_white_rhinoceros"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B55/1.0' "https://lpc.opengameart.org/sites/default/files/white_rhino.zip" -o "$TMP/rhino.zip"
+          unzip -q "$TMP/rhino.zip" -d "$TMP/rhino"
+          chmod -R u+rwX "$TMP/rhino" || true
+          rsync -a "$TMP/rhino/" "$ROOT/models/oga_white_rhinoceros/"
+          meta "oga_white_rhinoceros" "https://lpc.opengameart.org/content/white-rhinoceros" "White Rhinoceros" "https://lpc.opengameart.org/sites/default/files/white_rhino.zip" "Low-poly unwrapped white rhinoceros source."
+
+          mkdir -p "$TMP/snail" "$ROOT/models/oga_snail_photogrammetry"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B55/1.0' "https://opengameart.org/sites/default/files/snail_tinyworlds_0.zip" -o "$TMP/snail.zip"
+          unzip -q "$TMP/snail.zip" -d "$TMP/snail"
+          chmod -R u+rwX "$TMP/snail" || true
+          rsync -a "$TMP/snail/" "$ROOT/models/oga_snail_photogrammetry/"
+          meta "oga_snail_photogrammetry" "https://opengameart.org/content/snail-3d-model" "Snail 3D Model" "https://opengameart.org/sites/default/files/snail_tinyworlds_0.zip" "Photogrammetry snail-shell source, around 3k according to the source page."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B55 — real CC0 mammoth, lemur, rhinoceros and snail
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should inspect animation availability, skeletons, materials, scale and topology separately for each animal. The snail source is photogrammetry and should be optimized before any runtime promotion.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B55 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B55 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b55
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 mammoth lemur rhino snail B55"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
