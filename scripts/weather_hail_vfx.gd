@@ -79,8 +79,9 @@ func _sync_hail() -> void:
         return
 
     var temperature_ok := EnvironmentState.temperature_c > -2.0 and EnvironmentState.temperature_c < 12.0
-    var intensity := minf(EnvironmentState.rain_intensity, EnvironmentState.storm_intensity)
-    var active := not EnvironmentState.is_underwater and temperature_ok and EnvironmentState.storm_intensity >= 0.82 and EnvironmentState.rain_intensity >= 0.28
+    var exposure := clampf(EnvironmentState.local_exposure, 0.0, 1.0)
+    var intensity := minf(EnvironmentState.rain_intensity, EnvironmentState.storm_intensity) * exposure
+    var active := not EnvironmentState.is_underwater and exposure > 0.03 and temperature_ok and EnvironmentState.storm_intensity >= 0.82 and EnvironmentState.rain_intensity >= 0.28
 
     hail_particles.emitting = active
     hail_particles.amount_ratio = clampf(intensity, 0.0, 1.0) if active else 0.0
