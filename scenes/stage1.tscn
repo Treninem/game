@@ -1,0 +1,110 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/resource_node.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/quest_npc.gd" id="4"]
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape"]
+radius = 0.45
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="PlayerMesh"]
+radius = 0.45
+height = 1.8
+
+[node name="Bootstrap" type="Node"]
+script = ExtResource("1")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="Sun" type="DirectionalLight3D" parent="World"]
+rotation_degrees = Vector3(-55, -30, 0)
+shadow_enabled = true
+
+[node name="Ground" type="CSGBox3D" parent="World"]
+size = Vector3(80, 0.5, 80)
+position = Vector3(0, -0.25, 0)
+use_collision = true
+
+[node name="Player" type="CharacterBody3D" parent="World"]
+position = Vector3(0, 1, 8)
+script = ExtResource("2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Player"]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("PlayerShape")
+
+[node name="Body" type="MeshInstance3D" parent="World/Player"]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("PlayerMesh")
+
+[node name="CameraPivot" type="Node3D" parent="World/Player"]
+position = Vector3(0, 1.35, 0)
+
+[node name="Camera3D" type="Camera3D" parent="World/Player/CameraPivot"]
+position = Vector3(0, 0.55, 5.5)
+current = true
+
+[node name="InteractionRay" type="RayCast3D" parent="World/Player/CameraPivot/Camera3D"]
+target_position = Vector3(0, 0, -7)
+enabled = true
+
+[node name="Mira" type="CSGBox3D" parent="World"]
+position = Vector3(0, 1, -4)
+size = Vector3(1, 2, 1)
+use_collision = true
+script = ExtResource("4")
+
+[node name="Tree" type="CSGCylinder3D" parent="World"]
+position = Vector3(-4, 1.5, 0)
+radius = 0.5
+height = 3.0
+use_collision = true
+script = ExtResource("3")
+resource_id = "wood"
+display_name = "дерево"
+uses = 12
+
+[node name="Rock" type="CSGSphere3D" parent="World"]
+position = Vector3(4, 0.8, 0)
+radius = 0.9
+use_collision = true
+script = ExtResource("3")
+resource_id = "stone"
+display_name = "камень"
+uses = 8
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="PanelContainer" parent="UI"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 760.0
+offset_bottom = 150.0
+
+[node name="VBox" type="VBoxContainer" parent="UI/Panel"]
+
+[node name="Title" type="Label" parent="UI/Panel/VBox"]
+text = "ImPuls PC — Stage 1"
+theme_override_font_sizes/font_size = 22
+
+[node name="Inventory" type="Label" parent="UI/Panel/VBox"]
+text = "Инвентарь"
+
+[node name="Quest" type="Label" parent="UI/Panel/VBox"]
+text = "Задание"
+
+[node name="Vitals" type="Label" parent="UI/Panel/VBox"]
+text = "Состояние"
+
+[node name="Notice" type="Label" parent="UI"]
+anchors_preset = 12
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -80.0
+offset_right = -40.0
+offset_bottom = -30.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
