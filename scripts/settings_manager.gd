@@ -65,12 +65,19 @@ func load_settings() -> void:
         _write_defaults()
         save_settings()
     bindings = DEFAULT_BINDINGS.duplicate(true)
+    var repaired := false
     for action in DEFAULT_BINDINGS:
         var saved = config.get_value("controls", action, DEFAULT_BINDINGS[action])
-        if typeof(saved) == TYPE_DICTIONARY:
+        if typeof(saved) == TYPE_DICTIONARY and _binding_is_valid(saved as Dictionary):
             bindings[action] = saved
+        else:
+            bindings[action] = DEFAULT_BINDINGS[action].duplicate(true)
+            config.set_value("controls", action, bindings[action])
+            repaired = true
     _remove_obsolete_actions()
     _apply_bindings()
+    if repaired:
+        save_settings()
 
 func save_settings() -> void:
     for action in bindings:
@@ -105,11 +112,20 @@ func rebind_action(action: String, event: InputEvent) -> bool:
     if event is InputEventKey:
         if not event.pressed:
             return false
-        encoded = {"type": "key", "code": event.physical_keycode}
+        var key_event := event as InputEventKey
+        var code := int(key_event.physical_keycode)
+        if code <= 0:
+            code = int(key_event.keycode)
+        if code <= 0:
+            return false
+        encoded = {"type": "key", "code": code}
     elif event is InputEventMouseButton:
         if not event.pressed:
             return false
-        encoded = {"type": "mouse", "code": event.button_index}
+        var mouse_event := event as InputEventMouseButton
+        if int(mouse_event.button_index) <= 0:
+            return false
+        encoded = {"type": "mouse", "code": mouse_event.button_index}
     else:
         return false
     bindings[action] = encoded
@@ -152,11 +168,18 @@ func _write_defaults() -> void:
         config.set_value("controls", action, DEFAULT_BINDINGS[action])
 
 func _remove_obsolete_actions() -> void:
-    # Stage 10 is world-first. Old prototype shortcuts C/B must not invoke
-    # temporary shelter/crafting logic while locations are being authored.
     for action in ["craft", "build"]:
         if InputMap.has_action(action):
             InputMap.erase_action(action)
+
+func _binding_is_valid(binding: Dictionary) -> bool:
+    var kind := String(binding.get("type", ""))
+    var code := int(binding.get("code", 0))
+    if kind == "key":
+        return code > 0
+    if kind == "mouse":
+        return code > 0
+    return false
 
 func _apply_bindings() -> void:
     for action in bindings:
@@ -166,16 +189,34 @@ func _apply_binding(action: String, binding: Dictionary) -> void:
     if not InputMap.has_action(action):
         InputMap.add_action(action)
     InputMap.action_erase_events(action)
-    var event: InputEvent
-    if binding.get("type", "key") == "mouse":
+
+    var effective := binding
+    if not _binding_is_valid(effective):
+        effective = DEFAULT_BINDINGS.get(action, {"type": "key", "code": KEY_UNKNOWN})
+
+    if effective.get("type", "key") == "mouse":
         var mouse := InputEventMouseButton.new()
-        mouse.button_index = int(binding.get("code", MOUSE_BUTTON_LEFT))
-        event = mouse
-    else:
-        var key := InputEventKey.new()
-        key.physical_keycode = int(binding.get("code", 0))
-        event = key
-    InputMap.action_add_event(action, event)
+        mouse.button_index = int(effective.get("code", MOUSE_BUTTON_LEFT))
+        InputMap.action_add_event(action, mouse)
+        return
+
+    var code := int(effective.get("code", 0))
+    if code <= 0:
+        code = int(DEFAULT_BINDINGS.get(action, {}).get("code", KEY_UNKNOWN))
+    if code <= 0:
+        return
+
+    # Register both the physical scan-position and the logical keycode. Real
+    # Windows key events contain both, but either field may be absent in remote,
+    # accessibility or synthetic input paths. Keeping both prevents a valid key
+    # from becoming inert after an upgrade or keyboard-layout change.
+    var physical := InputEventKey.new()
+    physical.physical_keycode = code
+    InputMap.action_add_event(action, physical)
+
+    var logical := InputEventKey.new()
+    logical.keycode = code
+    InputMap.action_add_event(action, logical)
 
 func _ensure_audio_buses() -> void:
     for bus_name in ["Music", "SFX"]:
