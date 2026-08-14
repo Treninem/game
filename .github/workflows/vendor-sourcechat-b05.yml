@@ -1,0 +1,160 @@
+name: Vendor source-chat B05 real CC0 visuals
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b05.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b05
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 damage decal and particle sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b05"
+          TMP=".sourcechat_b05_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$ROOT/vfx" "$ROOT/decals" "$ROOT/materials" "$TMP"
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          Source page marks this staged asset as CC0 / public domain.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside files.
+          EOF
+          }
+
+          zip_images() {
+            local section="$1" key="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$section/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 360 \
+              -A 'ImPuls-CC0-SourceChat-B05/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' \
+              --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+              --include='*.gif' --include='*.GIF' --include='*.svg' --include='*.SVG' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one_image() {
+            local section="$1" key="$2" filename="$3" url="$4" source="$5" author="$6" notes="$7"
+            local target="$ROOT/$section/$key"
+            mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 \
+              -A 'ImPuls-CC0-SourceChat-B05/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_images "decals" "oga_100_grunge_splatter_masks" \
+            "https://opengameart.org/sites/default/files/grunge_brushes.zip" \
+            "https://opengameart.org/content/100-grunge-brushstrokes-and-splatters-set" \
+            "Dino0040 / OpenGameArt" \
+            "About 100 scanned CC0 brushstroke/splatter masks plus increased-opacity variants; candidates for mud, soot, grime, leaks, scorch breakup, weathering and damage decals."
+
+          zip_images "materials" "oga_64x_texture_overlays" \
+            "https://opengameart.org/sites/default/files/64x.zip" \
+            "https://opengameart.org/content/64x-textures-an-overlays" \
+            "FacadeGaikan / OpenGameArt" \
+            "Over 40 CC0 64x64 textures/overlays including crack, glass, ice, gravel, mud, water, lava, snow, stone and dirt; intended as cheap LOD/mask source, not final close-up art."
+
+          one_image "vfx" "oga_smoke_spritesheet_2024" "smoke_sheet.png" \
+            "https://opengameart.org/sites/default/files/smoke_sheet.png" \
+            "https://opengameart.org/content/smoke-sprite-sheet" \
+            "ohyhei / OpenGameArt" \
+            "CC0 smoke/trail spritesheet; alternate smoke source for fires, impacts, dust and distant columns."
+
+          one_image "decals" "oga_cracking_overlay" "Sheet.png" \
+            "https://opengameart.org/sites/default/files/Sheet.png" \
+            "https://opengameart.org/content/craking-block" \
+            "Xavier4321 / OpenGameArt" \
+            "CC0 animated/progressive crack overlay sheet; candidate for staged damage feedback on breakable props/materials."
+
+          one_image "decals" "oga_liquid_splatter" "blood_splatter.png" \
+            "https://opengameart.org/sites/default/files/blood_splatter.png" \
+            "https://opengameart.org/content/liquid-splatter-pixel-texture" \
+            "AlejandroHaibi / OpenGameArt" \
+            "512x512 CC0 liquid splatter mask; can be recolored for oil, muddy water, paint or generic fluid residues."
+
+          one_image "materials" "oga_y2k_ice_texture" "y2k_ice_texture.png" \
+            "https://opengameart.org/sites/default/files/y2k_ice_texture.png" \
+            "https://opengameart.org/content/y2k-ice-texture" \
+            "GGBotNet / OpenGameArt" \
+            "1024x1024 seamless CC0 ice texture candidate; main chat decides whether stylization matches art direction."
+
+          one_image "materials" "oga_cc0_glass_alpha" "Transparent.png" \
+            "https://opengameart.org/sites/default/files/Transparent.png" \
+            "https://opengameart.org/content/glass" \
+            "STKRudy85 / OpenGameArt" \
+            "Simple CC0 alpha glass texture candidate for cheap/far glass materials."
+
+          one_image "materials" "oga_window_texture" "window1.png" \
+            "https://opengameart.org/sites/default/files/window1.png" \
+            "https://opengameart.org/content/window-texture" \
+            "RooMan93 / OpenGameArt" \
+            "CC0 transparent window texture from author's own photograph; useful as a source/far-LOD window candidate."
+
+          one_image "vfx" "oga_bubble_glass_burst" "bubble.png" \
+            "https://opengameart.org/sites/default/files/bubble.png" \
+            "https://opengameart.org/content/bubble-explosion-0" \
+            "bongbonggun / OpenGameArt" \
+            "CC0 bubble burst that visually resembles glass-bubble shattering; candidate for very cheap glass/bubble burst LOD."
+
+          rm -rf "$TMP"
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B05 — real CC0 decal/material/VFX sources
+
+          Real downloaded files only. No runtime integration is performed here.
+
+          Coverage: grunge/splatter decal masks, progressive cracking overlay, liquid residue mask, smoke sheet, cheap 64x material overlays, ice, glass/window candidates and a tiny bubble/glass-burst effect.
+
+          Main integration chat should select and optimize only assets matching final visual direction. B05 intentionally provides masks/source material, not a mandate to use every file.
+          EOF
+
+          echo "B05 staged files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit only B05 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b05
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 damage decal particle sources B05"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
