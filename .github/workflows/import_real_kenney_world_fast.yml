@@ -38,7 +38,7 @@ jobs:
             local url="$1" out="$2"
             if [ -s "$out" ]; then echo "Already present: $out"; return 0; fi
             curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1200 \
-              -A 'ImPuls-CC0-AssetImporter/2.1' "$url" -o "$out"
+              -A 'ImPuls-CC0-AssetImporter/2.2' "$url" -o "$out"
             test -s "$out"
           }
 
@@ -89,19 +89,59 @@ jobs:
           Status: source-only; not gameplay-integrated by this chat.
           EOF
 
-      - name: Commit and push source packs
+      - name: Preserve downloaded batch outside worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          CACHE="/tmp/impuls_kenney_world_batch"
+          rm -rf "$CACHE"
+          mkdir -p "$CACHE"
+          cp -a assets/source_packs/opengameart/kenney/nature_kit "$CACHE/"
+          cp -a assets/source_packs/opengameart/kenney/survival_kit "$CACHE/"
+          cp -a assets/source_packs/opengameart/kenney/prototype_kit "$CACHE/"
+          cp -a assets/source_packs/opengameart/kenney/nature_landscape_blocks "$CACHE/"
+          cp assets/source_packs/opengameart/kenney/WORLD_BATCH_SHA256SUMS.txt "$CACHE/"
+
+      - name: Commit and push source packs safely over moving main
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/source_packs/opengameart/kenney
-          git diff --cached --quiet && exit 0
-          git commit -m "assets: vendor real CC0 Kenney world packs"
-          for attempt in 1 2 3 4 5 6; do
+          CACHE="/tmp/impuls_kenney_world_batch"
+          ROOT="assets/source_packs/opengameart/kenney"
+
+          for attempt in 1 2 3 4 5 6 7 8; do
+            echo "Race-safe push attempt ${attempt}/8"
             git fetch --depth=1 origin main
-            git rebase origin/main
-            if git push origin HEAD:main; then exit 0; fi
-            sleep $((attempt * 4))
+            git reset --hard FETCH_HEAD
+
+            rm -rf "$ROOT/nature_kit" "$ROOT/survival_kit" "$ROOT/prototype_kit" "$ROOT/nature_landscape_blocks"
+            mkdir -p "$ROOT"
+            cp -a "$CACHE/nature_kit" "$ROOT/"
+            cp -a "$CACHE/survival_kit" "$ROOT/"
+            cp -a "$CACHE/prototype_kit" "$ROOT/"
+            cp -a "$CACHE/nature_landscape_blocks" "$ROOT/"
+            cp "$CACHE/WORLD_BATCH_SHA256SUMS.txt" "$ROOT/"
+
+            git add \
+              "$ROOT/nature_kit" \
+              "$ROOT/survival_kit" \
+              "$ROOT/prototype_kit" \
+              "$ROOT/nature_landscape_blocks" \
+              "$ROOT/WORLD_BATCH_SHA256SUMS.txt"
+
+            if git diff --cached --quiet; then
+              echo "World packs already present on current main."
+              exit 0
+            fi
+
+            git commit -m "assets: vendor real CC0 Kenney world packs"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
           done
+
+          echo "ERROR: could not push Kenney world source packs after retries"
           exit 1
