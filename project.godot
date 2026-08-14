@@ -4,7 +4,7 @@ config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.4.0-stage4"
+config/version="0.4.1-stage4"
 config/icon="res://assets/branding/impuls_icon.svg"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
