@@ -1,7 +1,7 @@
 extends Node
 
 const SLOT_COUNT := 10
-const SAVE_VERSION := 4
+const SAVE_VERSION := 5
 const LEGACY_SAVE_PATH := "user://savegame.json"
 
 var current_slot: int = 1
@@ -81,15 +81,15 @@ func slot_info(slot: int) -> Dictionary:
     if data.is_empty():
         return {"slot": slot, "exists": false}
     var state = data.get("game_state", {})
-    var quest_stage := int(state.get("quest_stage", 0)) if typeof(state) == TYPE_DICTIONARY else 0
     var world_minutes := float(state.get("world_minutes", 0.0)) if typeof(state) == TYPE_DICTIONARY else 0.0
     var hour := int(world_minutes / 60.0) % 24
     var minute := int(world_minutes) % 60
+    var location := String(state.get("current_location", "неизвестная локация")) if typeof(state) == TYPE_DICTIONARY else "неизвестная локация"
     return {
         "slot": slot,
         "exists": true,
         "saved_at": String(data.get("saved_at", "неизвестно")),
-        "quest_stage": quest_stage,
+        "location": location,
         "world_time": "%02d:%02d" % [hour, minute]
     }
 
