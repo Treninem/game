@@ -1,0 +1,84 @@
+name: Update source-chat staging index through B64
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b63-b64.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify B63-B64 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b63/models/oga_forest_monster_gibs
+            assets/staging/sourcechat_b63/models/oga_forest_monster_rigged_animated
+            assets/staging/sourcechat_b63/models/oga_skeleton_with_rig
+            assets/staging/sourcechat_b64/models/oga_daemon_statue_rigged_animated
+            assets/staging/sourcechat_b64/models/oga_mudeater_rigged_animated
+            assets/staging/sourcechat_b64/models/oga_undead_squirrel_animated
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B63 —' "$INDEX"; then
+            echo "B63 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B63 — rigged skeleton / Forest Monster / gibs
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b63/models/`
+
+          - `oga_skeleton_with_rig/` — simple rigged skeleton source.
+          - `oga_forest_monster_rigged_animated/` — rigged/animated creature with diffuse, normal and AO maps.
+          - `oga_forest_monster_gibs/` — matching separated body/gib source pieces.
+
+          Recommended use: authored enemy candidates after Godot skeleton/animation/material checks. Use gibs only if the final corpse/destruction direction needs them.
+
+          ## B64 — Mudeater / Undead Squirrel / Daemon Statue
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b64/models/`
+
+          - `oga_mudeater_rigged_animated/` — rigged/animated humanoid creature with packed texture maps.
+          - `oga_undead_squirrel_animated/` — rigged/animated undead wildlife source.
+          - `oga_daemon_statue_rigged_animated/` — rigged statue/daemon with attack, die, spell and idle source animations.
+
+          Recommended use: distinct authored enemy archetypes only where they match final art direction; validate import, scale, materials and collisions before production promotion.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B63-B64"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
