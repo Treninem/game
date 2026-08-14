@@ -1,0 +1,111 @@
+name: Vendor source-chat B94 real CC0 wood furniture
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b94.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b94
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 wooden furniture sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b94"
+          TMP=".sourcechat_b94_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/woodstuff" "$ROOT/models/oga_wood_stuff_84"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B94/1.0' \
+            "https://opengameart.org/sites/default/files/woodstuff.zip" -o "$TMP/woodstuff.zip"
+          unzip -q "$TMP/woodstuff.zip" -d "$TMP/woodstuff"
+          rsync -a "$TMP/woodstuff/" "$ROOT/models/oga_wood_stuff_84/"
+          meta "oga_wood_stuff_84" \
+            "https://opengameart.org/content/wood-stuff" \
+            "Wood Stuff" \
+            "https://opengameart.org/sites/default/files/woodstuff.zip" \
+            "84 wooden background props: tables, chairs, baskets, shelves, boxes, barrels and tools; one shared material with multiple color textures."
+
+          mkdir -p "$TMP/woodf1" "$ROOT/models/oga_wooden_furnitures_53"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B94/1.0' \
+            "https://opengameart.org/sites/default/files/woodenfurnitures_fbx_blend.zip" -o "$TMP/woodenfurnitures_fbx_blend.zip"
+          unzip -q "$TMP/woodenfurnitures_fbx_blend.zip" -d "$TMP/woodf1"
+          rsync -a "$TMP/woodf1/" "$ROOT/models/oga_wooden_furnitures_53/"
+          meta "oga_wooden_furnitures_53" \
+            "https://opengameart.org/content/wooden-furnitures" \
+            "Wooden Furnitures" \
+            "https://opengameart.org/sites/default/files/woodenfurnitures_fbx_blend.zip" \
+            "53 furniture models including tables, chairs, beds, benches, cabinets and shelves; FBX and Blend source retained."
+
+          mkdir -p "$TMP/woodf2" "$ROOT/models/oga_wood_furnitures_2_54"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B94/1.0' \
+            "https://opengameart.org/sites/default/files/woodfurnitures2_blend_gltf_textures.zip" -o "$TMP/woodfurnitures2_blend_gltf_textures.zip"
+          unzip -q "$TMP/woodfurnitures2_blend_gltf_textures.zip" -d "$TMP/woodf2"
+          rsync -a "$TMP/woodf2/" "$ROOT/models/oga_wood_furnitures_2_54/"
+          meta "oga_wood_furnitures_2_54" \
+            "https://opengameart.org/content/wood-furnitures-2" \
+            "Wood Furnitures 2" \
+            "https://opengameart.org/sites/default/files/woodfurnitures2_blend_gltf_textures.zip" \
+            "54 tables, chairs, cabinets, shelves, beds and decorative pillars; Blend, GLTF and texture sources retained."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B94 — real CC0 wooden furniture and settlement props
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should choose one coherent furniture family per location, normalize scale/materials, and avoid promoting all near-duplicate chairs/tables at once. These packs are useful for homes, taverns, inns, workshops, farms, markets and storage areas.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B94 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B94 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b94
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 wood furniture B94"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
