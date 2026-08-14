@@ -1,0 +1,117 @@
+name: Vendor source-chat B82 real CC0 transport prototype survival
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b82.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b82
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 transport prototype survival sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b82"
+          TMP=".sourcechat_b82_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" tmpname="$3"
+            mkdir -p "$TMP/$tmpname" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B82/1.0' "$url" -o "$TMP/$tmpname.zip"
+            unzip -q "$TMP/$tmpname.zip" -d "$TMP/$tmpname"
+            chmod -R u+rwX "$TMP/$tmpname" || true
+            find "$TMP/$tmpname" -type f -iname '*.unitypackage' -delete
+            rsync -a "$TMP/$tmpname/" "$ROOT/models/$name/"
+          }
+
+          stage_zip "kenney_car_kit_3_1" "https://opengameart.org/sites/default/files/kenney_car-kit_3.1.zip" "car"
+          meta "kenney_car_kit_3_1" \
+            "https://opengameart.org/content/car-kit" \
+            "Car Kit 3.1" \
+            "https://opengameart.org/sites/default/files/kenney_car-kit_3.1.zip" \
+            "Kenney CC0 transport kit with 45+ optimized vehicles including sedan, van, ambulance, firetruck/police variants, separate wheels and explosion debris."
+
+          stage_zip "kenney_train_kit" "https://opengameart.org/sites/default/files/kenney_train-kit.zip" "train"
+          meta "kenney_train_kit" \
+            "https://opengameart.org/content/train-kit" \
+            "Train Kit" \
+            "https://opengameart.org/sites/default/files/kenney_train-kit.zip" \
+            "Kenney CC0 train/rail/tram kit with almost 50 models plus spline-friendly track; source page explicitly lists Godot compatibility."
+
+          stage_zip "kenney_prototype_kit" "https://opengameart.org/sites/default/files/kenney_prototype-kit.zip" "prototype"
+          meta "kenney_prototype_kit" \
+            "https://opengameart.org/content/prototype-kit" \
+            "Prototype Kit" \
+            "https://opengameart.org/sites/default/files/kenney_prototype-kit.zip" \
+            "Kenney CC0 prototype library with 145 models, characters with 27 animations, animals with 4 animations, wheelchair, vehicles, walls, animated buttons/levers and more; Godot compatibility listed."
+
+          stage_zip "kenney_survival_kit" "https://opengameart.org/sites/default/files/kenney_survival-kit.zip" "survival"
+          meta "kenney_survival_kit" \
+            "https://opengameart.org/content/survival-kit" \
+            "Survival Kit" \
+            "https://opengameart.org/sites/default/files/kenney_survival-kit.zip" \
+            "Kenney CC0 survival/open-world library with 80 optimized structures, items, tools, craft objects and resources."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B82 — real CC0 transport, prototype and survival kits
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use Car/Train kits only if modern transport enters the world, use Prototype Kit for temporary development/retargeting references, and selectively promote Survival Kit objects that match the final art direction.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B82 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B82 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b82
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 transport prototype survival B82"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
