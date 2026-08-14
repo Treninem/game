@@ -7,6 +7,7 @@ extends Node
 const WATCH_GROUPS := ["game_menu", "gameplay_panels"]
 const MIN_SAFE_MARGIN := 8.0
 const MAX_SAFE_MARGIN := 24.0
+const GEOMETRY_EPSILON := 0.5
 
 var watched: Dictionary = {}
 var _reflow_queued := false
@@ -30,6 +31,22 @@ func _process(_delta: float) -> void:
     var ui_scale := _ui_scale()
     if viewport_size != _last_viewport_size or not is_equal_approx(ui_scale, _last_ui_scale):
         _queue_reflow()
+
+    # Menu scripts are allowed to rebuild their content, but they are not
+    # allowed to move the outer frame. Enforce geometry every frame only when
+    # a visible menu drifted, which permanently prevents the old negative
+    # offset bug from reappearing after open/resize/scale changes.
+    var stale: Array[int] = []
+    for instance_id in watched:
+        var ref: WeakRef = watched[instance_id]
+        var control := ref.get_ref() as Control
+        if control == null or not is_instance_valid(control):
+            stale.append(int(instance_id))
+            continue
+        if control.visible:
+            _enforce_frame_geometry(control)
+    for instance_id in stale:
+        watched.erase(instance_id)
 
 func _on_node_added(_node: Node) -> void:
     call_deferred("_discover")
@@ -84,9 +101,7 @@ func _fit_control(control: Control) -> void:
         return
 
     control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    var available := control.size
-    if available.x <= 1.0 or available.y <= 1.0:
-        available = get_viewport().get_visible_rect().size
+    var available := _available_size(control)
     if available.x <= 1.0 or available.y <= 1.0:
         return
 
@@ -100,13 +115,55 @@ func _fit_control(control: Control) -> void:
     if control.has_method("_apply_responsive_layout"):
         control.call("_apply_responsive_layout")
 
+    # Always finish with the same absolute geometry used by the per-frame
+    # guard. This makes layout deterministic even when the menu script still
+    # uses center anchors internally while rebuilding content.
+    _enforce_frame_geometry(control, true)
+
+func _available_size(control: Control) -> Vector2:
+    var available := control.size
+    if available.x <= 1.0 or available.y <= 1.0:
+        var viewport := get_viewport()
+        if viewport != null:
+            available = viewport.get_visible_rect().size
+    return available
+
+func _desired_frame_geometry(control: Control, available: Vector2) -> Dictionary:
+    var is_game_menu := control.is_in_group("game_menu")
     var preferred := Vector2(1120.0, 760.0) if is_game_menu else Vector2(1220.0, 820.0)
     var margin := clampf(minf(available.x, available.y) * 0.025, MIN_SAFE_MARGIN, MAX_SAFE_MARGIN)
     var usable := Vector2(maxf(1.0, available.x - margin * 2.0), maxf(1.0, available.y - margin * 2.0))
     var target := Vector2(minf(preferred.x, usable.x), minf(preferred.y, usable.y)).floor()
+    var position := ((available - target) * 0.5).floor()
+    return {"size": target, "position": position}
 
-    # Top-left anchors + explicit centered position avoid the negative-anchor
-    # drift that used to reappear after changing resolution or interface scale.
+func _enforce_frame_geometry(control: Control, force: bool = false) -> void:
+    if control == null or not is_instance_valid(control):
+        return
+    var frame_variant = control.get("frame")
+    if not (frame_variant is Control):
+        return
+    var frame := frame_variant as Control
+    if not is_instance_valid(frame):
+        return
+
+    var available := _available_size(control)
+    if available.x <= 1.0 or available.y <= 1.0:
+        return
+    var desired := _desired_frame_geometry(control, available)
+    var target: Vector2 = desired["size"]
+    var target_position: Vector2 = desired["position"]
+    var anchors_wrong := (
+        not is_zero_approx(frame.anchor_left)
+        or not is_zero_approx(frame.anchor_top)
+        or not is_zero_approx(frame.anchor_right)
+        or not is_zero_approx(frame.anchor_bottom)
+    )
+    var size_wrong := frame.size.distance_to(target) > GEOMETRY_EPSILON
+    var position_wrong := frame.position.distance_to(target_position) > GEOMETRY_EPSILON
+    if not force and not anchors_wrong and not size_wrong and not position_wrong:
+        return
+
     frame.custom_minimum_size = Vector2.ZERO
     frame.clip_contents = true
     frame.anchor_left = 0.0
@@ -114,7 +171,7 @@ func _fit_control(control: Control) -> void:
     frame.anchor_right = 0.0
     frame.anchor_bottom = 0.0
     frame.size = target
-    frame.position = ((available - target) * 0.5).floor()
+    frame.position = target_position
 
 func _fit_game_menu(control: Control, available: Vector2) -> void:
     var scale := _ui_scale()
