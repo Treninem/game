@@ -1,0 +1,105 @@
+name: Vendor source-chat B57 real CC0 gorilla cobra shark camel
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b57.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b57
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 gorilla cobra shark camel
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b57"
+          TMP=".sourcechat_b57_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4" notes="$5"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B57/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            chmod -R u+rwX "$TMP/$name" || true
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            meta "$name" "$page" "$title" "$url" "$notes"
+          }
+
+          stage_zip "oga_gorilla_male" "https://opengameart.org/sites/default/files/gorilla_male.zip" "https://opengameart.org/content/gorilla-male" "Gorilla (male)" "Low-poly unwrapped gorilla source; source page notes texture is not included."
+          stage_zip "oga_cobra_rigged" "https://opengameart.org/sites/default/files/cobra.zip" "https://opengameart.org/content/cobra-0" "Cobra" "330-triangle cobra; unwrapped and rigged/posed but source page states no animations and no final texture."
+
+          mkdir -p "$TMP/shark" "$ROOT/models/oga_shark_rigged_textured"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B57/1.0' "https://opengameart.org/sites/default/files/Shark.7z" -o "$TMP/shark.7z"
+          if ! command -v 7z >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq p7zip-full
+          fi
+          7z x -y -o"$TMP/shark" "$TMP/shark.7z" >/dev/null
+          chmod -R u+rwX "$TMP/shark" || true
+          rsync -a "$TMP/shark/" "$ROOT/models/oga_shark_rigged_textured/"
+          meta "oga_shark_rigged_textured" "https://opengameart.org/content/shark-low-poly" "Shark (low poly)" "https://opengameart.org/sites/default/files/Shark.7z" "Source page states textured and rigged; included license.txt."
+
+          mkdir -p "$ROOT/models/oga_camel_basemesh"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B57/1.0' "https://opengameart.org/sites/default/files/camel.blend" -o "$ROOT/models/oga_camel_basemesh/camel.blend"
+          meta "oga_camel_basemesh" "https://opengameart.org/content/camel-basemesh" "Camel basemesh" "https://opengameart.org/sites/default/files/camel.blend" "Generic camel basemesh around 800 tris; source page explicitly says not game-ready and intended as a starting point."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B57 — real CC0 gorilla, cobra, shark and camel
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should treat these as mixed-readiness animal sources: shark is rigged/textured, cobra is rigged but lacks finished texture/animations, gorilla lacks final texture, and camel is explicitly a basemesh requiring production work.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B57 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B57 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b57
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 gorilla cobra shark camel B57"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
