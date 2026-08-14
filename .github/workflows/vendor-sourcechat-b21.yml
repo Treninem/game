@@ -1,0 +1,88 @@
+name: Vendor source-chat B21 real CC0 mine object Godot sources
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b21.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b21
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 mine object sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b21/models/oga_mine_object_collection"
+          TMP=".sourcechat_b21_tmp"
+          rm -rf "$TMP" "$ROOT"
+          mkdir -p "$ROOT/godot_ready" "$ROOT/source" "$TMP/godot" "$TMP/source"
+          GODOT_URL="https://opengameart.org/sites/default/files/mineasset_godot.zip"
+          SOURCE_URL="https://opengameart.org/sites/default/files/mines_asset_fbx_gltf_blend.zip"
+          PAGE="https://opengameart.org/content/mine-object-collection"
+
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 540 -A 'ImPuls-CC0-SourceChat-B21/1.0' "$GODOT_URL" -o "$TMP/godot.zip"
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 540 -A 'ImPuls-CC0-SourceChat-B21/1.0' "$SOURCE_URL" -o "$TMP/source.zip"
+          unzip -q "$TMP/godot.zip" -d "$TMP/godot"
+          unzip -q "$TMP/source.zip" -d "$TMP/source"
+
+          rsync -a --prune-empty-dirs --include='*/' --include='*.tscn' --include='*.tres' --include='*.res' --include='*.material' --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' --include='*.blend' --include='*.BLEND' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*.gd' --exclude='*.cs' --exclude='*.dll' --exclude='*.exe' --exclude='*' "$TMP/godot/" "$ROOT/godot_ready/"
+          rsync -a --prune-empty-dirs --include='*/' --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' --include='*.blend' --include='*.BLEND' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$TMP/source/" "$ROOT/source/"
+
+          cat > "$ROOT/SOURCE.md" <<EOF
+          # Source
+
+          Pack: Mine Object collection
+          Author: loafbrr_1 / OpenGameArt
+          Source page: $PAGE
+          Godot-ready archive: $GODOT_URL
+          Source archive: $SOURCE_URL
+          License: CC0 / Creative Commons Zero as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+
+          Source page includes mine tracks, mine carts, pickaxes, jars, pipes, posts and mine contraptions; materials set up in Godot/Blend; 1K textures; FBX and GLTF formats; total tris about 12757.
+          Third-party executable scripts excluded.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks Mine Object collection as Creative Commons Zero / CC0.
+          https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          cat > "assets/staging/sourcechat_b21/README.md" <<'EOF'
+          # Source chat B21 — real CC0 Mine Object collection
+
+          Real Godot-ready and FBX/GLTF/Blend/texture source files are staged here. No runtime integration is performed.
+          Main chat should use this for authored mines, caves, minecart lines, tools, pipes and industrial underground props after checking pivots/collisions/scale.
+          EOF
+          rm -rf "$TMP"
+          find assets/staging/sourcechat_b21 -type f | wc -l
+          du -sh assets/staging/sourcechat_b21
+
+      - name: Commit B21 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b21
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 mine object Godot sources B21"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 2))
+          done
+          exit 1
