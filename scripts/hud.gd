@@ -18,6 +18,8 @@ var quest_text: Label
 var resources_text: Label
 var combat_text: Label
 var clock_text: Label
+var location_text: Label
+var economy_text: Label
 var notice: Label
 var notice_timer := 0.0
 
@@ -28,6 +30,7 @@ func _ready() -> void:
     GameState.inventory_changed.connect(_refresh)
     GameState.quest_changed.connect(_refresh)
     GameState.survival_changed.connect(_refresh)
+    GameState.location_changed.connect(_on_location_changed)
     GameState.notification_requested.connect(_show_notice)
     _refresh()
 
@@ -104,9 +107,9 @@ func _build_hud() -> void:
 
     var info_card := PanelContainer.new()
     info_card.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-    info_card.position = Vector2(-334, 24)
-    info_card.custom_minimum_size = Vector2(310, 94)
-    info_card.add_theme_stylebox_override("panel", _card_style(0.72))
+    info_card.position = Vector2(-354, 24)
+    info_card.custom_minimum_size = Vector2(330, 132)
+    info_card.add_theme_stylebox_override("panel", _card_style(0.76))
     add_child(info_card)
     var info_margin := MarginContainer.new()
     info_margin.add_theme_constant_override("margin_left", 14)
@@ -115,21 +118,31 @@ func _build_hud() -> void:
     info_margin.add_theme_constant_override("margin_bottom", 10)
     info_card.add_child(info_margin)
     var info_box := VBoxContainer.new()
-    info_box.add_theme_constant_override("separation", 4)
+    info_box.add_theme_constant_override("separation", 3)
     info_margin.add_child(info_box)
+    location_text = Label.new()
+    location_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+    location_text.modulate = Color(0.52, 0.78, 0.96)
+    location_text.add_theme_font_size_override("font_size", 13)
+    info_box.add_child(location_text)
     clock_text = Label.new()
     clock_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
     clock_text.add_theme_font_size_override("font_size", 18)
     info_box.add_child(clock_text)
+    economy_text = Label.new()
+    economy_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+    economy_text.modulate = Color(0.90, 0.76, 0.40)
+    economy_text.add_theme_font_size_override("font_size", 12)
+    info_box.add_child(economy_text)
     resources_text = Label.new()
     resources_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
     resources_text.modulate = Color(0.83, 0.87, 0.92)
-    resources_text.add_theme_font_size_override("font_size", 13)
+    resources_text.add_theme_font_size_override("font_size", 12)
     info_box.add_child(resources_text)
     combat_text = Label.new()
     combat_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
     combat_text.modulate = Color(0.66, 0.72, 0.80)
-    combat_text.add_theme_font_size_override("font_size", 12)
+    combat_text.add_theme_font_size_override("font_size", 11)
     info_box.add_child(combat_text)
 
     var quick := HBoxContainer.new()
@@ -165,6 +178,8 @@ func _refresh() -> void:
     thirst_bar.value = GameState.thirst
     thirst_value.text = "%d" % roundi(GameState.thirst)
     quest_text.text = GameState.quest_text()
+    location_text.text = GameState.current_location
+    economy_text.text = "Монеты %d   •   Репутация города %d" % [GameState.coins, GameState.city_reputation]
     resources_text.text = "Дерево %d   Камень %d   Ягоды %d   Вода %d" % [
         int(GameState.inventory.get("wood", 0)),
         int(GameState.inventory.get("stone", 0)),
@@ -175,6 +190,9 @@ func _refresh() -> void:
     var hour := int(GameState.world_minutes / 60.0) % 24
     var minute := int(GameState.world_minutes) % 60
     clock_text.text = "%02d:%02d" % [hour, minute]
+
+func _on_location_changed(_location: String) -> void:
+    _refresh()
 
 func _show_notice(message: String) -> void:
     if not is_instance_valid(notice):
