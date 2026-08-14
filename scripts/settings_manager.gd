@@ -37,6 +37,8 @@ const DEFAULT_BINDINGS := {
     "jump": {"type": "key", "code": KEY_SPACE},
     "interact": {"type": "key", "code": KEY_E},
     "attack": {"type": "mouse", "code": MOUSE_BUTTON_LEFT},
+    "cast_magic": {"type": "mouse", "code": MOUSE_BUTTON_RIGHT},
+    "next_spell": {"type": "key", "code": KEY_Q},
     "use_food": {"type": "key", "code": KEY_1},
     "use_water": {"type": "key", "code": KEY_2},
     "open_inventory": {"type": "key", "code": KEY_I},
