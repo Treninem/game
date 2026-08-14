@@ -1,0 +1,112 @@
+name: Vendor source-chat B85 real CC0 food kitchen
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b85.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b85
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 food and kitchen sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b85"
+          TMP=".sourcechat_b85_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/kenney" "$ROOT/models/kenney_food_kit_200"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B85/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_food-kit.zip" -o "$TMP/kenney.zip"
+          unzip -q "$TMP/kenney.zip" -d "$TMP/kenney"
+          chmod -R u+rwX "$TMP/kenney" || true
+          rsync -a "$TMP/kenney/" "$ROOT/models/kenney_food_kit_200/"
+          meta "kenney_food_kit_200" \
+            "https://opengameart.org/content/food-kit" \
+            "Food Kit" \
+            "https://opengameart.org/sites/default/files/kenney_food-kit.zip" \
+            "Kenney CC0 food/kitchen library with 200 optimized objects covering dishes and kitchen supplies from multiple cuisines."
+
+          mkdir -p "$TMP/quaternius" "$ROOT/models/quaternius_low_poly_food_100plus"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B85/1.0' \
+            "https://opengameart.org/sites/default/files/ultimate_food_pack_by_quaternius.zip" -o "$TMP/quaternius.zip"
+          unzip -q "$TMP/quaternius.zip" -d "$TMP/quaternius"
+          chmod -R u+rwX "$TMP/quaternius" || true
+          rsync -a "$TMP/quaternius/" "$ROOT/models/quaternius_low_poly_food_100plus/"
+          meta "quaternius_low_poly_food_100plus" \
+            "https://opengameart.org/content/low-poly-food-pack" \
+            "Low Poly Food Pack" \
+            "https://opengameart.org/sites/default/files/ultimate_food_pack_by_quaternius.zip" \
+            "Quaternius CC0 library with 100+ food and consumable models in FBX, OBJ and Blend formats."
+
+          mkdir -p "$ROOT/models/oga_detailed_food_bread_cheese_sausage"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B85/1.0' \
+            "https://opengameart.org/sites/default/files/foodPackOGACC0.blend" -o "$ROOT/models/oga_detailed_food_bread_cheese_sausage/foodPackOGACC0.blend"
+          meta "oga_detailed_food_bread_cheese_sausage" \
+            "https://opengameart.org/content/food-pack-0" \
+            "Food Pack" \
+            "https://opengameart.org/sites/default/files/foodPackOGACC0.blend" \
+            "CC0 relatively low-poly sausage, bread and cheese with diffuse, normal and specular textures."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B85 — real CC0 food and kitchen libraries
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should select a consistent subset for taverns, homes, markets and crafting. Avoid loading hundreds of food meshes into runtime just because they are staged.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B85 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B85 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b85
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 food kitchen B85"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
