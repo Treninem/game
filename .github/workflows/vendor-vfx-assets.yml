@@ -29,6 +29,18 @@ jobs:
           rm -rf .vfx_vendor_tmp
           mkdir -p .vfx_vendor_tmp assets/vfx/third_party
 
+          write_license() {
+            local target="$1"
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          This asset pack is recorded by its source page as CC0. The original author has waived copyright and related rights to the extent permitted by law under the Creative Commons CC0 1.0 Universal public-domain dedication.
+
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside the imported files.
+          EOF
+          }
+
           import_zip() {
             local key="$1"
             local url="$2"
@@ -36,10 +48,11 @@ jobs:
             local author="$4"
             local target="assets/vfx/third_party/$key"
             local work=".vfx_vendor_tmp/$key"
+            rm -rf "$target" "$work"
             mkdir -p "$work/archive" "$target"
-            echo "Downloading $key"
-            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 \
-              -A 'ImPuls-CC0-Asset-Vendor/1.0' "$url" -o "$work/pack.zip"
+            echo "Downloading ZIP pack $key"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 \
+              -A 'ImPuls-CC0-Asset-Vendor/1.1' "$url" -o "$work/pack.zip"
             unzip -q "$work/pack.zip" -d "$work/archive"
 
             # Only vendor visual assets and human-readable metadata. Never copy executables or scripts.
@@ -67,17 +80,48 @@ jobs:
 
           Only image files and human-readable metadata are copied from the downloaded archive. Executables and scripts are excluded.
           EOF
-
-            cat > "$target/LICENSE.txt" <<'EOF'
-          CC0 1.0 Universal
-
-          This asset pack is recorded by its source page as CC0. The original author has waived copyright and related rights to the extent permitted by law under the Creative Commons CC0 1.0 Universal public-domain dedication.
-
-          License reference: https://creativecommons.org/publicdomain/zero/1.0/
-          Preserve SOURCE.md beside the imported files.
-          EOF
+            write_license "$target"
           }
 
+          import_loose() {
+            local key="$1"
+            local source_url="$2"
+            local author="$3"
+            shift 3
+            local target="assets/vfx/third_party/$key"
+            rm -rf "$target"
+            mkdir -p "$target"
+
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source_url
+          License: CC0 1.0 Universal / public-domain dedication as stated by the source page.
+          Imported by: .github/workflows/vendor-vfx-assets.yml
+
+          Downloaded files:
+          EOF
+
+            while [ "$#" -gt 0 ]; do
+              local out="$1"
+              local url="$2"
+              shift 2
+              echo "Downloading loose asset $key/$out"
+              curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 \
+                -A 'ImPuls-CC0-Asset-Vendor/1.1' "$url" -o "$target/$out"
+              printf -- '- `%s` — %s\n' "$out" "$url" >> "$target/SOURCE.md"
+            done
+
+            cat >> "$target/SOURCE.md" <<'EOF'
+
+          Only visual assets and human-readable metadata are vendored. Executables and scripts are excluded.
+          EOF
+            write_license "$target"
+          }
+
+          # Existing verified CC0 production packs.
           import_zip \
             "kenney_particle_pack" \
             "https://www.kenney.nl/media/pages/assets/particle-pack/f8fe0f8cb8-1677578741/kenney_particle-pack.zip" \
@@ -114,6 +158,110 @@ jobs:
             "https://opengameart.org/content/arcane-magic-effect" \
             "Cethiel / OpenGameArt"
 
+          # Expanded magic / elemental / support VFX library.
+          import_zip \
+            "oga_light_magic" \
+            "https://opengameart.org/sites/default/files/LightEffects.zip" \
+            "https://opengameart.org/content/light-magic-effect" \
+            "Cethiel / OpenGameArt"
+
+          import_zip \
+            "oga_angel_shield" \
+            "https://opengameart.org/sites/default/files/Angel%20Shield%20Effect.zip" \
+            "https://opengameart.org/content/angel-shield-effect" \
+            "Cethiel / OpenGameArt"
+
+          import_zip \
+            "oga_plasma_electric" \
+            "https://opengameart.org/sites/default/files/rc_art_-_plasma_electric_animations.zip" \
+            "https://opengameart.org/content/plasma-electric-effect-animations" \
+            "Reactorcore / OpenGameArt"
+
+          import_zip \
+            "oga_basic_pixel_spells" \
+            "https://opengameart.org/sites/default/files/Pixel%20Animated%20Spells.zip" \
+            "https://opengameart.org/content/basic-pixel-animated-spells" \
+            "beddedOtaku / OpenGameArt"
+
+          import_zip \
+            "oga_magic_forcefield_grayscale" \
+            "https://opengameart.org/sites/default/files/magic1.zip" \
+            "https://opengameart.org/content/seamless-looping-magicforcefield-effect" \
+            "zookeeper / OpenGameArt"
+
+          import_zip \
+            "oga_magic_forcefield_color" \
+            "https://opengameart.org/sites/default/files/magic2.zip" \
+            "https://opengameart.org/content/seamless-looping-magicforcefield-effect-0" \
+            "zookeeper / OpenGameArt"
+
+          import_loose \
+            "oga_radial_lightning" \
+            "https://opengameart.org/content/radial-lightning-effect" \
+            "13rice / OpenGameArt" \
+            "spark_radial_spritesheet_13rice.png" "https://opengameart.org/sites/default/files/spark_radial_spritesheet_13rice_0.png" \
+            "spark_02.png" "https://opengameart.org/sites/default/files/spark_02.png" \
+            "spark_03.png" "https://opengameart.org/sites/default/files/spark_03.png" \
+            "pixelated_tilesheet.png" "https://opengameart.org/sites/default/files/pixelated_tilesheet.png"
+
+          import_loose \
+            "oga_fireball_godot" \
+            "https://opengameart.org/content/fireball-4" \
+            "i_rk_jain / OpenGameArt" \
+            "fb01.png" "https://opengameart.org/sites/default/files/fb01.png" \
+            "fb02.png" "https://opengameart.org/sites/default/files/fb02.png" \
+            "fb03.png" "https://opengameart.org/sites/default/files/fb03.png"
+
+          import_loose \
+            "oga_assorted_fireballs" \
+            "https://opengameart.org/content/assorted-fireballs-and-effects" \
+            "Puffolotti / OpenGameArt" \
+            "Spritesheet.png" "https://opengameart.org/sites/default/files/Spritesheet_8.png"
+
+          import_loose \
+            "oga_fireball_umplix" \
+            "https://opengameart.org/content/fireball-spritesheet" \
+            "Umplix / OpenGameArt" \
+            "fireball.png" "https://opengameart.org/sites/default/files/fireball_10.png"
+
+          import_loose \
+            "oga_magic_spell_icons" \
+            "https://opengameart.org/content/magic-spell-icons" \
+            "steefie92 / OpenGameArt" \
+            "magicicons.png" "https://opengameart.org/sites/default/files/magicicons_0.png" \
+            "spellicons.svg" "https://opengameart.org/sites/default/files/spellicons.svg"
+
+          import_loose \
+            "oga_energy_shield" \
+            "https://opengameart.org/content/shield-sprite" \
+            "zeroisnotnull / OpenGameArt" \
+            "shield.png" "https://opengameart.org/sites/default/files/shield_3.png"
+
+          import_loose \
+            "oga_resurrection_spell" \
+            "https://opengameart.org/content/resurrection-spell-sfx" \
+            "One Man Army / OpenGameArt" \
+            "reviveSpell.png" "https://opengameart.org/sites/default/files/reviveSpell.png" \
+            "reviveSpellComplete.png" "https://opengameart.org/sites/default/files/reviveSpellComplete.png"
+
+          import_loose \
+            "oga_magic_mirror_portal" \
+            "https://opengameart.org/content/magic-mirrorportal-pixel-sprite" \
+            "That One Annoying Pub Player / OpenGameArt" \
+            "MagicMirror.png" "https://opengameart.org/sites/default/files/MagicMirror.png"
+
+          import_loose \
+            "oga_m484_lightning_weapon" \
+            "https://opengameart.org/content/m484-lightning-weapon" \
+            "Master484 / OpenGameArt" \
+            "M484LightningWeapon.png" "https://opengameart.org/sites/default/files/M484LightningWeapon.png"
+
+          import_loose \
+            "oga_lightning_effect" \
+            "https://opengameart.org/content/lightning-effect" \
+            "John2k / OpenGameArt" \
+            "blitze.png" "https://opengameart.org/sites/default/files/blitze_0.png"
+
           rm -rf .vfx_vendor_tmp
 
           echo "Imported file counts:"
@@ -134,6 +282,6 @@ jobs:
             echo "No new VFX assets to commit."
             exit 0
           fi
-          git commit -m "assets(vfx): vendor verified CC0 magic combat packs"
+          git commit -m "assets(vfx): vendor expanded verified CC0 magic packs"
           git pull --rebase origin main
           git push origin HEAD:main
