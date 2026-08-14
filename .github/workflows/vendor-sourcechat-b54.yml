@@ -1,0 +1,95 @@
+name: Vendor source-chat B54 real CC0 crystals target keys
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b54.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b54
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 crystals target keys
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b54"
+          TMP=".sourcechat_b54_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/crystals" "$ROOT/models/oga_lowpoly_crystals_28"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B54/1.0' "https://opengameart.org/sites/default/files/crystals_0.zip" -o "$TMP/crystals.zip"
+          unzip -q "$TMP/crystals.zip" -d "$TMP/crystals"
+          chmod -R u+rwX "$TMP/crystals" || true
+          rsync -a "$TMP/crystals/" "$ROOT/models/oga_lowpoly_crystals_28/"
+          meta "oga_lowpoly_crystals_28" "https://opengameart.org/content/lowpoly-crystals-pack" "LowPoly Crystals Pack" "https://opengameart.org/sites/default/files/crystals_0.zip" "28 low-poly crystal models in FBX, OBJ and Blend according to the source page."
+
+          mkdir -p "$TMP/target" "$ROOT/models/oga_target_3d_2023"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B54/1.0' "https://opengameart.org/sites/default/files/target.zip" -o "$TMP/target.zip"
+          unzip -q "$TMP/target.zip" -d "$TMP/target"
+          chmod -R u+rwX "$TMP/target" || true
+          rsync -a "$TMP/target/" "$ROOT/models/oga_target_3d_2023/"
+          meta "oga_target_3d_2023" "https://opengameart.org/content/target-3d-model" "Target 3D Model" "https://opengameart.org/sites/default/files/target.zip" "Two color sets; source page states GLB/FBX/OBJ and Blend are included."
+
+          mkdir -p "$ROOT/models/oga_key_collection"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B54/1.0' "https://opengameart.org/sites/default/files/key.blend" -o "$ROOT/models/oga_key_collection/key.blend"
+          meta "oga_key_collection" "https://opengameart.org/content/key-collection" "Key collection" "https://opengameart.org/sites/default/files/key.blend" "Modern keys, an old key and a keyring in one static-mesh Blend source."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B54 — real CC0 crystals, target and key collection
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should classify crystals as resource/decor candidates, use the target only where training/range gameplay or dressing needs it, and select key models for quest/lock/world-prop use after scale/material review.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B54 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B54 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b54
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 crystals target keys B54"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
