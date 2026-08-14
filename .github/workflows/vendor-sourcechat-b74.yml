@@ -1,0 +1,125 @@
+name: Vendor source-chat B74 real CC0 cat dog horse tiger
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b74.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b74
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 companion and big cat sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b74"
+          TMP=".sourcechat_b74_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/cat" "$ROOT/models/oga_simple_cat_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B74/1.0' \
+            "https://opengameart.org/sites/default/files/cat.zip" -o "$TMP/cat.zip"
+          unzip -q "$TMP/cat.zip" -d "$TMP/cat"
+          chmod -R u+rwX "$TMP/cat" || true
+          rsync -a "$TMP/cat/" "$ROOT/models/oga_simple_cat_animated/"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B74/1.0' \
+            "https://opengameart.org/sites/default/files/cat_free.png" -o "$ROOT/models/oga_simple_cat_animated/cat_free.png"
+          meta "oga_simple_cat_animated" \
+            "https://opengameart.org/content/simple-cat" \
+            "Simple Cat" \
+            "https://opengameart.org/sites/default/files/cat.zip + cat_free.png" \
+            "Extremely low-poly cat; Blend includes a simple two-shape-key walk animation. cat_free.png is the author's from-scratch CC0 texture and is staged explicitly."
+
+          mkdir -p "$ROOT/models/oga_dog_jack_russell_rigged"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B74/1.0' \
+            "https://opengameart.org/sites/default/files/Dog%20%28Jack%20russel%29%20Release.blend" \
+            -o "$ROOT/models/oga_dog_jack_russell_rigged/dog_jack_russell.blend"
+          meta "oga_dog_jack_russell_rigged" \
+            "https://opengameart.org/content/dog-low-poly-rigged" \
+            "Dog Low Poly (Rigged)" \
+            "https://opengameart.org/sites/default/files/Dog%20%28Jack%20russel%29%20Release.blend" \
+            "Low-poly Jack Russell reference dog with 1428 vertices; source is labeled rigged."
+
+          mkdir -p "$ROOT/models/oga_rigged_horse"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B74/1.0' \
+            "https://opengameart.org/sites/default/files/riggedHorse.blend" \
+            -o "$ROOT/models/oga_rigged_horse/riggedHorse.blend"
+          meta "oga_rigged_horse" \
+            "https://opengameart.org/content/rigged-horse" \
+            "Rigged Horse" \
+            "https://opengameart.org/sites/default/files/riggedHorse.blend" \
+            "Horse source with skeleton rigged and ready to be animated; source page does not claim a finished animation set."
+
+          mkdir -p "$TMP/tiger" "$ROOT/models/oga_tiger_rigged"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B74/1.0' \
+            "https://opengameart.org/sites/default/files/tiger.zip" -o "$TMP/tiger.zip"
+          unzip -q "$TMP/tiger.zip" -d "$TMP/tiger"
+          chmod -R u+rwX "$TMP/tiger" || true
+          rsync -a "$TMP/tiger/" "$ROOT/models/oga_tiger_rigged/"
+          meta "oga_tiger_rigged" \
+            "https://opengameart.org/content/tiger" \
+            "Tiger" \
+            "https://opengameart.org/sites/default/files/tiger.zip" \
+            "Low-poly tiger, rigged and unwrapped. Source page notes a texture exists for 0 A.D.; this staging keeps only the CC0 package provided here."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B74 — real CC0 cat, dog, horse and tiger
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should inspect skeletons/animations and normalize scale/materials. Cat includes the author's from-scratch CC0 texture. Horse and tiger should not be assumed to have production animation sets merely because they are rigged.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B74 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B74 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b74
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 cat dog horse tiger B74"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
