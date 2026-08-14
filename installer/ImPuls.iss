@@ -37,6 +37,7 @@ Name: "{app}\current"
 
 [Files]
 Source: "..\build\windows\*"; DestDir: "{app}\current"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "updater_v4.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "updater.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "launcher.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "install_update_task.ps1"; DestDir: "{app}"; Flags: ignoreversion
