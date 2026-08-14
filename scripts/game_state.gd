@@ -32,6 +32,10 @@ var health: float = 100.0
 var max_health: float = 100.0
 var stamina: float = 100.0
 var max_stamina: float = 100.0
+var mana: float = 100.0
+var max_mana: float = 100.0
+var magic_shield: float = 0.0
+var max_magic_shield: float = 75.0
 var hunger: float = 100.0
 var thirst: float = 100.0
 var temperature: float = 36.6
@@ -51,6 +55,8 @@ func reset_new_game() -> void:
     house_position = Vector3.ZERO
     health = max_health
     stamina = max_stamina
+    mana = max_mana
+    magic_shield = 0.0
     hunger = 100.0
     thirst = 100.0
     temperature = 36.6
@@ -141,15 +147,41 @@ func consume_stamina(amount: float) -> bool:
     return true
 
 func restore_stamina(amount: float) -> void:
-    stamina = minf(max_stamina, stamina + amount)
+    stamina = minf(max_stamina, stamina + maxf(amount, 0.0))
+
+func consume_mana(amount: float) -> bool:
+    var cost := maxf(amount, 0.0)
+    if mana < cost:
+        return false
+    mana = maxf(0.0, mana - cost)
+    survival_changed.emit()
+    return true
+
+func restore_mana(amount: float) -> void:
+    mana = minf(max_mana, mana + maxf(amount, 0.0))
+    survival_changed.emit()
+
+func add_magic_shield(amount: float) -> void:
+    magic_shield = minf(max_magic_shield, magic_shield + maxf(amount, 0.0))
+    survival_changed.emit()
+    notify("Магический щит: %.0f." % magic_shield)
 
 func apply_damage(amount: float) -> void:
     if is_dead or amount <= 0.0:
         return
-    health = maxf(0.0, health - amount)
+    var incoming := amount
+    if magic_shield > 0.0:
+        var absorbed := minf(magic_shield, incoming)
+        magic_shield -= absorbed
+        incoming -= absorbed
+        if absorbed > 0.0 and magic_shield <= 0.0:
+            notify("Магический щит разрушен.")
+    if incoming > 0.0:
+        health = maxf(0.0, health - incoming)
     survival_changed.emit()
     if health <= 0.0:
         is_dead = true
+        magic_shield = 0.0
         notify("Вы погибли. Возрождение у безопасной точки столицы.")
         player_died.emit()
 
@@ -157,6 +189,8 @@ func revive() -> void:
     is_dead = false
     health = max_health
     stamina = max_stamina
+    mana = max_mana
+    magic_shield = 0.0
     hunger = maxf(hunger, 55.0)
     thirst = maxf(thirst, 55.0)
     survival_changed.emit()
@@ -199,6 +233,7 @@ func advance_survival(real_seconds: float) -> void:
     hunger = maxf(0.0, hunger - real_seconds * 0.025)
     thirst = maxf(0.0, thirst - real_seconds * 0.04)
     restore_stamina(real_seconds * 13.0)
+    mana = minf(max_mana, mana + real_seconds * 5.0)
     var hour := int(world_minutes / 60.0)
     var target_temperature := 36.6
     if hour >= 21 or hour < 6:
@@ -223,6 +258,8 @@ func snapshot() -> Dictionary:
         "house_position": [0.0, 0.0, 0.0],
         "health": health,
         "stamina": stamina,
+        "mana": mana,
+        "magic_shield": magic_shield,
         "hunger": hunger,
         "thirst": thirst,
         "temperature": temperature,
@@ -248,6 +285,8 @@ func load_snapshot(data: Dictionary) -> void:
     house_position = Vector3.ZERO
     health = clampf(float(data.get("health", 100.0)), 0.0, max_health)
     stamina = clampf(float(data.get("stamina", 100.0)), 0.0, max_stamina)
+    mana = clampf(float(data.get("mana", max_mana)), 0.0, max_mana)
+    magic_shield = clampf(float(data.get("magic_shield", 0.0)), 0.0, max_magic_shield)
     hunger = clampf(float(data.get("hunger", 100.0)), 0.0, 100.0)
     thirst = clampf(float(data.get("thirst", 100.0)), 0.0, 100.0)
     temperature = clampf(float(data.get("temperature", 36.6)), 30.0, 42.0)
