@@ -117,6 +117,7 @@ func _physics_process(delta: float) -> void:
     if not grounded_before and grounded_after and fall_speed_before_move > 3.4:
         footstep_distance_accum = 0.0
         WorldVFX.spawn_landing(global_position, fall_speed_before_move, "", -global_transform.basis.z)
+        ScreenVFX.landing_feedback(fall_speed_before_move)
     elif grounded_after and input_vec.length() > 0.08:
         footstep_distance_accum += last_horizontal_motion.length()
         var step_distance := 1.75 if can_sprint else 2.35
@@ -204,10 +205,12 @@ func _try_attack() -> void:
     if collider != null and collider.has_method("take_damage"):
         VFXLibrary.spawn("hit_slash", hit_position, get_tree().current_scene, hit_normal, swing_direction, 1.0)
         ThirdPartyVFX.spawn_slash(hit_position, get_tree().current_scene, 0.55)
+        ScreenVFX.shake(0.018, 0.08)
         collider.take_damage(attack_damage + InventorySystem.attack_bonus(), self)
     else:
         var surface := WorldVFX.surface_from_collider(collider, hit_position)
         WorldVFX.spawn_impact(surface, hit_position, hit_normal, swing_direction, 0.80)
+        ScreenVFX.shake(0.010, 0.06)
 
 func _try_interact() -> void:
     if GameState.is_dead:
