@@ -3,6 +3,7 @@ extends Node
 signal inventory_changed
 signal quest_changed
 signal survival_changed
+signal location_changed(location: String)
 signal notification_requested(message: String)
 signal player_died
 
@@ -18,6 +19,10 @@ const DEFAULT_INVENTORY := {
 
 var inventory: Dictionary = DEFAULT_INVENTORY.duplicate(true)
 var quest_stage: int = 0
+var city_quest_stage: int = 0
+var city_reputation: int = 0
+var coins: int = 20
+var current_location := "Окраины Люменграда"
 var house_built: bool = false
 var house_position: Vector3 = Vector3.ZERO
 var health: float = 100.0
@@ -35,6 +40,10 @@ var world_state: Dictionary = {}
 func reset_new_game() -> void:
     inventory = DEFAULT_INVENTORY.duplicate(true)
     quest_stage = 0
+    city_quest_stage = 0
+    city_reputation = 0
+    coins = 20
+    current_location = "Окраины Люменграда"
     house_built = false
     house_position = Vector3.ZERO
     health = max_health
@@ -47,6 +56,13 @@ func reset_new_game() -> void:
     is_dead = false
     world_state = {}
     _emit_all()
+    location_changed.emit(current_location)
+
+func set_location(location: String) -> void:
+    if location.is_empty() or current_location == location:
+        return
+    current_location = location
+    location_changed.emit(current_location)
 
 func set_world_value(key: String, value: Variant) -> void:
     if key.is_empty():
@@ -148,7 +164,7 @@ func confirm_gathering() -> bool:
         return false
     quest_stage = 2
     quest_changed.emit()
-    notification_requested.emit("Ресурсы собраны. Нажмите C, чтобы создать строительный набор.")
+    notification_requested.emit("Ресурсы собраны. Откройте меню крафта и создайте строительный набор.")
     return true
 
 func try_craft_building_kit() -> bool:
@@ -173,7 +189,7 @@ func try_mark_house_built(position: Vector3) -> bool:
         notification_requested.emit("Убежище уже построено.")
         return false
     if not remove_item("building_kit", 1):
-        notification_requested.emit("Нужен строительный набор. Создайте его клавишей C.")
+        notification_requested.emit("Нужен строительный набор. Создайте его в меню крафта.")
         return false
     house_built = true
     house_position = position
@@ -189,7 +205,32 @@ func complete_intro_quest() -> bool:
     quest_stage = 4
     add_item("starter_axe", 1)
     quest_changed.emit()
-    notification_requested.emit("Цепочка завершена. Получен стартовый топор.")
+    notification_requested.emit("Цепочка завершена. Получен стартовый топор. Теперь можно идти к городским воротам.")
+    return true
+
+func start_city_quest() -> bool:
+    if city_quest_stage != 0:
+        return false
+    city_quest_stage = 1
+    quest_changed.emit()
+    notification_requested.emit("Новое поручение: ремонт Южных ворот — 6 камня и 4 древесины.")
+    return true
+
+func complete_city_quest() -> bool:
+    if city_quest_stage != 1:
+        return false
+    var requirements := {"stone": 6, "wood": 4}
+    if not has_items(requirements):
+        notification_requested.emit("Для ремонта ворот нужно 6 камня и 4 древесины.")
+        return false
+    remove_item("stone", 6)
+    remove_item("wood", 4)
+    city_quest_stage = 2
+    coins += 35
+    city_reputation += 5
+    quest_changed.emit()
+    inventory_changed.emit()
+    notification_requested.emit("Ремонтный заказ выполнен: +35 монет, +5 репутации Люменграда.")
     return true
 
 func advance_survival(real_seconds: float) -> void:
@@ -207,24 +248,34 @@ func advance_survival(real_seconds: float) -> void:
     survival_changed.emit()
 
 func quest_text() -> String:
-    match quest_stage:
+    if quest_stage < 4:
+        match quest_stage:
+            0:
+                return "Поговорите с Мирой [E]."
+            1:
+                return "Соберите 8 дерева и 4 камня, затем вернитесь к Мире."
+            2:
+                return "Создайте строительный набор и постройте убежище [B]."
+            3:
+                return "Вернитесь к Мире за наградой."
+    match city_quest_stage:
         0:
-            return "Поговорите с Мирой [E]."
+            return "Исследуйте Южный квартал Люменграда и поговорите с жителями."
         1:
-            return "Соберите 8 дерева и 4 камня, затем вернитесь к Мире."
+            return "Радан: принесите 6 камня и 4 древесины для ремонта ворот."
         2:
-            return "Создайте строительный набор [C] и постройте убежище [B]."
-        3:
-            return "Вернитесь к Мире за наградой."
-        4:
-            return "Первое поручение завершено."
+            return "Ремонт Южных ворот завершён. Исследуйте город дальше."
         _:
-            return ""
+            return "Исследуйте Люменград."
 
 func snapshot() -> Dictionary:
     return {
         "inventory": inventory.duplicate(true),
         "quest_stage": quest_stage,
+        "city_quest_stage": city_quest_stage,
+        "city_reputation": city_reputation,
+        "coins": coins,
+        "current_location": current_location,
         "house_built": house_built,
         "house_position": [house_position.x, house_position.y, house_position.z],
         "health": health,
@@ -244,6 +295,10 @@ func load_snapshot(data: Dictionary) -> void:
         for key in saved_inventory:
             inventory[String(key)] = int(saved_inventory[key])
     quest_stage = int(data.get("quest_stage", 0))
+    city_quest_stage = int(data.get("city_quest_stage", 0))
+    city_reputation = maxi(0, int(data.get("city_reputation", 0)))
+    coins = maxi(0, int(data.get("coins", 20)))
+    current_location = String(data.get("current_location", "Окраины Люменграда"))
     house_built = bool(data.get("house_built", false))
     var pos = data.get("house_position", [0.0, 0.0, 0.0])
     if typeof(pos) == TYPE_ARRAY and pos.size() == 3:
@@ -261,6 +316,7 @@ func load_snapshot(data: Dictionary) -> void:
     world_state = saved_world_state.duplicate(true) if typeof(saved_world_state) == TYPE_DICTIONARY else {}
     is_dead = health <= 0.0
     _emit_all()
+    location_changed.emit(current_location)
 
 func notify(message: String) -> void:
     notification_requested.emit(message)
