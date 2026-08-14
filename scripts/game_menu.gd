@@ -9,7 +9,6 @@ const ACTION_LABELS := {
     "jump": "Прыжок",
     "interact": "Взаимодействие",
     "attack": "Атака",
-    "build": "Строительство",
     "use_food": "Быстрая еда",
     "use_water": "Быстрая вода",
     "open_inventory": "Инвентарь",
@@ -27,7 +26,6 @@ var update_status: Label
 var apply_update_button: Button
 var awaiting_action := ""
 var rebinding_label: Label
-var current_section := "main"
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -58,7 +56,6 @@ func _unhandled_input(event: InputEvent) -> void:
         get_viewport().set_input_as_handled()
 
 func open_menu(section: String = "main") -> void:
-    current_section = section
     visible = true
     get_tree().paused = true
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -78,8 +75,8 @@ func _build_shell() -> void:
 
     var frame := PanelContainer.new()
     frame.set_anchors_preset(Control.PRESET_CENTER)
-    frame.position = Vector2(-330, -310)
-    frame.custom_minimum_size = Vector2(660, 620)
+    frame.position = Vector2(-330, -300)
+    frame.custom_minimum_size = Vector2(660, 600)
     frame.add_theme_stylebox_override("panel", _panel_style())
     add_child(frame)
 
@@ -93,7 +90,6 @@ func _build_shell() -> void:
     var root := VBoxContainer.new()
     root.add_theme_constant_override("separation", 10)
     margin.add_child(root)
-
     var top := HBoxContainer.new()
     root.add_child(top)
     title_label = Label.new()
@@ -116,7 +112,6 @@ func _build_shell() -> void:
     scroll.add_child(content)
 
 func _show_section(section: String) -> void:
-    current_section = section
     _clear_content()
     match section:
         "saves": _show_saves()
@@ -138,12 +133,11 @@ func _clear_content() -> void:
 func _show_main() -> void:
     title_label.text = "Пауза"
     _info_card("Локация", GameState.current_location)
-    _info_card("Текущая цель", GameState.quest_text())
     _button("Продолжить игру", Callable(self, "close_menu"))
     _button("Сохранения — 10 слотов", Callable(self, "_show_section").bind("saves"))
     _button("Настройки", Callable(self, "_show_section").bind("settings"))
     _button("Проверка обновлений", Callable(self, "_show_section").bind("updates"))
-    var hint := _body("Игровые экраны не находятся в этом меню: I — инвентарь, M — карта, K — крафт, J — журнал. Предметы быстрого доступа используются клавишами 1/2/3.")
+    var hint := _body("I — инвентарь   M — карта   K — крафт   J — журнал. Эти экраны открываются прямо из игры и не являются пунктами паузы.")
     hint.modulate = Color(0.58, 0.68, 0.78)
     _button("Выйти из игры", Callable(get_tree(), "quit"), null, true)
 
@@ -175,17 +169,18 @@ func _save_to_slot(slot: int) -> void:
     var player := get_tree().get_first_node_in_group("player") as Node3D
     if player != null and SaveManager.save_game(player, slot):
         GameState.notify("Сохранено в слот %02d." % slot)
-    _show_section("saves")
+    _show_saves()
 
 func _load_slot(slot: int) -> void:
     if not SaveManager.prepare_load(slot):
         return
     get_tree().paused = false
+    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
     get_tree().reload_current_scene()
 
 func _delete_slot(slot: int) -> void:
     SaveManager.delete_slot(slot)
-    _show_section("saves")
+    _show_saves()
 
 func _show_settings() -> void:
     title_label.text = "Настройки"
@@ -252,7 +247,7 @@ func _show_other() -> void:
 
 func _show_updates() -> void:
     title_label.text = "Обновления"
-    _body("Проверка идёт по официальному Release репозитория игры. Если обновление не удалось, установленная версия продолжает запускаться.")
+    _body("Если обновление не удалось, установленная версия продолжит запускаться.")
     _button("Проверить обновления", Callable(UpdateManager, "check_for_updates"))
     update_status = _body("Обновления ещё не проверялись.")
     apply_update_button = _button("Обновить и перезапустить", Callable(UpdateManager, "install_latest_update"))
@@ -347,7 +342,7 @@ func _set_resolution(index: int, options: OptionButton) -> void:
 
 func _reset_settings() -> void:
     SettingsManager.reset_defaults()
-    _show_section("settings")
+    _show_settings()
 
 func _on_update_status_changed(text: String, available: bool) -> void:
     if is_instance_valid(update_status):
