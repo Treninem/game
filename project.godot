@@ -26,6 +26,8 @@ ThirdPartyVFX="*res://scripts/third_party_vfx.gd"
 MagicSystem="*res://scripts/magic_system.gd"
 EnvironmentState="*res://scripts/environment_state.gd"
 EnvironmentMarks="*res://scripts/environment_mark_pool.gd"
+WorldVFX="*res://scripts/world_vfx.gd"
+WeatherVFX="*res://scripts/weather_vfx.gd"
 MagicHUD="*res://scripts/magic_hud.gd"
 
 [display]
