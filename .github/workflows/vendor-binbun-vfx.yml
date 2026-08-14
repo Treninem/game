@@ -1,0 +1,227 @@
+name: Vendor high-quality CC0 Godot VFX
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-binbun-vfx.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-binbun-vfx
+  cancel-in-progress: false
+
+jobs:
+  vendor-binbun-vfx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout game repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Import free CC0 Binbun Godot 4 VFX packs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ROOT="assets/vfx/third_party"
+          TMP=".vendor_binbun_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$ROOT"
+
+          clone_sparse() {
+            local repo="$1"
+            local path="$2"
+            local out="$3"
+            git clone --depth 1 --filter=blob:none --sparse "$repo" "$out"
+            git -C "$out" sparse-checkout set "$path"
+          }
+
+          copy_pack() {
+            local src="$1"
+            local dst="$2"
+            rm -rf "$dst"
+            mkdir -p "$dst"
+            rsync -a --prune-empty-dirs \
+              --exclude='*.import' \
+              --exclude='*.uid' \
+              --exclude='*full*.tscn' \
+              --exclude='*_full.tscn' \
+              "$src/" "$dst/"
+          }
+
+          write_metadata() {
+            local dst="$1"
+            local title="$2"
+            local page="$3"
+            local mirror="$4"
+            local mirror_path="$5"
+
+            if [ -f "$dst/license.txt" ]; then
+              mv "$dst/license.txt" "$dst/UPSTREAM_LICENSE.txt"
+            fi
+
+            cat > "$dst/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          This Binbun/Binbun3D asset pack is distributed under Creative Commons Zero (CC0 1.0 Universal). It may be used, modified, copied and redistributed, including commercially, without attribution.
+
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+
+            cat > "$dst/SOURCE.md" <<EOF
+          # Source
+
+          Pack: $title
+          Original author: Binbun / Binbun3D
+          Original page: $page
+          Public GitHub mirror used for this import: $mirror
+          Mirror path: $mirror_path
+          License: CC0 1.0 Universal
+
+          Import policy:
+          - only the freely available pack content is staged here;
+          - files whose names identify paid/full showcase scenes are excluded;
+          - Godot-generated .import and .uid files are excluded and should be regenerated locally;
+          - internal res:// paths are rewritten only so the staged pack stays self-contained under assets/vfx/third_party/;
+          - this is a shared asset library import only and is not connected to gameplay automatically.
+          EOF
+          }
+
+          patch_prefix() {
+            local dst="$1"
+            local old="$2"
+            local new="$3"
+            while IFS= read -r -d '' file; do
+              sed -i "s#${old}#${new}#g" "$file"
+            done < <(find "$dst" -type f \( -name '*.tscn' -o -name '*.tres' -o -name '*.gd' -o -name '*.gdshader' \) -print0)
+          }
+
+          # Source A: bagidea/bagidea-office contains the free CC0 Elemental, Flame and Explosion packs.
+          clone_sparse \
+            "https://github.com/bagidea/bagidea-office.git" \
+            "godot/assets/BinbunVFX_Vol2" \
+            "$TMP/bagidea"
+
+          BAG_SRC="$TMP/bagidea/godot/assets/BinbunVFX_Vol2"
+          BAG_DST="$ROOT/binbun_godot4_core"
+          rm -rf "$BAG_DST"
+          mkdir -p "$BAG_DST"
+          for pack in ElementalMagicFX FlameFX ExplosionFX shared; do
+            copy_pack "$BAG_SRC/$pack" "$BAG_DST/$pack"
+          done
+          patch_prefix "$BAG_DST" \
+            "res://assets/BinbunVFX_Vol2/" \
+            "res://assets/vfx/third_party/binbun_godot4_core/"
+          write_metadata "$BAG_DST/ElementalMagicFX" "Elemental Magic FX" "https://binbun3d.itch.io/elemental-magic-fx" "https://github.com/bagidea/bagidea-office" "godot/assets/BinbunVFX_Vol2/ElementalMagicFX"
+          write_metadata "$BAG_DST/FlameFX" "Stylized Flame FX" "https://binbun3d.itch.io/flame-fx" "https://github.com/bagidea/bagidea-office" "godot/assets/BinbunVFX_Vol2/FlameFX"
+          write_metadata "$BAG_DST/ExplosionFX" "Explosion FX" "https://binbun3d.itch.io/explosion-fx" "https://github.com/bagidea/bagidea-office" "godot/assets/BinbunVFX_Vol2/ExplosionFX"
+          cat > "$BAG_DST/SOURCE.md" <<'EOF'
+          # Binbun Godot 4 Core VFX
+
+          Shared dependencies plus free CC0 Elemental Magic FX, Flame FX and Explosion FX staged for later use by the game-development chat.
+          EOF
+
+          # Source B: boryspimpek/Ninja contains free CC0 Dark Magic, Battle and Hit packs.
+          clone_sparse \
+            "https://github.com/boryspimpek/Ninja.git" \
+            "assets/BinbunVFX_Vol2" \
+            "$TMP/ninja"
+
+          NINJA_SRC="$TMP/ninja/assets/BinbunVFX_Vol2"
+          NINJA_DST="$ROOT/binbun_godot4_combat_magic"
+          rm -rf "$NINJA_DST"
+          mkdir -p "$NINJA_DST"
+          for pack in DarkMagicFX BattleFX StylizedHitFX shared; do
+            copy_pack "$NINJA_SRC/$pack" "$NINJA_DST/$pack"
+          done
+          patch_prefix "$NINJA_DST" \
+            "res://assets/BinbunVFX_Vol2/" \
+            "res://assets/vfx/third_party/binbun_godot4_combat_magic/"
+          write_metadata "$NINJA_DST/DarkMagicFX" "Dark Magic FX" "https://binbun3d.itch.io/dark-magic-fx" "https://github.com/boryspimpek/Ninja" "assets/BinbunVFX_Vol2/DarkMagicFX"
+          write_metadata "$NINJA_DST/BattleFX" "Battle FX" "https://binbun3d.itch.io/battle-fx" "https://github.com/boryspimpek/Ninja" "assets/BinbunVFX_Vol2/BattleFX"
+          write_metadata "$NINJA_DST/StylizedHitFX" "Hit FX" "https://binbun3d.itch.io/hit-fx" "https://github.com/boryspimpek/Ninja" "assets/BinbunVFX_Vol2/StylizedHitFX"
+          cat > "$NINJA_DST/SOURCE.md" <<'EOF'
+          # Binbun Godot 4 Combat / Dark Magic VFX
+
+          Shared dependencies plus free CC0 Dark Magic FX, Battle FX and Hit FX staged for later use by the game-development chat.
+          EOF
+
+          # Source C: us3cus/shapeshift-gamejam carries the free CC0 Electric FX package.
+          clone_sparse \
+            "https://github.com/us3cus/shapeshift-gamejam.git" \
+            "addons/BinbunVFX/ElectricFXFree/assets/BinbunVFX_Vol2" \
+            "$TMP/electric"
+
+          ELEC_SRC="$TMP/electric/addons/BinbunVFX/ElectricFXFree/assets/BinbunVFX_Vol2"
+          ELEC_DST="$ROOT/binbun_godot4_electric"
+          rm -rf "$ELEC_DST"
+          mkdir -p "$ELEC_DST"
+          for pack in ElectricFX shared; do
+            copy_pack "$ELEC_SRC/$pack" "$ELEC_DST/$pack"
+          done
+          patch_prefix "$ELEC_DST" \
+            "res://addons/BinbunVFX/ElectricFXFree/assets/BinbunVFX_Vol2/" \
+            "res://assets/vfx/third_party/binbun_godot4_electric/"
+          write_metadata "$ELEC_DST/ElectricFX" "Electric FX" "https://binbun3d.itch.io/electric-fx" "https://github.com/us3cus/shapeshift-gamejam" "addons/BinbunVFX/ElectricFXFree/assets/BinbunVFX_Vol2/ElectricFX"
+          cat > "$ELEC_DST/SOURCE.md" <<'EOF'
+          # Binbun Godot 4 Electric VFX
+
+          Shared dependencies plus the free CC0 Electric FX pack staged for later use by the game-development chat.
+          EOF
+
+          # Guard against broken references to the three source layouts.
+          if grep -RIl \
+            -e 'res://assets/BinbunVFX_Vol2/' \
+            -e 'res://addons/BinbunVFX/ElectricFXFree/assets/BinbunVFX_Vol2/' \
+            "$BAG_DST" "$NINJA_DST" "$ELEC_DST"; then
+            echo "Found unpatched upstream res:// paths"
+            exit 1
+          fi
+
+          # Confirm that real Godot assets, not just metadata, were imported.
+          TSCN_COUNT=$(find "$BAG_DST" "$NINJA_DST" "$ELEC_DST" -type f -name '*.tscn' | wc -l)
+          SHADER_COUNT=$(find "$BAG_DST" "$NINJA_DST" "$ELEC_DST" -type f -name '*.gdshader' | wc -l)
+          SCRIPT_COUNT=$(find "$BAG_DST" "$NINJA_DST" "$ELEC_DST" -type f -name '*.gd' | wc -l)
+          echo "Imported Godot scenes: $TSCN_COUNT"
+          echo "Imported shaders: $SHADER_COUNT"
+          echo "Imported scripts: $SCRIPT_COUNT"
+          test "$TSCN_COUNT" -ge 10
+          test "$SHADER_COUNT" -ge 20
+          test "$SCRIPT_COUNT" -ge 10
+
+          rm -rf "$TMP"
+
+      - name: Commit staged VFX library safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/vfx/third_party/binbun_godot4_core \
+                  assets/vfx/third_party/binbun_godot4_combat_magic \
+                  assets/vfx/third_party/binbun_godot4_electric
+
+          if git diff --cached --quiet; then
+            echo "No Binbun VFX changes to commit."
+            exit 0
+          fi
+
+          git commit -m "assets(vfx): vendor high-quality free CC0 Godot magic packs"
+
+          for attempt in $(seq 1 30); do
+            echo "Safe push attempt $attempt/30"
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "Binbun VFX assets pushed successfully."
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "Unable to push Binbun VFX assets after 30 safe retries."
+          exit 1
