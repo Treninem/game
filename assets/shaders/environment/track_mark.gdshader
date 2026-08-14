@@ -2,7 +2,7 @@ shader_type spatial;
 render_mode unshaded, cull_disabled, blend_mix, depth_draw_never;
 
 uniform vec4 mark_color : source_color = vec4(0.12, 0.09, 0.06, 0.72);
-uniform int mark_kind : hint_range(0, 4) = 0;
+uniform int mark_kind : hint_range(0, 6) = 0;
 uniform float mark_alpha : hint_range(0.0, 1.0) = 1.0;
 uniform float edge_softness : hint_range(0.001, 0.25) = 0.05;
 
@@ -60,6 +60,22 @@ float spill(vec2 uv) {
     return clamp(main_blob + drips, 0.0, 1.0);
 }
 
+float paw(vec2 uv) {
+    float pad = ellipse_mask(uv, vec2(0.50, 0.62), vec2(0.20, 0.16));
+    float toe1 = circle_mask(uv, vec2(0.32, 0.36), 0.090);
+    float toe2 = circle_mask(uv, vec2(0.44, 0.28), 0.095);
+    float toe3 = circle_mask(uv, vec2(0.57, 0.28), 0.095);
+    float toe4 = circle_mask(uv, vec2(0.69, 0.36), 0.085);
+    return clamp(max(pad, max(max(toe1, toe2), max(toe3, toe4))), 0.0, 1.0);
+}
+
+float hoof(vec2 uv) {
+    float left = ellipse_mask(uv, vec2(0.41, 0.49), vec2(0.13, 0.30));
+    float right = ellipse_mask(uv, vec2(0.59, 0.49), vec2(0.13, 0.30));
+    float cut = ellipse_mask(uv, vec2(0.50, 0.54), vec2(0.055, 0.25));
+    return clamp(max(left, right) * (1.0 - cut * 0.78), 0.0, 1.0);
+}
+
 void fragment() {
     float mask = footprint(UV);
     if (mark_kind == 1) {
@@ -70,6 +86,10 @@ void fragment() {
         mask = scorch(UV);
     } else if (mark_kind == 4) {
         mask = spill(UV);
+    } else if (mark_kind == 5) {
+        mask = paw(UV);
+    } else if (mark_kind == 6) {
+        mask = hoof(UV);
     }
 
     ALBEDO = mark_color.rgb;
