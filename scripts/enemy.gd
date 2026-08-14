@@ -68,6 +68,7 @@ func _physics_process(delta: float) -> void:
             attack_elapsed = attack_interval * interval_multiplier
             var impact_direction := -flat_to_player.normalized() if flat_to_player.length_squared() > 0.001 else Vector3.UP
             VFXLibrary.spawn("hit_blunt", target.global_position + Vector3.UP * 0.9, get_tree().current_scene, impact_direction, flat_to_player.normalized(), 0.85)
+            ScreenVFX.damage_feedback(attack_damage)
             GameState.apply_damage(attack_damage)
 
 func _idle_return(delta: float) -> void:
