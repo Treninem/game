@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.10.0-stage10 — 2026-08-14
+- Reordered development to world-first: terrain, capital, forests, fields, water, roads and regions now take priority over quests and player construction.
+- Replaced 512 m streaming tiles with lighter 192 m local chunks and a roughly 960 m visible streaming window around the player.
+- Limited collision generation to the nearby 3×3 chunk area; distant visible chunks are render-only.
+- Limited chunk creation to one visual chunk per frame and prioritized local collision generation to reduce traversal stalls.
+- Reduced procedural vegetation/resource density and added visibility ranges to keep the streamed world smooth.
+- Reserved a stable roughly 4 km capital footprint before future district authoring.
+- Removed the prototype shelter/"doghouse" from the active scene and migrated old saves so it cannot return.
+- Suspended the temporary Mira and South Gate quest chains until real locations are complete.
+- Deferred permanent building recipes and build controls until land/building rules are implemented against the completed world.
+- Added player terrain recovery so movement cannot fall through a chunk while local collision catches up.
+- Simplified pause UI and kept inventory/map/crafting/journal as direct in-game panels.
+- Removed the temporary quest card from the HUD; minimap remains permanently visible.
+- Increased save schema to v5 while preserving useful inventory, exploration and world-state data.
+- Fixed branding generation to use only the canonical selected ImPuls icon source instead of stale chunk fragments.
+
 ## 0.9.0-stage9 — 2026-08-14
 - Added a permanent in-game minimap with explored terrain, discovered POIs and a directional player marker.
 - Split inventory, full map, crafting and quest journal away from the pause menu into direct gameplay panels opened with I/M/K/J.
