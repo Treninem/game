@@ -86,14 +86,14 @@ jobs:
 
           mkdir -p "$TMP/pbrindustrial" "$ROOT/models/oga_pbr_industrial_a52_2025"
           curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B77/1.0' \
-            "https://opengameart.org/sites/default/files/oga_industrial_a52_version.zip" -o "$TMP/oga_industrial_a52_version.zip"
+            "https://opengameart.org/sites/default/files/oga_industrial_a52_version_0.zip" -o "$TMP/oga_industrial_a52_version.zip"
           unzip -q "$TMP/oga_industrial_a52_version.zip" -d "$TMP/pbrindustrial"
           chmod -R u+rwX "$TMP/pbrindustrial" || true
           rsync -a "$TMP/pbrindustrial/" "$ROOT/models/oga_pbr_industrial_a52_2025/"
           meta "oga_pbr_industrial_a52_2025" \
             "https://opengameart.org/content/pbr-industrial-asset-pack" \
             "PBR Industrial Asset Pack" \
-            "https://opengameart.org/sites/default/files/oga_industrial_a52_version.zip" \
+            "https://opengameart.org/sites/default/files/oga_industrial_a52_version_0.zip" \
             "2025 Blender 4/PBR industrial source collection with tanks, pipes, stairs, control panels, containers, garage/vents/ladders and related factory assets."
 
           find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
