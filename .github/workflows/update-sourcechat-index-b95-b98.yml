@@ -1,0 +1,65 @@
+name: Update source-chat staging index through B98
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b95-b98.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sourcechat-index-b95-b98
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify B95-B98 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            assets/staging/sourcechat_b95/models/oga_chainlink_fence_modular_60
+            assets/staging/sourcechat_b95/models/oga_unfinished_buildings_206plus10
+            assets/staging/sourcechat_b95/models/oga_lamppost_bench_trashcan
+            assets/staging/sourcechat_b96/models/oga_toilets_33
+            assets/staging/sourcechat_b96/models/oga_balloons_53_godot
+            assets/staging/sourcechat_b96/models/oga_room_filler_objects_30
+            assets/staging/sourcechat_b96/models/oga_halloween_props_128
+            assets/staging/sourcechat_b97/models/oga_canyon_terrain_161
+            assets/staging/sourcechat_b97/models/oga_foliage_1
+            assets/staging/sourcechat_b98/models/oga_six_houses_textures
+          )
+          for d in "${required[@]}"; do
+            test -d "$d" || { echo "Missing physical staging directory: $d" >&2; exit 1; }
+            test -n "$(find "$d" -type f -print -quit)" || { echo "Empty staging directory: $d" >&2; exit 1; }
+          done
+          INDEX=assets/staging/SOURCECHAT_INDEX.md
+          if ! grep -q '^## B95 —' "$INDEX"; then
+            printf '\n' >> "$INDEX"
+            echo 'IyMgQjk1IOKAlCBzdHJlZXQgZnVybml0dXJlIC8gdW5maW5pc2hlZCBidWlsZGluZ3MgLyBjaGFpbmxpbmsgZmVuY2VzCgpTdGF0dXM6ICoqUkVBRFkgLyBQSFlTSUNBTCoqClBhdGg6IGBhc3NldHMvc3RhZ2luZy9zb3VyY2VjaGF0X2I5NS9tb2RlbHMvYAoKLSBgb2dhX2NoYWlubGlua19mZW5jZV9tb2R1bGFyXzYwL2AKLSBgb2dhX3VuZmluaXNoZWRfYnVpbGRpbmdzXzIwNnBsdXMxMC9gCi0gYG9nYV9sYW1wcG9zdF9iZW5jaF90cmFzaGNhbi9gCgpSZWNvbW1lbmRlZCB1c2U6IGluZHVzdHJpYWwvY2l0eSBwZXJpbWV0ZXJzLCBhYmFuZG9uZWQgY29uc3RydWN0aW9uLCBzdHJlZXRzLCBwYXJrcyBhbmQgdXRpbGl0eSBkaXN0cmljdHMuIE1haW4gY2hhdCBzaG91bGQgZGVkdXBsaWNhdGUgYWdhaW5zdCBlYXJsaWVyIHJvYWQvZmVuY2UgcGFja3MgYW5kIHNlbGVjdCBjb2hlcmVudCBkaXN0cmljdC1zcGVjaWZpYyBzdWJzZXRzLgoKIyMgQjk2IOKAlCBiYXRocm9vbXMgLyByb29tIGZpbGxlciAvIGJhbGxvb25zIC8gdGhlbWVkIHByb3BzCgpTdGF0dXM6ICoqUkVBRFkgLyBQSFlTSUNBTCoqClBhdGg6IGBhc3NldHMvc3RhZ2luZy9zb3VyY2VjaGF0X2I5Ni9tb2RlbHMvYAoKLSBgb2dhX3RvaWxldHNfMzMvYAotIGBvZ2FfYmFsbG9vbnNfNTNfZ29kb3QvYAotIGBvZ2Ffcm9vbV9maWxsZXJfb2JqZWN0c18zMC9gCi0gYG9nYV9oYWxsb3dlZW5fcHJvcHNfMTI4L2AKClJlY29tbWVuZGVkIHVzZTogYmF0aHJvb21zLCBpbmhhYml0ZWQgaW50ZXJpb3JzLCBmZXN0aXZhbHMvZXZlbnRzIGFuZCBhYmFuZG9uZWQgbG9jYXRpb25zLiBUaGVtZWQgcHJvcHMgc2hvdWxkIHJlbWFpbiBvcHRpb25hbCBsb2NhdGlvbiBkcmVzc2luZyByYXRoZXIgdGhhbiBkZWZpbmluZyB0aGUgcGVybWFuZW50IHdvcmxkIHN0eWxlLgoKIyMgQjk3IOKAlCBjYW55b24gdGVycmFpbiAvIGZvbGlhZ2UKClN0YXR1czogKipSRUFEWSAvIFBIWVNJQ0FMKioKUGF0aDogYGFzc2V0cy9zdGFnaW5nL3NvdXJjZWNoYXRfYjk3L21vZGVscy9gCgotIGBvZ2FfY2FueW9uX3RlcnJhaW5fMTYxL2AKLSBgb2dhX2ZvbGlhZ2VfMS9gCgpSZWNvbW1lbmRlZCB1c2U6IGRyeS9jYW55b24gcmVnaW9ucywgY2xpZmZzLCByb2Nrcywgc2hydWJzIGFuZCB2ZWdldGF0aW9uIHZhcmlhdGlvbi4gT25seSBpbmRlcGVuZGVudCBzb3VyY2UgZ2VvbWV0cnkgd2FzIHN0YWdlZDsgYWRkb24tZGVwZW5kZW50IEdvZG90IGRlbW8gY29udGVudCB3YXMgaW50ZW50aW9uYWxseSBub3QgaW50cm9kdWNlZCBpbnRvIHRoZSBydW50aW1lIHByb2plY3QuCgojIyBCOTgg4oCUIHNpeCBob3VzZXMgd2l0aCBjb21wbGV0ZSB0ZXh0dXJlIHNvdXJjZXMKClN0YXR1czogKipSRUFEWSAvIFBIWVNJQ0FMKioKUGF0aDogYGFzc2V0cy9zdGFnaW5nL3NvdXJjZWNoYXRfYjk4L21vZGVscy9vZ2Ffc2l4X2hvdXNlc190ZXh0dXJlcy9gCgpTaXggaG91c2Ugc291cmNlIG1vZGVscyBwbHVzIHRoZSBzZXBhcmF0ZWx5IGRpc3RyaWJ1dGVkIHRleHR1cmUvYXRsYXMgYXJjaGl2ZXMgd2VyZSBzdGFnZWQgdG9nZXRoZXIgc28gdGhlIG1haW4gY2hhdCBoYXMgYSBjb21wbGV0ZSBlZGl0YWJsZSBzb3VyY2Ugc2V0LgoKUmVjb21tZW5kZWQgdXNlOiBhdXRob3JlZCByZXNpZGVudGlhbC9zZXR0bGVtZW50IGJ1aWxkaW5ncyBhZnRlciBhcnQtZGlyZWN0aW9uLCBzY2FsZSwgbWF0ZXJpYWwgYW5kIGNvbGxpc2lvbiByZXZpZXcuCg==' | base64 -d >> "$INDEX"
+          fi
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index physical source batches B95-B98"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
