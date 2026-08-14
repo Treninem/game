@@ -2,11 +2,9 @@ extends Node
 
 signal explored_changed
 
-const CELL_SIZE := 6.0
-const REVEAL_RADIUS := 2
-const WORLD_MIN := Vector2(-120.0, -120.0)
-const WORLD_MAX := Vector2(120.0, 90.0)
-const STATE_KEY := "map_explored"
+const CELL_SIZE := 256.0
+const REVEAL_RADIUS := 1
+const STATE_KEY := "map_explored_v2"
 
 var player: Node3D
 var last_cell := Vector2i(999999, 999999)
@@ -19,7 +17,8 @@ func _process(_delta: float) -> void:
         player = get_tree().get_first_node_in_group("player") as Node3D
         if player == null:
             return
-    var cell := world_to_cell(Vector2(player.global_position.x, player.global_position.z))
+    var world := Vector2(player.global_position.x, player.global_position.z)
+    var cell := world_to_cell(world)
     if cell != last_cell:
         last_cell = cell
         reveal_around(cell)
@@ -37,7 +36,7 @@ func reveal_around(center: Vector2i, radius: int = REVEAL_RADIUS) -> void:
         for y in range(center.y - radius, center.y + radius + 1):
             var cell := Vector2i(x, y)
             var world := cell_to_world_center(cell)
-            if world.x < WORLD_MIN.x or world.x > WORLD_MAX.x or world.y < WORLD_MIN.y or world.y > WORLD_MAX.y:
+            if not WorldData.inside_world(world):
                 continue
             if Vector2(x - center.x, y - center.y).length() > float(radius) + 0.35:
                 continue
@@ -64,10 +63,15 @@ func explored_cells() -> Array[Vector2i]:
     return result
 
 func explored_percent() -> float:
-    var columns := int(ceil((WORLD_MAX.x - WORLD_MIN.x) / CELL_SIZE))
-    var rows := int(ceil((WORLD_MAX.y - WORLD_MIN.y) / CELL_SIZE))
+    var width := WorldData.WORLD_MAX.x - WorldData.WORLD_MIN.x
+    var height := WorldData.WORLD_MAX.y - WorldData.WORLD_MIN.y
+    var columns := int(ceil(width / CELL_SIZE))
+    var rows := int(ceil(height / CELL_SIZE))
     var total := maxi(1, columns * rows)
     return clampf(float(_explored_dictionary().size()) / float(total) * 100.0, 0.0, 100.0)
+
+func explored_area_km2() -> float:
+    return float(_explored_dictionary().size()) * CELL_SIZE * CELL_SIZE / 1000000.0
 
 func _explored_dictionary() -> Dictionary:
     var saved = GameState.get_world_value(STATE_KEY, {})
