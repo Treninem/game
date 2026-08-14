@@ -719,3 +719,81 @@ Path: `assets/staging/sourcechat_b64/models/`
 - `oga_daemon_statue_rigged_animated/` — rigged statue/daemon with attack, die, spell and idle source animations.
 
 Recommended use: distinct authored enemy archetypes only where they match final art direction; validate import, scale, materials and collisions before production promotion.
+
+## B65 — Vampire Bat / Lava Golem
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b65/models/`
+
+- `oga_vampire_bat_animated/` — textured, rigged and animated vampire-bat source.
+- `oga_lava_golem_rigged_animated/` — rigged golem with idle/walk/attack source animation data; production materials require audit/rebuild.
+
+## B66 — spider / boar / wolf / werewolf
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b66/models/`
+
+- `oga_spider_animated/` — compact textured spider with idle/walk/attack.
+- `oga_boar_rigged_animated/` — rigged/textured boar with walk/attack.
+- `oga_wolf_rigged/` — rigged wolf source; animation readiness must be checked.
+- `oga_werewolf_animated/` — textured animated werewolf with locomotion/combat/death clips.
+
+## B67 — Universal Animation Library Standard
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b67/animations/`
+
+- `quaternius_universal_animation_library_standard/` — free CC0 Standard edition with 45 humanoid animations for retargeting.
+
+Important: this is the free Standard edition only, not the separate 120+ Source edition.
+
+## B68 — humanoid bases / medieval soldier
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b68/models/`
+
+- `oga_stylized_humanoid_base_yw/` — stylized textured rigged humanoid base.
+- `oga_medieval_soldier_rigged_animated/` — low-poly medieval soldier/guard source with animations.
+- `oga_simple_rigged_character_animated/` — simple textured rigged humanoid with idle/walk/jump.
+
+## B69 — additional CC0 character sources
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b69/models/`
+
+- `oga_cat_pilot_rigged_animated/` — rigged/animated character with multiple source actions and eye blendshapes.
+- `kenney_animated_characters_3/` — Kenney CC0 rigged character package with four skins and basic animations.
+- `oga_rigged_animated_humanoid/` — very low-poly humanoid source for prototyping/retargeting; rig hookup may need cleanup.
+
+## B70 — Zantar / Bombalach / Hydrach / Fat Demon
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b70/models/`
+
+- `oga_zantar_rigged_animated/` — gelatinous-cube enemy source described as rigged/animated.
+- `oga_bombalach_rigged_animated/` — mud/stone creature source with low/high-poly data and animation set.
+- `oga_hydrach_creature/` — original CC0 model/texture RAR archives preserved physically; hosted 7z extraction was unsafe. Animation status remains uncertain and must be inspected locally.
+- `oga_fat_demon_static/` — static low-poly demon with texture; requires rigging for active NPC use.
+
+## B71 — farm animals / duck / rooster / chicken / pigeon
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b71/models/`
+
+- `quaternius_lowpoly_animated_farm_animals/` — animated low-poly farm-animal source pack including pig/cow/horse/llama/dog/sheep variants.
+- `oga_rigged_duck/` — rigged duck with source waddle/peck actions.
+- `oga_rooster_animated/` — rigged/animated rooster with diffuse/normal maps.
+- `oga_chicken_animated/` — rigged/animated chicken with diffuse/normal maps.
+- `oga_pigeon_rigged_animated_untextured/` — rigged/animated pigeon; explicitly untextured.
+
+## B72 — forest fauna
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b72/models/`
+
+- `oga_fox_animated/` — compact fox with diffuse/normal maps and idle/walk/run/bite/digging/death clips.
+- `oga_deer_female_rigged_animated/` — rigged/animated doe with packed diffuse texture.
+- `oga_rabbit_rigged_animated/` — rigged/animated rabbit with packed diffuse/normal maps.
+- `oga_white_bear_static/` — textured low-poly white bear; explicitly static/unrigged.
+
+Integration rule: these are source candidates. Main game chat should selectively retarget, normalize scale/materials/collisions/LOD and promote only chosen production assets. Do not wire whole source libraries directly into runtime.
