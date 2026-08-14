@@ -1,0 +1,6 @@
+CC0 1.0 Universal
+
+This staged asset pack is recorded by its source page as CC0. The original author has waived copyright and related rights to the extent permitted by law under the Creative Commons CC0 1.0 Universal public-domain dedication.
+
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+Preserve SOURCE.md beside the staged files.
