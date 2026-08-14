@@ -1,0 +1,128 @@
+name: Vendor source-chat B29 real CC0 medieval building system
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b29.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b29
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 medieval building sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b29/models"
+          TMP=".sourcechat_b29_tmp"
+          rm -rf "assets/staging/sourcechat_b29" "$TMP"
+          mkdir -p "$ROOT/oga_modular_medieval_building_pack" "$ROOT/oga_medieval_tavern" "$ROOT/oga_medieval_blacksmith" "$ROOT/oga_medieval_tavern_interior" "$TMP"
+
+          BASE="https://opengameart.org/sites/default/files"
+          PAGE_MOD="https://opengameart.org/content/modular-medieval-building-pack"
+          for f in \
+            74694_Windows1Upload_blend.zip \
+            74695_Doors1Upload_blend.zip \
+            74696_HousePack1_2Upload_blend.zip \
+            74697_HousePack2_2Upload_blend.zip \
+            74698_BalconyUpload_blend.zip \
+            74699_ChimneyUpload_blend.zip \
+            74700_BuildingExtensionsUpload_blend.zip \
+            74701_StairsUpload_blend.zip \
+            74702_ExtraRoof1Upload_blend.zip \
+            74703_SignsUpload_blend.zip; do
+            curl --fail --location --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 600 -A 'ImPuls-CC0-B29/1.0' "$BASE/$f" -o "$TMP/$f"
+            d="$TMP/${f%.zip}"
+            mkdir -p "$d"
+            unzip -q "$TMP/$f" -d "$d"
+            rsync -a "$d/" "$ROOT/oga_modular_medieval_building_pack/"
+          done
+
+          curl --fail --location --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 600 -A 'ImPuls-CC0-B29/1.0' "$BASE/75282_ThePaintedWench_02Upload_blend.zip" -o "$TMP/tavern.zip"
+          unzip -q "$TMP/tavern.zip" -d "$ROOT/oga_medieval_tavern"
+          curl --fail --location --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 600 -A 'ImPuls-CC0-B29/1.0' "$BASE/75729_Blacksmith1Upload_blend.zip" -o "$TMP/blacksmith.zip"
+          unzip -q "$TMP/blacksmith.zip" -d "$ROOT/oga_medieval_blacksmith"
+          curl --fail --location --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 600 -A 'ImPuls-CC0-B29/1.0' "$BASE/medievaltavern.blend" -o "$ROOT/oga_medieval_tavern_interior/medievaltavern.blend"
+
+          for p in "$ROOT"/*; do
+            find "$p" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$p/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          done
+
+          cat > "$ROOT/oga_modular_medieval_building_pack/SOURCE.md" <<EOF
+          # Source
+          Pack: Modular Medieval Building Pack
+          Author: Daniel Andersson / OpenGameArt mirror
+          Source page: $PAGE_MOD
+          License: CC0 / Public Domain as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated.
+          EOF
+          cat > "$ROOT/oga_medieval_tavern/SOURCE.md" <<'EOF'
+          # Source
+          Pack: Medieval Tavern
+          Author: Daniel Andersson / OpenGameArt mirror
+          Source page: https://opengameart.org/content/medieval-tavern
+          License: CC0 / Public Domain.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated.
+          EOF
+          cat > "$ROOT/oga_medieval_blacksmith/SOURCE.md" <<'EOF'
+          # Source
+          Pack: Medieval Blacksmith
+          Author: Daniel Andersson / OpenGameArt mirror
+          Source page: https://opengameart.org/content/medieval-blacksmith
+          License: CC0 / Public Domain.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated.
+          EOF
+          cat > "$ROOT/oga_medieval_tavern_interior/SOURCE.md" <<'EOF'
+          # Source
+          Pack: Medieval Tavern Interior
+          Author: AnyRPG / derivative of Daniel Andersson Medieval Tavern
+          Source page: https://opengameart.org/content/medieval-tavern-interior
+          License: CC0 as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated.
+          EOF
+
+          cat > "assets/staging/sourcechat_b29/README.md" <<'EOF'
+          # Source chat B29 — real CC0 medieval building system
+
+          Real extracted source assets only. Nothing is connected to gameplay.
+
+          The modular building collection includes signs, roofs, stairs, building extensions, chimneys, balconies, multiple house bases, doors and windows. Separate Tavern and Blacksmith buildings plus a fully explorable Tavern Interior are also staged.
+
+          Main chat should use these as source pieces to build varied capital/village architecture, normalize scale/materials, create optimized GLB production variants, and avoid instancing whole high-cost Blend sources directly at runtime.
+          EOF
+          rm -rf "$TMP"
+          echo "B29 files:"; find assets/staging/sourcechat_b29 -type f | wc -l
+          du -sh assets/staging/sourcechat_b29
+
+      - name: Commit B29 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b29
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 medieval building system B29"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
