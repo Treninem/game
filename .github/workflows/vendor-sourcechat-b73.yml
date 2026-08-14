@@ -1,0 +1,118 @@
+name: Vendor source-chat B73 real CC0 animated fish
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b73.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b73
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 animated fish sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b73"
+          TMP=".sourcechat_b73_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/fish" "$ROOT/models/oga_fish_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B73/1.0' \
+            "https://opengameart.org/sites/default/files/fish.zip" \
+            -o "$TMP/fish.zip"
+          unzip -q "$TMP/fish.zip" -d "$TMP/fish"
+          chmod -R u+rwX "$TMP/fish" || true
+          rsync -a "$TMP/fish/" "$ROOT/models/oga_fish_rigged_animated/"
+          meta "oga_fish_rigged_animated" \
+            "https://opengameart.org/content/fish-animated" \
+            "Fish (Animated)" \
+            "https://opengameart.org/sites/default/files/fish.zip" \
+            "Rigged, animated fish with diffuse texture; source page describes it as ready for game use."
+
+          mkdir -p "$TMP/esox" "$ROOT/models/oga_esox_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B73/1.0' \
+            "https://opengameart.org/sites/default/files/esox.zip" \
+            -o "$TMP/esox.zip"
+          unzip -q "$TMP/esox.zip" -d "$TMP/esox"
+          chmod -R u+rwX "$TMP/esox" || true
+          rsync -a "$TMP/esox/" "$ROOT/models/oga_esox_animated/"
+          meta "oga_esox_animated" \
+            "https://opengameart.org/content/esox-animated-fish" \
+            "Esox - Animated Fish" \
+            "https://opengameart.org/sites/default/files/esox.zip" \
+            "1632-triangle fish with albedo/normal/roughness/specularity textures and idle, slow-swim and fast-swim animations."
+
+          mkdir -p "$TMP/quaternius" "$ROOT/models/quaternius_animated_fish_pack"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B73/1.0' \
+            "https://opengameart.org/sites/default/files/Animated%20Fish%20Pack%20by%20%40Quaternius.zip" \
+            -o "$TMP/quaternius.zip"
+          unzip -q "$TMP/quaternius.zip" -d "$TMP/quaternius"
+          chmod -R u+rwX "$TMP/quaternius" || true
+          rsync -a "$TMP/quaternius/" "$ROOT/models/quaternius_animated_fish_pack/"
+          meta "quaternius_animated_fish_pack" \
+            "https://opengameart.org/content/animated-fish" \
+            "Animated Fish" \
+            "https://opengameart.org/sites/default/files/Animated%20Fish%20Pack%20by%20%40Quaternius.zip" \
+            "Low-poly animated fish pack with Blend, OBJ and FBX formats."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B73 — real CC0 animated fish
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should normalize scale and materials and choose a small production subset per biome rather than importing all variants blindly.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B73 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B73 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b73
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 animated fish B73"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
