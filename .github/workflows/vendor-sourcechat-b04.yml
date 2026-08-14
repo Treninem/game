@@ -1,0 +1,176 @@
+name: Vendor source-chat B04 real CC0 packs
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b04.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b04
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 footsteps fire and broad SFX sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b04"
+          TMP=".sourcechat_b04_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$ROOT/audio" "$TMP"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full >/dev/null
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          The linked source page marks this staged asset as CC0 / public-domain dedication.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside staged files.
+          EOF
+          }
+
+          zip_pack() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/audio/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-SourceChat-B04/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' \
+              --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          seven_pack() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/audio/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-SourceChat-B04/1.0' "$url" -o "$work/pack.7z"
+            7z x -y "$work/pack.7z" -o"$work/archive" >/dev/null
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' \
+              --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one_file() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/audio/$key"
+            mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-SourceChat-B04/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_pack "oga_100_cc0_sfx_2" \
+            "https://opengameart.org/sites/default/files/sfx_100_v2.zip" \
+            "https://opengameart.org/content/100-cc0-sfx-2" \
+            "rubberduck / OpenGameArt" \
+            "100 CC0 sounds: air, doors, footsteps, glass, hits, ambient/machine/construction/highway/water-flow loops, metal, stone, switches, thunder and wood."
+
+          seven_pack "oga_41_snow_shoe_steps" \
+            "https://opengameart.org/sites/default/files/corsica_s-snow_shoes.7z" \
+            "https://opengameart.org/content/41-snow-shoe-steps" \
+            "Corsica_S; extracted/submitted by qubodup / OpenGameArt" \
+            "41 CC0 snow/ice shoe-step sounds; explicit permission for CC0 extraction recorded on source page."
+
+          seven_pack "oga_42_snow_gravel_footsteps" \
+            "https://opengameart.org/sites/default/files/corsica_s-walking_in_snow.7z" \
+            "https://opengameart.org/content/42-snow-and-gravel-footsteps" \
+            "Corsica_S; extracted/submitted by qubodup / OpenGameArt" \
+            "42 CC0 snow/gravel footsteps; archive contains FLAC source recordings."
+
+          seven_pack "oga_4_dry_snow_steps" \
+            "https://opengameart.org/sites/default/files/qubodup-snow_steps_dry_0.7z" \
+            "https://opengameart.org/content/4-dry-snow-steps" \
+            "qubodup / OpenGameArt" \
+            "Four dry/crisp snow footsteps, CC0."
+
+          seven_pack "oga_9_wet_snow_steps" \
+            "https://opengameart.org/sites/default/files/qubodup-wet_snow_steps.7z" \
+            "https://opengameart.org/content/9-wet-snow-steps" \
+            "qubodup / OpenGameArt" \
+            "Nine wet snow footsteps, CC0; source notes high sample rate on originals."
+
+          seven_pack "oga_35_wood_destruction_sfx" \
+            "https://opengameart.org/sites/default/files/independent_nu_ljudbank-wood_crack_hit_destruction.7z" \
+            "https://opengameart.org/content/35-wooden-crackshitsdestructions" \
+            "Independent.nu; submitted by qubodup / OpenGameArt" \
+            "35 CC0 wooden cracks, hits and destruction sounds for structures, props and falling timber."
+
+          one_file "oga_fireplace_loop" "fire.wav" \
+            "https://opengameart.org/sites/default/files/fire.wav" \
+            "https://opengameart.org/content/fireplace-sound-loop" \
+            "PagDev / OpenGameArt" \
+            "10.3 MB CC0 looping wood-burning fireplace recording; useful for hearths, campfires, stoves and forges."
+
+          one_file "oga_fire_crackling" "fire-1.ogg" \
+            "https://opengameart.org/sites/default/files/fire-1.ogg" \
+            "https://opengameart.org/content/fire-crackling" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 popping/crackling fire recording in OGG."
+          one_file "oga_fire_crackling" "fire-1.wav" \
+            "https://opengameart.org/sites/default/files/fire-1.wav" \
+            "https://opengameart.org/content/fire-crackling" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 popping/crackling fire recording in uncompressed WAV."
+
+          rm -rf "$TMP"
+
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B04 — real CC0 environment audio
+
+          These are physically downloaded source files, not link-only entries. This source chat does not connect them to gameplay.
+
+          Coverage: broad environmental SFX, machine/construction/road/water/thunder loops, snow and gravel footsteps, dry/wet snow, wood destruction, fireplace loop and fire crackling.
+
+          Main integration chat should inspect each `SOURCE.md` and `LICENSE.txt`, deduplicate against existing production/staging audio, normalize sample formats/levels if needed, then promote only selected sounds.
+          EOF
+
+          echo "B04 staged files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit only B04 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b04
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 environment audio B04"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
