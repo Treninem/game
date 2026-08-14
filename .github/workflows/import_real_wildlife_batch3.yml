@@ -1,0 +1,133 @@
+name: Import verified real wildlife batch 3
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import_real_wildlife_batch3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-real-wildlife-batch3
+  cancel-in-progress: false
+
+jobs:
+  import-wildlife:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sparse partial checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/import_real_wildlife_batch3.yml
+            assets/source_packs/opengameart/individual_animals
+          sparse-checkout-cone-mode: false
+
+      - name: Download verified CC0 animal sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+          mkdir -p "$ROOT/rat_animated" "$ROOT/cobra" "$ROOT/mammoth" "$ROOT/vampire_bat" "$ROOT/basic_fish"
+
+          fetch() {
+            local url="$1" out="$2"
+            if [ -s "$out" ]; then echo "Already present: $out"; return 0; fi
+            curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1200 \
+              -A 'ImPuls-CC0-AssetImporter/3.0' "$url" -o "$out"
+            test -s "$out"
+          }
+
+          fetch 'https://opengameart.org/sites/default/files/rat_source.7z' "$ROOT/rat_animated/rat_source.7z"
+          fetch 'https://opengameart.org/sites/default/files/rat_godot.zip' "$ROOT/rat_animated/rat_godot.zip"
+          fetch 'https://opengameart.org/sites/default/files/cobra.zip' "$ROOT/cobra/cobra.zip"
+          fetch 'https://opengameart.org/sites/default/files/Mammouth.7z' "$ROOT/mammoth/Mammouth.7z"
+          fetch 'https://opengameart.org/sites/default/files/animated_vampire_bat.zip' "$ROOT/vampire_bat/animated_vampire_bat.zip"
+          fetch 'https://opengameart.org/sites/default/files/Fish.7z' "$ROOT/basic_fish/Fish.7z"
+
+          find "$ROOT" -type f \( -name '*.zip' -o -name '*.7z' \) -size 0 -print -quit | grep -q . && { echo 'ERROR: zero-byte animal archive'; exit 1; } || true
+
+      - name: Write provenance metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+
+          cat > "$ROOT/rat_animated/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/rat-0
+          License: CC0
+          Author: br-n518
+          Files: rat_source.7z, rat_godot.zip
+          Notes: 270 triangles, 512x512 texture; idle, walk, run, attack and death animations. Godot-ready archive supplied by source page.
+          EOF
+
+          cat > "$ROOT/cobra/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/cobra-0
+          License: CC0
+          Author: Micket
+          File: cobra.zip
+          Notes: 330-triangle low-poly cobra; unwrapped and rigged/posed, no animations and no final texture included.
+          EOF
+
+          cat > "$ROOT/mammoth/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/mammuth-low-poly
+          License: CC0
+          Author: STKRudy85
+          File: Mammouth.7z
+          Notes: cartoon low-poly mammoth, textured; source archive includes license file.
+          EOF
+
+          cat > "$ROOT/vampire_bat/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/vampire-bat-animated
+          License: CC0
+          Author: rubberduck
+          File: animated_vampire_bat.zip
+          Notes: textured, rigged and animated vampire bat with frost variation; approximately 7.7k triangles before optional decimation.
+          EOF
+
+          cat > "$ROOT/basic_fish/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/basic-fish-low-poly
+          License: CC0
+          Author: STKRudy85
+          File: Fish.7z
+          Notes: basic low-poly fish, textured and rigged; source archive includes license file.
+          EOF
+
+      - name: Preserve batch outside worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/individual_animals"
+          CACHE="/tmp/impuls_wildlife_batch3"
+          rm -rf "$CACHE"
+          mkdir -p "$CACHE"
+          for d in rat_animated cobra mammoth vampire_bat basic_fish; do cp -a "$ROOT/$d" "$CACHE/"; done
+
+      - name: Commit safely over moving main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ROOT="assets/source_packs/opengameart/individual_animals"
+          CACHE="/tmp/impuls_wildlife_batch3"
+
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main
+            git reset --hard FETCH_HEAD
+            mkdir -p "$ROOT"
+            for d in rat_animated cobra mammoth vampire_bat basic_fish; do
+              rm -rf "$ROOT/$d"
+              cp -a "$CACHE/$d" "$ROOT/"
+            done
+            git add "$ROOT/rat_animated" "$ROOT/cobra" "$ROOT/mammoth" "$ROOT/vampire_bat" "$ROOT/basic_fish"
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "assets: vendor third verified CC0 wildlife batch"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
