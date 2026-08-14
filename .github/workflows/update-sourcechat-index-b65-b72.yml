@@ -1,0 +1,161 @@
+name: Update source-chat staging index through B72
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b65-b72.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify B65-B72 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b65/models/oga_lava_golem_rigged_animated
+            assets/staging/sourcechat_b65/models/oga_vampire_bat_animated
+            assets/staging/sourcechat_b66/models/oga_boar_rigged_animated
+            assets/staging/sourcechat_b66/models/oga_spider_animated
+            assets/staging/sourcechat_b66/models/oga_werewolf_animated
+            assets/staging/sourcechat_b66/models/oga_wolf_rigged
+            assets/staging/sourcechat_b67/animations/quaternius_universal_animation_library_standard
+            assets/staging/sourcechat_b68/models/oga_medieval_soldier_rigged_animated
+            assets/staging/sourcechat_b68/models/oga_simple_rigged_character_animated
+            assets/staging/sourcechat_b68/models/oga_stylized_humanoid_base_yw
+            assets/staging/sourcechat_b69/models/kenney_animated_characters_3
+            assets/staging/sourcechat_b69/models/oga_cat_pilot_rigged_animated
+            assets/staging/sourcechat_b69/models/oga_rigged_animated_humanoid
+            assets/staging/sourcechat_b70/models/oga_bombalach_rigged_animated
+            assets/staging/sourcechat_b70/models/oga_fat_demon_static
+            assets/staging/sourcechat_b70/models/oga_hydrach_creature
+            assets/staging/sourcechat_b70/models/oga_zantar_rigged_animated
+            assets/staging/sourcechat_b71/models/oga_chicken_animated
+            assets/staging/sourcechat_b71/models/oga_pigeon_rigged_animated_untextured
+            assets/staging/sourcechat_b71/models/oga_rigged_duck
+            assets/staging/sourcechat_b71/models/oga_rooster_animated
+            assets/staging/sourcechat_b71/models/quaternius_lowpoly_animated_farm_animals
+            assets/staging/sourcechat_b72/models/oga_deer_female_rigged_animated
+            assets/staging/sourcechat_b72/models/oga_fox_animated
+            assets/staging/sourcechat_b72/models/oga_rabbit_rigged_animated
+            assets/staging/sourcechat_b72/models/oga_white_bear_static
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B65 —' "$INDEX"; then
+            echo "B65 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B65 — Vampire Bat / Lava Golem
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b65/models/`
+
+          - `oga_vampire_bat_animated/` — textured, rigged and animated vampire-bat source.
+          - `oga_lava_golem_rigged_animated/` — rigged golem with idle/walk/attack source animation data; production materials require audit/rebuild.
+
+          ## B66 — spider / boar / wolf / werewolf
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b66/models/`
+
+          - `oga_spider_animated/` — compact textured spider with idle/walk/attack.
+          - `oga_boar_rigged_animated/` — rigged/textured boar with walk/attack.
+          - `oga_wolf_rigged/` — rigged wolf source; animation readiness must be checked.
+          - `oga_werewolf_animated/` — textured animated werewolf with locomotion/combat/death clips.
+
+          ## B67 — Universal Animation Library Standard
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b67/animations/`
+
+          - `quaternius_universal_animation_library_standard/` — free CC0 Standard edition with 45 humanoid animations for retargeting.
+
+          Important: this is the free Standard edition only, not the separate 120+ Source edition.
+
+          ## B68 — humanoid bases / medieval soldier
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b68/models/`
+
+          - `oga_stylized_humanoid_base_yw/` — stylized textured rigged humanoid base.
+          - `oga_medieval_soldier_rigged_animated/` — low-poly medieval soldier/guard source with animations.
+          - `oga_simple_rigged_character_animated/` — simple textured rigged humanoid with idle/walk/jump.
+
+          ## B69 — additional CC0 character sources
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b69/models/`
+
+          - `oga_cat_pilot_rigged_animated/` — rigged/animated character with multiple source actions and eye blendshapes.
+          - `kenney_animated_characters_3/` — Kenney CC0 rigged character package with four skins and basic animations.
+          - `oga_rigged_animated_humanoid/` — very low-poly humanoid source for prototyping/retargeting; rig hookup may need cleanup.
+
+          ## B70 — Zantar / Bombalach / Hydrach / Fat Demon
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b70/models/`
+
+          - `oga_zantar_rigged_animated/` — gelatinous-cube enemy source described as rigged/animated.
+          - `oga_bombalach_rigged_animated/` — mud/stone creature source with low/high-poly data and animation set.
+          - `oga_hydrach_creature/` — original CC0 model/texture RAR archives preserved physically; hosted 7z extraction was unsafe. Animation status remains uncertain and must be inspected locally.
+          - `oga_fat_demon_static/` — static low-poly demon with texture; requires rigging for active NPC use.
+
+          ## B71 — farm animals / duck / rooster / chicken / pigeon
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b71/models/`
+
+          - `quaternius_lowpoly_animated_farm_animals/` — animated low-poly farm-animal source pack including pig/cow/horse/llama/dog/sheep variants.
+          - `oga_rigged_duck/` — rigged duck with source waddle/peck actions.
+          - `oga_rooster_animated/` — rigged/animated rooster with diffuse/normal maps.
+          - `oga_chicken_animated/` — rigged/animated chicken with diffuse/normal maps.
+          - `oga_pigeon_rigged_animated_untextured/` — rigged/animated pigeon; explicitly untextured.
+
+          ## B72 — forest fauna
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b72/models/`
+
+          - `oga_fox_animated/` — compact fox with diffuse/normal maps and idle/walk/run/bite/digging/death clips.
+          - `oga_deer_female_rigged_animated/` — rigged/animated doe with packed diffuse texture.
+          - `oga_rabbit_rigged_animated/` — rigged/animated rabbit with packed diffuse/normal maps.
+          - `oga_white_bear_static/` — textured low-poly white bear; explicitly static/unrigged.
+
+          Integration rule: these are source candidates. Main game chat should selectively retarget, normalize scale/materials/collisions/LOD and promote only chosen production assets. Do not wire whole source libraries directly into runtime.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B65-B72"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
