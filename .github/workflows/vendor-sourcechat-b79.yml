@@ -1,0 +1,131 @@
+name: Vendor source-chat B79 real CC0 pirate graveyard fantasy town watercraft
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b79.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b79
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 settlement and watercraft kits
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b79"
+          TMP=".sourcechat_b79_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/pirate" "$ROOT/models/kenney_pirate_kit_2_1"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B79/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_pirate-kit_2.1.zip" -o "$TMP/pirate.zip"
+          unzip -q "$TMP/pirate.zip" -d "$TMP/pirate"
+          chmod -R u+rwX "$TMP/pirate" || true
+          find "$TMP/pirate" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/pirate/" "$ROOT/models/kenney_pirate_kit_2_1/"
+          meta "kenney_pirate_kit_2_1" \
+            "https://opengameart.org/content/pirate-kit" \
+            "Pirate Kit 2.1" \
+            "https://opengameart.org/sites/default/files/kenney_pirate-kit_2.1.zip" \
+            "Kenney 2026 pirate/world kit with 70+ optimized low-poly objects including ships, treasure, trees, rocks and related island/port pieces."
+
+          mkdir -p "$TMP/grave" "$ROOT/models/kenney_graveyard_kit_5"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B79/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_graveyard-kit_5.0.zip" -o "$TMP/grave.zip"
+          unzip -q "$TMP/grave.zip" -d "$TMP/grave"
+          chmod -R u+rwX "$TMP/grave" || true
+          find "$TMP/grave" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/grave/" "$ROOT/models/kenney_graveyard_kit_5/"
+          meta "kenney_graveyard_kit_5" \
+            "https://opengameart.org/content/graveyard-kit" \
+            "Graveyard Kit 5.0" \
+            "https://opengameart.org/sites/default/files/kenney_graveyard-kit_5.0.zip" \
+            "Kenney graveyard/Halloween source kit with 90 optimized models: graves, coffins, fences, benches, characters and more."
+
+          mkdir -p "$TMP/town" "$ROOT/models/kenney_fantasy_town_2"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B79/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip" -o "$TMP/town.zip"
+          unzip -q "$TMP/town.zip" -d "$TMP/town"
+          chmod -R u+rwX "$TMP/town" || true
+          find "$TMP/town" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/town/" "$ROOT/models/kenney_fantasy_town_2/"
+          meta "kenney_fantasy_town_2" \
+            "https://opengameart.org/content/fantasy-town-kit" \
+            "Fantasy Town Kit 2.0" \
+            "https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip" \
+            "Kenney 2025 modular fantasy/medieval town kit with 160+ optimized objects and FBX/OBJ/GLTF formats."
+
+          mkdir -p "$TMP/water" "$ROOT/models/kenney_watercraft_kit"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B79/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_watercraft_kit.zip" -o "$TMP/water.zip"
+          unzip -q "$TMP/water.zip" -d "$TMP/water"
+          chmod -R u+rwX "$TMP/water" || true
+          find "$TMP/water" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/water/" "$ROOT/models/kenney_watercraft_kit/"
+          meta "kenney_watercraft_kit" \
+            "https://opengameart.org/content/watercraft-kit" \
+            "Watercraft Kit" \
+            "https://opengameart.org/sites/default/files/kenney_watercraft_kit.zip" \
+            "Kenney low-poly watercraft source kit with 45+ boat/ship/vessel models; source page explicitly lists Godot compatibility."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B79 — real CC0 pirate, graveyard, fantasy-town and watercraft kits
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use Fantasy Town/Castle/Medieval Village packs as alternatives and settle on a consistent visual family. Pirate and Watercraft kits are candidates for harbors/coasts/rivers. Graveyard Kit supplies graveyard props and should not be blindly imported as an entire scene.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B79 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B79 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b79
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 pirate graveyard fantasy town watercraft B79"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
