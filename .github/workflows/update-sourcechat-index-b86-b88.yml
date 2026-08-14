@@ -44,52 +44,11 @@ jobs:
             test -d "$d" || { echo "Missing physical staging directory: $d" >&2; exit 1; }
             test -n "$(find "$d" -type f -print -quit)" || { echo "Empty staging directory: $d" >&2; exit 1; }
           done
-
           INDEX=assets/staging/SOURCECHAT_INDEX.md
-          if grep -q '^## B86 —' "$INDEX"; then
-            echo 'B86-B88 already indexed; no append needed.'
-            exit 0
+          if ! grep -q '^## B86 —' "$INDEX"; then
+            printf '\n' >> "$INDEX"
+            echo 'IyMgQjg2IOKAlCBtYXJrZXQgLyBtZWRpZXZhbCB0b29scyAvIHNldHRsZW1lbnQgcHJvcHMKClN0YXR1czogKipSRUFEWSAvIFBIWVNJQ0FMKioKUGF0aDogYGFzc2V0cy9zdGFnaW5nL3NvdXJjZWNoYXRfYjg2L21vZGVscy9gCgotIGBrZW5uZXlfbWluaV9tYXJrZXQvYAotIGBvZ2FfbWVkaWV2YWxfdG9vbHNfMTIvYAotIGBvZ2FfbWVkaWV2YWxfcHJvcHNfcGFja18xX2RhbmllbC9gCi0gYG9nYV9tZWRpZXZhbF9wcm9wc19wYWNrXzJfZGFuaWVsL2AKLSBgb2dhX21lZGlldmFsX3Byb3BzX3BhY2tfM19kYW5pZWwvYAoKUmVjb21tZW5kZWQgdXNlOiB2aWxsYWdlIG1hcmtldHMsIHdvcmtzaG9wcywgZmFybXMsIHRhdmVybnMsIHN0b3JhZ2UgYW5kIGdlbmVyYWwgc2V0dGxlbWVudCBkcmVzc2luZy4gTWFpbiBjaGF0IHNob3VsZCBub3JtYWxpemUgc2NhbGUvbWF0ZXJpYWxzIGFuZCBwcm9tb3RlIGNvaGVyZW50IHByb3Agc3Vic2V0cyBpbnN0ZWFkIG9mIGltcG9ydGluZyBlbnRpcmUgcGFja3MgYmxpbmRseS4KCiMjIEI4NyDigJQgY3JvcHMgLyBjb3JuIC8gaGF5IC8gZmFybSBzb3VyY2UgbW9kZWxzCgpTdGF0dXM6ICoqUkVBRFkgLyBQSFlTSUNBTCoqClBhdGg6IGBhc3NldHMvc3RhZ2luZy9zb3VyY2VjaGF0X2I4Ny9tb2RlbHMvYAoKLSBgcXVhdGVybml1c19sb3dwb2x5X2Nyb3BzXzEwMHBsdXMvYCDigJQgMTAwKyBsb3ctcG9seSBjcm9wcyB3aXRoIG11bHRpcGxlIGdyb3d0aCBzdGFnZXMuCi0gYG9nYV9sb3dfcG9seV9jb3JuL2AKLSBgb2dhX2hheV9iYWxlX2xvd3BvbHkvYAotIGBvZ2FfYmFzaWNfdm94ZWxfZmFybS9gCgpSZWNvbW1lbmRlZCB1c2U6IGZpZWxkcywgZmFybXMsIGNyb3AgcHJvZ3Jlc3Npb24sIGhhcnZlc3Qgc2NlbmVzIGFuZCBydXJhbCBkcmVzc2luZy4gTWFpbiBjaGF0IHNob3VsZCBzZWxlY3QgYXJ0LWRpcmVjdGlvbi1jb21wYXRpYmxlIGNyb3BzIGFuZCBtYXAgZ3Jvd3RoIHN0YWdlcyB0byBnYW1lcGxheSBvbmx5IGFmdGVyIHByb2R1Y3Rpb24gcmV2aWV3LgoKIyMgQjg4IOKAlCBzZXdlcnMgLyBtaW5lcyAvIGNhdmVzIC8gY29uY3JldGUgcGlwZXMKClN0YXR1czogKipSRUFEWSAvIFBIWVNJQ0FMKioKUGF0aDogYGFzc2V0cy9zdGFnaW5nL3NvdXJjZWNoYXRfYjg4L21vZGVscy9gCgotIGBvZ2Ffc2V3ZXJfdHVubmVsc19sb3dyZXNfMjAyNi9gCi0gYG9nYV9taW5lc19hbmRfY2F2ZXNfMTc4L2AKLSBgb2dhX2ZyZWVfbWluZV9hc3NldHNfcGFjay9gCi0gYG9nYV9jb25jcmV0ZV9waXBlcy9gCgpSZWNvbW1lbmRlZCB1c2U6IHNld2VycywgdW5kZXJncm91bmQgc2VydmljZSB0dW5uZWxzLCBtaW5lcywgY2F2ZXMsIGRyYWluYWdlIGFuZCBpbmR1c3RyaWFsIHVuZGVyZ3JvdW5kIHNwYWNlcy4gQ29tYmluZSBzZWxlY3RpdmVseSB3aXRoIEIyMS9CMjMvQjc2OyBkZWR1cGxpY2F0ZSBvdmVybGFwcGluZyBtaW5lL2NhdmUgcGllY2VzIGFuZCBrZWVwIG9ubHkgdGhlIGJlc3QgcHJvZHVjdGlvbiB2YXJpYW50cy4K' | base64 -d >> "$INDEX"
           fi
-
-          cat >> "$INDEX" <<'EOF'
-
-## B86 — market / medieval tools / settlement props
-
-Status: **READY / PHYSICAL**
-Path: `assets/staging/sourcechat_b86/models/`
-
-- `kenney_mini_market/`
-- `oga_medieval_tools_12/`
-- `oga_medieval_props_pack_1_daniel/`
-- `oga_medieval_props_pack_2_daniel/`
-- `oga_medieval_props_pack_3_daniel/`
-
-Recommended use: village markets, workshops, farms, taverns, storage and general settlement dressing. Main chat should normalize scale/materials and promote coherent prop subsets instead of importing entire packs blindly.
-
-## B87 — crops / corn / hay / farm source models
-
-Status: **READY / PHYSICAL**
-Path: `assets/staging/sourcechat_b87/models/`
-
-- `quaternius_lowpoly_crops_100plus/` — 100+ low-poly crops with multiple growth stages.
-- `oga_low_poly_corn/`
-- `oga_hay_bale_lowpoly/`
-- `oga_basic_voxel_farm/`
-
-Recommended use: fields, farms, crop progression, harvest scenes and rural dressing. Main chat should select art-direction-compatible crops and map growth stages to gameplay only after production review.
-
-## B88 — sewers / mines / caves / concrete pipes
-
-Status: **READY / PHYSICAL**
-Path: `assets/staging/sourcechat_b88/models/`
-
-- `oga_sewer_tunnels_lowres_2026/`
-- `oga_mines_and_caves_178/`
-- `oga_free_mine_assets_pack/`
-- `oga_concrete_pipes/`
-
-Recommended use: sewers, underground service tunnels, mines, caves, drainage and industrial underground spaces. Combine selectively with B21/B23/B76; deduplicate overlapping mine/cave pieces and keep only the best production variants.
-EOF
 
       - name: Commit index update with retries
         shell: bash
