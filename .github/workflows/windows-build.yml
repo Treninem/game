@@ -47,6 +47,10 @@ jobs:
         shell: bash
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
 
+      - name: Verify player traverses the world
+        shell: bash
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd
+
       - name: Export Windows x64
         shell: bash
         run: |
@@ -144,4 +148,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls Stage 10: world-first stabilization. Adaptive pause/gameplay UI, 64x64 km streamed world, canonical 4x4 km capital with 32 gates, movement recovery, permanent minimap, selected ImPuls branding, and offline-safe updater runtime."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls Stage 10: world-first stabilization. Adaptive pause/gameplay UI, 64x64 km streamed world, canonical 4x4 km capital with 32 gates, verified player traversal, movement recovery, permanent minimap, selected ImPuls branding, and offline-safe updater runtime."
