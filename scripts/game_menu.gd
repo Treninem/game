@@ -125,7 +125,8 @@ func _subtitle(text: String) -> Label:
     content.add_child(label)
     return label
 
-func _button(text: String, callback: Callable, parent: Container = content) -> Button:
+func _button(text: String, callback: Callable, parent: Container = null) -> Button:
+    var target: Container = content if parent == null else parent
     var button := Button.new()
     button.text = text
     button.custom_minimum_size.y = 42
@@ -134,7 +135,7 @@ func _button(text: String, callback: Callable, parent: Container = content) -> B
     button.add_theme_stylebox_override("hover", _button_style(Color(0.075, 0.12, 0.18, 1.0), Color(0.25, 0.70, 0.92, 0.95)))
     button.add_theme_stylebox_override("pressed", _button_style(Color(0.08, 0.09, 0.17, 1.0), Color(0.48, 0.34, 0.92, 1.0)))
     button.pressed.connect(callback)
-    parent.add_child(button)
+    target.add_child(button)
     return button
 
 func _back_button(callback: Callable) -> void:
