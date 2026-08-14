@@ -7,6 +7,7 @@ extends GPUParticles3D
 @export var bubble_size_min: float = 0.018
 @export var bubble_size_max: float = 0.055
 @export var field_lifetime: float = 5.0
+@export var enable_turbulence: bool = false
 
 func _ready() -> void:
     amount = maxi(bubble_count, 1)
@@ -26,11 +27,12 @@ func _ready() -> void:
     process.gravity = Vector3.ZERO
     process.scale_min = bubble_size_min
     process.scale_max = bubble_size_max
-    process.turbulence_enabled = true
-    process.turbulence_noise_strength = 0.32
-    process.turbulence_noise_scale = 2.2
-    process.turbulence_influence_min = 0.08
-    process.turbulence_influence_max = 0.26
+    process.turbulence_enabled = enable_turbulence
+    if enable_turbulence:
+        process.turbulence_noise_strength = 0.32
+        process.turbulence_noise_scale = 2.2
+        process.turbulence_influence_min = 0.08
+        process.turbulence_influence_max = 0.26
     process_material = process
 
     var bubble := SphereMesh.new()
