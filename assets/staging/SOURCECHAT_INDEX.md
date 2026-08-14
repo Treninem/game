@@ -313,6 +313,39 @@ Path: `assets/staging/sourcechat_b26/models/`
 
 Recommended use: farms/pastures/stables and settlement life, plus food/kitchen/market clutter. Main chat should test Godot animation import and normalize animal skeleton/scale before production promotion.
 
+## B27 — traffic / road furniture / fences
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b27/models/`
+
+- `oga_traffic_road_assets/` — cones, barriers, manholes, roadblocks, streetlights and hydrants.
+- `oga_modular_fence_pack/` — two modular fence families including Godot meshlib/gridmap source content.
+- `oga_basic_wooden_fence/` — farm-style wooden fence Blender source.
+
+Recommended use: city streets, work zones, farms, property boundaries and settlement dressing after scale/material/collision review.
+
+## B28 — large CC0 nature libraries
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b28/models/`
+
+- `kenney_nature_kit/` — large nature library with trees, rocks, stones, terrain elements, waterfalls, camping equipment and plants.
+- `quaternius_ultimate_nature_pack/` — broad trees/rocks/pines/forest/flowers source library in common 3D formats.
+
+Recommended use: regional vegetation/terrain dressing. Main chat should deduplicate overlaps, select consistent biome families, normalize scale/materials, create LOD/Multimesh-friendly production versions and avoid loading whole source packs at runtime.
+
+## B29 — modular medieval building system
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b29/models/`
+
+- `oga_modular_medieval_building_pack/` — modular house bases, windows, doors, balconies, chimneys, stairs, roofs/extensions/signs.
+- `oga_medieval_tavern/` — standalone tavern building source.
+- `oga_medieval_blacksmith/` — standalone blacksmith building source.
+- `oga_medieval_tavern_interior/` — explorable tavern interior source.
+
+Recommended use: varied capital/village architecture and authored interiors. Main chat should compose optimized production buildings rather than instancing heavy Blend source files directly.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
