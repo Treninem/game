@@ -25,131 +25,81 @@ jobs:
       - name: Download verified CC0 source packs
         shell: bash
         run: |
-          set -euo pipefail
+          set -u
           TMP=".survival_food_vehicles_tmp"
+          FAILS="$TMP/FAILED.txt"
           rm -rf "$TMP"
           mkdir -p "$TMP"
+          : > "$FAILS"
 
-          write_meta() {
-            local target="$1" key="$2" source="$3" download="$4" notes="$5" format="$6"
+          meta() {
+            local target="$1" key="$2" source="$3" url="$4" notes="$5" format="$6"
             cat > "$target/SOURCE.md" <<EOF
           # Source
 
           Pack key: $key
           Source page: $source
-          Download used: $download
+          Download used: $url
           License: CC0 1.0 Universal as stated by the source page.
-          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
-          Canonical staged 3D format: $format (plus required textures/metadata).
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated.
+          Canonical staged 3D format: $format.
           Notes: $notes
           EOF
             cat > "$target/LICENSE.txt" <<'EOF'
           CC0 1.0 Universal
-
-          Source page identifies this pack as CC0 / public-domain dedication.
           License reference: https://creativecommons.org/publicdomain/zero/1.0/
           Preserve SOURCE.md with staged files.
           EOF
           }
 
-          import_zip_best3d() {
+          import_best3d() {
             local key="$1" url="$2" source="$3" target="$4" notes="$5"
-            local work="$TMP/$key"
+            local work="$TMP/$key" format=""
             rm -rf "$target" "$work"
             mkdir -p "$target" "$work/archive"
-            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 600 \
-              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
-            unzip -q "$work/pack.zip" -d "$work/archive"
-
-            local format=""
+            if ! curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"; then
+              echo "$key | download failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+            if ! unzip -q "$work/pack.zip" -d "$work/archive"; then
+              echo "$key | unzip failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
             if find "$work/archive" -type f \( -iname '*.glb' -o -iname '*.gltf' \) -print -quit | grep -q .; then
               format="glTF/GLB"
-              rsync -a --prune-empty-dirs \
-                --include='*/' --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' \
-                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
-                --include='*.json' --include='*.JSON' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' \
-                "$work/archive/" "$target/"
+              rsync -a --prune-empty-dirs --include='*/' --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' --include='*.txt' --include='*.TXT' --include='*.json' --include='*.JSON' --exclude='*' "$work/archive/" "$target/"
             elif find "$work/archive" -type f -iname '*.fbx' -print -quit | grep -q .; then
               format="FBX"
-              rsync -a --prune-empty-dirs \
-                --include='*/' --include='*.fbx' --include='*.FBX' \
-                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
-                --include='*.json' --include='*.JSON' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' \
-                "$work/archive/" "$target/"
+              rsync -a --prune-empty-dirs --include='*/' --include='*.fbx' --include='*.FBX' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' --include='*.txt' --include='*.TXT' --include='*.json' --include='*.JSON' --exclude='*' "$work/archive/" "$target/"
             else
               format="OBJ"
-              rsync -a --prune-empty-dirs \
-                --include='*/' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
-                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
-                --include='*.json' --include='*.JSON' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' \
-                "$work/archive/" "$target/"
+              rsync -a --prune-empty-dirs --include='*/' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' --include='*.txt' --include='*.TXT' --include='*.json' --include='*.JSON' --exclude='*' "$work/archive/" "$target/"
             fi
-            write_meta "$target" "$key" "$source" "$url" "$notes" "$format"
+            if [ -z "$(find "$target" -type f -print -quit)" ]; then
+              echo "$key | no selected files | $url" >> "$FAILS"
+              rm -rf "$target"
+              return 0
+            fi
+            meta "$target" "$key" "$source" "$url" "$notes" "$format"
           }
 
-          import_zip_best3d "quaternius_crops_100plus" \
-            "https://opengameart.org/sites/default/files/nature_crops_pack_by_quaternius.zip" \
-            "https://opengameart.org/content/lowpoly-crops-pack" \
-            "assets/staging/food/quaternius_crops_100plus" \
-            "100+ crop models across five growth stages; useful for farms, gardens and harvesting."
-
-          import_zip_best3d "quaternius_food_100plus" \
-            "https://opengameart.org/sites/default/files/ultimate_food_pack_by_quaternius.zip" \
-            "https://opengameart.org/content/low-poly-food-pack" \
-            "assets/staging/food/quaternius_food_100plus" \
-            "100+ food and consumable models."
-
-          import_zip_best3d "quaternius_survival_50plus" \
-            "https://opengameart.org/sites/default/files/survival_pack_-_sept_2020.zip" \
-            "https://opengameart.org/content/lowpoly-survival-pack" \
-            "assets/staging/items/quaternius_survival_50plus" \
-            "50+ survival/camping assets including axe, weapons, fire, first aid and raft-related props."
-
-          import_zip_best3d "quaternius_public_transport" \
-            "https://opengameart.org/sites/default/files/Public%20Transport.zip" \
-            "https://opengameart.org/content/lowpoly-public-transport" \
-            "assets/staging/vehicles/quaternius_public_transport" \
-            "Public transport and service vehicle set: ambulance, bus, car, taxi, bicycle and related vehicles."
-
-          import_zip_best3d "quaternius_cars" \
-            "https://opengameart.org/sites/default/files/CarPack.zip" \
-            "https://opengameart.org/content/low-poly-cars-0" \
-            "assets/staging/vehicles/quaternius_cars" \
-            "Low-poly car pack for traffic and parked vehicle population."
-
-          import_zip_best3d "quaternius_modular_streets" \
-            "https://opengameart.org/sites/default/files/Street%20Pack%20by%20%40Quaternius.zip" \
-            "https://opengameart.org/content/lowpoly-modular-street-pack" \
-            "assets/staging/world/quaternius_modular_streets" \
-            "Modular street/city pieces including bridges, signs and traffic props."
-
-          import_zip_best3d "quaternius_medieval_weapons_2018" \
-            "https://opengameart.org/sites/default/files/Medieval%20Weapons%20Pack%20-%20Sept%202018.zip" \
-            "https://opengameart.org/content/lowpoly-medieval-weapons" \
-            "assets/staging/items/quaternius_medieval_weapons_2018" \
-            "Swords, scythes, shields, daggers, bows, axes and other CC0 medieval weapons."
-
-          import_zip_best3d "quaternius_rpg_items_100plus" \
-            "https://opengameart.org/sites/default/files/ultimate_rpg_items_pack_by_quaternius.zip" \
-            "https://opengameart.org/content/low-poly-rpg-pack" \
-            "assets/staging/items/quaternius_rpg_items_100plus" \
-            "100+ RPG items including weapons, helmets, staffs, gems, gold and pickups."
-
-          rm -rf "$TMP"
+          import_best3d "quaternius_crops_100plus" "https://opengameart.org/sites/default/files/nature_crops_pack_by_quaternius.zip" "https://opengameart.org/content/lowpoly-crops-pack" "assets/staging/food/quaternius_crops_100plus" "100+ crop models across five growth stages."
+          import_best3d "quaternius_food_100plus" "https://opengameart.org/sites/default/files/ultimate_food_pack_by_quaternius.zip" "https://opengameart.org/content/low-poly-food-pack" "assets/staging/food/quaternius_food_100plus" "100+ food and consumable models."
+          import_best3d "quaternius_survival_50plus" "https://opengameart.org/sites/default/files/survival_pack_-_sept_2020.zip" "https://opengameart.org/content/lowpoly-survival-pack" "assets/staging/items/quaternius_survival_50plus" "50+ survival/camping assets."
+          import_best3d "quaternius_public_transport" "https://opengameart.org/sites/default/files/Public%20Transport_0.zip" "https://opengameart.org/content/lowpoly-public-transport" "assets/staging/vehicles/quaternius_public_transport" "Ambulance, bus, car, taxi, bicycle and service transport."
+          import_best3d "quaternius_cars" "https://opengameart.org/sites/default/files/Car%20Pack.zip" "https://opengameart.org/content/lowpoly-cars" "assets/staging/vehicles/quaternius_cars" "Cars including sports, cop and taxi variants."
+          import_best3d "quaternius_modular_streets" "https://opengameart.org/sites/default/files/Street%20Pack%20by%20%40Quaternius.zip" "https://opengameart.org/content/lowpoly-modular-street-pack" "assets/staging/world/quaternius_modular_streets" "Modular streets, bridges, signs and traffic props."
+          import_best3d "quaternius_medieval_weapons_2018" "https://opengameart.org/sites/default/files/Medieval%20Weapons%20Pack%20-%20Sept%202018.zip" "https://opengameart.org/content/lowpoly-medieval-weapons" "assets/staging/items/quaternius_medieval_weapons_2018" "Swords, scythes, shields, daggers, bows and axes."
+          import_best3d "quaternius_rpg_items_100plus" "https://opengameart.org/sites/default/files/ultimate_rpg_items_pack_by_quaternius.zip" "https://opengameart.org/content/low-poly-rpg-pack" "assets/staging/items/quaternius_rpg_items_100plus" "100+ RPG items, weapons, helmets, staffs, gems and pickups."
 
           mkdir -p assets/staging/food assets/staging/vehicles assets/staging/world assets/staging/items
-          cat > assets/staging/food/FOOD_STAGING_MANIFEST.md <<'EOF'
-          # Food and farming source-only staging
-          Real CC0 crop/food packs for selection by the main integration chat.
-          EOF
-          cat > assets/staging/vehicles/VEHICLE_STAGING_MANIFEST.md <<'EOF'
-          # Vehicle source-only staging
-          Real CC0 transport/vehicle packs for selection by the main integration chat.
-          EOF
-          cat > assets/staging/world/WORLD_STAGING_MANIFEST.md <<'EOF'
-          # World source-only staging
-          Real CC0 street/world construction packs for selection by the main integration chat.
-          EOF
+          cp "$FAILS" assets/staging/items/SURVIVAL_FOOD_VEHICLE_DOWNLOAD_FAILURES.txt
+          printf '# Food and farming source-only staging\nReal CC0 crop/food sources for the main integration chat.\n' > assets/staging/food/FOOD_STAGING_MANIFEST.md
+          printf '# Vehicle source-only staging\nReal CC0 transport sources for the main integration chat.\n' > assets/staging/vehicles/VEHICLE_STAGING_MANIFEST.md
+          printf '# World source-only staging\nReal CC0 street/world construction sources for the main integration chat.\n' > assets/staging/world/WORLD_STAGING_MANIFEST.md
+          rm -rf "$TMP"
 
       - name: Commit staged source assets back to main
         shell: bash
