@@ -1,40 +1,56 @@
 extends Node
 
-const SAVE_PATH := "user://savegame.json"
-const BACKUP_PATH := "user://savegame.json.bak"
-const SAVE_VERSION := 3
+const SLOT_COUNT := 10
+const SAVE_VERSION := 4
+const LEGACY_SAVE_PATH := "user://savegame.json"
 
-func save_game(player: Node3D) -> bool:
+var current_slot: int = 1
+var pending_new_game: bool = false
+
+func _ready() -> void:
+    _migrate_legacy_save_once()
+
+func prepare_new_game(slot: int) -> void:
+    current_slot = _valid_slot(slot)
+    pending_new_game = true
+
+func prepare_load(slot: int) -> bool:
+    slot = _valid_slot(slot)
+    if not slot_exists(slot):
+        return false
+    current_slot = slot
+    pending_new_game = false
+    return true
+
+func consume_new_game_request() -> bool:
+    var value := pending_new_game
+    pending_new_game = false
+    return value
+
+func save_game(player: Node3D, slot: int = -1) -> bool:
+    slot = current_slot if slot < 1 else _valid_slot(slot)
+    current_slot = slot
     var payload := {
         "save_version": SAVE_VERSION,
+        "slot": slot,
+        "saved_at_unix": int(Time.get_unix_time_from_system()),
+        "saved_at": Time.get_datetime_string_from_system(false, true),
         "player": {
             "position": [player.global_position.x, player.global_position.y, player.global_position.z],
             "rotation_y": player.rotation.y
         },
         "game_state": GameState.snapshot()
     }
-    var temp_path := SAVE_PATH + ".tmp"
-    var file := FileAccess.open(temp_path, FileAccess.WRITE)
-    if file == null:
-        push_error("Unable to open temporary save file for writing")
-        return false
-    file.store_string(JSON.stringify(payload))
-    file.close()
-    if FileAccess.file_exists(SAVE_PATH):
-        DirAccess.remove_absolute(ProjectSettings.globalize_path(BACKUP_PATH))
-        DirAccess.rename_absolute(ProjectSettings.globalize_path(SAVE_PATH), ProjectSettings.globalize_path(BACKUP_PATH))
-    var err := DirAccess.rename_absolute(ProjectSettings.globalize_path(temp_path), ProjectSettings.globalize_path(SAVE_PATH))
-    if err != OK:
-        push_error("Unable to finalize save file")
-        return false
-    return true
+    return _write_atomic(_slot_path(slot), _backup_path(slot), payload)
 
-func load_game(player: Node3D) -> bool:
-    var data := _read_save(SAVE_PATH)
+func load_game(player: Node3D, slot: int = -1) -> bool:
+    slot = current_slot if slot < 1 else _valid_slot(slot)
+    current_slot = slot
+    var data := _read_save(_slot_path(slot))
     if data.is_empty():
-        data = _read_save(BACKUP_PATH)
+        data = _read_save(_backup_path(slot))
         if not data.is_empty():
-            GameState.notify("Основное сохранение повреждено. Загружена резервная копия.")
+            GameState.notify("Основное сохранение слота %d повреждено. Загружена резервная копия." % slot)
     if data.is_empty() or not data.has("player"):
         return false
     var p = data["player"]
@@ -45,6 +61,72 @@ func load_game(player: Node3D) -> bool:
     var saved_state = data.get("game_state", {})
     if typeof(saved_state) == TYPE_DICTIONARY:
         GameState.load_snapshot(saved_state)
+    return true
+
+func delete_slot(slot: int) -> bool:
+    slot = _valid_slot(slot)
+    var removed := false
+    for path in [_slot_path(slot), _backup_path(slot)]:
+        if FileAccess.file_exists(path):
+            var err := DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+            removed = removed or err == OK
+    return removed
+
+func slot_exists(slot: int) -> bool:
+    return FileAccess.file_exists(_slot_path(_valid_slot(slot)))
+
+func slot_info(slot: int) -> Dictionary:
+    slot = _valid_slot(slot)
+    var data := _read_save(_slot_path(slot))
+    if data.is_empty():
+        return {"slot": slot, "exists": false}
+    var state = data.get("game_state", {})
+    var quest_stage := int(state.get("quest_stage", 0)) if typeof(state) == TYPE_DICTIONARY else 0
+    var world_minutes := float(state.get("world_minutes", 0.0)) if typeof(state) == TYPE_DICTIONARY else 0.0
+    var hour := int(world_minutes / 60.0) % 24
+    var minute := int(world_minutes) % 60
+    return {
+        "slot": slot,
+        "exists": true,
+        "saved_at": String(data.get("saved_at", "неизвестно")),
+        "quest_stage": quest_stage,
+        "world_time": "%02d:%02d" % [hour, minute]
+    }
+
+func list_slots() -> Array[Dictionary]:
+    var result: Array[Dictionary] = []
+    for slot in range(1, SLOT_COUNT + 1):
+        result.append(slot_info(slot))
+    return result
+
+func first_used_slot() -> int:
+    for slot in range(1, SLOT_COUNT + 1):
+        if slot_exists(slot):
+            return slot
+    return 0
+
+func first_free_slot() -> int:
+    for slot in range(1, SLOT_COUNT + 1):
+        if not slot_exists(slot):
+            return slot
+    return 0
+
+func _write_atomic(path: String, backup_path: String, payload: Dictionary) -> bool:
+    var temp_path := path + ".tmp"
+    var file := FileAccess.open(temp_path, FileAccess.WRITE)
+    if file == null:
+        push_error("Unable to open temporary save file for writing")
+        return false
+    file.store_string(JSON.stringify(payload))
+    file.close()
+    if FileAccess.file_exists(path):
+        if FileAccess.file_exists(backup_path):
+            DirAccess.remove_absolute(ProjectSettings.globalize_path(backup_path))
+        DirAccess.rename_absolute(ProjectSettings.globalize_path(path), ProjectSettings.globalize_path(backup_path))
+    var err := DirAccess.rename_absolute(ProjectSettings.globalize_path(temp_path), ProjectSettings.globalize_path(path))
+    if err != OK:
+        push_error("Unable to finalize save file")
+        return false
     return true
 
 func _read_save(path: String) -> Dictionary:
@@ -61,3 +143,24 @@ func _read_save(path: String) -> Dictionary:
         push_error("Save file is newer than this game build")
         return {}
     return parsed
+
+func _migrate_legacy_save_once() -> void:
+    if not FileAccess.file_exists(LEGACY_SAVE_PATH) or slot_exists(1):
+        return
+    var legacy := _read_save(LEGACY_SAVE_PATH)
+    if legacy.is_empty():
+        return
+    legacy["save_version"] = SAVE_VERSION
+    legacy["slot"] = 1
+    legacy["saved_at_unix"] = int(Time.get_unix_time_from_system())
+    legacy["saved_at"] = Time.get_datetime_string_from_system(false, true)
+    _write_atomic(_slot_path(1), _backup_path(1), legacy)
+
+func _slot_path(slot: int) -> String:
+    return "user://save_slot_%02d.json" % slot
+
+func _backup_path(slot: int) -> String:
+    return "user://save_slot_%02d.json.bak" % slot
+
+func _valid_slot(slot: int) -> int:
+    return clampi(slot, 1, SLOT_COUNT)
