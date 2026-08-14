@@ -1,0 +1,5 @@
+CC0 1.0 Universal
+
+The linked source page marks this staged asset as CC0 / public-domain dedication.
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+Preserve SOURCE.md beside staged files.
