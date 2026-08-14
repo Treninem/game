@@ -21,7 +21,7 @@ func check_for_updates() -> void:
     checking = true
     update_available = false
     status_changed.emit("Проверка стабильного канала обновлений...", false)
-    var err := _request.request(API_URL, PackedStringArray(["User-Agent: ImPuls-Updater/2.0", "Accept: application/vnd.github+json"]))
+    var err := _request.request(API_URL, PackedStringArray(["User-Agent: ImPuls-Updater/4.0", "Accept: application/vnd.github+json"]))
     if err != OK:
         checking = false
         status_changed.emit("Не удалось начать проверку обновлений.", false)
@@ -31,7 +31,9 @@ func install_latest_update() -> bool:
         status_changed.emit("Новых стабильных обновлений нет.", false)
         return false
     var root := _install_root()
-    var updater := root.path_join("updater.ps1")
+    var updater_v4 := root.path_join("updater_v4.ps1")
+    var updater_legacy := root.path_join("updater.ps1")
+    var updater := updater_v4 if FileAccess.file_exists(updater_v4) else updater_legacy
     if not FileAccess.file_exists(updater):
         status_changed.emit("Updater не найден. Переустановите ImPuls последним стабильным установщиком.", false)
         return false
@@ -43,8 +45,8 @@ func install_latest_update() -> bool:
     if pid <= 0:
         status_changed.emit("Не удалось запустить обновление.", false)
         return false
-    status_changed.emit("Устанавливается стабильное обновление. Игра будет перезапущена.", true)
-    await get_tree().create_timer(0.35).timeout
+    status_changed.emit("Открывается окно обновления. Загружаются только недостающие данные.", true)
+    await get_tree().create_timer(0.45).timeout
     get_tree().quit()
     return true
 
@@ -70,7 +72,7 @@ func _on_request_completed(_result: int, response_code: int, _headers: PackedStr
     var local := local_build_tag()
     update_available = _is_remote_newer(local, latest_name)
     if update_available:
-        status_changed.emit("Доступно стабильное обновление: %s (установлено: %s)" % [latest_name, local], true)
+        status_changed.emit("Доступно стабильное обновление: %s (установлено: %s). Будет загружена только дельта." % [latest_name, local], true)
     else:
         status_changed.emit("Установлена последняя стабильная версия: %s" % local, false)
 
