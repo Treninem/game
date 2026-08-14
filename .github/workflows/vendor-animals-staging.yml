@@ -1,0 +1,118 @@
+name: Vendor CC0 animal staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-animals-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-animals-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-animals:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 animal packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP=".animals_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP"
+
+          write_meta() {
+            local target="$1" key="$2" source="$3" download="$4" notes="$5"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          Source page identifies this pack as CC0 / public-domain dedication.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md with staged files.
+          EOF
+          }
+
+          import_zip() {
+            local key="$1" url="$2" source="$3" target="$4" notes="$5"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs \
+              --include='*/' \
+              --include='*.glb' --include='*.GLB' \
+              --include='*.gltf' --include='*.GLTF' \
+              --include='*.bin' --include='*.BIN' \
+              --include='*.fbx' --include='*.FBX' \
+              --include='*.obj' --include='*.OBJ' \
+              --include='*.mtl' --include='*.MTL' \
+              --include='*.blend' --include='*.BLEND' \
+              --include='*.dae' --include='*.DAE' \
+              --include='*.png' --include='*.PNG' \
+              --include='*.jpg' --include='*.JPG' \
+              --include='*.jpeg' --include='*.JPEG' \
+              --include='*.webp' --include='*.WEBP' \
+              --include='*.svg' --include='*.SVG' \
+              --include='*.json' --include='*.JSON' \
+              --include='*.txt' --include='*.TXT' \
+              --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            write_meta "$target" "$key" "$source" "$url" "$notes"
+          }
+
+          import_zip "quaternius_farm_animals" \
+            "https://opengameart.org/sites/default/files/Farm%20Animals%20by%20%40Quaternius.zip" \
+            "https://opengameart.org/content/lowpoly-animated-farm-animal-pack" \
+            "assets/staging/animals/quaternius_farm_animals" \
+            "Animated CC0 farm animals: pig, cow, horse, llama, pug/dog and sheep; archive includes Blender, OBJ and FBX formats."
+
+          import_zip "kenney_cube_pets" \
+            "https://kenney.nl/media/pages/assets/cube-pets/44e58e945f-1774520254/kenney_cube-pets_1.0.zip" \
+            "https://kenney.nl/assets/cube-pets" \
+            "assets/staging/animals/kenney_cube_pets" \
+            "CC0 animated 3D pet pack centered on dogs/cats and related cubic pets; FBX/OBJ/glTF source formats retained."
+
+          rm -rf "$TMP"
+
+          cat > assets/staging/animals/ANIMAL_STAGING_MANIFEST.md <<'EOF'
+          # Animal source-only staging
+
+          Real CC0 animated animal source packs for the main integration chat.
+          No gameplay scripts/scenes/project settings are touched by this workflow.
+          EOF
+
+      - name: Commit staged animal assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/animals
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 animated farm animals and pets"
+          git pull --rebase origin main
+          git push origin HEAD:main
