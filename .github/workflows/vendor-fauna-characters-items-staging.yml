@@ -25,10 +25,12 @@ jobs:
       - name: Download verified CC0 packs
         shell: bash
         run: |
-          set -euo pipefail
+          set -u
           TMP=".fauna_chars_items_tmp"
+          FAILS="$TMP/FAILED.txt"
           rm -rf "$TMP"
           mkdir -p "$TMP"
+          : > "$FAILS"
 
           write_meta() {
             local target="$1" key="$2" source="$3" download="$4" notes="$5"
@@ -44,8 +46,6 @@ jobs:
           EOF
             cat > "$target/LICENSE.txt" <<'EOF'
           CC0 1.0 Universal
-
-          Source page identifies this pack as CC0 / public-domain dedication.
           License reference: https://creativecommons.org/publicdomain/zero/1.0/
           Preserve SOURCE.md with staged files.
           EOF
@@ -56,28 +56,29 @@ jobs:
             local work="$TMP/$key"
             rm -rf "$target" "$work"
             mkdir -p "$target" "$work/archive"
-            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 420 \
-              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
-            unzip -q "$work/pack.zip" -d "$work/archive"
+            if ! curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 600 -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"; then
+              echo "$key | download failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+            if ! unzip -q "$work/pack.zip" -d "$work/archive"; then
+              echo "$key | unzip failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
             rsync -a --prune-empty-dirs \
               --include='*/' \
-              --include='*.glb' --include='*.GLB' \
-              --include='*.gltf' --include='*.GLTF' \
-              --include='*.bin' --include='*.BIN' \
-              --include='*.fbx' --include='*.FBX' \
-              --include='*.obj' --include='*.OBJ' \
-              --include='*.mtl' --include='*.MTL' \
-              --include='*.blend' --include='*.BLEND' \
-              --include='*.dae' --include='*.DAE' \
-              --include='*.png' --include='*.PNG' \
-              --include='*.jpg' --include='*.JPG' \
-              --include='*.jpeg' --include='*.JPEG' \
-              --include='*.webp' --include='*.WEBP' \
-              --include='*.svg' --include='*.SVG' \
-              --include='*.json' --include='*.JSON' \
-              --include='*.txt' --include='*.TXT' \
-              --include='*.md' --include='*.MD' \
+              --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' \
+              --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+              --include='*.blend' --include='*.BLEND' --include='*.dae' --include='*.DAE' \
+              --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+              --include='*.svg' --include='*.SVG' --include='*.json' --include='*.JSON' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
               --exclude='*' "$work/archive/" "$target/"
+            if [ -z "$(find "$target" -type f -print -quit)" ]; then
+              echo "$key | archive had no selected asset files | $url" >> "$FAILS"
+              rm -rf "$target"
+              return 0
+            fi
             write_meta "$target" "$key" "$source" "$url" "$notes"
           }
 
@@ -85,80 +86,81 @@ jobs:
             "https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip" \
             "https://opengameart.org/content/animated-animales-low-poly" \
             "assets/staging/animals/quaternius_animal_pack_vol2" \
-            "Animated wolf, eagle, dog, cat and piranha; CC0 source pack."
+            "Animated wolf, eagle, dog, cat and piranha."
 
           import_zip "quaternius_animated_fish" \
             "https://opengameart.org/sites/default/files/Animated%20Fish%20Pack%20by%20%40Quaternius.zip" \
             "https://opengameart.org/content/animated-fish" \
             "assets/staging/animals/quaternius_animated_fish" \
-            "Seven animated aquatic species with Blender/OBJ/FBX source formats."
+            "Seven animated aquatic species."
 
           import_zip "quaternius_animals_pack_5" \
             "https://opengameart.org/sites/default/files/Animals%20Pack%20by%20Quaternius.zip" \
             "https://opengameart.org/content/5-low-poly-animals" \
             "assets/staging/animals/quaternius_animals_pack_5" \
-            "Five additional low-poly animated animals; CC0."
+            "Five additional low-poly animals."
 
           import_zip "quaternius_animated_human" \
-            "https://opengameart.org/sites/default/files/Animated%20Human%20by%20%40Quaternius.zip" \
+            "https://opengameart.org/sites/default/files/Animated%20Human%20by%20%40Quaternius_0.zip" \
             "https://opengameart.org/content/animated-human-low-poly" \
             "assets/staging/characters/quaternius_animated_human" \
-            "Animated humanoid with idle, jump, punch, run, walk, work and death animations."
+            "Animated human with idle, jump, punch, run, walk, work and death animations."
+
+          import_zip "quaternius_animated_characters_50plus" \
+            "https://opengameart.org/sites/default/files/ultimate_animated_character_pack_by_quaternius.zip" \
+            "https://opengameart.org/content/animated-characters-pack" \
+            "assets/staging/characters/quaternius_animated_characters_50plus" \
+            "50+ animated characters in FBX/OBJ/Blend source formats."
 
           import_zip "quaternius_universal_animation_library_2_standard" \
             "https://opengameart.org/sites/default/files/universal_animation_library_2standard.zip" \
             "https://opengameart.org/content/universal-animation-library-2" \
             "assets/staging/animations/quaternius_universal_animation_library_2_standard" \
-            "Standard CC0 Universal Animation Library 2; 130+ animation library source page, Godot-compatible universal humanoid rig."
+            "130+ CC0 humanoid animations on a universal rig compatible with Godot retargeting."
 
           import_zip "kenney_animated_characters_protagonists" \
             "https://www.kenney.nl/media/pages/assets/animated-characters-protagonists/608191acc4-1774773108/kenney_animated-characters-protagonists.zip" \
             "https://www.kenney.nl/assets/animated-characters-protagonists" \
             "assets/staging/characters/kenney_animated_characters_protagonists" \
-            "Eight CC0 animated 3D protagonist character files."
+            "Eight CC0 animated 3D protagonist files."
 
           import_zip "kenney_animated_characters_retro" \
             "https://www.kenney.nl/media/pages/assets/animated-characters-retro/93305a3c49-1774772819/kenney_animated-characters-retro.zip" \
             "https://www.kenney.nl/assets/animated-characters-retro" \
             "assets/staging/characters/kenney_animated_characters_retro" \
-            "Eight CC0 animated 3D retro survivor/zombie character files."
+            "Eight CC0 animated retro survivor/zombie character files."
 
           import_zip "kenney_generic_items" \
             "https://www.kenney.nl/media/pages/assets/generic-items/96b9087204-1677667000/kenney_generic-items.zip" \
             "https://www.kenney.nl/assets/generic-items" \
             "assets/staging/items/kenney_generic_items" \
-            "160 CC0 item/tool/household graphics for inventory, crafting and UI references."
+            "160 CC0 generic item/tool/household graphics."
 
           import_zip "kenney_blaster_kit" \
             "https://kenney.nl/media/pages/assets/blaster-kit/261d80a716-1753959510/kenney_blaster-kit_2.1.zip" \
             "https://kenney.nl/assets/blaster-kit" \
             "assets/staging/items/kenney_blaster_kit" \
-            "40 CC0 3D weapon/target/crate/throwable assets with animation/variations."
+            "40 CC0 3D blaster/target/crate/throwable assets."
 
-          rm -rf "$TMP"
-
+          mkdir -p assets/staging/animals assets/staging/characters assets/staging/animations assets/staging/items
+          cp "$FAILS" assets/staging/animals/FAUNA_CHARACTER_DOWNLOAD_FAILURES.txt
           cat > assets/staging/animals/FAUNA_STAGING_MANIFEST.md <<'EOF'
           # Fauna source-only staging
-
           Real CC0 animal/fish packs for the main integration chat. No gameplay integration is performed here.
           EOF
-
-          mkdir -p assets/staging/characters assets/staging/animations assets/staging/items
           cat > assets/staging/characters/CHARACTER_STAGING_MANIFEST.md <<'EOF'
           # Character source-only staging
-
-          Real CC0 humanoid/character packs for the main integration chat. No scenes/scripts/project settings are modified.
+          Real CC0 humanoid/character packs for the main integration chat. No gameplay integration is performed here.
           EOF
           cat > assets/staging/animations/ANIMATION_STAGING_MANIFEST.md <<'EOF'
           # Animation source-only staging
-
           Real CC0 animation libraries for retargeting by the main integration chat.
           EOF
           cat > assets/staging/items/ITEM_STAGING_MANIFEST.md <<'EOF'
           # Item source-only staging
-
           Real CC0 item/tool/weapon source packs for the main integration chat.
           EOF
+          rm -rf "$TMP"
 
       - name: Commit staged assets back to main
         shell: bash
