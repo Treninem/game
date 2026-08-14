@@ -1,0 +1,146 @@
+name: Vendor source-chat B07 real CC0 workshop machine vehicle audio
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b07.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b07
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 workshop machine and vehicle sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b07/audio"
+          TMP=".sourcechat_b07_tmp"
+          rm -rf "$TMP"; mkdir -p "$ROOT" "$TMP"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full >/dev/null
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks this staged asset as CC0/public domain.
+          License: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          seven() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 360 \
+              -A 'ImPuls-CC0-SourceChat-B07/1.0' "$url" -o "$work/pack.7z"
+            7z x -y "$work/pack.7z" -o"$work/archive" >/dev/null
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' \
+              --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-SourceChat-B07/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' \
+              --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$key"; mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 \
+              -A 'ImPuls-CC0-SourceChat-B07/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          seven "oga_68_workshop_sounds" \
+            "https://opengameart.org/sites/default/files/workshop.7z" \
+            "https://opengameart.org/content/68-workshop-sounds" \
+            "bart / OpenGameArt" \
+            "68 garage-recorded CC0 workshop sounds covering metal, wood, hammer, drill, tools, wrench and clatter."
+
+          zip_audio "oga_steam_release_hisses" \
+            "https://opengameart.org/sites/default/files/steam_hisses.zip" \
+            "https://opengameart.org/content/steam-release-sounds" \
+            "bart / OpenGameArt" \
+            "CC0 steam/hiss/release sounds for pipes, boilers, vents and damaged machinery."
+
+          one "oga_engine_sounds_2" "engine_sound.mp3" \
+            "https://opengameart.org/sites/default/files/engine_sound.mp3" \
+            "https://opengameart.org/content/engine-sounds2" \
+            "pauliuw / OpenGameArt" \
+            "First of two CC0 engine recordings."
+          one "oga_engine_sounds_2" "engine_sound_1.mp3" \
+            "https://opengameart.org/sites/default/files/engine_sound_1.mp3" \
+            "https://opengameart.org/content/engine-sounds2" \
+            "pauliuw / OpenGameArt" \
+            "Second of two CC0 engine recordings."
+
+          for n in 0 1 2 3 4 5; do
+            one "oga_racing_engine_loops" "loop_${n}.wav" \
+              "https://opengameart.org/sites/default/files/loop_${n}.wav" \
+              "https://opengameart.org/content/racing-car-engine-sound-loops" \
+              "domasx2 / OpenGameArt" \
+              "One of six CC0 pitch-varied engine loops remade from a public-domain source sample."
+          done
+
+          rm -rf "$TMP"
+          cat > "assets/staging/sourcechat_b07/README.md" <<'EOF'
+          # Source chat B07 — real CC0 workshop/machine/vehicle audio
+
+          Source-only staging. No game integration.
+          Includes workshop tools/metal/wood, steam hisses, two engine recordings and six engine-speed loop candidates.
+          Main chat should clean noisy workshop takes as needed and choose coherent machine/vehicle layers.
+          EOF
+          find assets/staging/sourcechat_b07 -type f | wc -l
+          du -sh assets/staging/sourcechat_b07
+
+      - name: Commit only B07 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b07
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 workshop machine vehicle audio B07"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
