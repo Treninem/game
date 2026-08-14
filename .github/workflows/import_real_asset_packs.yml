@@ -26,6 +26,7 @@ jobs:
           SG6="assets/source_packs/opengameart/system_g6"
           QUA="assets/source_packs/opengameart/quaternius"
           KEN="assets/source_packs/opengameart/kenney"
+          OGA="assets/source_packs/opengameart/individual_animals"
 
           mkdir -p \
             "$SG6/medieval_tools" \
@@ -35,7 +36,14 @@ jobs:
             "$SG6/medieval_weapons" \
             "$QUA/farm_animals" \
             "$QUA/animal_pack_vol2" \
-            "$KEN/cube_pets"
+            "$KEN/cube_pets" \
+            "$OGA/rooster" \
+            "$OGA/chicken" \
+            "$OGA/duck" \
+            "$OGA/rabbit" \
+            "$OGA/boar" \
+            "$OGA/bear" \
+            "$OGA/pig"
 
           curl -L --fail --retry 4 --retry-delay 3 \
             'https://opengameart.org/sites/default/files/medieval_tools_pack.7z' \
@@ -69,14 +77,48 @@ jobs:
             'https://opengameart.org/sites/default/files/kenney_cube-pets_1.0_0.zip' \
             -o "$KEN/cube_pets/kenney_cube-pets_1.0.zip"
 
-          find assets/source_packs/opengameart -type f \( -name '*.7z' -o -name '*.zip' \) -size 0 -print -quit | grep -q . && {
-            echo 'ERROR: zero-byte archive detected'
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/rooster.zip' \
+            -o "$OGA/rooster/rooster.zip"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/chicken_0.zip' \
+            -o "$OGA/chicken/chicken.zip"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/duck6.blend' \
+            -o "$OGA/duck/duck6.blend"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/rabbit.blend' \
+            -o "$OGA/rabbit/rabbit.blend"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/rabbit-FBX.7z' \
+            -o "$OGA/rabbit/rabbit-FBX.7z"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/boar_0.blend' \
+            -o "$OGA/boar/boar.blend"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/Bear.7z' \
+            -o "$OGA/bear/Bear.7z"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/pig_0.blend' \
+            -o "$OGA/pig/pig.blend"
+
+          find assets/source_packs/opengameart -type f \
+            \( -name '*.7z' -o -name '*.zip' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' \) \
+            -size 0 -print -quit | grep -q . && {
+            echo 'ERROR: zero-byte source asset detected'
             exit 1
           } || true
 
-          find assets/source_packs/opengameart -type f \( -name '*.7z' -o -name '*.zip' \) -print0 \
-            | sort -z \
-            | xargs -0 sha256sum \
+          find assets/source_packs/opengameart -type f \
+            \( -name '*.7z' -o -name '*.zip' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' \) \
+            -print0 | sort -z | xargs -0 sha256sum \
             > assets/source_packs/opengameart/SHA256SUMS.txt
 
       - name: Write provenance and license metadata
@@ -87,14 +129,15 @@ jobs:
           SG6="assets/source_packs/opengameart/system_g6"
           QUA="assets/source_packs/opengameart/quaternius"
           KEN="assets/source_packs/opengameart/kenney"
+          OGA="assets/source_packs/opengameart/individual_animals"
 
           cat > assets/source_packs/opengameart/README.md <<'EOF'
           # Verified CC0 source packs
 
-          Original downloadable archives mirrored for the main game-development chat.
+          Original downloadable archives/models mirrored for the main game-development chat.
           This folder is staging/source storage only: no scene, script, project-setting or runtime integration is performed by the research chat.
 
-          Every archive below comes from a source page that explicitly lists CC0.
+          Every source below is mirrored only after its individual source page explicitly lists CC0.
           EOF
 
           cat > "$SG6/LICENSE.txt" <<'EOF'
@@ -171,6 +214,62 @@ jobs:
           Contents: 16 animated cubic pets; separate FBX, OBJ and glTF models plus import instructions.
           EOF
 
+          cat > "$OGA/rooster/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/rooster-animated
+          License: CC0
+          Author: CDmir / TinyWorlds
+          File: rooster.zip
+          Notes: rigged and animated; diffuse texture + normal map; source marks it ready to use in-game.
+          EOF
+
+          cat > "$OGA/chicken/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/chicken-animated
+          License: CC0
+          Author: CDmir / TinyWorlds
+          File: chicken.zip
+          Notes: rigged and animated; diffuse texture + normal map; source marks it ready to use in-game.
+          EOF
+
+          cat > "$OGA/duck/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/rigged-duck
+          License: CC0
+          Author: weirdybeardyman
+          File: duck6.blend
+          Notes: rigged duck with waddle and peck animations.
+          EOF
+
+          cat > "$OGA/rabbit/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/rabbit-0
+          License: CC0
+          Author: CDmir / TinyWorlds
+          Files: rabbit.blend, rabbit-FBX.7z
+          Notes: rigged and animated; diffuse texture + normal map; source explicitly confirms commercial use under CC0.
+          EOF
+
+          cat > "$OGA/boar/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/boar
+          License: CC0
+          Author: Teh_Bucket
+          File: boar.blend
+          Notes: rigged, textured, walk + attack animations, approximately 1k triangles.
+          EOF
+
+          cat > "$OGA/bear/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/white-bear-low-poly
+          License: CC0
+          Author: STKRudy85
+          File: Bear.7z
+          Notes: textured low-poly bear; not rigged. License file included by source author.
+          EOF
+
+          cat > "$OGA/pig/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/low-poly-pig-0
+          License: CC0
+          Author: xTerryx
+          File: pig.blend
+          Notes: low-poly pig source model; animation quality is not guaranteed by source author.
+          EOF
+
       - name: Commit downloaded packs
         shell: bash
         run: |
@@ -182,7 +281,7 @@ jobs:
             echo "No asset changes to commit."
             exit 0
           fi
-          git commit -m "assets: vendor additional verified CC0 source packs"
+          git commit -m "assets: vendor verified CC0 wildlife and farm animal sources"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt ${attempt}/5"
