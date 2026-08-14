@@ -1,0 +1,38 @@
+name: Validate Player Movement
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/player_controller.gd"
+      - "scripts/humanoid_visual.gd"
+      - "scripts/world_streamer.gd"
+      - "scripts/world_data.gd"
+      - "scripts/settings_manager.gd"
+      - "scenes/stage1.tscn"
+      - "tests/smoke_player_movement.gd"
+      - ".github/workflows/validate-movement.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  movement-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+      - name: Parse project
+        shell: bash
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Prove player changes world position
+        shell: bash
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd
