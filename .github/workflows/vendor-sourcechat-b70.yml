@@ -76,23 +76,18 @@ jobs:
             "https://opengameart.org/sites/default/files/bombalach.blend + bombalachtexture.rar" \
             "Mud/stone creature source with low-poly animated/rigged/textured mesh, base mesh and high-poly mesh; source page lists idle, walk, jump, crouch, death, attack and hit."
 
-          mkdir -p "$TMP/hydrach" "$TMP/hydrachtex" "$ROOT/models/oga_hydrach_creature"
+          mkdir -p "$ROOT/models/oga_hydrach_creature"
           curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
             "https://opengameart.org/sites/default/files/hydrach.rar" \
-            -o "$TMP/hydrach.rar"
+            -o "$ROOT/models/oga_hydrach_creature/hydrach_source.rar"
           curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
             "https://opengameart.org/sites/default/files/texture.rar" \
-            -o "$TMP/hydrach_texture.rar"
-          7z x -y "$TMP/hydrach.rar" -o"$TMP/hydrach" >/dev/null
-          7z x -y "$TMP/hydrach_texture.rar" -o"$TMP/hydrachtex" >/dev/null
-          chmod -R u+rwX "$TMP/hydrach" "$TMP/hydrachtex" || true
-          rsync -a "$TMP/hydrach/" "$ROOT/models/oga_hydrach_creature/"
-          rsync -a "$TMP/hydrachtex/" "$ROOT/models/oga_hydrach_creature/"
+            -o "$ROOT/models/oga_hydrach_creature/hydrach_texture.rar"
           meta "oga_hydrach_creature" \
             "https://opengameart.org/content/hydrach" \
             "Hydrach" \
             "https://opengameart.org/sites/default/files/hydrach.rar + texture.rar" \
-            "Zerg-like creature source with low/high-poly meshes and texture. Animation status is disputed: page description lists animations but a source-page comment reports the model contains none; main chat must inspect before use."
+            "Original CC0 RAR sources preserved byte-for-byte because the hosted runner 7z crashes while extracting this legacy archive. Animation status is disputed: page description lists animations but a source-page comment reports the model contains none; main chat must inspect locally before use."
 
           mkdir -p "$TMP/fatdemon" "$ROOT/models/oga_fat_demon_static"
           curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
@@ -113,7 +108,7 @@ jobs:
 
           Source-only staging. Nothing is wired into gameplay.
 
-          Main integration chat should inspect rig/animation/material quality before promotion. Hydrach must be treated as animation-uncertain until inspected. Fat Demon is static and needs rigging if used as an active creature.
+          Main integration chat should inspect rig/animation/material quality before promotion. Hydrach is kept as original RAR archives because extraction crashes the hosted 7z build; extract/audit it locally with a compatible RAR tool. Hydrach animation status remains uncertain. Fat Demon is static and needs rigging if used as an active creature.
           EOF
 
           chmod -R u+rwX "$TMP" || true
