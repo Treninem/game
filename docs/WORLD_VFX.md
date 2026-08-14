@@ -101,6 +101,30 @@ All emitters exist only around the active player.
 - storm lightning flash;
 - underwater screen tint and enter/exit transition.
 
+### `WorldEffectEmitter`
+
+`scripts/world_effect_emitter.gd` is an attachable scene component for authored props. It can periodically emit:
+- fire;
+- smoke;
+- steam;
+- dust;
+- sparks;
+- splashes;
+- debris.
+
+It automatically stops doing work when the player is outside its configured activation distance. This component is intended for campfires, chimneys, fireplaces, forges, vents, steam leaks, waterfalls, workshops and future machines.
+
+### `LandmarkVFX`
+
+`scripts/landmark_vfx.gd` hooks the shared emitter into existing capital landmarks without duplicating their generator code.
+
+Current active landmark hooks:
+- **ForgeChimney** — chimney smoke;
+- **ForgeAnvil** — intermittent workshop sparks;
+- **FountainWater** — nearby fountain spray/splash.
+
+The hook scanner can safely discover generated landmark nodes after the city has been built and attaches each effect only once.
+
 ## Player integration
 
 `scripts/player_controller.gd` currently emits:
@@ -145,6 +169,7 @@ Procedural `VFXLibrary` particles remain underneath these sprites so effects sti
 ## Performance rules
 
 - Weather, nature and ambient emitters follow the local player.
+- Prop emitters are activation-distance gated.
 - Particles use bounded visibility AABBs.
 - Ground marks use a capped pool and visibility distance.
 - Do not create continent-wide rain/snow/fog particle systems.
