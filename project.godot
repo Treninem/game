@@ -24,6 +24,7 @@ MapSystem="*res://scripts/map_system.gd"
 VFXLibrary="*res://scripts/vfx_library.gd"
 MagicSystem="*res://scripts/magic_system.gd"
 EnvironmentState="*res://scripts/environment_state.gd"
+MagicHUD="*res://scripts/magic_hud.gd"
 
 [display]
 window/size/viewport_width=1280
