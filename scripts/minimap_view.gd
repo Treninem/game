@@ -1,15 +1,8 @@
 extends Control
 
+const CAPITAL := preload("res://scripts/capital_data.gd")
 const VIEW_RADIUS := 260.0
 const SAMPLE_GRID := 13
-const LOCAL_POIS := [
-    {"name": "Южные ворота", "pos": Vector2(0, -14), "kind": "gate"},
-    {"name": "Площадь", "pos": Vector2(0, -36), "kind": "city"},
-    {"name": "Рынок", "pos": Vector2(-18, -34), "kind": "shop"},
-    {"name": "Кузница", "pos": Vector2(24, -29), "kind": "quest"},
-    {"name": "Таверна", "pos": Vector2(20, -49), "kind": "inn"},
-    {"name": "Караульня", "pos": Vector2(-22, -20), "kind": "guard"}
-]
 
 var player: Node3D
 var redraw_elapsed := 0.0
@@ -39,7 +32,8 @@ func _draw() -> void:
 
     var center := Vector2(player.global_position.x, player.global_position.z)
     _draw_terrain(map_rect, center)
-    _draw_pois(map_rect, center)
+    _draw_capital_features(map_rect, center)
+    _draw_world_pois(map_rect, center)
     _draw_player(map_rect)
 
     draw_string(ThemeDB.fallback_font, Vector2(14, 21), "МИНИ-КАРТА", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.62, 0.78, 0.92))
@@ -59,32 +53,39 @@ func _draw_terrain(rect: Rect2, center: Vector2) -> void:
                 draw_rect(cell_rect, Color(0.004, 0.006, 0.010, 1.0), true)
                 continue
             var biome := WorldData.biome_at(world)
-            var color := WorldData.biome_color(biome)
-            color = color.darkened(0.12)
+            var color := WorldData.biome_color(biome).darkened(0.12)
             draw_rect(cell_rect, color, true)
 
-func _draw_pois(rect: Rect2, center: Vector2) -> void:
-    for poi in LOCAL_POIS:
-        _try_draw_poi(rect, center, poi)
-    for poi in WorldData.poi_catalog():
-        _try_draw_poi(rect, center, poi)
+func _draw_capital_features(rect: Rect2, center: Vector2) -> void:
+    # District anchors and the exact 32 perimeter gates are only shown after discovery.
+    for district in CAPITAL.DISTRICTS:
+        var pos: Vector2 = district.get("center", Vector2.ZERO)
+        if pos.distance_to(center) <= VIEW_RADIUS and MapSystem.is_world_explored(pos):
+            _draw_marker(rect, center, pos, "district")
 
-func _try_draw_poi(rect: Rect2, center: Vector2, poi: Dictionary) -> void:
-    var pos: Vector2 = poi.get("pos", Vector2.ZERO)
-    if pos.distance_to(center) > VIEW_RADIUS:
-        return
-    if not MapSystem.is_world_explored(pos):
-        return
+    for gate in CAPITAL.gates():
+        var pos: Vector2 = gate.get("position", Vector2.ZERO)
+        if pos.distance_to(center) <= VIEW_RADIUS and MapSystem.is_world_explored(pos):
+            _draw_marker(rect, center, pos, "gate")
+
+func _draw_world_pois(rect: Rect2, center: Vector2) -> void:
+    for poi in WorldData.poi_catalog():
+        var pos: Vector2 = poi.get("pos", Vector2.ZERO)
+        if pos.distance_to(center) <= VIEW_RADIUS and MapSystem.is_world_explored(pos):
+            _draw_marker(rect, center, pos, String(poi.get("kind", "poi")))
+
+func _draw_marker(rect: Rect2, center: Vector2, pos: Vector2, kind: String) -> void:
     var p := _world_to_screen(rect, center, pos)
-    var kind := String(poi.get("kind", "poi"))
     var color := Color(0.82, 0.86, 0.90)
     match kind:
-        "quest": color = Color(0.98, 0.72, 0.20)
-        "shop": color = Color(0.30, 0.86, 0.52)
-        "inn": color = Color(0.44, 0.66, 1.0)
-        "guard", "gate": color = Color(0.58, 0.78, 0.96)
+        "gate": color = Color(0.58, 0.78, 0.96)
+        "district": color = Color(0.64, 0.74, 0.86)
         "danger", "ruin": color = Color(0.92, 0.30, 0.26)
-        "capital", "city": color = Color(0.72, 0.84, 0.96)
+        "capital", "city", "settlement": color = Color(0.72, 0.84, 0.96)
+        "lake", "coast": color = Color(0.25, 0.65, 0.92)
+        "mine": color = Color(0.80, 0.56, 0.28)
+        "forest", "marsh": color = Color(0.25, 0.72, 0.34)
+        "mountain": color = Color(0.72, 0.74, 0.76)
     draw_circle(p, 4.0, color)
     draw_circle(p, 1.7, Color(0.02, 0.03, 0.05))
 
