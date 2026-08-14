@@ -38,6 +38,12 @@ func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("attack"):
         _try_attack()
         return
+    if event.is_action_pressed("cast_magic"):
+        MagicSystem.cast_selected(self, camera)
+        return
+    if event.is_action_pressed("next_spell"):
+        MagicSystem.select_next()
+        return
     if event.is_action_pressed("jump") and is_on_floor() and GameState.consume_stamina(8.0):
         velocity.y = jump_velocity
     elif event.is_action_pressed("interact"):
