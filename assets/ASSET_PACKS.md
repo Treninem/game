@@ -20,12 +20,18 @@ Folders: `assets/materials/reflective/`, `assets/materials/glass/`, `assets/shad
 - Godot Shaders Rain on Glass — shader code CC0 — https://godotshaders.com/shader/rain-on-glass-2/
 Required: mirrors clean/aged/dirty/scratched/cracked; glass clear/tinted/frosted/dusty/wet/fogged/scratched/cracked/shattered/reinforced; vehicle/display/bottle/lens/screen glass. Windows react to weather and day/night.
 
-### Water / rivers / waterfalls / wet surfaces — high priority
-Folders: `assets/materials/water/`, `assets/shaders/water/`, `assets/vfx/water/`, `assets/vfx/waterfalls/`, `assets/decals/wet/`.
-- Binbun Godot Water — CC0 shader with caustics/refraction/depth/foam — https://forum.godotengine.org/t/free-water-shader-with-caustics-cc0/134925
+### Water / rivers / waterfalls / underwater / wet surfaces — high priority
+Folders: `assets/materials/water/`, `assets/shaders/water/`, `assets/vfx/water/`, `assets/vfx/waterfalls/`, `assets/vfx/underwater/`, `assets/decals/wet/`.
+- Binbun Godot Water — CC0 shader with world-space caustics, refraction, depth, foam and smooth/toon shading — https://forum.godotengine.org/t/free-water-shader-with-caustics-cc0/134925
 - TomAzod Godot Water Splash VFX — CC0 dynamic splash: ripples/foam/bubbles/pillar/scenes/scripts — https://tomazod.itch.io/godot-splash-vfx
 - Godot Shaders water/waterfall CC0 family remains approved after individual verification.
 Water coverage: ocean/lake/river/stream/pond/swamp/puddle/shallow/deep/clear/turbid/muddy/industrial/underwater. Waterfalls need flowing body, edge breakup, impact foam, spray, mist, droplets and downstream turbulence. Effects: waves/current/ripples/rain rings/splashes/wakes/bubbles/foam/shore spray/caustics/refraction/depth/Fresnel. Wet asphalt/stone/soil/wood/roofs/vehicles dynamically change darkening, roughness and reflection.
+Underwater coverage: world-space caustic light patterns on terrain/rocks/objects, depth color absorption, fog/turbidity, suspended particles/plankton, bubbles, current-driven vegetation, surface view from below, distortion, shafts of light, muffled ambience and transition when camera crosses water surface. Use quality tiers and avoid expensive full-screen effects when not underwater.
+
+### Ice / frost / snow material systems
+Folders: `assets/materials/ice/`, `assets/shaders/ice/`, `assets/vfx/frost/`, `assets/decals/snow/`.
+- Dragonforge Godot 3D Ice Material Shaders and VFX — pack marked CC0; free download includes an ice shader and uses CC0 material sources — https://dragonforge-development.itch.io/godot-3d-vfx-ice-shaders — verify each bundled dependency before physical import.
+Required: clear/blue/cloudy/cracked/thin/thick ice, frozen puddles/lakes, icicles, frost on windows/metal/vegetation, slippery/wet thaw states, ice cracking cues, snow crust/powder/wet snow, footprint/tire depressions and melt-to-water transitions.
 
 ### Animated fire / smoke / steam / heat
 Maintain candle, lighter, torch, campfire, fireplace, stove, forge, barrel/object/building/grass/forest fires. Layer flames + sparks + embers + ash + smoke + light flicker + heat distortion. Add steam for hot water, cooking, industrial pipes, vents, geysers and extinguishing fire. Smoke needs wispy, chimney, campfire, dense black fire, white steam-like, ground-hugging and distant-column variants. Approved discovery/source families remain OpenGameArt CC0 animated effects and Kenney Particle/Smoke packs.
@@ -47,15 +53,17 @@ Folders: `assets/vfx/weather/`, `assets/vfx/atmosphere/`, `assets/shaders/weathe
 - Binbun Dynamic Sky — CC0 Godot shader with dynamic sun, day/sunset/night blending, clouds, stars and parallax — https://forum.godotengine.org/t/free-sky-shader-with-dynamic-sun-and-customizability-cc0/134798 — target `assets/shaders/sky/binbun_dynamic_sky/`.
 - Godot Shaders Animated Wind/Cloud Shadow Patches — CC0 procedural moving wind/cloud-shadow code — https://godotshaders.com/shader/animated-grassy-wind-or-cloud-shadow-pixel-patches-overlay/.
 - Godot Shaders CC0 archive — approved discovery source; verify each individual shader before physical import — https://godotshaders.com/shader-license/cc0/.
-
 Required dynamic weather library: rain from drizzle to wind-driven downpour; local/distant lightning and delayed thunder; wind from breeze to storm; layered clouds and cloud shadows; ground/river/valley/storm fog; snow and blizzard; hail; dust/sandstorms; leaves/petals/pollen; insects/fireflies; heat haze; frost/breath vapor; volcanic ash/industrial soot/steam.
 
-### Vegetation animation / environmental response
-Do not keep vegetation static. Shared wind shader/system must support grass, crops, reeds, bushes, flowers, tree branches/crowns and hanging vines with per-species stiffness, gust response and distance LOD. Add interaction bending near player/animals/vehicles where affordable. Rain adds wetness; snow adds accumulation cues; storms increase sway; fire can transition vegetation to burning/scorched states. Prefer shared GPU noise/turbulence over per-plant scripts.
+### Vegetation / cloth / flexible-object environmental motion
+Do not keep the world static. Shared wind systems must support grass, crops, reeds, bushes, flowers, tree branches/crowns, hanging vines, flags, banners, curtains, laundry, tarps, tent cloth, ropes, cables, hanging signs and lightweight debris. Use per-material stiffness, gust response, damping and distance LOD. Add interaction bending near player/animals/vehicles where affordable. Rain adds weight/wetness; snow adds accumulation; storms increase sway; fire can transition vegetation/cloth to burning/scorched states. Prefer shared GPU noise/turbulence over per-object scripts.
 
 ### Additional animated world phenomena — proactive coverage
 - Godot Shaders LAVA shader animated — CC0 animated lava/energy shader with noise, wave distortion and emission — https://godotshaders.com/shader/lava-shader-animated/ — target `assets/shaders/lava/animated_lava/`.
-Also maintain systems/assets for cooling lava crust, bubbles/splashes, ice/frost/melting, snow tracks/drifts, aurora/stars/meteors, god rays/light shafts, tornado/whirlwind/dust devil, ocean storm/whitecaps, underwater particles/caustics/currents, wind-reactive cloth/flags/ropes/cables/signs, distant bird flocks, insects/butterflies and fish schools.
+Also maintain systems/assets for cooling lava crust, bubbles/splashes, ice/frost/melting, snow tracks/drifts, aurora/stars/meteors, god rays/light shafts, tornado/whirlwind/dust devil, ocean storm/whitecaps, underwater particles/caustics/currents, distant bird flocks, insects/butterflies and fish schools.
+
+### Ambient life / flocking / schooling
+Maintain reusable animation/behavior-ready visuals for bird flocks, bats, insects, butterflies, fireflies, flies/gnats, fish schools and small background wildlife. Need near/far LOD: real animated meshes nearby, cheap impostors/particles at distance. Movement must respond to wind/current, time of day, biome and disturbances instead of looping in one fixed spot.
 
 ### Ground interaction VFX
 Maintain reusable effects per surface: dirt dust, sand kick, gravel chips, grass/leaf disturbance, mud splash, shallow-water splash, snow puff, stone dust, wood splinters, metal sparks, glass shards. Trigger from footsteps, running, landing, tools, combat, falling objects and vehicles. Scale by force/speed and surface material.
@@ -70,19 +78,19 @@ Maintain fingerprints, dust, grime, scratches, cracks, condensation, droplets, s
 Continue broad approved sources for buildings/infrastructure/interiors, humans/NPC animations, animals/ecology, food/farming, resources/crafting/tools, weapons/armor, vehicles/logistics, machines/production/technology, VFX/destruction, audio and complete UI. Shared material/VFX systems must be reused across world assets.
 
 ## Environmental VFX composition rule
-A production effect is a system, not one texture. Combine as appropriate: shader + particles + mesh/flipbook + light + decal + audio + environment/material response. Storm = clouds + darkening + wind + rain + wetness + lightning + thunder + water response; waterfall = flowing water + foam + mist + spray + audio; fire = flame + embers + smoke + light + heat distortion + scorch; lava = animated material + emission + crust + bubbles + heat haze + smoke/steam + light.
+A production effect is a system, not one texture. Combine as appropriate: shader + particles + mesh/flipbook + light + decal + audio + environment/material response. Storm = clouds + darkening + wind + rain + wetness + lightning + thunder + water response; waterfall = flowing water + foam + mist + spray + audio; fire = flame + embers + smoke + light + heat distortion + scorch; lava = animated material + emission + crust + bubbles + heat haze + smoke/steam + light; underwater = surface + refraction + caustics + depth fog + particles + current + audio.
 
 ## Material-state system requirement
-Support dry↔wet, clean↔dirty, intact↔cracked/broken, warm↔frosted/condensed, calm↔storm water, still↔wind-blown vegetation, normal↔burning/scorched, snow↔melted/wet, lava↔cooling crust, day↔night reflection. Prefer shader parameters/masks over duplicate meshes.
+Support dry↔wet, clean↔dirty, intact↔cracked/broken, warm↔frosted/condensed, calm↔storm water, still↔wind-blown vegetation/cloth, normal↔burning/scorched, snow↔melted/wet, water↔ice↔thaw, lava↔cooling crust, day↔night reflection. Prefer shader parameters/masks over duplicate meshes.
 
 ## Performance / quality tiers
 - High/Ultra: nearby high-density particles, richer shaders, important true/planar reflections and interaction VFX.
 - Medium: reduced particles, SSR/probes, simplified fog/cloud/water layers.
 - Low/distant: billboard/flipbook/static approximations, aggressive culling and cheap shaders.
 - Weather emitters follow camera/local cells rather than simulating particles across the whole map.
-- Vegetation wind runs in shared GPU shaders; avoid per-plant scripts.
+- Vegetation/cloth wind runs in shared GPU shaders; avoid per-object scripts.
 - Pool/reuse impact/splash/fire emitters.
-- Heavy cloud/fog/lava/water systems expose quality switches and avoid unnecessary transparent overdraw.
+- Heavy cloud/fog/lava/water/underwater systems expose quality switches and avoid unnecessary transparent overdraw.
 
 ## Import policy
 1. Prefer `.glb`/`.gltf` for models and optimized PNG/WebP masks/atlases for materials/VFX.
