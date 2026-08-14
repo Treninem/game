@@ -1,0 +1,121 @@
+name: Vendor source-chat B09 real CC0 interaction foley
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b09.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b09
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 interaction and vegetation foley
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b09/audio"
+          TMP=".sourcechat_b09_tmp"
+          rm -rf "$TMP"; mkdir -p "$ROOT" "$TMP"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full >/dev/null
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks this staged asset as CC0/public domain.
+          License: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          zip_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 -A 'ImPuls-CC0-SourceChat-B09/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          seven_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 -A 'ImPuls-CC0-SourceChat-B09/1.0' "$url" -o "$work/pack.7z"
+            7z x -y "$work/pack.7z" -o"$work/archive" >/dev/null
+            rsync -a --prune-empty-dirs --include='*/' --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_audio "oga_87_clickety_clips" \
+            "https://opengameart.org/sites/default/files/Click_Clips.zip" \
+            "https://opengameart.org/content/87-clickety-clips" \
+            "OwlishMedia / OpenGameArt" \
+            "87 CC0 clicks, snaps, switches, lever/button pushes, latches, pops and clacks for physical interactions and UI-adjacent world controls."
+
+          zip_audio "oga_27_various_foley" \
+            "https://opengameart.org/sites/default/files/sounds.zip" \
+            "https://opengameart.org/content/various-sound-effects" \
+            "laleksic / OpenGameArt" \
+            "27 CC0 phone-recorded and cleaned WAV effects including door open/close, bell, creaking, wood, lock and drawer sounds."
+
+          seven_audio "oga_20_dry_leaf_rustles" \
+            "https://opengameart.org/sites/default/files/qubodup-rustle.7z" \
+            "https://opengameart.org/content/20-rustles-dry-leaves" \
+            "qubodup / OpenGameArt" \
+            "20 CC0 high-resolution FLAC rustles for leaves, bushes, vegetation contact, stealth and wind-driven foliage."
+
+          zip_audio "oga_chain_winch" \
+            "https://opengameart.org/sites/default/files/winch.zip" \
+            "https://opengameart.org/content/chain-winch-sounds" \
+            "bart / OpenGameArt" \
+            "CC0 synthesized chain/winch background sounds for gates, lifts, cranes, workshops and mechanisms."
+
+          rm -rf "$TMP"
+          cat > "assets/staging/sourcechat_b09/README.md" <<'EOF'
+          # Source chat B09 — real CC0 interaction foley
+
+          Physically staged files only; no game integration.
+          Coverage: switches/buttons/latches, household doors/locks/drawers/creaks, dry vegetation rustles, and chain/winch mechanisms.
+          Main integration chat should classify by interaction type, normalize loudness, remove weak/noisy takes, and promote selected files.
+          EOF
+          find assets/staging/sourcechat_b09 -type f | wc -l
+          du -sh assets/staging/sourcechat_b09
+
+      - name: Commit only B09 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b09
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 interaction foley B09"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
