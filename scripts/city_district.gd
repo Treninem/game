@@ -23,15 +23,13 @@ const ASSET_PATHS := {
     "crate": ASSET_ROOT + "Prop_Crate.gltf"
 }
 
-const OPEN_DISTRICTS := {
-    "central": true,
-    "starter": true,
-    "arena": true,
-    "hippodrome": true,
-    "farms": true,
-    "canals": true,
-    "port": true
-}
+const DENSE_STREET_DISTRICTS := [
+    "central", "starter", "market", "crafts", "old_town", "residential", "guilds", "adventurers"
+]
+const GRAND_STREET_DISTRICTS := ["central", "starter", "royal", "aristocratic", "guilds"]
+const OPEN_DISTRICTS := ["arena", "hippodrome", "farms", "canals"]
+const INDUSTRIAL_DISTRICTS := ["crafts", "warehouses", "port", "sawmill", "training_mine"]
+const ELITE_DISTRICTS := ["rich", "aristocratic", "royal"]
 
 var player: Node3D
 var materials: Dictionary = {}
@@ -168,20 +166,66 @@ func _build_cell(cell: Vector2i) -> void:
         materials["ground"],
         root
     )
-    _add_road_grid(root)
 
     var world_pos := Vector2(root.position.x, root.position.z)
     var district: Dictionary = CAPITAL.district_at(world_pos)
     var district_id := String(district.get("id", "city"))
+    _add_road_network(root, cell, district_id)
     _populate_cell(root, cell, district_id)
 
-func _add_road_grid(root: Node3D) -> void:
-    _add_mesh_box("RoadNS", Vector3(18.0, 0.10, CELL_SIZE + 0.6), Vector3(0, 0.045, 0), materials["road"], root)
-    _add_mesh_box("RoadEW", Vector3(CELL_SIZE + 0.6, 0.10, 18.0), Vector3(0, 0.050, 0), materials["road"], root)
-    _add_mesh_box("WalkNSL", Vector3(4.0, 0.12, CELL_SIZE + 0.6), Vector3(-11.0, 0.065, 0), materials["walk"], root)
-    _add_mesh_box("WalkNSR", Vector3(4.0, 0.12, CELL_SIZE + 0.6), Vector3(11.0, 0.065, 0), materials["walk"], root)
-    _add_mesh_box("WalkEWT", Vector3(CELL_SIZE + 0.6, 0.12, 4.0), Vector3(0, 0.070, -11.0), materials["walk"], root)
-    _add_mesh_box("WalkEWB", Vector3(CELL_SIZE + 0.6, 0.12, 4.0), Vector3(0, 0.070, 11.0), materials["walk"], root)
+func _add_road_network(root: Node3D, cell: Vector2i, district_id: String) -> void:
+    var dense := district_id in DENSE_STREET_DISTRICTS
+    var open_area := district_id in OPEN_DISTRICTS
+    var ns_enabled := dense or abs(cell.x) % 2 == 0
+    var ew_enabled := dense or abs(cell.y) % 2 == 0
+    var road_width := _road_width_for(cell, district_id)
+    var road_material: Material = materials["track"] if district_id == "farms" else materials["road"]
+    var sidewalks := not open_area and district_id != "sawmill" and district_id != "training_mine"
+
+    if ns_enabled:
+        _add_road_strip(root, "RoadNS", true, road_width, 0.0, road_material, sidewalks)
+    if ew_enabled:
+        _add_road_strip(root, "RoadEW", false, road_width, 0.0, road_material, sidewalks)
+
+    if district_id in ["market", "crafts", "old_town", "residential"]:
+        var alley_vertical := abs(cell.x + cell.y) % 2 == 0
+        var alley_offset := 58.0 if abs(cell.x * 3 + cell.y) % 2 == 0 else -58.0
+        _add_road_strip(root, "Lane", alley_vertical, 7.0, alley_offset, materials["lane"], false)
+
+    if district_id == "central" or district_id == "starter":
+        _add_mesh_box("CivicCrossing", Vector3(34.0, 0.115, 34.0), Vector3(0, 0.060, 0), materials["plaza"], root)
+
+func _road_width_for(cell: Vector2i, district_id: String) -> float:
+    if district_id in OPEN_DISTRICTS:
+        return 9.0
+    if district_id in GRAND_STREET_DISTRICTS:
+        return 20.0 if abs(cell.x + cell.y) % 4 == 0 else 16.0
+    if district_id in INDUSTRIAL_DISTRICTS or district_id in ["guards", "training"]:
+        return 14.0
+    return 12.0 if abs(cell.x + cell.y) % 3 != 0 else 15.0
+
+func _add_road_strip(
+    root: Node3D,
+    node_name: String,
+    vertical: bool,
+    width: float,
+    offset: float,
+    material: Material,
+    sidewalks: bool
+) -> void:
+    var road_size := Vector3(width, 0.10, CELL_SIZE + 0.6) if vertical else Vector3(CELL_SIZE + 0.6, 0.10, width)
+    var road_pos := Vector3(offset, 0.045, 0) if vertical else Vector3(0, 0.045, offset)
+    _add_mesh_box(node_name, road_size, road_pos, material, root)
+
+    if not sidewalks:
+        return
+    var sidewalk_offset := width * 0.5 + 2.2
+    if vertical:
+        _add_mesh_box(node_name + "WalkL", Vector3(3.4, 0.12, CELL_SIZE + 0.6), Vector3(offset - sidewalk_offset, 0.065, 0), materials["walk"], root)
+        _add_mesh_box(node_name + "WalkR", Vector3(3.4, 0.12, CELL_SIZE + 0.6), Vector3(offset + sidewalk_offset, 0.065, 0), materials["walk"], root)
+    else:
+        _add_mesh_box(node_name + "WalkT", Vector3(CELL_SIZE + 0.6, 0.12, 3.4), Vector3(0, 0.065, offset - sidewalk_offset), materials["walk"], root)
+        _add_mesh_box(node_name + "WalkB", Vector3(CELL_SIZE + 0.6, 0.12, 3.4), Vector3(0, 0.065, offset + sidewalk_offset), materials["walk"], root)
 
 func _populate_cell(root: Node3D, cell: Vector2i, district_id: String) -> void:
     var rng := RandomNumberGenerator.new()
@@ -190,32 +234,55 @@ func _populate_cell(root: Node3D, cell: Vector2i, district_id: String) -> void:
     if district_id == "central" or district_id == "starter":
         _build_plaza_detail(root, rng, district_id)
         return
-    if district_id == "arena" or district_id == "hippodrome" or district_id == "farms" or district_id == "canals":
+    if district_id in OPEN_DISTRICTS:
         _build_open_district_detail(root, rng, district_id)
         return
+    if district_id == "port":
+        _build_port_detail(root, rng)
+        return
 
-    var lots := [Vector3(-52, 0, -52), Vector3(52, 0, -52), Vector3(-52, 0, 52), Vector3(52, 0, 52)]
-    var building_count := 2
-    if district_id == "royal" or district_id == "rich" or district_id == "aristocratic":
-        building_count = 1
-    elif district_id == "market" or district_id == "crafts" or district_id == "old_town" or district_id == "residential":
-        building_count = 3
-
+    var lots := [
+        Vector3(-54, 0, -54), Vector3(54, 0, -54),
+        Vector3(-54, 0, 54), Vector3(54, 0, 54)
+    ]
+    var building_count := _building_count_for(district_id)
     var used: Dictionary = {}
+
     for i in range(building_count):
         var lot_index := rng.randi_range(0, lots.size() - 1)
         var safety := 0
-        while used.has(lot_index) and safety < 8:
+        while used.has(lot_index) and safety < 10:
             lot_index = rng.randi_range(0, lots.size() - 1)
             safety += 1
         used[lot_index] = true
+        var lot: Vector3 = lots[lot_index]
+        lot.x += rng.randf_range(-6.0, 6.0)
+        lot.z += rng.randf_range(-6.0, 6.0)
         var rotation_step := rng.randi_range(0, 3)
-        _build_medieval_house(root, lots[lot_index], float(rotation_step) * PI * 0.5, district_id, rng)
+        _build_medieval_house(root, lot, float(rotation_step) * PI * 0.5, district_id, rng)
 
-    if district_id == "market" or district_id == "crafts" or district_id == "warehouses" or district_id == "port":
+    _add_district_props(root, district_id, rng)
+
+func _building_count_for(district_id: String) -> int:
+    if district_id in ["market", "crafts", "old_town", "residential"]:
+        return 3
+    if district_id in ELITE_DISTRICTS:
+        return 1
+    if district_id in ["stables", "sawmill", "training_mine"]:
+        return 1
+    return 2
+
+func _add_district_props(root: Node3D, district_id: String, rng: RandomNumberGenerator) -> void:
+    if district_id in ["market", "crafts", "warehouses", "sawmill"]:
         _instance_asset("wagon", root, Vector3(28, 0.12, -25), Vector3(0, rng.randf_range(-PI, PI), 0))
-        for i in range(3):
-            _instance_asset("crate", root, Vector3(23 + i * 1.4, 0.08, -31), Vector3.ZERO)
+        var crate_count := 4 if district_id == "warehouses" else 2
+        for i in range(crate_count):
+            _instance_asset("crate", root, Vector3(23 + i * 1.5, 0.08, -31), Vector3.ZERO)
+    elif district_id in ["guards", "training", "guilds", "adventurers"]:
+        for i in range(2):
+            _instance_asset("crate", root, Vector3(-28 + i * 3.0, 0.08, 27), Vector3(0, rng.randf_range(-0.2, 0.2), 0))
+    elif district_id == "stables":
+        _instance_asset("wagon", root, Vector3(-28, 0.12, 30), Vector3(0, rng.randf_range(-PI, PI), 0))
 
 func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id: String, rng: RandomNumberGenerator) -> void:
     var building := Node3D.new()
@@ -224,13 +291,11 @@ func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id
     building.rotation.y = yaw
     parent.add_child(building)
 
-    var brick_style := district_id in ["old_town", "guards", "training", "training_mine", "warehouses", "port"]
+    var brick_style := district_id in ["old_town", "guards", "training", "training_mine", "warehouses", "port", "crafts"]
     var wall_key := "wall_brick" if brick_style else "wall_plaster"
     var door_key := "door_brick" if brick_style else "door_plaster"
     var window_key := "window_brick" if brick_style else "window_plaster"
-    var stories := 1 if district_id in ["warehouses", "port", "stables", "sawmill"] else 2
-    if district_id in ["rich", "aristocratic", "royal"]:
-        stories = 2
+    var stories := _story_count_for(district_id)
 
     for story in range(stories):
         var y := float(story) * STORY_HEIGHT
@@ -247,13 +312,26 @@ func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id
             _instance_asset(window_key if i % 2 == 1 else wall_key, building, Vector3(-4.0, y, offset), Vector3(0, -PI * 0.5, 0))
 
     _instance_asset("roof", building, Vector3(0, float(stories) * STORY_HEIGHT, 0), Vector3.ZERO)
-    _add_collision_box(Vector3(8.0, float(stories) * STORY_HEIGHT, 8.0), Vector3(0, float(stories) * STORY_HEIGHT * 0.5, 0), building)
+    _add_collision_box(
+        Vector3(8.0, float(stories) * STORY_HEIGHT, 8.0),
+        Vector3(0, float(stories) * STORY_HEIGHT * 0.5, 0),
+        building
+    )
 
-    if rng.randf() < 0.35:
+    var clutter_chance := 0.55 if district_id in INDUSTRIAL_DISTRICTS else 0.24
+    if rng.randf() < clutter_chance:
         _instance_asset("crate", building, Vector3(5.2, 0.08, 3.4), Vector3(0, rng.randf_range(-PI, PI), 0))
 
+func _story_count_for(district_id: String) -> int:
+    if district_id in ["warehouses", "port", "stables", "sawmill", "training_mine"]:
+        return 1
+    if district_id in ELITE_DISTRICTS:
+        return 3
+    return 2
+
 func _build_plaza_detail(root: Node3D, rng: RandomNumberGenerator, district_id: String) -> void:
-    _add_mesh_box("PlazaStone", Vector3(116, 0.13, 116), Vector3(0, 0.075, 0), materials["plaza"], root)
+    var plaza_size := 124.0 if district_id == "central" else 108.0
+    _add_mesh_box("PlazaStone", Vector3(plaza_size, 0.13, plaza_size), Vector3(0, 0.075, 0), materials["plaza"], root)
     if district_id == "central":
         var base := CylinderMesh.new()
         base.top_radius = 6.0
@@ -270,16 +348,36 @@ func _build_plaza_detail(root: Node3D, rng: RandomNumberGenerator, district_id: 
 
 func _build_open_district_detail(root: Node3D, rng: RandomNumberGenerator, district_id: String) -> void:
     if district_id == "farms":
-        for i in range(5):
-            _add_mesh_box("Field_%d" % i, Vector3(24, 0.08, 42), Vector3(-60 + i * 30, 0.045, 48), materials["soil"], root)
+        var field_positions := [Vector3(-52, 0.045, -52), Vector3(52, 0.045, -52), Vector3(-52, 0.045, 52), Vector3(52, 0.045, 52)]
+        for i in range(field_positions.size()):
+            var size := Vector3(rng.randf_range(38.0, 54.0), 0.08, rng.randf_range(42.0, 62.0))
+            _add_mesh_box("Field_%d" % i, size, field_positions[i], materials["soil"], root)
     elif district_id == "canals":
-        _add_mesh_box("Canal", Vector3(34, 0.05, CELL_SIZE - 34), Vector3(48, 0.03, 0), materials["water"], root)
+        _add_mesh_box("Canal", Vector3(30, 0.05, CELL_SIZE - 28), Vector3(52, 0.03, 0), materials["water"], root)
+        _add_mesh_box("CanalBank", Vector3(5, 0.14, CELL_SIZE - 28), Vector3(33.0, 0.07, 0), materials["stone"], root)
+        _add_mesh_box("CanalBank2", Vector3(5, 0.14, CELL_SIZE - 28), Vector3(71.0, 0.07, 0), materials["stone"], root)
     elif district_id == "hippodrome":
-        _add_mesh_box("Track", Vector3(150, 0.08, 82), Vector3(0, 0.045, 42), materials["track"], root)
+        _build_hippodrome_track(root)
     elif district_id == "arena":
-        _add_mesh_box("ArenaApproach", Vector3(120, 0.08, 74), Vector3(0, 0.045, 42), materials["plaza"], root)
-    if rng.randf() < 0.55:
+        _add_mesh_box("ArenaApproach", Vector3(126, 0.08, 82), Vector3(0, 0.045, 42), materials["plaza"], root)
+        _add_mesh_box("ArenaAxis", Vector3(28, 0.09, 150), Vector3(0, 0.05, 0), materials["track"], root)
+
+    if rng.randf() < 0.48:
         _instance_asset("wagon", root, Vector3(-34, 0.10, 34), Vector3(0, rng.randf_range(-PI, PI), 0))
+
+func _build_hippodrome_track(root: Node3D) -> void:
+    _add_mesh_box("TrackNorth", Vector3(142, 0.08, 14), Vector3(0, 0.045, -52), materials["track"], root)
+    _add_mesh_box("TrackSouth", Vector3(142, 0.08, 14), Vector3(0, 0.045, 52), materials["track"], root)
+    _add_mesh_box("TrackWest", Vector3(14, 0.08, 104), Vector3(-64, 0.045, 0), materials["track"], root)
+    _add_mesh_box("TrackEast", Vector3(14, 0.08, 104), Vector3(64, 0.045, 0), materials["track"], root)
+
+func _build_port_detail(root: Node3D, rng: RandomNumberGenerator) -> void:
+    _add_mesh_box("HarborWater", Vector3(58, 0.05, CELL_SIZE - 18), Vector3(66, 0.03, 0), materials["water"], root)
+    _add_mesh_box("Quay", Vector3(24, 0.15, CELL_SIZE - 18), Vector3(24, 0.075, 0), materials["stone"], root)
+    _build_medieval_house(root, Vector3(-50, 0, -48), 0.0, "warehouses", rng)
+    _instance_asset("wagon", root, Vector3(-22, 0.12, 31), Vector3(0, rng.randf_range(-PI, PI), 0))
+    for i in range(5):
+        _instance_asset("crate", root, Vector3(-8 + float(i % 3) * 2.0, 0.08, -30 + float(i / 3) * 2.0), Vector3.ZERO)
 
 func _load_city_assets() -> void:
     for key in ASSET_PATHS.keys():
@@ -319,6 +417,7 @@ func _cell_seed(cell: Vector2i) -> int:
 func _prepare_materials() -> void:
     materials["ground"] = _material(Color(0.29, 0.31, 0.25), 0.98)
     materials["road"] = _material(Color(0.22, 0.205, 0.19), 0.97)
+    materials["lane"] = _material(Color(0.28, 0.25, 0.21), 0.99)
     materials["walk"] = _material(Color(0.38, 0.36, 0.33), 0.94)
     materials["plaza"] = _material(Color(0.43, 0.42, 0.40), 0.93)
     materials["stone"] = _material(Color(0.34, 0.36, 0.38), 0.92)
