@@ -1,14 +1,14 @@
 ; ImPuls PC — offline single-player RPG
-; Stage 8 streamed 64x64 km continent and continent-scale exploration
+; Stage 9 direct gameplay panels, permanent minimap and selected branding
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.8.0-stage8"
-config/icon="res://assets/branding/impuls_icon.svg"
+config/version="0.9.0-stage9"
+config/icon="res://assets/branding/impuls_icon.png"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-boot_splash/image="res://assets/branding/impuls_icon.svg"
+boot_splash/image="res://assets/branding/impuls_icon.png"
 boot_splash/bg_color=Color(0.015, 0.02, 0.035, 1)
 boot_splash/fullsize=false
 
