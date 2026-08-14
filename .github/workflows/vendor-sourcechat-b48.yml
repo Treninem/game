@@ -1,0 +1,88 @@
+name: Vendor source-chat B48 real CC0 pond docks well windmill
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b48.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b48
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 pond docks well windmill sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b48"
+          TMP=".sourcechat_b48_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4" notes="$5"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B48/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            chmod -R u+rwX "$TMP/$name" || true
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            chmod -R u+rwX "$ROOT/models/$name" || true
+            find "$ROOT/models/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip "oga_free_lowpoly_pond_kit" "https://opengameart.org/sites/default/files/free_pond_kit_assetquest.zip" "https://opengameart.org/content/free-lowpoly-pond-kit" "Free Lowpoly Pond Kit" "Pond scene source with tubs, pebbles, plants, animals and separate water meshes; common prop/plant atlas textures."
+          stage_zip "oga_modular_wooden_docks" "https://opengameart.org/sites/default/files/woodendock_fbxgltftextures.zip" "https://opengameart.org/content/modular-wooden-docks" "Modular Wooden Docks" "FBX/GLTF/textures source edition; source page lists 176 objects aligned for modular lake/swamp/beach construction."
+          stage_zip "oga_basic_well_4k" "https://opengameart.org/sites/default/files/Well_1.zip" "https://opengameart.org/content/basic-well" "Basic Well" "FBX/OBJ/STL/3DS source with 4K color, metallic-smoothness and normal textures."
+          stage_zip "oga_stylized_windmill" "https://opengameart.org/sites/default/files/Windmil.zip" "https://opengameart.org/content/stylized-wildmill-isometric-with-parts-to-build-animationand-blend" "Stylized Windmill" "Low-poly farm windmill source in FBX/OBJ/Blend with separable parts suitable for authored animation."
+
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B48 — real CC0 pond, docks, well and windmill
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should use these as authored location-building sources for ponds, lakes, swamps, shores, docks, farms and villages; verify scale/materials/collisions/LOD and deduplicate against existing harbour/medieval/nature libraries before promotion.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B48 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B48 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b48
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 pond docks well windmill B48"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
