@@ -1,0 +1,119 @@
+name: Import verified real asset packs
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import_real_asset_packs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-packs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/system_g6"
+          mkdir -p "$ROOT/medieval_tools" "$ROOT/medieval_crafting_stations" "$ROOT/medieval_props"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/medieval_tools_pack.7z' \
+            -o "$ROOT/medieval_tools/medieval_tools_pack.7z"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/medieval_crafting_stations_pack.7z' \
+            -o "$ROOT/medieval_crafting_stations/medieval_crafting_stations_pack.7z"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/medieval_props_pack.7z' \
+            -o "$ROOT/medieval_props/medieval_props_pack.7z"
+
+          test -s "$ROOT/medieval_tools/medieval_tools_pack.7z"
+          test -s "$ROOT/medieval_crafting_stations/medieval_crafting_stations_pack.7z"
+          test -s "$ROOT/medieval_props/medieval_props_pack.7z"
+
+          sha256sum \
+            "$ROOT/medieval_tools/medieval_tools_pack.7z" \
+            "$ROOT/medieval_crafting_stations/medieval_crafting_stations_pack.7z" \
+            "$ROOT/medieval_props/medieval_props_pack.7z" \
+            > "$ROOT/SHA256SUMS.txt"
+
+      - name: Write provenance and license metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/system_g6"
+
+          cat > "$ROOT/README.md" <<'EOF'
+          # System G6 — verified CC0 source packs
+
+          These are original downloadable archives mirrored into the repository for the main game-development chat to inspect, unpack, normalize and selectively integrate.
+
+          This research chat does not wire these assets into scenes, scripts or project settings.
+
+          Included packs:
+          - Medieval Tools Pack — 12 low-poly tools.
+          - Medieval Crafting Stations Pack — 3 crafting stations.
+          - Medieval Props Pack — 19 settlement/interior props.
+
+          All three source pages explicitly list CC0.
+          EOF
+
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          Creative Commons CC0 1.0 / Public Domain dedication.
+
+          Source pages:
+          https://opengameart.org/content/medieval-tools-pack
+          https://opengameart.org/content/medieval-crafting-stations-pack
+          https://opengameart.org/content/medieval-props-pack
+
+          Author/uploader: System G6 (Qoma)
+          Attribution is not required by CC0; source metadata is kept for provenance.
+          EOF
+
+          cat > "$ROOT/medieval_tools/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/medieval-tools-pack
+          License: CC0
+          Author: System G6 / Qoma
+          Original archive: medieval_tools_pack.7z
+          Contents: 12 low-poly tools including pitchfork, shovel, hoe, sickle, axe, scythe, rake, broom, saw, pickaxe and hammer.
+          EOF
+
+          cat > "$ROOT/medieval_crafting_stations/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/medieval-crafting-stations-pack
+          License: CC0
+          Author: System G6 / Qoma
+          Original archive: medieval_crafting_stations_pack.7z
+          Contents: 3 low-poly crafting stations in one Blender source with textures.
+          EOF
+
+          cat > "$ROOT/medieval_props/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/medieval-props-pack
+          License: CC0
+          Author: System G6 / Qoma
+          Original archive: medieval_props_pack.7z
+          Contents: 19 low-poly props including chest, bench, brazier, cabinet, campfire, cart, basket, bed, crate, hay, sawbuck, trough, logs, barrel, hitching post and bookshelf.
+          EOF
+
+      - name: Commit downloaded packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/source_packs/opengameart/system_g6
+          if git diff --cached --quiet; then
+            echo "No asset changes to commit."
+            exit 0
+          fi
+          git commit -m "assets: vendor verified CC0 System G6 source packs"
+          git push origin HEAD:main
