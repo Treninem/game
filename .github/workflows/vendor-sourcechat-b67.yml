@@ -1,0 +1,86 @@
+name: Vendor source-chat B67 real CC0 universal animation standard
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b67.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b67
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 Universal Animation Library Standard
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b67/animations/quaternius_universal_animation_library_standard"
+          TMP=".sourcechat_b67_tmp"
+          rm -rf "assets/staging/sourcechat_b67" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B67/1.0' \
+            "https://opengameart.org/sites/default/files/universal_animation_librarystandard.zip" \
+            -o "$TMP/universal_animation_librarystandard.zip"
+          unzip -q "$TMP/universal_animation_librarystandard.zip" -d "$TMP/extracted"
+          chmod -R u+rwX "$TMP/extracted" || true
+          rsync -a "$TMP/extracted/" "$ROOT/"
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+
+          cat > "$ROOT/SOURCE.md" <<'EOF'
+          # Source
+          Pack: Universal Animation Library — Standard
+          Author: Quaternius
+          Source page: https://opengameart.org/content/universal-animation-library
+          Download: https://opengameart.org/sites/default/files/universal_animation_librarystandard.zip
+          License: CC0 as stated on the source page.
+          Notes: Free Standard edition. The source page states this Standard edition contains 45 animations on a universal humanoid rig compatible with Godot, Unity and Unreal for retargeting. The separate full Source edition has 120+ animations and is not staged here.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+
+          cat > "assets/staging/sourcechat_b67/README.md" <<'EOF'
+          # Source chat B67 — Universal Animation Library Standard
+
+          Source-only staging. Contains the free CC0 Standard edition only.
+
+          Main integration chat should inspect the included rig/animation format and retarget selected clips to production humanoids instead of blindly importing every animation into runtime.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B67 files:"; find "assets/staging/sourcechat_b67" -type f | wc -l
+          du -sh "assets/staging/sourcechat_b67"
+
+      - name: Commit B67 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b67
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 universal animation standard B67"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
