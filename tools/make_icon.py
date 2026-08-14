@@ -8,57 +8,29 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "assets" / "branding" / "impuls_icon_source.b64"
+CHUNKS_DIR = ROOT / "assets" / "branding" / "source_chunks"
+FALLBACK_SOURCE = ROOT / "assets" / "branding" / "impuls_icon_source.b64"
 PNG_OUT = ROOT / "assets" / "branding" / "impuls_icon.png"
 DEFAULT_ICO = ROOT / "installer" / "impuls.ico"
 SIZES = [16, 32, 48, 64, 128, 256]
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 
 
-def _decode_first_valid_png(encoded: str) -> bytes:
-    clean = "".join(encoded.split())
-    if not clean.startswith("iVBOR"):
-        start = clean.find("iVBOR")
-        if start < 0:
-            raise RuntimeError("No PNG base64 signature in selected ImPuls artwork")
-        clean = clean[start:]
-
-    # Historical branding imports accidentally concatenated more than one
-    # base64 payload. Test every padding boundary and return the first complete
-    # PNG rather than letting stale bytes break all game builds.
-    boundaries: list[int] = []
-    i = 0
-    while i < len(clean):
-        if clean[i] == "=":
-            j = i
-            while j + 1 < len(clean) and clean[j + 1] == "=":
-                j += 1
-            boundaries.append(j + 1)
-            i = j + 1
-        else:
-            i += 1
-    boundaries.append(len(clean))
-
-    for end in boundaries:
-        candidate = clean[:end]
-        candidate += "=" * (-len(candidate) % 4)
-        try:
-            raw = base64.b64decode(candidate, validate=False)
-        except Exception:
-            continue
-        if not raw.startswith(PNG_MAGIC):
-            continue
-        try:
-            probe = Image.open(io.BytesIO(raw))
-            probe.verify()
-            return raw
-        except Exception:
-            continue
-    raise RuntimeError("Selected ImPuls artwork does not contain a complete PNG")
+def _read_encoded_source() -> str:
+    chunks = sorted(CHUNKS_DIR.glob("*.b64part"))
+    if chunks:
+        return "".join(path.read_text(encoding="utf-8").strip() for path in chunks)
+    return FALLBACK_SOURCE.read_text(encoding="utf-8").strip()
 
 
 def load_source() -> Image.Image:
-    raw = _decode_first_valid_png(SOURCE.read_text(encoding="utf-8"))
+    encoded = "".join(_read_encoded_source().split())
+    encoded += "=" * (-len(encoded) % 4)
+    raw = base64.b64decode(encoded, validate=True)
+    if not raw.startswith(PNG_MAGIC):
+        raise RuntimeError("Selected ImPuls branding source is not PNG")
+    probe = Image.open(io.BytesIO(raw))
+    probe.verify()
     image = Image.open(io.BytesIO(raw)).convert("RGBA")
     side = min(image.width, image.height)
     left = (image.width - side) // 2
