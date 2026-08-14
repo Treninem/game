@@ -1,0 +1,126 @@
+name: Vendor source-chat B100 real CC0 pond reeds playground
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b100.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b100
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 pond reed playground sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b100"
+          TMP=".sourcechat_b100_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$ROOT/models/oga_lily_pads_lod_collision"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B100/1.0' \
+            "https://opengameart.org/sites/default/files/water_lilly.blend" -o "$ROOT/models/oga_lily_pads_lod_collision/water_lilly.blend"
+          meta "oga_lily_pads_lod_collision" \
+            "https://opengameart.org/content/lily-pads" "Lily Pads" \
+            "https://opengameart.org/sites/default/files/water_lilly.blend" \
+            "Nymphaea/Victoria-style lily-pad source with LOD versions and a collision mesh according to source page."
+
+          mkdir -p "$TMP/waterlily" "$ROOT/models/oga_lowpoly_waterlily"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B100/1.0' \
+            "https://opengameart.org/sites/default/files/waterlily.zip" -o "$TMP/waterlily.zip"
+          unzip -q "$TMP/waterlily.zip" -d "$TMP/waterlily"
+          rsync -a "$TMP/waterlily/" "$ROOT/models/oga_lowpoly_waterlily/"
+          meta "oga_lowpoly_waterlily" \
+            "https://opengameart.org/content/lowpoly-waterlily" "LowPoly Waterlily" \
+            "https://opengameart.org/sites/default/files/waterlily.zip" \
+            "Low-poly waterlily source with FBX/OBJ/MTL."
+
+          mkdir -p "$TMP/reed" "$ROOT/models/oga_lowpoly_reed"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B100/1.0' \
+            "https://opengameart.org/sites/default/files/reed.zip" -o "$TMP/reed.zip"
+          unzip -q "$TMP/reed.zip" -d "$TMP/reed"
+          rsync -a "$TMP/reed/" "$ROOT/models/oga_lowpoly_reed/"
+          meta "oga_lowpoly_reed" \
+            "https://opengameart.org/content/lowpoly-reed" "LowPoly Reed" \
+            "https://opengameart.org/sites/default/files/reed.zip" \
+            "Low-poly reed source with FBX/OBJ/MTL for marshes, ponds and riverbanks."
+
+          mkdir -p "$TMP/pond" "$ROOT/models/oga_free_lowpoly_pond_kit"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B100/1.0' \
+            "https://opengameart.org/sites/default/files/free_pond_kit_assetquest.zip" -o "$TMP/free_pond_kit_assetquest.zip"
+          unzip -q "$TMP/free_pond_kit_assetquest.zip" -d "$TMP/pond"
+          rsync -a "$TMP/pond/" "$ROOT/models/oga_free_lowpoly_pond_kit/"
+          meta "oga_free_lowpoly_pond_kit" \
+            "https://opengameart.org/content/free-lowpoly-pond-kit" "Free Lowpoly Pond Kit" \
+            "https://opengameart.org/sites/default/files/free_pond_kit_assetquest.zip" \
+            "Pond-scene source with tubs/pebbles/plants/animals and separate water meshes; prop and plant atlas textures included by source pack."
+
+          mkdir -p "$TMP/playground" "$ROOT/models/oga_lowpoly_playground"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B100/1.0' \
+            "https://opengameart.org/sites/default/files/Playground.zip" -o "$TMP/Playground.zip"
+          unzip -q "$TMP/Playground.zip" -d "$TMP/playground"
+          rsync -a "$TMP/playground/" "$ROOT/models/oga_lowpoly_playground/"
+          meta "oga_lowpoly_playground" \
+            "https://opengameart.org/content/playground" "Playground" \
+            "https://opengameart.org/sites/default/files/Playground.zip" \
+            "Low-poly playground archive with Blend source and each object exported as GLTF."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B100 — real CC0 pond plants and playground
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat can use these for ponds, lakes, marshes, riverbanks and settlement recreation areas. Water materials/gameplay and plant interaction logic remain responsibilities of the main integration chat.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B100 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B100 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b100
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 pond reeds playground B100"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
