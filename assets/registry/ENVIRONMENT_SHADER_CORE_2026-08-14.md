@@ -2,15 +2,25 @@
 
 Status: PHYSICALLY INTEGRATED in `Treninem/game`.
 
-Project-owned reusable Godot 4.7 / GL Compatibility shaders:
+## Project-owned Godot 4.7 / GL Compatibility shaders
 - `assets/shaders/environment/underwater_screen.gdshader`
+- `assets/shaders/environment/underwater_caustics.gdshader`
 - `assets/shaders/environment/snow_cover.gdshader`
 - `assets/shaders/environment/wind_cloth.gdshader`
 - `assets/shaders/environment/seasonal_surface.gdshader`
+- `assets/shaders/environment/track_mark.gdshader`
 - usage/integration: `assets/shaders/environment/README.md`
 
+## Runtime systems physically integrated
+- `scripts/environment_state.gd` — global season/weather/wetness/frost/wind/underwater state, autoload `EnvironmentState`.
+- `scripts/environment_mark_pool.gd` — pooled mesh-based footprints, tire tracks, mud, scorch and spill marks, autoload `EnvironmentMarks`.
+- `scripts/underwater_bubble_field.gd` — lightweight configurable bubble field for underwater cells; turbulence is off by default for performance.
+
+## Compatibility rule
+The project currently uses Godot 4.7 `gl_compatibility`. Native Godot `Decal` rendering is not available in the Compatibility renderer, so ground traces use pooled `PlaneMesh` marks with `track_mark.gdshader` rather than `Decal` nodes. Keep this architecture until the project renderer is intentionally changed and revalidated.
+
 ## Purpose
-These form the first shared environmental material/VFX layer for underwater visuals, snow accumulation/melting, cloth/flag wind response and seasonal wet/dry/dust/frost changes. Other chats should extend these shared systems instead of creating incompatible one-off shaders.
+These shared systems provide the first reusable environmental layer for underwater visuals, moving caustics, bubbles, snow accumulation/melting, cloth/flag wind response, seasonal wet/dry/dust/frost changes, and persistent-but-budgeted surface traces. Other chats should extend these shared systems instead of creating incompatible one-off replacements.
 
 ## Approved CC0 reference sources for further work
 - Godot Shaders — Water with Caustics: https://godotshaders.com/shader/water-with-caustics/
@@ -23,9 +33,10 @@ These form the first shared environmental material/VFX layer for underwater visu
 Reference pages are not physical imports. Their example images/textures are not automatically covered by the shader-code license; verify every bundled asset separately before importing.
 
 ## Next extensions
-1. underwater caustic projector/material and bubble/suspended-particle scenes;
-2. snow/rain weather particle scenes and accumulation controller;
-3. pooled footprint/tire-track/mud/scorch Decal manager;
-4. ice/frost/crack material state and thaw transitions;
+1. rain/snow/hail particle field around the camera plus roof/ground/water reactions;
+2. ice/frost/crack material state and thaw transitions;
+3. footprint/tire mark emitters wired to player/animals/vehicles and surface type;
+4. underwater suspended-particle/plankton field and water-current controller;
 5. wind controller shared by vegetation, cloth, particles and weather audio;
-6. seasonal world-state controller feeding material parameters globally.
+6. seasonal world-state controller feeding terrain/vegetation/material transitions;
+7. cheap far-distance storm/fog/cloud representations and quality tiers.
