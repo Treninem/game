@@ -34,6 +34,19 @@ Wet asphalt/stone/soil/wood/roofs/vehicles dynamically change darkening, roughne
 ### Animated fire / smoke / steam / heat
 Maintain candle, lighter, torch, campfire, fireplace, stove, forge, barrel/object/building/grass/forest fires. Layer flames + sparks + embers + ash + smoke + light flicker + heat distortion. Add steam for hot water, cooking, industrial pipes, vents, geysers and extinguishing fire. Smoke needs wispy, chimney, campfire, dense black fire, white steam-like, ground-hugging and distant-column variants. Approved discovery/source families remain OpenGameArt CC0 animated effects and Kenney Particle/Smoke packs.
 
+### Magic / combat / explosions / collisions — physically integrated core
+Folders: `assets/vfx/`, `assets/vfx/third_party/`, `assets/decals/impact/`.
+- Project-owned procedural VFX Core Pack is physically integrated through `scripts/vfx_library.gd`; runtime catalog: `assets/vfx/README.md`; detailed registry: `assets/registry/VFX_MAGIC_COMBAT_EXPLOSIONS_2026-08-14.md`.
+- Current magic presets: arcane, fire, frost, lightning, poison, heal, holy, dark, portal, shield.
+- Combat presets: melee swing, slash hit, blunt hit, block/parry, critical hit, defeat burst.
+- Explosion presets: small, medium, large with flash + hot particles + debris + smoke + shockwave.
+- Collision presets: metal sparks, stone fragments/dust, wood fragments, dirt dust, glass shards, water splash/wave.
+- Kenney Particle Pack — approved CC0 enhancement source; do not mark physically imported until binaries exist — https://www.kenney.nl/assets/particle-pack
+- Kenney Smoke Particles — approved CC0 smoke/explosion enhancement source; do not mark physically imported until binaries exist — https://www.kenney.nl/assets/smoke-particles
+- OpenGameArt 2D Spell Effects by Mikodrak — approved CC0 spell enhancement source — https://opengameart.org/content/2d-spell-effects
+- OpenGameArt Earth Impact - Magic Effect by Cethiel — approved CC0 earth-impact source — https://opengameart.org/content/earth-impact-magic-effect
+Future magic must reuse semantic VFX events instead of hard-coding a texture into combat. Add projectiles, beams/channels, area fields, status loops, casting/charge, summoning, teleport, boss auras/phase transitions and large magical events through the shared VFX library.
+
 ### Weather / atmosphere / sky — high priority
 Folders: `assets/vfx/weather/`, `assets/vfx/atmosphere/`, `assets/shaders/weather/`, `assets/shaders/sky/`.
 - Kenney Particle Pack — 80 CC0 VFX sprites — https://www.kenney.nl/assets/particle-pack
