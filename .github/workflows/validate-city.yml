@@ -1,0 +1,52 @@
+name: Validate Lumengrad
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/city_district.gd"
+      - "scripts/capital_data.gd"
+      - "scenes/stage1.tscn"
+      - "assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/**"
+      - ".github/workflows/validate-city.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  city-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify city asset references
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF"
+          for file in \
+            Wall_Plaster_Straight.gltf \
+            Wall_Plaster_Door_Round.gltf \
+            Wall_Plaster_Window_Wide_Round.gltf \
+            Wall_UnevenBrick_Straight.gltf \
+            Wall_UnevenBrick_Door_Round.gltf \
+            Wall_UnevenBrick_Window_Wide_Round.gltf \
+            Roof_RoundTiles_8x8.gltf \
+            Prop_Wagon.gltf \
+            Prop_Crate.gltf; do
+            test -f "$root/$file"
+          done
+
+      - name: Install Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Parse project
+        shell: bash
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
