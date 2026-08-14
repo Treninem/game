@@ -1,0 +1,138 @@
+name: Vendor source-chat B71 real CC0 farm birds animals
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b71.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b71
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 farm and bird sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b71"
+          TMP=".sourcechat_b71_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/farm" "$ROOT/models/quaternius_lowpoly_animated_farm_animals"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B71/1.0' \
+            "https://opengameart.org/sites/default/files/Farm%20Animals%20by%20%40Quaternius.zip" \
+            -o "$TMP/farm.zip"
+          unzip -q "$TMP/farm.zip" -d "$TMP/farm"
+          chmod -R u+rwX "$TMP/farm" || true
+          rsync -a "$TMP/farm/" "$ROOT/models/quaternius_lowpoly_animated_farm_animals/"
+          meta "quaternius_lowpoly_animated_farm_animals" \
+            "https://opengameart.org/content/lowpoly-animated-farm-animal-pack" \
+            "LowPoly Animated Farm Animal Pack" \
+            "https://opengameart.org/sites/default/files/Farm%20Animals%20by%20%40Quaternius.zip" \
+            "Animated low-poly farm pack; source tags/listing include pig, cow, horse, llama, pug/dog and sheep; Blend, OBJ and FBX formats included."
+
+          mkdir -p "$ROOT/models/oga_rigged_duck"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B71/1.0' \
+            "https://opengameart.org/sites/default/files/duck6.blend" \
+            -o "$ROOT/models/oga_rigged_duck/duck6.blend"
+          meta "oga_rigged_duck" \
+            "https://opengameart.org/content/rigged-duck" \
+            "Rigged Duck" \
+            "https://opengameart.org/sites/default/files/duck6.blend" \
+            "Rigged duck with waddle and peck animations according to the source page."
+
+          mkdir -p "$TMP/rooster" "$ROOT/models/oga_rooster_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B71/1.0' \
+            "https://opengameart.org/sites/default/files/rooster.zip" \
+            -o "$TMP/rooster.zip"
+          unzip -q "$TMP/rooster.zip" -d "$TMP/rooster"
+          chmod -R u+rwX "$TMP/rooster" || true
+          rsync -a "$TMP/rooster/" "$ROOT/models/oga_rooster_animated/"
+          meta "oga_rooster_animated" \
+            "https://opengameart.org/content/rooster-animated" \
+            "Rooster (Animated)" \
+            "https://opengameart.org/sites/default/files/rooster.zip" \
+            "Rigged and animated rooster with diffuse texture and normal map; source page describes it as game-ready."
+
+          mkdir -p "$TMP/chicken" "$ROOT/models/oga_chicken_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B71/1.0' \
+            "https://opengameart.org/sites/default/files/chicken_0.zip" \
+            -o "$TMP/chicken.zip"
+          unzip -q "$TMP/chicken.zip" -d "$TMP/chicken"
+          chmod -R u+rwX "$TMP/chicken" || true
+          rsync -a "$TMP/chicken/" "$ROOT/models/oga_chicken_animated/"
+          meta "oga_chicken_animated" \
+            "https://opengameart.org/content/chicken-animated" \
+            "Chicken (animated)" \
+            "https://opengameart.org/sites/default/files/chicken_0.zip" \
+            "Rigged and animated chicken with diffuse texture and normal map; source page describes it as game-ready."
+
+          mkdir -p "$ROOT/models/oga_pigeon_rigged_animated_untextured"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B71/1.0' \
+            "https://opengameart.org/sites/default/files/genuinely-my-pigeon-extended-furthur.blend" \
+            -o "$ROOT/models/oga_pigeon_rigged_animated_untextured/pigeon.blend"
+          meta "oga_pigeon_rigged_animated_untextured" \
+            "https://opengameart.org/content/low-poly-3d-pigeon-model-rigged-animated-untextured" \
+            "Low poly 3D Pigeon model (rigged + animated) [untextured]" \
+            "https://opengameart.org/sites/default/files/genuinely-my-pigeon-extended-furthur.blend" \
+            "Low-poly rigged/animated pigeon source; intentionally untextured and requires material work before production use."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B71 — real CC0 farm animals and birds
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should inspect animations/import compatibility, normalize scales and materials, and selectively promote animals. The pigeon is explicitly untextured. The Quaternius pack is kept as source despite historical comments about FBX import issues; prefer Blend/OBJ or a clean conversion if FBX is problematic in Godot.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B71 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B71 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b71
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 farm birds animals B71"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
