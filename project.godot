@@ -23,6 +23,7 @@ WorldData="*res://scripts/world_data.gd"
 MapSystem="*res://scripts/map_system.gd"
 VFXLibrary="*res://scripts/vfx_library.gd"
 MagicSystem="*res://scripts/magic_system.gd"
+EnvironmentState="*res://scripts/environment_state.gd"
 
 [display]
 window/size/viewport_width=1280
