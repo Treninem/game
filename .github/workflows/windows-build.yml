@@ -1,28 +1,133 @@
-name: Windows Build
+name: Build Release and Installer
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: impuls-main-release
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build-game:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Export Windows build
-        uses: firebelley/godot-export@v7.0.0
+
+      - name: Install Godot 4.7.1 and export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+          curl -L -o templates.tpz "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export_templates.tpz"
+          rm -rf templates_unpack
+          mkdir templates_unpack
+          unzip -q templates.tpz -d templates_unpack
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.1.stable"
+          cp -r templates_unpack/templates/* "$HOME/.local/share/godot/export_templates/4.7.1.stable/"
+
+      - name: Validate project headlessly
+        shell: bash
+        run: |
+          ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+
+      - name: Export Windows x64
+        shell: bash
+        run: |
+          mkdir -p build/windows
+          ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --export-release "Windows Desktop" build/windows/ImPuls.exe
+          test -f build/windows/ImPuls.exe
+
+      - name: Package Windows build
+        shell: bash
+        run: |
+          cd build/windows
+          zip -9 -r ../../ImPuls-PC-Windows-x64.zip .
+
+      - uses: actions/upload-artifact@v4
         with:
-          godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
-          godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export_templates.tpz
-          relative_project_path: ./
-          archive_output: true
-      - name: Upload Windows artifact
-        uses: actions/upload-artifact@v4
+          name: game-windows
+          path: |
+            build/windows/
+            ImPuls-PC-Windows-x64.zip
+
+  build-installer:
+    needs: build-game
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
         with:
-          name: ImPuls-PC-Windows-x64
-          path: build/windows/
-          if-no-files-found: error
+          name: game-windows
+          path: downloaded
+
+      - name: Prepare installer payload
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path build/windows | Out-Null
+          Copy-Item downloaded/build/windows/* build/windows/ -Recurse -Force
+          "build-${{ github.run_number }}" | Set-Content installer/release_tag.txt -Encoding ASCII
+
+      - name: Ensure Inno Setup
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup -y --no-progress
+          }
+          if (-not (Test-Path $iscc)) {
+            throw "Inno Setup compiler not found"
+          }
+
+      - name: Build real Windows installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          & $iscc "/DMyBuildTag=build-${{ github.run_number }}" "installer\ImPuls.iss"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ImPuls-Setup
+          path: installer/output/ImPuls-Setup-*.exe
+
+  publish-release:
+    needs: [build-game, build-installer]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: game-windows
+          path: game
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ImPuls-Setup
+          path: installer
+
+      - name: Prepare release files
+        shell: bash
+        run: |
+          cp game/ImPuls-PC-Windows-x64.zip .
+          cp installer/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
+          sha256sum ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe > SHA256SUMS.txt
+
+      - name: Publish latest automatic build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "build-${{ github.run_number }}" \
+            ImPuls-PC-Windows-x64.zip \
+            ImPuls-Setup.exe \
+            SHA256SUMS.txt \
+            --repo "${{ github.repository }}" \
+            --title "ImPuls automatic build ${{ github.run_number }}" \
+            --notes "Automatic Windows build of ImPuls. Offline single-player Stage 1 vertical slice."
