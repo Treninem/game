@@ -17,10 +17,13 @@ jobs:
   vendor-wildlife-birds:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout staging area
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          sparse-checkout: |
+            assets/staging/animals
+          sparse-checkout-cone-mode: true
 
       - name: Download verified CC0 wildlife and birds
         shell: bash
@@ -54,18 +57,9 @@ jobs:
             local work="$TMP/$key"
             rm -rf "$target" "$work"
             mkdir -p "$target" "$work/archive"
-            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 420 \
-              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 420 -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
             unzip -q "$work/pack.zip" -d "$work/archive"
-            rsync -a --prune-empty-dirs \
-              --include='*/' \
-              --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' \
-              --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
-              --include='*.blend' --include='*.BLEND' \
-              --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' \
-              --include='*.gif' --include='*.GIF' --include='*.svg' --include='*.SVG' \
-              --include='*.txt' --include='*.TXT' --include='*.json' --include='*.JSON' --exclude='*' \
-              "$work/archive/" "$target/"
+            rsync -a --prune-empty-dirs --include='*/' --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' --include='*.blend' --include='*.BLEND' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.gif' --include='*.GIF' --include='*.svg' --include='*.SVG' --include='*.txt' --include='*.TXT' --include='*.json' --include='*.JSON' --exclude='*' "$work/archive/" "$target/"
             meta "$target" "$source" "$url" "$notes"
           }
 
@@ -73,59 +67,24 @@ jobs:
             local key="$1" url="$2" source="$3" target="$4" filename="$5" notes="$6"
             rm -rf "$target"
             mkdir -p "$target"
-            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
-              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$target/$filename"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$target/$filename"
             meta "$target" "$source" "$url" "$notes"
           }
 
-          import_zip "animated_wild_animals_2d" \
-            "https://opengameart.org/sites/default/files/All.zip" \
-            "https://opengameart.org/content/animated-wild-animals" \
-            "assets/staging/animals/animated_wild_animals_2d" \
-            "CC0 animated deer, bear, wolf, fox, boar and rabbit; walk/run/idle sprite fallback set."
-
-          import_zip "fox_3d_animated" \
-            "https://opengameart.org/sites/default/files/fox_source_v3.zip" \
-            "https://opengameart.org/content/fox-0" \
-            "assets/staging/animals/fox_3d_animated" \
-            "342-triangle CC0 3D fox with diffuse/normal textures and idle, walk, run, bite, digging and death animations."
-
-          import_single "rigged_duck" \
-            "https://opengameart.org/sites/default/files/duck6.blend" \
-            "https://opengameart.org/content/rigged-duck" \
-            "assets/staging/animals/rigged_duck" \
-            "duck6.blend" \
-            "CC0 rigged 3D duck with waddle and peck animations."
-
-          import_single "animated_pigeon" \
-            "https://opengameart.org/sites/default/files/genuinely-my-pigeon-extended-furthur.blend" \
-            "https://opengameart.org/content/low-poly-3d-pigeon-model-rigged-animated-untextured" \
-            "assets/staging/animals/animated_pigeon" \
-            "genuinely-my-pigeon-extended-furthur.blend" \
-            "CC0 low-poly rigged animated pigeon source model."
-
-          import_single "generic_animated_bird" \
-            "https://opengameart.org/sites/default/files/bird.blend" \
-            "https://opengameart.org/content/bird" \
-            "assets/staging/animals/generic_animated_bird" \
-            "bird.blend" \
-            "CC0 textured, rigged and animated generic bird source."
-
-          import_zip "kenney_animal_pack_redux" \
-            "https://opengameart.org/sites/default/files/kenney_animalPackRedux.zip" \
-            "https://opengameart.org/content/animal-pack-redux" \
-            "assets/staging/animals/kenney_animal_pack_redux" \
-            "CC0 2D fallback/reference pack with 30 animals including bear, chicken, cow, dog, duck, goat, horse, pig, rabbit, owl, parrot, penguin, whale and more."
+          import_zip "animated_wild_animals_2d" "https://opengameart.org/sites/default/files/All.zip" "https://opengameart.org/content/animated-wild-animals" "assets/staging/animals/animated_wild_animals_2d" "Animated deer, bear, wolf, fox, boar and rabbit; walk/run/idle fallback sprites."
+          import_zip "fox_3d_animated" "https://opengameart.org/sites/default/files/fox_source_v3.zip" "https://opengameart.org/content/fox-0" "assets/staging/animals/fox_3d_animated" "342-triangle 3D fox with diffuse/normal textures and multiple animations."
+          import_single "rigged_duck" "https://opengameart.org/sites/default/files/duck6.blend" "https://opengameart.org/content/rigged-duck" "assets/staging/animals/rigged_duck" "duck6.blend" "Rigged 3D duck with waddle and peck animations."
+          import_single "animated_pigeon" "https://opengameart.org/sites/default/files/genuinely-my-pigeon-extended-furthur.blend" "https://opengameart.org/content/low-poly-3d-pigeon-model-rigged-animated-untextured" "assets/staging/animals/animated_pigeon" "genuinely-my-pigeon-extended-furthur.blend" "Low-poly rigged animated pigeon source."
+          import_single "generic_animated_bird" "https://opengameart.org/sites/default/files/bird.blend" "https://opengameart.org/content/bird" "assets/staging/animals/generic_animated_bird" "bird.blend" "Textured, rigged and animated generic bird source."
+          import_zip "kenney_animal_pack_redux" "https://opengameart.org/sites/default/files/kenney_animalPackRedux.zip" "https://opengameart.org/content/animal-pack-redux" "assets/staging/animals/kenney_animal_pack_redux" "30-animal 2D fallback/reference pack."
 
           rm -rf "$TMP"
           cat > assets/staging/animals/WILDLIFE_BIRDS_STAGING_MANIFEST.md <<'EOF'
           # Wildlife and birds source-only staging
-
-          Real CC0 wildlife/bird source files. 3D sources are preferred; 2D packs are fallback/LOD/UI/reference material.
-          No gameplay scripts/scenes/project settings are touched by this workflow.
+          Real CC0 wildlife/bird source files. 3D sources are preferred; 2D packs are fallback/LOD/UI/reference material. No gameplay integration here.
           EOF
 
-      - name: Commit staged wildlife assets back to main
+      - name: Commit with concurrent-push retry
         shell: bash
         run: |
           set -euo pipefail
@@ -137,5 +96,13 @@ jobs:
             exit 0
           fi
           git commit -m "assets(staging): add CC0 wild animals ducks pigeon and bird fallbacks"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "Could not push after retries."
+          exit 1
