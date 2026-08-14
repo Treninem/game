@@ -4,7 +4,6 @@ const ICON_HEALTH = preload("res://assets/ui/icon_health.svg")
 const ICON_STAMINA = preload("res://assets/ui/icon_stamina.svg")
 const ICON_HUNGER = preload("res://assets/ui/icon_hunger.svg")
 const ICON_THIRST = preload("res://assets/ui/icon_thirst.svg")
-const ICON_QUEST = preload("res://assets/ui/icon_quest.svg")
 const MINIMAP_VIEW = preload("res://scripts/minimap_view.gd")
 
 var hp_bar: ProgressBar
@@ -15,7 +14,6 @@ var hp_value: Label
 var stamina_value: Label
 var hunger_value: Label
 var thirst_value: Label
-var quest_text: Label
 var clock_text: Label
 var location_text: Label
 var economy_text: Label
@@ -30,7 +28,6 @@ func _ready() -> void:
     set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     _build_hud()
     GameState.inventory_changed.connect(_refresh)
-    GameState.quest_changed.connect(_refresh)
     GameState.survival_changed.connect(_refresh)
     GameState.location_changed.connect(_on_location_changed)
     GameState.notification_requested.connect(_show_notice)
@@ -40,44 +37,13 @@ func _process(delta: float) -> void:
     if notice_timer > 0.0:
         notice_timer -= delta
         if notice_timer <= 0.0 and is_instance_valid(notice):
-            notice.text = ""
             notice.visible = false
 
 func _build_hud() -> void:
-    _build_quest()
     _build_vitals()
     _build_minimap()
     _build_quickbar()
     _build_notice()
-
-func _build_quest() -> void:
-    var quest_card := PanelContainer.new()
-    quest_card.position = Vector2(22, 20)
-    quest_card.custom_minimum_size = Vector2(370, 74)
-    quest_card.add_theme_stylebox_override("panel", _card_style(0.76))
-    add_child(quest_card)
-    var margin := MarginContainer.new()
-    margin.add_theme_constant_override("margin_left", 12)
-    margin.add_theme_constant_override("margin_right", 14)
-    margin.add_theme_constant_override("margin_top", 9)
-    margin.add_theme_constant_override("margin_bottom", 9)
-    quest_card.add_child(margin)
-    var row := HBoxContainer.new()
-    row.add_theme_constant_override("separation", 10)
-    margin.add_child(row)
-    row.add_child(_icon(ICON_QUEST, 28))
-    var stack := VBoxContainer.new()
-    stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-    row.add_child(stack)
-    var title := Label.new()
-    title.text = "ЦЕЛЬ"
-    title.modulate = Color(0.58, 0.76, 0.93)
-    title.add_theme_font_size_override("font_size", 10)
-    stack.add_child(title)
-    quest_text = Label.new()
-    quest_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    quest_text.add_theme_font_size_override("font_size", 13)
-    stack.add_child(quest_text)
 
 func _build_vitals() -> void:
     var card := PanelContainer.new()
@@ -160,15 +126,15 @@ func _build_quickbar() -> void:
     quick.position = Vector2(-435, -70)
     quick.add_theme_constant_override("separation", 7)
     add_child(quick)
-    var a = _quick_slot("1", "Ягоды")
-    quick.add_child(a["root"])
-    quick_food = a["count"]
-    var b = _quick_slot("2", "Вода")
-    quick.add_child(b["root"])
-    quick_water = b["count"]
-    var c = _quick_slot("3", "Еда")
-    quick.add_child(c["root"])
-    quick_meat = c["count"]
+    var food = _quick_slot("1", "Ягоды")
+    quick.add_child(food["root"])
+    quick_food = food["count"]
+    var water = _quick_slot("2", "Вода")
+    quick.add_child(water["root"])
+    quick_water = water["count"]
+    var meat = _quick_slot("3", "Еда")
+    quick.add_child(meat["root"])
+    quick_meat = meat["count"]
     quick.add_child(_hint_slot("I", "Инвентарь"))
     quick.add_child(_hint_slot("M", "Карта"))
 
@@ -196,7 +162,6 @@ func _refresh() -> void:
     hunger_value.text = "%d" % roundi(GameState.hunger)
     thirst_bar.value = GameState.thirst
     thirst_value.text = "%d" % roundi(GameState.thirst)
-    quest_text.text = GameState.quest_text()
     location_text.text = GameState.current_location
     economy_text.text = "◈ %d   ★ %d" % [GameState.coins, GameState.city_reputation]
     quick_food.text = "×%d" % int(GameState.inventory.get("berries", 0))
@@ -267,10 +232,10 @@ func _quick_slot(key: String, text: String) -> Dictionary:
     top.alignment = BoxContainer.ALIGNMENT_CENTER
     top.add_theme_constant_override("separation", 5)
     stack.add_child(top)
-    var k := Label.new()
-    k.text = key
-    k.add_theme_font_size_override("font_size", 14)
-    top.add_child(k)
+    var key_label := Label.new()
+    key_label.text = key
+    key_label.add_theme_font_size_override("font_size", 14)
+    top.add_child(key_label)
     var count := Label.new()
     count.modulate = Color(0.72, 0.82, 0.91)
     count.add_theme_font_size_override("font_size", 11)
@@ -290,17 +255,17 @@ func _hint_slot(key: String, text: String) -> PanelContainer:
     var stack := VBoxContainer.new()
     stack.alignment = BoxContainer.ALIGNMENT_CENTER
     card.add_child(stack)
-    var k := Label.new()
-    k.text = key
-    k.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    k.add_theme_font_size_override("font_size", 13)
-    stack.add_child(k)
-    var t := Label.new()
-    t.text = text
-    t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    t.modulate = Color(0.64, 0.70, 0.78)
-    t.add_theme_font_size_override("font_size", 9)
-    stack.add_child(t)
+    var key_label := Label.new()
+    key_label.text = key
+    key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    key_label.add_theme_font_size_override("font_size", 13)
+    stack.add_child(key_label)
+    var text_label := Label.new()
+    text_label.text = text
+    text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    text_label.modulate = Color(0.64, 0.70, 0.78)
+    text_label.add_theme_font_size_override("font_size", 9)
+    stack.add_child(text_label)
     return card
 
 func _card_style(alpha: float) -> StyleBoxFlat:
