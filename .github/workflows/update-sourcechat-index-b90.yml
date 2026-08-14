@@ -1,0 +1,77 @@
+name: Update source-chat staging index through B90
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b90.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify B90 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b90/models/oga_lowpoly_glasses_29
+            assets/staging/sourcechat_b90/models/oga_sneakers
+            assets/staging/sourcechat_b90/models/oga_cargo_pants
+            assets/staging/sourcechat_b90/models/oga_sweatshirt
+            assets/staging/sourcechat_b90/models/oga_work_boots
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B90 —' "$INDEX"; then
+            echo "B90 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B90 — glasses / clothing / footwear
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b90/models/`
+
+          - `oga_lowpoly_glasses_29/` — 29 low-poly glasses/sunglasses models.
+          - `oga_sneakers/` — low-poly sneaker/footwear source.
+          - `oga_cargo_pants/` — cargo-pants clothing source.
+          - `oga_sweatshirt/` — sweatshirt clothing source.
+          - `oga_work_boots/` — work-boots footwear source.
+
+          Licensing note: the Hats / Clothing / Props source page is currently marked CC0 and its historical comments state problematic third-party-texture items were removed. This batch contains only the currently listed cargo-pants, sweatshirt and work-boots individual files plus separate CC0 glasses/sneakers sources.
+
+          Integration rule: adapt selected clothing/accessories to the production humanoid body/skeleton; audit fit, clipping, weights, scale and materials before promotion. Do not wire staging assets directly into gameplay.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batch B90"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
