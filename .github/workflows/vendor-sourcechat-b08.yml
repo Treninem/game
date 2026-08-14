@@ -1,0 +1,161 @@
+name: Vendor source-chat B08 real CC0 animal creature audio
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b08.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b08
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 animal and creature sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b08/audio"
+          TMP=".sourcechat_b08_tmp"
+          rm -rf "$TMP"; mkdir -p "$ROOT" "$TMP"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq p7zip-full >/dev/null
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks this staged asset as CC0/public domain.
+          License: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          zip_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-SourceChat-B08/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' \
+              --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          seven_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-SourceChat-B08/1.0' "$url" -o "$work/pack.7z"
+            7z x -y "$work/pack.7z" -o"$work/archive" >/dev/null
+            rsync -a --prune-empty-dirs --include='*/' \
+              --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' \
+              --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$key"; mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 \
+              -A 'ImPuls-CC0-SourceChat-B08/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_audio "oga_80_creature_sfx" \
+            "https://opengameart.org/sites/default/files/80-CC0-creature-SFX.zip" \
+            "https://opengameart.org/content/80-cc0-creature-sfx" \
+            "rubberduck / OpenGameArt" \
+            "80 CC0 creature sounds: barking, bugs, breath, eating, grunts, howls, hurt, roars, screams, trolls and misc creature vocalizations."
+
+          seven_audio "oga_dog_sounds_pauliuw" \
+            "https://opengameart.org/sites/default/files/dog.7z" \
+            "https://opengameart.org/content/dog-sounds" \
+            "pauliuw / OpenGameArt" \
+            "Nine CC0 dog sounds including barking, growling and squalling."
+
+          seven_audio "oga_animal_beast_sounds" \
+            "https://opengameart.org/sites/default/files/beast_or_animal.7z" \
+            "https://opengameart.org/content/animal-or-beast-sounds" \
+            "pauliuw / OpenGameArt" \
+            "Seven CC0 strange animal/beast vocalizations for wild fauna source selection."
+
+          one "oga_horse_trotting" "Trot.ogg" \
+            "https://opengameart.org/sites/default/files/Trot.ogg" \
+            "https://opengameart.org/content/horse-trotting" \
+            "EZduzziteh / OpenGameArt" \
+            "CC0 horse trot/hoof cadence recording candidate."
+
+          one "oga_sheep_baa" "sheep_baa.ogg" \
+            "https://opengameart.org/sites/default/files/sheep_baa.ogg" \
+            "https://opengameart.org/content/sheep-baa" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 normalized sheep baa in OGG."
+          one "oga_sheep_baa" "sheep_baa.flac" \
+            "https://opengameart.org/sites/default/files/sheep_baa.flac" \
+            "https://opengameart.org/content/sheep-baa" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 lossless sheep baa source."
+
+          one "oga_quail_sound" "quail.ogg" \
+            "https://opengameart.org/sites/default/files/quail.ogg" \
+            "https://opengameart.org/content/quail-sound" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 bobwhite quail sound in OGG."
+          one "oga_quail_sound" "quail.flac" \
+            "https://opengameart.org/sites/default/files/quail.flac" \
+            "https://opengameart.org/content/quail-sound" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 lossless bobwhite quail source."
+
+          rm -rf "$TMP"
+          cat > "assets/staging/sourcechat_b08/README.md" <<'EOF'
+          # Source chat B08 — real CC0 animal/creature audio
+
+          Physically downloaded audio sources only; no runtime integration.
+          Coverage includes broad creature vocalizations, dogs, wild beast variants, horse trotting, sheep and quail.
+          Main integration chat should classify by species/behavior, reject synthetic or unsuitable takes, normalize levels and promote only selected files.
+          EOF
+          find assets/staging/sourcechat_b08 -type f | wc -l
+          du -sh assets/staging/sourcechat_b08
+
+      - name: Commit only B08 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b08
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 animal creature audio B08"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
