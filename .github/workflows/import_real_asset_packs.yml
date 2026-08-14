@@ -43,83 +43,36 @@ jobs:
             "$OGA/rabbit" \
             "$OGA/boar" \
             "$OGA/bear" \
-            "$OGA/pig"
+            "$OGA/pig" \
+            "$OGA/goat" \
+            "$OGA/pigeon"
 
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/medieval_tools_pack.7z' \
-            -o "$SG6/medieval_tools/medieval_tools_pack.7z"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/medieval_crafting_stations_pack.7z' \
-            -o "$SG6/medieval_crafting_stations/medieval_crafting_stations_pack.7z"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/medieval_props_pack.7z' \
-            -o "$SG6/medieval_props/medieval_props_pack.7z"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/medieval_buildings_pack.7z' \
-            -o "$SG6/medieval_buildings/medieval_buildings_pack.7z"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/medieval_weapon_pack.7z' \
-            -o "$SG6/medieval_weapons/medieval_weapon_pack.7z"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/Farm%20Animals%20by%20%40Quaternius.zip' \
-            -o "$QUA/farm_animals/Farm_Animals_by_Quaternius.zip"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip' \
-            -o "$QUA/animal_pack_vol2/Animal_Pack_Vol2_by_Quaternius.zip"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/kenney_cube-pets_1.0_0.zip' \
-            -o "$KEN/cube_pets/kenney_cube-pets_1.0.zip"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/rooster.zip' \
-            -o "$OGA/rooster/rooster.zip"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/chicken_0.zip' \
-            -o "$OGA/chicken/chicken.zip"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/duck6.blend' \
-            -o "$OGA/duck/duck6.blend"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/rabbit.blend' \
-            -o "$OGA/rabbit/rabbit.blend"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/rabbit-FBX.7z' \
-            -o "$OGA/rabbit/rabbit-FBX.7z"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/boar_0.blend' \
-            -o "$OGA/boar/boar.blend"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/Bear.7z' \
-            -o "$OGA/bear/Bear.7z"
-
-          curl -L --fail --retry 4 --retry-delay 3 \
-            'https://opengameart.org/sites/default/files/pig_0.blend' \
-            -o "$OGA/pig/pig.blend"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/medieval_tools_pack.7z' -o "$SG6/medieval_tools/medieval_tools_pack.7z"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/medieval_crafting_stations_pack.7z' -o "$SG6/medieval_crafting_stations/medieval_crafting_stations_pack.7z"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/medieval_props_pack.7z' -o "$SG6/medieval_props/medieval_props_pack.7z"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/medieval_buildings_pack.7z' -o "$SG6/medieval_buildings/medieval_buildings_pack.7z"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/medieval_weapon_pack.7z' -o "$SG6/medieval_weapons/medieval_weapon_pack.7z"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/Farm%20Animals%20by%20%40Quaternius.zip' -o "$QUA/farm_animals/Farm_Animals_by_Quaternius.zip"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip' -o "$QUA/animal_pack_vol2/Animal_Pack_Vol2_by_Quaternius.zip"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/kenney_cube-pets_1.0_0.zip' -o "$KEN/cube_pets/kenney_cube-pets_1.0.zip"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/rooster.zip' -o "$OGA/rooster/rooster.zip"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/chicken_0.zip' -o "$OGA/chicken/chicken.zip"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/duck6.blend' -o "$OGA/duck/duck6.blend"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/rabbit.blend' -o "$OGA/rabbit/rabbit.blend"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/rabbit-FBX.7z' -o "$OGA/rabbit/rabbit-FBX.7z"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/boar_0.blend' -o "$OGA/boar/boar.blend"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/Bear.7z' -o "$OGA/bear/Bear.7z"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/pig_0.blend' -o "$OGA/pig/pig.blend"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/goatlowrez.obj' -o "$OGA/goat/goatlowrez.obj"
+          curl -L --fail --retry 4 --retry-delay 3 'https://opengameart.org/sites/default/files/genuinely-my-pigeon-extended-furthur.blend' -o "$OGA/pigeon/pigeon.blend"
 
           find assets/source_packs/opengameart -type f \
             \( -name '*.7z' -o -name '*.zip' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' \) \
-            -size 0 -print -quit | grep -q . && {
-            echo 'ERROR: zero-byte source asset detected'
-            exit 1
-          } || true
+            -size 0 -print -quit | grep -q . && { echo 'ERROR: zero-byte source asset detected'; exit 1; } || true
 
           find assets/source_packs/opengameart -type f \
             \( -name '*.7z' -o -name '*.zip' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' \) \
-            -print0 | sort -z | xargs -0 sha256sum \
-            > assets/source_packs/opengameart/SHA256SUMS.txt
+            -print0 | sort -z | xargs -0 sha256sum > assets/source_packs/opengameart/SHA256SUMS.txt
 
       - name: Write provenance and license metadata
         shell: bash
@@ -136,7 +89,6 @@ jobs:
 
           Original downloadable archives/models mirrored for the main game-development chat.
           This folder is staging/source storage only: no scene, script, project-setting or runtime integration is performed by the research chat.
-
           Every source below is mirrored only after its individual source page explicitly lists CC0.
           EOF
 
@@ -152,122 +104,112 @@ jobs:
           License: CC0
           Contents: 12 low-poly tools: pitchfork, shovel, hoe, sickle, axe, scythe, rake, broom, saws, pickaxe, hammer.
           EOF
-
           cat > "$SG6/medieval_crafting_stations/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/medieval-crafting-stations-pack
           License: CC0
           Contents: 3 crafting stations, low-poly, textured.
           EOF
-
           cat > "$SG6/medieval_props/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/medieval-props-pack
           License: CC0
           Contents: 19 settlement/interior props including cart, trough, hay, logs, chest, bed, crates, barrel and hitching post.
           EOF
-
           cat > "$SG6/medieval_buildings/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/medieval-buildings-pack
           License: CC0
           Contents: 18 building/environment props including houses, hall, well, walls, gates, watch tower, doors, trees and pine.
           EOF
-
           cat > "$SG6/medieval_weapons/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/medieval-weapon-pack
           License: CC0
           Contents: 14 low-poly weapons/items including bow, crossbow, quiver, sword, dagger, axe, mace, shield, staff, wand and grimoire.
           EOF
 
-          mkdir -p "$QUA"
           cat > "$QUA/LICENSE.txt" <<'EOF'
           License: CC0 1.0 / public-domain dedication.
           Author/uploader: Quaternius.
           Source: OpenGameArt mirror of Quaternius packs.
           EOF
-
           cat > "$QUA/farm_animals/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/lowpoly-animated-farm-animal-pack
           License: CC0
           Author: Quaternius
-          Contents: animated farm animal pack; page tags/description include pig, cow, horse, llama, pug/dog and sheep; Blend/OBJ/FBX included.
-          Integration caution: prefer glTF conversion in the main chat because old animated FBX can import poorly in Godot.
+          Contents: animated farm animal pack; pig, cow, horse, llama, pug/dog and sheep; Blend/OBJ/FBX included.
           EOF
-
           cat > "$QUA/animal_pack_vol2/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/animated-animales-low-poly
           License: CC0
           Author: Quaternius
           Contents: animated wolf, eagle, dog, cat and piranha.
-          Integration caution: inspect animation import and convert source formats as needed for Godot.
           EOF
 
-          mkdir -p "$KEN"
           cat > "$KEN/LICENSE.txt" <<'EOF'
           License: CC0 1.0 / public-domain dedication.
           Author/uploader: Kenney.
           Source: OpenGameArt/Kenney.
           EOF
-
           cat > "$KEN/cube_pets/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/cube-pets
           License: CC0
           Author: Kenney
-          Contents: 16 animated cubic pets; separate FBX, OBJ and glTF models plus import instructions.
+          Contents: 16 animated cubic pets; FBX, OBJ and glTF models.
           EOF
 
           cat > "$OGA/rooster/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/rooster-animated
           License: CC0
           Author: CDmir / TinyWorlds
-          File: rooster.zip
-          Notes: rigged and animated; diffuse texture + normal map; source marks it ready to use in-game.
+          Notes: rigged and animated; diffuse + normal map; source marks it ready for game use.
           EOF
-
           cat > "$OGA/chicken/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/chicken-animated
           License: CC0
           Author: CDmir / TinyWorlds
-          File: chicken.zip
-          Notes: rigged and animated; diffuse texture + normal map; source marks it ready to use in-game.
+          Notes: rigged and animated; diffuse + normal map; source marks it ready for game use.
           EOF
-
           cat > "$OGA/duck/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/rigged-duck
           License: CC0
           Author: weirdybeardyman
-          File: duck6.blend
           Notes: rigged duck with waddle and peck animations.
           EOF
-
           cat > "$OGA/rabbit/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/rabbit-0
           License: CC0
           Author: CDmir / TinyWorlds
-          Files: rabbit.blend, rabbit-FBX.7z
-          Notes: rigged and animated; diffuse texture + normal map; source explicitly confirms commercial use under CC0.
+          Notes: rigged and animated; diffuse + normal map; Blender + FBX archive.
           EOF
-
           cat > "$OGA/boar/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/boar
           License: CC0
           Author: Teh_Bucket
-          File: boar.blend
           Notes: rigged, textured, walk + attack animations, approximately 1k triangles.
           EOF
-
           cat > "$OGA/bear/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/white-bear-low-poly
           License: CC0
           Author: STKRudy85
-          File: Bear.7z
-          Notes: textured low-poly bear; not rigged. License file included by source author.
+          Notes: textured low-poly bear; not rigged.
           EOF
-
           cat > "$OGA/pig/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/low-poly-pig-0
           License: CC0
           Author: xTerryx
-          File: pig.blend
-          Notes: low-poly pig source model; animation quality is not guaranteed by source author.
+          Notes: low-poly Blender source model.
+          EOF
+          cat > "$OGA/goat/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/goat
+          License: CC0
+          Author: Copabrangorandel
+          File: goatlowrez.obj
+          Notes: one-object goat mesh; no rig or textures; source explicitly states CC0 intended.
+          EOF
+          cat > "$OGA/pigeon/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/low-poly-3d-pigeon-model-rigged-animated-untextured
+          License: CC0
+          Author: mujtaba-io
+          File: pigeon.blend
+          Notes: low-poly pigeon, rigged and animated, untextured.
           EOF
 
       - name: Commit downloaded packs
@@ -277,21 +219,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/source_packs/opengameart
-          if git diff --cached --quiet; then
-            echo "No asset changes to commit."
-            exit 0
-          fi
-          git commit -m "assets: vendor verified CC0 wildlife and farm animal sources"
+          if git diff --cached --quiet; then echo "No asset changes to commit."; exit 0; fi
+          git commit -m "assets: vendor verified CC0 goat and pigeon sources"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt ${attempt}/5"
             git fetch origin main
             git rebase origin/main
-            if git push origin HEAD:main; then
-              exit 0
-            fi
+            if git push origin HEAD:main; then exit 0; fi
             sleep $((attempt * 3))
           done
-
           echo "ERROR: could not push source-pack commit after retries"
           exit 1
