@@ -1,0 +1,82 @@
+name: Vendor source-chat B52 real CC0 modular house interiors
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b52.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b52
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 modular house interior sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b52"
+          rm -rf "$ROOT"
+          mkdir -p "$ROOT/models"
+
+          stage_file() {
+            local name="$1" url="$2" page="$3" title="$4" filename="$5" notes="$6"
+            mkdir -p "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B52/1.0' "$url" -o "$ROOT/models/$name/$filename"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_file "oga_medieval_doors_interiors" "https://opengameart.org/sites/default/files/medievaldoors.blend" "https://opengameart.org/content/medieval-doors-interiors" "Medieval Doors Interiors" "medievaldoors.blend" "Openable/closeable door sources with interior faces; source page lists 1726 verts / 3247 tris."
+          stage_file "oga_medieval_windows_interiors" "https://opengameart.org/sites/default/files/medievalwindows.blend" "https://opengameart.org/content/medieval-windows-interiors" "Medieval Windows Interiors" "medievalwindows.blend" "Modular windows with front/back normals for explorable buildings; source page lists 1983 verts / 3145 tris."
+          stage_file "oga_medieval_small_house_interior" "https://opengameart.org/sites/default/files/housesmall.blend" "https://opengameart.org/content/medieval-small-house-interior" "Medieval Small House Interior" "housesmall.blend" "Modular small house with brick/plaster variants and optional chimney hearth; source page lists 1914 verts / 2696 tris."
+          stage_file "oga_medieval_medium_house_interior" "https://opengameart.org/sites/default/files/housemedium.blend" "https://opengameart.org/content/medieval-medium-house-interior" "Medieval Medium House Interior" "housemedium.blend" "Fully modular multi-floor/stair interior with roof/height/skin/door/chimney variants; source page lists 6862 verts / 10196 tris."
+          stage_file "oga_medieval_shack" "https://opengameart.org/sites/default/files/medievalshackwood.blend" "https://opengameart.org/content/medieval-shack" "Medieval Shack" "medievalshackwood.blend" "Low-poly wood shack; source page lists 1066 verts / 560 tris."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B52 — real CC0 modular house interiors
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Includes reusable doors/windows plus small and medium explorable house interiors and a simple shack. Main integration chat should compare these against B47 architecture, establish one consistent building grid/scale, and use these sources to make interiors genuinely enterable rather than as duplicate exterior-only shells.
+          EOF
+          echo "B52 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B52 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b52
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 modular house interiors B52"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
