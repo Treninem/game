@@ -1,9 +1,4 @@
-Creative Commons CC0 1.0 / Public Domain dedication.
-
-Source pages:
-https://opengameart.org/content/medieval-tools-pack
-https://opengameart.org/content/medieval-crafting-stations-pack
-https://opengameart.org/content/medieval-props-pack
-
-Author/uploader: System G6 (Qoma)
-Attribution is not required by CC0; source metadata is kept for provenance.
+License: CC0 1.0 / public-domain dedication.
+Author/uploader: System G6 (Qoma).
+Source: OpenGameArt.
+Attribution not required; provenance retained voluntarily.
