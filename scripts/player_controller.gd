@@ -116,13 +116,13 @@ func _physics_process(delta: float) -> void:
 
     if not grounded_before and grounded_after and fall_speed_before_move > 3.4:
         footstep_distance_accum = 0.0
-        WorldVFX.spawn_landing(global_position, fall_speed_before_move)
+        WorldVFX.spawn_landing(global_position, fall_speed_before_move, "", -global_transform.basis.z)
     elif grounded_after and input_vec.length() > 0.08:
         footstep_distance_accum += last_horizontal_motion.length()
         var step_distance := 1.75 if can_sprint else 2.35
         if footstep_distance_accum >= step_distance:
             footstep_distance_accum = 0.0
-            WorldVFX.spawn_footstep(global_position, 1.10 if can_sprint else 0.72)
+            WorldVFX.spawn_footstep(global_position, 1.10 if can_sprint else 0.72, "", -global_transform.basis.z)
     elif not grounded_after:
         footstep_distance_accum = 0.0
 
