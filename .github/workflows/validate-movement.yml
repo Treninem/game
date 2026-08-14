@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn 2>&1)
+          output=$(timeout 45s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn 2>&1)
           status=$?
           printf '%s\n' "$output"
           if [ "$status" -ne 0 ]; then
@@ -70,10 +70,12 @@ jobs:
         shell: bash
         run: |
           set +e
-          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn 2>&1)
+          output=$(timeout 35s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn 2>&1)
           status=$?
           printf '%s\n' "$output"
-          if [ "$status" -ne 0 ]; then
+          if [ "$status" -eq 124 ]; then
+            echo "::error title=UI layout smoke timeout::Menu layout did not settle within 35 seconds"
+          elif [ "$status" -ne 0 ]; then
             detail=$(printf '%s\n' "$output" | tail -n 24 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=UI smoke raw Godot output::$detail"
           fi
