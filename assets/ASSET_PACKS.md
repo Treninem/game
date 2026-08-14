@@ -9,95 +9,98 @@ Before generating or importing art, check this registry and the `assets/` tree. 
 
 ### Nature / terrain / vegetation
 - Kenney Nature Kit — 330 3D assets — CC0 — https://kenney.nl/assets/nature-kit — `assets/nature/kenney_nature_kit/`
-- Quaternius Ultimate Nature Pack — 150 models — CC0 — https://quaternius.com/packs/ultimatenature.html — `assets/nature/quaternius_ultimate_nature/`
-- Quaternius Stylized Nature MegaKit — 116 models: 40 trees, 35 plants/flowers, 27 rocks, grass/bushes; glTF/Godot support — CC0 — https://quaternius.com/packs/stylizednaturemegakit.html — `assets/nature/quaternius_stylized_megakit/`
+- Kenney Survival Kit — 80 3D survival/nature assets with animation — CC0 — https://kenney.nl/assets/survival-kit — `assets/survival/kenney_survival_kit/`
+- Quaternius Ultimate Nature Pack / Stylized Nature MegaKit / Simple Nature Pack — CC0 — `assets/nature/quaternius/`
 - Poly Haven — CC0 PBR textures/models/HDRIs — https://polyhaven.com/ — `assets/materials/polyhaven/`, `assets/lighting/hdri/polyhaven/`
-Maintain biome-ready trees, grass, plants, flowers, bushes, crops, rocks, stone, sand, soil, mud, snow, cliffs, water, caves, coast, river, swamp, desert, tundra, temperate, tropical and mountain assets.
+Maintain biome-ready trees, dead trees, logs, stumps, roots, branches, grass, reeds, moss, vines, flowers, bushes, crops, mushrooms, rocks, ores, stone, gravel, sand, clay, soil, mud, snow, ice, cliffs, caves, coast, beaches, riverbanks, swamp, desert, tundra, temperate, tropical, alpine and underwater vegetation.
 
-### Buildings / settlements / interiors
-- Kenney Modular Buildings — 100 modular 3D assets — CC0 — https://kenney.nl/assets/modular-buildings — `assets/buildings/kenney_modular_buildings/`
-- Quaternius Medieval Village MegaKit — 300+ modular pieces, glTF, free Standard tier CC0 — https://quaternius.com/packs/medievalvillagemegakit.html — `assets/buildings/quaternius_medieval_village_megakit/`
-- Quaternius Medieval Village Pack — 44 buildings/props — CC0 — https://quaternius.com/packs/medievalvillage.html — `assets/buildings/quaternius_medieval_village/`
-- Quaternius Modular Medieval Building Pack — 30 modular pieces — CC0 — https://quaternius.com/packs/modularmedievalbuildings.html — `assets/buildings/quaternius_modular_medieval/`
-- Quaternius Ultimate Fantasy RTS — 128 buildings/evolution/nature models — CC0 — https://quaternius.com/packs/ultimatefantasyrts.html — `assets/buildings/quaternius_fantasy_rts/`
-Maintain homes, farms, workshops, markets, taverns, warehouses, civic/industrial/commercial buildings, castles, fortifications, ruins, dungeons, roads, bridges, doors/windows, roofs, stairs and modular construction.
+### Water / atmosphere / sky / weather
+Maintain oceans, lakes, rivers, streams, ponds, swamps, puddles, waterfalls, foam, ripples, splashes, wetness, underwater caustics/fog, clouds, skyboxes/HDRI, sun/moon/stars, dawn/dusk, rain, storms, lightning, snow, hail, fog, mist, wind, dust storms, heat haze and seasonal variants. Prefer Godot shaders/GPUParticles plus verified CC0/project-owned textures.
 
-### Furniture / home / interior props
-- Quaternius Furniture Pack — 23 beds/chairs/tables/home essentials — CC0 — https://quaternius.com/packs/furniture.html — `assets/props/furniture/quaternius_furniture/`
-- Quaternius Ultimate Furniture Pack — 20 furniture essentials — CC0 — https://quaternius.com/packs/ultimatefurniture.html — `assets/props/furniture/quaternius_ultimate_furniture/`
-- Quaternius Sushi Restaurant Kit — 108 models, food/dishes, modular interior and animated characters — CC0 — https://quaternius.com/packs/sushirestaurantkit.html — `assets/props/interiors/quaternius_restaurant/`
-Maintain beds, chairs, tables, shelves, cupboards, lamps, kitchen props, dishes, market displays, workshop props, storage and decorative clutter.
+### Buildings / settlements / infrastructure
+Approved families include Kenney modular/city/fantasy/castle kits and Quaternius medieval/downtown/fantasy modular kits. Maintain houses, apartments, huts, tents, farms, barns, mills, workshops, smithies, mines, quarries, lumber camps, warehouses, markets, taverns, inns, shops, hospitals, schools, administration, factories, power/utility buildings, castles, towers, walls, gates, ruins, dungeons, sewers, caves, bunkers, roads, paths, sidewalks, rails, bridges, docks, piers, fences, signs, streetlights, pipes, cables, poles, drains, wells and modular construction parts.
 
-### Food / farming / consumables
-- Kenney Food Kit — 200 3D food/kitchen assets — CC0 — https://kenney.nl/assets/food-kit — `assets/items/food/kenney_food_kit/`
-- Quaternius Ultimate Food Pack — 103 food/consumable models — CC0 — https://quaternius.com/packs/ultimatefood.html — `assets/items/food/quaternius_ultimate_food/`
-- Quaternius Fantasy Props MegaKit Standard — 200+ props including vegetables, potions, tools, furniture, weapons and market assets — free Standard tier CC0 — https://quaternius.com/packs/fantasypropsmegakit.html — `assets/props/quaternius_fantasy_props_standard/`
-Maintain raw ingredients, crops, meat/fish, prepared meals, drinks, containers, cooking tools and spoilage/quality variants as gameplay requires.
+### Furniture / interiors / clutter
+Maintain beds, chairs, tables, shelves, cupboards, wardrobes, lamps, fireplaces, stoves, kitchen/bathroom props, dishes, barrels, crates, sacks, baskets, bottles, books, papers, tools, workshop clutter, storage, market displays, laboratory/medical props, industrial props, office props, trash, rubble and decorative clutter. Quaternius Fantasy Props MegaKit Standard is an approved broad CC0 source.
 
 ### Humans / NPCs / animation
-Quaternius CC0 character ecosystem remains the preferred discovery source. Maintain civilians, survivors, merchants, workers, farmers, hunters, guards, warriors, bandits and NPC archetypes; idle/walk/run/sprint/crouch/crawl/jump/climb/swim/combat/tools/gathering/crafting/farming/fishing/building/carrying/sitting/sleeping/injury/death/interactions.
-- Kenney Platformer Kit — 150 3D assets with animated characters/variations — CC0 — https://kenney.nl/assets/platformer-kit — `assets/characters/kenney_platformer/` — use selectively where style is compatible.
+- Quaternius Universal Animation Library — 120+ animations — CC0 — https://quaternius.com/packs/universalanimationlibrary.html
+- Quaternius Universal Animation Library 2 — 130+ animations incl. melee, armed combos, parkour, farming, fishing, zombies — CC0 — https://quaternius.com/packs/universalanimationlibrary2.html
+- Kenney Prototype Kit — 145 3D prototype assets including characters/animals/vehicles/buildings, animated — CC0 — https://www.kenney.nl/assets/prototype-kit — `assets/prototype/kenney_prototype/`
+Maintain body/age/role variants: civilians, children/elderly when suitable assets exist, survivors, merchants, workers, miners, lumberjacks, farmers, hunters, fishers, builders, medics, scientists, engineers, guards, soldiers, bandits and specialists. Animation coverage: locomotion, crouch/crawl, jump, climb, swim, parkour, combat, tools, gathering, mining, chopping, crafting, farming, fishing, building, carrying, pushing/pulling, sitting, eating/drinking, sleeping, emotes, injury, death and interactions.
 
-### Animals / wildlife / creatures
-- Quaternius Farm Animal Pack — 7 animated farm animals — CC0 — https://quaternius.com/packs/farmanimal.html — `assets/animals/farm/quaternius_farm_animals/`
-Maintain cattle, pigs, horses, sheep/goats, chickens, ducks/geese, dogs/cats, deer, boar, bear, fox, hare/rabbit, birds, fish, insects, predators, aquatic and hostile creatures. Verify each additional selected pack before physical import.
+### Animals / ecology / creatures
+Maintain domestic animals, livestock, mounts, forest/plains/desert/tundra/tropical wildlife, birds, fish, amphibians, reptiles, insects, pollinators, predators, scavengers, aquatic life and hostile/fantasy creatures where appropriate. Include idle/feed/drink/walk/run/flee/attack/sleep/swim/fly/death animation needs, nests/dens/tracks/droppings and ecosystem props.
 
-### Items / tools / weapons / resources
-- Kenney Generic Items and verified Kenney CC0 item sets remain approved.
-- Quaternius Fantasy Props MegaKit Standard is the preferred broad medieval prop/tool/weapon source.
-Maintain axes, pickaxes, shovels, hammers, knives, saws, fishing tools, farming tools, melee/ranged weapons, ammo, armor, clothing, medicine, containers, crafting stations, wood/stone/ore/metal/fiber/leather resources, electronics and machines.
+### Food / farming / biology
+Maintain seeds, crops by growth stage, fruit/vegetables, grain, herbs, mushrooms, meat, fish, eggs, milk, water containers, prepared meals, drinks, cooking ingredients, spoilage/rotten variants, farming equipment, irrigation, compost, animal feed and harvesting props. Kenney Food Kit and verified Quaternius food packs remain approved.
 
-### Vehicles / transportation
-Maintain cars, trucks, carts, wagons, boats, ships and progression-era transport. Import only verified CC0 packs with coherent art direction.
+### Items / resources / crafting / tools
+Maintain wood/logs/planks, stone, clay, sand, coal, ores, ingots, scrap, fibers, cloth, leather, rope, glass, chemicals, fuels, components, electronics, batteries, containers and currency/trade goods. Tools: axe, pickaxe, shovel, hammer, knife, saw, wrench, screwdriver, crowbar, hoe, sickle, fishing tools, repair tools, measuring/science tools. Include broken/damaged/worn variants when gameplay uses durability.
 
-### VFX / weather / physical environment
-Maintain `water`, `fire`, `wind`, `dust`, `smoke`, `fog`, `rain`, `snow`, `mud`, `debris`, `blood`, `magic`, `electricity`, `weather`. Prefer Godot shaders/GPUParticles with CC0/project-owned textures. Water covers ocean/lake/river/shallow water, foam, splash, ripple and waterfalls; vegetation supports wind response.
+### Weapons / armor / combat props
+- Quaternius Modular Weapons Pack — 24 medieval weapons incl. swords, daggers, bows, shields, hammers — CC0 — https://quaternius.com/packs/medievalweapons.html — `assets/weapons/quaternius_modular_medieval/`
+- Quaternius Ultimate Guns Pack — 40 gun models — CC0 — https://quaternius.com/packs/ultimategun.html — `assets/weapons/quaternius_guns/`
+- Kenney Blaster Kit — 40 3D assets incl. weapons, crates, silencer, throwables, smoke — CC0 — https://kenney.nl/assets/blaster-kit — `assets/weapons/kenney_blaster/`
+Maintain melee/ranged weapons, bows/crossbows, firearms where era allows, ammo, magazines, holsters, shields, helmets, armor/clothing protection, targets, impacts, casings and damage/debris assets.
 
-### Audio / ambience / Foley
-- Kenney UI Audio — 50 CC0 button/switch/click sounds — https://www.kenney.nl/assets/ui-audio — `assets/audio/ui/kenney_ui_audio/`
-- Kenney Digital Audio — 60 CC0 digital/laser/sci-fi sounds — https://www.kenney.nl/assets/digital-audio — `assets/audio/technology/kenney_digital_audio/`
-Maintain biome ambience, weather, fire/water, footsteps per surface, wildlife, human Foley, crafting/tools, combat, construction, machines, vehicles, UI and world interactions. Only verified redistribution-compatible/CC0 audio is production-approved.
+### Vehicles / logistics / transportation
+- Kenney Car Kit — 45 3D vehicles — CC0 — https://www.kenney.nl/assets/car-kit — `assets/vehicles/kenney_car_kit/`
+- Kenney Watercraft Kit — 45 boats/ships/watercraft — CC0 — https://kenney.nl/assets/watercraft-kit — `assets/vehicles/kenney_watercraft/`
+Maintain handcarts, wagons, bicycles, cars, trucks, tractors, construction/agricultural vehicles, boats, ships, trains/rail assets and later advanced transport. Separate wheels, doors, cargo, interiors, lights, damage/debris and audio needs.
 
-### UI / HUD / input
+### Machines / production / technology
+Maintain crafting benches, furnaces, kilns, forges, mills, pumps, generators, motors, conveyors, tanks, pipes, valves, cables, electrical equipment, batteries, solar/wind power, laboratory equipment, computers, communications, automation/robotics and era progression variants. Quaternius Sci-Fi Essentials Kit — 65 models, animated enemies/guns/props/screens, CC0 — https://quaternius.com/packs/scifiessentialskit.html — `assets/technology/quaternius_scifi_essentials/`. Kenney Modular Space Kit — 40 modular animated/variant station assets, CC0 — https://kenney.nl/assets/modular-space-kit — `assets/technology/kenney_modular_space/`.
+
+### VFX / decals / destruction
+Maintain fire/flames/embers/sparks, smoke/steam, dust, dirt, mud, water, rain/snow, leaves, wind streaks, fog, blood, footprints, tire tracks, bullet/weapon impacts, scorch marks, cracks, broken glass, debris, collapsing/broken construction pieces, electricity, sparks, leaks, poison/gas, healing/status effects and interaction highlights. Prefer procedural/project-owned effects when static packs are insufficient.
+
+### Audio / ambience / Foley / music support
+- Kenney UI Audio — 50 CC0 sounds — https://www.kenney.nl/assets/ui-audio
+- OpenGameArt Kenney Interface Sounds — 100 normalized OGG interface sounds — CC0 — https://opengameart.org/content/interface-sounds
+Maintain biome ambience, birds/insects/wildlife, wind/weather/thunder, fire/water, caves/interiors, footsteps for dirt/grass/sand/stone/wood/metal/snow/mud/water, cloth/gear Foley, eating/drinking, crafting/tools, mining/chopping, farming, combat, impacts, destruction, construction, machines, engines, vehicles, doors/containers, UI, alarms and world interactions. Music is tracked separately and must have equally clear redistribution/commercial rights.
+
+### UI / icons / input / accessibility
 - Kenney UI Pack — 430 UI assets — CC0 — https://kenney.nl/assets/ui-pack — `assets/ui/kenney_ui_pack/`
-- Kenney UI Pack Adventure and RPG variants remain approved when individually verified.
-Cover HUD, inventory, equipment, crafting, map/fog-of-war, quests, character, skills, technology, trading, construction, settings, controls, graphics, audio, accessibility and 10-slot save/load/delete.
+- Kenney Game Icons — 105 black/white game icons plus vectors — CC0 — https://opengameart.org/content/game-icons — `assets/ui/icons/kenney_game_icons/`
+Maintain HUD, health/stamina/hunger/thirst/temperature/oxygen/status, inventory, hotbar, equipment, crafting/recipes, building, farming, technology/research tree, economy/trading, quests/events, factions/reputation, map/minimap/markers/fog-of-war, character/stats/skills, companions, vehicles, settlements, production, electricity/water networks, settings, keybinds, controller prompts, accessibility, tutorials, notifications, dialogue, shops and 10-slot save/load/delete.
 
-### Additional discovery queue from Kenney CC0 catalog
-Individually verify and import when needed: Modular Cave Kit, Factory Kit, Modular Dungeon Kit, Pirate Kit, Modular Space Kit, City/Suburban kits, Fish Pack, Input Prompts, skyboxes and texture packs. Kenney catalog: https://www.kenney.nl/assets
+### Prototyping / fallback assets
+- Kenney Prototype Kit — 145 assets — CC0 — use for fast grayboxing and gameplay validation before final art.
+- Kenney Voxel Pack — textures/items/characters plus skybox/particles/sun/moon — CC0 — https://opengameart.org/content/voxel-pack — use selectively as fallback/reference, not to force voxel art direction.
+
+## Do not only collect obvious assets
+Future searches must also consider small assets that make a world believable: hinges, handles, nails, bolts, ropes, chains, cables, pipes, valves, buckets, cups, plates, cutlery, books, papers, maps, posters, signs, lamps, candles, trash, rubble, weeds, moss, puddles, footprints, tracks, nests, fences, gates, ladders, scaffolding, pallets, carts, sacks, crates, barrels, containers, switches, meters, gauges, control panels, medical supplies, laboratory glassware, repair parts and damaged/broken variants.
 
 ## Import policy
-1. Prefer glTF/GLB for Godot when available; retain source/license metadata.
-2. Import only files actually distributed in the verified free tier. A pack being CC0 does not make paid-only files free to download.
-3. Do not dump huge source archives into Git blindly. Import useful game-ready content and optimized runtime variants.
-4. Deduplicate meshes/materials/textures/animations shared across packs.
-5. Normalize scale, orientation, collision, material naming and LOD conventions before production use.
-6. Keep art direction coherent: recolor/rematerial compatible CC0 assets where necessary rather than mixing visibly incompatible styles.
-7. Third-party pack folders get `SOURCE.md` and/or `LICENSE.txt` metadata before assets are production-ready.
-8. For large packs, use a manifest plus selected production assets; avoid repository bloat and GitHub file-size problems.
+1. Prefer `.glb`/`.gltf` for Godot; retain source/license metadata.
+2. Import only files actually distributed in a verified free tier; paid/source-only files are not implicitly free.
+3. Do not dump huge archives blindly. Import useful production content and optimized runtime variants.
+4. Deduplicate meshes/materials/textures/animations.
+5. Normalize scale, Y-up orientation, pivots, collision, material naming and LOD conventions.
+6. Keep art direction coherent; rematerial/recolor compatible CC0 assets when necessary.
+7. Every third-party pack folder gets `SOURCE.md` and/or `LICENSE.txt` before production use.
+8. Repeated foliage/rocks/props should be MultiMesh-friendly; terrain/vegetation need culling/LOD.
+9. PBR runtime textures use sensible resolutions instead of unnecessary 8K/16K masters.
+10. Reusable humanoid animations live in shared libraries instead of being duplicated per NPC.
+11. Track dependencies between assets: mesh + material + texture + collision + animation + sound + icon + gameplay tag.
+12. Never treat a registry entry as physically imported until files are actually present in the repository.
 
-## Godot production profile
-- Preferred interchange: `.glb` / `.gltf`; fallback `.fbx`/`.obj` only when necessary.
-- One coherent unit scale and Y-up orientation.
-- Static world pieces need simplified collision; tiny decorative meshes normally do not.
-- Repeated foliage/rocks/props should be MultiMesh-friendly.
-- Terrain/vegetation need distance culling and LOD strategy.
-- PBR runtime textures use sensible game resolutions rather than raw 8K/16K sources.
-- Reusable humanoid animations belong in a shared animation library instead of duplicated per NPC.
-
-## World asset taxonomy
-Stable top-level categories: `nature`, `materials`, `lighting`, `world`, `buildings`, `characters`, `animals`, `items`, `props`, `vehicles`, `vfx`, `audio`, `ui`, `technology`.
+## Stable taxonomy
+`nature`, `materials`, `lighting`, `world`, `buildings`, `interiors`, `characters`, `animations`, `animals`, `food`, `items`, `resources`, `tools`, `weapons`, `clothing`, `props`, `vehicles`, `machines`, `technology`, `vfx`, `decals`, `audio`, `music`, `ui`, `icons`, `prototype`.
 
 ## Integration priority
-1. Terrain/biomes/water/vegetation
-2. Settlements/buildings/interiors/roads/dungeons/ruins
-3. Humans/NPCs and universal animations
-4. Wildlife/farm animals/aquatic life
-5. Food/furniture/items/resources/tools/weapons/clothing
-6. Vehicles
-7. VFX/weather
-8. Audio/Foley/ambience
-9. Complete UI
-10. Advanced technology
+1. Terrain, biome materials, water, sky/weather and vegetation
+2. Infrastructure, settlements, buildings and interiors
+3. Characters, roles and universal animations
+4. Animals/ecology and farming
+5. Resources, food, tools, crafting and production props
+6. Vehicles/logistics
+7. Combat equipment
+8. Machines/technology progression
+9. VFX/decals/destruction
+10. Audio/Foley/ambience
+11. Complete UI/icons/input/accessibility
+12. Tiny world-detail/clutter assets and damaged/seasonal variants
 
-Every development session working on `Treninem/game` must read this file before adding art and update it when approving another pack.
+Every development session working on `Treninem/game` must read this file before adding art and update it when approving another pack. The goal is a broad reusable production library, not a random pile of downloads.
