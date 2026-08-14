@@ -1,17 +1,28 @@
 param(
     [string]$InstallDir = "$env:LOCALAPPDATA\Programs\ImPuls",
-    [switch]$Background
+    [switch]$Background,
+    [switch]$WaitForGameExit
 )
 
 $ErrorActionPreference = "Stop"
 $Repo = "Treninem/game"
-$Headers = @{ "User-Agent" = "ImPuls-Updater/1.0" }
+$Headers = @{ "User-Agent" = "ImPuls-Updater/1.1" }
 $Api = "https://api.github.com/repos/$Repo/releases/latest"
 $TagFile = Join-Path $InstallDir "release_tag.txt"
 $CurrentDir = Join-Path $InstallDir "current"
 
 if ($Background -and (Get-Process -Name "ImPuls" -ErrorAction SilentlyContinue)) {
     exit 0
+}
+
+if ($WaitForGameExit) {
+    $deadline = (Get-Date).AddMinutes(3)
+    while ((Get-Process -Name "ImPuls" -ErrorAction SilentlyContinue) -and (Get-Date) -lt $deadline) {
+        Start-Sleep -Milliseconds 500
+    }
+    if (Get-Process -Name "ImPuls" -ErrorAction SilentlyContinue) {
+        exit 2
+    }
 }
 
 try {
@@ -74,6 +85,13 @@ try {
     if (Test-Path $BackupDir) {
         Remove-Item $BackupDir -Recurse -Force
     }
+
+    if ($WaitForGameExit) {
+        $GameExe = Join-Path $CurrentDir "ImPuls.exe"
+        if (Test-Path $GameExe) {
+            Start-Process -FilePath $GameExe -WorkingDirectory $CurrentDir
+        }
+    }
 } catch {
     if (-not (Test-Path $CurrentDir) -and (Test-Path $BackupDir)) {
         Move-Item $BackupDir $CurrentDir
@@ -86,6 +104,9 @@ try {
             "OK",
             "Warning"
         ) | Out-Null
+    }
+    if ($WaitForGameExit -and (Test-Path (Join-Path $CurrentDir "ImPuls.exe"))) {
+        Start-Process -FilePath (Join-Path $CurrentDir "ImPuls.exe") -WorkingDirectory $CurrentDir
     }
 } finally {
     Remove-Item $TempDir -Recurse -Force -ErrorAction SilentlyContinue
