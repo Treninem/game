@@ -1,0 +1,77 @@
+name: Update source-chat staging index through B94
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b89-b94.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sourcechat-index-b89-b94
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify B89-B94 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            assets/staging/sourcechat_b89/models/oga_character_pack_2026
+            assets/staging/sourcechat_b89/models/oga_hair_styles_cc0
+            assets/staging/sourcechat_b89/models/oga_human_parts_pack_2026
+            assets/staging/sourcechat_b89/models/oga_lowpoly_hats
+            assets/staging/sourcechat_b90/models/oga_cargo_pants
+            assets/staging/sourcechat_b90/models/oga_lowpoly_glasses_29
+            assets/staging/sourcechat_b90/models/oga_sneakers
+            assets/staging/sourcechat_b90/models/oga_sweatshirt
+            assets/staging/sourcechat_b90/models/oga_work_boots
+            assets/staging/sourcechat_b91/models/oga_hospital_medical_center_moscow_2025
+            assets/staging/sourcechat_b91/models/oga_medical_packaging_1
+            assets/staging/sourcechat_b91/models/oga_medical_packaging_2
+            assets/staging/sourcechat_b91/models/oga_medical_packaging_3
+            assets/staging/sourcechat_b92/models/oga_3td_office_starter_pack
+            assets/staging/sourcechat_b92/models/oga_cooking_assets
+            assets/staging/sourcechat_b92/models/oga_household_items_86
+            assets/staging/sourcechat_b92/models/oga_office_campus_buildings_2026
+            assets/staging/sourcechat_b93/models/oga_modular_wooden_docks_176
+            assets/staging/sourcechat_b93/models/oga_barrels_10_lyricsz
+            assets/staging/sourcechat_b94/models/oga_wood_stuff_84
+            assets/staging/sourcechat_b94/models/oga_wooden_furnitures_53
+            assets/staging/sourcechat_b94/models/oga_wood_furnitures_2_54
+          )
+          for d in "${required[@]}"; do
+            test -d "$d" || { echo "Missing physical staging directory: $d" >&2; exit 1; }
+            test -n "$(find "$d" -type f -print -quit)" || { echo "Empty staging directory: $d" >&2; exit 1; }
+          done
+          INDEX=assets/staging/SOURCECHAT_INDEX.md
+          if ! grep -q '^## B89 —' "$INDEX"; then
+            printf '\n' >> "$INDEX"
+            echo 'IyMgQjg5IOKAlCBjaGFyYWN0ZXIgY3VzdG9taXphdGlvbiBzb3VyY2VzCgpTdGF0dXM6ICoqUkVBRFkgLyBQSFlTSUNBTCoqClBhdGg6IGBhc3NldHMvc3RhZ2luZy9zb3VyY2VjaGF0X2I4OS9tb2RlbHMvYAoKLSBgb2dhX2NoYXJhY3Rlcl9wYWNrXzIwMjYvYAotIGBvZ2FfaHVtYW5fcGFydHNfcGFja18yMDI2L2AKLSBgb2dhX2xvd3BvbHlfaGF0cy9gCi0gYG9nYV9oYWlyX3N0eWxlc19jYzAvYAoKUmVjb21tZW5kZWQgdXNlOiBzb3VyY2UgbWF0ZXJpYWwgZm9yIE5QQy9ib2R5IHZhcmlhdGlvbiwgaGFpcnN0eWxlcywgaGF0cyBhbmQgY2hhcmFjdGVyIGN1c3RvbWl6YXRpb24gZXhwZXJpbWVudHMuIE1haW4gY2hhdCBzaG91bGQgc3RhbmRhcmRpemUgb25lIHByb2R1Y3Rpb24gc2tlbGV0b24vYm9keSBwaXBlbGluZSBiZWZvcmUgYWRhcHRpbmcgc2VsZWN0ZWQgcGFydHMuCgojIyBCOTAg4oCUIGdsYXNzZXMgLyBjbG90aGluZyAvIGZvb3R3ZWFyCgpTdGF0dXM6ICoqUkVBRFkgLyBQSFlTSUNBTCoqClBhdGg6IGBhc3NldHMvc3RhZ2luZy9zb3VyY2VjaGF0X2I5MC9tb2RlbHMvYAoKLSBgb2dhX2xvd3BvbHlfZ2xhc3Nlc18yOS9gCi0gYG9nYV9jYXJnb19wYW50cy9gCi0gYG9nYV9zd2VhdHNoaXJ0L2AKLSBgb2dhX3NuZWFrZXJzL2AKLSBgb2dhX3dvcmtfYm9vdHMvYAoKUmVjb21tZW5kZWQgdXNlOiBOUEMgd2FyZHJvYmUgYW5kIHZpc3VhbCB2YXJpYXRpb24uIFRoZXNlIGFyZSBzb3VyY2UgZ2FybWVudHMvYWNjZXNzb3JpZXMgYW5kIHNob3VsZCBiZSBmaXR0ZWQvcmV0YXJnZXRlZCB0byB0aGUgY2hvc2VuIHByb2R1Y3Rpb24gY2hhcmFjdGVyIHN0YW5kYXJkIHJhdGhlciB0aGFuIGJ1bGstd2lyZWQgZGlyZWN0bHkuCgojIyBCOTEg4oCUIGhvc3BpdGFsIC8gbWVkaWNhbCBwYWNrYWdpbmcKClN0YXR1czogKipSRUFEWSAvIFBIWVNJQ0FMKioKUGF0aDogYGFzc2V0cy9zdGFnaW5nL3NvdXJjZWNoYXRfYjkxL21vZGVscy9gCgotIGBvZ2FfaG9zcGl0YWxfbWVkaWNhbF9jZW50ZXJfbW9zY293XzIwMjUvYAotIGBvZ2FfbWVkaWNhbF9wYWNrYWdpbmdfMS9gCi0gYG9nYV9tZWRpY2FsX3BhY2thZ2luZ18yL2AKLSBgb2dhX21lZGljYWxfcGFja2FnaW5nXzMvYAoKUmVjb21tZW5kZWQgdXNlOiBjbGluaWNzLCBob3NwaXRhbHMsIHBoYXJtYWNpZXMsIG1lZGljYWwgc3RvcmFnZSBhbmQgZW52aXJvbm1lbnRhbCBzdG9yeXRlbGxpbmcuIE1haW4gY2hhdCBzaG91bGQgaW5zcGVjdCBzY2FsZS9tYXRlcmlhbHMgYW5kIHVzZSBvbmx5IGNvbnRleHQtYXBwcm9wcmlhdGUgc3Vic2V0cy4KCiMjIEI5MiDigJUgb2ZmaWNlIC8gaG91c2Vob2xkIC8gY29va2luZwoKU3RhdHVzOiAqKlJFQURZIC8gUEhZU0lDQUwqKgpQYXRoOiBgYXNzZXRzL3N0YWdpbmcvc291cmNlY2hhdF9iOTIvbW9kZWxzL2AKCi0gYG9nYV8zdGRfb2ZmaWNlX3N0YXJ0ZXJfcGFjay9gCi0gYG9nYV9vZmZpY2VfY2FtcHVzX2J1aWxkaW5nc18yMDI2L2AKLSBgb2dhX2hvdXNlaG9sZF9pdGVtc184Ni9gCi0gYG9nYV9jb29raW5nX2Fzc2V0cy9gCgpSZWNvbW1lbmRlZCB1c2U6IG9mZmljZXMsIGNhbXB1c2VzLCBob21lcywga2l0Y2hlbnMgYW5kIGluaGFiaXRlZCBpbnRlcmlvcnMuIERlZHVwbGljYXRlIGFnYWluc3QgQjc3L0I4NS9COTQgYW5kIGtlZXAgY29oZXJlbnQgcHJvcCBmYW1pbGllcyBwZXIgbG9jYXRpb24uCgojIyBCOTMg4oCUIG1vZHVsYXIgd29vZGVuIGRvY2tzIC8gYmFycmVscwoKU3RhdHVzOiAqKlJFQURZIC8gUEhZU0lDQUwqKgpQYXRoOiBgYXNzZXRzL3N0YWdpbmcvc291cmNlY2hhdF9iOTMvbW9kZWxzL2AKCi0gYG9nYV9tb2R1bGFyX3dvb2Rlbl9kb2Nrc18xNzYvYCDigJQgc291cmNlIGFuZCBHb2RvdC1yZWFkeSBkb2NrIHBpZWNlcy4KLSBgb2dhX2JhcnJlbHNfMTBfbHlyaWNzei9gCgpSZWNvbW1lbmRlZCB1c2U6IHBpZXJzLCB3YXRlcmZyb250cywgbGFrZS9zd2FtcCB3YWxrd2F5cywgc21hbGwgYnJpZGdlcyBhbmQgc2V0dGxlbWVudCBzdG9yYWdlLiBNYWluIGNoYXQgc2hvdWxkIGluc3BlY3QgcGl2b3RzL2NvbGxpc2lvbnMgYW5kIHByb21vdGUgb25seSByZXF1aXJlZCB2YXJpYW50cy4KCiMjIEI5NCDigJUgd29vZGVuIGZ1cm5pdHVyZSAvIHNldHRsZW1lbnQgcHJvcHMKClN0YXR1czogKipSRUFEWSAvIFBIWVNJQ0FMKioKUGF0aDogYGFzc2V0cy9zdGFnaW5nL3NvdXJjZWNoYXRfYjk0L21vZGVscy9gCgotIGBvZ2Ffd29vZF9zdHVmZl84NC9gCi0gYG9nYV93b29kZW5fZnVybml0dXJlc181My9gCi0gYG9nYV93b29kX2Z1cm5pdHVyZXNfMl81NC9gCgpSZWNvbW1lbmRlZCB1c2U6IGhvbWVzLCB0YXZlcm5zLCBpbm5zLCB3b3Jrc2hvcHMsIGZhcm1zLCBtYXJrZXRzIGFuZCBzdG9yYWdlLiBDaG9vc2UgY29oZXJlbnQgc3Vic2V0cyBhbmQgbm9ybWFsaXplIHNjYWxlL21hdGVyaWFscyBpbnN0ZWFkIG9mIGltcG9ydGluZyBhbGwgbmVhci1kdXBsaWNhdGUgZnVybml0dXJlLgo=' | base64 -d >> "$INDEX"
+          fi
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index physical source batches B89-B94"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
