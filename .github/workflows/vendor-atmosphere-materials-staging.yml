@@ -1,0 +1,135 @@
+name: Vendor CC0 atmosphere and material staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-atmosphere-materials-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-atmosphere-materials-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-atmosphere-materials:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 atmosphere and material sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ATM="assets/staging/atmosphere"
+          MAT="assets/staging/materials"
+          VFX="assets/staging/vfx_nonmagic"
+          TMP=".atmosphere_materials_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$ATM" "$MAT" "$VFX" "$TMP"
+
+          write_meta() {
+            local target="$1"
+            local key="$2"
+            local source_url="$3"
+            local author="$4"
+            local download_desc="$5"
+            local notes="$6"
+            mkdir -p "$target"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source_url
+          Download source(s): $download_desc
+          License: CC0 1.0 Universal / public-domain dedication as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          This staged asset is recorded by its source page as CC0. The original author has waived copyright and related rights to the extent permitted by law under the Creative Commons CC0 1.0 Universal public-domain dedication.
+
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside the staged files.
+          EOF
+          }
+
+          CLOUDS="$ATM/oga_clouds_transparency_2k"
+          WORK="$TMP/clouds"
+          rm -rf "$CLOUDS" "$WORK"
+          mkdir -p "$CLOUDS" "$WORK/archive"
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 \
+            -A 'ImPuls-CC0-Staging/1.0' \
+            "https://opengameart.org/sites/default/files/fx_cloudalphas.zip" \
+            -o "$WORK/clouds.zip"
+          unzip -q "$WORK/clouds.zip" -d "$WORK/archive"
+          rsync -a --prune-empty-dirs \
+            --include='*/' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --exclude='*' \
+            "$WORK/archive/" "$CLOUDS/"
+          write_meta "$CLOUDS" "oga_clouds_transparency_2k" \
+            "https://opengameart.org/content/clouds-with-transparency" \
+            "WickedInsignia / OpenGameArt" \
+            "https://opengameart.org/sites/default/files/fx_cloudalphas.zip" \
+            "2K CC0 cloud textures including alpha-channel PNG variants and black-background JPEG variants; main chat should retain optimized alpha PNGs needed by its sky system."
+
+          ICE="$MAT/oga_seamless_ice_512"
+          rm -rf "$ICE" && mkdir -p "$ICE"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "https://opengameart.org/sites/default/files/ice_0.png" \
+            -o "$ICE/ice.png"
+          write_meta "$ICE" "oga_seamless_ice_512" \
+            "https://opengameart.org/content/texture-pack-seamless-ice0png" \
+            "Heathal / OpenGameArt" \
+            "https://opengameart.org/sites/default/files/ice_0.png" \
+            "512x512 seamless CC0 ice texture source for frozen water, frost and icy surfaces."
+
+          SAND="$MAT/oga_desert_sand_2048"
+          rm -rf "$SAND" && mkdir -p "$SAND"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "https://opengameart.org/sites/default/files/sand_1.jpg" \
+            -o "$SAND/sand.jpg"
+          write_meta "$SAND" "oga_desert_sand_2048" \
+            "https://opengameart.org/content/2048-digitally-painted-tileable-desert-sand-texture" \
+            "txturs / OpenGameArt" \
+            "https://opengameart.org/sites/default/files/sand_1.jpg" \
+            "2048x2048 tileable CC0 desert sand source for dunes, beaches, drylands and dust-color sampling."
+
+          MASKS="$VFX/oga_particle_masks_small"
+          rm -rf "$MASKS" && mkdir -p "$MASKS"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/bishie_sparkle_1.png" -o "$MASKS/bishie_sparkle_1.png"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/bishie_sparkle_2.png" -o "$MASKS/bishie_sparkle_2.png"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/9_pointed_star.png" -o "$MASKS/9_pointed_star.png"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/mudpaint_0.png" -o "$MASKS/mudpaint.png"
+          write_meta "$MASKS" "oga_particle_masks_small" \
+            "https://opengameart.org/content/particle-textures" \
+            "Starry Skydancer / OpenGameArt" \
+            "four individual PNG files from the OpenGameArt entry" \
+            "Small CC0 particle masks: two sparkles, nine-point star and mud/paint splat. Useful as lightweight VFX masks or residue source material."
+
+          rm -rf "$TMP"
+
+      - name: Commit staged atmosphere/material assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/atmosphere/oga_clouds_transparency_2k \
+                  assets/staging/materials/oga_seamless_ice_512 \
+                  assets/staging/materials/oga_desert_sand_2048 \
+                  assets/staging/vfx_nonmagic/oga_particle_masks_small
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 clouds ice sand and masks"
+          git pull --rebase origin main
+          git push origin HEAD:main
