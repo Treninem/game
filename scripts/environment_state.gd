@@ -87,12 +87,17 @@ func apply_environment_material(material: ShaderMaterial) -> void:
     for uniform_info in material.shader.get_shader_uniform_list():
         available[StringName(uniform_info.get("name", ""))] = true
 
+    var thaw := clampf((temperature_c - 0.5) / 8.0, 0.0, 1.0)
+    var freeze := clampf((1.0 - temperature_c) / 8.0, 0.0, 1.0)
+
     _set_if_supported(material, available, &"wetness", wetness)
     _set_if_supported(material, available, &"dust", dust_amount)
     _set_if_supported(material, available, &"frost", frost_amount)
     _set_if_supported(material, available, &"winter", 1.0 if season == Season.WINTER else 0.0)
     _set_if_supported(material, available, &"autumn", 1.0 if season == Season.AUTUMN else 0.0)
-    _set_if_supported(material, available, &"melt", clampf((temperature_c - 0.5) / 8.0, 0.0, 1.0))
+    _set_if_supported(material, available, &"melt", thaw)
+    _set_if_supported(material, available, &"thaw_amount", thaw)
+    _set_if_supported(material, available, &"freeze_amount", freeze)
     _set_if_supported(material, available, &"snow_amount", maxf(snow_intensity, 0.45 if season == Season.WINTER else 0.0))
     _set_if_supported(material, available, &"wind_strength", wind_strength)
     _set_if_supported(material, available, &"wind_direction", wind_direction)
