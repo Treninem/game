@@ -1,13 +1,14 @@
-extends SceneTree
+extends Node
 
-func _initialize() -> void:
+func _ready() -> void:
+    process_mode = Node.PROCESS_MODE_ALWAYS
     call_deferred("_run_test")
 
 func _fail(code: int, message: String) -> void:
     var clean := message.replace("\r", " ").replace("\n", " ")
     print("::error title=UI layout smoke::%s" % clean)
     push_error("UI smoke: %s" % message)
-    quit(code)
+    get_tree().quit(code)
 
 func _frame_error(frame: Control, available: Vector2, label: String) -> String:
     if frame.size.x > available.x + 1.0 or frame.size.y > available.y + 1.0:
@@ -32,11 +33,12 @@ func _sidebar_error(menu: Control, frame: Control) -> String:
     return ""
 
 func _run_test() -> void:
-    var settings_manager := root.get_node_or_null("SettingsManager")
-    var save_manager := root.get_node_or_null("SaveManager")
-    var layout_guard := root.get_node_or_null("UILayoutGuard")
+    var tree := get_tree()
+    var settings_manager := get_node_or_null("/root/SettingsManager")
+    var save_manager := get_node_or_null("/root/SaveManager")
+    var layout_guard := get_node_or_null("/root/UILayoutGuard")
     if settings_manager == null or save_manager == null or layout_guard == null:
-        _fail(13, "required autoload nodes are missing from standalone test tree")
+        _fail(13, "required autoload nodes are missing from normal project tree")
         return
 
     var packed := load("res://scenes/stage1.tscn") as PackedScene
@@ -44,9 +46,9 @@ func _run_test() -> void:
         _fail(2, "stage scene missing")
         return
     var scene := packed.instantiate()
-    root.add_child(scene)
+    tree.root.add_child(scene)
     for _i in range(10):
-        await process_frame
+        await tree.process_frame
 
     var menu := scene.get_node_or_null("UI/GameMenu") as Control
     var panels := scene.get_node_or_null("UI/GameplayPanels") as Control
@@ -56,8 +58,8 @@ func _run_test() -> void:
 
     menu.call("open_menu", "main")
     for _i in range(5):
-        await process_frame
-    if not paused or not menu.visible:
+        await tree.process_frame
+    if not tree.paused or not menu.visible:
         _fail(4, "pause menu did not pause/show")
         return
     var frame = menu.get("frame") as Control
@@ -73,15 +75,15 @@ func _run_test() -> void:
         _fail(14, error)
         return
     menu.call("close_menu")
-    await process_frame
-    if paused or menu.visible:
+    await tree.process_frame
+    if tree.paused or menu.visible:
         _fail(7, "pause menu did not restore gameplay")
         return
 
     panels.call("open_panel", "inventory")
     for _i in range(5):
-        await process_frame
-    if not paused or not panels.visible:
+        await tree.process_frame
+    if not tree.paused or not panels.visible:
         _fail(8, "gameplay panel failed to open")
         return
     var panel_frame = panels.get("frame") as Control
@@ -93,18 +95,18 @@ func _run_test() -> void:
         _fail(9, error)
         return
     panels.call("close_panel")
-    await process_frame
-    if paused or panels.visible:
+    await tree.process_frame
+    if tree.paused or panels.visible:
         _fail(10, "gameplay panel did not restore gameplay")
         return
 
     settings_manager.call("set_value", "graphics", "ui_scale", 1.5)
     for _i in range(8):
-        await process_frame
+        await tree.process_frame
 
     menu.call("open_menu", "updates")
     for _i in range(8):
-        await process_frame
+        await tree.process_frame
     frame = menu.get("frame") as Control
     if frame == null:
         _fail(12, "150 percent pause frame missing")
@@ -118,11 +120,11 @@ func _run_test() -> void:
         _fail(15, "150 percent %s" % error)
         return
     menu.call("close_menu")
-    await process_frame
+    await tree.process_frame
 
     panels.call("open_panel", "map")
     for _i in range(8):
-        await process_frame
+        await tree.process_frame
     panel_frame = panels.get("frame") as Control
     if panel_frame == null:
         _fail(16, "150 percent gameplay panel frame missing")
@@ -134,7 +136,7 @@ func _run_test() -> void:
     panels.call("close_panel")
     settings_manager.call("set_value", "graphics", "ui_scale", 1.0)
     for _i in range(4):
-        await process_frame
+        await tree.process_frame
 
     var slots = save_manager.call("list_slots")
     if not (slots is Array) or slots.size() != 10:
@@ -143,4 +145,4 @@ func _run_test() -> void:
         return
 
     print("UI smoke passed: centralized auto-alignment, 150% UI scaling and 10 save slots are stable")
-    quit(0)
+    tree.quit(0)
