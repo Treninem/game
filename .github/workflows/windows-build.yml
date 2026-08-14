@@ -26,6 +26,8 @@ jobs:
         run: |
           python3 -m pip install --disable-pip-version-check pillow
           python3 tools/make_icon.py installer/impuls.ico
+          test -s assets/branding/impuls_icon.png
+          test -s installer/impuls.ico
 
       - name: Install Godot 4.7.1 and export templates
         shell: bash
@@ -76,6 +78,7 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check pillow
           python tools/make_icon.py installer/impuls.ico
+          if (-not (Test-Path installer/impuls.ico)) { throw "ImPuls ICO missing" }
 
       - uses: actions/download-artifact@v4
         with:
@@ -141,4 +144,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.9.0 Stage 9: direct in-game inventory/map/crafting/journal panels, permanent HUD minimap, simplified pause menu, quick-use slots, and user-selected branding artwork across EXE/installer/updater shortcuts."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.10.0 Stage 10: world-first stabilization. 192 m local streaming chunks, nearby-only physics, one-chunk-per-frame generation, reserved 4 km capital terrain, legacy shelter and temporary quests removed, movement/terrain recovery fixed, permanent minimap and direct gameplay panels retained, selected ImPuls branding validated for EXE/installer/updater."
