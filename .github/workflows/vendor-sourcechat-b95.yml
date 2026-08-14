@@ -1,0 +1,111 @@
+name: Vendor source-chat B95 real CC0 street buildings fences
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b95.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b95
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 street building fence sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b95"
+          TMP=".sourcechat_b95_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/fence" "$ROOT/models/oga_chainlink_fence_modular_60"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B95/1.0' \
+            "https://opengameart.org/sites/default/files/chainlinkfence_blend_glb_texture.zip" -o "$TMP/chainlinkfence_blend_glb_texture.zip"
+          unzip -q "$TMP/chainlinkfence_blend_glb_texture.zip" -d "$TMP/fence"
+          rsync -a "$TMP/fence/" "$ROOT/models/oga_chainlink_fence_modular_60/"
+          meta "oga_chainlink_fence_modular_60" \
+            "https://opengameart.org/content/chainlink-fence-modular-kit" \
+            "Chainlink Fence Modular Kit" \
+            "https://opengameart.org/sites/default/files/chainlinkfence_blend_glb_texture.zip" \
+            "60 modular chainlink-fence objects with Blend/GLB/textures; 1K/2K textures according to source page."
+
+          mkdir -p "$TMP/unfinished" "$ROOT/models/oga_unfinished_buildings_206plus10"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B95/1.0' \
+            "https://opengameart.org/sites/default/files/unfinishedbuildings_fbx_gltf_textures.zip" -o "$TMP/unfinishedbuildings_fbx_gltf_textures.zip"
+          unzip -q "$TMP/unfinishedbuildings_fbx_gltf_textures.zip" -d "$TMP/unfinished"
+          rsync -a "$TMP/unfinished/" "$ROOT/models/oga_unfinished_buildings_206plus10/"
+          meta "oga_unfinished_buildings_206plus10" \
+            "https://opengameart.org/content/unfinished-buildings" \
+            "Unfinished Buildings" \
+            "https://opengameart.org/sites/default/files/unfinishedbuildings_fbx_gltf_textures.zip" \
+            "206 modular building pieces plus 10 preset unfinished/abandoned buildings with interiors; FBX/GLTF/textures retained."
+
+          mkdir -p "$TMP/street" "$ROOT/models/oga_lamppost_bench_trashcan"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B95/1.0' \
+            "https://opengameart.org/sites/default/files/lamppostbenchtrashcan_fbx_gltf_textures_blend.zip" -o "$TMP/lamppostbenchtrashcan_fbx_gltf_textures_blend.zip"
+          unzip -q "$TMP/lamppostbenchtrashcan_fbx_gltf_textures_blend.zip" -d "$TMP/street"
+          rsync -a "$TMP/street/" "$ROOT/models/oga_lamppost_bench_trashcan/"
+          meta "oga_lamppost_bench_trashcan" \
+            "https://opengameart.org/content/lamp-post-bench-trashcan" \
+            "Lamp Post Bench TrashCan" \
+            "https://opengameart.org/sites/default/files/lamppostbenchtrashcan_fbx_gltf_textures_blend.zip" \
+            "Street furniture collection with lamp posts, benches, trash cans and cans; FBX/GLTF/Blend/textures retained."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B95 — real CC0 street, building and fence sources
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use these for perimeter fences, abandoned/unfinished construction, streets, parks and industrial districts. Deduplicate against existing city/fence packs and keep one coherent art direction per district.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B95 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B95 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b95
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 street buildings fences B95"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
