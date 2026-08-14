@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.1-stable — 2026-08-14
+- Introduced a rolling `stable` GitHub Release channel controlled only by the main integration chat; ordinary asset/research commits can no longer become player updates.
+- Pinned both the in-game updater and external PowerShell updater to the stable channel instead of `releases/latest`.
+- Made SHA-256 metadata mandatory for game and updater-runtime downloads; invalid or missing checksums abort the update and preserve the installed build.
+- Replaced stale/fallback branding generation: the selected ImPuls artwork in `assets/branding/impuls_icon.png` is now the single source for the game window, Windows EXE, installer and refreshed shortcuts.
+- Removed the duplicate standalone MagicHUD overlay from autoload so the normal gameplay HUD is the only persistent HUD layer.
+- Added a real WorldEnvironment with procedural sky and ambient sky lighting so the world cannot boot as a flat gray/black scene.
+- Increased the active third-person camera far plane to 1100 m and strengthened the main sun for readable traversal.
+- Added stable-world boot smoke validation: mandatory player/camera/environment/HUD nodes, camera visibility distance and hidden blocking menus at gameplay start.
+- Added UI/save smoke validation: pause menu and gameplay panels must fit the viewport, pause/unpause correctly, restore gameplay and preserve exactly 10 save slots.
+- Existing movement smoke remains mandatory so a build where the character walks in place cannot enter the stable release.
+
 ## 0.10.0-stage10 — 2026-08-14
 - Reordered development to world-first: terrain, capital, forests, fields, water, roads and regions now take priority over quests and player construction.
 - Replaced 512 m streaming tiles with lighter 192 m local chunks and a roughly 960 m visible streaming window around the player.
