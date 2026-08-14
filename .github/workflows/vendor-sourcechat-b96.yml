@@ -1,0 +1,122 @@
+name: Vendor source-chat B96 real CC0 interior holiday props
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b96.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b96
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 interior and holiday prop sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b96"
+          TMP=".sourcechat_b96_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/toilets" "$ROOT/models/oga_toilets_33"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B96/1.0' \
+            "https://opengameart.org/sites/default/files/toilets_fbx_gltf_blend.zip" -o "$TMP/toilets_fbx_gltf_blend.zip"
+          unzip -q "$TMP/toilets_fbx_gltf_blend.zip" -d "$TMP/toilets"
+          rsync -a "$TMP/toilets/" "$ROOT/models/oga_toilets_33/"
+          meta "oga_toilets_33" \
+            "https://opengameart.org/content/toilets" \
+            "Toilets" \
+            "https://opengameart.org/sites/default/files/toilets_fbx_gltf_blend.zip" \
+            "33 bathroom objects including toilets, sinks and urinals with FBX/GLTF/Blend source."
+
+          mkdir -p "$TMP/balloons" "$ROOT/models/oga_balloons_53_godot"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B96/1.0' \
+            "https://opengameart.org/sites/default/files/balloons_godot.zip" -o "$TMP/balloons_godot.zip"
+          unzip -q "$TMP/balloons_godot.zip" -d "$TMP/balloons"
+          rsync -a "$TMP/balloons/" "$ROOT/models/oga_balloons_53_godot/"
+          meta "oga_balloons_53_godot" \
+            "https://opengameart.org/content/balloons-2" \
+            "Balloons" \
+            "https://opengameart.org/sites/default/files/balloons_godot.zip" \
+            "53 balloon objects including A-Z, 0-9 and balloon-art shapes; Godot-ready source archive."
+
+          mkdir -p "$TMP/room" "$ROOT/models/oga_room_filler_objects_30"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B96/1.0' \
+            "https://opengameart.org/sites/default/files/roomfillerobjects_1_fbx_gltf_blend_textures.zip" -o "$TMP/roomfillerobjects_1_fbx_gltf_blend_textures.zip"
+          unzip -q "$TMP/roomfillerobjects_1_fbx_gltf_blend_textures.zip" -d "$TMP/room"
+          rsync -a "$TMP/room/" "$ROOT/models/oga_room_filler_objects_30/"
+          meta "oga_room_filler_objects_30" \
+            "https://opengameart.org/content/room-filler-object-1" \
+            "Room Filler Object 1" \
+            "https://opengameart.org/sites/default/files/roomfillerobjects_1_fbx_gltf_blend_textures.zip" \
+            "30 miscellaneous plywood room-filler props with FBX/GLTF/Blend/textures."
+
+          mkdir -p "$TMP/halloween" "$ROOT/models/oga_halloween_props_128"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B96/1.0' \
+            "https://opengameart.org/sites/default/files/halloweenpropassets_fbx_gltf_blend.zip" -o "$TMP/halloweenpropassets_fbx_gltf_blend.zip"
+          unzip -q "$TMP/halloweenpropassets_fbx_gltf_blend.zip" -d "$TMP/halloween"
+          rsync -a "$TMP/halloween/" "$ROOT/models/oga_halloween_props_128/"
+          meta "oga_halloween_props_128" \
+            "https://opengameart.org/content/halloween-props" \
+            "Halloween Props" \
+            "https://opengameart.org/sites/default/files/halloweenpropassets_fbx_gltf_blend.zip" \
+            "128 pumpkins, tombstones, coffin, ghost sheets, signs and overlay/decal-style props; source FBX/GLTF/Blend retained."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B96 — real CC0 interior, bathroom and holiday props
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use these for bathrooms, occupied interiors, festivals, abandoned buildings and seasonal/event dressing. Avoid bulk-importing themed props where they do not fit the permanent world art direction.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B96 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B96 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b96
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 interior holiday props B96"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
