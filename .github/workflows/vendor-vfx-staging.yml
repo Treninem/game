@@ -1,0 +1,212 @@
+name: Vendor source-only CC0 VFX staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-vfx-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-vfx-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and sanitize verified CC0 staging packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/vfx_nonmagic"
+          TMP=".vfx_staging_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$ROOT"
+
+          write_meta() {
+            local target="$1"
+            local key="$2"
+            local source_url="$3"
+            local author="$4"
+            local download_url="$5"
+            local notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source_url
+          Download used by staging workflow: $download_url
+          License: CC0 1.0 Universal / public-domain dedication as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          This staged asset pack is recorded by its source page as CC0. The original author has waived copyright and related rights to the extent permitted by law under the Creative Commons CC0 1.0 Universal public-domain dedication.
+
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside the staged files.
+          EOF
+          }
+
+          import_zip() {
+            local key="$1"
+            local url="$2"
+            local source_url="$3"
+            local author="$4"
+            local notes="$5"
+            local target="$ROOT/$key"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            echo "Downloading $key"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+
+            # Staging still excludes code/executables. Visuals and audio only.
+            rsync -a --prune-empty-dirs \
+              --include='*/' \
+              --include='*.png' --include='*.PNG' \
+              --include='*.jpg' --include='*.JPG' \
+              --include='*.jpeg' --include='*.JPEG' \
+              --include='*.webp' --include='*.WEBP' \
+              --include='*.gif' --include='*.GIF' \
+              --include='*.svg' --include='*.SVG' \
+              --include='*.wav' --include='*.WAV' \
+              --include='*.ogg' --include='*.OGG' \
+              --include='*.mp3' --include='*.MP3' \
+              --include='*.flac' --include='*.FLAC' \
+              --include='*.txt' --include='*.TXT' \
+              --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            write_meta "$target" "$key" "$source_url" "$author" "$url" "$notes"
+          }
+
+          import_file() {
+            local key="$1"
+            local filename="$2"
+            local url="$3"
+            local source_url="$4"
+            local author="$5"
+            local notes="$6"
+            local target="$ROOT/$key"
+            mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 120 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$target/$filename"
+            write_meta "$target" "$key" "$source_url" "$author" "$url" "$notes"
+          }
+
+          import_zip \
+            "oga_para_particlefx_1" \
+            "https://opengameart.org/sites/default/files/para_CC0_particlefx-1.zip" \
+            "https://opengameart.org/content/animated-particle-effects-1" \
+            "para / OpenGameArt" \
+            "14 animated particle-effect variations; 1024x1024 sheets, 128x128 cells, 30 fps, 64 frames. Useful for smoke/fire/general animated effects."
+
+          import_zip \
+            "oga_para_particlefx_2" \
+            "https://opengameart.org/sites/default/files/para_CC0_particlefx-2.zip" \
+            "https://opengameart.org/content/animated-particle-effects-2" \
+            "para / OpenGameArt" \
+            "Animated air bubbles, fire/flame and hit-effect sheets. Main chat should select only effects matching final art direction."
+
+          import_zip \
+            "oga_blender_volumetric_effects" \
+            "https://opengameart.org/sites/default/files/blender-volumetric-particles-effects.zip" \
+            "https://opengameart.org/content/25-special-effects-rendered-with-blender" \
+            "rubberduck / OpenGameArt" \
+            "40 rendered effects across flame, explosion, ring, shockwave and smoke families. Workflow stages rendered images only; Blender project/source files are intentionally excluded."
+
+          import_zip \
+            "oga_cc0_bang_sfx" \
+            "https://opengameart.org/sites/default/files/25-CC0-bang-sfx.zip" \
+            "https://opengameart.org/content/25-cc0-bang-firework-sfx" \
+            "rubberduck / OpenGameArt" \
+            "25 CC0 bang/firework/cannon/explosion recordings plus short shot-like sounds. Audio is staged only and not connected to gameplay."
+
+          import_zip \
+            "kenney_splat_pack" \
+            "https://kenney.nl/media/pages/assets/splat-pack/1070534984-1677495350/kenney_splat-pack.zip" \
+            "https://kenney.nl/assets/splat-pack" \
+            "Kenney" \
+            "30 CC0 splat/VFX textures useful for mud, paint, oil, water, grime, impact residue and other decal candidates."
+
+          # CC0 smoke/vapor textures are separate files on the source page.
+          import_file "oga_smoke_vapor" "smoke1.png" \
+            "https://opengameart.org/sites/default/files/smoke1.png" \
+            "https://opengameart.org/content/smoke-vapor-particles" \
+            "Fupi / OpenGameArt" \
+            "Four soft smoke/vapor textures suitable for steam, dust, clouds, fog wisps and gas particles."
+          import_file "oga_smoke_vapor" "smoke2.png" \
+            "https://opengameart.org/sites/default/files/smoke2.png" \
+            "https://opengameart.org/content/smoke-vapor-particles" \
+            "Fupi / OpenGameArt" \
+            "Four soft smoke/vapor textures suitable for steam, dust, clouds, fog wisps and gas particles."
+          import_file "oga_smoke_vapor" "smoke3.png" \
+            "https://opengameart.org/sites/default/files/smoke3.png" \
+            "https://opengameart.org/content/smoke-vapor-particles" \
+            "Fupi / OpenGameArt" \
+            "Four soft smoke/vapor textures suitable for steam, dust, clouds, fog wisps and gas particles."
+          import_file "oga_smoke_vapor" "smoke4.png" \
+            "https://opengameart.org/sites/default/files/smoke4_0.png" \
+            "https://opengameart.org/content/smoke-vapor-particles" \
+            "Fupi / OpenGameArt" \
+            "Four soft smoke/vapor textures suitable for steam, dust, clouds, fog wisps and gas particles."
+
+          import_file "oga_explosion_atlas" "explosion_atlas_512x512.png" \
+            "https://opengameart.org/sites/default/files/explosion_atlas_512x512.png" \
+            "https://opengameart.org/content/explosion-particles-sprite-atlas" \
+            "TheJosh + Kenney / OpenGameArt" \
+            "Compact 3x3 CC0 explosion atlas derived from Kenney Smoke Particles; useful as a low-cost explosion flipbook candidate."
+
+          rm -rf "$TMP"
+
+          cat > "$ROOT/STAGING_MANIFEST.md" <<'EOF'
+          # Non-magic VFX staging manifest
+
+          These files are source-only staging material. They are intentionally not connected to Godot runtime code by this workflow.
+
+          Staged families:
+          - animated general particles / smoke / fire;
+          - air bubbles and impact sheets;
+          - volumetric-rendered flames, explosions, rings and shockwaves;
+          - explosion/bang audio recordings;
+          - splat/decal candidates for mud, oil, grime, liquids and residues;
+          - soft smoke/vapor textures;
+          - compact explosion atlas.
+
+          Main integration chat should deduplicate against `assets/vfx/third_party/`, choose production-quality subsets, optimize atlases/audio, and only then wire selected assets into gameplay.
+          EOF
+
+          echo "Staged file counts:"
+          for dir in "$ROOT"/*; do
+            [ -d "$dir" ] || continue
+            printf '%s: ' "$dir"
+            find "$dir" -type f | wc -l
+          done
+
+      - name: Commit staging assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/vfx_nonmagic
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): vendor verified CC0 non-magic VFX packs"
+          git pull --rebase origin main
+          git push origin HEAD:main
