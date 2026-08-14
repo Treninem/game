@@ -15,6 +15,10 @@
 - Removed the temporary quest card from the HUD; minimap remains permanently visible.
 - Increased save schema to v5 while preserving useful inventory, exploration and world-state data.
 - Fixed branding generation to use only the canonical selected ImPuls icon source instead of stale chunk fragments.
+- Added the project-owned procedural VFX Core Pack with reusable magic, combat, explosion and collision presets.
+- Added arcane, fire, frost, lightning, poison, heal, holy, dark, portal and shield magic VFX presets.
+- Added small/medium/large explosions plus metal, stone, wood, dirt, glass and water collision effects.
+- Connected melee swing/hit, enemy attack and enemy defeat feedback to the active combat scripts.
 
 ## 0.9.0-stage9 — 2026-08-14
 - Added a permanent in-game minimap with explored terrain, discovered POIs and a directional player marker.
