@@ -31,6 +31,7 @@ WeatherVFX="*res://scripts/weather_vfx.gd"
 WeatherHailVFX="*res://scripts/weather_hail_vfx.gd"
 AmbientVFX="*res://scripts/ambient_vfx.gd"
 NatureVFX="*res://scripts/nature_vfx.gd"
+LandmarkVFX="*res://scripts/landmark_vfx.gd"
 ScreenVFX="*res://scripts/screen_vfx.gd"
 MagicHUD="*res://scripts/magic_hud.gd"
 
