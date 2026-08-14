@@ -2,9 +2,8 @@ extends Control
 
 const WORLD_MAP_VIEW = preload("res://scripts/world_map_view.gd")
 
-var panel: PanelContainer
-var title_label: Label
 var content: VBoxContainer
+var title_label: Label
 var current_section := ""
 
 func _ready() -> void:
@@ -40,8 +39,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _toggle(section: String) -> void:
     if visible and current_section == section:
         close_panel()
-        return
-    open_panel(section)
+    else:
+        open_panel(section)
 
 func open_panel(section: String) -> void:
     current_section = section
@@ -58,16 +57,16 @@ func close_panel() -> void:
 
 func _build_shell() -> void:
     var shade := ColorRect.new()
-    shade.color = Color(0.005, 0.008, 0.014, 0.68)
+    shade.color = Color(0.005, 0.008, 0.014, 0.62)
     shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     add_child(shade)
 
-    panel = PanelContainer.new()
+    var panel := PanelContainer.new()
     panel.set_anchors_preset(Control.PRESET_FULL_RECT)
-    panel.offset_left = 42
-    panel.offset_top = 34
-    panel.offset_right = -42
-    panel.offset_bottom = -34
+    panel.offset_left = 46
+    panel.offset_top = 38
+    panel.offset_right = -46
+    panel.offset_bottom = -38
     panel.add_theme_stylebox_override("panel", _panel_style())
     add_child(panel)
 
@@ -81,7 +80,6 @@ func _build_shell() -> void:
     var root := VBoxContainer.new()
     root.add_theme_constant_override("separation", 10)
     margin.add_child(root)
-
     var header := HBoxContainer.new()
     root.add_child(header)
     title_label = Label.new()
@@ -93,8 +91,8 @@ func _build_shell() -> void:
     hint.modulate = Color(0.58, 0.68, 0.78)
     hint.add_theme_font_size_override("font_size", 12)
     header.add_child(hint)
-
     root.add_child(HSeparator.new())
+
     var scroll := ScrollContainer.new()
     scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
     scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -115,11 +113,10 @@ func _rebuild_content() -> void:
         _: close_panel()
 
 func _show_inventory() -> void:
-    title_label.text = "Инвентарь и экипировка"
+    title_label.text = "Инвентарь"
     var equipped := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
     var equipped_name := "Нет" if equipped.is_empty() else String(InventorySystem.item_info(equipped).get("name", equipped))
-    _info("Экипировано", "%s   •   бонус атаки +%.0f" % [equipped_name, InventorySystem.attack_bonus()])
-
+    _info("Оружие", "%s   •   бонус атаки +%.0f" % [equipped_name, InventorySystem.attack_bonus()])
     var rows := InventorySystem.inventory_rows()
     if rows.is_empty():
         _text("Инвентарь пуст.")
@@ -143,20 +140,17 @@ func _show_inventory() -> void:
         desc.modulate = Color(0.70, 0.76, 0.84)
         desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
         stack.add_child(desc)
-
         var item_id := String(info.get("id", ""))
         var equip_slot := String(info.get("equip_slot", ""))
         if not equip_slot.is_empty():
-            var txt := "Экипировано" if InventorySystem.equipped_item(equip_slot) == item_id else "Экипировать"
-            var b := _button(txt, Callable(self, "_equip").bind(item_id), row)
-            b.custom_minimum_size.x = 145
+            var label := "Экипировано" if InventorySystem.equipped_item(equip_slot) == item_id else "Экипировать"
+            _button(label, Callable(self, "_equip").bind(item_id), row).custom_minimum_size.x = 145
         elif item_id in ["berries", "water_flask", "raw_meat", "cooked_meat"]:
-            var use := _button("Использовать", Callable(self, "_use_item").bind(item_id), row)
-            use.custom_minimum_size.x = 135
+            _button("Использовать", Callable(self, "_use_item").bind(item_id), row).custom_minimum_size.x = 135
 
 func _show_map() -> void:
     title_label.text = "Карта мира"
-    _text("Открытые территории показаны цветом. Неисследованные области остаются скрытыми. Голубой маркер — персонаж.")
+    _text("Открытые территории показаны цветом; неисследованные остаются скрытыми. Мини-карта всегда остаётся на игровом HUD.")
     var map := WORLD_MAP_VIEW.new()
     map.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     map.custom_minimum_size.y = 560
@@ -164,12 +158,8 @@ func _show_map() -> void:
 
 func _show_crafting() -> void:
     title_label.text = "Крафт"
-    _text("Рецепты доступны напрямую из игры. Материалы списываются только после успешного создания.")
-    var recipes := InventorySystem.available_recipes()
-    if recipes.is_empty():
-        _text("Пока нет изученных рецептов.")
-        return
-    for recipe in recipes:
+    _text("Пока доступны только небольшие походные рецепты. Строительство зданий будет подключено после завершения мира, столицы и правил участков.")
+    for recipe in InventorySystem.available_recipes():
         var card := PanelContainer.new()
         card.add_theme_stylebox_override("panel", _row_style())
         content.add_child(card)
@@ -186,26 +176,9 @@ func _show_crafting() -> void:
         craft.disabled = not bool(recipe.get("can_craft", false))
 
 func _show_journal() -> void:
-    title_label.text = "Журнал заданий"
-    var intro_status := "Не начато"
-    if GameState.quest_stage > 0 and GameState.quest_stage < 4:
-        intro_status = "Активно"
-    elif GameState.quest_stage >= 4:
-        intro_status = "Завершено"
-    _info("Первое убежище  •  " + intro_status, GameState.quest_text() if GameState.quest_stage < 4 else "Поручение Миры завершено.")
-
-    var city_status := "Не начато"
-    if GameState.city_quest_stage == 1:
-        city_status = "Активно"
-    elif GameState.city_quest_stage >= 2:
-        city_status = "Завершено"
-    var city_text := "Поговорите с кузнецом Раданом."
-    if GameState.city_quest_stage == 1:
-        city_text = "Принесите 6 камня и 4 древесины для ремонта ворот."
-    elif GameState.city_quest_stage >= 2:
-        city_text = "Ремонт ворот завершён, награда получена."
-    _info("Ремонт Южных ворот  •  " + city_status, city_text)
-    _text("Монеты: %d   •   Репутация Люменграда: %d   •   Побеждено существ: %d" % [GameState.coins, GameState.city_reputation, GameState.enemies_defeated])
+    title_label.text = "Журнал"
+    _info("Разработка мира", "Сюжетные и стартовые задания временно отключены. Сначала завершаются столица, дороги, леса, поля, водоёмы, поселения и остальные основные локации.")
+    _text("После стабилизации мира задания будут привязаны к реальным местам и событиям, а не к временным тестовым объектам.")
 
 func _equip(item_id: String) -> void:
     InventorySystem.equip(item_id)
