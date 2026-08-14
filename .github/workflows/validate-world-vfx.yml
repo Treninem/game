@@ -11,6 +11,7 @@ on:
       - "scripts/ambient_vfx.gd"
       - "scripts/nature_vfx.gd"
       - "scripts/world_effect_emitter.gd"
+      - "scripts/landmark_vfx.gd"
       - "scripts/screen_vfx.gd"
       - "scripts/environment_mark_pool.gd"
       - "scripts/player_controller.gd"
@@ -54,12 +55,14 @@ jobs:
           test -s scripts/ambient_vfx.gd
           test -s scripts/nature_vfx.gd
           test -s scripts/world_effect_emitter.gd
+          test -s scripts/landmark_vfx.gd
           test -s scripts/screen_vfx.gd
           test -s scripts/environment_mark_pool.gd
           grep -Fq 'WorldVFX="*res://scripts/world_vfx.gd"' project.godot
           grep -Fq 'WeatherVFX="*res://scripts/weather_vfx.gd"' project.godot
           grep -Fq 'AmbientVFX="*res://scripts/ambient_vfx.gd"' project.godot
           grep -Fq 'NatureVFX="*res://scripts/nature_vfx.gd"' project.godot
+          grep -Fq 'LandmarkVFX="*res://scripts/landmark_vfx.gd"' project.godot
           grep -Fq 'ScreenVFX="*res://scripts/screen_vfx.gd"' project.godot
           grep -Fq 'spawn_footstep' scripts/player_controller.gd
           grep -Fq 'spawn_landing' scripts/player_controller.gd
@@ -70,3 +73,5 @@ jobs:
           grep -Fq 'GroundMist' scripts/nature_vfx.gd
           grep -Fq 'SeaSpray' scripts/nature_vfx.gd
           grep -Fq 'class_name WorldEffectEmitter' scripts/world_effect_emitter.gd
+          grep -Fq 'ForgeChimney' scripts/landmark_vfx.gd
+          grep -Fq 'FountainWater' scripts/landmark_vfx.gd
