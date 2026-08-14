@@ -1,0 +1,88 @@
+name: Vendor source-chat B20 real CC0 containers Godot sources
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b20.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b20
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 container model sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b20/models/oga_containers_pack"
+          TMP=".sourcechat_b20_tmp"
+          rm -rf "$TMP" "$ROOT"
+          mkdir -p "$ROOT/godot_ready" "$ROOT/source" "$TMP/godot" "$TMP/source"
+          GODOT_URL="https://opengameart.org/sites/default/files/containerpack_godot.zip"
+          SOURCE_URL="https://opengameart.org/sites/default/files/containerspack_blend_fbx_gltf_textures.zip"
+          PAGE="https://opengameart.org/content/containers-pack"
+
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 480 -A 'ImPuls-CC0-SourceChat-B20/1.0' "$GODOT_URL" -o "$TMP/godot.zip"
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 480 -A 'ImPuls-CC0-SourceChat-B20/1.0' "$SOURCE_URL" -o "$TMP/source.zip"
+          unzip -q "$TMP/godot.zip" -d "$TMP/godot"
+          unzip -q "$TMP/source.zip" -d "$TMP/source"
+
+          rsync -a --prune-empty-dirs --include='*/' --include='*.tscn' --include='*.tres' --include='*.res' --include='*.material' --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' --include='*.blend' --include='*.BLEND' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*.gd' --exclude='*.cs' --exclude='*.dll' --exclude='*.exe' --exclude='*' "$TMP/godot/" "$ROOT/godot_ready/"
+          rsync -a --prune-empty-dirs --include='*/' --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' --include='*.blend' --include='*.BLEND' --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$TMP/source/" "$ROOT/source/"
+
+          cat > "$ROOT/SOURCE.md" <<EOF
+          # Source
+
+          Pack: Containers Pack
+          Author: loafbrr_1 / OpenGameArt
+          Source page: $PAGE
+          Godot-ready archive: $GODOT_URL
+          Source archive: $SOURCE_URL
+          License: CC0 / Creative Commons Zero as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+
+          Source page: 34 combinations — 3 propane tanks, 9 oxygen tanks, 7 gas cans, 6 water drums, 6 water jugs and 3 water tanks; 1K textures; collision already set up in Godot; total source tris 52826.
+          Third-party executable scripts excluded.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks Containers Pack as Creative Commons Zero / CC0.
+          https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          cat > "assets/staging/sourcechat_b20/README.md" <<'EOF'
+          # Source chat B20 — real CC0 Containers Pack
+
+          Real Godot-ready resources and FBX/GLTF/Blend/1K-texture source files are staged here. No runtime integration is performed.
+          Main chat should select container variants by world context and reuse provided collision meshes/resources after inspection.
+          EOF
+          rm -rf "$TMP"
+          find assets/staging/sourcechat_b20 -type f | wc -l
+          du -sh assets/staging/sourcechat_b20
+
+      - name: Commit B20 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b20
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 containers Godot sources B20"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 2))
+          done
+          exit 1
