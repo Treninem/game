@@ -1,5 +1,7 @@
 extends Control
 
+const APP_ICON = preload("res://assets/branding/impuls_icon.svg")
+
 const ACTION_LABELS := {
     "move_forward": "Движение вперёд",
     "move_back": "Движение назад",
@@ -24,7 +26,6 @@ var update_status: Label
 var apply_update_button: Button
 var awaiting_action := ""
 var rebinding_label: Label
-var initial_open := true
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -32,7 +33,6 @@ func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     _build_shell()
     UpdateManager.status_changed.connect(_on_update_status_changed)
-    SettingsManager.bindings_changed.connect(_refresh_current_if_controls)
     call_deferred("open_menu")
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -57,8 +57,6 @@ func open_menu() -> void:
     _show_main()
 
 func close_menu() -> void:
-    if initial_open:
-        initial_open = false
     awaiting_action = ""
     visible = false
     get_tree().paused = false
@@ -66,21 +64,22 @@ func close_menu() -> void:
 
 func _build_shell() -> void:
     var backdrop := ColorRect.new()
-    backdrop.color = Color(0.015, 0.02, 0.035, 0.94)
+    backdrop.color = Color(0.008, 0.012, 0.022, 0.94)
     backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     add_child(backdrop)
 
     panel = PanelContainer.new()
-    panel.custom_minimum_size = Vector2(760, 560)
+    panel.custom_minimum_size = Vector2(760, 600)
     panel.set_anchors_preset(Control.PRESET_CENTER)
-    panel.position = Vector2(-380, -280)
+    panel.position = Vector2(-380, -300)
+    panel.add_theme_stylebox_override("panel", _panel_style())
     add_child(panel)
 
     var margin := MarginContainer.new()
-    margin.add_theme_constant_override("margin_left", 28)
-    margin.add_theme_constant_override("margin_right", 28)
-    margin.add_theme_constant_override("margin_top", 24)
-    margin.add_theme_constant_override("margin_bottom", 24)
+    margin.add_theme_constant_override("margin_left", 34)
+    margin.add_theme_constant_override("margin_right", 34)
+    margin.add_theme_constant_override("margin_top", 26)
+    margin.add_theme_constant_override("margin_bottom", 26)
     panel.add_child(margin)
 
     content = VBoxContainer.new()
@@ -92,41 +91,62 @@ func _clear_content() -> void:
     for child in content.get_children():
         child.queue_free()
 
-func _title(text: String) -> void:
-    var label := Label.new()
-    label.text = text
-    label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    label.add_theme_font_size_override("font_size", 28)
-    content.add_child(label)
+func _brand_header(section_title: String = "") -> void:
+    var row := HBoxContainer.new()
+    row.alignment = BoxContainer.ALIGNMENT_CENTER
+    row.add_theme_constant_override("separation", 12)
+    content.add_child(row)
+    var icon := TextureRect.new()
+    icon.texture = APP_ICON
+    icon.custom_minimum_size = Vector2(54, 54)
+    icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    row.add_child(icon)
+    var stack := VBoxContainer.new()
+    row.add_child(stack)
+    var brand := Label.new()
+    brand.text = "ImPuls"
+    brand.add_theme_font_size_override("font_size", 28)
+    stack.add_child(brand)
+    if not section_title.is_empty():
+        var section := Label.new()
+        section.text = section_title
+        section.modulate = Color(0.56, 0.76, 0.93)
+        section.add_theme_font_size_override("font_size", 13)
+        stack.add_child(section)
 
 func _subtitle(text: String) -> Label:
     var label := Label.new()
     label.text = text
     label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    label.modulate = Color(0.72, 0.78, 0.86)
     content.add_child(label)
     return label
 
 func _button(text: String, callback: Callable) -> Button:
     var button := Button.new()
     button.text = text
-    button.custom_minimum_size.y = 42
+    button.custom_minimum_size.y = 44
+    button.add_theme_font_size_override("font_size", 16)
+    button.add_theme_stylebox_override("normal", _button_style(Color(0.055, 0.075, 0.11, 0.96), Color(0.18, 0.38, 0.55, 0.7)))
+    button.add_theme_stylebox_override("hover", _button_style(Color(0.075, 0.12, 0.18, 1.0), Color(0.25, 0.70, 0.92, 0.95)))
+    button.add_theme_stylebox_override("pressed", _button_style(Color(0.08, 0.09, 0.17, 1.0), Color(0.48, 0.34, 0.92, 1.0)))
     button.pressed.connect(callback)
     content.add_child(button)
     return button
 
-func _back_button(callback: Callable = Callable(self, "_show_main")) -> void:
+func _back_button(callback: Callable) -> void:
     var spacer := Control.new()
-    spacer.custom_minimum_size.y = 8
+    spacer.custom_minimum_size.y = 6
     content.add_child(spacer)
     _button("← Назад", callback)
 
 func _show_main() -> void:
     _clear_content()
-    _title("ImPuls")
-    _subtitle("Версия %s • %s" % [String(ProjectSettings.get_setting("application/config/version", "development")), UpdateManager.local_build_tag()])
-    _button("Продолжить", Callable(self, "close_menu"))
-    _button("Сохранения — 10 слотов", Callable(self, "_show_saves"))
+    _brand_header("ГЛАВНОЕ МЕНЮ")
+    _subtitle("Версия %s  •  %s" % [String(ProjectSettings.get_setting("application/config/version", "development")), UpdateManager.local_build_tag()])
+    _button("Продолжить игру", Callable(self, "close_menu"))
+    _button("Сохранения  •  10 слотов", Callable(self, "_show_saves"))
     _button("Настройки", Callable(self, "_show_settings"))
     _button("Проверить обновления", Callable(UpdateManager, "check_for_updates"))
     update_status = _subtitle("Обновления ещё не проверялись.")
@@ -142,25 +162,26 @@ func _on_update_status_changed(text: String, available: bool) -> void:
 
 func _show_saves() -> void:
     _clear_content()
-    _title("Сохранения")
-    _subtitle("Можно создать, перезаписать, загрузить или удалить любой из 10 независимых слотов.")
+    _brand_header("СОХРАНЕНИЯ")
+    _subtitle("10 независимых слотов: создание, перезапись, загрузка и удаление.")
     var scroll := ScrollContainer.new()
     scroll.custom_minimum_size.y = 390
     content.add_child(scroll)
     var list := VBoxContainer.new()
     list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    list.add_theme_constant_override("separation", 7)
     scroll.add_child(list)
 
     for info in SaveManager.list_slots():
         var slot := int(info["slot"])
         var row := HBoxContainer.new()
-        row.add_theme_constant_override("separation", 8)
+        row.add_theme_constant_override("separation", 7)
         list.add_child(row)
 
         var label := Label.new()
         label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
         if bool(info.get("exists", false)):
-            label.text = "Слот %02d  •  %s  •  время мира %s  •  этап задания %d" % [slot, String(info.get("saved_at", "")), String(info.get("world_time", "--:--")), int(info.get("quest_stage", 0))]
+            label.text = "Слот %02d  •  %s  •  %s  •  задание %d" % [slot, String(info.get("saved_at", "")), String(info.get("world_time", "--:--")), int(info.get("quest_stage", 0))]
         else:
             label.text = "Слот %02d  •  пусто" % slot
         row.add_child(label)
@@ -181,7 +202,7 @@ func _show_saves() -> void:
         delete_button.disabled = not bool(info.get("exists", false))
         delete_button.pressed.connect(Callable(self, "_delete_slot").bind(slot))
         row.add_child(delete_button)
-    _back_button()
+    _back_button(Callable(self, "_show_main"))
 
 func _save_to_slot(slot: int) -> void:
     var player := get_tree().get_first_node_in_group("player") as Node3D
@@ -201,18 +222,18 @@ func _delete_slot(slot: int) -> void:
 
 func _show_settings() -> void:
     _clear_content()
-    _title("Настройки")
+    _brand_header("НАСТРОЙКИ")
     _button("Управление", Callable(self, "_show_controls"))
     _button("Графика", Callable(self, "_show_graphics"))
     _button("Звук", Callable(self, "_show_audio"))
     _button("Игра и интерфейс", Callable(self, "_show_other"))
-    _button("Сбросить всё по умолчанию", Callable(self, "_reset_settings"))
-    _back_button()
+    _button("Сбросить настройки", Callable(self, "_reset_settings"))
+    _back_button(Callable(self, "_show_main"))
 
 func _show_controls() -> void:
     _clear_content()
-    _title("Управление")
-    rebinding_label = _subtitle("Нажмите кнопку действия, затем новую клавишу или кнопку мыши.")
+    _brand_header("УПРАВЛЕНИЕ")
+    rebinding_label = _subtitle("Нажмите действие, затем новую клавишу или кнопку мыши.")
     var scroll := ScrollContainer.new()
     scroll.custom_minimum_size.y = 390
     content.add_child(scroll)
@@ -236,15 +257,11 @@ func _show_controls() -> void:
 func _begin_rebind(action: String) -> void:
     awaiting_action = action
     if is_instance_valid(rebinding_label):
-        rebinding_label.text = "Ожидание новой кнопки для: %s" % String(ACTION_LABELS.get(action, action))
-
-func _refresh_current_if_controls() -> void:
-    if visible and not awaiting_action.is_empty():
-        return
+        rebinding_label.text = "Нажмите новую кнопку для: %s" % String(ACTION_LABELS.get(action, action))
 
 func _show_graphics() -> void:
     _clear_content()
-    _title("Графика")
+    _brand_header("ГРАФИКА")
     _add_checkbox("Полноэкранный режим", bool(SettingsManager.get_value("graphics", "fullscreen")), Callable(self, "_set_setting_bool").bind("graphics", "fullscreen"))
     _add_checkbox("Вертикальная синхронизация (VSync)", bool(SettingsManager.get_value("graphics", "vsync")), Callable(self, "_set_setting_bool").bind("graphics", "vsync"))
 
@@ -255,7 +272,7 @@ func _show_graphics() -> void:
     res_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     resolution_row.add_child(res_label)
     var resolutions := OptionButton.new()
-    var options := [Vector2i(1280,720), Vector2i(1600,900), Vector2i(1920,1080), Vector2i(2560,1440)]
+    var options := [Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080), Vector2i(2560, 1440)]
     var current := Vector2i(int(SettingsManager.get_value("graphics", "resolution_width")), int(SettingsManager.get_value("graphics", "resolution_height")))
     for i in range(options.size()):
         var r: Vector2i = options[i]
@@ -272,7 +289,7 @@ func _show_graphics() -> void:
 
 func _show_audio() -> void:
     _clear_content()
-    _title("Звук")
+    _brand_header("ЗВУК")
     _add_slider("Общая громкость", float(SettingsManager.get_value("audio", "master_volume")), 0.0, 1.0, 0.05, Callable(self, "_set_setting_float").bind("audio", "master_volume"))
     _add_slider("Музыка", float(SettingsManager.get_value("audio", "music_volume")), 0.0, 1.0, 0.05, Callable(self, "_set_setting_float").bind("audio", "music_volume"))
     _add_slider("Эффекты", float(SettingsManager.get_value("audio", "sfx_volume")), 0.0, 1.0, 0.05, Callable(self, "_set_setting_float").bind("audio", "sfx_volume"))
@@ -281,7 +298,7 @@ func _show_audio() -> void:
 
 func _show_other() -> void:
     _clear_content()
-    _title("Игра и интерфейс")
+    _brand_header("ИГРА И ИНТЕРФЕЙС")
     _add_slider("Чувствительность мыши", float(SettingsManager.get_value("gameplay", "mouse_sensitivity")), 0.001, 0.01, 0.0005, Callable(self, "_set_setting_float").bind("gameplay", "mouse_sensitivity"))
     _add_slider("Поле зрения (FOV)", float(SettingsManager.get_value("gameplay", "camera_fov")), 60.0, 100.0, 1.0, Callable(self, "_set_setting_float").bind("gameplay", "camera_fov"))
     _add_slider("Автосохранение, секунд", float(SettingsManager.get_value("gameplay", "autosave_seconds")), 30.0, 300.0, 30.0, Callable(self, "_set_setting_float").bind("gameplay", "autosave_seconds"))
@@ -330,3 +347,23 @@ func _set_resolution(index: int, option: OptionButton) -> void:
 func _reset_settings() -> void:
     SettingsManager.reset_defaults()
     _show_settings()
+
+func _panel_style() -> StyleBoxFlat:
+    var style := StyleBoxFlat.new()
+    style.bg_color = Color(0.025, 0.035, 0.055, 0.98)
+    style.border_color = Color(0.15, 0.50, 0.70, 0.72)
+    style.set_border_width_all(1)
+    style.set_corner_radius_all(14)
+    style.shadow_color = Color(0, 0, 0, 0.55)
+    style.shadow_size = 22
+    return style
+
+func _button_style(bg: Color, border: Color) -> StyleBoxFlat:
+    var style := StyleBoxFlat.new()
+    style.bg_color = bg
+    style.border_color = border
+    style.set_border_width_all(1)
+    style.set_corner_radius_all(8)
+    style.content_margin_left = 14
+    style.content_margin_right = 14
+    return style
