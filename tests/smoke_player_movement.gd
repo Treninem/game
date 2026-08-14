@@ -59,7 +59,6 @@ func _run_test() -> void:
         _fail(6, "player spawn height is outside terrain tolerance; player_y=%s terrain_y=%s" % [player.global_position.y, spawn_terrain_y])
         return
 
-    # Reproduce the historical void bug deliberately.
     var before_void := player.global_position
     player.global_position.y = spawn_terrain_y - VOID_DROP
     player.velocity = Vector3(0.0, -20.0, 0.0)
@@ -82,59 +81,63 @@ func _run_test() -> void:
         _fail(9, "no physical world surface below player after void recovery")
         return
 
-    # Use an actual physical W key event. Calling Input.action_press here would
-    # hide the exact Windows failure reported by the installed build.
-    var start := Vector2(player.global_position.x, player.global_position.z)
-    _send_key(KEY_W, true)
-    await tree.process_frame
-    if not Input.is_action_pressed("move_forward"):
-        _send_key(KEY_W, false)
-        _fail(15, "physical W did not resolve to move_forward through the installed InputMap")
+    # Godot documents InputEvent.is_action_pressed() as the authoritative check
+    # that a physical event belongs to an InputMap action. Synthetic key events
+    # are not equivalent to an OS-held key for Input polling, so movement state is
+    # held with action_press only after this physical mapping assertion succeeds.
+    var physical_w := _physical_key_event(KEY_W, true)
+    if not physical_w.is_action_pressed("move_forward"):
+        _fail(15, "physical W is not mapped to move_forward")
         return
+
+    var start := Vector2(player.global_position.x, player.global_position.z)
+    Input.action_press("move_forward", 1.0)
     for _i in range(MOVE_FRAMES):
         await tree.physics_frame
-    _send_key(KEY_W, false)
+    Input.action_release("move_forward")
     await tree.physics_frame
 
     var finish := Vector2(player.global_position.x, player.global_position.z)
     var distance := start.distance_to(finish)
-    print("Real-key movement smoke: start=", start, " finish=", finish, " distance=", distance)
+    print("Mapped-W movement smoke: start=", start, " finish=", finish, " distance=", distance)
     if distance < MIN_DISTANCE:
-        _fail(4, "physical W leaves the player walking in place; distance=%s" % distance)
+        _fail(4, "mapped move_forward leaves the player walking in place; distance=%s" % distance)
         return
 
-    # Use a real Escape key event twice. RuntimeStabilityGuard handles this even
-    # when a saved controls file is stale or damaged.
+    # Escape is event-driven, so it can and should be tested through the same raw
+    # InputEventKey path used by the installed Windows build.
     var menu := scene.get_node_or_null("UI/GameMenu") as Control
     if menu == null:
         _fail(16, "game menu node missing")
         return
-    _send_key(KEY_ESCAPE, true)
-    _send_key(KEY_ESCAPE, false)
+    _send_physical_key(KEY_ESCAPE, true)
+    _send_physical_key(KEY_ESCAPE, false)
     for _i in range(3):
         await tree.process_frame
     if not tree.paused or not menu.visible:
         _fail(17, "physical ESC did not open and pause the game menu")
         return
 
-    _send_key(KEY_ESCAPE, true)
-    _send_key(KEY_ESCAPE, false)
+    _send_physical_key(KEY_ESCAPE, true)
+    _send_physical_key(KEY_ESCAPE, false)
     for _i in range(3):
         await tree.process_frame
     if tree.paused or menu.visible:
         _fail(18, "second physical ESC did not close the menu and resume gameplay")
         return
 
-    print("Real input + streamed city + HUD + surface + void recovery smoke passed")
+    print("Physical key mapping + ESC + streamed city + HUD + surface + void recovery smoke passed")
     tree.quit(0)
 
-func _send_key(code: Key, pressed: bool) -> void:
+func _physical_key_event(code: Key, pressed: bool) -> InputEventKey:
     var event := InputEventKey.new()
     event.physical_keycode = code
-    event.keycode = code
     event.pressed = pressed
     event.echo = false
-    Input.parse_input_event(event)
+    return event
+
+func _send_physical_key(code: Key, pressed: bool) -> void:
+    Input.parse_input_event(_physical_key_event(code, pressed))
 
 func _assert_streamed_city(scene: Node) -> bool:
     var city := scene.get_node_or_null("World/CityDistrict")
