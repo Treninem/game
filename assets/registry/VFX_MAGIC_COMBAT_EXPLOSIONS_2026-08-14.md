@@ -3,7 +3,7 @@
 Date: 2026-08-14
 Repository: `Treninem/game`
 
-## Physically integrated now
+## Physically integrated runtime core
 
 Project-owned procedural Godot VFX Core Pack:
 - implementation: `scripts/vfx_library.gd`;
@@ -12,7 +12,7 @@ Project-owned procedural Godot VFX Core Pack:
 - player melee swing + hit impact integrated in `scripts/player_controller.gd`;
 - enemy attack + defeat feedback integrated in `scripts/enemy.gd`.
 
-### Coverage
+### Runtime coverage
 
 Magic: arcane, fire, frost, lightning, poison, heal, holy, dark, portal, shield.
 
@@ -22,37 +22,51 @@ Explosions: small, medium, large; each composed from flash + hot particles + deb
 
 Collisions/surface impacts: metal, stone, wood, dirt, glass, water.
 
-## Approved external CC0 enhancement sources — NOT physically imported yet
+## Physically imported third-party CC0 VFX packs
 
-These sources are approved for future texture/flipbook enrichment. The status must remain `approved-not-imported` until binaries and license/source metadata are actually committed.
+All packs below are now physically present under `assets/vfx/third_party/`. Each imported pack contains generated `SOURCE.md` and `LICENSE.txt` metadata. The vendor workflow copies only image files and human-readable metadata and excludes executables/scripts.
 
 ### Kenney Particle Pack
-- Status: approved-not-imported.
+- Status: imported.
 - License: CC0.
-- Intended target: `assets/vfx/third_party/kenney_particle_pack/`.
+- Path: `assets/vfx/third_party/kenney_particle_pack/`.
 - Coverage: generic particles; magic, fire/flame, light, smoke, sparks, slash, scorch, traces and related sprites.
 - Source: https://www.kenney.nl/assets/particle-pack
 
 ### Kenney Smoke Particles
-- Status: approved-not-imported.
+- Status: imported.
 - License: CC0.
-- Intended target: `assets/vfx/third_party/kenney_smoke_particles/`.
+- Path: `assets/vfx/third_party/kenney_smoke_particles/`.
 - Coverage: smoke and explosion sprites.
 - Source: https://www.kenney.nl/assets/smoke-particles
 
 ### OpenGameArt — 2D Spell Effects by Mikodrak
-- Status: approved-not-imported.
+- Status: imported.
 - License: CC0.
-- Intended target: `assets/vfx/third_party/oga_2d_spell_effects/`.
+- Path: `assets/vfx/third_party/oga_2d_spell_effects/`.
 - Coverage: spell effects including fire, lightning, explosion and rain.
 - Source: https://opengameart.org/content/2d-spell-effects
 
 ### OpenGameArt — Earth Impact - Magic Effect by Cethiel
-- Status: approved-not-imported.
+- Status: imported.
 - License: CC0.
-- Intended target: `assets/vfx/third_party/oga_earth_impact/`.
+- Path: `assets/vfx/third_party/oga_earth_impact/`.
 - Coverage: multiple earth-impact magic effects.
 - Source: https://opengameart.org/content/earth-impact-magic-effect
+
+### OpenGameArt — Weapon Slash - Effect by Cethiel
+- Status: imported.
+- License: CC0.
+- Path: `assets/vfx/third_party/oga_weapon_slash/`.
+- Coverage: animated weapon movement, slash and hit effects with multiple variants.
+- Source: https://opengameart.org/content/weapon-slash-effect
+
+### OpenGameArt — Arcane Magic Effect by Cethiel
+- Status: imported.
+- License: CC0.
+- Path: `assets/vfx/third_party/oga_arcane_magic/`.
+- Coverage: arcane projectile/spell effects.
+- Source: https://opengameart.org/content/arcane-magic-effect
 
 ## Required next VFX coverage
 
@@ -71,8 +85,8 @@ When magic gameplay is implemented, extend the same library rather than creating
 ## Production rules
 
 1. Gameplay emits semantic VFX events (`hit_slash`, `magic_fire`, `collision_metal`) rather than hard-coding a specific third-party texture.
-2. Imported CC0 flipbooks/sprites may decorate existing presets without changing combat logic.
+2. Imported CC0 flipbooks/sprites decorate existing presets without changing combat logic.
 3. VFX quality must scale through settings/LOD: particle amount, light flashes, smoke density and decal persistence.
 4. Short combat VFX must self-delete and avoid persistent lights.
 5. Large effects need distance culling and reduced far-LOD variants.
-6. No external pack may be marked `imported` unless its actual files plus `SOURCE.md`/`LICENSE.txt` exist in the repository.
+6. Every third-party pack keeps `SOURCE.md`/`LICENSE.txt` beside its files.
