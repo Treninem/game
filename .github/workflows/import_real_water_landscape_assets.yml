@@ -1,0 +1,252 @@
+name: Import real CC0 water and landscape source packs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import_real_water_landscape_assets.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-water-landscape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified source assets
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ROOT="assets/source_packs/opengameart/water_landscape"
+          mkdir -p \
+            "$ROOT/water_surfaces" \
+            "$ROOT/pond_kit" \
+            "$ROOT/reeds" \
+            "$ROOT/marsh_plants" \
+            "$ROOT/waterlilies" \
+            "$ROOT/bridges/wooden" \
+            "$ROOT/bridges/stone" \
+            "$ROOT/bridges/concrete" \
+            "$ROOT/bridges/modular" \
+            "$ROOT/bridges/suspension_hanging" \
+            "$ROOT/playground_swings"
+
+          fetch() {
+            local url="$1"
+            local out="$2"
+            echo "Downloading: $url"
+            curl -A 'Mozilla/5.0 (compatible; Treninem-game-asset-mirror/1.0)' \
+              -L --fail --retry 5 --retry-delay 3 --retry-all-errors \
+              "$url" -o "$out"
+            test -s "$out"
+          }
+
+          # Water, ponds, swamps, stream/river/lake source surfaces.
+          fetch 'https://opengameart.org/sites/default/files/all_tiles.zip' \
+            "$ROOT/water_surfaces/water_pack_1_all_tiles.zip"
+          fetch 'https://opengameart.org/sites/default/files/free_pond_kit_assetquest.zip' \
+            "$ROOT/pond_kit/free_pond_kit_assetquest.zip"
+
+          # Reeds / marsh vegetation / water lilies.
+          fetch 'https://opengameart.org/sites/default/files/reed.zip' \
+            "$ROOT/reeds/lowpoly_reed.zip"
+          fetch 'https://opengameart.org/sites/default/files/plant.zip' \
+            "$ROOT/marsh_plants/plants_low_poly.zip"
+          fetch 'https://opengameart.org/sites/default/files/waterlily.zip' \
+            "$ROOT/waterlilies/lowpoly_waterlily.zip"
+          fetch 'https://opengameart.org/sites/default/files/water_lilly_0.blend' \
+            "$ROOT/waterlilies/lily_pads_lod_collision.blend"
+
+          # Bridges and small bridge variants.
+          fetch 'https://opengameart.org/sites/default/files/003_bridge.zip' \
+            "$ROOT/bridges/wooden/wooden_bridge.zip"
+          fetch 'https://opengameart.org/sites/default/files/005_stone_bridge.zip' \
+            "$ROOT/bridges/stone/stone_bridge.zip"
+          fetch 'https://opengameart.org/sites/default/files/concrete_bridge.zip' \
+            "$ROOT/bridges/concrete/concrete_bridge.zip"
+          fetch 'https://opengameart.org/sites/default/files/Bridging.zip' \
+            "$ROOT/bridges/modular/bridges_and_stuff.zip"
+          fetch 'https://opengameart.org/sites/default/files/50_rpg_asset_models.blend' \
+            "$ROOT/bridges/suspension_hanging/50_fantasy_rpg_models_with_hanging_bridges.blend"
+
+          # Playground objects; archive contains every object exported as glTF.
+          fetch 'https://opengameart.org/sites/default/files/Playground.zip' \
+            "$ROOT/playground_swings/playground.zip"
+
+          find "$ROOT" -type f -size 0 -print -quit | grep -q . && {
+            echo 'ERROR: zero-byte downloaded asset detected'
+            exit 1
+          } || true
+
+          find "$ROOT" -type f \
+            \( -name '*.zip' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' -o -name '*.png' \) \
+            -print0 | sort -z | xargs -0 sha256sum > "$ROOT/SHA256SUMS.txt"
+
+      - name: Write provenance and license metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/water_landscape"
+
+          cat > "$ROOT/README.md" <<'EOF'
+          # Water and landscape source assets (CC0)
+
+          Real third-party source packs mirrored for later curation by the main game-development chat.
+
+          IMPORTANT: this directory is source/staging storage only. Nothing here is wired into Godot scenes, scripts, project settings, runtime resources, maps, or installer builds by this workflow.
+
+          Requested coverage:
+          - rivers / lakes / streams: reusable water-surface texture sources plus separate water meshes from the pond kit;
+          - ponds / swamps: pond kit, muddy/swamp water texture sources and marsh vegetation;
+          - reeds: dedicated low-poly reed model plus additional low-poly plant pack;
+          - water lilies / lily pads: two independent CC0 3D sources;
+          - bridges / small bridges: wooden, stone, concrete and modular bridge packs;
+          - suspension / hanging bridges: CC0 fantasy-RPG model pack explicitly tagged suspension + hanging + bridge;
+          - swings / playground: CC0 Playground archive with per-object glTF exports.
+
+          All mirrored sources listed below were selected from source pages that explicitly state CC0. Source URLs are retained for provenance.
+          EOF
+
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          License status for the mirrored files in this folder: CC0 / public-domain dedication according to each linked source page.
+          Attribution is not required by CC0, but author/source metadata is retained voluntarily for provenance and future auditing.
+          See every SOURCE.md before promoting an asset into production folders.
+          EOF
+
+          cat > "$ROOT/water_surfaces/SOURCE.md" <<'EOF'
+          Name: Water Pack 1
+          Author: TheDikTatorTot
+          Source: https://opengameart.org/content/water-pack-1
+          License: CC0
+          Original file: all_tiles.zip
+          Intended staging use: water-surface references/textures for rivers, lakes, streams, ponds and swamp variants after curation.
+          EOF
+
+          cat > "$ROOT/pond_kit/SOURCE.md" <<'EOF'
+          Name: Free Lowpoly Pond Kit
+          Author: AssetQuest
+          Source: https://opengameart.org/content/free-lowpoly-pond-kit
+          License: CC0
+          Original file: free_pond_kit_assetquest.zip
+          Notes: separate water meshes, props and plant meshes suitable for pond/wetland scene construction.
+          EOF
+
+          cat > "$ROOT/reeds/SOURCE.md" <<'EOF'
+          Name: LowPoly Reed
+          Author: Aredon
+          Source: https://opengameart.org/content/lowpoly-reed
+          License: CC0
+          Original file: reed.zip
+          Formats listed by source: FBX, OBJ, MTL.
+          EOF
+
+          cat > "$ROOT/marsh_plants/SOURCE.md" <<'EOF'
+          Name: Plants - low poly
+          Author: geekygnome
+          Source: https://opengameart.org/content/plants-low-poly
+          License: CC0
+          Original file: plant.zip
+          Notes: general low-poly plants; retained as extra marsh/reed-bank vegetation source.
+          EOF
+
+          cat > "$ROOT/waterlilies/SOURCE.md" <<'EOF'
+          Source 1: LowPoly Waterlily
+          Author: Aredon
+          URL: https://opengameart.org/content/lowpoly-waterlily
+          License: CC0
+          Original file: waterlily.zip
+          Formats listed by source: FBX, OBJ, MTL.
+
+          Source 2: Lily Pads
+          Author: Starry Skydancer
+          URL: https://opengameart.org/content/lily-pads
+          License: CC0
+          Original source file: water_lilly.blend
+          Notes: source page states LOD versions and collision mesh are included.
+          EOF
+
+          cat > "$ROOT/bridges/wooden/SOURCE.md" <<'EOF'
+          Name: Wooden Bridge
+          Author: JamesWhite
+          Source: https://opengameart.org/content/wooden-bridge-0
+          License: CC0
+          Original file: 003_bridge.zip
+          EOF
+
+          cat > "$ROOT/bridges/stone/SOURCE.md" <<'EOF'
+          Name: Stone Bridge
+          Author: JamesWhite
+          Source: https://opengameart.org/content/stone-bridge-0
+          License: CC0
+          Original file: 005_stone_bridge.zip
+          EOF
+
+          cat > "$ROOT/bridges/concrete/SOURCE.md" <<'EOF'
+          Name: Concrete bridge
+          Author: tbbk
+          Source: https://opengameart.org/content/concrete-bridge
+          License: CC0
+          Original file: concrete_bridge.zip
+          EOF
+
+          cat > "$ROOT/bridges/modular/SOURCE.md" <<'EOF'
+          Name: Bridges and Stuff
+          Author: FacadeGaikan
+          Source: https://opengameart.org/content/bridges-and-stuff
+          License: CC0
+          Original file: Bridging.zip
+          Notes: low-poly bridges plus pier, ladder and steps.
+          EOF
+
+          cat > "$ROOT/bridges/suspension_hanging/SOURCE.md" <<'EOF'
+          Name: 50 fantasy-RPG asset models
+          Author: rubberduck
+          Source: https://opengameart.org/content/50-fantasy-rpg-asset-models
+          License: CC0
+          Original file: 50_rpg_asset_models.blend
+          Notes: source is explicitly tagged bridge, suspension and hanging and describes bridge variations among the 50 models.
+          EOF
+
+          cat > "$ROOT/playground_swings/SOURCE.md" <<'EOF'
+          Name: Playground
+          Author: leonkin
+          Source: https://opengameart.org/content/playground
+          License: CC0
+          Original file: Playground.zip
+          Notes: low-poly playground; archive contains the Blender file and every object exported as glTF.
+          EOF
+
+      - name: Commit downloaded source packs only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add assets/source_packs/opengameart/water_landscape
+          if git diff --cached --quiet; then
+            echo "No source-asset changes to commit."
+            exit 0
+          fi
+
+          git commit -m "assets: vendor CC0 water landscape and bridge packs"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt ${attempt}/5"
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+
+          echo "ERROR: could not push source-pack commit after retries"
+          exit 1
