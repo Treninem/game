@@ -1,0 +1,111 @@
+name: Import real CC0 Kenney world source packs
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import_real_kenney_world_batch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-real-kenney-world
+  cancel-in-progress: false
+
+jobs:
+  import-world:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 world packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/kenney"
+          mkdir -p "$ROOT/nature_kit" "$ROOT/survival_kit" "$ROOT/prototype_kit" "$ROOT/nature_landscape_blocks"
+
+          fetch() {
+            local url="$1" out="$2"
+            if [ -s "$out" ]; then echo "Already present: $out"; return 0; fi
+            curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1200 \
+              -A 'ImPuls-CC0-AssetImporter/2.0' "$url" -o "$out"
+            test -s "$out"
+          }
+
+          fetch 'https://opengameart.org/sites/default/files/Nature%20Kit%20%282.1%29.zip' \
+            "$ROOT/nature_kit/Nature_Kit_2.1.zip"
+          fetch 'https://opengameart.org/sites/default/files/kenney_survival-kit.zip' \
+            "$ROOT/survival_kit/kenney_survival-kit.zip"
+          fetch 'https://opengameart.org/sites/default/files/kenney_prototype-kit.zip' \
+            "$ROOT/prototype_kit/kenney_prototype-kit.zip"
+          fetch 'https://opengameart.org/sites/default/files/NatureLandscapeBlocks_Optimised.zip' \
+            "$ROOT/nature_landscape_blocks/NatureLandscapeBlocks_Optimised.zip"
+
+          find "$ROOT" -type f -name '*.zip' -size 0 -print -quit | grep -q . && { echo 'ERROR: zero-byte archive'; exit 1; } || true
+
+      - name: Write provenance metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/source_packs/opengameart/kenney"
+
+          cat > "$ROOT/nature_kit/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/nature-kit
+          License: CC0
+          Author: Kenney
+          File: Nature_Kit_2.1.zip
+          Coverage: 330+ optimized low-poly objects including trees, rocks, stones, terrain elements, waterfalls, camping equipment and plants.
+          Status: source pack only; main chat decides what to integrate.
+          EOF
+
+          cat > "$ROOT/survival_kit/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/survival-kit
+          License: CC0
+          Author: Kenney
+          File: kenney_survival-kit.zip
+          Coverage: 80 optimized low-poly survival structures, items, tools and resources.
+          Status: source pack only; main chat decides what to integrate.
+          EOF
+
+          cat > "$ROOT/prototype_kit/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/prototype-kit
+          License: CC0
+          Author: Kenney
+          File: kenney_prototype-kit.zip
+          Coverage: 145 models including animated characters, animals, wheelchair, vehicles, walls, objects, buttons and levers; source explicitly lists Godot compatibility.
+          Status: source pack only; main chat decides what to integrate.
+          EOF
+
+          cat > "$ROOT/nature_landscape_blocks/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/nature-landscape-blocks-asset-forge-game-engine-optimized
+          License: CC0
+          Author: nateonus, based on Kenney Nature Kit
+          File: NatureLandscapeBlocks_Optimised.zip
+          Coverage: optimized modular nature landscape blocks for assembling large terrain scenes.
+          Status: source pack only; main chat decides what to integrate.
+          EOF
+
+          find assets/source_packs/opengameart -type f \
+            \( -name '*.zip' -o -name '*.7z' -o -name '*.blend' -o -name '*.obj' -o -name '*.fbx' -o -name '*.glb' -o -name '*.gltf' -o -name '*.gz' \) \
+            -print0 | sort -z | xargs -0 sha256sum > assets/source_packs/opengameart/SHA256SUMS.txt
+
+      - name: Commit world source packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/source_packs/opengameart/kenney assets/source_packs/opengameart/SHA256SUMS.txt
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets: vendor real CC0 Kenney world source packs"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
