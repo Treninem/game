@@ -184,7 +184,7 @@ func _run_test() -> void:
 
     var slots = save_manager.call("list_slots")
     if not (slots is Array) or slots.size() != 10:
-        var count := slots.size() if slots is Array else -1
+        var count: int = slots.size() if slots is Array else -1
         _fail(11, "save slot count regressed; count=%s" % count)
         return
 
