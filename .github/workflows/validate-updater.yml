@@ -1,0 +1,98 @@
+name: Validate Delta Updater
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "installer/updater.ps1"
+      - "tools/build_delta.py"
+      - ".github/workflows/windows-build.yml"
+      - ".github/workflows/validate-updater.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  delta-roundtrip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and reconstruct synthetic content delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/impuls-old /tmp/impuls-new /tmp/impuls-out
+          python3 - <<'PY'
+          from pathlib import Path
+          import random
+          rng = random.Random(1337)
+          base = bytearray(rng.randbytes(5 * 1024 * 1024))
+          Path('/tmp/impuls-old/ImPuls.pck').write_bytes(base)
+          newer = base[:]
+          newer[900_000:900_000] = b'NEW-ASSET-' * 8192
+          newer[2_700_000:2_760_000] = b'Z' * 60_000
+          newer.extend(b'APPENDED-CONTENT-' * 4096)
+          Path('/tmp/impuls-new/ImPuls.pck').write_bytes(newer)
+          Path('/tmp/impuls-old/ImPuls.exe').write_bytes(b'EXE-v1' * 10000)
+          Path('/tmp/impuls-new/ImPuls.exe').write_bytes(b'EXE-v2' * 10000)
+          PY
+          python3 tools/build_delta.py \
+            --old-dir /tmp/impuls-old \
+            --new-dir /tmp/impuls-new \
+            --from-build build-100 \
+            --to-build build-101 \
+            --output /tmp/impuls-out/delta.zip \
+            --manifest /tmp/impuls-out/manifest.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, shutil, zipfile
+          old = Path('/tmp/impuls-old')
+          new = Path('/tmp/impuls-new')
+          stage = Path('/tmp/impuls-stage')
+          shutil.copytree(old, stage)
+          with zipfile.ZipFile('/tmp/impuls-out/delta.zip') as z:
+              z.extractall('/tmp/impuls-extract')
+          root = Path('/tmp/impuls-extract')
+          meta = json.loads((root/'delta.json').read_text())
+          payload = (root/'payload.bin').read_bytes()
+          for rel, patch in meta['changed'].items():
+              source_path = stage/rel
+              source = source_path.read_bytes() if source_path.exists() else b''
+              out = bytearray()
+              for op in patch['ops']:
+                  off, length = op['offset'], op['length']
+                  if op['op'] == 'copy':
+                      out += source[off:off+length]
+                  else:
+                      out += payload[off:off+length]
+              source_path.parent.mkdir(parents=True, exist_ok=True)
+              source_path.write_bytes(out)
+              assert hashlib.sha256(out).hexdigest() == patch['sha256']
+          for rel in meta['deleted']:
+              p = stage/rel
+              if p.exists(): p.unlink()
+          manifest = json.loads(Path('/tmp/impuls-out/manifest.json').read_text())
+          for rel, info in manifest['files'].items():
+              data = (stage/rel).read_bytes()
+              assert len(data) == info['size']
+              assert hashlib.sha256(data).hexdigest() == info['sha256']
+              assert data == (new/rel).read_bytes()
+          print('delta roundtrip OK')
+          PY
+
+  powershell-parse:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse updater with Windows PowerShell
+        shell: powershell
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path "installer/updater.ps1"), [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+          Write-Host "updater.ps1 syntax OK"
