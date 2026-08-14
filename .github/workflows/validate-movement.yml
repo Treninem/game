@@ -10,6 +10,9 @@ on:
       - "scripts/world_streamer.gd"
       - "scripts/world_data.gd"
       - "scripts/city_district.gd"
+      - "scripts/city_streamer_fast.gd"
+      - "scripts/runtime_stability_guard.gd"
+      - "scripts/hud_runtime.gd"
       - "scripts/settings_manager.gd"
       - "scripts/ui_layout_guard.gd"
       - "scripts/game_menu.gd"
@@ -19,6 +22,7 @@ on:
       - "tests/smoke_player_movement.tscn"
       - "tests/smoke_ui_and_save.gd"
       - "tests/smoke_ui_and_save.tscn"
+      - "assets/shaders/**"
       - ".github/workflows/validate-movement.yml"
   workflow_dispatch:
 
@@ -43,6 +47,7 @@ jobs:
             assets/branding
             assets/ui
             assets/vfx
+            assets/shaders
             assets/staging/sourcechat_b47
             project.godot
           sparse-checkout-cone-mode: false
@@ -64,7 +69,7 @@ jobs:
           status=$?
           printf '%s\n' "$output"
           if [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 24 | tr '\n' ' ' | sed 's/%/%25/g')
+            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Player smoke raw Godot output::$detail"
           fi
           exit "$status"
@@ -78,7 +83,7 @@ jobs:
           if [ "$status" -eq 124 ]; then
             echo "::error title=UI layout smoke timeout::Menu layout did not settle within 35 seconds"
           elif [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 24 | tr '\n' ' ' | sed 's/%/%25/g')
+            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=UI smoke raw Godot output::$detail"
           fi
           exit "$status"
