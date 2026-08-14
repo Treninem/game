@@ -1,0 +1,87 @@
+name: Update source-chat staging index through B89
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b88-b89.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify B88-B89 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b88/models/oga_sewer_tunnels_lowres_2026
+            assets/staging/sourcechat_b88/models/oga_mines_and_caves_178
+            assets/staging/sourcechat_b88/models/oga_free_mine_assets_pack
+            assets/staging/sourcechat_b88/models/oga_concrete_pipes
+            assets/staging/sourcechat_b89/models/oga_character_pack_2026
+            assets/staging/sourcechat_b89/models/oga_human_parts_pack_2026
+            assets/staging/sourcechat_b89/models/oga_lowpoly_hats
+            assets/staging/sourcechat_b89/models/oga_hair_styles_cc0
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B88 —' "$INDEX"; then
+            echo "B88 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B88 — sewers / mines / caves / concrete pipes
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b88/models/`
+
+          - `oga_sewer_tunnels_lowres_2026/` — 2026 low-resolution modular sewer source with reduced texture/poly cost.
+          - `oga_mines_and_caves_178/` — large 178-object mine/cave source library with Godot-ready data; third-party scripts removed in this source-only chat.
+          - `oga_free_mine_assets_pack/` — broad mine support/rail/rock/lamp/cart/chest source set.
+          - `oga_concrete_pipes/` — concrete pipe/infrastructure source preserved as original archive.
+
+          ## B89 — character bodies / parts / hats / hair
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b89/models/`
+
+          - `oga_character_pack_2026/` — 2026 grouped male/female humanoid source archive for NPC variety auditioning.
+          - `oga_human_parts_pack_2026/` — modular human heads/faces/arms/legs/hands/feet and related parts.
+          - `oga_lowpoly_hats/` — simple low-poly hat source collection.
+          - `oga_hair_styles_cc0/` — five separate CC0 male/female hairstyle sources.
+
+          Integration rule: B88 and B89 are source libraries only. Main game chat should select one production cave/sewer grid standard and one production humanoid skeleton/body standard, then adapt only chosen meshes/parts and rebuild materials/collision/LOD as needed.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B88-B89"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
