@@ -14,5 +14,4 @@ func interact(_player: Node) -> void:
     GameState.notify("Получено: %s +%d" % [display_name, amount_per_use])
     if uses <= 0:
         visible = false
-        if "use_collision" in self:
-            set_deferred("use_collision", false)
+        set_deferred("use_collision", false)
