@@ -3,7 +3,7 @@
 #endif
 
 #define MyAppName "ImPuls"
-#define MyAppVersion "0.10.3"
+#define MyAppVersion "0.10.4"
 #define MyAppPublisher "Treninem"
 
 [Setup]
@@ -26,11 +26,11 @@ ArchitecturesAllowed=x64compatible
 DisableProgramGroupPage=yes
 CloseApplications=yes
 RestartApplications=no
-VersionInfoVersion=0.10.3.0
+VersionInfoVersion=0.10.4.0
 VersionInfoCompany=Treninem
 VersionInfoDescription=ImPuls PC Installer
 VersionInfoProductName=ImPuls
-VersionInfoProductVersion=0.10.3.0
+VersionInfoProductVersion=0.10.4.0
 
 [Dirs]
 Name: "{app}\current"
