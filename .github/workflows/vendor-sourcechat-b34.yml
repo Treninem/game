@@ -1,0 +1,83 @@
+name: Vendor source-chat B34 real CC0 characters and animation libraries
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b34.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b34
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 character and animation libraries
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b34"
+          TMP=".sourcechat_b34_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$ROOT/animations" "$TMP"
+          stage_zip() {
+            local root="$1" name="$2" url="$3" page="$4" title="$5"
+            mkdir -p "$TMP/$name" "$root/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B34/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$root/$name/"
+            find "$root/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$root/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$root/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+          stage_zip "$ROOT/models" "quaternius_animated_characters" "https://opengameart.org/sites/default/files/ultimate_animated_character_pack_by_quaternius.zip" "https://opengameart.org/content/animated-characters-pack" "Quaternius Animated Characters Pack"
+          stage_zip "$ROOT/animations" "quaternius_universal_animation_library" "https://opengameart.org/sites/default/files/universal_animation_librarystandard.zip" "https://opengameart.org/content/universal-animation-library" "Quaternius Universal Animation Library"
+          stage_zip "$ROOT/animations" "quaternius_universal_animation_library_2" "https://opengameart.org/sites/default/files/universal_animation_library_2standard.zip" "https://opengameart.org/content/universal-animation-library-2" "Quaternius Universal Animation Library 2"
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B34 — real CC0 people and humanoid animation sources
+
+          Real extracted source assets only; nothing is connected to gameplay.
+
+          - Animated Characters Pack: 50+ animated character variants in common 3D formats.
+          - Universal Animation Library: standard free CC0 humanoid animation package for retargeting.
+          - Universal Animation Library 2: extended compatible CC0 humanoid motions including additional locomotion/combat/parkour/farming/fishing/zombie-style actions.
+
+          Main chat should establish one canonical Godot humanoid skeleton/retarget profile, test animation import and root motion, then promote curated character and motion subsets. Do not load the entire source library into runtime scenes.
+          EOF
+          rm -rf "$TMP"
+          echo "B34 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+      - name: Commit B34 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b34
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 characters animation libraries B34"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
