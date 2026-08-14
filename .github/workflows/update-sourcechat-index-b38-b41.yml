@@ -1,0 +1,98 @@
+name: Update source-chat staging index through B41
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b38-b41.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sourcechat-index-b38-b41
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Append verified B38-B41
+        shell: bash
+        run: |
+          set -euo pipefail
+          for p in \
+            assets/staging/sourcechat_b38/models/kenney_weapon_pack \
+            assets/staging/sourcechat_b38/models/oga_construction_site_kit \
+            assets/staging/sourcechat_b38/ui/kenney_generic_items \
+            assets/staging/sourcechat_b39/models/oga_fox_animated \
+            assets/staging/sourcechat_b39/models/oga_rabbit_rigged_animated \
+            assets/staging/sourcechat_b39/models/oga_steamer_duck_3d \
+            assets/staging/sourcechat_b39/models/oga_boar_rigged_animated \
+            assets/staging/sourcechat_b40/models/oga_pigeon_rigged_animated \
+            assets/staging/sourcechat_b40/models/oga_chicken_rigged_animated \
+            assets/staging/sourcechat_b40/models/oga_rooster_rigged_animated \
+            assets/staging/sourcechat_b41/models/oga_deer_female \
+            assets/staging/sourcechat_b41/models/oga_tiger_lowpoly_rigged \
+            assets/staging/sourcechat_b41/models/oga_crocodile_animated \
+            assets/staging/sourcechat_b41/models/oga_white_bear_lowpoly; do test -d "$p"; done
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/staging/SOURCECHAT_INDEX.md')
+          t=p.read_text(encoding='utf-8')
+          if '## B38 — weapons / item UI / construction source' in t:
+              raise SystemExit(0)
+          marker='## Integration rules for the main chat'
+          block='''## B38 — weapons / item UI / construction source
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b38/`
+
+          - `models/kenney_weapon_pack/` — low-poly weapon source models and related renders.
+          - `ui/kenney_generic_items/` — generic tools/medical/tech/travel/transport inventory UI source set.
+          - `models/oga_construction_site_kit/` — building-site source props retained for staging/reference; inspect material provenance/visual quality before production promotion.
+
+          ## B39 — fox / rabbit / duck / boar 3D species
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b39/models/`
+
+          Species-specific real CC0 source assets: animated fox, rigged/animated rabbit, rigged duck and rigged/animated boar. Main chat should normalize scale/orientation and verify Godot animation import before production use.
+
+          ## B40 — pigeon / chicken / rooster 3D birds
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b40/models/`
+
+          Real CC0 bird sources: rigged/animated pigeon, chicken and rooster. Recommended use: city flocks and farm birds after materials, scale, animation import and AI behavior are standardized.
+
+          ## B41 — deer / tiger / crocodile / bear 3D wildlife
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b41/models/`
+
+          Real CC0 wildlife sources: rigged/animated female deer, rigged tiger, animated crocodile and textured low-poly white bear. Bear source is not rigged; main chat should only rig/animate it if selected for production.
+
+          '''
+          if marker not in t: raise SystemExit('integration marker missing')
+          p.write_text(t.replace(marker,block+marker,1),encoding='utf-8')
+          PY
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches through B41"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
