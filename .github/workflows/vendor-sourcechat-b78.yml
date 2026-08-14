@@ -1,0 +1,118 @@
+name: Vendor source-chat B78 real CC0 Kenney nature castle medieval
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b78.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b78
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 Kenney world kits
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b78"
+          TMP=".sourcechat_b78_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/nature" "$ROOT/models/kenney_nature_kit_2_1"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B78/1.0' \
+            "https://opengameart.org/sites/default/files/Nature%20Kit%20%282.1%29.zip" -o "$TMP/nature.zip"
+          unzip -q "$TMP/nature.zip" -d "$TMP/nature"
+          chmod -R u+rwX "$TMP/nature" || true
+          find "$TMP/nature" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/nature/" "$ROOT/models/kenney_nature_kit_2_1/"
+          meta "kenney_nature_kit_2_1" \
+            "https://opengameart.org/content/nature-kit" \
+            "Nature Kit 2.1" \
+            "https://opengameart.org/sites/default/files/Nature%20Kit%20%282.1%29.zip" \
+            "Kenney optimized low-poly world kit with 330+ nature objects: trees, rocks, stones, terrain, waterfalls, camping gear, plants, canoe/paddle/fences/statues and more."
+
+          mkdir -p "$TMP/castle" "$ROOT/models/kenney_castle_kit"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B78/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_castle-kit.zip" -o "$TMP/castle.zip"
+          unzip -q "$TMP/castle.zip" -d "$TMP/castle"
+          chmod -R u+rwX "$TMP/castle" || true
+          find "$TMP/castle" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/castle/" "$ROOT/models/kenney_castle_kit/"
+          meta "kenney_castle_kit" \
+            "https://opengameart.org/content/castle-kit" \
+            "Castle Kit" \
+            "https://opengameart.org/sites/default/files/kenney_castle-kit.zip" \
+            "Kenney optimized castle-building kit with 75+ objects including walls, towers, gates, siege equipment, characters and flags."
+
+          mkdir -p "$TMP/retro" "$ROOT/models/kenney_retro_medieval_kit"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B78/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_retro-medieval-kit.zip" -o "$TMP/retro.zip"
+          unzip -q "$TMP/retro.zip" -d "$TMP/retro"
+          chmod -R u+rwX "$TMP/retro" || true
+          find "$TMP/retro" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/retro/" "$ROOT/models/kenney_retro_medieval_kit/"
+          meta "kenney_retro_medieval_kit" \
+            "https://opengameart.org/content/retro-medieval-kit" \
+            "Retro Medieval Kit" \
+            "https://opengameart.org/sites/default/files/kenney_retro-medieval-kit.zip" \
+            "Kenney retro early-3D/PSX-style medieval kit with 120 optimized objects and low-resolution textures; separate FBX/OBJ/GLB formats."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B78 — real CC0 Kenney nature/castle/retro-medieval kits
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should treat Nature Kit as a broad source library and only promote biome-relevant pieces. Castle Kit is suitable for modular fortifications after scale/material/collision normalization. Retro Medieval Kit has a deliberately PSX-like style and should only be mixed with the main visual direction when stylistically appropriate.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B78 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B78 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b78
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 Kenney nature castle medieval B78"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
