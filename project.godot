@@ -1,10 +1,10 @@
 ; ImPuls PC — offline single-player RPG
-; Stage 10 world-first stabilization, local streaming and legacy quest cleanup
+; Stable foundation: world visibility, traversal, clean UI boot and rolling stable updates
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.10.0-stage10"
+config/version="0.10.1-stable"
 config/icon="res://assets/branding/impuls_icon.png"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
@@ -34,7 +34,6 @@ AmbientVFX="*res://scripts/ambient_vfx.gd"
 NatureVFX="*res://scripts/nature_vfx.gd"
 LandmarkVFX="*res://scripts/landmark_vfx.gd"
 ScreenVFX="*res://scripts/screen_vfx.gd"
-MagicHUD="*res://scripts/magic_hud.gd"
 
 [display]
 window/size/viewport_width=1280
