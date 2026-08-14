@@ -1,0 +1,126 @@
+name: Update source-chat staging index through B62
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b58-b62.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify B58-B62 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b58/models/oga_anklyosaurus_static
+            assets/staging/sourcechat_b58/models/oga_elephant_lowpoly_animated
+            assets/staging/sourcechat_b58/models/oga_old_deer_male_animated
+            assets/staging/sourcechat_b59/models/oga_albertosaurus_static
+            assets/staging/sourcechat_b59/models/oga_pentaceratops_static
+            assets/staging/sourcechat_b59/models/oga_trex_static
+            assets/staging/sourcechat_b60/models/oga_big_stone_bridge
+            assets/staging/sourcechat_b60/models/oga_medieval_gatehouse
+            assets/staging/sourcechat_b60/models/oga_wooden_bridge
+            assets/staging/sourcechat_b61/models/oga_horse_drawn_carriage
+            assets/staging/sourcechat_b61/models/oga_medieval_waterpowered_sawmill
+            assets/staging/sourcechat_b62/models/oga_bartender_rigged
+            assets/staging/sourcechat_b62/models/oga_goblin_rigged_animated
+            assets/staging/sourcechat_b62/models/oga_monk_rigged_idle
+            assets/staging/sourcechat_b62/models/oga_old_lady_rigged
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B58 —' "$INDEX"; then
+            echo "B58 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B58 — animated male deer / elephant / Anklyosaurus
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b58/models/`
+
+          - `oga_old_deer_male_animated/` — rigged/animated male deer source with packed material maps.
+          - `oga_elephant_lowpoly_animated/` — rigged elephant source with multiple authored animations.
+          - `oga_anklyosaurus_static/` — static dinosaur source; not rigged/animated.
+
+          Recommended use: production-candidate deer/elephant after Godot import tests; Anklyosaurus only as a source mesh requiring rigging/animation if selected.
+
+          ## B59 — prehistoric static fauna sources
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b59/models/`
+
+          - `oga_pentaceratops_static/`
+          - `oga_albertosaurus_static/`
+          - `oga_trex_static/`
+
+          Recommended use: optional authored prehistoric-region source pool. These are static source meshes and must not be treated as finished animated creatures.
+
+          ## B60 — bridges / fortified gate
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b60/models/`
+
+          - `oga_big_stone_bridge/`
+          - `oga_wooden_bridge/`
+          - `oga_medieval_gatehouse/`
+
+          Recommended use: traversal landmarks, settlement entrances and fortifications after scale/collision/LOD work. Optimize the large stone bridge heavily before production promotion.
+
+          ## B61 — water-powered sawmill / horse-drawn carriage
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b61/models/`
+
+          - `oga_medieval_waterpowered_sawmill/`
+          - `oga_horse_drawn_carriage/`
+
+          Recommended use: authored river/lumber/industry location and carriage/world-prop source. Carriage materials require repair/replacement before production use.
+
+          ## B62 — authored NPC archetypes
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b62/models/`
+
+          - `oga_bartender_rigged/`
+          - `oga_old_lady_rigged/`
+          - `oga_monk_rigged_idle/`
+          - `oga_goblin_rigged_animated/`
+
+          Recommended use: authored settlement/enemy NPC candidates after skeleton/animation/material import checks. Use as distinct archetypes rather than mass-spawning identical models.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B58-B62"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
