@@ -1,0 +1,141 @@
+name: Vendor CC0 wildlife and birds staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-wildlife-birds-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-wildlife-birds-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-wildlife-birds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 wildlife and birds
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP=".wildlife_birds_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP"
+
+          meta() {
+            local target="$1" source="$2" download="$3" notes="$4"
+            mkdir -p "$target"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md with staged files.
+          EOF
+          }
+
+          import_zip() {
+            local key="$1" url="$2" source="$3" target="$4" notes="$5"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 420 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs \
+              --include='*/' \
+              --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' \
+              --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+              --include='*.blend' --include='*.BLEND' \
+              --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' \
+              --include='*.gif' --include='*.GIF' --include='*.svg' --include='*.SVG' \
+              --include='*.txt' --include='*.TXT' --include='*.json' --include='*.JSON' --exclude='*' \
+              "$work/archive/" "$target/"
+            meta "$target" "$source" "$url" "$notes"
+          }
+
+          import_single() {
+            local key="$1" url="$2" source="$3" target="$4" filename="$5" notes="$6"
+            rm -rf "$target"
+            mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$source" "$url" "$notes"
+          }
+
+          import_zip "animated_wild_animals_2d" \
+            "https://opengameart.org/sites/default/files/All.zip" \
+            "https://opengameart.org/content/animated-wild-animals" \
+            "assets/staging/animals/animated_wild_animals_2d" \
+            "CC0 animated deer, bear, wolf, fox, boar and rabbit; walk/run/idle sprite fallback set."
+
+          import_zip "fox_3d_animated" \
+            "https://opengameart.org/sites/default/files/fox_source_v3.zip" \
+            "https://opengameart.org/content/fox-0" \
+            "assets/staging/animals/fox_3d_animated" \
+            "342-triangle CC0 3D fox with diffuse/normal textures and idle, walk, run, bite, digging and death animations."
+
+          import_single "rigged_duck" \
+            "https://opengameart.org/sites/default/files/duck6.blend" \
+            "https://opengameart.org/content/rigged-duck" \
+            "assets/staging/animals/rigged_duck" \
+            "duck6.blend" \
+            "CC0 rigged 3D duck with waddle and peck animations."
+
+          import_single "animated_pigeon" \
+            "https://opengameart.org/sites/default/files/genuinely-my-pigeon-extended-furthur.blend" \
+            "https://opengameart.org/content/low-poly-3d-pigeon-model-rigged-animated-untextured" \
+            "assets/staging/animals/animated_pigeon" \
+            "genuinely-my-pigeon-extended-furthur.blend" \
+            "CC0 low-poly rigged animated pigeon source model."
+
+          import_single "generic_animated_bird" \
+            "https://opengameart.org/sites/default/files/bird.blend" \
+            "https://opengameart.org/content/bird" \
+            "assets/staging/animals/generic_animated_bird" \
+            "bird.blend" \
+            "CC0 textured, rigged and animated generic bird source."
+
+          import_zip "kenney_animal_pack_redux" \
+            "https://opengameart.org/sites/default/files/kenney_animalPackRedux.zip" \
+            "https://opengameart.org/content/animal-pack-redux" \
+            "assets/staging/animals/kenney_animal_pack_redux" \
+            "CC0 2D fallback/reference pack with 30 animals including bear, chicken, cow, dog, duck, goat, horse, pig, rabbit, owl, parrot, penguin, whale and more."
+
+          rm -rf "$TMP"
+          cat > assets/staging/animals/WILDLIFE_BIRDS_STAGING_MANIFEST.md <<'EOF'
+          # Wildlife and birds source-only staging
+
+          Real CC0 wildlife/bird source files. 3D sources are preferred; 2D packs are fallback/LOD/UI/reference material.
+          No gameplay scripts/scenes/project settings are touched by this workflow.
+          EOF
+
+      - name: Commit staged wildlife assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/animals
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 wild animals ducks pigeon and bird fallbacks"
+          git pull --rebase origin main
+          git push origin HEAD:main
