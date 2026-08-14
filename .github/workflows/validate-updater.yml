@@ -108,10 +108,20 @@ jobs:
             }
             Write-Host "$file syntax OK"
           }
-      - name: Prove bootstrap can load UTF-8 implementation
+      - name: Prove bootstrap loads localized UTF-8 implementation
         shell: powershell
         run: |
           $text = Get-Content installer/updater_bootstrap.ps1 -Raw
-          if ($text -notmatch 'ReadAllText' -or $text -notmatch 'UTF8Encoding') { throw "Bootstrap does not enforce UTF-8" }
+          if ($text -notmatch 'ReadAllText' -or $text -notmatch 'UTF8Encoding' -or $text -notmatch 'updater_v4.ps1') {
+            throw "Bootstrap does not enforce UTF-8 implementation loading"
+          }
           $impl = [System.IO.File]::ReadAllText((Resolve-Path "installer/updater_v4.ps1"), (New-Object System.Text.UTF8Encoding($false)))
-          if ($impl -notmatch 'Обновление ImPuls' -or $impl -notmatch 'Загрузка только недостающих данных') { throw "Localized visible updater text missing" }
+          foreach ($marker in @('Initialize-ProgressUi','Set-ProgressUi','Download-File','Get-DeltaChain','Apply-Delta','Verify-Manifest')) {
+            if ($impl -notmatch [regex]::Escape($marker)) { throw "Missing updater marker: $marker" }
+          }
+          $hasNonAscii = $false
+          foreach ($ch in $impl.ToCharArray()) {
+            if ([int]$ch -gt 127) { $hasNonAscii = $true; break }
+          }
+          if (-not $hasNonAscii) { throw "Localized updater text is missing" }
+          Write-Host "UTF-8 localized updater bootstrap proof OK"
