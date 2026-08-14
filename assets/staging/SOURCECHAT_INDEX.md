@@ -346,6 +346,29 @@ Path: `assets/staging/sourcechat_b29/models/`
 
 Recommended use: varied capital/village architecture and authored interiors. Main chat should compose optimized production buildings rather than instancing heavy Blend source files directly.
 
+## B30 — Kenney world architecture kits
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b30/models/`
+
+- `kenney_castle_kit/` — castle walls, towers, gates and related fortification pieces.
+- `kenney_modular_dungeon_kit/` — modular dungeon segments.
+- `kenney_building_kit/` — general building walls, windows, animated doors and roofs.
+- `kenney_fantasy_town_kit/` — broad modular fantasy/medieval town source set.
+- `kenney_city_kit_commercial/` — commercial city buildings and compatible street details.
+
+Recommended use: fortifications, dungeons, capital/village expansion and commercial districts. Main chat should choose one coherent regional style per district, normalize scale/materials/collisions and promote optimized production subsets only.
+
+## B31 — prototype/animation fallback and pirate/coast assets
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b31/models/`
+
+- `kenney_prototype_kit/` — broad prototyping source library with characters/animations, animals/animations, vehicles, structures and interactive objects.
+- `kenney_pirate_kit/` — ships, treasure, island/nature and pirate-themed props.
+
+Recommended use: Prototype Kit primarily as animation/prototyping/fallback source; Pirate Kit for ports, islands and coastal locations where the art direction fits. Avoid blindly promoting placeholder-style assets into final runtime content.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
