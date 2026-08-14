@@ -1,9 +1,10 @@
 param([string]$InstallDir)
 $ErrorActionPreference = "SilentlyContinue"
 $TaskName = "ImPuls Background Update"
+$Bootstrap = Join-Path $InstallDir "updater_bootstrap.ps1"
 $Preferred = Join-Path $InstallDir "updater_v4.ps1"
 $Legacy = Join-Path $InstallDir "updater.ps1"
-$Script = if (Test-Path $Preferred) { $Preferred } else { $Legacy }
+$Script = if (Test-Path $Bootstrap) { $Bootstrap } elseif (Test-Path $Preferred) { $Preferred } else { $Legacy }
 $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$Script`" -InstallDir `"$InstallDir`" -Background"
 $Trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5) -RepetitionInterval (New-TimeSpan -Hours 1)
 $Principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
