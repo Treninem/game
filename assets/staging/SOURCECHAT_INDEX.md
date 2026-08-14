@@ -797,3 +797,73 @@ Path: `assets/staging/sourcechat_b72/models/`
 - `oga_white_bear_static/` — textured low-poly white bear; explicitly static/unrigged.
 
 Integration rule: these are source candidates. Main game chat should selectively retarget, normalize scale/materials/collisions/LOD and promote only chosen production assets. Do not wire whole source libraries directly into runtime.
+
+## B73 — animated fish
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b73/models/`
+
+- `oga_fish_rigged_animated/` — rigged/animated general fish source.
+- `oga_esox_animated/` — detailed fish with idle/slow/fast swim and PBR-ish maps.
+- `quaternius_animated_fish_pack/` — low-poly animated fish library for biome variety.
+
+## B74 — cat / dog / horse / tiger
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b74/models/`
+
+- `oga_simple_cat_animated/` — extremely low-poly cat with simple shape-key walk and author's CC0 texture.
+- `oga_dog_jack_russell_rigged/` — low-poly rigged Jack Russell.
+- `oga_rigged_horse/` — rigged horse source ready for animation work.
+- `oga_tiger_rigged/` — low-poly rigged/unwrapped tiger source.
+
+## B75 — crocodile / birds / wasp
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b75/models/`
+
+- `oga_crocodile_animated/` — textured crocodile with idle/walk/attack/death source clips.
+- `oga_yellow_billed_shrike_rigged/` — IK-rigged background bird with high-resolution maps.
+- `oga_modified_wasp_animated/` — polygonal wasp with simple idle animation.
+- `oga_bird_rigged_animated/` — generic textured rigged/animated small-bird candidate.
+
+## B76 — dungeon kits / Genie
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b76/models/`
+
+- `kenney_mini_dungeon_2/` — compact Kenney dungeon source kit.
+- `kenney_modular_dungeon_kit_2/` — modular Kenney dungeon-building kit.
+- `oga_medieval_dungeon_interior_2026/` — 2026 modular medieval dungeon interior with animated doors.
+- `oga_genie_rigged_animated/` — higher-poly rigged Genie with floating animation; optimize before use.
+
+## B77 — furniture / home / industrial
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b77/models/`
+
+- `kenney_furniture_kit_120/` — broad optimized furniture/building-material source library.
+- `oga_home_interior_assets_2025/` — compact modern home-interior prop collection.
+- `oga_modular_industrial_157/` — 157-mesh low-poly industrial construction library.
+- `oga_pbr_industrial_a52_2025/` — modern Blender/PBR factory/industrial source assets.
+
+## B78 — Kenney nature / castle / retro medieval
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b78/models/`
+
+- `kenney_nature_kit_2_1/` — very broad 330+ object nature source library.
+- `kenney_castle_kit/` — modular fortification/castle source kit.
+- `kenney_retro_medieval_kit/` — deliberately retro/PSX-style medieval source family.
+
+## B79 — pirate / graveyard / fantasy town / watercraft
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b79/models/`
+
+- `kenney_pirate_kit_2_1/` — island/port/pirate/ship source library.
+- `kenney_graveyard_kit_5/` — graveyard/coffin/fence/prop source library.
+- `kenney_fantasy_town_2/` — large modular fantasy/medieval town kit.
+- `kenney_watercraft_kit/` — broad boat/ship/watercraft source kit.
+
+Integration rule: these remain source libraries. Main game chat should choose a consistent visual family per biome/location, normalize scale/materials/collisions/LOD and promote only selected production assets rather than wiring whole staging directories into runtime.
