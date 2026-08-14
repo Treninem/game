@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/city_district.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/humanoid_visual.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/city_gate_controller.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/world_streamer.gd" id="12"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -42,9 +43,12 @@ light_color = Color(1, 0.91, 0.78, 1)
 light_energy = 1.15
 shadow_enabled = true
 
+[node name="WorldStreamer" type="Node3D" parent="World"]
+script = ExtResource("12")
+
 [node name="Ground" type="CSGBox3D" parent="World"]
-size = Vector3(120, 0.5, 120)
-position = Vector3(0, -0.25, 0)
+size = Vector3(140, 0.5, 140)
+position = Vector3(0, -0.3, 0)
 use_collision = true
 
 [node name="CityDistrict" type="Node3D" parent="World"]
