@@ -10,6 +10,7 @@ on:
       - "scripts/weather_hail_vfx.gd"
       - "scripts/ambient_vfx.gd"
       - "scripts/nature_vfx.gd"
+      - "scripts/world_effect_emitter.gd"
       - "scripts/screen_vfx.gd"
       - "scripts/environment_mark_pool.gd"
       - "scripts/player_controller.gd"
@@ -52,6 +53,7 @@ jobs:
           test -s scripts/weather_vfx.gd
           test -s scripts/ambient_vfx.gd
           test -s scripts/nature_vfx.gd
+          test -s scripts/world_effect_emitter.gd
           test -s scripts/screen_vfx.gd
           test -s scripts/environment_mark_pool.gd
           grep -Fq 'WorldVFX="*res://scripts/world_vfx.gd"' project.godot
@@ -67,3 +69,4 @@ jobs:
           grep -Fq 'Fireflies' scripts/ambient_vfx.gd
           grep -Fq 'GroundMist' scripts/nature_vfx.gd
           grep -Fq 'SeaSpray' scripts/nature_vfx.gd
+          grep -Fq 'class_name WorldEffectEmitter' scripts/world_effect_emitter.gd
