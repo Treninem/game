@@ -1,0 +1,91 @@
+name: Vendor source-chat B60 real CC0 bridges gatehouse
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b60.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b60
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 bridge and gatehouse sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b60"
+          TMP=".sourcechat_b60_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4" notes="$5"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B60/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            chmod -R u+rwX "$TMP/$name" || true
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            meta "$name" "$page" "$title" "$url" "$notes"
+          }
+
+          stage_zip "oga_big_stone_bridge" "https://opengameart.org/sites/default/files/bridge.zip" "https://opengameart.org/content/big-stone-bridge" "Big stone bridge" "Modular high-detail stone bridge section intended to be repeated into a long bridge. Source archive is large; main chat should optimize/LOD before promotion."
+          stage_zip "oga_wooden_bridge" "https://opengameart.org/sites/default/files/003_bridge.zip" "https://opengameart.org/content/wooden-bridge-0" "Wooden Bridge" "Compact wooden bridge source with 256x256 texture and Blend file."
+          stage_zip "oga_medieval_gatehouse" "https://opengameart.org/sites/default/files/76122_GateHouse2Upload_blend.zip" "https://opengameart.org/content/medieval-gatehouse" "Medieval Gatehouse" "CC0 medieval gatehouse source; useful gate/portcullis geometry for settlement entrances and fortifications."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B60 — real CC0 bridges and medieval gatehouse
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should compare gatehouse architecture with existing castle/village kits, normalize scale, create traversal-safe collisions, and heavily optimize the large stone-bridge source before production use.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B60 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B60 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b60
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 bridges gatehouse B60"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
