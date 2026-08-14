@@ -459,3 +459,79 @@ Real CC0 wildlife sources: rigged/animated female deer, rigged tiger, animated c
 6. Keep surface/material semantics consistent across footsteps, impacts, destruction and weather.
 7. Preserve source/license metadata after promotion.
 8. Source-only chats do not modify gameplay scripts, scenes, `project.godot`, autoloads or build/export configuration.
+
+## B42 — small wildlife models
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b42/models/`
+
+- `oga_frog_lowpoly_animated/` — animated frog source.
+- `oga_snake_lowpoly_animated/` — animated snake source.
+- `oga_rat_godot/` — Godot-ready animated rat source.
+- `oga_ant_rigged_animated/` — rigged/animated ant.
+- `oga_flying_squirrel_rigged/` — rigged flying squirrel.
+- `oga_goat_lowrez/` — goat source mesh.
+
+Recommended use: small wildlife, farm edges, caves/swamps/forests and ambient fauna after scale/animation/collision review.
+
+## B43 — wetland / coast / insect fauna
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b43/models/`
+
+- `oga_penguin_rigged_animated/`
+- `oga_crab_lowpoly_animated/`
+- `oga_turtle_rigged/`
+- `oga_butterfly_animated/`
+- `oga_bee_rigged/`
+- `oga_swamp_limule_rigged_animated/`
+
+Recommended use: coasts, ponds, wetlands, cold-region fauna and ambient insects. Verify imported materials and animation clips before promotion.
+
+## B44 — vegetation / explicit LOD nature sources
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b44/models/`
+
+- `quaternius_stylized_nature_megakit_standard/`
+- `oga_free_plant_pack/`
+- `oga_free_vegetation_lod_pack/`
+
+Recommended use: trees, rocks, grasses, ferns, flowers and performance-oriented vegetation LOD candidates. Deduplicate visually against B28 before production promotion.
+
+## B45 — 50+ monster source library
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b45/models/oga_50plus_monsters_pack_3d/`
+
+Real CC0 library of 56 static low-poly monster source models. These are not assumed rigged/animated; shortlist only useful creatures for later production work.
+
+## B46 — Fantasy Props MegaKit Standard
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b46/models/quaternius_fantasy_props_megakit_standard/`
+
+Real CC0 standard pack with 94 source models spanning weapons, tools, vegetables, potions, market stalls, chests, furniture and related fantasy/medieval props.
+
+Recommended use: markets, homes, workshops, taverns, inventory/world props and settlement dressing after deduplication against older prop libraries.
+
+## B47 — Medieval Village MegaKit Standard
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/`
+
+Real CC0 standard pack with 176 modular village-building models including walls, roofs, stairs, doors, windows, vines and related architecture pieces.
+
+Recommended use: main settlement construction source. Compare against older medieval kits and keep the strongest coherent building family rather than integrating duplicates.
+
+## B48 — pond / docks / well / windmill
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b48/models/`
+
+- `oga_free_lowpoly_pond_kit/`
+- `oga_modular_wooden_docks/` — source page lists 176 modular dock objects.
+- `oga_basic_well_4k/`
+- `oga_stylized_windmill/`
+
+Recommended use: ponds, lakes, swamps, shores, docks, farms and villages. Normalize scale/materials/collisions and deduplicate against harbour/nature/medieval sources before promotion.
