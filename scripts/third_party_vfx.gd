@@ -61,6 +61,19 @@ func spawn_magic(element: String, position: Vector3, parent: Node = null, streng
         return null
     return flipbook
 
+func spawn_spell_cast(spell_id: String, position: Vector3, parent: Node = null, strength: float = 1.0) -> Node3D:
+    var element := "arcane"
+    match spell_id:
+        "fireball", "fire_zone": element = "fire"
+        "ice_shard", "frost_zone": element = "frost"
+        "lightning": element = "lightning"
+        "poison_orb": element = "poison"
+        "heal": element = "heal"
+        "shield": element = "shield"
+        "blink": element = "portal"
+        "arcane_blast": element = "arcane"
+    return spawn_magic(element, position, parent, strength)
+
 func spawn_slash(position: Vector3, parent: Node = null, strength: float = 1.0) -> Node3D:
     var host := parent if parent != null else get_tree().current_scene
     if host == null:
