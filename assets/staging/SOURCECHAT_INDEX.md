@@ -129,6 +129,34 @@ Path: `assets/staging/sourcechat_b10/audio/`
 
 Recommended use: wood, stone/hard surface, leaves, gravel, mud/dirt, grass/sand and wooden-floor walking. Combine with B04 snow and B03 mud/water material audio rather than creating a separate incompatible footstep system.
 
+## B11 — water / cooking / utility audio
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b11/audio/`
+
+- `oga_dripping_water_loop/`
+- `oga_6_short_water_splashes/`
+- `oga_boiling_water_loops/`
+- `oga_stove_switch/`
+- `oga_adding_salt/`
+- `oga_water_waves/`
+
+Recommended use: caves/cellars/sewers/wells/pipe leaks, small water impacts, cooking pots, tavern/home/camp kitchens, stove/furnace controls and river/shore/water-body layering.
+
+## B12 — metal / clockwork / mechanical audio
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b12/audio/`
+
+- `oga_31_metal_pings_scrapes/`
+- `oga_33_cast_iron_clangs/`
+- `oga_metal_clang_pitches/`
+- `oga_door_spring_sounds/`
+- `oga_steam_boiler_loop/`
+- `oga_clockwork_ticking/`
+
+Recommended use: metal filing/scrapes, heavy resonant impacts, object-size clang variation, door/trap springs, steam/industrial generators, clocks/timers and clockwork machinery. Deduplicate against B03/B07 by selecting the best sound for each object mass and mechanism.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
