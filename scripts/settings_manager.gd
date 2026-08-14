@@ -37,11 +37,8 @@ const DEFAULT_BINDINGS := {
     "jump": {"type": "key", "code": KEY_SPACE},
     "interact": {"type": "key", "code": KEY_E},
     "attack": {"type": "mouse", "code": MOUSE_BUTTON_LEFT},
-    "craft": {"type": "key", "code": KEY_C},
-    "build": {"type": "key", "code": KEY_B},
     "use_food": {"type": "key", "code": KEY_1},
     "use_water": {"type": "key", "code": KEY_2},
-    "use_meat": {"type": "key", "code": KEY_3},
     "open_inventory": {"type": "key", "code": KEY_I},
     "open_map": {"type": "key", "code": KEY_M},
     "open_journal": {"type": "key", "code": KEY_J},
@@ -70,6 +67,7 @@ func load_settings() -> void:
         var saved = config.get_value("controls", action, DEFAULT_BINDINGS[action])
         if typeof(saved) == TYPE_DICTIONARY:
             bindings[action] = saved
+    _remove_obsolete_actions()
     _apply_bindings()
 
 func save_settings() -> void:
@@ -82,6 +80,7 @@ func reset_defaults() -> void:
     _write_defaults()
     bindings = DEFAULT_BINDINGS.duplicate(true)
     save_settings()
+    _remove_obsolete_actions()
     _apply_bindings()
     apply_all()
     settings_changed.emit()
@@ -149,6 +148,13 @@ func _write_defaults() -> void:
             config.set_value(section, key, DEFAULTS[section][key])
     for action in DEFAULT_BINDINGS:
         config.set_value("controls", action, DEFAULT_BINDINGS[action])
+
+func _remove_obsolete_actions() -> void:
+    # Stage 10 is world-first. Old prototype shortcuts C/B must not invoke
+    # temporary shelter/crafting logic while locations are being authored.
+    for action in ["craft", "build"]:
+        if InputMap.has_action(action):
+            InputMap.erase_action(action)
 
 func _apply_bindings() -> void:
     for action in bindings:
