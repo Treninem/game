@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.0-stage7 — 2026-08-14
+- Rebuilt the pause/navigation menu into a game-style sidebar layout.
+- Saves, settings, map, inventory, crafting, journal and updates are now always visible from the pause menu.
+- Added direct gameplay hotkeys: M map, I inventory, J journal, K crafting.
+- Added a persistent exploration map with fog of war: visited cells are revealed and unexplored territory remains hidden.
+- Exploration progress is stored inside save data through world state and persists across reloads.
+- Added discovered POI markers for city gates, plaza, market, forge, tavern, guardhouse, Mira and danger areas.
+- Added player position marker and explored-percentage display on the map.
+- Kept the 10-slot save system, control rebinding, graphics, audio, gameplay settings and in-game update controls in the new menu.
+
 ## 0.6.0-stage6 — 2026-08-14
 - Added the first playable city district: Lюмengrad South Quarter.
 - Added southern wall and gate, gate towers, main road, plaza, market stalls, forge, tavern, guardhouse, houses, fountain, lamps, trees and city decor.
