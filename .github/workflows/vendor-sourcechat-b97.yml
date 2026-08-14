@@ -1,0 +1,100 @@
+name: Vendor source-chat B97 real CC0 canyon foliage
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b97.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b97
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 canyon and foliage sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b97"
+          TMP=".sourcechat_b97_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/canyon" "$ROOT/models/oga_canyon_terrain_161"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B97/1.0' \
+            "https://opengameart.org/sites/default/files/canyonterrain_blend_fbx_glb.zip" -o "$TMP/canyonterrain_blend_fbx_glb.zip"
+          unzip -q "$TMP/canyonterrain_blend_fbx_glb.zip" -d "$TMP/canyon"
+          rsync -a "$TMP/canyon/" "$ROOT/models/oga_canyon_terrain_161/"
+          meta "oga_canyon_terrain_161" \
+            "https://opengameart.org/content/canyon-terrain-asset" \
+            "Canyon Terrain Asset" \
+            "https://opengameart.org/sites/default/files/canyonterrain_blend_fbx_glb.zip" \
+            "161 canyon/desert terrain objects with rocks and plants; independent Blend/FBX/GLB source retained. Godot addon-dependent archive intentionally not imported into this source-only batch."
+
+          mkdir -p "$TMP/foliage" "$ROOT/models/oga_foliage_1"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-B97/1.0' \
+            "https://opengameart.org/sites/default/files/generic_foliage_fbx_gltf_blend.zip" -o "$TMP/generic_foliage_fbx_gltf_blend.zip"
+          unzip -q "$TMP/generic_foliage_fbx_gltf_blend.zip" -d "$TMP/foliage"
+          rsync -a "$TMP/foliage/" "$ROOT/models/oga_foliage_1/"
+          meta "oga_foliage_1" \
+            "https://opengameart.org/content/foliage1" \
+            "Foliage_1" \
+            "https://opengameart.org/sites/default/files/generic_foliage_fbx_gltf_blend.zip" \
+            "Grass, trees, shrubs and foliage source meshes with 2K textures; FBX/GLTF/Blend retained."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B97 — real CC0 canyon and foliage sources
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use these as source libraries for dry/canyon regions, cliffs, rocks, shrubs and vegetation variation. The Canyon Godot demo depends on external addons, so this batch deliberately keeps independent source geometry rather than adding runtime dependencies.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B97 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B97 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b97
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 canyon foliage B97"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
