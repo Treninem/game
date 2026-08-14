@@ -30,6 +30,7 @@ var temperature: float = 36.6
 var world_minutes: float = 8.0 * 60.0
 var enemies_defeated: int = 0
 var is_dead: bool = false
+var world_state: Dictionary = {}
 
 func reset_new_game() -> void:
     inventory = DEFAULT_INVENTORY.duplicate(true)
@@ -44,7 +45,16 @@ func reset_new_game() -> void:
     world_minutes = 8.0 * 60.0
     enemies_defeated = 0
     is_dead = false
+    world_state = {}
     _emit_all()
+
+func set_world_value(key: String, value: Variant) -> void:
+    if key.is_empty():
+        return
+    world_state[key] = value
+
+func get_world_value(key: String, default_value: Variant = null) -> Variant:
+    return world_state.get(key, default_value)
 
 func add_item(item_id: String, amount: int = 1) -> void:
     inventory[item_id] = int(inventory.get(item_id, 0)) + maxi(amount, 0)
@@ -116,7 +126,9 @@ func revive() -> void:
     thirst = maxf(thirst, 55.0)
     survival_changed.emit()
 
-func register_enemy_defeat() -> void:
+func register_enemy_defeat(enemy_id: String = "") -> void:
+    if not enemy_id.is_empty():
+        set_world_value("enemy:" + enemy_id, true)
     enemies_defeated += 1
     add_item("raw_meat", 1)
     notify("Враг побеждён. Получено сырое мясо.")
@@ -221,7 +233,8 @@ func snapshot() -> Dictionary:
         "thirst": thirst,
         "temperature": temperature,
         "world_minutes": world_minutes,
-        "enemies_defeated": enemies_defeated
+        "enemies_defeated": enemies_defeated,
+        "world_state": world_state.duplicate(true)
     }
 
 func load_snapshot(data: Dictionary) -> void:
@@ -244,6 +257,8 @@ func load_snapshot(data: Dictionary) -> void:
     temperature = clampf(float(data.get("temperature", 36.6)), 30.0, 42.0)
     world_minutes = fmod(float(data.get("world_minutes", 480.0)), 1440.0)
     enemies_defeated = maxi(0, int(data.get("enemies_defeated", 0)))
+    var saved_world_state = data.get("world_state", {})
+    world_state = saved_world_state.duplicate(true) if typeof(saved_world_state) == TYPE_DICTIONARY else {}
     is_dead = health <= 0.0
     _emit_all()
 
