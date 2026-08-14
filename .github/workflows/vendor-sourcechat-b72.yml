@@ -1,0 +1,128 @@
+name: Vendor source-chat B72 real CC0 forest fauna
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b72.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b72
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 forest fauna sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b72"
+          TMP=".sourcechat_b72_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/fox" "$ROOT/models/oga_fox_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B72/1.0' \
+            "https://opengameart.org/sites/default/files/fox_source_v3.zip" \
+            -o "$TMP/fox.zip"
+          unzip -q "$TMP/fox.zip" -d "$TMP/fox"
+          chmod -R u+rwX "$TMP/fox" || true
+          rsync -a "$TMP/fox/" "$ROOT/models/oga_fox_animated/"
+          meta "oga_fox_animated" \
+            "https://opengameart.org/content/fox-0" \
+            "Fox" \
+            "https://opengameart.org/sites/default/files/fox_source_v3.zip" \
+            "342-triangle fox with 1024 diffuse/normal textures and idle, walk, run, bite, digging and death animations."
+
+          mkdir -p "$ROOT/models/oga_deer_female_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B72/1.0' \
+            "https://opengameart.org/sites/default/files/doe.blend" \
+            -o "$ROOT/models/oga_deer_female_rigged_animated/doe.blend"
+          meta "oga_deer_female_rigged_animated" \
+            "https://opengameart.org/content/deer-female" \
+            "Deer Female" \
+            "https://opengameart.org/sites/default/files/doe.blend" \
+            "Rigged and animated female deer with diffuse texture packed into the Blend file; source page describes it as ready for game use."
+
+          mkdir -p "$ROOT/models/oga_rabbit_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B72/1.0' \
+            "https://opengameart.org/sites/default/files/rabbit.blend" \
+            -o "$ROOT/models/oga_rabbit_rigged_animated/rabbit.blend"
+          meta "oga_rabbit_rigged_animated" \
+            "https://opengameart.org/content/rabbit-0" \
+            "Rabbit" \
+            "https://opengameart.org/sites/default/files/rabbit.blend" \
+            "Rigged and animated rabbit with diffuse texture and normal map packed into the Blend file."
+
+          mkdir -p "$TMP/bear" "$ROOT/models/oga_white_bear_static"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B72/1.0' \
+            "https://opengameart.org/sites/default/files/Bear.7z" \
+            -o "$TMP/Bear.7z"
+          if 7z x -y "$TMP/Bear.7z" -o"$TMP/bear" >/dev/null; then
+            chmod -R u+rwX "$TMP/bear" || true
+            rsync -a "$TMP/bear/" "$ROOT/models/oga_white_bear_static/"
+          else
+            cp "$TMP/Bear.7z" "$ROOT/models/oga_white_bear_static/Bear.7z"
+          fi
+          meta "oga_white_bear_static" \
+            "https://opengameart.org/content/white-bear-low-poly" \
+            "White Bear (Low poly)" \
+            "https://opengameart.org/sites/default/files/Bear.7z" \
+            "Textured low-poly bear source; source page explicitly states it is not rigged. If extraction fails on the hosted runner, the original 7z is preserved."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B72 — real CC0 forest fauna
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should normalize scale, skeletons/materials and selectively promote the fox, doe and rabbit. The white bear is static and requires rigging/animation for active fauna use.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B72 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B72 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b72
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 forest fauna B72"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
