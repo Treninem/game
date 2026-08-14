@@ -72,6 +72,7 @@ radius = 0.5
 height = 3.0
 use_collision = true
 script = ExtResource("3")
+persistent_id = "tree_start"
 resource_id = "wood"
 display_name = "дерево"
 uses = 12
@@ -82,6 +83,7 @@ radius = 0.55
 height = 3.0
 use_collision = true
 script = ExtResource("3")
+persistent_id = "tree_ruins"
 resource_id = "wood"
 display_name = "дерево"
 uses = 10
@@ -91,6 +93,7 @@ position = Vector3(4, 0.8, 0)
 radius = 0.9
 use_collision = true
 script = ExtResource("3")
+persistent_id = "rock_start"
 resource_id = "stone"
 display_name = "камень"
 uses = 8
@@ -100,6 +103,7 @@ position = Vector3(10, 0.65, -7)
 radius = 0.75
 use_collision = true
 script = ExtResource("3")
+persistent_id = "rock_east"
 resource_id = "stone"
 display_name = "камень"
 uses = 6
@@ -109,6 +113,7 @@ position = Vector3(-7, 0.65, 7)
 radius = 0.7
 use_collision = true
 script = ExtResource("3")
+persistent_id = "berries_start"
 resource_id = "berries"
 display_name = "ягоды"
 amount_per_use = 1
@@ -120,6 +125,7 @@ radius = 1.1
 height = 1.3
 use_collision = true
 script = ExtResource("3")
+persistent_id = "well_start"
 resource_id = "water_flask"
 display_name = "фляга воды"
 amount_per_use = 1
@@ -128,6 +134,7 @@ uses = 12
 [node name="Raider1" type="CharacterBody3D" parent="World"]
 position = Vector3(-14, 0.1, -15)
 script = ExtResource("5")
+enemy_id = "raider_west_01"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Raider1"]
 position = Vector3(0, 0.8, 0)
@@ -140,6 +147,7 @@ mesh = SubResource("EnemyMesh")
 [node name="Raider2" type="CharacterBody3D" parent="World"]
 position = Vector3(15, 0.1, -18)
 script = ExtResource("5")
+enemy_id = "raider_east_01"
 max_health = 90.0
 move_speed = 3.6
 attack_damage = 10.0
@@ -173,7 +181,7 @@ offset_bottom = 180.0
 [node name="VBox" type="VBoxContainer" parent="UI/Panel"]
 
 [node name="Title" type="Label" parent="UI/Panel/VBox"]
-text = "ImPuls PC — Stage 2 Combat & Survival"
+text = "ImPuls PC — Stage 3 Persistent World"
 theme_override_font_sizes/font_size = 22
 
 [node name="Inventory" type="Label" parent="UI/Panel/VBox"]
