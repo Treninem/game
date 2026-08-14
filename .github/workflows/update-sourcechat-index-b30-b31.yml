@@ -1,0 +1,84 @@
+name: Update source-chat staging index through B31
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b30-b31.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sourcechat-index-b30-b31
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Append verified B30-B31
+        shell: bash
+        run: |
+          set -euo pipefail
+          for p in \
+            assets/staging/sourcechat_b30/models/kenney_castle_kit \
+            assets/staging/sourcechat_b30/models/kenney_modular_dungeon_kit \
+            assets/staging/sourcechat_b30/models/kenney_building_kit \
+            assets/staging/sourcechat_b30/models/kenney_fantasy_town_kit \
+            assets/staging/sourcechat_b30/models/kenney_city_kit_commercial \
+            assets/staging/sourcechat_b31/models/kenney_prototype_kit \
+            assets/staging/sourcechat_b31/models/kenney_pirate_kit; do test -d "$p"; done
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/staging/SOURCECHAT_INDEX.md')
+          t=p.read_text(encoding='utf-8')
+          if '## B30 — Kenney world architecture kits' in t:
+              raise SystemExit(0)
+          marker='## Integration rules for the main chat'
+          block='''## B30 — Kenney world architecture kits
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b30/models/`
+
+          - `kenney_castle_kit/` — castle walls, towers, gates and related fortification pieces.
+          - `kenney_modular_dungeon_kit/` — modular dungeon segments.
+          - `kenney_building_kit/` — general building walls, windows, animated doors and roofs.
+          - `kenney_fantasy_town_kit/` — broad modular fantasy/medieval town source set.
+          - `kenney_city_kit_commercial/` — commercial city buildings and compatible street details.
+
+          Recommended use: fortifications, dungeons, capital/village expansion and commercial districts. Main chat should choose one coherent regional style per district, normalize scale/materials/collisions and promote optimized production subsets only.
+
+          ## B31 — prototype/animation fallback and pirate/coast assets
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b31/models/`
+
+          - `kenney_prototype_kit/` — broad prototyping source library with characters/animations, animals/animations, vehicles, structures and interactive objects.
+          - `kenney_pirate_kit/` — ships, treasure, island/nature and pirate-themed props.
+
+          Recommended use: Prototype Kit primarily as animation/prototyping/fallback source; Pirate Kit for ports, islands and coastal locations where the art direction fits. Avoid blindly promoting placeholder-style assets into final runtime content.
+
+          '''
+          if marker not in t: raise SystemExit('integration marker missing')
+          p.write_text(t.replace(marker,block+marker,1),encoding='utf-8')
+          PY
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches through B31"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
