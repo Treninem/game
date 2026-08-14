@@ -6,6 +6,7 @@ on:
     paths:
       - "installer/updater_bootstrap.ps1"
       - "installer/updater_v4.ps1"
+      - "installer/repair_sync.ps1"
       - "installer/updater.ps1"
       - "tools/build_delta.py"
       - ".github/workflows/windows-build.yml"
@@ -93,11 +94,11 @@ jobs:
         with:
           sparse-checkout: |
             installer
-      - name: Parse bootstrap and updater runtimes as explicit UTF-8
+      - name: Parse updater runtimes as explicit UTF-8
         shell: powershell
         run: |
           $utf8 = New-Object System.Text.UTF8Encoding($false)
-          foreach ($file in @("installer/updater_bootstrap.ps1", "installer/updater_v4.ps1", "installer/updater.ps1")) {
+          foreach ($file in @("installer/updater_bootstrap.ps1", "installer/updater_v4.ps1", "installer/repair_sync.ps1", "installer/updater.ps1")) {
             $tokens = $null
             $errors = $null
             $source = [System.IO.File]::ReadAllText((Resolve-Path $file), $utf8)
@@ -108,20 +109,32 @@ jobs:
             }
             Write-Host "$file syntax OK"
           }
-      - name: Prove bootstrap loads localized UTF-8 implementation
+      - name: Prove localized delta bootstrap and file repair policy
         shell: powershell
         run: |
-          $text = Get-Content installer/updater_bootstrap.ps1 -Raw
-          if ($text -notmatch 'ReadAllText' -or $text -notmatch 'UTF8Encoding' -or $text -notmatch 'updater_v4.ps1') {
+          $bootstrap = Get-Content installer/updater_bootstrap.ps1 -Raw
+          if ($bootstrap -notmatch 'ReadAllText' -or $bootstrap -notmatch 'UTF8Encoding' -or $bootstrap -notmatch 'updater_v4.ps1') {
             throw "Bootstrap does not enforce UTF-8 implementation loading"
           }
           $impl = [System.IO.File]::ReadAllText((Resolve-Path "installer/updater_v4.ps1"), (New-Object System.Text.UTF8Encoding($false)))
           foreach ($marker in @('Initialize-ProgressUi','Set-ProgressUi','Download-File','Get-DeltaChain','Apply-Delta','Verify-Manifest')) {
             if ($impl -notmatch [regex]::Escape($marker)) { throw "Missing updater marker: $marker" }
           }
+          if ($impl -match 'ImPuls-PC-Windows-x64\.zip.*Download-File') { throw "Delta updater contains forbidden full-package fallback" }
+
+          $repair = [System.IO.File]::ReadAllText((Resolve-Path "installer/repair_sync.ps1"), (New-Object System.Text.UTF8Encoding($false)))
+          foreach ($marker in @('ImPuls-File-Manifest.json','ImPuls.exe','ImPuls.pck','File-Matches','Verify-Hash','Download-File')) {
+            if ($repair -notmatch [regex]::Escape($marker)) { throw "Missing repair marker: $marker" }
+          }
+          if ($repair -match 'ImPuls-PC-Windows-x64\.zip') { throw "Repair runtime must not download the full game archive" }
+
+          $router = Get-Content installer/updater.ps1 -Raw
+          foreach ($marker in @('repair_sync.ps1','updater_bootstrap.ps1','ImPuls.exe','ImPuls.pck')) {
+            if ($router -notmatch [regex]::Escape($marker)) { throw "Updater router missing marker: $marker" }
+          }
           $hasNonAscii = $false
           foreach ($ch in $impl.ToCharArray()) {
             if ([int]$ch -gt 127) { $hasNonAscii = $true; break }
           }
           if (-not $hasNonAscii) { throw "Localized updater text is missing" }
-          Write-Host "UTF-8 localized updater bootstrap proof OK"
+          Write-Host "Delta + individual file repair policy proof OK"
