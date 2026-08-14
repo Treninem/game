@@ -1,5 +1,5 @@
 ; ImPuls PC — offline single-player RPG
-; Stable foundation: world visibility, traversal, clean UI boot and rolling stable updates
+; Stable release candidate 0.10.1: world visibility, traversal, clean UI boot and rolling stable updates
 config_version=5
 
 [application]
