@@ -1,0 +1,102 @@
+name: Vendor source-chat B19 real CC0 breakable doors windows
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b19.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b19
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 breakable door/window sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b19/models/oga_breakable_doors_windows"
+          TMP=".sourcechat_b19_tmp"
+          rm -rf "$TMP" "$ROOT"
+          mkdir -p "$ROOT/godot_ready" "$ROOT/source" "$TMP/godot" "$TMP/source"
+
+          GODOT_URL="https://opengameart.org/sites/default/files/breakable_entrances_godot.zip"
+          SOURCE_URL="https://opengameart.org/sites/default/files/doorsandwindows_fbx_gltf_textures_blend.zip"
+          PAGE="https://opengameart.org/content/breakable-doors-and-windows"
+
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 360 -A 'ImPuls-CC0-SourceChat-B19/1.0' "$GODOT_URL" -o "$TMP/godot.zip"
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 360 -A 'ImPuls-CC0-SourceChat-B19/1.0' "$SOURCE_URL" -o "$TMP/source.zip"
+          unzip -q "$TMP/godot.zip" -d "$TMP/godot"
+          unzip -q "$TMP/source.zip" -d "$TMP/source"
+
+          rsync -a --prune-empty-dirs --include='*/' \
+            --include='*.tscn' --include='*.tres' --include='*.res' --include='*.material' \
+            --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' \
+            --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+            --include='*.blend' --include='*.BLEND' \
+            --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+            --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+            --exclude='*.gd' --exclude='*.cs' --exclude='*.dll' --exclude='*.exe' --exclude='*' "$TMP/godot/" "$ROOT/godot_ready/"
+
+          rsync -a --prune-empty-dirs --include='*/' \
+            --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' \
+            --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+            --include='*.blend' --include='*.BLEND' \
+            --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+            --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+            --exclude='*' "$TMP/source/" "$ROOT/source/"
+
+          cat > "$ROOT/SOURCE.md" <<EOF
+          # Source
+
+          Pack: Breakable Doors and Windows
+          Author: loafbrr_1 / OpenGameArt
+          Source page: $PAGE
+          Godot-ready archive: $GODOT_URL
+          Source archive: $SOURCE_URL
+          License: CC0 1.0 Universal / Creative Commons Zero as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+
+          Source page notes: materials are set up in the Godot folder and Blend source, textures are 1K, models use FBX/source formats, and broken variants plus collider meshes are included.
+          Third-party executable scripts are intentionally excluded. Main integration chat should use the game's own interaction/destruction logic.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          The OpenGameArt source page marks Breakable Doors and Windows as Creative Commons Zero / CC0.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+
+          cat > "assets/staging/sourcechat_b19/README.md" <<'EOF'
+          # Source chat B19 — real CC0 breakable doors/windows
+
+          Real extracted files only. Godot-ready resources plus FBX/GLTF/Blend/texture sources are staged, with executable third-party scripts excluded.
+          Main chat should inspect scale, pivots, collisions, door/window states and broken pieces before promoting selected assets into production.
+          EOF
+
+          rm -rf "$TMP"
+          find assets/staging/sourcechat_b19 -type f | wc -l
+          du -sh assets/staging/sourcechat_b19
+
+      - name: Commit only B19 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b19
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 breakable doors windows B19"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
