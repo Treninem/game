@@ -75,8 +75,7 @@ jobs:
           test -f build/windows/ImPuls.exe
           test -f build/windows/ImPuls.pck
       - name: Report compact package size
-        run: |
-          du -h build/windows/ImPuls.exe build/windows/ImPuls.pck
+        run: du -h build/windows/ImPuls.exe build/windows/ImPuls.pck
       - name: Package Windows build
         run: cd build/windows && zip -9 -r ../../ImPuls-PC-Windows-x64.zip .
       - uses: actions/upload-artifact@v4
@@ -97,15 +96,16 @@ jobs:
             installer
             assets/branding
       - name: Validate updater PowerShell syntax
-        shell: pwsh
+        shell: powershell
         run: |
-          $files = @("installer/updater_v4.ps1", "installer/updater.ps1", "installer/install_update_task.ps1", "installer/refresh_shortcuts.ps1")
+          $files = @("installer/updater_bootstrap.ps1", "installer/updater_v4.ps1", "installer/updater.ps1", "installer/install_update_task.ps1", "installer/refresh_shortcuts.ps1")
           foreach ($file in $files) {
             $tokens = $null
             $errors = $null
-            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file), [ref]$tokens, [ref]$errors) | Out-Null
+            $source = [System.IO.File]::ReadAllText((Resolve-Path $file), (New-Object System.Text.UTF8Encoding($false)))
+            [System.Management.Automation.Language.Parser]::ParseInput($source, [ref]$tokens, [ref]$errors) | Out-Null
             if ($errors.Count -gt 0) {
-              $errors | ForEach-Object { Write-Error "$file: $($_.Message)" }
+              $errors | ForEach-Object { Write-Error "$file :: $($_.Message)" }
               throw "PowerShell syntax validation failed: $file"
             }
           }
@@ -196,7 +196,7 @@ jobs:
           cp installer-artifact/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
 
           mkdir -p updater-runtime
-          cp installer/updater_v4.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
+          cp installer/updater_bootstrap.ps1 installer/updater_v4.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
           (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
 
           FROM_BUILD="${OLD_BUILD:-bootstrap}"
