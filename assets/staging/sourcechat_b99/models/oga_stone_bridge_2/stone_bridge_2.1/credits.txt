@@ -1,0 +1,23 @@
+This document is for informational purposes only.
+If redistributing this archive, please include this file so that others may benefit from 
+the information included herein.
+
+All included files are, or have previously been, released into the public domain - CC0
+No credit is required.
+
+stone_bridge_2.blend - https://opengameart.org/content/stone_bridge_2 - Paul_Wortmann - cc0
+Included is the blend file, as well as obj exports of each piece.
+
+The textures were derived from:
+(They have been modified)
+https://opengameart.org/content/tileable-bricks-ground-textures-set-1       - Cethiel   - cc0
+https://opengameart.org/content/stylized-sandy-stone-path                   - minime453 - cc0
+
+Preview image 1:
+Blender 2.83.5
+
+Preview image 2:
+Grume 0.31.3
+https://github.com/Paul-Wortmann/Grume
+
+
