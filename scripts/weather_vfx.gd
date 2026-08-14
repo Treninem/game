@@ -10,6 +10,8 @@ var dust_particles: GPUParticles3D
 var bubble_particles: GPUParticles3D
 var splash_elapsed := 0.0
 var update_elapsed := 0.0
+var storm_elapsed := 0.0
+var next_storm_flash := 6.0
 
 func _ready() -> void:
     set_process(true)
@@ -34,6 +36,20 @@ func _process(delta: float) -> void:
         if splash_elapsed >= interval:
             splash_elapsed = 0.0
             _spawn_rain_splash(player.global_position)
+
+    _update_storm(delta)
+
+func _update_storm(delta: float) -> void:
+    if EnvironmentState.is_underwater or EnvironmentState.storm_intensity <= 0.12:
+        storm_elapsed = 0.0
+        return
+    storm_elapsed += delta
+    if storm_elapsed < next_storm_flash:
+        return
+    storm_elapsed = 0.0
+    var storm := clampf(EnvironmentState.storm_intensity, 0.12, 1.0)
+    next_storm_flash = randf_range(3.2, 9.0) / maxf(storm, 0.35)
+    ScreenVFX.lightning_flash(0.55 + storm * 0.75)
 
 func _ensure_emitters() -> void:
     if root != null and is_instance_valid(root):
