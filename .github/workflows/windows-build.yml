@@ -18,6 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Generate ImPuls icon
+        run: python3 tools/make_icon.py installer/impuls.ico
+
       - name: Install Godot 4.7.1 and export templates
         shell: bash
         run: |
@@ -34,8 +37,7 @@ jobs:
 
       - name: Validate project headlessly
         shell: bash
-        run: |
-          ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
 
       - name: Export Windows x64
         shell: bash
@@ -63,6 +65,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Generate ImPuls icon
+        run: python tools/make_icon.py installer/impuls.ico
+
       - uses: actions/download-artifact@v4
         with:
           name: game-windows
@@ -79,12 +84,8 @@ jobs:
         shell: pwsh
         run: |
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-          if (-not (Test-Path $iscc)) {
-            choco install innosetup -y --no-progress
-          }
-          if (-not (Test-Path $iscc)) {
-            throw "Inno Setup compiler not found"
-          }
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
+          if (-not (Test-Path $iscc)) { throw "Inno Setup compiler not found" }
 
       - name: Build real Windows installer
         shell: pwsh
@@ -106,28 +107,19 @@ jobs:
         with:
           name: game-windows
           path: game
-
       - uses: actions/download-artifact@v4
         with:
           name: ImPuls-Setup
           path: installer
-
       - name: Prepare release files
         shell: bash
         run: |
           cp game/ImPuls-PC-Windows-x64.zip .
           cp installer/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
           sha256sum ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe > SHA256SUMS.txt
-
       - name: Publish latest automatic build
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" \
-            ImPuls-PC-Windows-x64.zip \
-            ImPuls-Setup.exe \
-            SHA256SUMS.txt \
-            --repo "${{ github.repository }}" \
-            --title "ImPuls automatic build ${{ github.run_number }}" \
-            --notes "Automatic Windows build of ImPuls. Offline single-player Stage 1 vertical slice."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "Automatic Windows build of ImPuls. Offline single-player Stage 1 vertical slice."
