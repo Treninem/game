@@ -1,0 +1,50 @@
+name: Validate Magic Runtime
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/validate-magic.yml"
+      - "scripts/magic_*.gd"
+      - "scripts/player_controller.gd"
+      - "scripts/enemy.gd"
+      - "scripts/game_state.gd"
+      - "scripts/settings_manager.gd"
+      - "scripts/vfx_library.gd"
+      - "project.godot"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-magic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Validate project and magic scripts headlessly
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+
+      - name: Verify magic runtime files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s scripts/magic_system.gd
+          test -s scripts/magic_projectile.gd
+          test -s scripts/magic_zone.gd
+          grep -q 'MagicSystem="*res://scripts/magic_system.gd"' project.godot
+          grep -q 'cast_magic' scripts/settings_manager.gd
+          grep -q 'next_spell' scripts/settings_manager.gd
+          grep -q 'apply_status' scripts/enemy.gd
