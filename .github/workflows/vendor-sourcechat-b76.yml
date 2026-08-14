@@ -1,0 +1,124 @@
+name: Vendor source-chat B76 real CC0 dungeon kits genie
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b76.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b76
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 dungeon and genie sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b76"
+          TMP=".sourcechat_b76_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/minidungeon" "$ROOT/models/kenney_mini_dungeon_2"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B76/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_mini-dungeon_2.0.zip" -o "$TMP/minidungeon.zip"
+          unzip -q "$TMP/minidungeon.zip" -d "$TMP/minidungeon"
+          chmod -R u+rwX "$TMP/minidungeon" || true
+          rsync -a "$TMP/minidungeon/" "$ROOT/models/kenney_mini_dungeon_2/"
+          meta "kenney_mini_dungeon_2" \
+            "https://opengameart.org/content/mini-dungeon" \
+            "Mini Dungeon 2.0" \
+            "https://opengameart.org/sites/default/files/kenney_mini-dungeon_2.0.zip" \
+            "Kenney 2026 low-poly mini dungeon/roguelike kit with 30 optimized objects."
+
+          mkdir -p "$TMP/moddungeon" "$ROOT/models/kenney_modular_dungeon_kit_2"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B76/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_modular-dungeon-kit_2.0.zip" -o "$TMP/moddungeon.zip"
+          unzip -q "$TMP/moddungeon.zip" -d "$TMP/moddungeon"
+          chmod -R u+rwX "$TMP/moddungeon" || true
+          rsync -a "$TMP/moddungeon/" "$ROOT/models/kenney_modular_dungeon_kit_2/"
+          meta "kenney_modular_dungeon_kit_2" \
+            "https://opengameart.org/content/modular-dungeon-kit" \
+            "Modular Dungeon Kit 2.0" \
+            "https://opengameart.org/sites/default/files/kenney_modular-dungeon-kit_2.0.zip" \
+            "Kenney 2026 modular dungeon kit with 40 optimized objects and FBX/OBJ/GLTF source formats."
+
+          mkdir -p "$TMP/medieval" "$ROOT/models/oga_medieval_dungeon_interior_2026"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B76/1.0' \
+            "https://opengameart.org/sites/default/files/dungeon.tar.gz" -o "$TMP/dungeon.tar.gz"
+          tar -xzf "$TMP/dungeon.tar.gz" -C "$TMP/medieval"
+          chmod -R u+rwX "$TMP/medieval" || true
+          rsync -a "$TMP/medieval/" "$ROOT/models/oga_medieval_dungeon_interior_2026/"
+          meta "oga_medieval_dungeon_interior_2026" \
+            "https://opengameart.org/content/medieval-dungeon-interior" \
+            "medieval dungeon interior" \
+            "https://opengameart.org/sites/default/files/dungeon.tar.gz" \
+            "2026 modular dungeon interior source with two hallway types, room tiles and animated doors; color/normal PBR maps with retro nearest filtering."
+
+          mkdir -p "$ROOT/models/oga_genie_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B76/1.0' \
+            "https://opengameart.org/sites/default/files/genie.blend" -o "$ROOT/models/oga_genie_rigged_animated/genie.blend"
+          meta "oga_genie_rigged_animated" \
+            "https://opengameart.org/content/genie" \
+            "Genie" \
+            "https://opengameart.org/sites/default/files/genie.blend" \
+            "Fully rigged ~40k-triangle creature with one floating animation and color/roughness/normal maps. Higher-poly source; main chat must LOD/optimize before runtime use."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B76 — real CC0 dungeon kits and Genie
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should compare the three dungeon kits and promote a consistent subset rather than mixing every style. Genie is significantly higher-poly than the wildlife packs and should be optimized/LOD'd before any production use.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B76 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B76 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b76
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 dungeon kits genie B76"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
