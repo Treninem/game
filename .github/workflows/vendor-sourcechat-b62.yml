@@ -1,0 +1,81 @@
+name: Vendor source-chat B62 real CC0 authored NPCs
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b62.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b62
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 authored NPC sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b62"
+          rm -rf "$ROOT"
+          mkdir -p "$ROOT/models"
+
+          stage_file() {
+            local name="$1" url="$2" page="$3" title="$4" filename="$5" notes="$6"
+            mkdir -p "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B62/1.0' "$url" -o "$ROOT/models/$name/$filename"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_file "oga_bartender_rigged" "https://opengameart.org/sites/default/files/bartender-IK.blend" "https://opengameart.org/content/bartender" "Bartender" "bartender-IK.blend" "Rigged medieval villager/bartender woman; diffuse/AO/normal textures packed into Blend."
+          stage_file "oga_old_lady_rigged" "https://opengameart.org/sites/default/files/oldlady-v2.blend" "https://opengameart.org/content/old-lady" "Old Lady" "oldlady-v2.blend" "Rigged elderly woman with diffuse/specular/normal textures packed; source page lists a sitting animation."
+          stage_file "oga_monk_rigged_idle" "https://opengameart.org/sites/default/files/MONK.blend" "https://opengameart.org/content/monk" "Monk" "MONK.blend" "Rigged monk with diffuse/AO/specular/normal maps packed; source page lists idle animation."
+          stage_file "oga_goblin_rigged_animated" "https://opengameart.org/sites/default/files/goblin-FINAL.blend" "https://opengameart.org/content/goblin-1" "Goblin" "goblin-FINAL.blend" "Rigged and animated goblin with packed diffuse/texture/glow maps."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B62 — real CC0 authored NPC archetypes
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Includes bartender, old lady, monk and animated goblin sources. Main integration chat should test Godot skeleton/animation import, retarget compatible motions where useful, standardize scale/materials and keep these as authored NPC archetypes instead of mass-spawning duplicates.
+          EOF
+          echo "B62 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B62 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b62
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 authored NPCs B62"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
