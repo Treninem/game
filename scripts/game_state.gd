@@ -7,10 +7,10 @@ signal location_changed(location: String)
 signal notification_requested(message: String)
 signal player_died
 
+const CONTENT_PHASE := "world_foundation"
 const DEFAULT_INVENTORY := {
     "wood": 0,
     "stone": 0,
-    "building_kit": 0,
     "starter_axe": 0,
     "raw_meat": 0,
     "berries": 2,
@@ -18,11 +18,14 @@ const DEFAULT_INVENTORY := {
 }
 
 var inventory: Dictionary = DEFAULT_INVENTORY.duplicate(true)
+# Kept for backward save compatibility. Gameplay quests are intentionally
+# suspended until the world/capital/regions are stable and authored.
 var quest_stage: int = 0
 var city_quest_stage: int = 0
 var city_reputation: int = 0
 var coins: int = 20
-var current_location := "Окраины Люменграда"
+var current_location := "Люменград • территория столицы"
+# Legacy shelter fields are retained only so older saves can be migrated safely.
 var house_built: bool = false
 var house_position: Vector3 = Vector3.ZERO
 var health: float = 100.0
@@ -43,7 +46,7 @@ func reset_new_game() -> void:
     city_quest_stage = 0
     city_reputation = 0
     coins = 20
-    current_location = "Окраины Люменграда"
+    current_location = "Люменград • территория столицы"
     house_built = false
     house_position = Vector3.ZERO
     health = max_health
@@ -54,9 +57,23 @@ func reset_new_game() -> void:
     world_minutes = 8.0 * 60.0
     enemies_defeated = 0
     is_dead = false
-    world_state = {}
+    world_state = {"content_phase": CONTENT_PHASE, "world_foundation_v1": true}
     _emit_all()
     location_changed.emit(current_location)
+
+func migrate_to_world_foundation() -> void:
+    # Removes prototype progression without deleting useful player resources,
+    # map exploration or settings from existing save slots.
+    quest_stage = 0
+    city_quest_stage = 0
+    house_built = false
+    house_position = Vector3.ZERO
+    inventory.erase("building_kit")
+    world_state.erase("house")
+    world_state.erase("house_position")
+    world_state["content_phase"] = CONTENT_PHASE
+    world_state["world_foundation_v1"] = true
+    _emit_all()
 
 func set_location(location: String) -> void:
     if location.is_empty() or current_location == location:
@@ -73,6 +90,8 @@ func get_world_value(key: String, default_value: Variant = null) -> Variant:
     return world_state.get(key, default_value)
 
 func add_item(item_id: String, amount: int = 1) -> void:
+    if item_id == "building_kit":
+        return
     inventory[item_id] = int(inventory.get(item_id, 0)) + maxi(amount, 0)
     inventory_changed.emit()
 
@@ -131,7 +150,7 @@ func apply_damage(amount: float) -> void:
     survival_changed.emit()
     if health <= 0.0:
         is_dead = true
-        notify("Вы погибли. Возрождение у стартовой точки.")
+        notify("Вы погибли. Возрождение у безопасной точки столицы.")
         player_died.emit()
 
 func revive() -> void:
@@ -147,91 +166,33 @@ func register_enemy_defeat(enemy_id: String = "") -> void:
         set_world_value("enemy:" + enemy_id, true)
     enemies_defeated += 1
     add_item("raw_meat", 1)
-    notify("Враг побеждён. Получено сырое мясо.")
+    notify("Противник побеждён.")
 
+# Prototype quest/building entry points remain as safe no-ops so older NPC
+# scripts cannot crash the world-foundation build. They will be replaced after
+# the authored world and capital are complete.
 func start_quest() -> void:
-    if quest_stage != 0:
-        return
-    quest_stage = 1
-    quest_changed.emit()
-    notification_requested.emit("Задание: соберите 8 дерева и 4 камня.")
+    notify("Задания временно отключены: сначала завершается мир и столица.")
 
 func confirm_gathering() -> bool:
-    if quest_stage != 1:
-        return false
-    if not has_items({"wood": 8, "stone": 4}):
-        notification_requested.emit("Пока недостаточно ресурсов: нужно 8 дерева и 4 камня.")
-        return false
-    quest_stage = 2
-    quest_changed.emit()
-    notification_requested.emit("Ресурсы собраны. Откройте меню крафта и создайте строительный набор.")
-    return true
+    return false
 
 func try_craft_building_kit() -> bool:
-    if quest_stage < 2:
-        notification_requested.emit("Сначала получите рецепт у Миры.")
-        return false
-    if house_built or int(inventory.get("building_kit", 0)) > 0:
-        notification_requested.emit("Строительный набор уже создан или дом уже построен.")
-        return false
-    var recipe := {"wood": 8, "stone": 4}
-    if not has_items(recipe):
-        notification_requested.emit("Для набора требуется 8 дерева и 4 камня.")
-        return false
-    remove_item("wood", 8)
-    remove_item("stone", 4)
-    add_item("building_kit", 1)
-    notification_requested.emit("Создан строительный набор. Нажмите B, чтобы поставить убежище.")
-    return true
+    notify("Строительство будет подключено после завершения мира и локаций.")
+    return false
 
-func try_mark_house_built(position: Vector3) -> bool:
-    if house_built:
-        notification_requested.emit("Убежище уже построено.")
-        return false
-    if not remove_item("building_kit", 1):
-        notification_requested.emit("Нужен строительный набор. Создайте его в меню крафта.")
-        return false
-    house_built = true
-    house_position = position
-    if quest_stage == 2:
-        quest_stage = 3
-        quest_changed.emit()
-    notification_requested.emit("Убежище построено. Вернитесь к Мире.")
-    return true
+func try_mark_house_built(_position: Vector3) -> bool:
+    notify("Строительство будет подключено после завершения мира и локаций.")
+    return false
 
 func complete_intro_quest() -> bool:
-    if quest_stage != 3 or not house_built:
-        return false
-    quest_stage = 4
-    add_item("starter_axe", 1)
-    quest_changed.emit()
-    notification_requested.emit("Цепочка завершена. Получен стартовый топор. Теперь можно идти к городским воротам.")
-    return true
+    return false
 
 func start_city_quest() -> bool:
-    if city_quest_stage != 0:
-        return false
-    city_quest_stage = 1
-    quest_changed.emit()
-    notification_requested.emit("Новое поручение: ремонт Южных ворот — 6 камня и 4 древесины.")
-    return true
+    return false
 
 func complete_city_quest() -> bool:
-    if city_quest_stage != 1:
-        return false
-    var requirements := {"stone": 6, "wood": 4}
-    if not has_items(requirements):
-        notification_requested.emit("Для ремонта ворот нужно 6 камня и 4 древесины.")
-        return false
-    remove_item("stone", 6)
-    remove_item("wood", 4)
-    city_quest_stage = 2
-    coins += 35
-    city_reputation += 5
-    quest_changed.emit()
-    inventory_changed.emit()
-    notification_requested.emit("Ремонтный заказ выполнен: +35 монет, +5 репутации Люменграда.")
-    return true
+    return false
 
 func advance_survival(real_seconds: float) -> void:
     world_minutes = fmod(world_minutes + real_seconds * 4.0, 1440.0)
@@ -248,36 +209,18 @@ func advance_survival(real_seconds: float) -> void:
     survival_changed.emit()
 
 func quest_text() -> String:
-    if quest_stage < 4:
-        match quest_stage:
-            0:
-                return "Поговорите с Мирой [E]."
-            1:
-                return "Соберите 8 дерева и 4 камня, затем вернитесь к Мире."
-            2:
-                return "Создайте строительный набор и постройте убежище [B]."
-            3:
-                return "Вернитесь к Мире за наградой."
-    match city_quest_stage:
-        0:
-            return "Исследуйте Южный квартал Люменграда и поговорите с жителями."
-        1:
-            return "Радан: принесите 6 камня и 4 древесины для ремонта ворот."
-        2:
-            return "Ремонт Южных ворот завершён. Исследуйте город дальше."
-        _:
-            return "Исследуйте Люменград."
+    return ""
 
 func snapshot() -> Dictionary:
     return {
         "inventory": inventory.duplicate(true),
-        "quest_stage": quest_stage,
-        "city_quest_stage": city_quest_stage,
+        "quest_stage": 0,
+        "city_quest_stage": 0,
         "city_reputation": city_reputation,
         "coins": coins,
         "current_location": current_location,
-        "house_built": house_built,
-        "house_position": [house_position.x, house_position.y, house_position.z],
+        "house_built": false,
+        "house_position": [0.0, 0.0, 0.0],
         "health": health,
         "stamina": stamina,
         "hunger": hunger,
@@ -293,18 +236,16 @@ func load_snapshot(data: Dictionary) -> void:
     var saved_inventory = data.get("inventory", {})
     if typeof(saved_inventory) == TYPE_DICTIONARY:
         for key in saved_inventory:
-            inventory[String(key)] = int(saved_inventory[key])
-    quest_stage = int(data.get("quest_stage", 0))
-    city_quest_stage = int(data.get("city_quest_stage", 0))
+            var item_id := String(key)
+            if item_id != "building_kit":
+                inventory[item_id] = int(saved_inventory[key])
+    quest_stage = 0
+    city_quest_stage = 0
     city_reputation = maxi(0, int(data.get("city_reputation", 0)))
     coins = maxi(0, int(data.get("coins", 20)))
-    current_location = String(data.get("current_location", "Окраины Люменграда"))
-    house_built = bool(data.get("house_built", false))
-    var pos = data.get("house_position", [0.0, 0.0, 0.0])
-    if typeof(pos) == TYPE_ARRAY and pos.size() == 3:
-        house_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
-    else:
-        house_position = Vector3.ZERO
+    current_location = String(data.get("current_location", "Люменград • территория столицы"))
+    house_built = false
+    house_position = Vector3.ZERO
     health = clampf(float(data.get("health", 100.0)), 0.0, max_health)
     stamina = clampf(float(data.get("stamina", 100.0)), 0.0, max_stamina)
     hunger = clampf(float(data.get("hunger", 100.0)), 0.0, 100.0)
@@ -315,7 +256,7 @@ func load_snapshot(data: Dictionary) -> void:
     var saved_world_state = data.get("world_state", {})
     world_state = saved_world_state.duplicate(true) if typeof(saved_world_state) == TYPE_DICTIONARY else {}
     is_dead = health <= 0.0
-    _emit_all()
+    migrate_to_world_foundation()
     location_changed.emit(current_location)
 
 func notify(message: String) -> void:
