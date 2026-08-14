@@ -58,12 +58,12 @@ func _process(_delta: float) -> void:
         return
 
     _update_location()
-    var current_cell := _cell_for_world(player.global_position)
+    var current_cell: Vector2i = _cell_for_world(player.global_position)
     if current_cell != last_player_cell:
         last_player_cell = current_cell
         _refresh_stream(false)
 
-    var builds := 0
+    var builds: int = 0
     while not pending_cells.is_empty() and builds < MAX_CELL_BUILDS_PER_FRAME:
         var cell: Vector2i = pending_cells.pop_front()
         queued_cells.erase(cell)
@@ -78,8 +78,8 @@ func _resolve_player() -> void:
         player = get_tree().get_first_node_in_group("player") as Node3D
 
 func _update_location() -> void:
-    var world_2d := Vector2(player.global_position.x, player.global_position.z)
-    var location := "Окраины Люменграда"
+    var world_2d: Vector2 = Vector2(player.global_position.x, player.global_position.z)
+    var location: String = "Окраины Люменграда"
     if CAPITAL.inside_capital(world_2d):
         var district: Dictionary = CAPITAL.district_at(world_2d)
         location = "Люменград"
@@ -93,27 +93,27 @@ func _update_location() -> void:
 func _refresh_stream(force_current: bool) -> void:
     if player == null:
         return
-    var world_2d := Vector2(player.global_position.x, player.global_position.z)
+    var world_2d: Vector2 = Vector2(player.global_position.x, player.global_position.z)
     if not CAPITAL.inside_capital(world_2d):
         pending_cells.clear()
         queued_cells.clear()
         return
 
-    var current := _cell_for_world(player.global_position)
+    var current: Vector2i = _cell_for_world(player.global_position)
     if force_current and not loaded_cells.has(current):
         _queue_cell(current, true)
 
     for ring in range(0, LOAD_RADIUS_CELLS + 1):
         for x in range(-ring, ring + 1):
             for z in range(-ring, ring + 1):
-                if ring > 0 and abs(x) < ring and abs(z) < ring:
+                if ring > 0 and absi(x) < ring and absi(z) < ring:
                     continue
                 _queue_cell(current + Vector2i(x, z), false)
 
 func _queue_cell(cell: Vector2i, front: bool) -> void:
     if loaded_cells.has(cell) or queued_cells.has(cell):
         return
-    var center := _cell_center(cell)
+    var center: Vector3 = _cell_center(cell)
     if not CAPITAL.inside_capital(Vector2(center.x, center.z)):
         return
     queued_cells[cell] = true
@@ -125,17 +125,17 @@ func _queue_cell(cell: Vector2i, front: bool) -> void:
 func _should_keep_cell(cell: Vector2i) -> bool:
     if player == null:
         return false
-    var center := _cell_center(cell)
+    var center: Vector3 = _cell_center(cell)
     return Vector2(center.x, center.z).distance_to(Vector2(player.global_position.x, player.global_position.z)) <= UNLOAD_RADIUS
 
 func _unload_far_cells() -> void:
     if player == null:
         return
-    var player_2d := Vector2(player.global_position.x, player.global_position.z)
+    var player_2d: Vector2 = Vector2(player.global_position.x, player.global_position.z)
     var remove: Array[Vector2i] = []
     for key in loaded_cells.keys():
         var cell: Vector2i = key
-        var center := _cell_center(cell)
+        var center: Vector3 = _cell_center(cell)
         if Vector2(center.x, center.z).distance_to(player_2d) > UNLOAD_RADIUS:
             remove.append(cell)
     for cell in remove:
@@ -169,7 +169,7 @@ func _is_civic_core(cell: Vector2i, district_id: String) -> bool:
     return district_id in ["central", "starter"] and cell == _district_core_cell(district_id)
 
 func _lot_is_clear(root: Node3D, lot: Vector3) -> bool:
-    var world_lot := Vector2(root.position.x + lot.x, root.position.z + lot.z)
+    var world_lot: Vector2 = Vector2(root.position.x + lot.x, root.position.z + lot.z)
     return CAPITAL.protected_infrastructure_near(world_lot, LANDMARK_LOT_CLEARANCE).is_empty()
 
 func _build_cell(cell: Vector2i) -> void:
@@ -187,20 +187,20 @@ func _build_cell(cell: Vector2i) -> void:
         root
     )
 
-    var world_pos := Vector2(root.position.x, root.position.z)
+    var world_pos: Vector2 = Vector2(root.position.x, root.position.z)
     var district: Dictionary = CAPITAL.district_at(world_pos)
-    var district_id := String(district.get("id", "city"))
+    var district_id: String = String(district.get("id", "city"))
     _add_road_network(root, cell, district_id)
     _populate_cell(root, cell, district_id)
 
 func _add_road_network(root: Node3D, cell: Vector2i, district_id: String) -> void:
-    var dense := district_id in DENSE_STREET_DISTRICTS
-    var open_area := district_id in OPEN_DISTRICTS
-    var ns_enabled := dense or abs(cell.x) % 2 == 0
-    var ew_enabled := dense or abs(cell.y) % 2 == 0
-    var road_width := _road_width_for(cell, district_id)
+    var dense: bool = district_id in DENSE_STREET_DISTRICTS
+    var open_area: bool = district_id in OPEN_DISTRICTS
+    var ns_enabled: bool = dense or absi(cell.x) % 2 == 0
+    var ew_enabled: bool = dense or absi(cell.y) % 2 == 0
+    var road_width: float = _road_width_for(cell, district_id)
     var road_material: Material = materials["track"] if district_id == "farms" else materials["road"]
-    var sidewalks := not open_area and district_id != "sawmill" and district_id != "training_mine"
+    var sidewalks: bool = not open_area and district_id != "sawmill" and district_id != "training_mine"
 
     if ns_enabled:
         _add_road_strip(root, "RoadNS", true, road_width, 0.0, road_material, sidewalks)
@@ -208,8 +208,8 @@ func _add_road_network(root: Node3D, cell: Vector2i, district_id: String) -> voi
         _add_road_strip(root, "RoadEW", false, road_width, 0.0, road_material, sidewalks)
 
     if district_id in ["market", "crafts", "old_town", "residential"]:
-        var alley_vertical := abs(cell.x + cell.y) % 2 == 0
-        var alley_offset := 58.0 if abs(cell.x * 3 + cell.y) % 2 == 0 else -58.0
+        var alley_vertical: bool = absi(cell.x + cell.y) % 2 == 0
+        var alley_offset: float = 58.0 if absi(cell.x * 3 + cell.y) % 2 == 0 else -58.0
         _add_road_strip(root, "Lane", alley_vertical, 7.0, alley_offset, materials["lane"], false)
 
     if _is_civic_core(cell, district_id):
@@ -219,10 +219,10 @@ func _road_width_for(cell: Vector2i, district_id: String) -> float:
     if district_id in OPEN_DISTRICTS:
         return 9.0
     if district_id in GRAND_STREET_DISTRICTS:
-        return 20.0 if abs(cell.x + cell.y) % 4 == 0 else 16.0
+        return 20.0 if absi(cell.x + cell.y) % 4 == 0 else 16.0
     if district_id in INDUSTRIAL_DISTRICTS or district_id in ["guards", "training"]:
         return 14.0
-    return 12.0 if abs(cell.x + cell.y) % 3 != 0 else 15.0
+    return 12.0 if absi(cell.x + cell.y) % 3 != 0 else 15.0
 
 func _add_road_strip(
     root: Node3D,
@@ -233,13 +233,13 @@ func _add_road_strip(
     material: Material,
     sidewalks: bool
 ) -> void:
-    var road_size := Vector3(width, 0.10, CELL_SIZE + 0.6) if vertical else Vector3(CELL_SIZE + 0.6, 0.10, width)
-    var road_pos := Vector3(offset, 0.045, 0) if vertical else Vector3(0, 0.045, offset)
+    var road_size: Vector3 = Vector3(width, 0.10, CELL_SIZE + 0.6) if vertical else Vector3(CELL_SIZE + 0.6, 0.10, width)
+    var road_pos: Vector3 = Vector3(offset, 0.045, 0) if vertical else Vector3(0, 0.045, offset)
     _add_mesh_box(node_name, road_size, road_pos, material, root)
 
     if not sidewalks:
         return
-    var sidewalk_offset := width * 0.5 + 2.2
+    var sidewalk_offset: float = width * 0.5 + 2.2
     if vertical:
         _add_mesh_box(node_name + "WalkL", Vector3(3.4, 0.12, CELL_SIZE + 0.6), Vector3(offset - sidewalk_offset, 0.065, 0), materials["walk"], root)
         _add_mesh_box(node_name + "WalkR", Vector3(3.4, 0.12, CELL_SIZE + 0.6), Vector3(offset + sidewalk_offset, 0.065, 0), materials["walk"], root)
@@ -261,7 +261,7 @@ func _populate_cell(root: Node3D, cell: Vector2i, district_id: String) -> void:
         _build_port_detail(root, rng)
         return
 
-    var base_lots := [
+    var base_lots: Array[Vector3] = [
         Vector3(-54, 0, -54), Vector3(54, 0, -54),
         Vector3(-54, 0, 54), Vector3(54, 0, 54)
     ]
@@ -273,12 +273,12 @@ func _populate_cell(root: Node3D, cell: Vector2i, district_id: String) -> void:
         if _lot_is_clear(root, lot):
             available_lots.append(lot)
 
-    var building_count := mini(_building_count_for(district_id), available_lots.size())
+    var building_count: int = mini(_building_count_for(district_id), available_lots.size())
     for i in range(building_count):
-        var lot_index := rng.randi_range(0, available_lots.size() - 1)
-        var lot := available_lots[lot_index]
+        var lot_index: int = rng.randi_range(0, available_lots.size() - 1)
+        var lot: Vector3 = available_lots[lot_index]
         available_lots.remove_at(lot_index)
-        var rotation_step := rng.randi_range(0, 3)
+        var rotation_step: int = rng.randi_range(0, 3)
         _build_medieval_house(root, lot, float(rotation_step) * PI * 0.5, district_id, rng)
 
     _add_district_props(root, district_id, rng)
@@ -295,7 +295,7 @@ func _building_count_for(district_id: String) -> int:
 func _add_district_props(root: Node3D, district_id: String, rng: RandomNumberGenerator) -> void:
     if district_id in ["market", "crafts", "warehouses", "sawmill"]:
         _instance_asset("wagon", root, Vector3(28, 0.12, -25), Vector3(0, rng.randf_range(-PI, PI), 0))
-        var crate_count := 4 if district_id == "warehouses" else 2
+        var crate_count: int = 4 if district_id == "warehouses" else 2
         for i in range(crate_count):
             _instance_asset("crate", root, Vector3(23 + i * 1.5, 0.08, -31), Vector3.ZERO)
     elif district_id in ["guards", "training", "guilds", "adventurers"]:
@@ -311,17 +311,17 @@ func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id
     building.rotation.y = yaw
     parent.add_child(building)
 
-    var brick_style := district_id in ["old_town", "guards", "training", "training_mine", "warehouses", "port", "crafts"]
-    var wall_key := "wall_brick" if brick_style else "wall_plaster"
-    var door_key := "door_brick" if brick_style else "door_plaster"
-    var window_key := "window_brick" if brick_style else "window_plaster"
-    var stories := _story_count_for(district_id)
+    var brick_style: bool = district_id in ["old_town", "guards", "training", "training_mine", "warehouses", "port", "crafts"]
+    var wall_key: String = "wall_brick" if brick_style else "wall_plaster"
+    var door_key: String = "door_brick" if brick_style else "door_plaster"
+    var window_key: String = "window_brick" if brick_style else "window_plaster"
+    var stories: int = _story_count_for(district_id)
 
     for story in range(stories):
-        var y := float(story) * STORY_HEIGHT
+        var y: float = float(story) * STORY_HEIGHT
         for i in range(4):
-            var offset := -3.0 + float(i) * MODULE_WIDTH
-            var front_key := wall_key
+            var offset: float = -3.0 + float(i) * MODULE_WIDTH
+            var front_key: String = wall_key
             if story == 0 and i == 1:
                 front_key = door_key
             elif i == 0 or i == 3:
@@ -338,7 +338,7 @@ func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id
         building
     )
 
-    var clutter_chance := 0.55 if district_id in INDUSTRIAL_DISTRICTS else 0.24
+    var clutter_chance: float = 0.55 if district_id in INDUSTRIAL_DISTRICTS else 0.24
     if rng.randf() < clutter_chance:
         _instance_asset("crate", building, Vector3(5.2, 0.08, 3.4), Vector3(0, rng.randf_range(-PI, PI), 0))
 
@@ -350,7 +350,7 @@ func _story_count_for(district_id: String) -> int:
     return 2
 
 func _build_plaza_detail(root: Node3D, rng: RandomNumberGenerator, district_id: String) -> void:
-    var plaza_size := 124.0 if district_id == "central" else 108.0
+    var plaza_size: float = 124.0 if district_id == "central" else 108.0
     _add_mesh_box("PlazaStone", Vector3(plaza_size, 0.13, plaza_size), Vector3(0, 0.075, 0), materials["plaza"], root)
     if district_id == "central":
         var base := CylinderMesh.new()
@@ -368,9 +368,9 @@ func _build_plaza_detail(root: Node3D, rng: RandomNumberGenerator, district_id: 
 
 func _build_open_district_detail(root: Node3D, rng: RandomNumberGenerator, district_id: String) -> void:
     if district_id == "farms":
-        var field_positions := [Vector3(-52, 0.045, -52), Vector3(52, 0.045, -52), Vector3(-52, 0.045, 52), Vector3(52, 0.045, 52)]
+        var field_positions: Array[Vector3] = [Vector3(-52, 0.045, -52), Vector3(52, 0.045, -52), Vector3(-52, 0.045, 52), Vector3(52, 0.045, 52)]
         for i in range(field_positions.size()):
-            var size := Vector3(rng.randf_range(38.0, 54.0), 0.08, rng.randf_range(42.0, 62.0))
+            var size: Vector3 = Vector3(rng.randf_range(38.0, 54.0), 0.08, rng.randf_range(42.0, 62.0))
             _add_mesh_box("Field_%d" % i, size, field_positions[i], materials["soil"], root)
     elif district_id == "canals":
         _add_mesh_box("Canal", Vector3(30, 0.05, CELL_SIZE - 28), Vector3(52, 0.03, 0), materials["water"], root)
@@ -401,10 +401,10 @@ func _build_port_detail(root: Node3D, rng: RandomNumberGenerator) -> void:
 
 func _load_city_assets() -> void:
     for key in ASSET_PATHS.keys():
-        var path := String(ASSET_PATHS[key])
+        var path: String = String(ASSET_PATHS[key])
         if not ResourceLoader.exists(path):
             continue
-        var resource := load(path)
+        var resource: Resource = load(path)
         if resource is PackedScene:
             assets[key] = resource
 
@@ -432,7 +432,7 @@ func _fallback_asset(parent: Node3D, pos: Vector3, rotation: Vector3) -> Node3D:
     return marker
 
 func _cell_seed(cell: Vector2i) -> int:
-    return abs(CITY_SEED ^ (cell.x * 73856093) ^ (cell.y * 19349663))
+    return absi(CITY_SEED ^ (cell.x * 73856093) ^ (cell.y * 19349663))
 
 func _prepare_materials() -> void:
     materials["ground"] = _material(Color(0.29, 0.31, 0.25), 0.98)
