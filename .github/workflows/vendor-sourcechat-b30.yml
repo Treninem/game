@@ -1,0 +1,93 @@
+name: Vendor source-chat B30 real CC0 Kenney architecture kits
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b30.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b30
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 Kenney architecture kits
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b30/models"
+          TMP=".sourcechat_b30_tmp"
+          rm -rf "assets/staging/sourcechat_b30" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+
+          stage_zip() {
+            local name="$1" file="$2" page="$3" title="$4"
+            local url="https://opengameart.org/sites/default/files/$file"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B30/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            find "$ROOT/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip "kenney_castle_kit" "kenney_castle-kit.zip" "https://opengameart.org/content/castle-kit" "Kenney Castle Kit"
+          stage_zip "kenney_modular_dungeon_kit" "kenney_modular-dungeon-kit_2.0.zip" "https://opengameart.org/content/modular-dungeon-kit" "Kenney Modular Dungeon Kit"
+          stage_zip "kenney_building_kit" "kenney_building-kit.zip" "https://opengameart.org/content/building-kit" "Kenney Building Kit"
+          stage_zip "kenney_fantasy_town_kit" "kenney_fantasy-town-kit_2.0.zip" "https://opengameart.org/content/fantasy-town-kit" "Kenney Fantasy Town Kit"
+          stage_zip "kenney_city_kit_commercial" "kenney_city-kit-commercial_2.1.zip" "https://opengameart.org/content/city-kit-commercial" "Kenney City Kit (Commercial)"
+
+          cat > "assets/staging/sourcechat_b30/README.md" <<'EOF'
+          # Source chat B30 — real CC0 world architecture kits
+
+          Real extracted source assets only; nothing is connected to gameplay.
+
+          - Castle Kit: castle walls, towers, gates, siege props, flags and related pieces.
+          - Modular Dungeon Kit: modular dungeon segments.
+          - Building Kit: walls, windows, doors and roofs for general structures.
+          - Fantasy Town Kit: 160+ optimized modular fantasy/medieval town pieces.
+          - City Kit (Commercial): 50+ optimized commercial buildings, awnings, signs and compatible city details.
+
+          Main chat should select an art-direction-consistent subset per region, normalize scale/materials/collisions and convert/promote only production-ready GLB variants.
+          EOF
+          rm -rf "$TMP"
+          echo "B30 files:"; find assets/staging/sourcechat_b30 -type f | wc -l
+          du -sh assets/staging/sourcechat_b30
+
+      - name: Commit B30 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b30
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 Kenney world architecture B30"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
