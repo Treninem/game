@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.10.2-stable"
+const VERSION := "0.10.4-stable"
 const PLAYER_GROUND_CLEARANCE := 0.08
 const RESPAWN_POSITION := Vector3(0, PLAYER_GROUND_CLEARANCE, 8)
 
@@ -61,8 +61,6 @@ func _arm_player_surface_guard(force_snap_to_terrain: bool) -> void:
     if player.has_method("prepare_for_streamed_surface"):
         player.call("prepare_for_streamed_surface", force_snap_to_terrain)
     elif player.has_method("_begin_ground_guard"):
-        # Compatibility with the current controller while the guard remains an
-        # internal method. Every bootstrap teleport must reactivate it.
         player.call("_begin_ground_guard", force_snap_to_terrain)
 
 func _on_player_died() -> void:
@@ -75,7 +73,5 @@ func _on_player_died() -> void:
     respawning = false
     GameState.notify("Вы возродились в безопасной зоне столицы.")
 
-# Compatibility entry point for older controller/save code. Stage 10 deliberately
-# does not instantiate the prototype shelter.
 func spawn_house_from_state() -> void:
     pass
