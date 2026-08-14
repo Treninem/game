@@ -50,7 +50,7 @@ jobs:
           }
           stage_zip "quaternius_rpg_characters" "https://opengameart.org/sites/default/files/rpg_characters_-_nov_2020.zip" "https://opengameart.org/content/lowpoly-rpg-characters" "Quaternius LowPoly RPG Characters"
           stage_zip "quaternius_animated_monsters" "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip" "https://opengameart.org/content/lowpoly-animated-monsters" "Quaternius LowPoly Animated Monsters"
-          stage_zip "quaternius_ultimate_rpg_items" "https://opengameart.org/sites/default/files/ultimate_rpg_items_pack_by_quaternius.zip" "https://opengameart.org/content/low-poly-rpg-pack" "Quaternius Low Poly RPG Pack"
+          stage_zip "quaternius_ultimate_rpg_items" "https://opengameart.org/sites/default/files/ultimate_rpg_items_pack_by_quaternius_0.zip" "https://opengameart.org/content/low-poly-rpg-pack" "Quaternius Low Poly RPG Pack"
           cat > "$ROOT/README.md" <<'EOF'
           # Source chat B36 — real CC0 RPG characters, monsters and items
 
