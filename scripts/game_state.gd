@@ -33,7 +33,7 @@ func reset_new_game() -> void:
     _emit_all()
 
 func add_item(item_id: String, amount: int = 1) -> void:
-    inventory[item_id] = int(inventory.get(item_id, 0)) + max(amount, 0)
+    inventory[item_id] = int(inventory.get(item_id, 0)) + maxi(amount, 0)
     inventory_changed.emit()
 
 func remove_item(item_id: String, amount: int = 1) -> bool:
@@ -147,13 +147,13 @@ func snapshot() -> Dictionary:
 func load_snapshot(data: Dictionary) -> void:
     inventory = DEFAULT_INVENTORY.duplicate(true)
     var saved_inventory = data.get("inventory", {})
-    if saved_inventory is Dictionary:
+    if typeof(saved_inventory) == TYPE_DICTIONARY:
         for key in saved_inventory:
             inventory[String(key)] = int(saved_inventory[key])
     quest_stage = int(data.get("quest_stage", 0))
     house_built = bool(data.get("house_built", false))
     var pos = data.get("house_position", [0.0, 0.0, 0.0])
-    if pos is Array and pos.size() == 3:
+    if typeof(pos) == TYPE_ARRAY and pos.size() == 3:
         house_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
     else:
         house_position = Vector3.ZERO
