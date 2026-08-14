@@ -1,0 +1,91 @@
+name: Vendor source-chat B65 real CC0 bat lava golem
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b65.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b65
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 bat and lava golem sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b65"
+          TMP=".sourcechat_b65_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/bat" "$ROOT/models/oga_vampire_bat_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B65/1.0' "https://opengameart.org/sites/default/files/animated_vampire_bat.zip" -o "$TMP/bat.zip"
+          unzip -q "$TMP/bat.zip" -d "$TMP/bat"
+          chmod -R u+rwX "$TMP/bat" || true
+          rsync -a "$TMP/bat/" "$ROOT/models/oga_vampire_bat_animated/"
+          meta "oga_vampire_bat_animated" "https://opengameart.org/content/vampire-bat-animated" "Vampire Bat (Animated)" "https://opengameart.org/sites/default/files/animated_vampire_bat.zip" "Textured, rigged and animated vampire bat with frost-bat variation; source page lists 7732 tris and notes it can be reduced."
+
+          mkdir -p "$TMP/golem" "$ROOT/models/oga_lava_golem_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B65/1.0' "https://opengameart.org/sites/default/files/golem_clean.blend.zip" -o "$TMP/golem.zip"
+          unzip -q "$TMP/golem.zip" -d "$TMP/golem"
+          chmod -R u+rwX "$TMP/golem" || true
+          rsync -a "$TMP/golem/" "$ROOT/models/oga_lava_golem_rigged_animated/"
+          meta "oga_lava_golem_rigged_animated" "https://opengameart.org/content/lava-golem" "lava golem" "https://opengameart.org/sites/default/files/golem_clean.blend.zip" "Fully rigged lava golem with idle, walk and attack animations. Source page states the downloadable clean Blend does not include the author's non-redistributable photo-based textures; only the author's CC0 glow map is supplied."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B65 — real CC0 Vampire Bat and Lava Golem
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should test bat/golem skeleton and animation imports. The lava golem requires new production-safe diffuse/normal/specular materials because the clean CC0 download intentionally excludes the original non-redistributable photo-based texture maps.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B65 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B65 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b65
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 bat lava golem B65"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
