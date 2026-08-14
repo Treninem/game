@@ -1,16 +1,18 @@
 ; ImPuls PC — offline single-player RPG
-; Stage 3 persistent combat/survival vertical slice
+; Stage 4 menus, settings, saves and updates
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.3.0-stage3"
+config/version="0.4.0-stage4"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [autoload]
 GameState="*res://scripts/game_state.gd"
 SaveManager="*res://scripts/save_manager.gd"
+SettingsManager="*res://scripts/settings_manager.gd"
+UpdateManager="*res://scripts/update_manager.gd"
 
 [display]
 window/size/viewport_width=1280
