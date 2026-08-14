@@ -1,0 +1,59 @@
+name: Diagnose UI Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnose-ui-smoke.yml"
+      - "tests/smoke_ui_and_save.gd"
+      - "scripts/ui_layout_guard.gd"
+  workflow_dispatch:
+
+jobs:
+  diagnose-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts
+            scenes
+            tests
+            tools
+            installer
+            assets/branding
+            assets/ui
+            assets/vfx
+            assets/staging/sourcechat_b47
+      - name: Install Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+      - name: Import project
+        shell: bash
+        run: timeout 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Run bounded UI smoke
+        shell: bash
+        run: |
+          set -uo pipefail
+          set +e
+          timeout --signal=TERM --kill-after=5s 70s stdbuf -oL -eL ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn 2>&1 | tee ui-smoke.log
+          status=${PIPESTATUS[0]}
+          set -e
+          echo "UI_SMOKE_EXIT=$status"
+          if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+            echo "::error title=UI smoke timeout::Godot UI smoke did not exit; last output follows"
+            tail -n 120 ui-smoke.log
+            exit 124
+          fi
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-smoke-log
+          path: ui-smoke.log
+          if-no-files-found: ignore
