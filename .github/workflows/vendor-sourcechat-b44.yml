@@ -1,0 +1,83 @@
+name: Vendor source-chat B44 real CC0 vegetation LOD nature
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b44.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b44
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 vegetation sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b44"
+          TMP=".sourcechat_b44_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B44/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            find "$ROOT/models/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip "quaternius_stylized_nature_megakit_standard" "https://opengameart.org/sites/default/files/stylized_nature_megakitstandard.zip" "https://opengameart.org/content/stylized-nature-megakit" "Stylized Nature MegaKit Standard"
+          stage_zip "oga_free_plant_pack" "https://opengameart.org/sites/default/files/plant-pack.zip" "https://opengameart.org/content/free-plant-pack" "Free Plant Pack"
+          stage_zip "oga_free_vegetation_lod_pack" "https://lpc.opengameart.org/sites/default/files/free_vegetation_pack.zip" "https://opengameart.org/content/free-vegetation-asset-pack" "Free Vegetation Asset Pack with LOD"
+
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B44 — real CC0 vegetation and LOD nature sources
+
+          Source-only staging. Nothing in this batch is connected to gameplay.
+
+          Includes a 2025 stylized nature standard kit, a low-poly plant/flower/fern/grass pack and a vegetation pack with multiple explicit LOD variants. Main integration chat should deduplicate against B28, preserve only visually compatible species, build biome palettes and prefer supplied LOD variants where they improve streaming performance.
+          EOF
+          rm -rf "$TMP"
+          echo "B44 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B44 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b44
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 vegetation LOD nature B44"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
