@@ -3,7 +3,7 @@
 #endif
 
 #define MyAppName "ImPuls"
-#define MyAppVersion "0.10.2"
+#define MyAppVersion "0.10.3"
 #define MyAppPublisher "Treninem"
 
 [Setup]
@@ -26,11 +26,11 @@ ArchitecturesAllowed=x64compatible
 DisableProgramGroupPage=yes
 CloseApplications=yes
 RestartApplications=no
-VersionInfoVersion=0.10.2.0
+VersionInfoVersion=0.10.3.0
 VersionInfoCompany=Treninem
 VersionInfoDescription=ImPuls PC Installer
 VersionInfoProductName=ImPuls
-VersionInfoProductVersion=0.10.2.0
+VersionInfoProductVersion=0.10.3.0
 
 [Dirs]
 Name: "{app}\current"
@@ -39,6 +39,7 @@ Name: "{app}\current"
 Source: "..\build\windows\*"; DestDir: "{app}\current"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "updater_bootstrap.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "updater_v4.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "repair_sync.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "updater.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "launcher.vbs"; DestDir: "{app}"; Flags: ignoreversion
 Source: "install_update_task.ps1"; DestDir: "{app}"; Flags: ignoreversion
