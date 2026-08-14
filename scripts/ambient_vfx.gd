@@ -7,6 +7,7 @@ var root: Node3D
 var mote_particles: GPUParticles3D
 var firefly_particles: GPUParticles3D
 var ash_particles: GPUParticles3D
+var underwater_particles: GPUParticles3D
 var update_elapsed := 0.0
 var ashen_peak_position := Vector2(14200.0, -12200.0)
 
@@ -42,9 +43,11 @@ func _ensure_emitters() -> void:
     mote_particles = _make_motes()
     firefly_particles = _make_fireflies()
     ash_particles = _make_ash()
+    underwater_particles = _make_underwater_suspension()
     root.add_child(mote_particles)
     root.add_child(firefly_particles)
     root.add_child(ash_particles)
+    root.add_child(underwater_particles)
 
 func _sync_ambience(player_position: Vector3) -> void:
     if mote_particles == null:
@@ -59,6 +62,8 @@ func _sync_ambience(player_position: Vector3) -> void:
     mote_particles.emitting = not underwater and calm_enough and biome in ["forest", "plains", "taiga", "marsh"]
     firefly_particles.emitting = not underwater and night and EnvironmentState.temperature_c > 5.0 and EnvironmentState.rain_intensity < 0.40 and biome in ["forest", "marsh"]
     ash_particles.emitting = not underwater and xz.distance_to(ashen_peak_position) < 3600.0
+    underwater_particles.emitting = underwater
+    underwater_particles.amount_ratio = 1.0 if underwater else 0.0
 
     mote_particles.amount = 75 if biome in ["forest", "marsh"] else 48
     firefly_particles.amount = 46 if biome == "marsh" else 34
@@ -76,6 +81,14 @@ func _sync_ambience(player_position: Vector3) -> void:
     if ash_process != null:
         ash_process.direction = Vector3(EnvironmentState.wind_direction.x * 0.65, -0.45, EnvironmentState.wind_direction.z * 0.65).normalized()
         ash_process.initial_velocity_max = 0.7 + EnvironmentState.wind_strength * 1.5
+    var underwater_process := underwater_particles.process_material as ParticleProcessMaterial
+    if underwater_process != null:
+        var current := EnvironmentState.water_current_direction
+        if current.length_squared() < 0.001:
+            current = Vector3.RIGHT
+        underwater_process.direction = current.normalized()
+        underwater_process.initial_velocity_min = 0.025 + EnvironmentState.water_current_strength * 0.08
+        underwater_process.initial_velocity_max = 0.12 + EnvironmentState.water_current_strength * 0.62
 
 func _make_motes() -> GPUParticles3D:
     var particles := GPUParticles3D.new()
@@ -158,6 +171,35 @@ func _make_ash() -> GPUParticles3D:
     var quad := QuadMesh.new()
     quad.size = Vector2(0.045, 0.045)
     quad.material = _particle_material(Color(0.28, 0.27, 0.25, 0.56), true, 0.0)
+    particles.draw_pass_1 = quad
+    return particles
+
+func _make_underwater_suspension() -> GPUParticles3D:
+    var particles := GPUParticles3D.new()
+    particles.name = "UnderwaterSuspension"
+    particles.amount = 150
+    particles.amount_ratio = 0.0
+    particles.lifetime = 7.0
+    particles.local_coords = false
+    particles.visibility_aabb = AABB(Vector3(-12, -8, -12), Vector3(24, 16, 24))
+
+    var process := ParticleProcessMaterial.new()
+    process.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+    process.emission_box_extents = Vector3(9.0, 4.0, 9.0)
+    process.direction = Vector3.RIGHT
+    process.spread = 72.0
+    process.initial_velocity_min = 0.03
+    process.initial_velocity_max = 0.22
+    process.gravity = Vector3(0.0, 0.012, 0.0)
+    process.scale_min = 0.35
+    process.scale_max = 1.40
+    process.turbulence_enabled = false
+    process.color = Color(0.64, 0.78, 0.72, 0.26)
+    particles.process_material = process
+
+    var quad := QuadMesh.new()
+    quad.size = Vector2(0.022, 0.022)
+    quad.material = _particle_material(Color(0.64, 0.78, 0.72, 0.26), true, 0.0)
     particles.draw_pass_1 = quad
     return particles
 
