@@ -1,0 +1,121 @@
+name: Vendor source-chat B87 real CC0 crops corn hay farm
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b87.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b87
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 crops corn hay farm sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b87"
+          TMP=".sourcechat_b87_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/crops" "$ROOT/models/quaternius_lowpoly_crops_100plus"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B87/1.0' \
+            "https://opengameart.org/sites/default/files/nature_crops_pack_by_quaternius.zip" -o "$TMP/crops.zip"
+          unzip -q "$TMP/crops.zip" -d "$TMP/crops"
+          chmod -R u+rwX "$TMP/crops" || true
+          rsync -a "$TMP/crops/" "$ROOT/models/quaternius_lowpoly_crops_100plus/"
+          meta "quaternius_lowpoly_crops_100plus" \
+            "https://opengameart.org/content/lowpoly-crops-pack" \
+            "LowPoly Crops Pack" \
+            "https://opengameart.org/sites/default/files/nature_crops_pack_by_quaternius.zip" \
+            "Quaternius CC0 crop library with 100+ models across five growth stages; FBX, OBJ and Blend formats."
+
+          mkdir -p "$ROOT/models/oga_low_poly_corn"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B87/1.0' \
+            "https://opengameart.org/sites/default/files/cornexport.blend" -o "$ROOT/models/oga_low_poly_corn/cornexport.blend"
+          meta "oga_low_poly_corn" \
+            "https://opengameart.org/content/low-poly-corn" \
+            "Low Poly Corn" \
+            "https://opengameart.org/sites/default/files/cornexport.blend" \
+            "Very low-poly CC0 corn source (86 verts / 148 tris) suitable for fields and harvest props."
+
+          mkdir -p "$ROOT/models/oga_hay_bale_lowpoly"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B87/1.0' \
+            "https://opengameart.org/sites/default/files/hay_bale.blend" -o "$ROOT/models/oga_hay_bale_lowpoly/hay_bale.blend"
+          meta "oga_hay_bale_lowpoly" \
+            "https://opengameart.org/content/hay-bale-0" \
+            "Hay Bale" \
+            "https://opengameart.org/sites/default/files/hay_bale.blend" \
+            "2024 CC0 low-poly hay bale with 108 tris for farmyard/field dressing."
+
+          mkdir -p "$TMP/farm" "$ROOT/models/oga_basic_voxel_farm"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B87/1.0' \
+            "https://opengameart.org/sites/default/files/BASIC_FARM.zip" -o "$TMP/BASIC_FARM.zip"
+          unzip -q "$TMP/BASIC_FARM.zip" -d "$TMP/farm"
+          chmod -R u+rwX "$TMP/farm" || true
+          rsync -a "$TMP/farm/" "$ROOT/models/oga_basic_voxel_farm/"
+          meta "oga_basic_voxel_farm" \
+            "https://opengameart.org/content/farm-1" \
+            "FARM" \
+            "https://opengameart.org/sites/default/files/BASIC_FARM.zip" \
+            "Simple CC0 MagicaVoxel farm assets. Style is deliberately voxel; main chat should use only if a matching location or conversion/reference role is useful."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B87 — real CC0 crops, corn, hay and farm assets
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should prioritize the Quaternius crop stages for actual farm fields, use corn/hay as low-cost dressing, and treat the voxel farm pack as optional/reference material unless its style matches a deliberate location.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B87 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B87 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b87
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 crops corn hay farm B87"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
