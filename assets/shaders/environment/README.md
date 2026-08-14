@@ -13,7 +13,7 @@ Project-owned reusable Godot 4.7 / GL Compatibility environment shaders.
 2. Rain increases `wetness`; prolonged cold increases `frost`/`winter`; warming increases `melt`.
 3. Wind direction/strength should come from one world weather state and feed vegetation/cloth/VFX together.
 4. Do not apply high-cost transparent effects to the whole map. Use camera/local cells and distance quality tiers.
-5. Footprints, tire tracks, mud, scorch and cracks should use pooled Decal nodes and reusable masks; persist only gameplay-important traces.
+5. The project uses the GL Compatibility renderer, so Godot `Decal` nodes are not available. Footprints, tire tracks, mud, scorch and cracks must use pooled low-poly mesh/quad marks, terrain/material masks or baked geometry instead.
 6. Underwater visuals should be combined with fog, caustics, particles/bubbles and filtered audio instead of relying on the screen shader alone.
 
 ## License
