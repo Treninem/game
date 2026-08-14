@@ -1,0 +1,143 @@
+name: Vendor source-only CC0 atmosphere VFX staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-vfx-staging-atmosphere.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-vfx-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-atmosphere-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Stage verified CC0 fire fog steam spark assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/vfx_nonmagic"
+          TMP=".vfx_atmosphere_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$ROOT"
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used by staging workflow: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          Source page records this asset as CC0. Preserve SOURCE.md beside staged files.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          zip_pack() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs \
+              --include='*/' --include='*.png' --include='*.PNG' \
+              --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' \
+              --include='*.webp' --include='*.WEBP' --include='*.gif' --include='*.GIF' \
+              --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one_file() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$key"
+            mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 120 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_pack "oga_fire_smoke_animations" \
+            "https://opengameart.org/sites/default/files/rc_art_-_fire_smoke_animations.zip" \
+            "https://opengameart.org/content/fire-smoke-animations" \
+            "Reactorcore / OpenGameArt" \
+            "Transparent fire and smoke frame animations in several variants, styles and sizes; candidate for campfires, building fires, chimney smoke and distant fire LOD."
+
+          zip_pack "oga_burning_fire_40f" \
+            "https://opengameart.org/sites/default/files/FIRE.zip" \
+            "https://opengameart.org/content/fire-fx-burning-fire-animation" \
+            "Mikodrak / OpenGameArt" \
+            "Transparent looping 40-frame fire animation; candidate for torch, campfire, fireplace, forge and object-fire flipbooks."
+
+          one_file "oga_animated_steam" "steam_wall_sheet.png" \
+            "https://opengameart.org/sites/default/files/steam_wall_sheet.png" \
+            "https://opengameart.org/content/animated-steam" \
+            "hatmix / OpenGameArt" \
+            "64x64-frame steam/smoke spritesheet; candidate for vents, hot pipes, cooking, geysers and machine leaks."
+
+          one_file "oga_spark_effect" "spark_sprite_strip9.png" \
+            "https://opengameart.org/sites/default/files/spark_sprite_strip9_0.png" \
+            "https://opengameart.org/content/spark-effect" \
+            "kurohina / OpenGameArt" \
+            "Nine-frame spark strip candidate for metal impacts, electrical faults, grinding and tool effects."
+          one_file "oga_spark_effect" "spark_sprite2_strip9.png" \
+            "https://opengameart.org/sites/default/files/spark_sprite2_strip9.png" \
+            "https://opengameart.org/content/spark-effect" \
+            "kurohina / OpenGameArt" \
+            "Second nine-frame spark-strip variation."
+
+          one_file "oga_fog_animation" "fog_1.png" \
+            "https://opengameart.org/sites/default/files/fog_1.png" \
+            "https://opengameart.org/content/fog-animation" \
+            "AntumDeluge / OpenGameArt" \
+            "Tileable 640x480 fog/cloud animation source; page documents a 40-frame preview sequence. Candidate for local moving fog/cloud layers."
+
+          one_file "oga_thick_fog" "fog01.png" \
+            "https://opengameart.org/sites/default/files/fog01.png" \
+            "https://opengameart.org/content/thick-fog" \
+            "LFA / OpenGameArt" \
+            "1024x512 horizontally scrolling/tileable thick fog texture; candidate for rolling mist, smoke banks and distant haze."
+
+          one_file "oga_snowflake_particle" "snowflake.png" \
+            "https://opengameart.org/sites/default/files/snowflake.png" \
+            "https://opengameart.org/content/snow-flake" \
+            "mkwong98 / OpenGameArt" \
+            "128x128 CC0 snowflake particle candidate for cheap procedural snowfall and blizzard layers."
+
+          rm -rf "$TMP"
+
+      - name: Commit atmosphere staging assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/vfx_nonmagic
+          if git diff --cached --quiet; then
+            echo "No atmosphere staging changes."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 fire fog steam spark weather sources"
+          git pull --rebase origin main
+          git push origin HEAD:main
