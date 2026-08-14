@@ -1,0 +1,122 @@
+name: Vendor source-chat B84 real CC0 weapon libraries
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b84.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b84
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 weapon sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b84"
+          TMP=".sourcechat_b84_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/weaponpack" "$ROOT/models/kenney_weapon_pack_30"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B84/1.0' \
+            "https://opengameart.org/sites/default/files/weaponPack_assets.zip" -o "$TMP/weaponpack.zip"
+          unzip -q "$TMP/weaponpack.zip" -d "$TMP/weaponpack"
+          chmod -R u+rwX "$TMP/weaponpack" || true
+          find "$TMP/weaponpack" -type f -iname '*.unitypackage' -delete
+          rsync -a "$TMP/weaponpack/" "$ROOT/models/kenney_weapon_pack_30/"
+          meta "kenney_weapon_pack_30" \
+            "https://opengameart.org/content/weapon-pack" \
+            "Weapon pack" \
+            "https://opengameart.org/sites/default/files/weaponPack_assets.zip" \
+            "Kenney CC0 low-poly library with 30 weapon types from knives/grenades to pistols and rocket launchers, plus casings and renders."
+
+          mkdir -p "$TMP/blaster" "$ROOT/models/kenney_blaster_kit_2_1"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B84/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_blaster-kit_2.1.zip" -o "$TMP/blaster.zip"
+          unzip -q "$TMP/blaster.zip" -d "$TMP/blaster"
+          chmod -R u+rwX "$TMP/blaster" || true
+          rsync -a "$TMP/blaster/" "$ROOT/models/kenney_blaster_kit_2_1/"
+          meta "kenney_blaster_kit_2_1" \
+            "https://opengameart.org/content/blaster-kit" \
+            "Blaster Kit 2.1" \
+            "https://opengameart.org/sites/default/files/kenney_blaster-kit_2.1.zip" \
+            "Kenney CC0 kit with 40 optimized blasters, bullets, magazines, crates, targets and related weapon props."
+
+          mkdir -p "$ROOT/models/oga_fantasy_weapons_19"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B84/1.0' \
+            "https://opengameart.org/sites/default/files/WeaponsPack.blend" -o "$ROOT/models/oga_fantasy_weapons_19/WeaponsPack.blend"
+          meta "oga_fantasy_weapons_19" \
+            "https://opengameart.org/content/19-low-poly-fantasy-weapons" \
+            "19 Low-Poly Fantasy Weapons" \
+            "https://opengameart.org/sites/default/files/WeaponsPack.blend" \
+            "CC0 Blender source containing shortsword, scimitar, mace, longsword, halberd, greatsword, glaive, axes, bardiche, broadsword, buckler, dagger, katana, rapier, saber, spear, warhammer and bow."
+
+          mkdir -p "$ROOT/models/oga_archery_set"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B84/1.0' \
+            "https://opengameart.org/sites/default/files/archerySetOGA.blend" -o "$ROOT/models/oga_archery_set/archerySetOGA.blend"
+          meta "oga_archery_set" \
+            "https://opengameart.org/content/archery-set" \
+            "Archery Set" \
+            "https://opengameart.org/sites/default/files/archerySetOGA.blend" \
+            "Textured CC0 bow, arrows, quiver and target stand source."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B84 — real CC0 weapon libraries
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should select weapons appropriate to the game's era/art direction, rebuild collisions/grip origins as needed, and avoid mixing futuristic Blaster assets into medieval locations unless explicitly justified.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B84 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B84 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b84
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 weapon libraries B84"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
