@@ -32,10 +32,9 @@ func _process(_delta: float) -> void:
     if viewport_size != _last_viewport_size or not is_equal_approx(ui_scale, _last_ui_scale):
         _queue_reflow()
 
-    # Menu scripts are allowed to rebuild their content, but they are not
-    # allowed to move the outer frame. Enforce geometry every frame only when
-    # a visible menu drifted, which permanently prevents the old negative
-    # offset bug from reappearing after open/resize/scale changes.
+    # Menu scripts may rebuild content while paused, but they are not allowed to
+    # move the outer frame. Correct geometry immediately whenever visible drift
+    # is detected.
     var stale: Array[int] = []
     for instance_id in watched:
         var ref: WeakRef = watched[instance_id]
@@ -105,20 +104,23 @@ func _fit_control(control: Control) -> void:
     if available.x <= 1.0 or available.y <= 1.0:
         return
 
+    # Legacy menu scripts still calculate their own internal responsive state.
+    # Let them do that first. The centralized guard then performs compaction and
+    # is the final/only authority for outer-frame geometry. The previous order
+    # let the legacy method undo 150% UI compaction after the guard had applied it.
+    if control.has_method("_apply_responsive_layout"):
+        control.call("_apply_responsive_layout")
+
     var is_game_menu := control.is_in_group("game_menu")
     if is_game_menu:
         _fit_game_menu(control, available)
     else:
         _fit_gameplay_panels(control, available)
 
-    # Let each menu recalculate its own content once after compacting widgets.
-    if control.has_method("_apply_responsive_layout"):
-        control.call("_apply_responsive_layout")
-
-    # Always finish with the same absolute geometry used by the per-frame
-    # guard. This makes layout deterministic even when the menu script still
-    # uses center anchors internally while rebuilding content.
     _enforce_frame_geometry(control, true)
+    # Containers can finish minimum-size negotiation later in the same frame.
+    # Reassert once deferred so no negative CENTER offset survives that pass.
+    call_deferred("_enforce_frame_geometry", control, true)
 
 func _available_size(control: Control) -> Vector2:
     var available := control.size

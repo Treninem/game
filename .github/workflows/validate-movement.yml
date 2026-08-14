@@ -9,8 +9,10 @@ on:
       - "scripts/world_streamer.gd"
       - "scripts/world_data.gd"
       - "scripts/settings_manager.gd"
+      - "scripts/ui_layout_guard.gd"
       - "scenes/stage1.tscn"
       - "tests/smoke_player_movement.gd"
+      - "tests/smoke_ui_and_save.gd"
       - ".github/workflows/validate-movement.yml"
   workflow_dispatch:
 
@@ -23,6 +25,17 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts
+            scenes
+            tests
+            assets/branding
+            assets/ui
+            assets/vfx
+            assets/staging/sourcechat_b47
+            project.godot
+          sparse-checkout-cone-mode: false
       - name: Install Godot 4.7.1
         shell: bash
         run: |
@@ -33,6 +46,9 @@ jobs:
       - name: Parse project
         shell: bash
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
-      - name: Prove player changes world position
+      - name: Prove player surface, void recovery and movement
         shell: bash
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd
+      - name: Prove UI geometry and save slots
+        shell: bash
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_ui_and_save.gd

@@ -1,20 +1,25 @@
 extends SceneTree
 
 const MIN_DISTANCE := 0.75
-const WARMUP_FRAMES := 20
+const WARMUP_FRAMES := 45
 const MOVE_FRAMES := 45
-const RECOVERY_FRAMES := 32
+const RECOVERY_FRAMES := 45
 const SURFACE_TOLERANCE := 0.70
 const VOID_DROP := 25.0
 
 func _initialize() -> void:
     call_deferred("_run_test")
 
+func _fail(code: int, message: String) -> void:
+    var clean := message.replace("\r", " ").replace("\n", " ")
+    print("::error title=Player surface smoke::%s" % clean)
+    push_error("Movement smoke failed: %s" % message)
+    quit(code)
+
 func _run_test() -> void:
     var packed := load("res://scenes/stage1.tscn") as PackedScene
     if packed == null:
-        push_error("Movement smoke: main stage scene could not be loaded")
-        quit(2)
+        _fail(2, "main stage scene could not be loaded")
         return
 
     var scene := packed.instantiate()
@@ -24,19 +29,20 @@ func _run_test() -> void:
 
     var player := scene.get_node_or_null("World/Player") as CharacterBody3D
     if player == null:
-        push_error("Movement smoke: player node missing")
-        quit(3)
+        _fail(3, "player node missing")
         return
 
+    if bool(player.get("ground_guard_active")):
+        _fail(10, "spawn guard never acquired a real physical surface")
+        return
     if not _assert_surface_under_player(player, "spawn"):
-        quit(5)
+        _fail(5, "no physical world surface below player at spawn")
         return
 
     var spawn_xz := Vector2(player.global_position.x, player.global_position.z)
     var spawn_terrain_y := WorldData.elevation_at(spawn_xz)
     if player.global_position.y < spawn_terrain_y - 0.10 or player.global_position.y > spawn_terrain_y + SURFACE_TOLERANCE:
-        push_error("Movement smoke failed: player did not spawn on terrain; player_y=%s terrain_y=%s" % [player.global_position.y, spawn_terrain_y])
-        quit(6)
+        _fail(6, "player spawn height is outside terrain tolerance; player_y=%s terrain_y=%s" % [player.global_position.y, spawn_terrain_y])
         return
 
     # Reproduce the old regression deliberately: place the body deep below the
@@ -50,16 +56,17 @@ func _run_test() -> void:
     var recovered_xz := Vector2(player.global_position.x, player.global_position.z)
     var recovered_terrain_y := WorldData.elevation_at(recovered_xz)
     print("Void recovery smoke: before=", before_void, " recovered=", player.global_position, " terrain_y=", recovered_terrain_y)
+    if bool(player.get("ground_guard_active")):
+        _fail(11, "void recovery returned to coordinates but never reacquired physical ground")
+        return
     if player.global_position.y < recovered_terrain_y - 0.10:
-        push_error("Movement smoke failed: player remained below world after void recovery")
-        quit(7)
+        _fail(7, "player remained below world after void recovery")
         return
     if recovered_xz.distance_to(Vector2(before_void.x, before_void.z)) > 2.0:
-        push_error("Movement smoke failed: void recovery moved player to an unrelated XZ")
-        quit(8)
+        _fail(8, "void recovery moved player to unrelated XZ; distance=%s" % recovered_xz.distance_to(Vector2(before_void.x, before_void.z)))
         return
     if not _assert_surface_under_player(player, "recovery"):
-        quit(9)
+        _fail(9, "no physical world surface below player after void recovery")
         return
 
     var start := Vector2(player.global_position.x, player.global_position.z)
@@ -73,22 +80,22 @@ func _run_test() -> void:
     var distance := start.distance_to(finish)
     print("Movement smoke: start=", start, " finish=", finish, " distance=", distance)
     if distance < MIN_DISTANCE:
-        push_error("Movement smoke failed: player walked in place")
-        quit(4)
+        _fail(4, "player walked in place after surface recovery; distance=%s" % distance)
         return
     print("Movement + surface + void recovery smoke passed")
     quit(0)
 
 func _assert_surface_under_player(player: CharacterBody3D, phase: String) -> bool:
+    var xz := Vector2(player.global_position.x, player.global_position.z)
+    var terrain_y := WorldData.elevation_at(xz)
     var from := player.global_position + Vector3.UP * 1.0
-    var to := player.global_position + Vector3.DOWN * 3.0
+    var to := Vector3(player.global_position.x, minf(player.global_position.y - 0.2, terrain_y - 2.5), player.global_position.z)
     var query := PhysicsRayQueryParameters3D.create(from, to)
     query.exclude = [player.get_rid()]
     query.collide_with_bodies = true
     query.collide_with_areas = false
     var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
     if hit.is_empty():
-        push_error("Movement smoke failed: no physical world surface below player during %s" % phase)
         return false
-    print("Surface smoke [", phase, "]: collider=", hit.get("collider"), " position=", hit.get("position"))
+    print("Surface smoke [", phase, "]: collider=", hit.get("collider"), " position=", hit.get("position"), " terrain_y=", terrain_y)
     return true
