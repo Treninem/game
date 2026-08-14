@@ -9,6 +9,7 @@ on:
       - "scripts/humanoid_visual.gd"
       - "scripts/world_streamer.gd"
       - "scripts/world_data.gd"
+      - "scripts/city_district.gd"
       - "scripts/settings_manager.gd"
       - "scripts/ui_layout_guard.gd"
       - "scenes/stage1.tscn"
