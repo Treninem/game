@@ -41,6 +41,10 @@ const DEFAULT_BINDINGS := {
     "build": {"type": "key", "code": KEY_B},
     "use_food": {"type": "key", "code": KEY_1},
     "use_water": {"type": "key", "code": KEY_2},
+    "open_inventory": {"type": "key", "code": KEY_I},
+    "open_map": {"type": "key", "code": KEY_M},
+    "open_journal": {"type": "key", "code": KEY_J},
+    "open_crafting": {"type": "key", "code": KEY_K},
     "quick_save": {"type": "key", "code": KEY_F5},
     "quick_load": {"type": "key", "code": KEY_F9},
     "pause_menu": {"type": "key", "code": KEY_ESCAPE}
