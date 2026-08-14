@@ -1,0 +1,105 @@
+name: Vendor source-chat B39 real CC0 fox rabbit duck boar
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b39.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b39
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 species models
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b39/models"
+          TMP=".sourcechat_b39_tmp"
+          rm -rf "assets/staging/sourcechat_b39" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B39/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_single() {
+            local name="$1" url="$2" page="$3" title="$4" filename="$5"
+            mkdir -p "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B39/1.0' "$url" -o "$ROOT/$name/$filename"
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip "oga_fox_animated" "https://opengameart.org/sites/default/files/fox_source_v3.zip" "https://opengameart.org/content/fox-0" "Fox by br-n518"
+          stage_single "oga_rabbit_rigged_animated" "https://opengameart.org/sites/default/files/rabbit.blend" "https://opengameart.org/content/rabbit-0" "Rabbit by CDmir/TinyWorlds" "rabbit.blend"
+          stage_single "oga_steamer_duck_3d" "https://opengameart.org/sites/default/files/duck3d.blend" "https://opengameart.org/content/steamer-duck-3d" "Steamer Duck 3D" "duck3d.blend"
+          stage_single "oga_boar_rigged_animated" "https://opengameart.org/sites/default/files/boar.blend" "https://opengameart.org/content/boar" "Boar by Teh_Bucket" "boar.blend"
+
+          cat > "assets/staging/sourcechat_b39/README.md" <<'EOF'
+          # Source chat B39 — real CC0 fox, rabbit, duck and boar 3D sources
+
+          Real species-specific 3D sources only; nothing is connected to gameplay.
+
+          - Fox: textured low-poly animated source with idle/walk/run/bite/dig/death motions.
+          - Rabbit: rigged and animated model with packed textures/normal map.
+          - Duck: rigged 3D duck Blender source with shape keys.
+          - Boar: rigged/textured source with walk and attack animations.
+
+          Main chat should normalize scale/orientation, verify Godot animation import and build species AI separately before promoting production copies.
+          EOF
+          rm -rf "$TMP"
+          echo "B39 files:"; find assets/staging/sourcechat_b39 -type f | wc -l
+          du -sh assets/staging/sourcechat_b39
+      - name: Commit B39 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b39
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 fox rabbit duck boar B39"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*4))
+          done
+          exit 1
