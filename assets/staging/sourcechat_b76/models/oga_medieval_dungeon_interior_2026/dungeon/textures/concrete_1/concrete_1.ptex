@@ -1,0 +1,866 @@
+{
+	"connections": [
+		{
+			"from": "clouds_noise",
+			"from_port": 0,
+			"to": "warp",
+			"to_port": 0
+		},
+		{
+			"from": "clouds_noise_2",
+			"from_port": 0,
+			"to": "warp",
+			"to_port": 1
+		},
+		{
+			"from": "warp",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "normal_map_convert_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map_convert_2",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "export",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "export_2",
+			"to_port": 0
+		},
+		{
+			"from": "warp",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 0
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "invert",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 1
+		},
+		{
+			"from": "supersample",
+			"from_port": 0,
+			"to": "invert",
+			"to_port": 0
+		},
+		{
+			"from": "supersample",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 2
+		},
+		{
+			"from": "graph_2",
+			"from_port": 0,
+			"to": "supersample",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "_Node_225800",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export_paths": {
+
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 678.457397460938,
+				"y": -6.81153535842896
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 0.0,
+				"depth_scale": 0.0,
+				"emission_energy": 0.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 0.0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": -447.292358398438,
+				"y": -145.076889038086
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.41357421875,
+							"g": 0.451977550983429,
+							"pos": 0.0,
+							"r": 0.47265625
+						},
+						{
+							"a": 1.0,
+							"b": 0.281112670898438,
+							"g": 0.319137573242188,
+							"pos": 0.219531343183445,
+							"r": 0.34765625
+						},
+						{
+							"a": 1.0,
+							"b": 0.32080078125,
+							"g": 0.358909606933594,
+							"pos": 0.276783251580391,
+							"r": 0.375
+						},
+						{
+							"a": 1.0,
+							"b": 0.4793701171875,
+							"g": 0.576742172241211,
+							"pos": 0.72057045507067,
+							"r": 0.6015625
+						},
+						{
+							"a": 1.0,
+							"b": 0.5616455078125,
+							"g": 0.654651641845703,
+							"pos": 0.762555187895098,
+							"r": 0.671875
+						},
+						{
+							"a": 1.0,
+							"b": 0.294265747070312,
+							"g": 0.355488061904907,
+							"pos": 1.0,
+							"r": 0.37109375
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "clouds_noise",
+			"node_position": {
+				"x": -1285.97790527344,
+				"y": -58.2581520080566
+			},
+			"parameters": {
+				"n_scale": 1.0,
+				"param0": 8.0,
+				"param1": 0.0
+			},
+			"seed_int": 4024236800,
+			"type": "clouds_noise"
+		},
+		{
+			"generic_size": 1,
+			"name": "warp",
+			"node_position": {
+				"x": -939.029174804688,
+				"y": 43.467658996582
+			},
+			"parameters": {
+				"amount": 0.345,
+				"eps": 0.1,
+				"mode": 0.0
+			},
+			"seed_int": 0,
+			"type": "warp"
+		},
+		{
+			"name": "clouds_noise_2",
+			"node_position": {
+				"x": -1276.3291015625,
+				"y": 110.367645263672
+			},
+			"parameters": {
+				"n_scale": 1.0,
+				"param0": 8.0,
+				"param1": 0.0
+			},
+			"seed_int": 3895818752,
+			"type": "clouds_noise"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -309.3544921875,
+				"y": 267.244079589844
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 8.0,
+				"strength": 1.0
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "normal_map_convert_2",
+			"node_position": {
+				"x": -128.792404174805,
+				"y": 260.758117675781
+			},
+			"parameters": {
+				"op": 0.0
+			},
+			"seed_int": 0,
+			"type": "normal_map_convert"
+		},
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": 366.995147705078,
+				"y": 228.511169433594
+			},
+			"parameters": {
+				"f32": false,
+				"filter": false,
+				"mipmap": false,
+				"size": 8.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": 362.043548583984,
+				"y": -148.959991455078
+			},
+			"parameters": {
+				"f32": false,
+				"filter": false,
+				"mipmap": false,
+				"size": 8.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "export",
+			"node_position": {
+				"x": 677.622680664062,
+				"y": -180.946960449219
+			},
+			"parameters": {
+				"format": 0.0,
+				"size": 8.0,
+				"suffix": "concrete_1_n"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "export_2",
+			"node_position": {
+				"x": 661.517578125,
+				"y": -368.351776123047
+			},
+			"parameters": {
+				"format": 0.0,
+				"size": 8.0,
+				"suffix": "concrete_1_c"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -750.106750488281,
+				"y": 142.317886352539
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.3984375,
+							"g": 0.3984375,
+							"pos": 0.190172826354864,
+							"r": 0.3984375
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.578318200193445,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2",
+			"node_position": {
+				"x": -539.82958984375,
+				"y": 226.812469482422
+			},
+			"parameters": {
+				"amount1": 1.0,
+				"blend_type1": 0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "invert",
+			"node_position": {
+				"x": -720.681457519531,
+				"y": 224.824264526367
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "invert"
+		},
+		{
+			"name": "supersample",
+			"node_position": {
+				"x": -1038.408203125,
+				"y": 289.878051757812
+			},
+			"parameters": {
+				"count": 2.0,
+				"size": 8,
+				"width": 2.0
+			},
+			"seed_int": 0,
+			"type": "supersample"
+		},
+		{
+			"connections": [
+				{
+					"from": "smooth_curvature2",
+					"from_port": 0,
+					"to": "tones_step_3",
+					"to_port": 0
+				},
+				{
+					"from": "bricks",
+					"from_port": 0,
+					"to": "bricks_2",
+					"to_port": 0
+				},
+				{
+					"from": "bricks_2",
+					"from_port": 0,
+					"to": "smooth_curvature2",
+					"to_port": 0
+				},
+				{
+					"from": "tones_step_3",
+					"from_port": 0,
+					"to": "buffer",
+					"to_port": 0
+				},
+				{
+					"from": "buffer",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "random",
+			"longdesc": "",
+			"name": "graph_2",
+			"node_position": {
+				"x": -1416.63024902344,
+				"y": 304.678375244141
+			},
+			"nodes": [
+				{
+					"name": "smooth_curvature2",
+					"node_position": {
+						"x": 2340.33959960938,
+						"y": 1669.212890625
+					},
+					"parameters": {
+						"param0": 8.0,
+						"param1": 16.0,
+						"param2": 2.0,
+						"param3": 0.5,
+						"param4": 1.0
+					},
+					"seed_int": 0,
+					"type": "smooth_curvature2"
+				},
+				{
+					"name": "tones_step_3",
+					"node_position": {
+						"x": 2635.28271484375,
+						"y": 1672.07287597656
+					},
+					"parameters": {
+						"invert": true,
+						"value": 0.15,
+						"width": 0.65
+					},
+					"seed_int": 0,
+					"type": "tones_step"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": 1382.36083984375,
+						"y": 1666.31774902344
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 3162.48095703125,
+						"y": 1666.51501464844
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "grayscale",
+							"type": "f"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": 2356.82495117188,
+						"y": 864.209655761719
+					},
+					"parameters": {
+						"param0": 1.0,
+						"param1": 2.0,
+						"param10": 2.0,
+						"param11": 4.0,
+						"param12": 4.0,
+						"param13": 0.0,
+						"param14": 0.25,
+						"param15": 0.0,
+						"param16": 0.25,
+						"param17": 0.0,
+						"param18": 0.5,
+						"param19": 2.0,
+						"param2": 5.0,
+						"param20": 16.0,
+						"param3": 1.0,
+						"param4": 0.5,
+						"param5": 0.12,
+						"param6": 0.05,
+						"param7": 0.35,
+						"param8": 0.0,
+						"param9": 0.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "bricks 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "pattern"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "repeat 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "repeat"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "rows 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "rows"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "columns 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "columns"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "offset 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "row_offset"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "mortar 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "mortar"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						},
+						{
+							"label": "bevel 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "bevel"
+								}
+							],
+							"name": "param6",
+							"type": "linked_control"
+						},
+						{
+							"label": "round 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "round"
+								}
+							],
+							"name": "param7",
+							"type": "linked_control"
+						},
+						{
+							"label": "corner 1",
+							"linked_widgets": [
+								{
+									"node": "bricks",
+									"widget": "corner"
+								}
+							],
+							"name": "param8",
+							"type": "linked_control"
+						},
+						{
+							"label": "bricks 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "pattern"
+								}
+							],
+							"name": "param9",
+							"type": "linked_control"
+						},
+						{
+							"label": "repeat 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "repeat"
+								}
+							],
+							"name": "param10",
+							"type": "linked_control"
+						},
+						{
+							"label": "rows 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "rows"
+								}
+							],
+							"name": "param11",
+							"type": "linked_control"
+						},
+						{
+							"label": "columns 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "columns"
+								}
+							],
+							"name": "param12",
+							"type": "linked_control"
+						},
+						{
+							"label": "offset 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "row_offset"
+								}
+							],
+							"name": "param13",
+							"type": "linked_control"
+						},
+						{
+							"label": "mortar 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "mortar"
+								}
+							],
+							"name": "param14",
+							"type": "linked_control"
+						},
+						{
+							"label": "bevel 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "bevel"
+								}
+							],
+							"name": "param15",
+							"type": "linked_control"
+						},
+						{
+							"label": "round 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "round"
+								}
+							],
+							"name": "param16",
+							"type": "linked_control"
+						},
+						{
+							"label": "corner 2",
+							"linked_widgets": [
+								{
+									"node": "bricks_2",
+									"widget": "corner"
+								}
+							],
+							"name": "param17",
+							"type": "linked_control"
+						},
+						{
+							"label": "quality",
+							"linked_widgets": [
+								{
+									"node": "smooth_curvature2",
+									"widget": "param1"
+								}
+							],
+							"name": "param20",
+							"type": "linked_control"
+						},
+						{
+							"label": "strength",
+							"linked_widgets": [
+								{
+									"node": "smooth_curvature2",
+									"widget": "param2"
+								}
+							],
+							"name": "param19",
+							"type": "linked_control"
+						},
+						{
+							"label": "radius",
+							"linked_widgets": [
+								{
+									"node": "smooth_curvature2",
+									"widget": "param3"
+								}
+							],
+							"name": "param18",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "bricks",
+					"node_position": {
+						"x": 1934.98010253906,
+						"y": 1670.1279296875
+					},
+					"parameters": {
+						"bevel": 0.05,
+						"columns": 1.0,
+						"corner": 0.0,
+						"mortar": 0.12,
+						"pattern": 1.0,
+						"repeat": 2.0,
+						"round": 0.35,
+						"row_offset": 0.5,
+						"rows": 5.0
+					},
+					"seed_int": 0,
+					"type": "bricks3"
+				},
+				{
+					"name": "bricks_2",
+					"node_position": {
+						"x": 2129.31030273438,
+						"y": 1667.41796875
+					},
+					"parameters": {
+						"bevel": 0.0,
+						"columns": 4.0,
+						"corner": 0.0,
+						"mortar": 0.25,
+						"pattern": 0.0,
+						"repeat": 2.0,
+						"round": 0.25,
+						"row_offset": 0.0,
+						"rows": 4.0
+					},
+					"seed_int": 0,
+					"type": "bricks3"
+				},
+				{
+					"name": "buffer",
+					"node_position": {
+						"x": 2874.01318359375,
+						"y": 1665.69848632812
+					},
+					"parameters": {
+						"f32": false,
+						"filter": false,
+						"mipmap": false,
+						"size": 8.0
+					},
+					"seed_int": 0,
+					"type": "buffer",
+					"version": 2
+				}
+			],
+			"parameters": {
+				"param0": 1.0,
+				"param1": 2.0,
+				"param10": 2.0,
+				"param11": 4.0,
+				"param12": 4.0,
+				"param13": 0.0,
+				"param14": 0.25,
+				"param15": 0.0,
+				"param16": 0.25,
+				"param17": 0.0,
+				"param18": 0.5,
+				"param19": 2.0,
+				"param2": 5.0,
+				"param20": 16.0,
+				"param3": 1.0,
+				"param4": 0.5,
+				"param5": 0.12,
+				"param6": 0.05,
+				"param7": 0.35,
+				"param8": 0.0,
+				"param9": 0.0
+			},
+			"scroll_offset": {
+				"x": 1928.09741210938,
+				"y": 416.732177734375
+			},
+			"seed_int": 2707990272,
+			"shortdesc": "",
+			"type": "graph"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}
