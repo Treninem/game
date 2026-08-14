@@ -56,8 +56,10 @@ func _physics_process(delta: float) -> void:
 
 func _finish(position: Vector3, normal: Vector3) -> void:
     VFXLibrary.spawn_magic(element, position, get_tree().current_scene, 0.70)
+    ThirdPartyVFX.spawn_magic(element, position, get_tree().current_scene, 0.82)
     if element == "fire":
         VFXLibrary.spawn_explosion(position, "small", get_tree().current_scene, 0.55)
+        ThirdPartyVFX.spawn_scorch(position, get_tree().current_scene, 1.15)
     elif element == "frost":
         VFXLibrary.spawn("magic_frost", position, get_tree().current_scene, normal, direction, 0.75)
     queue_free()
@@ -83,6 +85,8 @@ func _build_visual(data: Dictionary) -> void:
     material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
     mesh_instance.material_override = material
     add_child(mesh_instance)
+
+    ThirdPartyVFX.attach_projectile_visual(self, element, radius * 4.2)
 
     var light := OmniLight3D.new()
     light.name = "SpellLight"
