@@ -22,6 +22,14 @@ Notes: rigged, but source itself describes the rig as poor. Use as fallback/refe
 Target: `assets/animals/wildlife/squirrel/opengameart_flying_squirrel/`
 Status: VERIFIED SOURCE; RE-RIG REQUIRED.
 
+### Bee — OpenGameArt
+Source: https://opengameart.org/content/bee-0
+License: CC0
+Format: Blender
+Notes: rigged and non-rigged versions are provided; useful for pollination, apiaries and ambient ecosystem simulation.
+Target: `assets/animals/insects/bee/opengameart_bee/`
+Status: VERIFIED SOURCE; texture dependencies must be kept beside the model.
+
 ### Raven coverage
 Source collection: https://opengameart.org/content/cc0-3d-animals-creatures
 License policy: collection is CC0-oriented, but individual Raven entry must still be opened and checked before binary import.
@@ -52,6 +60,14 @@ Target staging: `assets/items/opengameart_inventory_items/`
 Rule: extract only useful objects instead of importing the full 40 MB Blender source into runtime.
 Status: VERIFIED SOURCE; SELECTIVE EXTRACTION ONLY.
 
+### Spinning Machine Tools — OpenGameArt
+Source: https://opengameart.org/content/spinning-machine-tools-low-poly
+License: CC0
+Archive: Spinning-Machine-Tools.7z (~472 KB)
+Notes: low-poly machinery set; useful for workshop/early industrial machinery and mechanical clutter after inventory inspection.
+Target: `assets/technology/machinery/opengameart_spinning_machine_tools/`
+Status: VERIFIED SOURCE; inspect individual meshes before runtime use.
+
 ## Animal-powered transport
 
 ### Horse Drawn Carriage — OpenGameArt
@@ -71,6 +87,22 @@ Target: `assets/vehicles/handcarts/opengameart_handwagon/`
 Status: VERIFIED production candidate after scale/material normalization.
 
 ## Mills / rural industry
+
+### Medieval Waterpowered Sawmill — OpenGameArt
+Source: https://opengameart.org/content/medieval-waterpowered-sawmill
+License: CC0
+Format: Blender source in ZIP (~1.7 MB)
+Notes: purpose-built medieval water-powered sawmill for a village setting.
+Target: `assets/buildings/industry/sawmill/opengameart_waterpowered_sawmill/`
+Status: HIGH-PRIORITY VERIFIED SOURCE; inspect wheel/blade animation and collision before production.
+
+### Medieval Sawmill — OpenGameArt
+Source: https://opengameart.org/content/medieval-sawmill
+License: CC0
+Archive: sawmill.zip (~8.9 MB)
+Notes: textured and animated; source warns blades may be one-sided in some engines.
+Target: `assets/buildings/industry/sawmill/opengameart_medieval_sawmill/`
+Status: VERIFIED SOURCE; material/backface fix may be required in Godot.
 
 ### Animated Windmill — OpenGameArt
 Source: https://opengameart.org/content/windmill-4
@@ -97,9 +129,7 @@ Target: `assets/buildings/industry/windmill/opengameart_stylized_windmill/`
 Status: VERIFIED SOURCE.
 
 ## Settlement-production coverage to keep searching
-- watermill with usable wheel animation
-- water-powered sawmill production-ready model
-- beehive/apiary 3D set
+- 3D beehive/apiary set (bee model itself now covered)
 - cheese press / butter churn / dairy workbench
 - grain mill interior machinery
 - bakery oven and baking tools
@@ -112,7 +142,7 @@ Status: VERIFIED SOURCE.
 - rope-making / fishing-net production props
 
 ## Remaining fauna gaps
-High priority: goose + gosling, piglet, goat kid, moose/elk, badger, raccoon, normal squirrel, crow/raven production model, owl, eagle/hawk, sparrow, seagull, amphibians, snakes/lizards, insects/pollinators.
+High priority: goose + gosling, piglet, goat kid, moose/elk, badger, raccoon, normal squirrel, crow/raven production model, owl, eagle/hawk, sparrow, seagull, amphibians, snakes/lizards and additional insects/pollinators.
 
 ## Explicit rejection / caution
 - OpenGameArt `Sickle` page located in this pass is GPL/CC-BY-SA, not CC0; do not import it under the project's CC0-first policy.
