@@ -1,0 +1,5 @@
+CC0 1.0 Universal
+
+This Binbun/Binbun3D asset pack is distributed under Creative Commons Zero (CC0 1.0 Universal). It may be used, modified, copied and redistributed, including commercially, without attribution.
+
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
