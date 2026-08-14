@@ -1,10 +1,10 @@
 ; ImPuls PC — offline single-player RPG
-; Stable 0.10.2: delta-only installed updates, visible progress and centralized UI auto-alignment
+; Stable 0.10.3: delta-only updates plus rendered-bounds UI fitting through 150% scale
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.10.2-stable"
+config/version="0.10.3-stable"
 config/icon="res://assets/branding/impuls_icon.png"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
