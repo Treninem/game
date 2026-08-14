@@ -535,3 +535,63 @@ Path: `assets/staging/sourcechat_b48/models/`
 - `oga_stylized_windmill/`
 
 Recommended use: ponds, lakes, swamps, shores, docks, farms and villages. Normalize scale/materials/collisions and deduplicate against harbour/nature/medieval sources before promotion.
+
+## B49 — tents / crafting stations / survival props
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b49/models/`
+
+- `oga_medieval_tents/`
+- `oga_medieval_crafting_stations/`
+- `oga_medieval_survival_props/`
+
+Recommended use: camps, crafting areas and temporary/rural settlements after material, pivot, collision and scale review.
+
+## B50 — church / blacksmith interiors / candles / signs
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b50/models/`
+
+- `oga_medieval_church_interior/`
+- `oga_medieval_blacksmith_interior/`
+- `oga_medieval_candles/`
+- `oga_medieval_signs/`
+
+Recommended use: authored enterable church/temple and blacksmith interiors plus selective interior/street detail props. Compare building shells with B47/B52 before promotion.
+
+## B51 — medieval detail props
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b51/models/`
+
+- `oga_medieval_benches/`
+- `oga_medieval_cage/`
+- `oga_medieval_boat/`
+- `oga_cemetery_gravestones/`
+- `oga_open_books/`
+
+Recommended use: squares/churches, quest/prison dressing, shore props, cemetery locations and libraries/interiors after scale/material/collision review.
+
+## B52 — modular explorable house interiors
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b52/models/`
+
+- `oga_medieval_doors_interiors/`
+- `oga_medieval_windows_interiors/`
+- `oga_medieval_small_house_interior/`
+- `oga_medieval_medium_house_interior/`
+- `oga_medieval_shack/`
+
+Recommended use: genuinely enterable homes and reusable double-sided doors/windows. Establish one production building grid/scale with B47 rather than mixing incompatible modules blindly.
+
+## B53 — inventory / mine / magic staff sources
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b53/models/`
+
+- `oga_inventory_items_60plus/` — broad food/tool/weapon/crafting/quest/resource inventory source library.
+- `oga_crystal_mine/` — authored crystal-mine source.
+- `oga_magic_staff_set/` — elemental staff source family.
+
+Recommended use: classify and deduplicate inventory meshes against B36/B38/B46; promote only the strongest production candidates. Treat mine/staff assets as separate location/equipment sources.
