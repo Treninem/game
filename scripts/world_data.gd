@@ -4,8 +4,11 @@ const WORLD_HALF_SIZE := 32000.0
 const WORLD_MIN := Vector2(-WORLD_HALF_SIZE, -WORLD_HALF_SIZE)
 const WORLD_MAX := Vector2(WORLD_HALF_SIZE, WORLD_HALF_SIZE)
 const SEA_LEVEL := 0.0
-const CITY_FLAT_RADIUS := 420.0
-const CITY_BLEND_RADIUS := 900.0
+# Capital target from the master specification is roughly 4x4 km. Reserve a
+# stable, mostly level footprint now so districts can be built without later
+# tearing up terrain or moving quests/buildings.
+const CITY_FLAT_RADIUS := 2100.0
+const CITY_BLEND_RADIUS := 2700.0
 const WORLD_SEED := 260814
 
 const POIS := [
