@@ -22,86 +22,153 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ROOT="assets/source_packs/opengameart/system_g6"
-          mkdir -p "$ROOT/medieval_tools" "$ROOT/medieval_crafting_stations" "$ROOT/medieval_props"
+
+          SG6="assets/source_packs/opengameart/system_g6"
+          QUA="assets/source_packs/opengameart/quaternius"
+          KEN="assets/source_packs/opengameart/kenney"
+
+          mkdir -p \
+            "$SG6/medieval_tools" \
+            "$SG6/medieval_crafting_stations" \
+            "$SG6/medieval_props" \
+            "$SG6/medieval_buildings" \
+            "$SG6/medieval_weapons" \
+            "$QUA/farm_animals" \
+            "$QUA/animal_pack_vol2" \
+            "$KEN/cube_pets"
 
           curl -L --fail --retry 4 --retry-delay 3 \
             'https://opengameart.org/sites/default/files/medieval_tools_pack.7z' \
-            -o "$ROOT/medieval_tools/medieval_tools_pack.7z"
+            -o "$SG6/medieval_tools/medieval_tools_pack.7z"
 
           curl -L --fail --retry 4 --retry-delay 3 \
             'https://opengameart.org/sites/default/files/medieval_crafting_stations_pack.7z' \
-            -o "$ROOT/medieval_crafting_stations/medieval_crafting_stations_pack.7z"
+            -o "$SG6/medieval_crafting_stations/medieval_crafting_stations_pack.7z"
 
           curl -L --fail --retry 4 --retry-delay 3 \
             'https://opengameart.org/sites/default/files/medieval_props_pack.7z' \
-            -o "$ROOT/medieval_props/medieval_props_pack.7z"
+            -o "$SG6/medieval_props/medieval_props_pack.7z"
 
-          test -s "$ROOT/medieval_tools/medieval_tools_pack.7z"
-          test -s "$ROOT/medieval_crafting_stations/medieval_crafting_stations_pack.7z"
-          test -s "$ROOT/medieval_props/medieval_props_pack.7z"
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/medieval_buildings_pack.7z' \
+            -o "$SG6/medieval_buildings/medieval_buildings_pack.7z"
 
-          sha256sum \
-            "$ROOT/medieval_tools/medieval_tools_pack.7z" \
-            "$ROOT/medieval_crafting_stations/medieval_crafting_stations_pack.7z" \
-            "$ROOT/medieval_props/medieval_props_pack.7z" \
-            > "$ROOT/SHA256SUMS.txt"
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/medieval_weapon_pack.7z' \
+            -o "$SG6/medieval_weapons/medieval_weapon_pack.7z"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/Farm%20Animals%20by%20%40Quaternius.zip' \
+            -o "$QUA/farm_animals/Farm_Animals_by_Quaternius.zip"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip' \
+            -o "$QUA/animal_pack_vol2/Animal_Pack_Vol2_by_Quaternius.zip"
+
+          curl -L --fail --retry 4 --retry-delay 3 \
+            'https://opengameart.org/sites/default/files/kenney_cube-pets_1.0_0.zip' \
+            -o "$KEN/cube_pets/kenney_cube-pets_1.0.zip"
+
+          find assets/source_packs/opengameart -type f \( -name '*.7z' -o -name '*.zip' \) -size 0 -print -quit | grep -q . && {
+            echo 'ERROR: zero-byte archive detected'
+            exit 1
+          } || true
+
+          find assets/source_packs/opengameart -type f \( -name '*.7z' -o -name '*.zip' \) -print0 \
+            | sort -z \
+            | xargs -0 sha256sum \
+            > assets/source_packs/opengameart/SHA256SUMS.txt
 
       - name: Write provenance and license metadata
         shell: bash
         run: |
           set -euo pipefail
-          ROOT="assets/source_packs/opengameart/system_g6"
 
-          cat > "$ROOT/README.md" <<'EOF'
-          # System G6 — verified CC0 source packs
+          SG6="assets/source_packs/opengameart/system_g6"
+          QUA="assets/source_packs/opengameart/quaternius"
+          KEN="assets/source_packs/opengameart/kenney"
 
-          These are original downloadable archives mirrored into the repository for the main game-development chat to inspect, unpack, normalize and selectively integrate.
+          cat > assets/source_packs/opengameart/README.md <<'EOF'
+          # Verified CC0 source packs
 
-          This research chat does not wire these assets into scenes, scripts or project settings.
+          Original downloadable archives mirrored for the main game-development chat.
+          This folder is staging/source storage only: no scene, script, project-setting or runtime integration is performed by the research chat.
 
-          Included packs:
-          - Medieval Tools Pack — 12 low-poly tools.
-          - Medieval Crafting Stations Pack — 3 crafting stations.
-          - Medieval Props Pack — 19 settlement/interior props.
-
-          All three source pages explicitly list CC0.
+          Every archive below comes from a source page that explicitly lists CC0.
           EOF
 
-          cat > "$ROOT/LICENSE.txt" <<'EOF'
-          Creative Commons CC0 1.0 / Public Domain dedication.
-
-          Source pages:
-          https://opengameart.org/content/medieval-tools-pack
-          https://opengameart.org/content/medieval-crafting-stations-pack
-          https://opengameart.org/content/medieval-props-pack
-
-          Author/uploader: System G6 (Qoma)
-          Attribution is not required by CC0; source metadata is kept for provenance.
+          cat > "$SG6/LICENSE.txt" <<'EOF'
+          License: CC0 1.0 / public-domain dedication.
+          Author/uploader: System G6 (Qoma).
+          Source: OpenGameArt.
+          Attribution not required; provenance retained voluntarily.
           EOF
 
-          cat > "$ROOT/medieval_tools/SOURCE.md" <<'EOF'
+          cat > "$SG6/medieval_tools/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/medieval-tools-pack
           License: CC0
-          Author: System G6 / Qoma
-          Original archive: medieval_tools_pack.7z
-          Contents: 12 low-poly tools including pitchfork, shovel, hoe, sickle, axe, scythe, rake, broom, saw, pickaxe and hammer.
+          Contents: 12 low-poly tools: pitchfork, shovel, hoe, sickle, axe, scythe, rake, broom, saws, pickaxe, hammer.
           EOF
 
-          cat > "$ROOT/medieval_crafting_stations/SOURCE.md" <<'EOF'
+          cat > "$SG6/medieval_crafting_stations/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/medieval-crafting-stations-pack
           License: CC0
-          Author: System G6 / Qoma
-          Original archive: medieval_crafting_stations_pack.7z
-          Contents: 3 low-poly crafting stations in one Blender source with textures.
+          Contents: 3 crafting stations, low-poly, textured.
           EOF
 
-          cat > "$ROOT/medieval_props/SOURCE.md" <<'EOF'
+          cat > "$SG6/medieval_props/SOURCE.md" <<'EOF'
           Source: https://opengameart.org/content/medieval-props-pack
           License: CC0
-          Author: System G6 / Qoma
-          Original archive: medieval_props_pack.7z
-          Contents: 19 low-poly props including chest, bench, brazier, cabinet, campfire, cart, basket, bed, crate, hay, sawbuck, trough, logs, barrel, hitching post and bookshelf.
+          Contents: 19 settlement/interior props including cart, trough, hay, logs, chest, bed, crates, barrel and hitching post.
+          EOF
+
+          cat > "$SG6/medieval_buildings/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/medieval-buildings-pack
+          License: CC0
+          Contents: 18 building/environment props including houses, hall, well, walls, gates, watch tower, doors, trees and pine.
+          EOF
+
+          cat > "$SG6/medieval_weapons/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/medieval-weapon-pack
+          License: CC0
+          Contents: 14 low-poly weapons/items including bow, crossbow, quiver, sword, dagger, axe, mace, shield, staff, wand and grimoire.
+          EOF
+
+          mkdir -p "$QUA"
+          cat > "$QUA/LICENSE.txt" <<'EOF'
+          License: CC0 1.0 / public-domain dedication.
+          Author/uploader: Quaternius.
+          Source: OpenGameArt mirror of Quaternius packs.
+          EOF
+
+          cat > "$QUA/farm_animals/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/lowpoly-animated-farm-animal-pack
+          License: CC0
+          Author: Quaternius
+          Contents: animated farm animal pack; page tags/description include pig, cow, horse, llama, pug/dog and sheep; Blend/OBJ/FBX included.
+          Integration caution: prefer glTF conversion in the main chat because old animated FBX can import poorly in Godot.
+          EOF
+
+          cat > "$QUA/animal_pack_vol2/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/animated-animales-low-poly
+          License: CC0
+          Author: Quaternius
+          Contents: animated wolf, eagle, dog, cat and piranha.
+          Integration caution: inspect animation import and convert source formats as needed for Godot.
+          EOF
+
+          mkdir -p "$KEN"
+          cat > "$KEN/LICENSE.txt" <<'EOF'
+          License: CC0 1.0 / public-domain dedication.
+          Author/uploader: Kenney.
+          Source: OpenGameArt/Kenney.
+          EOF
+
+          cat > "$KEN/cube_pets/SOURCE.md" <<'EOF'
+          Source: https://opengameart.org/content/cube-pets
+          License: CC0
+          Author: Kenney
+          Contents: 16 animated cubic pets; separate FBX, OBJ and glTF models plus import instructions.
           EOF
 
       - name: Commit downloaded packs
@@ -110,10 +177,10 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/source_packs/opengameart/system_g6
+          git add assets/source_packs/opengameart
           if git diff --cached --quiet; then
             echo "No asset changes to commit."
             exit 0
           fi
-          git commit -m "assets: vendor verified CC0 System G6 source packs"
+          git commit -m "assets: vendor additional verified CC0 source packs"
           git push origin HEAD:main
