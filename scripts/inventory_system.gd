@@ -13,18 +13,19 @@ const ITEMS := {
     "berries": {"name": "Лесные ягоды", "category": "Еда", "description": "Немного утоляют голод и восстанавливают здоровье.", "equip_slot": ""},
     "water_flask": {"name": "Фляга воды", "category": "Напиток", "description": "Восстанавливает запас жидкости.", "equip_slot": ""},
     "raw_meat": {"name": "Сырое мясо", "category": "Еда", "description": "Питательно, но употреблять сырым опасно.", "equip_slot": ""},
-    "building_kit": {"name": "Строительный набор", "category": "Строительство", "description": "Комплект для установки первого убежища.", "equip_slot": ""},
     "starter_axe": {"name": "Топор поселенца", "category": "Оружие / инструмент", "description": "Простой топор. Усиливает ближнюю атаку и подходит для работы по дереву.", "equip_slot": SLOT_WEAPON},
     "stone_knife": {"name": "Каменный нож", "category": "Оружие", "description": "Лёгкое раннее оружие для ближнего боя.", "equip_slot": SLOT_WEAPON},
-    "campfire_kit": {"name": "Набор для костра", "category": "Строительство", "description": "Подготовленные материалы для безопасного костра.", "equip_slot": ""},
+    "campfire_kit": {"name": "Набор для костра", "category": "Походное", "description": "Подготовленные материалы для будущей системы лагеря.", "equip_slot": ""},
     "cooked_meat": {"name": "Жареное мясо", "category": "Еда", "description": "Безопасная и сытная еда.", "equip_slot": ""}
 }
 
+# Permanent building recipes are intentionally absent in Stage 10. They will be
+# authored only after city/region rules, land ownership and placement constraints
+# are stable. Small survival recipes remain useful for traversal testing.
 const RECIPES := {
-    "building_kit": {"name": "Строительный набор", "result": "building_kit", "amount": 1, "requirements": {"wood": 8, "stone": 4}, "unlock_stage": 2},
-    "stone_knife": {"name": "Каменный нож", "result": "stone_knife", "amount": 1, "requirements": {"wood": 1, "stone": 3}, "unlock_stage": 1},
-    "campfire_kit": {"name": "Набор для костра", "result": "campfire_kit", "amount": 1, "requirements": {"wood": 4, "stone": 6}, "unlock_stage": 1},
-    "cooked_meat": {"name": "Жареное мясо", "result": "cooked_meat", "amount": 1, "requirements": {"raw_meat": 1, "wood": 1}, "unlock_stage": 1}
+    "stone_knife": {"name": "Каменный нож", "result": "stone_knife", "amount": 1, "requirements": {"wood": 1, "stone": 3}},
+    "campfire_kit": {"name": "Походный набор для костра", "result": "campfire_kit", "amount": 1, "requirements": {"wood": 4, "stone": 6}},
+    "cooked_meat": {"name": "Жареное мясо", "result": "cooked_meat", "amount": 1, "requirements": {"raw_meat": 1, "wood": 1}}
 }
 
 func item_info(item_id: String) -> Dictionary:
@@ -47,8 +48,6 @@ func available_recipes() -> Array:
     var rows: Array = []
     for recipe_id in RECIPES:
         var recipe: Dictionary = RECIPES[recipe_id]
-        if GameState.quest_stage < int(recipe.get("unlock_stage", 0)):
-            continue
         var row := recipe.duplicate(true)
         row["id"] = String(recipe_id)
         row["can_craft"] = GameState.has_items(row.get("requirements", {}))
@@ -57,12 +56,9 @@ func available_recipes() -> Array:
 
 func craft(recipe_id: String) -> bool:
     if not RECIPES.has(recipe_id):
-        GameState.notify("Неизвестный рецепт.")
+        GameState.notify("Этот рецепт сейчас недоступен.")
         return false
     var recipe: Dictionary = RECIPES[recipe_id]
-    if GameState.quest_stage < int(recipe.get("unlock_stage", 0)):
-        GameState.notify("Этот рецепт ещё не изучен.")
-        return false
     var requirements: Dictionary = recipe.get("requirements", {})
     if not GameState.has_items(requirements):
         GameState.notify("Недостаточно материалов для: %s" % String(recipe.get("name", recipe_id)))
