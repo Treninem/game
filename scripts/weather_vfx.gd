@@ -2,6 +2,8 @@ extends Node
 
 # Camera/local weather VFX. Emitters follow the player but keep spawned particles
 # in world coordinates so large-world streaming does not need global weather nodes.
+# Particle budgets stay fixed; intensity uses amount_ratio to avoid reallocating
+# particle buffers whenever rain/snow/dust strength changes.
 
 var root: Node3D
 var rain_particles: GPUParticles3D
@@ -31,11 +33,12 @@ func _process(delta: float) -> void:
         update_elapsed = 0.0
         _sync_weather()
 
-    if EnvironmentState.rain_intensity > 0.20 and not EnvironmentState.is_underwater:
-        var interval := lerpf(0.42, 0.07, EnvironmentState.rain_intensity)
+    var local_rain := EnvironmentState.effective_rain_intensity()
+    if local_rain > 0.20 and not EnvironmentState.is_underwater:
+        var interval := lerpf(0.42, 0.07, local_rain)
         if splash_elapsed >= interval:
             splash_elapsed = 0.0
-            _spawn_rain_splash(player.global_position)
+            _spawn_rain_splash(player.global_position, local_rain)
 
     _update_storm(delta)
 
@@ -49,7 +52,8 @@ func _update_storm(delta: float) -> void:
     storm_elapsed = 0.0
     var storm := clampf(EnvironmentState.storm_intensity, 0.12, 1.0)
     next_storm_flash = randf_range(3.2, 9.0) / maxf(storm, 0.35)
-    ScreenVFX.lightning_flash(0.55 + storm * 0.75)
+    var shelter_visibility := lerpf(0.45, 1.0, EnvironmentState.local_exposure)
+    ScreenVFX.lightning_flash((0.55 + storm * 0.75) * shelter_visibility)
 
 func _ensure_emitters() -> void:
     if root != null and is_instance_valid(root):
@@ -73,16 +77,22 @@ func _ensure_emitters() -> void:
 func _sync_weather() -> void:
     if rain_particles == null:
         return
+
     var underwater := EnvironmentState.is_underwater
-    rain_particles.emitting = EnvironmentState.rain_intensity > 0.03 and not underwater
-    snow_particles.emitting = EnvironmentState.snow_intensity > 0.03 and not underwater
-    dust_particles.emitting = EnvironmentState.dust_amount > 0.08 and EnvironmentState.rain_intensity < 0.10 and not underwater
+    var exposure := clampf(EnvironmentState.local_exposure, 0.0, 1.0)
+    var rain := EnvironmentState.rain_intensity * exposure
+    var snow := EnvironmentState.snow_intensity * exposure
+    var dust := EnvironmentState.dust_amount * exposure
+
+    rain_particles.emitting = rain > 0.03 and not underwater
+    snow_particles.emitting = snow > 0.03 and not underwater
+    dust_particles.emitting = dust > 0.08 and EnvironmentState.rain_intensity < 0.10 and not underwater
     bubble_particles.emitting = underwater
 
-    rain_particles.amount = maxi(24, int(90.0 + 360.0 * EnvironmentState.rain_intensity))
-    snow_particles.amount = maxi(18, int(60.0 + 240.0 * EnvironmentState.snow_intensity))
-    dust_particles.amount = maxi(12, int(35.0 + 130.0 * EnvironmentState.dust_amount))
-    bubble_particles.amount = 80 if underwater else 1
+    rain_particles.amount_ratio = clampf(rain, 0.0, 1.0) if rain_particles.emitting else 0.0
+    snow_particles.amount_ratio = clampf(snow, 0.0, 1.0) if snow_particles.emitting else 0.0
+    dust_particles.amount_ratio = clampf(dust, 0.0, 1.0) if dust_particles.emitting else 0.0
+    bubble_particles.amount_ratio = 1.0 if underwater else 0.0
 
     var rain_process := rain_particles.process_material as ParticleProcessMaterial
     if rain_process != null:
@@ -97,7 +107,8 @@ func _sync_weather() -> void:
 func _make_rain() -> GPUParticles3D:
     var particles := GPUParticles3D.new()
     particles.name = "Rain"
-    particles.amount = 180
+    particles.amount = 450
+    particles.amount_ratio = 0.0
     particles.lifetime = 1.25
     particles.local_coords = false
     particles.visibility_aabb = AABB(Vector3(-18, -16, -18), Vector3(36, 32, 36))
@@ -124,7 +135,8 @@ func _make_rain() -> GPUParticles3D:
 func _make_snow() -> GPUParticles3D:
     var particles := GPUParticles3D.new()
     particles.name = "Snow"
-    particles.amount = 120
+    particles.amount = 300
+    particles.amount_ratio = 0.0
     particles.lifetime = 4.5
     particles.local_coords = false
     particles.visibility_aabb = AABB(Vector3(-18, -18, -18), Vector3(36, 36, 36))
@@ -151,7 +163,8 @@ func _make_snow() -> GPUParticles3D:
 func _make_dust() -> GPUParticles3D:
     var particles := GPUParticles3D.new()
     particles.name = "Dust"
-    particles.amount = 60
+    particles.amount = 165
+    particles.amount_ratio = 0.0
     particles.lifetime = 3.4
     particles.local_coords = false
     particles.visibility_aabb = AABB(Vector3(-20, -10, -20), Vector3(40, 20, 40))
@@ -179,6 +192,7 @@ func _make_bubbles() -> GPUParticles3D:
     var particles := GPUParticles3D.new()
     particles.name = "UnderwaterBubbles"
     particles.amount = 80
+    particles.amount_ratio = 0.0
     particles.lifetime = 3.1
     particles.local_coords = false
     particles.visibility_aabb = AABB(Vector3(-10, -10, -10), Vector3(20, 20, 20))
@@ -205,7 +219,9 @@ func _make_bubbles() -> GPUParticles3D:
     particles.draw_pass_1 = sphere
     return particles
 
-func _spawn_rain_splash(player_position: Vector3) -> void:
+func _spawn_rain_splash(player_position: Vector3, local_rain: float) -> void:
+    if EnvironmentState.local_exposure < 0.12:
+        return
     var angle := randf() * TAU
     var distance := randf_range(1.5, 10.0)
     var sample := player_position + Vector3(cos(angle) * distance, 0.0, sin(angle) * distance)
@@ -216,9 +232,9 @@ func _spawn_rain_splash(player_position: Vector3) -> void:
     var point := Vector3(sample.x, terrain_y + 0.05, sample.z)
     var surface := WorldVFX.surface_at(point)
     if surface in ["water", "mud"]:
-        WorldVFX.spawn_environment_effect("splash", point, 0.30 + EnvironmentState.rain_intensity * 0.35)
-    elif EnvironmentState.rain_intensity > 0.55:
-        VFXLibrary.spawn_collision("water", point, Vector3.UP, get_tree().current_scene, 0.18 + EnvironmentState.rain_intensity * 0.18)
+        WorldVFX.spawn_environment_effect("splash", point, 0.30 + local_rain * 0.35)
+    elif local_rain > 0.55:
+        VFXLibrary.spawn_collision("water", point, Vector3.UP, get_tree().current_scene, 0.18 + local_rain * 0.18)
 
 func _particle_material(color: Color, billboard: bool) -> StandardMaterial3D:
     var material := StandardMaterial3D.new()
