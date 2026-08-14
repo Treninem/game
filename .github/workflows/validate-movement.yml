@@ -48,7 +48,25 @@ jobs:
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
       - name: Prove player surface, void recovery and movement
         shell: bash
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd
+        run: |
+          set +e
+          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd 2>&1)
+          status=$?
+          printf '%s\n' "$output"
+          if [ "$status" -ne 0 ]; then
+            detail=$(printf '%s\n' "$output" | tail -n 18 | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=Player smoke raw Godot output::$detail"
+          fi
+          exit "$status"
       - name: Prove UI geometry and save slots
         shell: bash
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_ui_and_save.gd
+        run: |
+          set +e
+          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_ui_and_save.gd 2>&1)
+          status=$?
+          printf '%s\n' "$output"
+          if [ "$status" -ne 0 ]; then
+            detail=$(printf '%s\n' "$output" | tail -n 18 | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=UI smoke raw Godot output::$detail"
+          fi
+          exit "$status"
