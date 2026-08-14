@@ -1,37 +1,19 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/resource_node.gd" id="3"]
-[ext_resource type="Script" path="res://scripts/quest_npc.gd" id="4"]
-[ext_resource type="Script" path="res://scripts/enemy.gd" id="5"]
-[ext_resource type="Script" path="res://scripts/game_menu.gd" id="6"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="7"]
-[ext_resource type="Script" path="res://scripts/dialogue_ui.gd" id="8"]
-[ext_resource type="Script" path="res://scripts/city_district.gd" id="9"]
-[ext_resource type="Script" path="res://scripts/humanoid_visual.gd" id="10"]
-[ext_resource type="Script" path="res://scripts/city_gate_controller.gd" id="11"]
-[ext_resource type="Script" path="res://scripts/world_streamer.gd" id="12"]
-[ext_resource type="Script" path="res://scripts/gameplay_panels.gd" id="13"]
+[ext_resource type="Script" path="res://scripts/game_menu.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/dialogue_ui.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/city_district.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/humanoid_visual.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/city_gate_controller.gd" id="8"]
+[ext_resource type="Script" path="res://scripts/world_streamer.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/gameplay_panels.gd" id="10"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
 height = 1.8
-
-[sub_resource type="CapsuleMesh" id="PlayerMesh"]
-radius = 0.45
-height = 1.8
-
-[sub_resource type="CapsuleShape3D" id="EnemyShape"]
-radius = 0.5
-height = 1.6
-
-[sub_resource type="CapsuleMesh" id="EnemyMesh"]
-radius = 0.5
-height = 1.6
-
-[sub_resource type="BoxShape3D" id="MiraShape"]
-size = Vector3(0.85, 2.1, 0.75)
 
 [node name="Bootstrap" type="Node"]
 script = ExtResource("1")
@@ -45,34 +27,24 @@ light_energy = 1.15
 shadow_enabled = true
 
 [node name="WorldStreamer" type="Node3D" parent="World"]
-script = ExtResource("12")
-
-[node name="Ground" type="CSGBox3D" parent="World"]
-size = Vector3(140, 0.5, 140)
-position = Vector3(0, -0.3, 0)
-use_collision = true
-
-[node name="CityDistrict" type="Node3D" parent="World"]
 script = ExtResource("9")
 
+[node name="CityDistrict" type="Node3D" parent="World"]
+script = ExtResource("6")
+
 [node name="GateController" type="Node" parent="World/CityDistrict"]
-script = ExtResource("11")
+script = ExtResource("8")
 
 [node name="Player" type="CharacterBody3D" parent="World"]
-position = Vector3(0, 1, 8)
+position = Vector3(0, 2, 8)
 script = ExtResource("2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="World/Player"]
 position = Vector3(0, 0.9, 0)
 shape = SubResource("PlayerShape")
 
-[node name="Body" type="MeshInstance3D" parent="World/Player"]
-visible = false
-position = Vector3(0, 0.9, 0)
-mesh = SubResource("PlayerMesh")
-
 [node name="Avatar" type="Node3D" parent="World/Player"]
-script = ExtResource("10")
+script = ExtResource("7")
 skin_color = Color(0.72, 0.54, 0.40, 1)
 primary_color = Color(0.08, 0.15, 0.24, 1)
 secondary_color = Color(0.16, 0.28, 0.36, 1)
@@ -85,132 +57,12 @@ position = Vector3(0, 1.35, 0)
 [node name="Camera3D" type="Camera3D" parent="World/Player/CameraPivot"]
 position = Vector3(0, 0.55, 5.5)
 current = true
+far = 700.0
 
 [node name="InteractionRay" type="RayCast3D" parent="World/Player/CameraPivot/Camera3D"]
 target_position = Vector3(0, 0, -7)
 enabled = true
 collide_with_areas = true
-
-[node name="Mira" type="StaticBody3D" parent="World"]
-position = Vector3(0, 0, -4)
-script = ExtResource("4")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Mira"]
-position = Vector3(0, 1.05, 0)
-shape = SubResource("MiraShape")
-
-[node name="MiraVisual" type="Node3D" parent="World/Mira"]
-script = ExtResource("10")
-skin_color = Color(0.76, 0.58, 0.45, 1)
-primary_color = Color(0.24, 0.16, 0.34, 1)
-secondary_color = Color(0.38, 0.26, 0.48, 1)
-accent_color = Color(0.58, 0.44, 0.88, 1)
-hair_color = Color(0.18, 0.08, 0.04, 1)
-has_hood = true
-
-[node name="Tree" type="CSGCylinder3D" parent="World"]
-position = Vector3(-4, 1.5, 2)
-radius = 0.5
-height = 3.0
-use_collision = true
-script = ExtResource("3")
-persistent_id = "tree_start"
-resource_id = "wood"
-display_name = "дерево"
-uses = 12
-
-[node name="Tree2" type="CSGCylinder3D" parent="World"]
-position = Vector3(-9, 1.5, 12)
-radius = 0.55
-height = 3.0
-use_collision = true
-script = ExtResource("3")
-persistent_id = "tree_ruins"
-resource_id = "wood"
-display_name = "дерево"
-uses = 10
-
-[node name="Rock" type="CSGSphere3D" parent="World"]
-position = Vector3(4, 0.8, 2)
-radius = 0.9
-use_collision = true
-script = ExtResource("3")
-persistent_id = "rock_start"
-resource_id = "stone"
-display_name = "камень"
-uses = 8
-
-[node name="Rock2" type="CSGSphere3D" parent="World"]
-position = Vector3(10, 0.65, 14)
-radius = 0.75
-use_collision = true
-script = ExtResource("3")
-persistent_id = "rock_east"
-resource_id = "stone"
-display_name = "камень"
-uses = 6
-
-[node name="BerryBush" type="CSGSphere3D" parent="World"]
-position = Vector3(-7, 0.65, 7)
-radius = 0.7
-use_collision = true
-script = ExtResource("3")
-persistent_id = "berries_start"
-resource_id = "berries"
-display_name = "ягоды"
-amount_per_use = 1
-uses = 6
-
-[node name="Well" type="CSGCylinder3D" parent="World"]
-position = Vector3(7, 0.65, 7)
-radius = 1.1
-height = 1.3
-use_collision = true
-script = ExtResource("3")
-persistent_id = "well_start"
-resource_id = "water_flask"
-display_name = "фляга воды"
-amount_per_use = 1
-uses = 12
-
-[node name="Raider1" type="CharacterBody3D" parent="World"]
-position = Vector3(-20, 0.1, 30)
-script = ExtResource("5")
-enemy_id = "raider_west_01"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Raider1"]
-position = Vector3(0, 0.8, 0)
-shape = SubResource("EnemyShape")
-
-[node name="Body" type="MeshInstance3D" parent="World/Raider1"]
-position = Vector3(0, 0.8, 0)
-mesh = SubResource("EnemyMesh")
-
-[node name="Raider2" type="CharacterBody3D" parent="World"]
-position = Vector3(24, 0.1, 34)
-script = ExtResource("5")
-enemy_id = "raider_east_01"
-max_health = 90.0
-move_speed = 3.6
-attack_damage = 10.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Raider2"]
-position = Vector3(0, 0.8, 0)
-shape = SubResource("EnemyShape")
-
-[node name="Body" type="MeshInstance3D" parent="World/Raider2"]
-position = Vector3(0, 0.8, 0)
-mesh = SubResource("EnemyMesh")
-
-[node name="RuinWall1" type="CSGBox3D" parent="World"]
-position = Vector3(-22, 1.25, 25)
-size = Vector3(8, 2.5, 0.6)
-use_collision = true
-
-[node name="RuinWall2" type="CSGBox3D" parent="World"]
-position = Vector3(22, 1.25, 28)
-size = Vector3(0.6, 2.5, 9)
-use_collision = true
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -221,7 +73,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("7")
+script = ExtResource("4")
 
 [node name="Crosshair" type="Label" parent="UI"]
 anchors_preset = 8
@@ -246,7 +98,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("13")
+script = ExtResource("10")
 
 [node name="GameMenu" type="Control" parent="UI"]
 layout_mode = 3
@@ -255,7 +107,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("6")
+script = ExtResource("3")
 
 [node name="DialogueUI" type="Control" parent="UI"]
 layout_mode = 3
@@ -264,4 +116,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("8")
+script = ExtResource("5")
