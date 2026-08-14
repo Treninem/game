@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.4.0-stage4"
+const VERSION := "0.6.0-stage6"
 const HOUSE_SCENE := preload("res://scenes/house.tscn")
 const RESPAWN_POSITION := Vector3(0, 1, 8)
 
@@ -21,7 +21,7 @@ func _ready() -> void:
         GameState.revive()
         player.global_position = RESPAWN_POSITION
     spawn_house_from_state()
-    GameState.notify("Esc — меню  •  F5 — быстро сохранить  •  F9 — быстро загрузить")
+    GameState.notify("Южный квартал Люменграда открыт • Esc — меню • E — взаимодействие")
 
 func _process(delta: float) -> void:
     if not GameState.is_dead:
@@ -41,7 +41,7 @@ func _on_player_died() -> void:
     player.velocity = Vector3.ZERO
     GameState.revive()
     respawning = false
-    GameState.notify("Вы возродились. Часть потребностей восстановлена.")
+    GameState.notify("Вы возродились у окраин Люменграда. Часть потребностей восстановлена.")
 
 func spawn_house_from_state() -> void:
     if is_instance_valid(spawned_house):
