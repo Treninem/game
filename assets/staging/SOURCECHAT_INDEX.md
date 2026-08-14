@@ -867,3 +867,64 @@ Path: `assets/staging/sourcechat_b79/models/`
 - `kenney_watercraft_kit/` — broad boat/ship/watercraft source kit.
 
 Integration rule: these remain source libraries. Main game chat should choose a consistent visual family per biome/location, normalize scale/materials/collisions/LOD and promote only selected production assets rather than wiring whole staging directories into runtime.
+
+## B80 — coherent Kenney city family
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b80/models/`
+
+- `kenney_city_kit_roads/` — modular roads/barriers for a coherent modern-city base.
+- `kenney_city_kit_suburban_2/` — suburban buildings/fences/trees/driveways.
+- `kenney_city_kit_commercial_2_1/` — commercial buildings, signs and awnings.
+- `kenney_city_kit_industrial_1/` — industrial/warehouse/factory city pieces.
+
+## B81 — additional building / road / retro urban sources
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b81/models/`
+
+- `kenney_building_kit/` — generic modular building construction library.
+- `kenney_modular_buildings_2024/` — 100-model modular structures/houses/skyscrapers source library.
+- `kenney_3d_road_tile_pack_300/` — 300+ modular road tiles covering city/beach/river/tram/highway cases.
+- `kenney_retro_urban_kit/` — intentionally retro/PSX-style urban family; use only where art direction allows.
+
+## B82 — transport / prototype / survival
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b82/models/`
+
+- `kenney_car_kit_3_1/` — cars/service vehicles plus wheels/debris.
+- `kenney_train_kit/` — train/tram/rail source kit.
+- `kenney_prototype_kit/` — broad development library including animated characters/animals, mechanisms and generic props.
+- `kenney_survival_kit/` — structures, tools, crafting items and open-world survival props.
+
+## B83 — factory / racing / holiday / coaster
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b83/models/`
+
+- `kenney_factory_kit_3_0/` — large factory/automation/conveyor source family.
+- `kenney_racing_kit_1_2/` — road/track/pit/fence/bridge racing source pieces.
+- `kenney_holiday_kit/` — winter/holiday trees, structures and seasonal props.
+- `kenney_coaster_kit/` — theme-park/coaster tracks, trains and related pieces.
+
+## B84 — weapon libraries
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b84/models/`
+
+- `kenney_weapon_pack_30/` — broad low-poly modern weapon source library.
+- `kenney_blaster_kit_2_1/` — sci-fi blasters/ammo/crates/targets; use only in fitting locations.
+- `oga_fantasy_weapons_19/` — medieval/fantasy swords, axes, polearms, bow and shield source set.
+- `oga_archery_set/` — textured bow/arrows/quiver/target set.
+
+## B85 — food / kitchen / consumables
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b85/models/`
+
+- `kenney_food_kit_200/` — broad 200-object food/kitchen library.
+- `quaternius_low_poly_food_100plus/` — 100+ low-poly food/consumable models.
+- `oga_detailed_food_bread_cheese_sausage/` — smaller detailed bread/cheese/sausage source with texture maps.
+
+Integration rule: these remain source libraries. Main game chat should choose coherent subsets per actual location and normalize scale, materials, collisions, animation rigs and LOD before promotion. Do not wire staging libraries directly into gameplay.
