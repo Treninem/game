@@ -17,24 +17,37 @@ var right_leg: Node3D
 var torso: MeshInstance3D
 var walk_time := 0.0
 var base_position := Vector3.ZERO
+var last_parent_position := Vector3.ZERO
+var measured_speed := 0.0
 
 func _ready() -> void:
     base_position = position
+    var body := get_parent() as CharacterBody3D
+    if body != null:
+        last_parent_position = body.global_position
     _build_character()
 
 func _process(delta: float) -> void:
     var body := get_parent() as CharacterBody3D
     if body == null:
         return
-    var horizontal_speed := Vector2(body.velocity.x, body.velocity.z).length()
+
+    var displacement := body.global_position - last_parent_position
+    last_parent_position = body.global_position
+    var horizontal_distance := Vector2(displacement.x, displacement.z).length()
+    var instantaneous_speed := horizontal_distance / maxf(delta, 0.0001)
+    measured_speed = lerpf(measured_speed, instantaneous_speed, minf(1.0, delta * 12.0))
+
     var target_swing := 0.0
-    if horizontal_speed > 0.15:
-        walk_time += delta * clampf(horizontal_speed * 1.7, 4.0, 12.0)
+    if measured_speed > 0.18 and not get_tree().paused:
+        walk_time += delta * clampf(measured_speed * 1.7, 4.0, 12.0)
         target_swing = sin(walk_time) * 0.62
         position.y = base_position.y + abs(sin(walk_time * 2.0)) * 0.025
     else:
+        measured_speed = move_toward(measured_speed, 0.0, delta * 7.0)
         walk_time += delta * 1.2
         position.y = lerpf(position.y, base_position.y, minf(1.0, delta * 8.0))
+
     if is_instance_valid(left_arm):
         left_arm.rotation.x = lerpf(left_arm.rotation.x, target_swing, minf(1.0, delta * 10.0))
     if is_instance_valid(right_arm):

@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @export var walk_speed := 5.0
 @export var run_speed := 8.0
-@export var acceleration := 18.0
+@export var acceleration := 22.0
 @export var jump_velocity := 5.5
 @export var gravity := 18.0
 @export var attack_damage := 24.0
@@ -16,12 +16,21 @@ extends CharacterBody3D
 
 var attack_elapsed := 0.0
 var recovery_cooldown := 0.0
+var stuck_elapsed := 0.0
+var last_horizontal_motion := Vector2.ZERO
+var last_safe_position := Vector3.ZERO
 
 func _ready() -> void:
     add_to_group("player")
+    floor_snap_length = 0.45
+    floor_max_angle = deg_to_rad(52.0)
+    safe_margin = 0.045
+    up_direction = Vector3.UP
+    motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
     _apply_settings()
     SettingsManager.settings_changed.connect(_apply_settings)
     Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+    last_safe_position = global_position
 
 func _apply_settings() -> void:
     camera.fov = float(SettingsManager.get_value("gameplay", "camera_fov"))
@@ -69,10 +78,13 @@ func _physics_process(delta: float) -> void:
     recovery_cooldown = maxf(0.0, recovery_cooldown - delta)
     if GameState.is_dead:
         velocity = Vector3.ZERO
+        last_horizontal_motion = Vector2.ZERO
         return
 
     if not is_on_floor():
         velocity.y -= gravity * delta
+    elif velocity.y < 0.0:
+        velocity.y = 0.0
 
     var input_vec := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
     var wants_sprint := Input.is_action_pressed("sprint") and input_vec.length() > 0.0 and is_on_floor()
@@ -81,14 +93,56 @@ func _physics_process(delta: float) -> void:
         GameState.stamina = maxf(0.0, GameState.stamina - sprint_stamina_per_second * delta)
         GameState.survival_changed.emit()
 
-    var direction := (transform.basis * Vector3(input_vec.x, 0.0, input_vec.y)).normalized()
+    var direction := (global_transform.basis * Vector3(input_vec.x, 0.0, input_vec.y)).normalized()
     var target_speed := run_speed if can_sprint else walk_speed
     var target := direction * target_speed
     velocity.x = move_toward(velocity.x, target.x, acceleration * delta)
     velocity.z = move_toward(velocity.z, target.z, acceleration * delta)
+
+    var before := global_position
     move_and_slide()
     _enforce_world_bounds()
     _recover_to_terrain_if_needed(false)
+
+    var moved := global_position - before
+    last_horizontal_motion = Vector2(moved.x, moved.z)
+    if last_horizontal_motion.length() > 0.002 and is_on_floor():
+        last_safe_position = global_position
+
+    if input_vec.length() > 0.15 and direction.length() > 0.1 and last_horizontal_motion.length() < 0.0015:
+        stuck_elapsed += delta
+        if stuck_elapsed >= 0.28:
+            _attempt_unstick(direction, delta, target_speed)
+            stuck_elapsed = 0.0
+    else:
+        stuck_elapsed = 0.0
+
+func actual_horizontal_speed(delta: float = 1.0 / 60.0) -> float:
+    return last_horizontal_motion.length() / maxf(delta, 0.0001)
+
+func _attempt_unstick(direction: Vector3, delta: float, target_speed: float) -> void:
+    # A streamed terrain collision can appear during the same frame in which the
+    # player reaches a chunk seam. Recover upward first, then retry a small legal
+    # horizontal step without ever phasing through a wall.
+    var lift := Vector3.UP * 0.22
+    if not test_move(global_transform, lift):
+        global_position += lift
+
+    var retry := direction.normalized() * minf(0.28, target_speed * maxf(delta, 1.0 / 60.0) * 2.0)
+    if retry.length() > 0.001 and not test_move(global_transform, retry):
+        global_position += retry
+        velocity.x = direction.x * target_speed
+        velocity.z = direction.z * target_speed
+        return
+
+    # If the body was spawned inside newly streamed terrain, move it onto the
+    # authoritative height field instead of leaving an animated character stuck.
+    var xz := Vector2(global_position.x, global_position.z)
+    if WorldData.inside_world(xz):
+        var terrain_y := WorldData.elevation_at(xz)
+        if global_position.y < terrain_y + 0.15:
+            global_position.y = terrain_y + 1.08
+            velocity.y = 0.0
 
 func _recover_to_terrain_if_needed(force_check: bool) -> void:
     if recovery_cooldown > 0.0 and not force_check:
@@ -99,7 +153,7 @@ func _recover_to_terrain_if_needed(force_check: bool) -> void:
         return
     var terrain_y := WorldData.elevation_at(xz)
     if global_position.y < terrain_y - 1.5:
-        global_position.y = terrain_y + 1.15
+        global_position.y = terrain_y + 1.08
         velocity.y = 0.0
 
 func _enforce_world_bounds() -> void:

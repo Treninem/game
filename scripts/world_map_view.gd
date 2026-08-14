@@ -8,7 +8,7 @@ var redraw_elapsed := 0.0
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_IGNORE
-    custom_minimum_size = Vector2(700, 470)
+    custom_minimum_size = Vector2(640, 430)
     if not MapSystem.explored_changed.is_connected(queue_redraw):
         MapSystem.explored_changed.connect(queue_redraw)
     queue_redraw()
@@ -22,7 +22,10 @@ func _process(delta: float) -> void:
         queue_redraw()
 
 func _draw() -> void:
-    var map_rect := Rect2(Vector2(8, 8), size - Vector2(16, 46))
+    if size.x < 40.0 or size.y < 40.0:
+        return
+    var footer_height := 34.0
+    var map_rect := Rect2(Vector2(8, 8), Vector2(maxf(20.0, size.x - 16.0), maxf(20.0, size.y - footer_height - 8.0)))
     draw_style_box(_panel_style(), map_rect)
     var inner := map_rect.grow(-8)
     draw_rect(inner, Color(0.006, 0.010, 0.016, 1.0), true)
@@ -54,7 +57,8 @@ func _draw() -> void:
         draw_circle(p, 2.5, Color.WHITE)
         _draw_local_inset(inner, world)
 
-    draw_string(ThemeDB.fallback_font, Vector2(14, size.y - 14), "Континент 64 × 64 км   •   исследовано %.2f км² (%.2f%%)   •   тёмные области не открыты" % [MapSystem.explored_area_km2(), MapSystem.explored_percent()], HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color(0.72, 0.79, 0.88))
+    var footer := "64 × 64 км   •   открыто %.2f км² / %.2f%%   •   тёмное = не исследовано" % [MapSystem.explored_area_km2(), MapSystem.explored_percent()]
+    draw_string(ThemeDB.fallback_font, Vector2(14, size.y - 10), footer, HORIZONTAL_ALIGNMENT_LEFT, maxf(120.0, size.x - 28.0), 13, Color(0.68, 0.77, 0.86))
 
 func _draw_continent_frame(rect: Rect2) -> void:
     draw_rect(rect, Color(0.16, 0.24, 0.30, 0.9), false, 1.5)
@@ -75,7 +79,10 @@ func _draw_capital_outline(rect: Rect2) -> void:
     draw_polyline(corners, Color(0.55, 0.76, 0.90, 0.9), 1.5)
 
 func _draw_local_inset(rect: Rect2, player_world: Vector2) -> void:
-    var inset_size := Vector2(300, 210)
+    var inset_size := Vector2(
+        minf(320.0, maxf(210.0, rect.size.x * 0.40)),
+        minf(220.0, maxf(155.0, rect.size.y * 0.44))
+    )
     var inset := Rect2(rect.end - inset_size - Vector2(10, 10), inset_size)
     draw_style_box(_inset_style(), inset)
     var inner := inset.grow(-7)
@@ -107,27 +114,39 @@ func _draw_capital_local(rect: Rect2, player_world: Vector2) -> void:
     var capital_rect := Rect2(Vector2(minf(a.x, b.x), minf(a.y, b.y)), Vector2(absf(b.x - a.x), absf(b.y - a.y)))
     draw_rect(capital_rect, Color(0.60, 0.70, 0.78, 0.78), false, 1.3)
 
+    var district_labels := 0
     for district in CAPITAL.DISTRICTS:
         var pos: Vector2 = district.get("center", Vector2.ZERO)
-        if pos.distance_to(player_world) <= LOCAL_RADIUS and MapSystem.is_world_explored(pos):
-            _draw_local_poi(rect, player_world, pos, String(district.get("name", "")), "district")
+        if pos.distance_to(player_world) > LOCAL_RADIUS or not MapSystem.is_world_explored(pos):
+            continue
+        var show_name := pos.distance_to(player_world) <= 650.0 and district_labels < 4
+        _draw_local_poi(rect, player_world, pos, String(district.get("name", "")), "district", show_name)
+        if show_name:
+            district_labels += 1
+
+    var gate_labels := 0
     for gate in CAPITAL.gates():
         var pos: Vector2 = gate.get("position", Vector2.ZERO)
-        if pos.distance_to(player_world) <= LOCAL_RADIUS and MapSystem.is_world_explored(pos):
-            _draw_local_poi(rect, player_world, pos, String(gate.get("name", "")), "gate")
+        if pos.distance_to(player_world) > LOCAL_RADIUS or not MapSystem.is_world_explored(pos):
+            continue
+        var show_name := pos.distance_to(player_world) <= 360.0 and gate_labels < 2
+        _draw_local_poi(rect, player_world, pos, String(gate.get("name", "")), "gate", show_name)
+        if show_name:
+            gate_labels += 1
 
 func _draw_poi(rect: Rect2, world: Vector2, name: String, kind: String, show_name: bool) -> void:
     var p := _world_to_screen(world, rect)
     var color := _poi_color(kind)
     draw_circle(p, 4.5, color)
     draw_circle(p, 1.8, Color(0.03, 0.04, 0.06))
-    if show_name:
+    if show_name and not name.is_empty():
         draw_string(ThemeDB.fallback_font, p + Vector2(7, 3), name, HORIZONTAL_ALIGNMENT_LEFT, 130, 10, Color(0.88, 0.91, 0.95))
 
-func _draw_local_poi(rect: Rect2, center: Vector2, world: Vector2, name: String, kind: String) -> void:
+func _draw_local_poi(rect: Rect2, center: Vector2, world: Vector2, name: String, kind: String, show_name: bool) -> void:
     var p := _local_to_screen(world, rect, center)
     draw_circle(p, 3.5, _poi_color(kind))
-    draw_string(ThemeDB.fallback_font, p + Vector2(5, 3), name, HORIZONTAL_ALIGNMENT_LEFT, 120, 8, Color(0.90, 0.92, 0.95))
+    if show_name and not name.is_empty():
+        draw_string(ThemeDB.fallback_font, p + Vector2(5, 3), name, HORIZONTAL_ALIGNMENT_LEFT, minf(150.0, rect.size.x * 0.5), 8, Color(0.90, 0.92, 0.95))
 
 func _poi_color(kind: String) -> Color:
     match kind:

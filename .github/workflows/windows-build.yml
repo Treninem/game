@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: impuls-main-release
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-game:
@@ -144,4 +144,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.10.0 Stage 10: world-first stabilization. 192 m local streaming chunks, nearby-only physics, one-chunk-per-frame generation, reserved 4 km capital terrain, legacy shelter and temporary quests removed, movement/terrain recovery fixed, permanent minimap and direct gameplay panels retained, selected ImPuls branding validated for EXE/installer/updater."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls Stage 10: world-first stabilization. Adaptive pause/gameplay UI, 64x64 km streamed world, canonical 4x4 km capital with 32 gates, movement recovery, permanent minimap, selected ImPuls branding, and offline-safe updater runtime."

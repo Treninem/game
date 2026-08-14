@@ -104,7 +104,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("10")
 
-[node name="GameMenu" type="Control" parent="UI"]
+[node name="GameMenu" type="Control" parent="UI" groups=["game_menu"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
