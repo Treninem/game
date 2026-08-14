@@ -32,10 +32,6 @@ func _process(delta: float) -> void:
         autosave_elapsed = 0.0
         SaveManager.save_game(player)
 
-func _exit_tree() -> void:
-    if is_instance_valid(player) and not SaveManager.pending_new_game:
-        SaveManager.save_game(player)
-
 func _on_player_died() -> void:
     if respawning:
         return
