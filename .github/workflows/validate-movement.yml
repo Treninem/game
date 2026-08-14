@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "scripts/bootstrap.gd"
       - "scripts/player_controller.gd"
       - "scripts/humanoid_visual.gd"
       - "scripts/world_streamer.gd"
@@ -12,9 +13,15 @@ on:
       - "scripts/ui_layout_guard.gd"
       - "scenes/stage1.tscn"
       - "tests/smoke_player_movement.gd"
+      - "tests/smoke_player_movement.tscn"
       - "tests/smoke_ui_and_save.gd"
+      - "tests/smoke_ui_and_save.tscn"
       - ".github/workflows/validate-movement.yml"
   workflow_dispatch:
+
+concurrency:
+  group: validate-player-movement-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -50,11 +57,11 @@ jobs:
         shell: bash
         run: |
           set +e
-          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_player_movement.gd 2>&1)
+          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn 2>&1)
           status=$?
           printf '%s\n' "$output"
           if [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 18 | tr '\n' ' ' | sed 's/%/%25/g')
+            detail=$(printf '%s\n' "$output" | tail -n 24 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Player smoke raw Godot output::$detail"
           fi
           exit "$status"
@@ -62,11 +69,11 @@ jobs:
         shell: bash
         run: |
           set +e
-          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/smoke_ui_and_save.gd 2>&1)
+          output=$(./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn 2>&1)
           status=$?
           printf '%s\n' "$output"
           if [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 18 | tr '\n' ' ' | sed 's/%/%25/g')
+            detail=$(printf '%s\n' "$output" | tail -n 24 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=UI smoke raw Godot output::$detail"
           fi
           exit "$status"
