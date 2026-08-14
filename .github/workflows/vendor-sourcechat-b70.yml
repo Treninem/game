@@ -1,0 +1,139 @@
+name: Vendor source-chat B70 real CC0 monster sources
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b70.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b70
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 monster sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b70"
+          TMP=".sourcechat_b70_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$TMP/zantar" "$ROOT/models/oga_zantar_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
+            "https://opengameart.org/sites/default/files/zantar.zip" \
+            -o "$TMP/zantar.zip"
+          unzip -q "$TMP/zantar.zip" -d "$TMP/zantar"
+          chmod -R u+rwX "$TMP/zantar" || true
+          rsync -a "$TMP/zantar/" "$ROOT/models/oga_zantar_rigged_animated/"
+          meta "oga_zantar_rigged_animated" \
+            "https://opengameart.org/content/zantar-character" \
+            "Zantar Character" \
+            "https://opengameart.org/sites/default/files/zantar.zip" \
+            "Gelatinous cube enemy; source author describes it as fully rigged and animated."
+
+          mkdir -p "$ROOT/models/oga_bombalach_rigged_animated" "$TMP/bombalachtex"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
+            "https://opengameart.org/sites/default/files/bombalach.blend" \
+            -o "$ROOT/models/oga_bombalach_rigged_animated/bombalach.blend"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
+            "https://opengameart.org/sites/default/files/bombalachtexture.rar" \
+            -o "$TMP/bombalachtexture.rar"
+          7z x -y "$TMP/bombalachtexture.rar" -o"$TMP/bombalachtex" >/dev/null
+          chmod -R u+rwX "$TMP/bombalachtex" || true
+          rsync -a "$TMP/bombalachtex/" "$ROOT/models/oga_bombalach_rigged_animated/"
+          meta "oga_bombalach_rigged_animated" \
+            "https://opengameart.org/content/bombalach" \
+            "Bombalach" \
+            "https://opengameart.org/sites/default/files/bombalach.blend + bombalachtexture.rar" \
+            "Mud/stone creature source with low-poly animated/rigged/textured mesh, base mesh and high-poly mesh; source page lists idle, walk, jump, crouch, death, attack and hit."
+
+          mkdir -p "$TMP/hydrach" "$TMP/hydrachtex" "$ROOT/models/oga_hydrach_creature"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
+            "https://opengameart.org/sites/default/files/hydrach.rar" \
+            -o "$TMP/hydrach.rar"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
+            "https://opengameart.org/sites/default/files/texture.rar" \
+            -o "$TMP/hydrach_texture.rar"
+          7z x -y "$TMP/hydrach.rar" -o"$TMP/hydrach" >/dev/null
+          7z x -y "$TMP/hydrach_texture.rar" -o"$TMP/hydrachtex" >/dev/null
+          chmod -R u+rwX "$TMP/hydrach" "$TMP/hydrachtex" || true
+          rsync -a "$TMP/hydrach/" "$ROOT/models/oga_hydrach_creature/"
+          rsync -a "$TMP/hydrachtex/" "$ROOT/models/oga_hydrach_creature/"
+          meta "oga_hydrach_creature" \
+            "https://opengameart.org/content/hydrach" \
+            "Hydrach" \
+            "https://opengameart.org/sites/default/files/hydrach.rar + texture.rar" \
+            "Zerg-like creature source with low/high-poly meshes and texture. Animation status is disputed: page description lists animations but a source-page comment reports the model contains none; main chat must inspect before use."
+
+          mkdir -p "$TMP/fatdemon" "$ROOT/models/oga_fat_demon_static"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B70/1.0' \
+            "https://opengameart.org/sites/default/files/Normal%20Fat%20Demon.zip" \
+            -o "$TMP/fatdemon.zip"
+          unzip -q "$TMP/fatdemon.zip" -d "$TMP/fatdemon"
+          chmod -R u+rwX "$TMP/fatdemon" || true
+          rsync -a "$TMP/fatdemon/" "$ROOT/models/oga_fat_demon_static/"
+          meta "oga_fat_demon_static" \
+            "https://opengameart.org/content/fat-demon" \
+            "Fat Demon" \
+            "https://opengameart.org/sites/default/files/Normal%20Fat%20Demon.zip" \
+            "Static low-poly demon source: about 1270 tris with 512 diffuse texture; source page explicitly states it is not rigged."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B70 — real CC0 monster sources
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should inspect rig/animation/material quality before promotion. Hydrach must be treated as animation-uncertain until inspected. Fat Demon is static and needs rigging if used as an active creature.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B70 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B70 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b70
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 monster sources B70"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
