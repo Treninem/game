@@ -18,8 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate ImPuls icon
-        run: python3 tools/make_icon.py installer/impuls.ico
+      - name: Prepare ImPuls branding
+        run: |
+          python3 -m pip install --disable-pip-version-check pillow
+          python3 tools/make_icon.py installer/impuls.ico
 
       - name: Install Godot 4.7.1 and export templates
         shell: bash
@@ -65,8 +67,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate ImPuls icon
-        run: python tools/make_icon.py installer/impuls.ico
+      - name: Prepare ImPuls branding
+        shell: pwsh
+        run: |
+          python -m pip install --disable-pip-version-check pillow
+          python tools/make_icon.py installer/impuls.ico
 
       - uses: actions/download-artifact@v4
         with:
@@ -115,6 +120,7 @@ jobs:
       - name: Prepare release files
         shell: bash
         run: |
+          python3 -m pip install --disable-pip-version-check pillow
           python3 tools/make_icon.py installer/impuls.ico
           cp game/ImPuls-PC-Windows-x64.zip .
           cp installer-artifact/ImPuls-Setup-*.exe ./ImPuls-Setup.exe
@@ -131,4 +137,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.8.0 Stage 8: streamed 64x64 km continent, 512 m terrain chunks, deterministic biomes/elevation, ocean edges, procedural vegetation and landmarks, continent-scale fog-of-war map with local inset. Includes background self-update and branding/shortcut refresh."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.9.0 Stage 9: direct in-game inventory/map/crafting/journal panels, permanent HUD minimap, simplified pause menu, quick-use slots, and user-selected branding artwork across EXE/installer/updater shortcuts."
