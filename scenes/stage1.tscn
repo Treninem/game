@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/dialogue_ui.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/city_district.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/humanoid_visual.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/city_gate_controller.gd" id="11"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -48,6 +49,9 @@ use_collision = true
 
 [node name="CityDistrict" type="Node3D" parent="World"]
 script = ExtResource("9")
+
+[node name="GateController" type="Node" parent="World/CityDistrict"]
+script = ExtResource("11")
 
 [node name="Player" type="CharacterBody3D" parent="World"]
 position = Vector3(0, 1, 8)
