@@ -1,0 +1,141 @@
+name: Vendor source-chat B14 real CC0 species fauna audio
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b14.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b14
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 species and fauna sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b14/audio"
+          TMP=".sourcechat_b14_tmp"
+          rm -rf "$TMP"; mkdir -p "$ROOT" "$TMP"
+
+          meta() {
+            local target="$1" key="$2" source="$3" author="$4" download="$5" notes="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal / public-domain dedication as stated on source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          Source page marks this staged asset as CC0/public domain.
+          License: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          one() {
+            local key="$1" filename="$2" url="$3" source="$4" author="$5" notes="$6"
+            local target="$ROOT/$key"; mkdir -p "$target"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 -A 'ImPuls-CC0-SourceChat-B14/1.0' "$url" -o "$target/$filename"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          zip_audio() {
+            local key="$1" url="$2" source="$3" author="$4" notes="$5"
+            local target="$ROOT/$key" work="$TMP/$key"
+            rm -rf "$target" "$work"; mkdir -p "$target" "$work/archive"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 -A 'ImPuls-CC0-SourceChat-B14/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs --include='*/' --include='*.wav' --include='*.WAV' --include='*.ogg' --include='*.OGG' --include='*.mp3' --include='*.MP3' --include='*.flac' --include='*.FLAC' --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --exclude='*' "$work/archive/" "$target/"
+            meta "$target" "$key" "$source" "$author" "$url" "$notes"
+          }
+
+          one "oga_donkey_bray" "donkey_bray_-_starninjas.ogg" \
+            "https://opengameart.org/sites/default/files/donkey_bray_-_starninjas.ogg" \
+            "https://opengameart.org/content/donkey-bray" \
+            "StarNinjas / OpenGameArt" \
+            "CC0 donkey bray imitation; useful as a farm/pack-animal source candidate."
+
+          zip_audio "oga_bear_growls" \
+            "https://opengameart.org/sites/default/files/bear.zip" \
+            "https://opengameart.org/content/bear-growls" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 bear growls in FLAC/OGG extracted from U.S. Fish & Wildlife Service source recordings."
+
+          zip_audio "oga_bat_screeches" \
+            "https://opengameart.org/sites/default/files/bat.zip" \
+            "https://opengameart.org/content/bat-screeches" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 bat screeches in FLAC/OGG; useful for caves, ruins and night fauna."
+
+          one "oga_crow_caw" "crow_caw.wav" \
+            "https://opengameart.org/sites/default/files/crow_caw.wav" \
+            "https://opengameart.org/content/crow-caw" \
+            "zeroisnotnull / OpenGameArt" \
+            "CC0 real crow caw recording."
+
+          one "oga_crows_singing" "Crows.ogg" \
+            "https://opengameart.org/sites/default/files/Crows.ogg" \
+            "https://opengameart.org/content/crows-singing" \
+            "IgnasD / OpenGameArt" \
+            "CC0 multi-crow/crow ambience recording."
+
+          zip_audio "oga_penguin_sounds" \
+            "https://opengameart.org/sites/default/files/penguin.zip" \
+            "https://opengameart.org/content/penguin-sounds" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 penguin sounds in FLAC/OGG, suitable for cold-region fauna source selection."
+
+          one "oga_rabbit_eating" "RabbitEating.wav" \
+            "https://opengameart.org/sites/default/files/RabbitEating.wav" \
+            "https://opengameart.org/content/rabbit-eating" \
+            "Voltiment555 / OpenGameArt" \
+            "CC0 rabbit eating/chewing foley for close wildlife behavior."
+
+          zip_audio "oga_large_wings_flap" \
+            "https://opengameart.org/sites/default/files/wings_flap_large.zip" \
+            "https://opengameart.org/content/large-wings-flap" \
+            "AntumDeluge / OpenGameArt" \
+            "CC0 large-wing flap source for large birds and other winged fauna."
+
+          rm -rf "$TMP"
+          cat > "assets/staging/sourcechat_b14/README.md" <<'EOF'
+          # Source chat B14 — real CC0 species/fauna audio
+
+          Physically staged source files only; no runtime integration.
+          Coverage: donkey, bear, bats, crows, penguins, rabbit eating and large wing flaps.
+
+          Deliberately excluded from this CC0 batch after license verification: Goat bleat (CC-BY 4.0), Chicken Sound Effect (CC-BY 3.0), Gull Sounds (CC-BY-SA 3.0) and Horse Gallop Loop (CC-BY 3.0).
+          EOF
+          find assets/staging/sourcechat_b14 -type f | wc -l
+          du -sh assets/staging/sourcechat_b14
+
+      - name: Commit only B14 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b14
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 species fauna audio B14"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
