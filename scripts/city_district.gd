@@ -9,6 +9,7 @@ const MAX_CELL_BUILDS_PER_FRAME := 1
 const CITY_SEED := 470219
 const MODULE_WIDTH := 2.0
 const STORY_HEIGHT := 3.12
+const LANDMARK_LOT_CLEARANCE := 84.0
 
 const ASSET_ROOT := "res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/"
 const ASSET_PATHS := {
@@ -149,8 +150,27 @@ func _cell_for_world(pos: Vector3) -> Vector2i:
         floori((pos.z + CELL_SIZE * 0.5) / CELL_SIZE)
     )
 
+func _cell_for_point(pos: Vector2) -> Vector2i:
+    return Vector2i(
+        floori((pos.x + CELL_SIZE * 0.5) / CELL_SIZE),
+        floori((pos.y + CELL_SIZE * 0.5) / CELL_SIZE)
+    )
+
 func _cell_center(cell: Vector2i) -> Vector3:
     return Vector3(float(cell.x) * CELL_SIZE, 0.0, float(cell.y) * CELL_SIZE)
+
+func _district_core_cell(district_id: String) -> Vector2i:
+    for district in CAPITAL.DISTRICTS:
+        if String(district.get("id", "")) == district_id:
+            return _cell_for_point(district.get("center", Vector2.ZERO))
+    return Vector2i(999999, 999999)
+
+func _is_civic_core(cell: Vector2i, district_id: String) -> bool:
+    return district_id in ["central", "starter"] and cell == _district_core_cell(district_id)
+
+func _lot_is_clear(root: Node3D, lot: Vector3) -> bool:
+    var world_lot := Vector2(root.position.x + lot.x, root.position.z + lot.z)
+    return CAPITAL.protected_infrastructure_near(world_lot, LANDMARK_LOT_CLEARANCE).is_empty()
 
 func _build_cell(cell: Vector2i) -> void:
     var root := Node3D.new()
@@ -192,7 +212,7 @@ func _add_road_network(root: Node3D, cell: Vector2i, district_id: String) -> voi
         var alley_offset := 58.0 if abs(cell.x * 3 + cell.y) % 2 == 0 else -58.0
         _add_road_strip(root, "Lane", alley_vertical, 7.0, alley_offset, materials["lane"], false)
 
-    if district_id == "central" or district_id == "starter":
+    if _is_civic_core(cell, district_id):
         _add_mesh_box("CivicCrossing", Vector3(34.0, 0.115, 34.0), Vector3(0, 0.060, 0), materials["plaza"], root)
 
 func _road_width_for(cell: Vector2i, district_id: String) -> float:
@@ -231,7 +251,7 @@ func _populate_cell(root: Node3D, cell: Vector2i, district_id: String) -> void:
     var rng := RandomNumberGenerator.new()
     rng.seed = _cell_seed(cell)
 
-    if district_id == "central" or district_id == "starter":
+    if _is_civic_core(cell, district_id):
         _build_plaza_detail(root, rng, district_id)
         return
     if district_id in OPEN_DISTRICTS:
@@ -241,23 +261,23 @@ func _populate_cell(root: Node3D, cell: Vector2i, district_id: String) -> void:
         _build_port_detail(root, rng)
         return
 
-    var lots := [
+    var base_lots := [
         Vector3(-54, 0, -54), Vector3(54, 0, -54),
         Vector3(-54, 0, 54), Vector3(54, 0, 54)
     ]
-    var building_count := _building_count_for(district_id)
-    var used: Dictionary = {}
-
-    for i in range(building_count):
-        var lot_index := rng.randi_range(0, lots.size() - 1)
-        var safety := 0
-        while used.has(lot_index) and safety < 10:
-            lot_index = rng.randi_range(0, lots.size() - 1)
-            safety += 1
-        used[lot_index] = true
-        var lot: Vector3 = lots[lot_index]
+    var available_lots: Array[Vector3] = []
+    for base_lot in base_lots:
+        var lot: Vector3 = base_lot
         lot.x += rng.randf_range(-6.0, 6.0)
         lot.z += rng.randf_range(-6.0, 6.0)
+        if _lot_is_clear(root, lot):
+            available_lots.append(lot)
+
+    var building_count := mini(_building_count_for(district_id), available_lots.size())
+    for i in range(building_count):
+        var lot_index := rng.randi_range(0, available_lots.size() - 1)
+        var lot := available_lots[lot_index]
+        available_lots.remove_at(lot_index)
         var rotation_step := rng.randi_range(0, 3)
         _build_medieval_house(root, lot, float(rotation_step) * PI * 0.5, district_id, rng)
 
