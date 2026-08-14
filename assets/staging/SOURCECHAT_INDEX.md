@@ -419,6 +419,36 @@ Path: `assets/staging/sourcechat_b37/models/quaternius_crops_pack/`
 
 Real 3D crop source library with multiple growth stages. Recommended use: fields/farms/farming system after scale/pivot normalization and production optimization.
 
+## B38 — weapons / item UI / construction source
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b38/`
+
+- `models/kenney_weapon_pack/` — low-poly weapon source models and related renders.
+- `ui/kenney_generic_items/` — generic tools/medical/tech/travel/transport inventory UI source set.
+- `models/oga_construction_site_kit/` — building-site source props retained for staging/reference; inspect material provenance/visual quality before production promotion.
+
+## B39 — fox / rabbit / duck / boar 3D species
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b39/models/`
+
+Species-specific real CC0 source assets: animated fox, rigged/animated rabbit, rigged duck and rigged/animated boar. Main chat should normalize scale/orientation and verify Godot animation import before production use.
+
+## B40 — pigeon / chicken / rooster 3D birds
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b40/models/`
+
+Real CC0 bird sources: rigged/animated pigeon, chicken and rooster. Recommended use: city flocks and farm birds after materials, scale, animation import and AI behavior are standardized.
+
+## B41 — deer / tiger / crocodile / bear 3D wildlife
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b41/models/`
+
+Real CC0 wildlife sources: rigged/animated female deer, rigged tiger, animated crocodile and textured low-poly white bear. Bear source is not rigged; main chat should only rig/animate it if selected for production.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
