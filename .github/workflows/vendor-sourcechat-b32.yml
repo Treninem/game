@@ -1,0 +1,84 @@
+name: Vendor source-chat B32 real CC0 survival graveyard furniture
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b32.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b32
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 survival graveyard furniture kits
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b32/models"
+          TMP=".sourcechat_b32_tmp"
+          rm -rf "assets/staging/sourcechat_b32" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+          stage_zip() {
+            local name="$1" file="$2" page="$3" title="$4"
+            local url="https://opengameart.org/sites/default/files/$file"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B32/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            find "$ROOT/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+          stage_zip "kenney_survival_kit" "kenney_survival-kit.zip" "https://opengameart.org/content/survival-kit" "Kenney Survival Kit"
+          stage_zip "kenney_graveyard_kit" "kenney_graveyard-kit_5.0.zip" "https://opengameart.org/content/graveyard-kit" "Kenney Graveyard Kit"
+          stage_zip "kenney_furniture_kit" "kenney_furniturePack.zip" "https://opengameart.org/content/furniture-kit" "Kenney Furniture Kit"
+          cat > "assets/staging/sourcechat_b32/README.md" <<'EOF'
+          # Source chat B32 — real CC0 survival, graveyard and furniture libraries
+
+          Real extracted source assets only; nothing is connected to gameplay.
+
+          - Survival Kit: structures, survival items, tools and resources.
+          - Graveyard Kit: graves, coffins, fences, benches, characters and related cemetery/Halloween objects.
+          - Furniture Kit: chairs, sofas, tables, bookcases, kitchen, bathroom and building/interior materials.
+
+          Main chat should use Survival Kit for crafting/camps/remote settlements, Graveyard Kit for cemeteries/crypt approaches, and Furniture Kit for authored interiors. Select coherent subsets and promote optimized runtime copies only.
+          EOF
+          rm -rf "$TMP"
+          echo "B32 files:"; find assets/staging/sourcechat_b32 -type f | wc -l
+          du -sh assets/staging/sourcechat_b32
+      - name: Commit B32 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b32
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 survival graveyard furniture B32"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*4))
+          done
+          exit 1
