@@ -131,4 +131,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.7.0 Stage 7: rebuilt game-style pause/navigation menu with always-visible saves/settings, direct M/I/J/K panels, persistent fog-of-war exploration map with discovered POIs, and continued city gameplay. Includes background self-update and branding/shortcut refresh."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.8.0 Stage 8: streamed 64x64 km continent, 512 m terrain chunks, deterministic biomes/elevation, ocean edges, procedural vegetation and landmarks, continent-scale fog-of-war map with local inset. Includes background self-update and branding/shortcut refresh."
