@@ -973,3 +973,18 @@ Path: `assets/staging/sourcechat_b89/models/`
 - `oga_hair_styles_cc0/` — five separate CC0 male/female hairstyle sources.
 
 Integration rule: B88 and B89 are source libraries only. Main game chat should select one production cave/sewer grid standard and one production humanoid skeleton/body standard, then adapt only chosen meshes/parts and rebuild materials/collision/LOD as needed.
+
+## B90 — glasses / clothing / footwear
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b90/models/`
+
+- `oga_lowpoly_glasses_29/` — 29 low-poly glasses/sunglasses models.
+- `oga_sneakers/` — low-poly sneaker/footwear source.
+- `oga_cargo_pants/` — cargo-pants clothing source.
+- `oga_sweatshirt/` — sweatshirt clothing source.
+- `oga_work_boots/` — work-boots footwear source.
+
+Licensing note: the Hats / Clothing / Props source page is currently marked CC0 and its historical comments state problematic third-party-texture items were removed. This batch contains only the currently listed cargo-pants, sweatshirt and work-boots individual files plus separate CC0 glasses/sneakers sources.
+
+Integration rule: adapt selected clothing/accessories to the production humanoid body/skeleton; audit fit, clipping, weights, scale and materials before promotion. Do not wire staging assets directly into gameplay.
