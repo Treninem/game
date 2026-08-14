@@ -1,0 +1,117 @@
+name: Vendor source-chat B83 real CC0 factory racing holiday coaster
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b83.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b83
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 factory racing holiday coaster sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b83"
+          TMP=".sourcechat_b83_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" tmpname="$3"
+            mkdir -p "$TMP/$tmpname" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B83/1.0' "$url" -o "$TMP/$tmpname.zip"
+            unzip -q "$TMP/$tmpname.zip" -d "$TMP/$tmpname"
+            chmod -R u+rwX "$TMP/$tmpname" || true
+            find "$TMP/$tmpname" -type f -iname '*.unitypackage' -delete
+            rsync -a "$TMP/$tmpname/" "$ROOT/models/$name/"
+          }
+
+          stage_zip "kenney_factory_kit_3_0" "https://opengameart.org/sites/default/files/kenney_factory-kit_3.0.zip" "factory"
+          meta "kenney_factory_kit_3_0" \
+            "https://opengameart.org/content/factory-kit" \
+            "Factory Kit 3.0" \
+            "https://opengameart.org/sites/default/files/kenney_factory-kit_3.0.zip" \
+            "Kenney 2026 CC0 factory/automation/puzzle source kit with 140+ optimized conveyor, warehouse and industrial objects."
+
+          stage_zip "kenney_racing_kit_1_2" "https://opengameart.org/sites/default/files/Racing%20Kit%20%281.2%29.zip" "racing"
+          meta "kenney_racing_kit_1_2" \
+            "https://opengameart.org/content/racing-kit" \
+            "Racing Kit 1.2" \
+            "https://opengameart.org/sites/default/files/Racing%20Kit%20%281.2%29.zip" \
+            "Kenney CC0 racing/road source kit with 70+ track pieces, roads, borders, pitstop/tents, flags, billboards, fences and bridges."
+
+          stage_zip "kenney_holiday_kit" "https://opengameart.org/sites/default/files/kenney_holiday-kit.zip" "holiday"
+          meta "kenney_holiday_kit" \
+            "https://opengameart.org/content/holiday-kit" \
+            "Holiday Kit" \
+            "https://opengameart.org/sites/default/files/kenney_holiday-kit.zip" \
+            "Kenney CC0 winter/holiday source kit with 100 optimized models including trees, snow fort, toy train, cabin elements and seasonal props."
+
+          stage_zip "kenney_coaster_kit" "https://opengameart.org/sites/default/files/kenney_coaster-kit.zip" "coaster"
+          meta "kenney_coaster_kit" \
+            "https://opengameart.org/content/coaster-kit" \
+            "Coaster Kit" \
+            "https://opengameart.org/sites/default/files/kenney_coaster-kit.zip" \
+            "Kenney CC0 theme-park source kit with 180+ optimized coaster tracks, spline pieces, trains and related park objects."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B83 — real CC0 factory, racing, holiday and coaster kits
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use Factory Kit as an alternate/coherent industrial family, Racing/Coaster only for locations that justify them, and Holiday Kit selectively for winter/seasonal regions. Do not promote entire packs blindly.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B83 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B83 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b83
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 factory racing holiday coaster B83"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
