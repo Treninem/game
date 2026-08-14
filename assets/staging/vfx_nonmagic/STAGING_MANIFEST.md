@@ -4,11 +4,13 @@ These files are source-only staging material. They are intentionally not connect
 
 Staged families:
 - animated general particles / smoke / fire;
-- air bubbles and impact sheets;
+- air bubbles and physical hit sheets;
 - volumetric-rendered flames, explosions, rings and shockwaves;
+- multiple transparent explosion atlas families;
 - explosion/bang audio recordings;
 - splat/decal candidates for mud, oil, grime, liquids and residues;
 - soft smoke/vapor textures;
-- compact explosion atlas.
+- water caustics, drops and splash candidates;
+- lightning and rain animation candidates.
 
-Main integration chat should deduplicate against `assets/vfx/third_party/`, choose production-quality subsets, optimize atlases/audio, and only then wire selected assets into gameplay.
+Main integration chat should deduplicate against production assets, choose production-quality subsets, optimize atlases/audio and only then wire selected assets into gameplay.
