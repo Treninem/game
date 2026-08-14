@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -26,6 +26,9 @@ height = 1.6
 [sub_resource type="CapsuleMesh" id="EnemyMesh"]
 radius = 0.5
 height = 1.6
+
+[sub_resource type="BoxShape3D" id="MiraShape"]
+size = Vector3(0.85, 2.1, 0.75)
 
 [node name="Bootstrap" type="Node"]
 script = ExtResource("1")
@@ -79,15 +82,15 @@ target_position = Vector3(0, 0, -7)
 enabled = true
 collide_with_areas = true
 
-[node name="Mira" type="CSGBox3D" parent="World"]
-visible = false
-position = Vector3(0, 1, -4)
-size = Vector3(1, 2, 1)
-use_collision = true
+[node name="Mira" type="StaticBody3D" parent="World"]
+position = Vector3(0, 0, -4)
 script = ExtResource("4")
 
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Mira"]
+position = Vector3(0, 1.05, 0)
+shape = SubResource("MiraShape")
+
 [node name="MiraVisual" type="Node3D" parent="World/Mira"]
-position = Vector3(0, -1, 0)
 script = ExtResource("10")
 skin_color = Color(0.76, 0.58, 0.45, 1)
 primary_color = Color(0.24, 0.16, 0.34, 1)
