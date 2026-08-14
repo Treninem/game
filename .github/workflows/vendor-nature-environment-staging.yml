@@ -1,0 +1,132 @@
+name: Vendor nature and environment CC0 staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-nature-environment-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-nature-environment-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-nature-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 nature and environment assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          VFX_ROOT="assets/staging/vfx_nonmagic"
+          NATURE_ROOT="assets/staging/nature"
+          TMP=".nature_env_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$VFX_ROOT" "$NATURE_ROOT" "$TMP"
+
+          write_meta() {
+            local target="$1"
+            local key="$2"
+            local source_url="$3"
+            local author="$4"
+            local download_desc="$5"
+            local notes="$6"
+            mkdir -p "$target"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Author/source: $author
+          Source page: $source_url
+          Download source(s): $download_desc
+          License: CC0 1.0 Universal / public-domain dedication as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          This staged asset is recorded by its source page as CC0. The original author has waived copyright and related rights to the extent permitted by law under the Creative Commons CC0 1.0 Universal public-domain dedication.
+
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside the staged files.
+          EOF
+          }
+
+          # Animated steam/smoke spritesheet.
+          STEAM="$VFX_ROOT/oga_animated_steam"
+          rm -rf "$STEAM"
+          mkdir -p "$STEAM"
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 120 \
+            -A 'ImPuls-CC0-Staging/1.0' \
+            "https://opengameart.org/sites/default/files/steam_wall_sheet.png" \
+            -o "$STEAM/steam_wall_sheet.png"
+          write_meta "$STEAM" "oga_animated_steam" \
+            "https://opengameart.org/content/animated-steam" \
+            "hatmix / OpenGameArt" \
+            "https://opengameart.org/sites/default/files/steam_wall_sheet.png" \
+            "64x64 CC0 animated steam/smoke spritesheet for vents, pipes, cooking, hot water and machinery."
+
+          # Kenney foliage sprites: 50 flat + 50 shaded, vectors retained where present.
+          FOLIAGE="$NATURE_ROOT/kenney_foliage_sprites"
+          WORK="$TMP/kenney_foliage"
+          rm -rf "$FOLIAGE" "$WORK"
+          mkdir -p "$FOLIAGE" "$WORK/archive"
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 240 \
+            -A 'ImPuls-CC0-Staging/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_foliageSprites.zip" \
+            -o "$WORK/pack.zip"
+          unzip -q "$WORK/pack.zip" -d "$WORK/archive"
+          rsync -a --prune-empty-dirs \
+            --include='*/' \
+            --include='*.png' --include='*.PNG' \
+            --include='*.svg' --include='*.SVG' \
+            --include='*.txt' --include='*.TXT' \
+            --include='*.md' --include='*.MD' \
+            --exclude='*' "$WORK/archive/" "$FOLIAGE/"
+          write_meta "$FOLIAGE" "kenney_foliage_sprites" \
+            "https://opengameart.org/content/foliage-sprites" \
+            "Kenney / OpenGameArt mirror" \
+            "https://opengameart.org/sites/default/files/kenney_foliageSprites.zip" \
+            "CC0 foliage billboard/model-building source: 50 flat sprites, 50 shaded sprites and vector sources where included."
+
+          # Large CC0 leaf shape textures for wind-blown leaf particles and foliage cards.
+          LEAVES="$NATURE_ROOT/oga_tree_leaves_pack_1"
+          rm -rf "$LEAVES"
+          mkdir -p "$LEAVES"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/tree_leaves_001.png" -o "$LEAVES/tree_leaves_001.png"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/tree_leaves_002_1.png" -o "$LEAVES/tree_leaves_002.png"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/tree_leaves_003_0.png" -o "$LEAVES/tree_leaves_003.png"
+          curl --fail --location --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/tree_leaves_004_0.png" -o "$LEAVES/tree_leaves_004.png"
+          write_meta "$LEAVES" "oga_tree_leaves_pack_1" \
+            "https://opengameart.org/content/tree-leaves-pack-1" \
+            "TrachinusDraco / OpenGameArt" \
+            "four source PNG files from the OpenGameArt entry" \
+            "Four large CC0 leaf-shape textures for foliage cards, loose leaves and wind-driven leaf particle masks."
+
+          rm -rf "$TMP"
+
+      - name: Commit staged assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/vfx_nonmagic/oga_animated_steam \
+                  assets/staging/nature/kenney_foliage_sprites \
+                  assets/staging/nature/oga_tree_leaves_pack_1
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 steam foliage and leaves"
+          git pull --rebase origin main
+          git push origin HEAD:main
