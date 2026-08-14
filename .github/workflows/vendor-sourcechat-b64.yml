@@ -1,0 +1,92 @@
+name: Vendor source-chat B64 real CC0 enemy archetypes
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b64.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b64
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 enemy archetype sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b64"
+          TMP=".sourcechat_b64_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$ROOT/models/oga_mudeater_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B64/1.0' "https://opengameart.org/sites/default/files/mudeater.blend" -o "$ROOT/models/oga_mudeater_rigged_animated/mudeater.blend"
+          meta "oga_mudeater_rigged_animated" "https://opengameart.org/content/mudeater-animated" "Mudeater (animated)" "https://opengameart.org/sites/default/files/mudeater.blend" "Rigged and animated humanoid creature with packed diffuse and normal maps; source page describes it as ready to use ingame."
+
+          mkdir -p "$TMP/squirrel" "$ROOT/models/oga_undead_squirrel_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B64/1.0' "https://opengameart.org/sites/default/files/undeadsquirrell.zip" -o "$TMP/squirrel.zip"
+          unzip -q "$TMP/squirrel.zip" -d "$TMP/squirrel"
+          chmod -R u+rwX "$TMP/squirrel" || true
+          rsync -a "$TMP/squirrel/" "$ROOT/models/oga_undead_squirrel_animated/"
+          meta "oga_undead_squirrel_animated" "https://opengameart.org/content/undead-squirrel-animated" "Undead Squirrel (ANIMATED)" "https://opengameart.org/sites/default/files/undeadsquirrell.zip" "Rigged and animated undead squirrel with diffuse and normal maps; source page describes it as ready to use ingame."
+
+          mkdir -p "$ROOT/models/oga_daemon_statue_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B64/1.0' "https://opengameart.org/sites/default/files/demon_statue3.blend" -o "$ROOT/models/oga_daemon_statue_rigged_animated/demon_statue3.blend"
+          meta "oga_daemon_statue_rigged_animated" "https://opengameart.org/content/daemon-statue-with-riganimations" "Daemon statue with rig+animations" "https://opengameart.org/sites/default/files/demon_statue3.blend" "Rigged daemon/statue source with authored attack, die and spell animations plus idle poses and a consolidated baked texture."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B64 — real CC0 enemy archetypes
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Includes Mudeater, Undead Squirrel and Daemon Statue source characters. Main integration chat should validate Godot skeleton/animation import, standardize scale/materials/collisions, and use them as authored enemy archetypes only if they match the final world/art direction.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B64 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B64 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b64
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 enemy archetypes B64"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
