@@ -1,0 +1,92 @@
+name: Vendor source-chat B53 real CC0 inventory mine staffs
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b53.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b53
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 inventory mine staff sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b53"
+          TMP=".sourcechat_b53_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$ROOT/models/oga_inventory_items_60plus"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B53/1.0' "https://opengameart.org/sites/default/files/inventory_items.blend" -o "$ROOT/models/oga_inventory_items_60plus/inventory_items.blend"
+          meta "oga_inventory_items_60plus" "https://opengameart.org/content/inventory-items" "Inventory items (60+)" "https://opengameart.org/sites/default/files/inventory_items.blend" "Source page lists 60+ items spanning food, tools, weapons, books, keys, potions, fishing gear, ore/gems, cookware, farm tools and other RPG inventory/world props."
+
+          mkdir -p "$ROOT/models/oga_crystal_mine"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B53/1.0' "https://opengameart.org/sites/default/files/crystalmineexport.blend" -o "$ROOT/models/oga_crystal_mine/crystalmineexport.blend"
+          meta "oga_crystal_mine" "https://opengameart.org/content/crystal-mine" "Crystal Mine" "https://opengameart.org/sites/default/files/crystalmineexport.blend" "Mine-level source; source page lists 6144 verts / 12224 tris."
+
+          mkdir -p "$TMP/magic" "$ROOT/models/oga_magic_staff_set"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B53/1.0' "https://opengameart.org/sites/default/files/magicstaffset.zip" -o "$TMP/magic.zip"
+          unzip -q "$TMP/magic.zip" -d "$TMP/magic"
+          chmod -R u+rwX "$TMP/magic" || true
+          rsync -a "$TMP/magic/" "$ROOT/models/oga_magic_staff_set/"
+          meta "oga_magic_staff_set" "https://opengameart.org/content/magic-staff-set" "Magic Staff Set" "https://opengameart.org/sites/default/files/magicstaffset.zip" "Elemental staff recolor set; source page lists 110 verts / 212 tris for the staff source family."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B53 — real CC0 inventory items, crystal mine and staff set
+
+          Source-only staging. Nothing is connected to gameplay.
+
+          Main integration chat should classify inventory items into food/tools/weapons/crafting/quest/resource categories, compare duplicates with B36/B38/B46, and only promote the strongest production-ready meshes. Crystal mine and staff sources are separate authored candidates for mine/fantasy locations.
+          EOF
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B53 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B53 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b53
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 inventory mine staffs B53"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
