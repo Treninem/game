@@ -13,7 +13,9 @@ Playable Stage 10 foundation for combat magic. This is a gameplay system, not on
 - `scripts/magic_projectile.gd` — reusable raycast-safe projectile runtime.
 - `scripts/magic_zone.gd` — reusable persistent area spell runtime.
 - `scripts/magic_hud.gd` — selected spell, mana, shield and cooldown HUD.
-- `scripts/vfx_library.gd` — semantic visual effects shared by combat and magic.
+- `scripts/vfx_library.gd` — procedural semantic VFX foundation shared by combat and magic.
+- `scripts/third_party_vfx.gd` — runtime bridge from semantic events to physically imported CC0 sprites/flipbooks.
+- `scripts/vfx_flipbook_3d.gd` — lightweight 3D billboard flipbook player.
 - `scripts/game_state.gd` — persistent mana and magic shield state.
 - `scripts/enemy.gd` — burning, poisoned, frozen and shocked status processing.
 
@@ -43,18 +45,35 @@ Playable Stage 10 foundation for combat magic. This is a gameplay system, not on
 Status durations refresh instead of creating duplicate independent timers.
 
 ## VFX integration
-Gameplay emits semantic calls through `VFXLibrary`. Imported CC0 packs under `assets/vfx/third_party/` may improve visuals without changing spell logic.
+Gameplay emits semantic calls through `VFXLibrary`; imported assets are layered through `ThirdPartyVFX` without coupling combat rules to individual PNG files.
 
-Physically imported enhancement packs include Kenney Particle Pack, Kenney Smoke Particles and OpenGameArt spell/impact/slash packs. Keep source/license files beside third-party assets.
+Physically integrated visual layers now include:
+- Kenney fire sprites on fireball projectiles and flame flipbooks on fire casts/impacts;
+- Kenney star/frost-style sprites on ice projectiles and frost events;
+- Kenney spark sequences on lightning events;
+- Kenney magic/twirl sequences on poison, dark and portal events;
+- Kenney light/star sequences on healing and holy effects;
+- Kenney circle sequence on shield casts;
+- Kenney slash sequence on physical weapon swings and hit feedback;
+- OpenGameArt Arcane Magic `Arcane_Effect_1..7` as the arcane flipbook sequence;
+- Kenney scorch texture as a short-lived lightweight ground mark for fireball/fire-zone impacts.
+
+The procedural particle layer remains active underneath these sprites. This keeps the effect volumetric and readable in 3D while adding authored CC0 detail. All imported packs retain their own `SOURCE.md` and `LICENSE.txt` under `assets/vfx/third_party/`.
+
+## Performance rules
+- Imported effects use unshaded billboard quads rather than extra 3D geometry.
+- Flipbooks self-delete after their configured frame sequence.
+- Projectile sprite layers are attached to the projectile and disappear with it.
+- Fire scorch marks currently expire after 10 seconds.
+- Persistent AoE zones use sparse CC0 sprite pulses while the cheaper procedural particles provide the continuous layer.
 
 ## Validation
-`.github/workflows/validate-magic.yml` runs Godot 4.7.1 headlessly for changes affecting the magic runtime. It is isolated from the release workflow so unrelated parallel commits cannot cancel the magic validation run.
+`.github/workflows/validate-magic.yml` runs Godot 4.7.1 headlessly for changes affecting the magic runtime, HUD, imported-VFX bridge and flipbook player. It is isolated from the release workflow so unrelated parallel commits cannot cancel the magic validation run.
 
 ## Next production pass
-- Use selected imported CC0 flipbooks/sprites inside the semantic VFX presets.
 - Add cast animation hooks for hands/staves/weapons.
 - Add spell audio and spatial impact audio.
-- Add surface-specific elemental decals: scorch, frost, poison residue, arcane rune.
+- Add frost, poison and arcane surface marks alongside scorch.
 - Add unlock/progression rules instead of exposing every spell permanently.
 - Add resistances, elemental interactions and friendly/hostile magic ownership.
 - Add boss-scale channels, summons and large weather-linked magic after the base combat loop is stable.
