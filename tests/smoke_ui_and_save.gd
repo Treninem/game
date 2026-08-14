@@ -4,6 +4,9 @@ func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
     call_deferred("_run_test")
 
+func _checkpoint(text: String) -> void:
+    print("UI_SMOKE_CHECKPOINT: ", text)
+
 func _fail(code: int, message: String) -> void:
     var clean := message.replace("\r", " ").replace("\n", " ")
     print("::error title=UI layout smoke::%s" % clean)
@@ -34,6 +37,7 @@ func _sidebar_error(menu: Control, frame: Control) -> String:
 
 func _run_test() -> void:
     var tree := get_tree()
+    _checkpoint("start")
     var settings_manager := get_node_or_null("/root/SettingsManager")
     var save_manager := get_node_or_null("/root/SaveManager")
     var layout_guard := get_node_or_null("/root/UILayoutGuard")
@@ -47,8 +51,10 @@ func _run_test() -> void:
         return
     var scene := packed.instantiate()
     tree.root.add_child(scene)
+    _checkpoint("stage-instantiated")
     for _i in range(10):
         await tree.process_frame
+    _checkpoint("stage-warmup-complete")
 
     var menu := scene.get_node_or_null("UI/GameMenu") as Control
     var panels := scene.get_node_or_null("UI/GameplayPanels") as Control
@@ -56,9 +62,12 @@ func _run_test() -> void:
         _fail(3, "menu nodes missing")
         return
 
+    _checkpoint("opening-pause-main")
     menu.call("open_menu", "main")
+    _checkpoint("pause-main-open-returned")
     for _i in range(5):
         await tree.process_frame
+    _checkpoint("pause-main-settled")
     if not tree.paused or not menu.visible:
         _fail(4, "pause menu did not pause/show")
         return
@@ -76,13 +85,17 @@ func _run_test() -> void:
         return
     menu.call("close_menu")
     await tree.process_frame
+    _checkpoint("pause-main-closed")
     if tree.paused or menu.visible:
         _fail(7, "pause menu did not restore gameplay")
         return
 
+    _checkpoint("opening-inventory")
     panels.call("open_panel", "inventory")
+    _checkpoint("inventory-open-returned")
     for _i in range(5):
         await tree.process_frame
+    _checkpoint("inventory-settled")
     if not tree.paused or not panels.visible:
         _fail(8, "gameplay panel failed to open")
         return
@@ -96,17 +109,23 @@ func _run_test() -> void:
         return
     panels.call("close_panel")
     await tree.process_frame
+    _checkpoint("inventory-closed")
     if tree.paused or panels.visible:
         _fail(10, "gameplay panel did not restore gameplay")
         return
 
+    _checkpoint("setting-ui-scale-150")
     settings_manager.call("set_value", "graphics", "ui_scale", 1.5)
     for _i in range(8):
         await tree.process_frame
+    _checkpoint("ui-scale-150-settled")
 
+    _checkpoint("opening-updates-150")
     menu.call("open_menu", "updates")
+    _checkpoint("updates-150-open-returned")
     for _i in range(8):
         await tree.process_frame
+    _checkpoint("updates-150-settled")
     frame = menu.get("frame") as Control
     if frame == null:
         _fail(12, "150 percent pause frame missing")
@@ -121,10 +140,14 @@ func _run_test() -> void:
         return
     menu.call("close_menu")
     await tree.process_frame
+    _checkpoint("updates-150-closed")
 
+    _checkpoint("opening-map-150")
     panels.call("open_panel", "map")
+    _checkpoint("map-150-open-returned")
     for _i in range(8):
         await tree.process_frame
+    _checkpoint("map-150-settled")
     panel_frame = panels.get("frame") as Control
     if panel_frame == null:
         _fail(16, "150 percent gameplay panel frame missing")
@@ -137,6 +160,7 @@ func _run_test() -> void:
     settings_manager.call("set_value", "graphics", "ui_scale", 1.0)
     for _i in range(4):
         await tree.process_frame
+    _checkpoint("map-closed-scale-restored")
 
     var slots = save_manager.call("list_slots")
     if not (slots is Array) or slots.size() != 10:
@@ -144,5 +168,6 @@ func _run_test() -> void:
         _fail(11, "save slot count regressed; count=%s" % count)
         return
 
+    _checkpoint("passed")
     print("UI smoke passed: centralized auto-alignment, 150% UI scaling and 10 save slots are stable")
     tree.quit(0)
