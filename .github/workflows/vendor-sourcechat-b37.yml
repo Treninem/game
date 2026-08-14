@@ -1,0 +1,74 @@
+name: Vendor source-chat B37 real CC0 crops growth pack
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b37.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b37
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 crops growth pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b37/models/quaternius_crops_pack"
+          TMP=".sourcechat_b37_tmp"
+          rm -rf "assets/staging/sourcechat_b37" "$TMP"
+          mkdir -p "$ROOT" "$TMP/extract"
+          URL="https://opengameart.org/sites/default/files/nature_crops_pack_by_quaternius.zip"
+          PAGE="https://opengameart.org/content/lowpoly-crops-pack"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B37/1.0' "$URL" -o "$TMP/crops.zip"
+          unzip -q "$TMP/crops.zip" -d "$TMP/extract"
+          rsync -a "$TMP/extract/" "$ROOT/"
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+          cat > "$ROOT/SOURCE.md" <<EOF
+          # Source
+          Pack: Quaternius LowPoly Crops Pack
+          Source page: $PAGE
+          Download: $URL
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          Source page describes 100+ crop models with five growth stages in FBX, OBJ and Blend formats.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          cat > "assets/staging/sourcechat_b37/README.md" <<'EOF'
+          # Source chat B37 — real CC0 crop/growth sources
+
+          Real extracted 3D crop source pack only; nothing is connected to gameplay.
+          Main chat should map crop variants to its farming/growth states, normalize scale/pivots, generate optimized runtime variants and promote only the required species/stages.
+          EOF
+          rm -rf "$TMP"
+          echo "B37 files:"; find assets/staging/sourcechat_b37 -type f | wc -l
+          du -sh assets/staging/sourcechat_b37
+      - name: Commit B37 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b37
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 crops growth pack B37"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*4))
+          done
+          exit 1
