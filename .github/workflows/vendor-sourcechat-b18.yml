@@ -1,0 +1,116 @@
+name: Vendor source-chat B18 real CC0 Godot-ready breakable props
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b18.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b18
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 Godot-ready breakable prop sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b18/models/oga_breakable_boxes_godot_ready"
+          TMP=".sourcechat_b18_tmp"
+          rm -rf "$TMP" "$ROOT"
+          mkdir -p "$ROOT/godot_ready" "$ROOT/source" "$TMP/godot" "$TMP/source"
+
+          GODOT_URL="https://opengameart.org/sites/default/files/breakable_boxes_extract-to-godot-project-folder.zip"
+          SOURCE_URL="https://opengameart.org/sites/default/files/brekable_boxes_fbx_gltf_blend_textures.zip"
+          PAGE="https://opengameart.org/content/breakable-boxes"
+
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 420 -A 'ImPuls-CC0-SourceChat-B18/1.0' "$GODOT_URL" -o "$TMP/godot.zip"
+          curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 420 -A 'ImPuls-CC0-SourceChat-B18/1.0' "$SOURCE_URL" -o "$TMP/source.zip"
+          unzip -q "$TMP/godot.zip" -d "$TMP/godot"
+          unzip -q "$TMP/source.zip" -d "$TMP/source"
+
+          # Keep models, textures, materials and scene/resources from the Godot-ready package.
+          # Third-party executable scripts are intentionally excluded in this source-only chat.
+          rsync -a --prune-empty-dirs --include='*/' \
+            --include='*.tscn' --include='*.tres' --include='*.res' --include='*.material' \
+            --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' \
+            --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+            --include='*.blend' --include='*.BLEND' \
+            --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' \
+            --include='*.webp' --include='*.WEBP' --include='*.tga' --include='*.TGA' \
+            --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+            --exclude='*.gd' --exclude='*.cs' --exclude='*.dll' --exclude='*.exe' --exclude='*' "$TMP/godot/" "$ROOT/godot_ready/"
+
+          rsync -a --prune-empty-dirs --include='*/' \
+            --include='*.glb' --include='*.GLB' --include='*.gltf' --include='*.GLTF' \
+            --include='*.fbx' --include='*.FBX' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+            --include='*.blend' --include='*.BLEND' \
+            --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' \
+            --include='*.webp' --include='*.WEBP' --include='*.tga' --include='*.TGA' \
+            --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' \
+            --exclude='*' "$TMP/source/" "$ROOT/source/"
+
+          cat > "$ROOT/SOURCE.md" <<EOF
+          # Source
+
+          Pack: Breakable Boxes
+          Author: loafbrr_1 / OpenGameArt
+          Source page: $PAGE
+          Godot-ready archive: $GODOT_URL
+          Source archive: $SOURCE_URL
+          License: CC0 1.0 Universal / Creative Commons Zero as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+
+          Source page notes:
+          - boxes, barrel and jar;
+          - Godot folder with materials already set up;
+          - 1K textures;
+          - FBX/source formats and packed Blender source;
+          - crate ~460 tris; barrel ~1592 tris; jar ~1446 tris;
+          - separate low-poly collision meshes.
+
+          Safety/staging note: third-party executable scripts were intentionally excluded. The main integration chat should inspect scenes/resources and wire its own destruction/gameplay logic.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          The OpenGameArt source page marks Breakable Boxes as Creative Commons Zero / CC0.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+
+          cat > "assets/staging/sourcechat_b18/README.md" <<'EOF'
+          # Source chat B18 — real CC0 Godot-ready breakable props
+
+          Real extracted files are staged under `models/oga_breakable_boxes_godot_ready/`.
+          Both the Godot-ready archive contents and the FBX/GLTF/Blend/texture source archive were downloaded and extracted.
+          Runtime scripts from the third-party archive were deliberately excluded; this chat does not integrate anything into gameplay.
+
+          Main chat should inspect the staged `.tscn`/`.tres`, meshes, collision meshes and 1K materials, choose crate/barrel/jar variants, then connect them to the game's own destruction system.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B18 staged files:"; find assets/staging/sourcechat_b18 -type f | wc -l
+          du -sh assets/staging/sourcechat_b18
+
+      - name: Commit only B18 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b18
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "assets(staging): vendor real CC0 Godot-ready breakable props B18"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
