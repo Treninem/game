@@ -1,0 +1,83 @@
+name: Vendor source-chat B33 real CC0 vehicle and watercraft kits
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b33.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b33
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 vehicle and watercraft kits
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b33/models"
+          TMP=".sourcechat_b33_tmp"
+          rm -rf "assets/staging/sourcechat_b33" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+          stage_zip_url() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B33/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            find "$ROOT/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+          stage_zip_url "kenney_car_kit" "https://opengameart.org/sites/default/files/kenney_car-kit_3.1.zip" "https://opengameart.org/content/car-kit" "Kenney Car Kit"
+          stage_zip_url "kenney_racing_kit" "https://opengameart.org/sites/default/files/Racing%20Kit%20%281.2%29.zip" "https://opengameart.org/content/racing-kit" "Kenney Racing Kit"
+          stage_zip_url "kenney_watercraft_kit" "https://opengameart.org/sites/default/files/kenney_watercraft_kit.zip" "https://opengameart.org/content/watercraft-kit" "Kenney Watercraft Kit"
+          cat > "assets/staging/sourcechat_b33/README.md" <<'EOF'
+          # Source chat B33 — real CC0 land/water vehicle libraries
+
+          Real extracted source assets only; nothing is connected to gameplay.
+
+          - Car Kit: sedan/van/emergency vehicles, separate wheels and vehicle debris.
+          - Racing Kit: roads/tracks, borders, tents, pitstop, flags, billboards, fences and bridges.
+          - Watercraft Kit: optimized boats/ships/watercraft source models.
+
+          Main chat should treat these as model sources, normalize wheel/pivot/scale conventions, create collision/LOD production copies, and only then wire future vehicle systems.
+          EOF
+          rm -rf "$TMP"
+          echo "B33 files:"; find assets/staging/sourcechat_b33 -type f | wc -l
+          du -sh assets/staging/sourcechat_b33
+      - name: Commit B33 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b33
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 vehicle watercraft kits B33"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*4))
+          done
+          exit 1
