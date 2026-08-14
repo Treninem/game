@@ -1,0 +1,86 @@
+name: Vendor source-chat B25 real CC0 harbour and ruins
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b25.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b25
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 harbour and ruins packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b25/models"
+          TMP=".sourcechat_b25_tmp"
+          rm -rf "assets/staging/sourcechat_b25" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-SourceChat-B25/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            find "$ROOT/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 / Public Domain as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip "oga_3td_harbour_pack" "https://opengameart.org/sites/default/files/3td_Harbor%20Pack.zip" "https://opengameart.org/content/3td-harbour-pack" "3TD Harbour Pack"
+          stage_zip "oga_3td_fantasy_ruins_pack" "https://opengameart.org/sites/default/files/Fantasy%20Ruins%20Pack.zip" "https://opengameart.org/content/3td-fantasy-ruins-pack" "3TD Fantasy Ruins Pack"
+
+          cat > "assets/staging/sourcechat_b25/README.md" <<'EOF'
+          # Source chat B25 — real CC0 harbour and ruins
+
+          Real extracted source packs only. Nothing is connected to gameplay.
+
+          Harbour pack includes dock, lighthouse/splitrock, wharf, wharf stand and industrial shack with textures.
+          Fantasy ruins pack includes ruined cathedral, foundation/corner ruin, roman rail, pillars, arch, wall segments, speaking stones and ruined temples with textures.
+
+          Main chat should inspect scale/collisions/materials and promote selected assets to production paths as needed.
+          EOF
+          rm -rf "$TMP"
+          echo "B25 files:"; find assets/staging/sourcechat_b25 -type f | wc -l
+          du -sh assets/staging/sourcechat_b25
+
+      - name: Commit B25 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b25
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 harbour ruins B25"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
