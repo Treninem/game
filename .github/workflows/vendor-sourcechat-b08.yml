@@ -91,7 +91,7 @@ jobs:
           }
 
           zip_audio "oga_80_creature_sfx" \
-            "https://opengameart.org/sites/default/files/80-CC0-creature-SFX.zip" \
+            "https://opengameart.org/sites/default/files/80-CC0-creature-SFX_0.zip" \
             "https://opengameart.org/content/80-cc0-creature-sfx" \
             "rubberduck / OpenGameArt" \
             "80 CC0 creature sounds: barking, bugs, breath, eating, grunts, howls, hurt, roars, screams, trolls and misc creature vocalizations."
@@ -115,7 +115,7 @@ jobs:
             "CC0 horse trot/hoof cadence recording candidate."
 
           one "oga_sheep_baa" "sheep_baa.ogg" \
-            "https://opengameart.org/sites/default/files/sheep_baa.ogg" \
+            "https://opengameart.org/sites/default/files/sheep_baa_0.ogg" \
             "https://opengameart.org/content/sheep-baa" \
             "AntumDeluge / OpenGameArt" \
             "CC0 normalized sheep baa in OGG."
@@ -126,7 +126,7 @@ jobs:
             "CC0 lossless sheep baa source."
 
           one "oga_quail_sound" "quail.ogg" \
-            "https://opengameart.org/sites/default/files/quail.ogg" \
+            "https://opengameart.org/sites/default/files/quail_0.ogg" \
             "https://opengameart.org/content/quail-sound" \
             "AntumDeluge / OpenGameArt" \
             "CC0 bobwhite quail sound in OGG."
