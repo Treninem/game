@@ -1,0 +1,120 @@
+name: Update source-chat staging index through B37
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b32-b37.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sourcechat-index-b32-b37
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Append verified B32-B37
+        shell: bash
+        run: |
+          set -euo pipefail
+          for p in \
+            assets/staging/sourcechat_b32/models/kenney_survival_kit \
+            assets/staging/sourcechat_b32/models/kenney_graveyard_kit \
+            assets/staging/sourcechat_b32/models/kenney_furniture_kit \
+            assets/staging/sourcechat_b33/models/kenney_car_kit \
+            assets/staging/sourcechat_b33/models/kenney_racing_kit \
+            assets/staging/sourcechat_b33/models/kenney_watercraft_kit \
+            assets/staging/sourcechat_b34/models/quaternius_animated_characters \
+            assets/staging/sourcechat_b34/animations/quaternius_universal_animation_library \
+            assets/staging/sourcechat_b34/animations/quaternius_universal_animation_library_2 \
+            assets/staging/sourcechat_b35/models/quaternius_animal_pack_vol2 \
+            assets/staging/sourcechat_b35/models/quaternius_5_lowpoly_animals \
+            assets/staging/sourcechat_b35/models/quaternius_animated_fish \
+            assets/staging/sourcechat_b36/models/quaternius_rpg_characters \
+            assets/staging/sourcechat_b36/models/quaternius_animated_monsters \
+            assets/staging/sourcechat_b36/models/quaternius_ultimate_rpg_items \
+            assets/staging/sourcechat_b37/models/quaternius_crops_pack; do test -d "$p"; done
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/staging/SOURCECHAT_INDEX.md')
+          t=p.read_text(encoding='utf-8')
+          if '## B32 — survival / graveyard / furniture' in t:
+              raise SystemExit(0)
+          marker='## Integration rules for the main chat'
+          block='''## B32 — survival / graveyard / furniture
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b32/models/`
+
+          Real Kenney Survival, Graveyard and Furniture source kits. Recommended use: camps/crafting, cemeteries/crypt approaches and authored interiors. Promote only coherent optimized subsets.
+
+          ## B33 — land vehicles / racing / watercraft
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b33/models/`
+
+          Real Kenney Car, Racing and Watercraft source kits. Recommended use: future vehicles, roads/tracks and boats after wheel/pivot/scale/collision conventions are standardized by the main chat.
+
+          ## B34 — people / humanoid animation libraries
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b34/`
+
+          - `models/quaternius_animated_characters/` — animated character source family.
+          - `animations/quaternius_universal_animation_library/` — free Standard humanoid animation source archive.
+          - `animations/quaternius_universal_animation_library_2/` — extended compatible Standard humanoid animation source archive.
+
+          Recommended use: establish one canonical Godot humanoid skeleton/retarget profile, test root motion/import and promote curated character/motion subsets only.
+
+          ## B35 — animated wild / water fauna
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b35/models/`
+
+          Real animated animal/fish source packs including wolf/eagle/dog/cat/piranha families plus additional animals and fish. Main chat should standardize species scale/orientation and build AI/animation state machines separately.
+
+          ## B36 — RPG characters / monsters / items
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b36/models/`
+
+          - `quaternius_rpg_characters/` — rigged/animated fantasy character archetypes.
+          - `quaternius_animated_monsters/` — animated monster/enemy sources.
+          - `quaternius_ultimate_rpg_items/` — broad RPG equipment/item source library.
+
+          Recommended use: curated NPC/enemy/equipment production assets after skeleton, collision, LOD and item-category normalization.
+
+          ## B37 — crops / growth stages
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b37/models/quaternius_crops_pack/`
+
+          Real 3D crop source library with multiple growth stages. Recommended use: fields/farms/farming system after scale/pivot normalization and production optimization.
+
+          '''
+          if marker not in t: raise SystemExit('integration marker missing')
+          p.write_text(t.replace(marker,block+marker,1),encoding='utf-8')
+          PY
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches through B37"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
