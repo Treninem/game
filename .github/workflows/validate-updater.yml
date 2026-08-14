@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "installer/updater_bootstrap.ps1"
       - "installer/updater_v4.ps1"
       - "installer/updater.ps1"
       - "tools/build_delta.py"
@@ -92,16 +93,25 @@ jobs:
         with:
           sparse-checkout: |
             installer
-      - name: Parse both updater runtimes with Windows PowerShell
+      - name: Parse bootstrap and updater runtimes as explicit UTF-8
         shell: powershell
         run: |
-          foreach ($file in @("installer/updater_v4.ps1", "installer/updater.ps1")) {
+          $utf8 = New-Object System.Text.UTF8Encoding($false)
+          foreach ($file in @("installer/updater_bootstrap.ps1", "installer/updater_v4.ps1", "installer/updater.ps1")) {
             $tokens = $null
             $errors = $null
-            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file), [ref]$tokens, [ref]$errors) | Out-Null
+            $source = [System.IO.File]::ReadAllText((Resolve-Path $file), $utf8)
+            [System.Management.Automation.Language.Parser]::ParseInput($source, [ref]$tokens, [ref]$errors) | Out-Null
             if ($errors.Count -gt 0) {
               $errors | ForEach-Object { Write-Error "$file :: $($_.Message)" }
               exit 1
             }
             Write-Host "$file syntax OK"
           }
+      - name: Prove bootstrap can load UTF-8 implementation
+        shell: powershell
+        run: |
+          $text = Get-Content installer/updater_bootstrap.ps1 -Raw
+          if ($text -notmatch 'ReadAllText' -or $text -notmatch 'UTF8Encoding') { throw "Bootstrap does not enforce UTF-8" }
+          $impl = [System.IO.File]::ReadAllText((Resolve-Path "installer/updater_v4.ps1"), (New-Object System.Text.UTF8Encoding($false)))
+          if ($impl -notmatch 'Обновление ImPuls' -or $impl -notmatch 'Загрузка только недостающих данных') { throw "Localized visible updater text missing" }
