@@ -1,0 +1,141 @@
+name: Update source-chat staging index through B85
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/update-sourcechat-index-b80-b85.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sourcechat-index-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify B80-B85 physical directories and append index
+        shell: bash
+        run: |
+          set -euo pipefail
+          INDEX="assets/staging/SOURCECHAT_INDEX.md"
+          required=(
+            assets/staging/sourcechat_b80/models/kenney_city_kit_commercial_2_1
+            assets/staging/sourcechat_b80/models/kenney_city_kit_industrial_1
+            assets/staging/sourcechat_b80/models/kenney_city_kit_roads
+            assets/staging/sourcechat_b80/models/kenney_city_kit_suburban_2
+            assets/staging/sourcechat_b81/models/kenney_3d_road_tile_pack_300
+            assets/staging/sourcechat_b81/models/kenney_building_kit
+            assets/staging/sourcechat_b81/models/kenney_modular_buildings_2024
+            assets/staging/sourcechat_b81/models/kenney_retro_urban_kit
+            assets/staging/sourcechat_b82/models/kenney_car_kit_3_1
+            assets/staging/sourcechat_b82/models/kenney_train_kit
+            assets/staging/sourcechat_b82/models/kenney_prototype_kit
+            assets/staging/sourcechat_b82/models/kenney_survival_kit
+            assets/staging/sourcechat_b83/models/kenney_factory_kit_3_0
+            assets/staging/sourcechat_b83/models/kenney_racing_kit_1_2
+            assets/staging/sourcechat_b83/models/kenney_holiday_kit
+            assets/staging/sourcechat_b83/models/kenney_coaster_kit
+            assets/staging/sourcechat_b84/models/kenney_weapon_pack_30
+            assets/staging/sourcechat_b84/models/kenney_blaster_kit_2_1
+            assets/staging/sourcechat_b84/models/oga_fantasy_weapons_19
+            assets/staging/sourcechat_b84/models/oga_archery_set
+            assets/staging/sourcechat_b85/models/kenney_food_kit_200
+            assets/staging/sourcechat_b85/models/quaternius_low_poly_food_100plus
+            assets/staging/sourcechat_b85/models/oga_detailed_food_bread_cheese_sausage
+          )
+          for p in "${required[@]}"; do
+            test -d "$p" || { echo "Missing physical staging directory: $p"; exit 1; }
+          done
+          test -f "$INDEX"
+          if grep -q '^## B80 —' "$INDEX"; then
+            echo "B80 already indexed; nothing to append."
+            exit 0
+          fi
+          cat >> "$INDEX" <<'EOF'
+
+          ## B80 — coherent Kenney city family
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b80/models/`
+
+          - `kenney_city_kit_roads/` — modular roads/barriers for a coherent modern-city base.
+          - `kenney_city_kit_suburban_2/` — suburban buildings/fences/trees/driveways.
+          - `kenney_city_kit_commercial_2_1/` — commercial buildings, signs and awnings.
+          - `kenney_city_kit_industrial_1/` — industrial/warehouse/factory city pieces.
+
+          ## B81 — additional building / road / retro urban sources
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b81/models/`
+
+          - `kenney_building_kit/` — generic modular building construction library.
+          - `kenney_modular_buildings_2024/` — 100-model modular structures/houses/skyscrapers source library.
+          - `kenney_3d_road_tile_pack_300/` — 300+ modular road tiles covering city/beach/river/tram/highway cases.
+          - `kenney_retro_urban_kit/` — intentionally retro/PSX-style urban family; use only where art direction allows.
+
+          ## B82 — transport / prototype / survival
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b82/models/`
+
+          - `kenney_car_kit_3_1/` — cars/service vehicles plus wheels/debris.
+          - `kenney_train_kit/` — train/tram/rail source kit.
+          - `kenney_prototype_kit/` — broad development library including animated characters/animals, mechanisms and generic props.
+          - `kenney_survival_kit/` — structures, tools, crafting items and open-world survival props.
+
+          ## B83 — factory / racing / holiday / coaster
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b83/models/`
+
+          - `kenney_factory_kit_3_0/` — large factory/automation/conveyor source family.
+          - `kenney_racing_kit_1_2/` — road/track/pit/fence/bridge racing source pieces.
+          - `kenney_holiday_kit/` — winter/holiday trees, structures and seasonal props.
+          - `kenney_coaster_kit/` — theme-park/coaster tracks, trains and related pieces.
+
+          ## B84 — weapon libraries
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b84/models/`
+
+          - `kenney_weapon_pack_30/` — broad low-poly modern weapon source library.
+          - `kenney_blaster_kit_2_1/` — sci-fi blasters/ammo/crates/targets; use only in fitting locations.
+          - `oga_fantasy_weapons_19/` — medieval/fantasy swords, axes, polearms, bow and shield source set.
+          - `oga_archery_set/` — textured bow/arrows/quiver/target set.
+
+          ## B85 — food / kitchen / consumables
+
+          Status: **READY / PHYSICAL**
+          Path: `assets/staging/sourcechat_b85/models/`
+
+          - `kenney_food_kit_200/` — broad 200-object food/kitchen library.
+          - `quaternius_low_poly_food_100plus/` — 100+ low-poly food/consumable models.
+          - `oga_detailed_food_bread_cheese_sausage/` — smaller detailed bread/cheese/sausage source with texture maps.
+
+          Integration rule: these remain source libraries. Main game chat should choose coherent subsets per actual location and normalize scale, materials, collisions, animation rigs and LOD before promotion. Do not wire staging libraries directly into gameplay.
+          EOF
+
+      - name: Commit index update with retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/SOURCECHAT_INDEX.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs(staging): index verified physical batches B80-B85"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
