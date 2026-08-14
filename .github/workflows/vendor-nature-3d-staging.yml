@@ -1,0 +1,152 @@
+name: Vendor CC0 nature 3D staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-nature-3d-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-nature-3d-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-nature-3d:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download verified CC0 nature packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP=".nature3d_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP"
+
+          write_cc0_meta() {
+            local target="$1"
+            local key="$2"
+            local source="$3"
+            local download="$4"
+            local notes="$5"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Source page: $source
+          Download used: $download
+          License: Creative Commons CC0 1.0 Universal as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          Source page identifies this asset pack as Creative Commons CC0 / public-domain dedication.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md beside staged files.
+          EOF
+          }
+
+          import_zip() {
+            local key="$1"
+            local url="$2"
+            local source="$3"
+            local target="$4"
+            local notes="$5"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            echo "Downloading $key"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 300 \
+              -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"
+            unzip -q "$work/pack.zip" -d "$work/archive"
+            rsync -a --prune-empty-dirs \
+              --include='*/' \
+              --include='*.glb' --include='*.GLB' \
+              --include='*.gltf' --include='*.GLTF' \
+              --include='*.bin' --include='*.BIN' \
+              --include='*.obj' --include='*.OBJ' \
+              --include='*.mtl' --include='*.MTL' \
+              --include='*.fbx' --include='*.FBX' \
+              --include='*.dae' --include='*.DAE' \
+              --include='*.blend' --include='*.BLEND' \
+              --include='*.png' --include='*.PNG' \
+              --include='*.jpg' --include='*.JPG' \
+              --include='*.jpeg' --include='*.JPEG' \
+              --include='*.webp' --include='*.WEBP' \
+              --include='*.svg' --include='*.SVG' \
+              --include='*.json' --include='*.JSON' \
+              --include='*.txt' --include='*.TXT' \
+              --include='*.md' --include='*.MD' \
+              --exclude='*' "$work/archive/" "$target/"
+            write_cc0_meta "$target" "$key" "$source" "$url" "$notes"
+          }
+
+          import_zip "kenney_nature_kit" \
+            "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip" \
+            "https://kenney.nl/assets/nature-kit" \
+            "assets/staging/nature/kenney_nature_kit" \
+            "Kenney Nature Kit: 330 CC0 3D files tagged nature/tree/rock/foliage. Staged model and texture/source formats only."
+
+          import_zip "kenney_survival_kit" \
+            "https://kenney.nl/media/pages/assets/survival-kit/4065a8185b-1712149243/kenney_survival-kit.zip" \
+            "https://kenney.nl/assets/survival-kit" \
+            "assets/staging/survival/kenney_survival_kit" \
+            "Kenney Survival Kit v2: 80 CC0 3D files with animation support; source-only staging for survival/environment props."
+
+          import_zip "oga_ground_texture_set" \
+            "https://opengameart.org/sites/default/files/ground_4.zip" \
+            "https://opengameart.org/content/ground-texture-set" \
+            "assets/staging/materials/oga_ground_texture_set" \
+            "OpenGameArt Ground Texture Set by musdasch: 10 seamless 512x512 CC0 textures covering dirt, grass, gravel, rock, sand, snow and mountain ground."
+
+          import_zip "oga_seamless_textures" \
+            "https://opengameart.org/sites/default/files/seamlessTextures.zip" \
+            "https://opengameart.org/content/seamless-textures" \
+            "assets/staging/materials/oga_seamless_textures" \
+            "OpenGameArt Seamless textures by arikel/CruzR: 18 CC0 1024x1024 JPEG textures including concrete, ground, grass, earth, wall, stone and rock."
+
+          rm -rf "$TMP"
+
+          cat > assets/staging/NATURE_3D_MANIFEST.md <<'EOF'
+          # Nature 3D / terrain source-only staging
+
+          This batch is physically downloaded source material for the main integration chat.
+
+          Folders:
+          - `assets/staging/nature/kenney_nature_kit/`
+          - `assets/staging/survival/kenney_survival_kit/`
+          - `assets/staging/materials/oga_ground_texture_set/`
+          - `assets/staging/materials/oga_seamless_textures/`
+
+          Nothing in this workflow modifies gameplay scenes/scripts or automatically wires these assets into Godot.
+          EOF
+
+          echo "Staged counts:"
+          for dir in assets/staging/nature/kenney_nature_kit assets/staging/survival/kenney_survival_kit assets/staging/materials/oga_ground_texture_set assets/staging/materials/oga_seamless_textures; do
+            printf '%s: ' "$dir"
+            find "$dir" -type f | wc -l
+          done
+
+      - name: Commit staged nature assets back to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/nature/kenney_nature_kit assets/staging/survival/kenney_survival_kit assets/staging/materials/oga_ground_texture_set assets/staging/materials/oga_seamless_textures assets/staging/NATURE_3D_MANIFEST.md
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 nature 3D and terrain packs"
+          git pull --rebase origin main
+          git push origin HEAD:main
