@@ -1,5 +1,5 @@
 ; ImPuls PC — offline single-player RPG
-; Stable 0.10.3: delta-only updates plus rendered-bounds UI fitting through 150% UI scale; isolated UI regression smoke
+; Stable 0.10.3: delta-only updates plus rendered-bounds UI fitting through 150% UI scale; deterministic UI regression smoke
 config_version=5
 
 [application]
