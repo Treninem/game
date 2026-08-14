@@ -1,0 +1,117 @@
+name: Vendor source-chat B80 real CC0 city kits
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b80.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b80
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 Kenney city kits
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b80"
+          TMP=".sourcechat_b80_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          stage_zip() {
+            local name="$1" url="$2" tmpname="$3"
+            mkdir -p "$TMP/$tmpname" "$ROOT/models/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B80/1.0' "$url" -o "$TMP/$tmpname.zip"
+            unzip -q "$TMP/$tmpname.zip" -d "$TMP/$tmpname"
+            chmod -R u+rwX "$TMP/$tmpname" || true
+            find "$TMP/$tmpname" -type f -iname '*.unitypackage' -delete
+            rsync -a "$TMP/$tmpname/" "$ROOT/models/$name/"
+          }
+
+          stage_zip "kenney_city_kit_roads" "https://opengameart.org/sites/default/files/kenney_city-kit-roads.zip" "roads"
+          meta "kenney_city_kit_roads" \
+            "https://opengameart.org/content/city-kit-roads" \
+            "City Kit (Roads)" \
+            "https://opengameart.org/sites/default/files/kenney_city-kit-roads.zip" \
+            "Kenney CC0 road kit with 70 optimized objects; FBX/OBJ/GLTF formats and modular barriers/road pieces."
+
+          stage_zip "kenney_city_kit_suburban_2" "https://opengameart.org/sites/default/files/kenney_city-kit-suburban_2.0.zip" "suburban"
+          meta "kenney_city_kit_suburban_2" \
+            "https://opengameart.org/content/city-kit-suburban" \
+            "City Kit (Suburban) 2.0" \
+            "https://opengameart.org/sites/default/files/kenney_city-kit-suburban_2.0.zip" \
+            "Kenney CC0 suburban building kit with 40 optimized objects, fences, trees and driveways compatible with City Kit Roads."
+
+          stage_zip "kenney_city_kit_commercial_2_1" "https://opengameart.org/sites/default/files/kenney_city-kit-commercial_2.1.zip" "commercial"
+          meta "kenney_city_kit_commercial_2_1" \
+            "https://opengameart.org/content/city-kit-commercial" \
+            "City Kit (Commercial) 2.1" \
+            "https://opengameart.org/sites/default/files/kenney_city-kit-commercial_2.1.zip" \
+            "Kenney CC0 commercial-building kit with 50+ optimized objects, signs, awnings and building parts compatible with City Kit Roads."
+
+          stage_zip "kenney_city_kit_industrial_1" "https://opengameart.org/sites/default/files/kenney_city-kit-industrial_1.0.zip" "industrial"
+          meta "kenney_city_kit_industrial_1" \
+            "https://opengameart.org/content/city-kit-industrial" \
+            "City Kit (Industrial) 1.0" \
+            "https://opengameart.org/sites/default/files/kenney_city-kit-industrial_1.0.zip" \
+            "Kenney CC0 industrial-building kit with 25+ optimized factory/warehouse/city objects compatible with City Kit Roads."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B80 — real CC0 Kenney city kits
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should use these as a coherent modern-city family. Promote only the road/building pieces needed by actual locations and normalize collisions/materials/scale before production use.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B80 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B80 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b80
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 city kits B80"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
