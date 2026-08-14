@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0-stage9 — 2026-08-14
+- Added a permanent in-game minimap with explored terrain, discovered POIs and a directional player marker.
+- Split inventory, full map, crafting and quest journal away from the pause menu into direct gameplay panels opened with I/M/K/J.
+- Simplified Esc pause menu to Continue, Saves, Settings, Updates and Exit.
+- Kept 10 independent save slots with create/overwrite/load/delete operations.
+- Simplified HUD by removing resource/combat debug text and keeping compact quest, vitals, minimap, location/time/economy and quick-use controls.
+- Added third quick-use slot on key 3 for cooked/raw meat.
+- Switched Windows branding generation to the user-selected ImPuls artwork; build pipeline generates the application PNG and multi-size ICO from that source.
+- Installer/updater shortcut branding remains refreshable during automatic updates.
+
 ## 0.8.0-stage8 — 2026-08-14
 - Expanded the target playable world to a 64 × 64 km first continent.
 - Added deterministic terrain streaming in 512 m chunks around the player instead of loading the whole continent at once.
