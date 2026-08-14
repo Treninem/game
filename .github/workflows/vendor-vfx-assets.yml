@@ -283,5 +283,19 @@ jobs:
             exit 0
           fi
           git commit -m "assets(vfx): vendor expanded verified CC0 magic packs"
-          git pull --rebase origin main
-          git push origin HEAD:main
+
+          # Other asset chats may commit to main at the same time. Retry only with
+          # fetch + rebase + normal push; never force-push or overwrite their work.
+          for attempt in $(seq 1 30); do
+            echo "Safe push attempt $attempt/30"
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "VFX assets pushed successfully."
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "Unable to push VFX assets after 30 safe retries."
+          exit 1
