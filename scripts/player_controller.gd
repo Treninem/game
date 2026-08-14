@@ -17,6 +17,7 @@ extends CharacterBody3D
 var attack_elapsed := 0.0
 
 func _ready() -> void:
+    add_to_group("player")
     Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event: InputEvent) -> void:
