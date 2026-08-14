@@ -54,8 +54,8 @@ jobs:
           meta "oga_medieval_waterpowered_sawmill" "https://opengameart.org/content/medieval-waterpowered-sawmill" "Medieval Waterpowered Sawmill" "https://opengameart.org/sites/default/files/75340_WaterPoweredSawmillUpload_blend.zip" "Authored water-powered sawmill building/source for river/industry/lumber locations."
 
           mkdir -p "$ROOT/models/oga_horse_drawn_carriage"
-          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B61/1.0' "https://opengameart.org/sites/default/files/WOZ.blend" -o "$ROOT/models/oga_horse_drawn_carriage/WOZ.blend"
-          meta "oga_horse_drawn_carriage" "https://opengameart.org/content/horse-drawn-carriage" "Horse drawn carriage" "https://opengameart.org/sites/default/files/WOZ.blend" "Static carriage source. Source-page comments state textures were not packed; main chat must rebuild/replace materials before production use."
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B61/1.0' "https://opengameart.org/sites/default/files/WOZ_0.blend" -o "$ROOT/models/oga_horse_drawn_carriage/WOZ_0.blend"
+          meta "oga_horse_drawn_carriage" "https://opengameart.org/content/horse-drawn-carriage" "Horse drawn carriage" "https://opengameart.org/sites/default/files/WOZ_0.blend" "Static carriage source. Source-page comments state textures were not packed; main chat must rebuild/replace materials before production use."
 
           find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
           cat > "$ROOT/README.md" <<'EOF'
