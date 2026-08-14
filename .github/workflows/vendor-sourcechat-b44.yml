@@ -34,7 +34,9 @@ jobs:
             mkdir -p "$TMP/$name" "$ROOT/models/$name"
             curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-B44/1.0' "$url" -o "$TMP/$name.zip"
             unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            chmod -R u+rwX "$TMP/$name" || true
             rsync -a "$TMP/$name/" "$ROOT/models/$name/"
+            chmod -R u+rwX "$ROOT/models/$name" || true
             find "$ROOT/models/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
             cat > "$ROOT/models/$name/SOURCE.md" <<EOF
           # Source
@@ -61,6 +63,7 @@ jobs:
 
           Includes a 2025 stylized nature standard kit, a low-poly plant/flower/fern/grass pack and a vegetation pack with multiple explicit LOD variants. Main integration chat should deduplicate against B28, preserve only visually compatible species, build biome palettes and prefer supplied LOD variants where they improve streaming performance.
           EOF
+          chmod -R u+rwX "$TMP" || true
           rm -rf "$TMP"
           echo "B44 files:"; find "$ROOT" -type f | wc -l
           du -sh "$ROOT"
