@@ -1,13 +1,24 @@
 extends Node
 
+var _finished := false
+
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
+    var watchdog := get_tree().create_timer(45.0, true, false, true)
+    watchdog.timeout.connect(_on_watchdog_timeout)
     call_deferred("_run_test")
+
+func _on_watchdog_timeout() -> void:
+    if not _finished:
+        _fail(17, "UI smoke watchdog timeout; inspect the preceding Godot runtime error/checkpoint")
 
 func _checkpoint(text: String) -> void:
     print("UI_SMOKE_CHECKPOINT: ", text)
 
 func _fail(code: int, message: String) -> void:
+    if _finished:
+        return
+    _finished = true
     var clean := message.replace("\r", " ").replace("\n", " ")
     print("::error title=UI layout smoke::%s" % clean)
     push_error("UI smoke: %s" % message)
@@ -40,9 +51,6 @@ func _sidebar_error(menu: Control, frame: Control) -> String:
     return ""
 
 func _remove_world_workload(scene: Node) -> void:
-    # World boot and traversal have their own mandatory smoke tests. Keeping the
-    # real UI nodes but removing World/Bootstrap makes this test deterministic
-    # and prevents chunk streaming from masking UI regressions behind long CI runs.
     for path in ["Bootstrap", "World"]:
         var node := scene.get_node_or_null(path)
         if node != null:
@@ -181,5 +189,6 @@ func _run_test() -> void:
         return
 
     _checkpoint("passed")
+    _finished = true
     print("UI smoke passed: rendered bounds stay centered, 150% UI scaling adapts safely, and 10 save slots are stable")
     tree.quit(0)
