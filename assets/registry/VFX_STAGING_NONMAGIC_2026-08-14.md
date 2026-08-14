@@ -10,10 +10,11 @@ Root: `assets/staging/vfx_nonmagic/`
 
 All entries below have real files present in the repository, not registry-only placeholders. Each staged family keeps `SOURCE.md` and `LICENSE.txt`.
 
-### Fire / smoke / fog
+### Fire / smoke / fog / steam
 
 - `oga_burning_fire_40f` — OpenGameArt, Mikodrak, CC0. Real looping burning-fire assets including GIF previews and a directory of individual transparent PNG frames. Recommended: campfire, fireplace, furnace, torch and burning-object source material.
 - `oga_fire_smoke_animations` — OpenGameArt, Reactorcore, CC0. Real fire/flame/smoke sprite families including preview sheets and separate animation-frame directories such as FireBlast, FireBurst, FirePlume, OilyFireball and SmokeGas. Recommended: main chat selects suitable subsets by art direction.
+- `oga_animated_steam` — OpenGameArt, hatmix, CC0. Real `steam_wall_sheet.png` animated steam/smoke spritesheet. Recommended: pipes, vents, cooking, hot water, machinery, geysers and industrial steam.
 - `oga_smoke_vapor` — OpenGameArt, Fupi, CC0. Four soft smoke/vapor textures. Recommended: smoke, steam, dust, cloud wisps, fog wisps, gas and industrial emissions.
 - `oga_fog_animation` — OpenGameArt, AntumDeluge, CC0. Real tileable `fog.png` texture for moving/layered fog and cloud banks.
 - `oga_thick_fog` — OpenGameArt, LFA, CC0. Real horizontally tileable `fog01.png` texture for thick fog, haze and distant smoke banks.
