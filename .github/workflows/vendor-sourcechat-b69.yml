@@ -1,0 +1,118 @@
+name: Vendor source-chat B69 real CC0 character sources
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b69.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b69
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 character sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b69"
+          TMP=".sourcechat_b69_tmp"
+          rm -rf "$ROOT" "$TMP"
+          mkdir -p "$ROOT/models" "$TMP"
+
+          meta() {
+            local name="$1" page="$2" title="$3" download="$4" notes="$5"
+            cat > "$ROOT/models/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $download
+          License: CC0 as stated on the source page.
+          Notes: $notes
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/models/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+
+          mkdir -p "$ROOT/models/oga_cat_pilot_rigged_animated"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B69/1.0' \
+            "https://opengameart.org/sites/default/files/CatPilot.blend" \
+            -o "$ROOT/models/oga_cat_pilot_rigged_animated/CatPilot.blend"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B69/1.0' \
+            "https://opengameart.org/sites/default/files/catPilotTex.png" \
+            -o "$ROOT/models/oga_cat_pilot_rigged_animated/catPilotTex.png"
+          meta "oga_cat_pilot_rigged_animated" \
+            "https://opengameart.org/content/cat-pilot-rigged-animated" \
+            "Cat Pilot (Rigged + Animated)" \
+            "https://opengameart.org/sites/default/files/CatPilot.blend + catPilotTex.png" \
+            "Rigged character with walking, running, cheering, goggles animation and eye blendshapes according to the source page."
+
+          mkdir -p "$TMP/kenney" "$ROOT/models/kenney_animated_characters_3"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B69/1.0' \
+            "https://opengameart.org/sites/default/files/kenney_animated-characters-3.zip" \
+            -o "$TMP/kenney.zip"
+          unzip -q "$TMP/kenney.zip" -d "$TMP/kenney"
+          chmod -R u+rwX "$TMP/kenney" || true
+          rsync -a "$TMP/kenney/" "$ROOT/models/kenney_animated_characters_3/"
+          meta "kenney_animated_characters_3" \
+            "https://opengameart.org/content/animated-characters-3" \
+            "Animated Characters 3" \
+            "https://opengameart.org/sites/default/files/kenney_animated-characters-3.zip" \
+            "Kenney CC0 rigged character package with 4 skins and idle, jump and running animations."
+
+          mkdir -p "$TMP/humanoid" "$ROOT/models/oga_rigged_animated_humanoid"
+          curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-B69/1.0' \
+            "https://opengameart.org/sites/default/files/animated%20humanoid.zip" \
+            -o "$TMP/humanoid.zip"
+          unzip -q "$TMP/humanoid.zip" -d "$TMP/humanoid"
+          chmod -R u+rwX "$TMP/humanoid" || true
+          rsync -a "$TMP/humanoid/" "$ROOT/models/oga_rigged_animated_humanoid/"
+          meta "oga_rigged_animated_humanoid" \
+            "https://opengameart.org/content/rigged-and-animated-humanoid" \
+            "Rigged and Animated Humanoid" \
+            "https://opengameart.org/sites/default/files/animated%20humanoid.zip" \
+            "Low-poly humanoid under 1000 tris, intended for humanoid retargeting/prototyping; source author notes the rig may require manual bone hookup."
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "$ROOT/README.md" <<'EOF'
+          # Source chat B69 — real CC0 character sources
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          Main integration chat should audition character quality and retarget animations to production rigs. The XCVG humanoid is a prototype/retarget source, not a final hero model.
+          EOF
+
+          chmod -R u+rwX "$TMP" || true
+          rm -rf "$TMP"
+          echo "B69 files:"; find "$ROOT" -type f | wc -l
+          du -sh "$ROOT"
+
+      - name: Commit B69 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b69
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 character sources B69"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
