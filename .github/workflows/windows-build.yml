@@ -131,4 +131,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "Automatic Windows build of ImPuls. Updater refreshes game files, branding icon, desktop and Start Menu shortcuts, then refreshes Windows shell icons."
+          gh release create "build-${{ github.run_number }}" ImPuls-PC-Windows-x64.zip ImPuls-Setup.exe ImPuls-Updater-Runtime.zip SHA256SUMS.txt --repo "${{ github.repository }}" --title "ImPuls automatic build ${{ github.run_number }}" --notes "ImPuls 0.6.0 Stage 6: first playable city district, modular humanoid player/NPC visuals, scheduled citizens, city location HUD, coins/reputation and the first city quest. Includes background self-update and branding/shortcut refresh."
