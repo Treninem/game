@@ -1,10 +1,10 @@
 ; ImPuls PC — offline single-player RPG
-; Stage 4 menus, settings, saves and updates
+; Stage 5 inventory, crafting, dialogue and quest journal
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.4.1-stage4"
+config/version="0.5.0-stage5"
 config/icon="res://assets/branding/impuls_icon.svg"
 run/main_scene="res://scenes/stage1.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
@@ -17,6 +17,8 @@ GameState="*res://scripts/game_state.gd"
 SaveManager="*res://scripts/save_manager.gd"
 SettingsManager="*res://scripts/settings_manager.gd"
 UpdateManager="*res://scripts/update_manager.gd"
+InventorySystem="*res://scripts/inventory_system.gd"
+DialogueManager="*res://scripts/dialogue_manager.gd"
 
 [display]
 window/size/viewport_width=1280
