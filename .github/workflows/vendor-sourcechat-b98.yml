@@ -1,0 +1,88 @@
+name: Vendor source-chat B98 real CC0 six houses
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b98.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b98
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download real CC0 six-house source set
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b98/models/oga_six_houses_textures"
+          TMP=".sourcechat_b98_tmp"
+          rm -rf "assets/staging/sourcechat_b98" "$TMP"
+          mkdir -p "$ROOT/models" "$ROOT/textures" "$TMP"
+
+          fetch_zip() {
+            local file="$1" dest="$2"
+            mkdir -p "$dest"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 3000 -A 'ImPuls-CC0-B98/1.0' \
+              "https://opengameart.org/sites/default/files/$file" -o "$TMP/$file"
+            unzip -q "$TMP/$file" -d "$dest"
+          }
+
+          fetch_zip "blendfile_fbxforunityandunreal.zip" "$ROOT/models"
+          fetch_zip "atlas4.zip" "$ROOT/textures/atlas4"
+          fetch_zip "proptrim_surfacedirt-texture.zip" "$ROOT/textures/proptrim_surfacedirt"
+          fetch_zip "bldgtextures.zip" "$ROOT/textures/building_textures"
+
+          cat > "$ROOT/SOURCE.md" <<'EOF'
+          # Source
+          Pack: 6 houses and textures
+          Source page: https://opengameart.org/content/6-houses-and-textures
+          Downloads: blendfile_fbxforunityandunreal.zip + atlas4.zip + proptrim_surfacedirt-texture.zip + bldgtextures.zip
+          License: CC0 as stated on the source page.
+          Notes: Six unique house source models plus all four downloadable texture/atlas archives from the free CC0 release.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+
+          find "$ROOT" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' -o -iname '*.cs' -o -iname '*.gd' \) -delete
+          cat > "assets/staging/sourcechat_b98/README.md" <<'EOF'
+          # Source chat B98 — real CC0 six-house source set
+
+          Source-only staging. Nothing is wired into gameplay.
+
+          The source page splits models and textures into multiple archives; this batch intentionally stages all of them so the main integration chat has a complete editable house source set rather than incomplete meshes.
+          EOF
+
+          rm -rf "$TMP"
+          echo "B98 files:"; find "assets/staging/sourcechat_b98" -type f | wc -l
+          du -sh "assets/staging/sourcechat_b98"
+
+      - name: Commit B98 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b98
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 six houses B98"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*5))
+          done
+          exit 1
