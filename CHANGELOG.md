@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.2-stable — 2026-08-14
+- Added `updater_v4.ps1`: normal updates for an installed game now use retained content-aware delta chains only and no longer fall back to downloading the full game archive.
+- Full `ImPuls-PC-Windows-x64.zip` is reserved for first installation/manual recovery; ordinary updates download only the missing delta payload plus small manifests/runtime metadata.
+- Added visible aggregate update progress with transferred bytes, total planned network traffic, delta stage, verification stage and final result.
+- Kept SHA-256 verification, full final-manifest validation, rollback and offline-safe startup before replacing the installed build.
+- Scheduled background updates now prefer the v4 delta updater while retaining the legacy updater only as a compatibility fallback.
+- Added PowerShell syntax validation for updater/runtime scripts to the stable Windows build pipeline.
+- Activated a centralized `UILayoutGuard` for pause and gameplay panels.
+- Menu geometry now reflows after window size, fullscreen and UI-scale changes, compacts sidebar/tabs when needed and re-centers frames in the actual viewport.
+- Expanded UI smoke coverage to the maximum supported 150% UI scale and verifies both pause and gameplay panels plus sidebar fit.
+- Continued the streamed Люменград foundation with differentiated street hierarchy, district density/identity and streamed protected landmarks while preserving the one-city-cell-per-frame loading budget.
+
 ## 0.10.1-stable — 2026-08-14
 - Introduced a rolling `stable` GitHub Release channel controlled only by the main integration chat; ordinary asset/research commits can no longer become player updates.
 - Pinned both the in-game updater and external PowerShell updater to the stable channel instead of `releases/latest`.
