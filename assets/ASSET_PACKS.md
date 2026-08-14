@@ -44,6 +44,7 @@ Folders: `assets/vfx/`, `assets/vfx/third_party/`, `assets/decals/impact/`.
 - Explosion presets: small, medium, large with flash + hot particles + debris + smoke + shockwave.
 - Collision presets: metal sparks, stone fragments/dust, wood fragments, dirt dust, glass shards, water splash/wave.
 - Physically imported CC0 enhancement packs under `assets/vfx/third_party/`: Kenney Particle Pack, Kenney Smoke Particles, OpenGameArt 2D Spell Effects, Arcane Magic Effect, Earth Impact - Magic Effect and Weapon Slash - Effect. Each pack keeps `SOURCE.md` and `LICENSE.txt`.
+- Expanded physical CC0 magic library adds 16 pack folders / 329 files: `oga_light_magic`, `oga_angel_shield`, `oga_plasma_electric`, `oga_basic_pixel_spells`, `oga_magic_forcefield_grayscale`, `oga_magic_forcefield_color`, `oga_radial_lightning`, `oga_fireball_godot`, `oga_assorted_fireballs`, `oga_fireball_umplix`, `oga_magic_spell_icons`, `oga_energy_shield`, `oga_resurrection_spell`, `oga_magic_mirror_portal`, `oga_m484_lightning_weapon`, `oga_lightning_effect`. Sources and licenses are preserved inside every folder. These are staged library assets only; importing them does not authorize automatic gameplay integration.
 Future magic must reuse semantic VFX events instead of hard-coding a texture into combat.
 
 ### Weather / atmosphere / sky — high priority
