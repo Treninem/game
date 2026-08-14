@@ -1,0 +1,83 @@
+name: Vendor source-chat B35 real CC0 animated fauna
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-sourcechat-b35.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-sourcechat-b35
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download real CC0 animated fauna packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/sourcechat_b35/models"
+          TMP=".sourcechat_b35_tmp"
+          rm -rf "assets/staging/sourcechat_b35" "$TMP"
+          mkdir -p "$ROOT" "$TMP"
+          stage_zip() {
+            local name="$1" url="$2" page="$3" title="$4"
+            mkdir -p "$TMP/$name" "$ROOT/$name"
+            curl --fail --location --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-B35/1.0' "$url" -o "$TMP/$name.zip"
+            unzip -q "$TMP/$name.zip" -d "$TMP/$name"
+            rsync -a "$TMP/$name/" "$ROOT/$name/"
+            find "$ROOT/$name" -type f \( -iname '*.exe' -o -iname '*.dll' -o -iname '*.bat' -o -iname '*.cmd' -o -iname '*.ps1' \) -delete
+            cat > "$ROOT/$name/SOURCE.md" <<EOF
+          # Source
+          Pack: $title
+          Source page: $page
+          Download: $url
+          License: CC0 as stated on the source page.
+          Status: PHYSICALLY STAGED SOURCE — not gameplay-integrated in this chat.
+          EOF
+            cat > "$ROOT/$name/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+          }
+          stage_zip "quaternius_animal_pack_vol2" "https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip" "https://opengameart.org/content/animated-animales-low-poly" "Animated Animales Low Poly / Animal Pack Vol.2"
+          stage_zip "quaternius_5_lowpoly_animals" "https://opengameart.org/sites/default/files/Animals%20Pack%20by%20Quaternius.zip" "https://opengameart.org/content/5-low-poly-animals" "5 Low Poly Animals"
+          stage_zip "quaternius_animated_fish" "https://opengameart.org/sites/default/files/Animated%20Fish%20Pack%20by%20%40Quaternius.zip" "https://opengameart.org/content/animated-fish" "Animated Fish"
+          cat > "assets/staging/sourcechat_b35/README.md" <<'EOF'
+          # Source chat B35 — real CC0 animated fauna sources
+
+          Real extracted source assets only; nothing is connected to gameplay.
+
+          - Animal Pack Vol.2: animated wolf, eagle, dog, cat and piranha.
+          - 5 Low Poly Animals: five additional animated animal sources.
+          - Animated Fish: low-poly animated fish sources with Blend/OBJ/FBX family.
+
+          Main chat should inspect animation import quality, standardize scale/orientation, build species-specific AI/animation state machines separately, and promote only suitable models into production paths.
+          EOF
+          rm -rf "$TMP"
+          echo "B35 files:"; find assets/staging/sourcechat_b35 -type f | wc -l
+          du -sh assets/staging/sourcechat_b35
+      - name: Commit B35 with push-race retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/sourcechat_b35
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(staging): vendor real CC0 animated fauna B35"
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*4))
+          done
+          exit 1
