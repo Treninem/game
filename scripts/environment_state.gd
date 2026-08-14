@@ -4,6 +4,7 @@ signal weather_changed
 signal season_changed(season: int)
 signal underwater_changed(is_underwater: bool)
 signal exposure_changed(exposure: float)
+signal water_current_changed(direction: Vector3, strength: float)
 
 enum Season {
     SPRING,
@@ -27,6 +28,8 @@ var snow_cover_amount: float = 0.0
 var surface_freeze_amount: float = 0.0
 var thaw_amount: float = 0.0
 var local_exposure: float = 1.0
+var water_current_direction: Vector3 = Vector3(0.85, 0.0, 0.25).normalized()
+var water_current_strength: float = 0.12
 var is_underwater: bool = false
 
 func set_weather(
@@ -49,6 +52,14 @@ func set_wind(direction: Vector3, strength: float) -> void:
         wind_direction = direction.normalized()
     wind_strength = clampf(strength, 0.0, 1.0)
     weather_changed.emit()
+
+func set_water_current(direction: Vector3, strength: float) -> void:
+    var resolved := direction
+    resolved.y = clampf(resolved.y, -0.35, 0.35)
+    if resolved.length_squared() > 0.0001:
+        water_current_direction = resolved.normalized()
+    water_current_strength = clampf(strength, 0.0, 1.0)
+    water_current_changed.emit(water_current_direction, water_current_strength)
 
 func set_temperature(value_c: float) -> void:
     temperature_c = value_c
@@ -145,6 +156,8 @@ func apply_environment_material(material: ShaderMaterial) -> void:
     _set_if_supported(material, available, &"snow_amount", maxf(snow_cover_amount, snow_intensity * 0.18))
     _set_if_supported(material, available, &"wind_strength", wind_strength)
     _set_if_supported(material, available, &"wind_direction", wind_direction)
+    _set_if_supported(material, available, &"current_strength", water_current_strength)
+    _set_if_supported(material, available, &"current_direction", water_current_direction)
 
 func _set_if_supported(material: ShaderMaterial, available: Dictionary, parameter: StringName, value: Variant) -> void:
     if available.has(parameter):
