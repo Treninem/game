@@ -37,7 +37,7 @@ Folders: `assets/vfx/`, `assets/vfx/third_party/`, `assets/decals/impact/`.
 - Combat presets: melee swing, slash hit, blunt hit, block/parry, critical hit, defeat burst.
 - Explosion presets: small, medium, large with flash + hot particles + debris + smoke + shockwave.
 - Collision presets: metal sparks, stone fragments/dust, wood fragments, dirt dust, glass shards, water splash/wave.
-- Kenney Particle Pack / Smoke Particles and OpenGameArt CC0 effects remain approved enhancement sources, but are not physically imported until binaries exist.
+- Physically imported CC0 enhancement packs under `assets/vfx/third_party/`: Kenney Particle Pack, Kenney Smoke Particles, OpenGameArt 2D Spell Effects, Arcane Magic Effect, Earth Impact - Magic Effect and Weapon Slash - Effect. Each pack keeps `SOURCE.md` and `LICENSE.txt`.
 Future magic must reuse semantic VFX events instead of hard-coding a texture into combat.
 
 ### Weather / atmosphere / sky — high priority
