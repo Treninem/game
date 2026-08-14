@@ -58,6 +58,8 @@ func _physics_process(delta: float) -> void:
         move_and_slide()
         if attack_elapsed <= 0.0:
             attack_elapsed = attack_interval
+            var impact_direction := -flat_to_player.normalized() if flat_to_player.length_squared() > 0.001 else Vector3.UP
+            VFXLibrary.spawn("hit_blunt", target.global_position + Vector3.UP * 0.9, get_tree().current_scene, impact_direction, flat_to_player.normalized(), 0.85)
             GameState.apply_damage(attack_damage)
 
 func _idle_return(delta: float) -> void:
@@ -83,6 +85,7 @@ func take_damage(amount: float, attacker: Node = null) -> void:
         _die()
 
 func _die() -> void:
+    VFXLibrary.spawn("death_burst", global_position + Vector3.UP * 0.75, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 1.0)
     GameState.register_enemy_defeat(enemy_id)
     set_physics_process(false)
     visible = false
