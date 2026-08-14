@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/capital_perimeter.gd" id="11"]
 [ext_resource type="Script" path="res://scripts/world_environment_controller.gd" id="12"]
 [ext_resource type="Script" path="res://scripts/runtime_stability_guard.gd" id="13"]
+[ext_resource type="Script" path="res://scripts/capital_spawn_surface.gd" id="14"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -42,6 +43,9 @@ script = ExtResource("6")
 
 [node name="RuntimeStabilityGuard" type="Node" parent="World"]
 script = ExtResource("13")
+
+[node name="CapitalSpawnSurface" type="StaticBody3D" parent="World"]
+script = ExtResource("14")
 
 [node name="Player" type="CharacterBody3D" parent="World"]
 position = Vector3(0, 0.08, 8)
