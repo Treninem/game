@@ -10,6 +10,12 @@ extends CharacterBody3D
 @export var sprint_stamina_per_second := 16.0
 @export var attack_cooldown := 0.55
 
+const GROUND_CLEARANCE := 0.08
+const SPAWN_GUARD_PHYSICS_FRAMES := 8
+const RECOVERY_GUARD_PHYSICS_FRAMES := 4
+const VOID_RECOVERY_DEPTH := 1.25
+const SAFE_RECOVERY_XZ_RADIUS := 96.0
+
 @onready var pivot: Node3D = $CameraPivot
 @onready var camera: Camera3D = $CameraPivot/Camera3D
 @onready var interaction_ray: RayCast3D = $CameraPivot/Camera3D/InteractionRay
@@ -19,6 +25,8 @@ var recovery_cooldown := 0.0
 var stuck_elapsed := 0.0
 var last_horizontal_motion := Vector2.ZERO
 var last_safe_position := Vector3.ZERO
+var has_safe_position := false
+var spawn_guard_frames := 0
 var footstep_distance_accum := 0.0
 
 func _ready() -> void:
@@ -31,7 +39,10 @@ func _ready() -> void:
     _apply_settings()
     SettingsManager.settings_changed.connect(_apply_settings)
     Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-    last_safe_position = global_position
+    # The streamed world is prepared after this node enters the player group.
+    # Keep the body on the authoritative height field until the first terrain
+    # collision has had several physics frames to register.
+    _begin_ground_guard(true, SPAWN_GUARD_PHYSICS_FRAMES)
 
 func _apply_settings() -> void:
     camera.fov = float(SettingsManager.get_value("gameplay", "camera_fov"))
@@ -71,6 +82,11 @@ func _unhandled_input(event: InputEvent) -> void:
     elif event.is_action_pressed("quick_load"):
         if SaveManager.load_game(self):
             GameState.migrate_to_world_foundation()
+            # Old saves may contain a position from before the streamed world was
+            # ready. Preserve legitimate elevated positions, but repair any save
+            # that is already below the authoritative terrain and give streaming
+            # time to rebuild collision around the loaded XZ.
+            _begin_ground_guard(false, SPAWN_GUARD_PHYSICS_FRAMES)
             _recover_to_terrain_if_needed(true)
             GameState.notify("Загружен слот %02d." % SaveManager.current_slot)
 
@@ -81,6 +97,10 @@ func _physics_process(delta: float) -> void:
         velocity = Vector3.ZERO
         last_horizontal_motion = Vector2.ZERO
         footstep_distance_accum = 0.0
+        return
+
+    if spawn_guard_frames > 0:
+        _hold_on_streamed_surface()
         return
 
     var grounded_before := is_on_floor()
@@ -111,8 +131,9 @@ func _physics_process(delta: float) -> void:
     var moved := global_position - before
     last_horizontal_motion = Vector2(moved.x, moved.z)
     var grounded_after := is_on_floor()
-    if last_horizontal_motion.length() > 0.002 and grounded_after:
+    if grounded_after:
         last_safe_position = global_position
+        has_safe_position = true
 
     if not grounded_before and grounded_after and fall_speed_before_move > 3.4:
         footstep_distance_accum = 0.0
@@ -138,6 +159,32 @@ func _physics_process(delta: float) -> void:
 func actual_horizontal_speed(delta: float = 1.0 / 60.0) -> float:
     return last_horizontal_motion.length() / maxf(delta, 0.0001)
 
+func _begin_ground_guard(force_snap_to_terrain: bool, frames: int) -> void:
+    var xz := Vector2(global_position.x, global_position.z)
+    if WorldData.inside_world(xz):
+        var terrain_y := WorldData.elevation_at(xz)
+        if force_snap_to_terrain or global_position.y < terrain_y - 0.20:
+            global_position.y = terrain_y + GROUND_CLEARANCE
+    velocity = Vector3.ZERO
+    last_horizontal_motion = Vector2.ZERO
+    spawn_guard_frames = maxi(spawn_guard_frames, frames)
+    last_safe_position = global_position
+    has_safe_position = true
+
+func _hold_on_streamed_surface() -> void:
+    velocity = Vector3.ZERO
+    last_horizontal_motion = Vector2.ZERO
+    var xz := Vector2(global_position.x, global_position.z)
+    if WorldData.inside_world(xz):
+        var terrain_y := WorldData.elevation_at(xz)
+        if global_position.y < terrain_y + GROUND_CLEARANCE:
+            global_position.y = terrain_y + GROUND_CLEARANCE
+    spawn_guard_frames -= 1
+    if spawn_guard_frames <= 0:
+        spawn_guard_frames = 0
+        last_safe_position = global_position
+        has_safe_position = true
+
 func _attempt_unstick(direction: Vector3, delta: float, target_speed: float) -> void:
     # A streamed terrain collision can appear during the same frame in which the
     # player reaches a chunk seam. Recover upward first, then retry a small legal
@@ -153,14 +200,16 @@ func _attempt_unstick(direction: Vector3, delta: float, target_speed: float) -> 
         velocity.z = direction.z * target_speed
         return
 
-    # If the body was spawned inside newly streamed terrain, move it onto the
-    # authoritative height field instead of leaving an animated character stuck.
+    # If the body was spawned inside newly streamed terrain, place its feet just
+    # above the authoritative surface. The node origin is already at foot level,
+    # so a one-metre lift would incorrectly leave the player floating.
     var xz := Vector2(global_position.x, global_position.z)
     if WorldData.inside_world(xz):
         var terrain_y := WorldData.elevation_at(xz)
         if global_position.y < terrain_y + 0.15:
-            global_position.y = terrain_y + 1.08
+            global_position.y = terrain_y + GROUND_CLEARANCE
             velocity.y = 0.0
+            spawn_guard_frames = maxi(spawn_guard_frames, 2)
 
 func _recover_to_terrain_if_needed(force_check: bool) -> void:
     if recovery_cooldown > 0.0 and not force_check:
@@ -168,11 +217,34 @@ func _recover_to_terrain_if_needed(force_check: bool) -> void:
     recovery_cooldown = 0.25
     var xz := Vector2(global_position.x, global_position.z)
     if not WorldData.inside_world(xz):
+        if has_safe_position:
+            global_position = last_safe_position
+            velocity = Vector3.ZERO
+            spawn_guard_frames = maxi(spawn_guard_frames, RECOVERY_GUARD_PHYSICS_FRAMES)
         return
+
     var terrain_y := WorldData.elevation_at(xz)
-    if global_position.y < terrain_y - 1.5:
-        global_position.y = terrain_y + 1.08
-        velocity.y = 0.0
+    if global_position.y >= terrain_y - VOID_RECOVERY_DEPTH:
+        return
+
+    # Prefer the most recent grounded position when it is nearby. This avoids
+    # placing the player into a wall at a chunk seam. If no nearby safe point is
+    # available, restore the current XZ directly onto the authoritative terrain.
+    var recovery_position := Vector3(global_position.x, terrain_y + GROUND_CLEARANCE, global_position.z)
+    if has_safe_position:
+        var safe_xz := Vector2(last_safe_position.x, last_safe_position.z)
+        if WorldData.inside_world(safe_xz) and safe_xz.distance_to(xz) <= SAFE_RECOVERY_XZ_RADIUS:
+            recovery_position = last_safe_position
+            var safe_terrain_y := WorldData.elevation_at(safe_xz)
+            recovery_position.y = maxf(recovery_position.y, safe_terrain_y + GROUND_CLEARANCE)
+
+    global_position = recovery_position
+    velocity = Vector3.ZERO
+    last_horizontal_motion = Vector2.ZERO
+    footstep_distance_accum = 0.0
+    spawn_guard_frames = maxi(spawn_guard_frames, RECOVERY_GUARD_PHYSICS_FRAMES)
+    last_safe_position = recovery_position
+    has_safe_position = true
 
 func _enforce_world_bounds() -> void:
     var limit := WorldData.WORLD_HALF_SIZE - 24.0
