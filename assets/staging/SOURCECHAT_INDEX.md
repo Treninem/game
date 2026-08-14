@@ -369,6 +369,56 @@ Path: `assets/staging/sourcechat_b31/models/`
 
 Recommended use: Prototype Kit primarily as animation/prototyping/fallback source; Pirate Kit for ports, islands and coastal locations where the art direction fits. Avoid blindly promoting placeholder-style assets into final runtime content.
 
+## B32 — survival / graveyard / furniture
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b32/models/`
+
+Real Kenney Survival, Graveyard and Furniture source kits. Recommended use: camps/crafting, cemeteries/crypt approaches and authored interiors. Promote only coherent optimized subsets.
+
+## B33 — land vehicles / racing / watercraft
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b33/models/`
+
+Real Kenney Car, Racing and Watercraft source kits. Recommended use: future vehicles, roads/tracks and boats after wheel/pivot/scale/collision conventions are standardized by the main chat.
+
+## B34 — people / humanoid animation libraries
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b34/`
+
+- `models/quaternius_animated_characters/` — animated character source family.
+- `animations/quaternius_universal_animation_library/` — free Standard humanoid animation source archive.
+- `animations/quaternius_universal_animation_library_2/` — extended compatible Standard humanoid animation source archive.
+
+Recommended use: establish one canonical Godot humanoid skeleton/retarget profile, test root motion/import and promote curated character/motion subsets only.
+
+## B35 — animated wild / water fauna
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b35/models/`
+
+Real animated animal/fish source packs including wolf/eagle/dog/cat/piranha families plus additional animals and fish. Main chat should standardize species scale/orientation and build AI/animation state machines separately.
+
+## B36 — RPG characters / monsters / items
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b36/models/`
+
+- `quaternius_rpg_characters/` — rigged/animated fantasy character archetypes.
+- `quaternius_animated_monsters/` — animated monster/enemy sources.
+- `quaternius_ultimate_rpg_items/` — broad RPG equipment/item source library.
+
+Recommended use: curated NPC/enemy/equipment production assets after skeleton, collision, LOD and item-category normalization.
+
+## B37 — crops / growth stages
+
+Status: **READY / PHYSICAL**
+Path: `assets/staging/sourcechat_b37/models/quaternius_crops_pack/`
+
+Real 3D crop source library with multiple growth stages. Recommended use: fields/farms/farming system after scale/pivot normalization and production optimization.
+
 ## Integration rules for the main chat
 
 1. A `READY / PHYSICAL` status means real files exist in `main`, not just source links.
