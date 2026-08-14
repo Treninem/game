@@ -1,18 +1,23 @@
-extends SceneTree
+extends Node
 
-func _initialize() -> void:
+func _ready() -> void:
     call_deferred("_run_test")
+
+func _fail(code: int, message: String) -> void:
+    var clean := message.replace("\r", " ").replace("\n", " ")
+    print("::error title=Boot smoke::%s" % clean)
+    push_error("Boot smoke: %s" % message)
+    get_tree().quit(code)
 
 func _run_test() -> void:
     var packed := load("res://scenes/stage1.tscn") as PackedScene
     if packed == null:
-        push_error("Boot smoke: stage scene missing")
-        quit(2)
+        _fail(2, "stage scene missing")
         return
     var scene := packed.instantiate()
-    root.add_child(scene)
-    for _i in range(12):
-        await process_frame
+    get_tree().root.add_child(scene)
+    for _i in range(18):
+        await get_tree().process_frame
 
     var player := scene.get_node_or_null("World/Player") as CharacterBody3D
     var camera := scene.get_node_or_null("World/Player/CameraPivot/Camera3D") as Camera3D
@@ -22,20 +27,16 @@ func _run_test() -> void:
     var gameplay_panels := scene.get_node_or_null("UI/GameplayPanels") as Control
 
     if player == null or camera == null or env_host == null or hud == null:
-        push_error("Boot smoke: mandatory world nodes missing")
-        quit(3)
+        _fail(3, "mandatory world nodes missing")
         return
     if camera.far < 900.0:
-        push_error("Boot smoke: camera view distance regressed")
-        quit(4)
+        _fail(4, "camera view distance regressed")
         return
     if pause_menu == null or gameplay_panels == null or pause_menu.visible or gameplay_panels.visible:
-        push_error("Boot smoke: blocking UI visible on gameplay start")
-        quit(5)
+        _fail(5, "blocking UI visible on gameplay start")
         return
     if not hud.visible:
-        push_error("Boot smoke: HUD is hidden")
-        quit(6)
+        _fail(6, "HUD is hidden")
         return
 
     var found_world_environment := false
@@ -44,9 +45,8 @@ func _run_test() -> void:
             found_world_environment = true
             break
     if not found_world_environment:
-        push_error("Boot smoke: world environment was not created")
-        quit(7)
+        _fail(7, "world environment was not created")
         return
 
     print("Boot smoke passed: world, camera, HUD and environment are stable")
-    quit(0)
+    get_tree().quit(0)
