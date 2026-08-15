@@ -1,4 +1,3 @@
-class_name WorldSettlements
 extends Node3D
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
