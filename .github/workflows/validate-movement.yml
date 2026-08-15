@@ -118,10 +118,10 @@ jobs:
           status=$?
           set -e
           printf '%s\n' "$output"
+          detail=$(printf '%s\n' "$output" | tail -n 48 | tr '\n' ' ' | sed 's/%/%25/g' | sed 's/\r//g')
           if [ "$status" -eq 124 ]; then
-            echo "::error title=Canonical regions smoke timeout::Regional geography logic did not settle within 30 seconds in the isolated smoke project"
+            echo "::error title=Canonical regions smoke timeout::$detail"
           elif [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Canonical regions raw Godot output::$detail"
           fi
           exit "$status"
