@@ -130,6 +130,22 @@ Physical asset commit: `4024d655ed3eac8b75278da124a5a97d84d643fa`
 - Batch failure file: `assets/staging/ui/UI_ADVANCED_DOWNLOAD_FAILURES.txt` — verified empty.
 - Style/integration selection guide: `assets/staging/ui/UI_SELECTION_GUIDE.md` — source-only guidance; not gameplay integration.
 
+### UI material textures and Cyrillic font reserve
+Physical asset commit: `11a31996388bf06dc8574334c0a4ae49cffba57a`
+
+- `assets/staging/ui/materials/dark_wood/` — dark seamless wood for RPG/menu frames.
+- `assets/staging/ui/materials/cedar/` — lighter seamless wood alternative.
+- `assets/staging/ui/materials/leather/` — seamless leather for inventory/equipment/journal styling.
+- `assets/staging/ui/materials/rusty_iron/` — seamless aged metal for industrial/workshop/technology-era UI.
+- `assets/staging/ui/materials/obsidian/` and `assets/staging/ui/materials/onyx/` — dark/magic/high-tier interface material sources.
+- `assets/staging/ui/materials/white_marble/` — palace/government/high-status UI source material.
+- `assets/staging/ui/materials/parchment_wallpaper/` — seamless parchment for map, journal, codex and quest backgrounds.
+- `assets/staging/ui/fonts/rubik/` — OFL Cyrillic-capable variable sans family for primary readable UI.
+- `assets/staging/ui/fonts/pt_serif/` — OFL Cyrillic-capable serif family for books, journals and lore.
+- `assets/staging/ui/fonts/old_standard_tt/` — OFL Cyrillic-capable historical serif family for maps, decrees and decorative headings.
+- Batch failure file: `assets/staging/ui/UI_MATERIAL_FONT_DOWNLOAD_FAILURES.txt` — verified empty.
+- Role guide: `assets/staging/ui/UI_MATERIAL_FONT_GUIDE.md` — source-only guidance; no runtime integration.
+
 ## Main integration-chat checklist
 
 Before adding a model to gameplay:
