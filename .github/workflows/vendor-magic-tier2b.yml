@@ -76,7 +76,7 @@ jobs:
             "https://opengameart.org/content/barrier-sprite-sheet" \
             "https://opengameart.org/sites/default/files/barrier000_0.png"
 
-          # Four scalable summoning circles; retain SVG and original AI source files.
+          # Four scalable summoning circles; retain real SVG/AI/PNG sources only.
           ZIP="$TMP/summoning_circles.zip"
           UNPACK="$TMP/summoning_circles"
           DST="$ROOT/oga_summoning_circles_vector"
@@ -90,11 +90,16 @@ jobs:
             rel="${f#$UNPACK/}"
             mkdir -p "$DST/$(dirname "$rel")"
             cp "$f" "$DST/$rel"
-          done < <(find "$UNPACK" -type f \( -iname '*.svg' -o -iname '*.ai' -o -iname '*.png' -o -iname '*.txt' -o -iname '*.md' \) -print0)
+          done < <(find "$UNPACK" -type f \
+            -not -path '*/__MACOSX/*' \
+            ! -name '._*' \
+            \( -iname '*.svg' -o -iname '*.ai' -o -iname '*.png' -o -iname '*.txt' -o -iname '*.md' \) -print0)
+          find "$DST" -type f -exec chmod 0644 {} +
           meta "$DST" "4 Summoning Circles" "Luke.RUSTLTD" \
             "https://opengameart.org/content/4-summoning-circles" \
             "https://opengameart.org/sites/default/files/summoning_circles.zip"
           test "$(find "$DST" -type f | wc -l)" -ge 6
+          test ! -d "$DST/__MACOSX"
 
           echo "Ritual/barrier tier contents:"
           for d in oga_fire_trap_rune oga_magic_barrier_gfroad oga_summoning_circles_vector; do
@@ -108,7 +113,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
+          git add -A \
             assets/vfx/third_party/oga_fire_trap_rune \
             assets/vfx/third_party/oga_magic_barrier_gfroad \
             assets/vfx/third_party/oga_summoning_circles_vector
@@ -116,7 +121,7 @@ jobs:
             echo "No ritual/barrier VFX changes."
             exit 0
           fi
-          git commit -m "assets(vfx): vendor CC0 ritual barrier rune effects"
+          git commit -m "assets(vfx): vendor clean CC0 ritual barrier rune effects"
           for attempt in $(seq 1 30); do
             git fetch origin main
             git rebase origin/main
