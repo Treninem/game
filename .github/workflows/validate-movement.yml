@@ -17,6 +17,8 @@ on:
       - "scripts/capital_perimeter.gd"
       - "scripts/city_district.gd"
       - "scripts/city_streamer_fast.gd"
+      - "scripts/door_interactable.gd"
+      - "scripts/enterable_building.gd"
       - "scripts/runtime_stability_guard.gd"
       - "scripts/hud_runtime.gd"
       - "scripts/settings_manager.gd"
@@ -26,9 +28,12 @@ on:
       - "scenes/stage1.tscn"
       - "tests/smoke_player_movement.gd"
       - "tests/smoke_player_movement.tscn"
+      - "tests/smoke_enterable_building.gd"
+      - "tests/smoke_enterable_building.tscn"
       - "tests/smoke_ui_and_save.gd"
       - "tests/smoke_ui_and_save.tscn"
       - "assets/shaders/**"
+      - "assets/staging/sourcechat_b47/**"
       - "assets/staging/nature/kenney_nature_kit/**"
       - ".github/workflows/validate-movement.yml"
   workflow_dispatch:
@@ -88,6 +93,20 @@ jobs:
           if [ "$status" -ne 0 ]; then
             detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Player smoke raw Godot output::$detail"
+          fi
+          exit "$status"
+      - name: Prove buildings are physically enterable
+        shell: bash
+        run: |
+          set +e
+          output=$(timeout 30s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_enterable_building.tscn 2>&1)
+          status=$?
+          printf '%s\n' "$output"
+          if [ "$status" -eq 124 ]; then
+            echo "::error title=Enterable building smoke timeout::Building physics did not settle within 30 seconds"
+          elif [ "$status" -ne 0 ]; then
+            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=Enterable building raw Godot output::$detail"
           fi
           exit "$status"
       - name: Prove UI geometry and save slots
