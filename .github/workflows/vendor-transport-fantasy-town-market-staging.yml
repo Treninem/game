@@ -1,0 +1,171 @@
+name: Vendor CC0 train fantasy town market car staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-transport-fantasy-town-market-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-transport-fantasy-town-market-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-transport-town-market:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout staging areas
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            .github/workflows
+            assets/staging/vehicles
+            assets/staging/city
+            assets/staging/medieval
+            assets/staging/interiors
+          sparse-checkout-cone-mode: true
+
+      - name: Download verified CC0 packs
+        shell: bash
+        run: |
+          set -u
+          TMP=".transport_town_market_tmp"
+          FAILS="$TMP/FAILED.txt"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" assets/staging/vehicles assets/staging/city assets/staging/medieval assets/staging/interiors
+          : > "$FAILS"
+
+          write_meta() {
+            local target="$1" key="$2" source="$3" download="$4" notes="$5" format="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Source page: $source
+          Download used: $download
+          License: Creative Commons CC0 1.0 Universal as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Canonical staged format: $format.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          Creative Commons Zero (CC0 1.0 Universal)
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md with staged files.
+          EOF
+          }
+
+          import_zip_canonical() {
+            local key="$1" url="$2" source="$3" target="$4" notes="$5"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            if ! curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"; then
+              echo "$key | download failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+            if ! unzip -q "$work/pack.zip" -d "$work/archive"; then
+              echo "$key | unzip failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+
+            local format=""
+            if find "$work/archive" -type f -iname '*.glb' -print -quit | grep -q .; then
+              format="GLB"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.glb' --include='*.GLB' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.gltf' -print -quit | grep -q .; then
+              format="glTF"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.fbx' -print -quit | grep -q .; then
+              format="FBX"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.fbx' --include='*.FBX' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.obj' -print -quit | grep -q .; then
+              format="OBJ"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            else
+              echo "$key | no supported 3D format found | $url" >> "$FAILS"
+              rm -rf "$target"
+              return 0
+            fi
+            write_meta "$target" "$key" "$source" "$url" "$notes" "$format"
+          }
+
+          import_zip_canonical "kenney_train_kit" \
+            "https://opengameart.org/sites/default/files/kenney_train-kit_0.zip" \
+            "https://opengameart.org/content/train-kit" \
+            "assets/staging/vehicles/kenney_train_kit" \
+            "Train, tram/trolley and rail/track models for railway stations and logistics infrastructure."
+
+          import_zip_canonical "kenney_car_kit_3_1" \
+            "https://opengameart.org/sites/default/files/kenney_car-kit_3.1.zip" \
+            "https://opengameart.org/content/car-kit" \
+            "assets/staging/vehicles/kenney_car_kit_3_1" \
+            "Modern vehicle family including sedan, van, ambulance, firetruck/police-related variants, separate wheels and debris."
+
+          import_zip_canonical "kenney_fantasy_town_2" \
+            "https://opengameart.org/sites/default/files/kenney_fantasy-town-kit_2.0.zip" \
+            "https://opengameart.org/content/fantasy-town-kit" \
+            "assets/staging/medieval/kenney_fantasy_town_2" \
+            "160+ modular fantasy/medieval town objects for coherent walls, buildings and districts."
+
+          import_zip_canonical "kenney_mini_market" \
+            "https://opengameart.org/sites/default/files/kenney_mini-market.zip" \
+            "https://opengameart.org/content/mini-market" \
+            "assets/staging/interiors/kenney_mini_market" \
+            "20 optimized supermarket/shop objects; source pack includes animated objects and variations."
+
+          cp "$FAILS" assets/staging/vehicles/TRANSPORT_TOWN_MARKET_DOWNLOAD_FAILURES.txt
+          cat > assets/staging/vehicles/TRANSPORT_EXPANSION_MANIFEST.md <<'EOF'
+          # Transport expansion source-only staging
+          CC0 train/rail and modern vehicle source packs. No gameplay vehicle physics or routes are added here.
+          EOF
+          rm -rf "$TMP"
+
+      - name: Commit with concurrent-push retry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/vehicles assets/staging/medieval assets/staging/interiors
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 train car fantasy town and market kits"
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              sleep $((attempt * 2))
+              continue
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "Could not push after retries" >&2
+          exit 1
