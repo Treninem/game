@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: impuls-promote-menu-music
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   promote:
@@ -21,6 +21,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/audio/music
 
       - name: Promote pinned CC0 title track into production audio
         shell: bash
@@ -37,7 +41,7 @@ jobs:
           fi
 
           rm -rf /tmp/impuls-menu-music
-          git clone --quiet --no-checkout "$SOURCE_REPO" /tmp/impuls-menu-music
+          git clone --quiet --filter=blob:none --no-checkout "$SOURCE_REPO" /tmp/impuls-menu-music
           git -C /tmp/impuls-menu-music checkout --quiet "$SOURCE_COMMIT" -- "$SOURCE_FILE" LICENSE
           test -s "/tmp/impuls-menu-music/$SOURCE_FILE"
           test -s /tmp/impuls-menu-music/LICENSE
