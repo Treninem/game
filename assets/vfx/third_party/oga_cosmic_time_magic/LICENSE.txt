@@ -1,0 +1,4 @@
+CC0 1.0 Universal
+
+This staged asset is sourced from an OpenGameArt submission marked CC0 / Creative Commons Zero.
+License reference: https://creativecommons.org/publicdomain/zero/1.0/

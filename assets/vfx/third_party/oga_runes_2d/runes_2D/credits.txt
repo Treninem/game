@@ -1,0 +1,24 @@
+This document is for informational purposes only.
+If redistributing this archive, please include this file so that others may benefit from 
+the information included herein.
+
+All included files are, or have previously been, released into the public domain - CC0
+No credit is required.
+
+Included images of runes scaled to 512, 256 and 128.
+
+The models and textures were derived from:
+https://opengameart.org/content/handpainted-style-rocks - CC0 - Rubberduck
+https://opengameart.org/content/molten-rock-like-thing - CC0 - Prime_8
+https://opengameart.org/content/cc0-rune-icons - CC0 - AntumDeluge
+
+The 3D version can be found here:
+https://opengameart.org/content/runes-3d
+
+Preview images:
+Blender 2.83.5
+
+
+
+
+
