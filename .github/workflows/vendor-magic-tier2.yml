@@ -1,0 +1,259 @@
+name: Vendor CC0 Magic Tier 2
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-magic-tier2.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-magic-tier2
+  cancel-in-progress: false
+
+jobs:
+  vendor-magic-tier2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout game repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and sanitize verified CC0 magic packs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ROOT="assets/vfx/third_party"
+          TMP=".vendor_magic_tier2_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$ROOT"
+
+          write_meta() {
+            local dst="$1"
+            local title="$2"
+            local author="$3"
+            local page="$4"
+            local source_file="$5"
+            cat > "$dst/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          This staged asset is sourced from an OpenGameArt submission marked CC0 / Creative Commons Zero.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+            cat > "$dst/SOURCE.md" <<EOF
+          # Source
+
+          Pack: $title
+          Author: $author
+          Original page: $page
+          Source file: $source_file
+          License: CC0 1.0 Universal
+
+          Import policy:
+          - staged asset-library content only; not connected to gameplay automatically;
+          - only production-useful visual/source files are retained from archives;
+          - executable/script payloads from archives are not imported;
+          - source and license metadata are preserved in this folder.
+          EOF
+          }
+
+          download_zip() {
+            local slug="$1"
+            local url="$2"
+            local title="$3"
+            local author="$4"
+            local page="$5"
+            local dst="$ROOT/$slug"
+            local zip="$TMP/$slug.zip"
+            local unpack="$TMP/$slug"
+
+            rm -rf "$dst" "$unpack"
+            mkdir -p "$dst" "$unpack"
+            curl -L --fail --retry 5 --retry-delay 2 -A 'Treninem-game-asset-vendor/1.0' "$url" -o "$zip"
+            unzip -q "$zip" -d "$unpack"
+
+            while IFS= read -r -d '' file; do
+              rel="${file#$unpack/}"
+              mkdir -p "$dst/$(dirname "$rel")"
+              cp "$file" "$dst/$rel"
+            done < <(find "$unpack" -type f \( \
+              -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o \
+              -iname '*.gif' -o -iname '*.svg' -o -iname '*.blend' -o -iname '*.obj' -o \
+              -iname '*.mtl' -o -iname '*.txt' -o -iname '*.md' \
+            \) -print0)
+
+            write_meta "$dst" "$title" "$author" "$page" "$url"
+            test "$(find "$dst" -type f | wc -l)" -ge 3
+          }
+
+          download_file() {
+            local slug="$1"
+            local url="$2"
+            local filename="$3"
+            local title="$4"
+            local author="$5"
+            local page="$6"
+            local dst="$ROOT/$slug"
+            rm -rf "$dst"
+            mkdir -p "$dst"
+            curl -L --fail --retry 5 --retry-delay 2 -A 'Treninem-game-asset-vendor/1.0' "$url" -o "$dst/$filename"
+            test -s "$dst/$filename"
+            write_meta "$dst" "$title" "$author" "$page" "$url"
+          }
+
+          download_zip \
+            "oga_cosmic_time_magic" \
+            "https://opengameart.org/sites/default/files/Cosmic%20Time%20-%20Magic%20Effect.zip" \
+            "Cosmic Time - Magic Effect" "Cethiel" \
+            "https://opengameart.org/content/cosmic-time-magic-effect"
+
+          download_zip \
+            "oga_pure_projectile_magic" \
+            "https://opengameart.org/sites/default/files/Pure%20Projectile%20Effect.zip" \
+            "Pure Projectile - Magic Effect" "Cethiel" \
+            "https://opengameart.org/content/pure-projectile-magic-effect"
+
+          download_zip \
+            "oga_fire_wrath_magic" \
+            "https://opengameart.org/sites/default/files/Fire%20Wrath%20-%20Magic%20Effect.zip" \
+            "Fire Wrath - Magic Effect" "Cethiel" \
+            "https://opengameart.org/content/fire-wrath-magic-effect"
+
+          download_zip \
+            "oga_nature_magic" \
+            "https://opengameart.org/sites/default/files/Nature%20Magic%20Effect.zip" \
+            "Nature - Magic Effect" "Cethiel" \
+            "https://opengameart.org/content/nature-magic-effect"
+
+          download_zip \
+            "oga_water_magic" \
+            "https://opengameart.org/sites/default/files/Water_Effect.zip" \
+            "Water Magic Effect" "Cethiel" \
+            "https://opengameart.org/content/water-magic-effect"
+
+          download_zip \
+            "oga_angel_wings_magic" \
+            "https://opengameart.org/sites/default/files/Wings_Effect.zip" \
+            "Angel Wings Effect" "Cethiel" \
+            "https://opengameart.org/content/angel-wings-effect"
+
+          download_zip \
+            "oga_music_magic" \
+            "https://opengameart.org/sites/default/files/Everything_1.zip" \
+            "Music - Magic Effect" "Cethiel" \
+            "https://opengameart.org/content/music-magic-effect"
+
+          download_zip \
+            "oga_blood_magic" \
+            "https://opengameart.org/sites/default/files/Blood%20-%20Magic%20Effect.zip" \
+            "Blood - Magic Effect" "Cethiel" \
+            "https://opengameart.org/content/blood-magic-effect"
+
+          download_zip \
+            "oga_fire_circle_fx" \
+            "https://opengameart.org/sites/default/files/Fire_Circles.zip" \
+            "Fire Circle FX" "Matriax" \
+            "https://opengameart.org/content/fire-circle-fx"
+
+          download_zip \
+            "oga_cc0_rune_icons" \
+            "https://opengameart.org/sites/default/files/rune-ocal_20201223.zip" \
+            "CC0 Rune Icons" "AntumDeluge" \
+            "https://opengameart.org/content/cc0-rune-icons"
+
+          download_zip \
+            "oga_runes_2d" \
+            "https://opengameart.org/sites/default/files/runes_2d.zip" \
+            "Runes 2D" "Paul Wortmann" \
+            "https://opengameart.org/content/runes-2d"
+
+          download_file \
+            "oga_teleport_circle" \
+            "https://opengameart.org/sites/default/files/teleportCircle_0.png" \
+            "teleportCircle.png" \
+            "Teleport Circle - Sprite Sheet" "gfroad" \
+            "https://opengameart.org/content/teleport-circle-sprite-sheet"
+
+          download_file \
+            "oga_teleporter_volumetric_blue" \
+            "https://opengameart.org/sites/default/files/teleporter-effect-blue_1.png" \
+            "teleporter-effect-blue.png" \
+            "Teleporter Effect - Blue" "rubberduck" \
+            "https://opengameart.org/content/teleporter-effect"
+
+          download_file \
+            "oga_teleporter_volumetric_edited" \
+            "https://opengameart.org/sites/default/files/teleporter-effect-edited_1.png" \
+            "teleporter-effect-edited.png" \
+            "Teleporter Effect - Edited" "rubberduck" \
+            "https://opengameart.org/content/teleporter-effect"
+
+          echo "Tier 2 folders:"
+          for d in \
+            oga_cosmic_time_magic oga_pure_projectile_magic oga_fire_wrath_magic \
+            oga_nature_magic oga_water_magic oga_angel_wings_magic oga_music_magic \
+            oga_blood_magic oga_fire_circle_fx oga_cc0_rune_icons oga_runes_2d \
+            oga_teleport_circle oga_teleporter_volumetric_blue oga_teleporter_volumetric_edited; do
+            printf '%-38s %s files\n' "$d" "$(find "$ROOT/$d" -type f | wc -l)"
+          done
+
+          TOTAL=$(find \
+            "$ROOT/oga_cosmic_time_magic" "$ROOT/oga_pure_projectile_magic" \
+            "$ROOT/oga_fire_wrath_magic" "$ROOT/oga_nature_magic" \
+            "$ROOT/oga_water_magic" "$ROOT/oga_angel_wings_magic" \
+            "$ROOT/oga_music_magic" "$ROOT/oga_blood_magic" \
+            "$ROOT/oga_fire_circle_fx" "$ROOT/oga_cc0_rune_icons" \
+            "$ROOT/oga_runes_2d" "$ROOT/oga_teleport_circle" \
+            "$ROOT/oga_teleporter_volumetric_blue" "$ROOT/oga_teleporter_volumetric_edited" \
+            -type f | wc -l)
+          echo "Total staged tier-2 files: $TOTAL"
+          test "$TOTAL" -ge 40
+
+          rm -rf "$TMP"
+
+      - name: Commit staged magic tier 2 safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            assets/vfx/third_party/oga_cosmic_time_magic \
+            assets/vfx/third_party/oga_pure_projectile_magic \
+            assets/vfx/third_party/oga_fire_wrath_magic \
+            assets/vfx/third_party/oga_nature_magic \
+            assets/vfx/third_party/oga_water_magic \
+            assets/vfx/third_party/oga_angel_wings_magic \
+            assets/vfx/third_party/oga_music_magic \
+            assets/vfx/third_party/oga_blood_magic \
+            assets/vfx/third_party/oga_fire_circle_fx \
+            assets/vfx/third_party/oga_cc0_rune_icons \
+            assets/vfx/third_party/oga_runes_2d \
+            assets/vfx/third_party/oga_teleport_circle \
+            assets/vfx/third_party/oga_teleporter_volumetric_blue \
+            assets/vfx/third_party/oga_teleporter_volumetric_edited
+
+          if git diff --cached --quiet; then
+            echo "No tier-2 magic changes to commit."
+            exit 0
+          fi
+
+          git commit -m "assets(vfx): vendor expanded CC0 magic tier 2"
+
+          for attempt in $(seq 1 30); do
+            echo "Safe push attempt $attempt/30"
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "Magic tier 2 pushed successfully."
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "Unable to push magic tier 2 after safe retries."
+          exit 1
