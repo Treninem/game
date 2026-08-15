@@ -1,0 +1,168 @@
+name: Vendor canonical Kenney world survival food furniture
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-kenney-world-survival-food-furniture.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-kenney-world-survival-food-furniture
+  cancel-in-progress: false
+
+jobs:
+  vendor-world-survival-food-furniture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout staging areas
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            .github/workflows
+            assets/staging/nature
+            assets/staging/items
+            assets/staging/food
+            assets/staging/interiors
+          sparse-checkout-cone-mode: true
+
+      - name: Download canonical CC0 packs
+        shell: bash
+        run: |
+          set -u
+          TMP=".kenney_world_tmp"
+          FAILS="$TMP/FAILED.txt"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" assets/staging/nature assets/staging/items assets/staging/food assets/staging/interiors
+          : > "$FAILS"
+
+          write_meta() {
+            local target="$1" key="$2" source="$3" download="$4" notes="$5" format="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Source page: $source
+          Download used: $download
+          License: Creative Commons CC0 as stated by Kenney.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Canonical staged format: $format.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          Creative Commons Zero (CC0)
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md with staged files.
+          EOF
+          }
+
+          import_zip_canonical() {
+            local key="$1" url="$2" source="$3" target="$4" notes="$5"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            if ! curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 900 -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"; then
+              echo "$key | download failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+            if ! unzip -q "$work/pack.zip" -d "$work/archive"; then
+              echo "$key | unzip failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+
+            local format=""
+            if find "$work/archive" -type f -iname '*.glb' -print -quit | grep -q .; then
+              format="GLB"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.glb' --include='*.GLB' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.gltf' -print -quit | grep -q .; then
+              format="glTF"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.fbx' -print -quit | grep -q .; then
+              format="FBX"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.fbx' --include='*.FBX' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            else
+              echo "$key | no supported 3D format found | $url" >> "$FAILS"
+              rm -rf "$target"
+              return 0
+            fi
+            write_meta "$target" "$key" "$source" "$url" "$notes" "$format"
+          }
+
+          import_zip_canonical "kenney_nature_kit" \
+            "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip" \
+            "https://kenney.nl/assets/nature-kit" \
+            "assets/staging/nature/kenney_nature_kit" \
+            "330 3D nature assets covering trees, rocks and foliage for coherent biome population."
+
+          import_zip_canonical "kenney_survival_kit" \
+            "https://kenney.nl/media/pages/assets/survival-kit/4065a8185b-1712149243/kenney_survival-kit.zip" \
+            "https://kenney.nl/assets/survival-kit" \
+            "assets/staging/items/kenney_survival_kit" \
+            "80 survival/nature objects with animation support in the source pack."
+
+          import_zip_canonical "kenney_food_kit" \
+            "https://kenney.nl/media/pages/assets/food-kit/83086fa91c-1719418518/kenney_food-kit.zip" \
+            "https://kenney.nl/assets/food-kit" \
+            "assets/staging/food/kenney_food_kit" \
+            "200 coherent 3D food and kitchen assets for shops, homes, inventories and cooking scenes."
+
+          import_zip_canonical "kenney_furniture_kit" \
+            "https://kenney.nl/media/pages/assets/furniture-kit/440e0608a4-1677580847/kenney_furniture-kit.zip" \
+            "https://kenney.nl/assets/furniture-kit" \
+            "assets/staging/interiors/kenney_furniture_kit" \
+            "140 coherent 3D interior objects including tables, chairs and beds."
+
+          cp "$FAILS" assets/staging/items/KENNEY_WORLD_DOWNLOAD_FAILURES.txt
+          cat > assets/staging/nature/NATURE_CANONICAL_MANIFEST.md <<'EOF'
+          # Nature canonical staging
+          Large CC0 nature collection staged in one preferred 3D format only.
+          EOF
+          cat > assets/staging/items/SURVIVAL_CANONICAL_MANIFEST.md <<'EOF'
+          # Survival canonical staging
+          CC0 survival props staged as source-only assets for later integration.
+          EOF
+          rm -rf "$TMP"
+
+      - name: Commit with concurrent-push retry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/nature assets/staging/items assets/staging/food assets/staging/interiors
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add canonical CC0 nature survival food and furniture kits"
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              sleep $((attempt * 2))
+              continue
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "Could not push after retries" >&2
+          exit 1
