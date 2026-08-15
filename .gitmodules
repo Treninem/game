@@ -52,3 +52,12 @@
 [submodule "assets/source_packs/kaykit_halloween_bits"]
 	path = assets/source_packs/kaykit_halloween_bits
 	url = https://github.com/KayKit-Game-Assets/KayKit-Halloween-Bits-1.0.git
+[submodule "assets/source_packs/kaykit_prototype_bits"]
+	path = assets/source_packs/kaykit_prototype_bits
+	url = https://github.com/KayKit-Game-Assets/KayKit-Prototype-Bits-1.0.git
+[submodule "assets/source_packs/quaternius_cc0_stage"]
+	path = assets/source_packs/quaternius_cc0_stage
+	url = https://github.com/weftspun/quaternius-stage.git
+[submodule "assets/source_packs/cc0tree"]
+	path = assets/source_packs/cc0tree
+	url = https://github.com/SkywolfGameStudios/CC0Tree.git
