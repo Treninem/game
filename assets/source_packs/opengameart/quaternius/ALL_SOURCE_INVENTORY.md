@@ -3,6 +3,7 @@
 | File | Bytes | SHA256 |
 |---|---:|---|
 | `animal_pack_vol2/Animal_Pack_Vol2_by_Quaternius.zip` | 2069972 | `6d8f6789d65dbdb352ebad98a4209f26b41b384e87d81bc05e9ca76139db1248` |
+| `animated_characters/ultimate_animated_character_pack_by_quaternius.zip` | 48430012 | `0295062cbc72da52ee804f39ac38694901a40458011f9b2638fc7ef13ed509da` |
 | `animated_monsters/animated_monster_pack_by_quaternius.zip` | 1408836 | `acab2bddc5939f9b1b92c930507d73e0fd80037a39631cf2049bb6cfcaec1acd` |
 | `cars/car_pack.zip` | 911283 | `40b1f046227d1d7d3bc208e6dffb36803af71fa62476e371019d76860f08ce07` |
 | `crops/nature_crops_pack_by_quaternius.zip` | 13368975 | `48de7f1e092750a3832501e79d1463abeec8218c76090fc4b81fa8dfccacdb52` |
