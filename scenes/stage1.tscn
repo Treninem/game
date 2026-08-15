@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://scripts/settlement_interior_visuals.gd" id="19"]
 [ext_resource type="Script" path="res://scripts/settlement_public_works.gd" id="20"]
 [ext_resource type="Script" path="res://scripts/settlement_civic_spaces.gd" id="21"]
+[ext_resource type="Script" path="res://scripts/world_audio.gd" id="22"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -41,6 +42,9 @@ shadow_enabled = true
 
 [node name="WorldStreamer" type="Node3D" parent="World"]
 script = ExtResource("9")
+
+[node name="WorldAudio" type="Node3D" parent="World"]
+script = ExtResource("22")
 
 [node name="Settlements" type="Node3D" parent="World"]
 script = ExtResource("17")

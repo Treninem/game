@@ -1,0 +1,5 @@
+CC0 1.0 Universal
+
+The source page identifies these audio files as CC0 / public-domain dedication.
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+See SOURCE.md beside these production files for provenance and promotion history.
