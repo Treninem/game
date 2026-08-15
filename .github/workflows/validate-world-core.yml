@@ -30,6 +30,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The staging/source-pack archive is research input, never runtime content.
+          # Partial + sparse checkout keeps this mandatory gate fast even as the
+          # asset library grows, while retaining every directory used by the game.
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/audio
+            assets/branding
+            assets/production
+            assets/registry
+            assets/shaders
+            assets/ui
+            assets/vfx
+            scenes
+            scripts
+            story
+            tests
 
       - name: Install Godot 4.7.1
         shell: bash
