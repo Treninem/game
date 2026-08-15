@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/smoke_settlement_gate_network.gd" id="1"]
+
+[node name="SmokeSettlementGateNetwork" type="Node"]
+script = ExtResource("1")
