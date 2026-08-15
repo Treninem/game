@@ -1,0 +1,79 @@
+name: Import verified real Quaternius world source packs
+
+on:
+  push:
+    paths: ['.github/workflows/import_real_quaternius_world_batch.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-real-quaternius-world-source-packs
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sparse checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/import_real_quaternius_world_batch.yml
+            assets/source_packs/opengameart/quaternius
+          sparse-checkout-cone-mode: false
+
+      - name: Download and validate verified CC0 packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='assets/source_packs/opengameart/quaternius'
+          mkdir -p "$ROOT"/{crops,medieval_village,modular_buildings,food,modular_dungeon,survival,nature}
+          getzip(){ url="$1"; out="$2"; [ -s "$out" ] || curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-AssetImporter/5.1' "$url" -o "$out"; test -s "$out"; unzip -tqq "$out" >/dev/null; head -c 512 "$out" | grep -Eiq '<!doctype html|<html' && { echo "HTML instead of ZIP: $out"; exit 1; } || true; }
+          getzip 'https://opengameart.org/sites/default/files/nature_crops_pack_by_quaternius.zip' "$ROOT/crops/nature_crops_pack_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/medieval_village_pack_-_dec_2020.zip' "$ROOT/medieval_village/medieval_village_pack_dec_2020.zip"
+          getzip 'https://opengameart.org/sites/default/files/ultimate_textured_building_pack_by_quaternius.zip' "$ROOT/modular_buildings/ultimate_textured_building_pack_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/ultimate_food_pack_by_quaternius.zip' "$ROOT/food/ultimate_food_pack_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/Modular%20Dungeon%20by%20%40Quaternius.zip' "$ROOT/modular_dungeon/modular_dungeon_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/survival_pack_-_sept_2020.zip' "$ROOT/survival/survival_pack_sept_2020.zip"
+          getzip 'https://opengameart.org/sites/default/files/ultimate_nature_pack_by_quaternius.zip' "$ROOT/nature/ultimate_nature_pack_by_quaternius.zip"
+
+          cat > "$ROOT/LICENSE.txt" <<'EOF'
+          License: CC0 1.0 / public-domain dedication.
+          Author: Quaternius.
+          Source mirror: OpenGameArt.
+          Provenance retained voluntarily.
+          EOF
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-crops-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: 100+ crops, 5 growth stages; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/crops/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-medieval-village-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: medieval village buildings and props; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/medieval_village/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-buildings-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: modular textured buildings with atlas palettes; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/modular_buildings/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/low-poly-food-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: 100+ food and consumable models; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/food/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-modular-dungeon' 'License: CC0' 'Author: Quaternius' 'Coverage: modular dungeon pieces and props; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/modular_dungeon/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-survival-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: 50+ survival/camping/tool assets; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/survival/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/low-poly-nature-pack-1' 'License: CC0' 'Author: Quaternius' 'Coverage: 150 trees, rocks, flowers and forest models; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/nature/SOURCE.md"
+          find "$ROOT" -type f -name '*.zip' -print0 | sort -z | xargs -0 sha256sum > "$ROOT/WORLD_SOURCE_SHA256SUMS.txt"
+          { echo '# Quaternius world source inventory'; echo; echo '| File | Bytes | SHA256 |'; echo '|---|---:|---|'; while IFS= read -r -d '' f; do printf '| `%s` | %s | `%s` |\n' "${f#$ROOT/}" "$(stat -c %s "$f")" "$(sha256sum "$f"|awk '{print $1}')"; done < <(find "$ROOT" -type f -name '*.zip' -print0 | sort -z); } > "$ROOT/WORLD_SOURCE_INVENTORY.md"
+          rm -rf /tmp/qworld && mkdir -p /tmp/qworld && cp -a "$ROOT"/. /tmp/qworld/
+
+      - name: Commit safely over moving main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          ROOT='assets/source_packs/opengameart/quaternius'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main
+            git reset --hard FETCH_HEAD
+            mkdir -p "$ROOT"
+            cp -a /tmp/qworld/. "$ROOT/"
+            git add "$ROOT"
+            git diff --cached --quiet && exit 0
+            git commit -m 'assets: vendor verified Quaternius world source packs'
+            git push origin HEAD:main && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
