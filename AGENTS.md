@@ -1,5 +1,14 @@
 # ImPuls development instructions
 
+## Integration ownership and parallel-chat safety
+`Treninem/game` is the canonical source of truth for the game. The designated main integration chat owns live runtime integration and release readiness.
+
+Unless the user explicitly delegates a runtime task elsewhere, parallel specialist/source chats MUST NOT edit `scripts/**`, `scenes/**`, `tests/**`, `project.godot`, `export_presets.cfg`, `installer/**`, or runtime/build/release workflows under `.github/workflows/**`. Story-only chats may edit `story/**`. Source-only asset chats may edit staging, registry, license and source-pack material as described below.
+
+Before every live integration write, re-read the current `main` head and the exact target file so work from another chat is not overwritten. Keep commits narrow, never force-push/rewrite shared history, and resolve newly arrived changes before continuing.
+
+A stable installer/release MUST NOT be published merely because the project parses. Mandatory release gates are a green `Validate World Core`, green player-movement validation, and the release workflow's own bounded gameplay/UI/export/installer checks. Never remove, weaken, skip or turn a failing smoke test into a warning just to obtain a green build. Fix the underlying regression instead.
+
 ## Shared assets
 All agents/chats working on this repository MUST read `assets/ASSET_PACKS.md` before creating or sourcing visual assets and should also inspect relevant detailed registries under `assets/registry/` before duplicating work.
 
@@ -34,5 +43,3 @@ When adding a third-party pack:
 - check the batch failure manifest before claiming the pack is `STAGED_PHYSICAL`;
 - if working in source-only staging mode, record the recommended integration target but do not integrate it yourself;
 - if working in the main integration chat, integrate selected useful assets after review rather than leaving production copies unused.
-
-The repository `Treninem/game` is the canonical source of truth for this game.
