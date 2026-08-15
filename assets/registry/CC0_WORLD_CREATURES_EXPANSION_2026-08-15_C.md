@@ -50,7 +50,19 @@ Contains 64+ optimized low-poly 3D models in OBJ/FBX/glTF. Use only for prototyp
 - Quaternius Animated Fish Pack — 7 animated aquatic species; official tags include shark, whale, dolphin, clownfish and manta. FBX/OBJ/Blend, CC0.
 - Quaternius Animated Cute Fish Pack — 52 models, with 50+ animated fish plus rods/lures; useful for rivers, lakes, sea and fishing systems. FBX/OBJ/Blend, CC0.
 
-Not yet covered strongly enough by these verified packs: bear, wild boar, rabbit/hare, goose, duck, pigeon and some local forest birds. Continue searching before the main chat invents placeholders for those species.
+### Verified CC0 fallback species sources
+
+Use these only when the coherent staged Quaternius/KayKit art direction does not provide the needed species. Main chat should normalize scale/materials and visually check style before integration.
+
+- OpenGameArt `Rabbit` by CDmir/TinyWorlds — low-poly, rigged and animated rabbit, diffuse + normal map, Blender and FBX archive, CC0. Strong fallback for rabbit/hare population.
+- OpenGameArt `Low poly 3D Pigeon model (rigged + animated)` by mujtaba-io — low-poly rigged/animated pigeon, Blender source, untextured, CC0. Strong fallback for city/village pigeon after material work.
+- OpenGameArt `Steamer Duck 3D` by drummyfish — low-poly duck, rigged with shape keys, Blender + OBJ, CC0. Fallback for ducks.
+- Plewr `3D Goose` — free low-poly goose, including a rigged Blender version, CC0; author explicitly publishes CC0 3D models. Fallback for geese.
+- OpenGameArt `White Bear (Low poly)` by STKRudy85 — textured static low-poly bear, not rigged, CC0. Use only as a visual/base-mesh fallback unless main chat supplies animation/rigging.
+- OpenGameArt `Animal bestiary` by rudy85 — CC0 3D animal collection; useful as an additional audit source when a species remains missing.
+- Mordrag `Low Poly Animals` — CC0 Blender animal bundle tagged with rabbit, sheep, wolf and elephant; source-only fallback, visually vet before use.
+
+Still weak/needs a better coherent animated source: wild boar, goose/duck/pigeon in the same style as the main animal family, and broader local forest birds. Continue searching before creating custom placeholders.
 
 ## Verified farms / settlements / world props
 
