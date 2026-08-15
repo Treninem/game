@@ -1,0 +1,192 @@
+name: Stage UI materials and Cyrillic fonts
+
+on:
+  push:
+    paths:
+      - .github/workflows/stage-ui-materials-fonts.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ui-material-font-staging
+  cancel-in-progress: true
+
+jobs:
+  stage-ui-materials-fonts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            assets/staging/ui
+            .github/workflows/stage-ui-materials-fonts.yml
+          sparse-checkout-cone-mode: false
+
+      - name: Download UI material textures and fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/ui"
+          MAT="$ROOT/materials"
+          FONTS="$ROOT/fonts"
+          mkdir -p "$MAT" "$FONTS"
+          FAILS="$ROOT/UI_MATERIAL_FONT_DOWNLOAD_FAILURES.txt"
+          : > "$FAILS"
+
+          stage_file() {
+            local dir="$1" filename="$2" direct="$3" title="$4" page="$5" license="$6" purpose="$7"
+            rm -rf "$dir" && mkdir -p "$dir"
+            if curl --retry 3 --retry-delay 2 -fL "$direct" -o "$dir/$filename"; then
+              printf '# %s\n\n- Status: STAGED_PHYSICAL\n- Source page: %s\n- Direct download: %s\n- License: %s\n- Intended use: %s\n- Note: Source-only staging; the main integration chat must choose and normalize production assets.\n' \
+                "$title" "$page" "$direct" "$license" "$purpose" > "$dir/SOURCE.md"
+              printf '%s\nSee SOURCE.md for source details.\n' "$license" > "$dir/LICENSE.txt"
+            else
+              echo "$dir/$filename | $direct" >> "$FAILS"
+              rm -rf "$dir"
+            fi
+          }
+
+          stage_font_family() {
+            local slug="$1" title="$2" source_dir="$3" purpose="$4"
+            shift 4
+            local dir="$FONTS/$slug"
+            rm -rf "$dir" && mkdir -p "$dir"
+            local ok=1 file url
+            while [ "$#" -gt 0 ]; do
+              file="$1"; url="$2"; shift 2
+              if ! curl --retry 3 --retry-delay 2 -fL "$url" -o "$dir/$file"; then
+                echo "$slug/$file | $url" >> "$FAILS"
+                ok=0
+              fi
+            done
+            if [ "$ok" -eq 1 ]; then
+              printf '# %s\n\n- Status: STAGED_PHYSICAL\n- Source: Google Fonts repository (%s)\n- License: SIL Open Font License 1.1\n- Cyrillic: verified from source metadata/project documentation.\n- Intended use: %s\n- Note: Source-only staging; main integration chat chooses production font roles.\n' \
+                "$title" "$source_dir" "$purpose" > "$dir/SOURCE.md"
+            fi
+          }
+
+          stage_file "$MAT/dark_wood" "Holz Dark Seamless.jpg" \
+            "https://opengameart.org/sites/default/files/Holz%20Dark%20Seamless.jpg" \
+            "Dark Wood Seamless Handcrafted Texture" \
+            "https://opengameart.org/content/dark-wood-seamless-handcrafted-texture" \
+            "CC0" \
+            "Dark fantasy/RPG menu panels, wooden frames, inventory and crafting UI."
+
+          stage_file "$MAT/cedar" "cedar.png" \
+            "https://opengameart.org/sites/default/files/cedar_0.png" \
+            "Simple Textures - Cedar" \
+            "https://opengameart.org/content/simple-textures" \
+            "CC0" \
+            "Lighter wood alternative for crafting, building and neutral panels."
+
+          stage_file "$MAT/leather" "leather.png" \
+            "https://opengameart.org/sites/default/files/leather_1.png" \
+            "Simple Textures - Leather" \
+            "https://opengameart.org/content/simple-textures" \
+            "CC0" \
+            "Inventory, equipment, journal covers and survival-themed panels."
+
+          stage_file "$MAT/rusty_iron" "rustyiron.png" \
+            "https://opengameart.org/sites/default/files/rustyiron_0.png" \
+            "Simple Textures - Rusty Iron" \
+            "https://opengameart.org/content/simple-textures" \
+            "CC0" \
+            "Industrial, workshop, damaged equipment and technology-era UI frames."
+
+          stage_file "$MAT/obsidian" "obsidian.png" \
+            "https://opengameart.org/sites/default/files/obsidian_4.png" \
+            "Simple Textures - Obsidian" \
+            "https://opengameart.org/content/simple-textures" \
+            "CC0" \
+            "Magic, dark-fantasy and high-tier interface accents."
+
+          stage_file "$MAT/onyx" "onyx.png" \
+            "https://opengameart.org/sites/default/files/onyx_2.png" \
+            "Simple Textures - Onyx" \
+            "https://opengameart.org/content/simple-textures" \
+            "CC0" \
+            "Premium/dark menu accents, title frames and rare-item presentation."
+
+          stage_file "$MAT/white_marble" "whitemarble.png" \
+            "https://opengameart.org/sites/default/files/whitemarble_0.png" \
+            "Simple Textures - White Marble" \
+            "https://opengameart.org/content/simple-textures" \
+            "CC0" \
+            "Palace, government, imperial and high-status UI panels."
+
+          stage_file "$MAT/parchment_wallpaper" "ParchmentWallpaper.png" \
+            "https://opengameart.org/sites/default/files/ParchmentWallpaper.png" \
+            "Seamless Parchment Wallpaper" \
+            "https://opengameart.org/content/seamless-assorted-textures" \
+            "CC0" \
+            "World map, journal, codex, quest and document backgrounds."
+
+          stage_font_family "rubik" "Rubik" "google/fonts/ofl/rubik" \
+            "Primary readable UI font for Russian/Latin menus, HUD labels, tooltips and settings." \
+            "Rubik[wght].ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/Rubik%5Bwght%5D.ttf" \
+            "Rubik-Italic[wght].ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf" \
+            "OFL.txt" "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/OFL.txt" \
+            "METADATA.pb" "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/METADATA.pb"
+
+          stage_font_family "pt_serif" "PT Serif" "google/fonts/ofl/ptserif" \
+            "Readable serif for Russian/Latin books, journals, letters, lore and long-form quest text." \
+            "PT_Serif-Web-Regular.ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/ptserif/PT_Serif-Web-Regular.ttf" \
+            "PT_Serif-Web-Bold.ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/ptserif/PT_Serif-Web-Bold.ttf" \
+            "PT_Serif-Web-Italic.ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/ptserif/PT_Serif-Web-Italic.ttf" \
+            "OFL.txt" "https://raw.githubusercontent.com/google/fonts/main/ofl/ptserif/OFL.txt" \
+            "METADATA.pb" "https://raw.githubusercontent.com/google/fonts/main/ofl/ptserif/METADATA.pb"
+
+          stage_font_family "old_standard_tt" "Old Standard TT" "google/fonts/ofl/oldstandardtt" \
+            "Historical/decorative Russian/Latin headings for maps, decrees, books and old-era UI." \
+            "OldStandard-Regular.ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/oldstandardtt/OldStandard-Regular.ttf" \
+            "OldStandard-Bold.ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/oldstandardtt/OldStandard-Bold.ttf" \
+            "OldStandard-Italic.ttf" "https://raw.githubusercontent.com/google/fonts/main/ofl/oldstandardtt/OldStandard-Italic.ttf" \
+            "OFL.txt" "https://raw.githubusercontent.com/google/fonts/main/ofl/oldstandardtt/OFL.txt" \
+            "METADATA.pb" "https://raw.githubusercontent.com/google/fonts/main/ofl/oldstandardtt/METADATA.pb"
+
+          printf '%s\n' \
+            '# UI materials and fonts' \
+            '' \
+            'Source-only staging for interface styling.' \
+            '' \
+            'Material roles:' \
+            '- dark_wood / cedar: wooden frames, crafting, settlement and neutral RPG panels.' \
+            '- leather: inventory, equipment, survival and journal covers.' \
+            '- rusty_iron: workshop, industry and technology-era screens.' \
+            '- obsidian / onyx: magic, rare/premium and dark UI accents.' \
+            '- white_marble: palace, government and high-status screens.' \
+            '- parchment_wallpaper: maps, journals, quests and codex backgrounds.' \
+            '' \
+            'Font roles:' \
+            '- Rubik: preferred primary readable UI font.' \
+            '- PT Serif: preferred long-form book/journal/lore font.' \
+            '- Old Standard TT: decorative/historical headings and documents.' \
+            '' \
+            'All three font families have verified Cyrillic coverage and OFL source files staged alongside them.' \
+            > "$ROOT/UI_MATERIAL_FONT_GUIDE.md"
+
+      - name: Commit material and font staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain -- assets/staging/ui)" ]; then
+            echo "No UI material/font changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/ui
+          git commit -m "assets(staging): add UI material textures and Cyrillic fonts"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort || true
+            sleep $((attempt * 2))
+          done
+          exit 1
