@@ -1,0 +1,54 @@
+name: Validate source-pack integrity
+on:
+  push:
+    paths: ['assets/source_packs/**', '.github/workflows/validate_source_packs.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: validate-source-packs-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            assets/source_packs
+            .github/workflows/validate_source_packs.yml
+          sparse-checkout-cone-mode: false
+      - name: Validate source-only asset storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='assets/source_packs'; [ -d "$ROOT" ] || exit 0
+          sudo apt-get update -qq && sudo apt-get install -y -qq p7zip-full >/dev/null
+          bad=0; hashes=$(mktemp); checked=0
+          if find "$ROOT" -type f -size 0 -print -quit | grep -q .; then
+            find "$ROOT" -type f -size 0 -print | sed 's/^/ERROR zero-byte: /'; bad=1
+          fi
+          while IFS= read -r -d '' f; do
+            checked=$((checked+1))
+            if head -c 1024 "$f" 2>/dev/null | grep -Eaiq '<!doctype html|<html|<body'; then echo "ERROR HTML masquerading as asset: $f"; bad=1; fi
+            case "${f,,}" in
+              *.zip) unzip -tqq "$f" >/dev/null || { echo "ERROR broken ZIP: $f"; bad=1; } ;;
+              *.7z) 7z t -bd "$f" >/dev/null || { echo "ERROR broken 7z: $f"; bad=1; } ;;
+            esac
+            sha256sum "$f" >> "$hashes"
+            d=$(dirname "$f")
+            if [ ! -f "$d/SOURCE.md" ] && [ ! -f "$d/../SOURCE.md" ] && [ ! -f "$d/../../SOURCE.md" ]; then echo "ERROR missing SOURCE.md near $f"; bad=1; fi
+          done < <(find "$ROOT" -type f \( -iname '*.zip' -o -iname '*.7z' -o -iname '*.blend' -o -iname '*.fbx' -o -iname '*.obj' -o -iname '*.glb' -o -iname '*.gltf' \) -print0)
+          echo '## Source-pack validation' >> "$GITHUB_STEP_SUMMARY"
+          echo "Binary source files checked: $checked" >> "$GITHUB_STEP_SUMMARY"
+          dups=$(awk '{print $1}' "$hashes" | sort | uniq -d || true)
+          if [ -n "$dups" ]; then
+            echo '### Duplicate payloads' >> "$GITHUB_STEP_SUMMARY"
+            while read -r h; do [ -z "$h" ] || grep "^$h " "$hashes" >> "$GITHUB_STEP_SUMMARY"; done <<< "$dups"
+          else
+            echo 'No duplicate binary payloads detected.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          [ "$bad" -eq 0 ] || exit 1
+          echo 'Source-pack integrity validation PASSED.'
