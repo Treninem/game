@@ -1,0 +1,62 @@
+name: Import Quaternius animated character source pack
+on:
+  push:
+    paths: ['.github/workflows/import_real_quaternius_character_pack.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: import-quaternius-character-pack
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/import_real_quaternius_character_pack.yml
+            assets/source_packs/opengameart/quaternius
+          sparse-checkout-cone-mode: false
+      - name: Download validate and inventory CC0 character pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='assets/source_packs/opengameart/quaternius'
+          DIR="$ROOT/animated_characters"
+          mkdir -p "$DIR"
+          OUT="$DIR/ultimate_animated_character_pack_by_quaternius.zip"
+          if [ ! -s "$OUT" ]; then
+            curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-AssetImporter/9.0' \
+              'https://opengameart.org/sites/default/files/ultimate_animated_character_pack_by_quaternius.zip' -o "$OUT"
+          fi
+          test -s "$OUT"
+          unzip -tqq "$OUT" >/dev/null
+          head -c 1024 "$OUT" | grep -Eiq '<!doctype html|<html|<body' && { echo 'ERROR HTML instead of ZIP'; exit 1; } || true
+          printf '%s\n' 'Source: https://opengameart.org/content/animated-characters-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: 50+ animated low-poly characters including human, elf, zombie, ninja, cowboy and goblin variants; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$DIR/SOURCE.md"
+          find "$ROOT" -type f -name '*.zip' -print0 | sort -z | xargs -0 sha256sum > "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+          { echo '# Quaternius complete source ZIP inventory'; echo; echo '| File | Bytes | SHA256 |'; echo '|---|---:|---|'; while IFS= read -r -d '' f; do printf '| `%s` | %s | `%s` |\n' "${f#$ROOT/}" "$(stat -c %s "$f")" "$(sha256sum "$f"|awk '{print $1}')"; done < <(find "$ROOT" -type f -name '*.zip' -print0 | sort -z); } > "$ROOT/ALL_SOURCE_INVENTORY.md"
+          rm -rf /tmp/qcharacter && mkdir -p /tmp/qcharacter
+          cp -a "$DIR" /tmp/qcharacter/
+          cp "$ROOT/ALL_SOURCE_SHA256SUMS.txt" /tmp/qcharacter/
+          cp "$ROOT/ALL_SOURCE_INVENTORY.md" /tmp/qcharacter/
+      - name: Commit safely over freshest main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          ROOT='assets/source_packs/opengameart/quaternius'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main; git reset --hard FETCH_HEAD; mkdir -p "$ROOT"
+            rm -rf "$ROOT/animated_characters"; cp -a /tmp/qcharacter/animated_characters "$ROOT/"
+            cp /tmp/qcharacter/ALL_SOURCE_SHA256SUMS.txt "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+            cp /tmp/qcharacter/ALL_SOURCE_INVENTORY.md "$ROOT/ALL_SOURCE_INVENTORY.md"
+            git add "$ROOT"
+            git diff --cached --quiet && exit 0
+            git commit -m 'assets: vendor Quaternius animated character source pack'
+            git push origin HEAD:main && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
