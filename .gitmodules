@@ -25,3 +25,6 @@
 [submodule "assets/audio/source_packs/stargate_cc0_sample_pack"]
 	path = assets/audio/source_packs/stargate_cc0_sample_pack
 	url = https://github.com/stargatedaw/stargate-sample-pack.git
+[submodule "assets/audio/source_packs/cc0_medieval_weapons"]
+	path = assets/audio/source_packs/cc0_medieval_weapons
+	url = https://github.com/PanderMusubi/sound-effects-library-weapons.git
