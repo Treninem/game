@@ -1,3 +1,4 @@
+# Full-library validation refresh after Quaternius world batch.
 name: Validate source-pack integrity
 on:
   push:
