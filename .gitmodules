@@ -16,3 +16,6 @@
 [submodule "assets/audio/third_party/kenney_digital_audio"]
 	path = assets/audio/third_party/kenney_digital_audio
 	url = https://github.com/Boyquotes/kenney-digital-audio-for-godot.git
+[submodule "assets/audio/source_packs/ambient_sounds_muges"]
+	path = assets/audio/source_packs/ambient_sounds_muges
+	url = https://github.com/Muges/ambientsounds.git
