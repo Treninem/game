@@ -92,6 +92,24 @@ Physical asset commit: `7810ade56829d5e74e3b2a1f8553d58a0d1647a7`
 - `assets/staging/interiors/kenney_mini_market/` — supermarket/shop interior props with source variations/animation support.
 - Batch failure file: `assets/staging/vehicles/TRANSPORT_TOWN_MARKET_DOWNLOAD_FAILURES.txt` — verified empty.
 
+### UI, menu, map, inventory and control prompts
+Physical asset commit: `a4a7d000c60f3403188db33639b7f6e5f1973e9f`
+
+- `assets/staging/ui/kenney_ui_pack/` — 430+ general UI sprites plus sheets/vector/font/sound source material.
+- `assets/staging/ui/kenney_ui_pack_adventure/` — adventure/fantasy themed buttons, panels and HUD pieces.
+- `assets/staging/ui/kenney_game_icons/` — menu/settings/save/map/general game icons.
+- `assets/staging/ui/kenney_board_game_icons/` — resource/action/system icons useful for crafting and map UI.
+- `assets/staging/ui/kenney_input_prompts/` — keyboard, mouse, controller and generic input glyphs.
+- `assets/staging/ui/kenney_cursor_pack/` — 180+ cursor/pointer variants.
+- `assets/staging/ui/simple_button_pack/` — generic button/tab states.
+- `assets/staging/ui/rpg_inventory/` — complete RPG inventory UI with dark/copper border variants.
+- `assets/staging/ui/rpg_inventory_icons/` — RPG equipment, potion and crafting icons.
+- `assets/staging/ui/rpg_ui_icons/` — status, magic, weapon, armor, medicine and item icons.
+- `assets/staging/ui/map_editor_ui_icons/` — compact map/editor UI glyphs.
+- `assets/staging/ui/map_marker_active/` and `assets/staging/ui/map_marker_normal/` — vector world-map point markers.
+- `assets/staging/ui/parchment_map_texture/` — parchment background for maps/journals/decorative panels.
+- Batch failure file: `assets/staging/ui/UI_DOWNLOAD_FAILURES.txt` — verified empty after corrected inventory source URL.
+
 ## Main integration-chat checklist
 
 Before adding a model to gameplay:
