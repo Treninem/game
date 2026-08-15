@@ -62,6 +62,19 @@ jobs:
       - name: Parse project and scripts
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
 
+      - name: Verify enterable shell uses production assets only
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -Fq 'res://assets/production/medieval/building_shell/Door_1_Flat.gltf' scripts/enterable_building.gd
+          grep -Fq 'res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf' scripts/enterable_building.gd
+          ! grep -E 'DOOR_SCENE.*assets/staging|ROOF_SCENE.*assets/staging' scripts/enterable_building.gd
+          test -s assets/production/medieval/building_shell/Door_1_Flat.gltf
+          test -s assets/production/medieval/building_shell/Door_1_Flat.bin
+          test -s assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf
+          test -s assets/production/medieval/building_shell/Roof_RoundTiles_8x8.bin
+          test -s assets/production/medieval/building_shell/QUATERNIUS_CC0_LICENSE.txt
+
       - name: Verify startup main menu flow
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_startup_menu.tscn
 
