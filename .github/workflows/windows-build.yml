@@ -13,6 +13,7 @@ on:
       - "tests/**"
       - "assets/audio/**"
       - "assets/branding/**"
+      - "assets/production/**"
       - "assets/ui/**"
       - "assets/vfx/**"
       - "assets/shaders/**"
@@ -32,6 +33,7 @@ jobs:
   build-game:
     if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[stable]') }}
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,6 +45,7 @@ jobs:
             installer
             assets/audio
             assets/branding
+            assets/production
             assets/ui
             assets/vfx
             assets/shaders
@@ -67,17 +70,42 @@ jobs:
           mkdir -p "$HOME/.local/share/godot/export_templates/4.7.1.stable"
           cp -r templates_unpack/templates/* "$HOME/.local/share/godot/export_templates/4.7.1.stable/"
       - name: Validate project headlessly
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+        shell: bash
+        run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
       - name: Verify startup main menu
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_startup_menu.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
+      - name: Verify canonical regions and climate
+        run: bash tools/run_godot_smoke.sh tests/smoke_canonical_regions.tscn 90
+      - name: Verify physical hydrology
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_hydrology.tscn 180
       - name: Verify production world audio
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_audio.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_audio.tscn 180
+      - name: Verify physical river crossings
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_crossings.tscn 180
+      - name: Verify real enterable building shell
+        run: bash tools/run_godot_smoke.sh tests/smoke_enterable_building.tscn 180
+      - name: Verify real production furniture
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_interior_assets.tscn 240
+      - name: Verify streamed physical settlements
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements.tscn 300
+      - name: Verify settlement public works
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_public_works.tscn 300
+      - name: Verify settlement civic spaces
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_civic_spaces.tscn 300
+      - name: Verify settlement streaming bounds
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_streaming.tscn 300
+      - name: Verify settlement gate network
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_gate_network.tscn 240
+      - name: Verify roads through settlement gates
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_road_gate_overlay.tscn 240
+      - name: Verify fortified town gate clearance
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_gate_overlay.tscn 240
       - name: Verify stable gameplay boot
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_boot_world.tscn 300
       - name: Verify UI and save slots
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_ui_and_save.tscn 180
       - name: Verify player traverses the world
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_player_movement.tscn 240
       - name: Export Windows x64
         run: |
           mkdir -p build/windows
