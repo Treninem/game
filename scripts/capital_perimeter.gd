@@ -1,7 +1,11 @@
 extends Node3D
 
 const CAPITAL := preload("res://scripts/capital_data.gd")
+const LOAD_DISTANCE := 3600.0
+const UNLOAD_DISTANCE := 4600.0
 
+var player: Node3D
+var perimeter_built := false
 var gate_runtime: Array[Dictionary] = []
 var wall_material: StandardMaterial3D
 var tower_material: StandardMaterial3D
@@ -12,11 +16,27 @@ var last_open_state := true
 
 func _ready() -> void:
     _prepare_materials()
-    _build_perimeter()
-    last_open_state = CAPITAL.gates_are_open(GameState.world_minutes)
-    _apply_gate_state(last_open_state, true)
+    position = Vector3(CAPITAL.CENTER.x, WorldData.elevation_at(CAPITAL.CENTER), CAPITAL.CENTER.y)
+    call_deferred("_resolve_player")
 
 func _process(delta: float) -> void:
+    _resolve_player()
+    if player == null:
+        return
+
+    var player_2d := Vector2(player.global_position.x, player.global_position.z)
+    var distance := player_2d.distance_to(CAPITAL.CENTER)
+    if not perimeter_built:
+        if distance <= LOAD_DISTANCE:
+            _build_perimeter()
+            perimeter_built = true
+            last_open_state = CAPITAL.gates_are_open(GameState.world_minutes)
+            _apply_gate_state(last_open_state, true)
+        return
+    if distance > UNLOAD_DISTANCE:
+        _clear_perimeter()
+        return
+
     state_elapsed += delta
     if state_elapsed >= 0.5:
         state_elapsed = 0.0
@@ -33,6 +53,17 @@ func _process(delta: float) -> void:
             left.rotation.y = move_toward(left.rotation.y, -target_angle, delta * 1.45)
         if is_instance_valid(right):
             right.rotation.y = move_toward(right.rotation.y, target_angle, delta * 1.45)
+
+func _resolve_player() -> void:
+    if player == null or not is_instance_valid(player):
+        player = get_tree().get_first_node_in_group("player") as Node3D
+
+func _clear_perimeter() -> void:
+    for child in get_children():
+        child.queue_free()
+    gate_runtime.clear()
+    perimeter_built = false
+    state_elapsed = 0.0
 
 func _build_perimeter() -> void:
     _build_side_walls("north")
@@ -78,7 +109,7 @@ func _add_wall_segment(side: String, center_offset: float, length: float) -> voi
 func _build_gate(gate: Dictionary) -> void:
     var root := Node3D.new()
     root.name = "Gate_%s" % String(gate.get("id", "unknown"))
-    var p: Vector2 = gate.get("position", Vector2.ZERO)
+    var p: Vector2 = gate.get("local_position", Vector2.ZERO)
     root.position = Vector3(p.x, 0.0, p.y)
     match String(gate.get("side", "south")):
         "north": root.rotation.y = PI
@@ -111,15 +142,9 @@ func _build_gate(gate: Dictionary) -> void:
     sign.position = Vector3(0, 30.0, 0)
     sign.font_size = 28
     sign.outline_size = 7
-    sign.no_depth_test = false
     root.add_child(sign)
 
-    gate_runtime.append({
-        "id": String(gate.get("id", "")),
-        "left": left_pivot,
-        "right": right_pivot,
-        "root": root
-    })
+    gate_runtime.append({"id":String(gate.get("id", "")), "left":left_pivot, "right":right_pivot, "root":root})
 
 func _add_gate_door(node_name: String, size: Vector3, local_pos: Vector3, parent: Node3D) -> void:
     var body := AnimatableBody3D.new()
@@ -135,11 +160,11 @@ func _add_gate_door(node_name: String, size: Vector3, local_pos: Vector3, parent
     mesh_instance.mesh = mesh
     body.add_child(mesh_instance)
 
-    var shape := CollisionShape3D.new()
-    var box := BoxShape3D.new()
-    box.size = size
-    shape.shape = box
-    body.add_child(shape)
+    var collision := CollisionShape3D.new()
+    var shape := BoxShape3D.new()
+    shape.size = size
+    collision.shape = shape
+    body.add_child(collision)
 
     var band := MeshInstance3D.new()
     var band_mesh := BoxMesh.new()
@@ -183,20 +208,16 @@ func _apply_gate_state(opened: bool, immediate: bool) -> void:
 func is_gate_open(gate_id: String) -> bool:
     if CAPITAL.gate_by_id(gate_id).is_empty():
         return false
-    return last_open_state
-
-func can_build_at(world_pos: Vector3) -> bool:
-    return CAPITAL.can_build_at(Vector2(world_pos.x, world_pos.z))
+    return perimeter_built and last_open_state
 
 func _prepare_materials() -> void:
-    wall_material = _material(Color(0.31, 0.34, 0.38), 0.91)
-    tower_material = _material(Color(0.24, 0.27, 0.31), 0.93)
-    wood_material = _material(Color(0.20, 0.105, 0.045), 0.92)
-    metal_material = _material(Color(0.24, 0.28, 0.32), 0.52, 0.55)
+    wall_material = _material(Color(0.31, 0.30, 0.28), 0.96)
+    tower_material = _material(Color(0.37, 0.35, 0.31), 0.94)
+    wood_material = _material(Color(0.20, 0.09, 0.035), 0.93)
+    metal_material = _material(Color(0.13, 0.15, 0.17), 0.62)
 
-func _material(color: Color, roughness_value: float, metallic_value: float = 0.0) -> StandardMaterial3D:
+func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
     var material := StandardMaterial3D.new()
     material.albedo_color = color
     material.roughness = roughness_value
-    material.metallic = metallic_value
     return material
