@@ -2,27 +2,48 @@ extends Node3D
 
 const SETTLEMENTS_SCRIPT := preload("res://scripts/world_settlements.gd")
 const REQUIRED_IDS := ["border_village_01", "border_village_02", "first_fortified_town"]
+const WATCHDOG_SECONDS := 20.0
 
 var failed := false
+var current_stage := "boot"
+var watchdog: Timer
 
 func _ready() -> void:
+    watchdog = Timer.new()
+    watchdog.name = "SettlementSmokeWatchdog"
+    watchdog.one_shot = true
+    watchdog.wait_time = WATCHDOG_SECONDS
+    watchdog.timeout.connect(_on_watchdog_timeout)
+    add_child(watchdog)
+    watchdog.start()
     call_deferred("_run_test")
+
+func _stage(value: String) -> void:
+    current_stage = value
+    print("WORLD_SETTLEMENTS_STAGE ", value)
+
+func _on_watchdog_timeout() -> void:
+    _fail(90, "smoke stalled or coroutine aborted during stage '%s'" % current_stage)
 
 func _fail(code: int, message: String) -> void:
     if failed:
         return
     failed = true
+    if watchdog != null:
+        watchdog.stop()
     var clean := message.replace("\r", " ").replace("\n", " ")
     print("::error title=World settlements smoke::%s" % clean)
     push_error("World settlements smoke failed: %s" % message)
     get_tree().quit(code)
 
 func _run_test() -> void:
+    _stage("create settlement streamer")
     var settlements := SETTLEMENTS_SCRIPT.new() as WorldSettlements
     settlements.name = "TestSettlements"
     add_child(settlements)
     await get_tree().process_frame
 
+    _stage("validate settlement catalog")
     var specs := settlements.settlement_specs()
     if specs.size() != 3:
         _fail(2, "expected exactly the two established border villages and first fortified town; got %d" % specs.size())
@@ -35,6 +56,7 @@ func _run_test() -> void:
         _fail(4, "settlement streamer has no unload hysteresis and may thrash near its boundary")
         return
 
+    _stage("materialize three settlements")
     var village_a := settlements.materialize_settlement_for_test("border_village_01")
     var village_b := settlements.materialize_settlement_for_test("border_village_02")
     var town := settlements.materialize_settlement_for_test("first_fortified_town")
@@ -42,9 +64,11 @@ func _run_test() -> void:
         _fail(5, "one or more established settlements could not materialize")
         return
 
+    _stage("settle physics")
     for _i in range(5):
         await get_tree().physics_frame
 
+    _stage("validate building counts")
     if settlements.loaded_settlement_count() != 3:
         _fail(6, "manual materialization did not register all three settlements")
         return
@@ -59,6 +83,7 @@ func _run_test() -> void:
         _fail(9, "fortified town has fewer than fifteen real enterable buildings")
         return
 
+    _stage("validate enterable interiors")
     if not _validate_all_enterables(village_a, "first border village"):
         return
     if not _validate_all_enterables(village_b, "river village"):
@@ -66,6 +91,7 @@ func _run_test() -> void:
     if not _validate_all_enterables(town, "fortified town"):
         return
 
+    _stage("validate village fences and wells")
     for village in [village_a, village_b]:
         var gate := village.get_node_or_null("VillageGatePassage") as Marker3D
         if gate == null:
@@ -77,6 +103,7 @@ func _run_test() -> void:
         if not _validate_static_shape(village.get_node_or_null("PhysicalWell"), "%s/PhysicalWell" % village.name):
             return
 
+    _stage("validate fortified town gate")
     var passage := town.get_node_or_null("TownGatePassage") as Marker3D
     if passage == null:
         _fail(30, "fortified town has no explicit gate passage")
@@ -108,6 +135,7 @@ func _run_test() -> void:
         _fail(33, "town wall collision closes the declared gate passage; gap=%.2f" % physical_gap)
         return
 
+    _stage("validate materialization counters")
     if settlements.materialized_buildings < 30:
         _fail(34, "settlement batch did not actually create the expected building volume")
         return
@@ -123,6 +151,7 @@ func _run_test() -> void:
         _fail(37, "thirty settlement interiors are not fully furnished; physical props=%d" % total_furniture)
         return
 
+    _stage("validate streamed population")
     if _settlement_npc_count(village_a) != 5 or _settlement_npc_count(village_b) != 5:
         _fail(38, "each border village must materialize exactly five physical residents")
         return
@@ -139,6 +168,8 @@ func _run_test() -> void:
     if not _validate_population(town, "fortified town"):
         return
 
+    _stage("complete")
+    watchdog.stop()
     print("WORLD_SETTLEMENTS_SMOKE_OK settlements=3 enterable_buildings=", settlements.materialized_buildings, " physical_furniture=", total_furniture, " npcs=", settlements.materialized_npcs, " walls=", settlements.materialized_wall_segments, " gates=", settlements.materialized_gate_passages)
     get_tree().quit(0)
 
