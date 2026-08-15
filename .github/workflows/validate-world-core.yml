@@ -51,6 +51,12 @@ jobs:
       - name: Verify physical river crossings
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_crossings.tscn
 
+      - name: Verify real enterable building shell
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_enterable_building.tscn
+
+      - name: Verify streamed physical settlements and gates
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_settlements.tscn
+
       - name: Verify world boot, streamed roads and river water
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn
 
