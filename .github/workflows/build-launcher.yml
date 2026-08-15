@@ -29,6 +29,37 @@ jobs:
           sparse-checkout-cone-mode: false
           fetch-depth: 1
 
+      - name: Harden release discovery compatibility
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $path = 'launcher\ImPulsLauncher.cs'
+          $content = Get-Content -Raw -Path $path
+
+          $oldArrayCast = 'object[] assets = assetsObj as object[];'
+          $newArrayCast = 'System.Collections.IEnumerable assets = assetsObj as System.Collections.IEnumerable;'
+          if (-not $content.Contains($oldArrayCast)) { throw 'Expected release asset array parser was not found.' }
+          $content = $content.Replace($oldArrayCast, $newArrayCast)
+
+          $oldRelease = 'Dictionary<string, object> release = GetJsonObject("https://api.github.com/repos/" + Repo + "/releases/latest");'
+          $newRelease = 'Dictionary<string, object> release = GetJsonObject("https://api.github.com/repos/" + Repo + "/releases/tags/stable");'
+          if (-not $content.Contains($oldRelease)) { throw 'Expected latest-release lookup was not found.' }
+          $content = $content.Replace($oldRelease, $newRelease)
+
+          Set-Content -Path $path -Value $content -Encoding UTF8
+          Write-Host 'Launcher source hardened: IEnumerable asset parsing + stable game release tag.'
+
+      - name: Verify stable game package exists
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ 'User-Agent' = 'ImPuls-Launcher-CI'; 'Accept' = 'application/vnd.github+json' }
+          $release = Invoke-RestMethod -Headers $headers -Uri 'https://api.github.com/repos/Treninem/game/releases/tags/stable'
+          $asset = $release.assets | Where-Object { $_.name -eq 'ImPuls-PC-Windows-x64.zip' } | Select-Object -First 1
+          if (-not $asset) { throw 'Stable release does not contain ImPuls-PC-Windows-x64.zip.' }
+          if ([int64]$asset.size -lt 1048576) { throw "Stable game package is unexpectedly small: $($asset.size) bytes" }
+          Write-Host "Stable package found: $($asset.name), $($asset.size) bytes"
+
       - name: Build launcher
         shell: pwsh
         run: |
