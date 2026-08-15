@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://scripts/start_spawn_surface.gd" id="14"]
 [ext_resource type="Script" path="res://scripts/start_region_streamer.gd" id="15"]
 [ext_resource type="Script" path="res://scripts/start_civilization_signs.gd" id="16"]
+[ext_resource type="Script" path="res://scripts/world_settlements.gd" id="17"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -36,6 +37,9 @@ shadow_enabled = true
 
 [node name="WorldStreamer" type="Node3D" parent="World"]
 script = ExtResource("9")
+
+[node name="Settlements" type="Node3D" parent="World"]
+script = ExtResource("17")
 
 [node name="StartRegion" type="Node3D" parent="World"]
 script = ExtResource("15")
