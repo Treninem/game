@@ -1,0 +1,7 @@
+CC0 1.0 Universal
+
+The shader code staged in this directory is sourced from GodotShaders pages whose code/snippets are released under Creative Commons Zero (CC0 1.0 Universal).
+
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+
+Only shader source code is staged here. Preview images, videos and other page media are not included and are not covered by this file.
