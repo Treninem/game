@@ -19,3 +19,9 @@
 [submodule "assets/audio/source_packs/ambient_sounds_muges"]
 	path = assets/audio/source_packs/ambient_sounds_muges
 	url = https://github.com/Muges/ambientsounds.git
+[submodule "assets/audio/source_packs/sound_cc0_misc"]
+	path = assets/audio/source_packs/sound_cc0_misc
+	url = https://github.com/code4fukui/sound-cc0.git
+[submodule "assets/audio/source_packs/stargate_cc0_sample_pack"]
+	path = assets/audio/source_packs/stargate_cc0_sample_pack
+	url = https://github.com/stargatedaw/stargate-sample-pack.git
