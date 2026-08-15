@@ -67,14 +67,14 @@ func _draw_continent_frame(rect: Rect2) -> void:
     draw_line(Vector2(rect.position.x, center.y), Vector2(rect.end.x, center.y), Color(0.18, 0.23, 0.28, 0.35), 1.0)
 
 func _draw_capital_outline(rect: Rect2) -> void:
-    if not MapSystem.is_world_explored(Vector2.ZERO):
+    if not MapSystem.is_world_explored(CAPITAL.CENTER):
         return
     var corners := PackedVector2Array([
-        _world_to_screen(Vector2(-CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect),
-        _world_to_screen(Vector2(CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect),
-        _world_to_screen(Vector2(CAPITAL.HALF_EXTENT, CAPITAL.HALF_EXTENT), rect),
-        _world_to_screen(Vector2(-CAPITAL.HALF_EXTENT, CAPITAL.HALF_EXTENT), rect),
-        _world_to_screen(Vector2(-CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect)
+        _world_to_screen(CAPITAL.CENTER + Vector2(-CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect),
+        _world_to_screen(CAPITAL.CENTER + Vector2(CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect),
+        _world_to_screen(CAPITAL.CENTER + Vector2(CAPITAL.HALF_EXTENT, CAPITAL.HALF_EXTENT), rect),
+        _world_to_screen(CAPITAL.CENTER + Vector2(-CAPITAL.HALF_EXTENT, CAPITAL.HALF_EXTENT), rect),
+        _world_to_screen(CAPITAL.CENTER + Vector2(-CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect)
     ])
     draw_polyline(corners, Color(0.55, 0.76, 0.90, 0.9), 1.5)
 
@@ -107,16 +107,17 @@ func _draw_local_inset(rect: Rect2, player_world: Vector2) -> void:
     draw_string(ThemeDB.fallback_font, inset.position + Vector2(10, 17), "Рядом • 4.8 км", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.72, 0.82, 0.92))
 
 func _draw_capital_local(rect: Rect2, player_world: Vector2) -> void:
-    if player_world.distance_to(Vector2.ZERO) > LOCAL_RADIUS + CAPITAL.HALF_EXTENT:
+    if player_world.distance_to(CAPITAL.CENTER) > LOCAL_RADIUS + CAPITAL.HALF_EXTENT:
         return
-    var a := _local_to_screen(Vector2(-CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect, player_world)
-    var b := _local_to_screen(Vector2(CAPITAL.HALF_EXTENT, CAPITAL.HALF_EXTENT), rect, player_world)
+    var a := _local_to_screen(CAPITAL.CENTER + Vector2(-CAPITAL.HALF_EXTENT, -CAPITAL.HALF_EXTENT), rect, player_world)
+    var b := _local_to_screen(CAPITAL.CENTER + Vector2(CAPITAL.HALF_EXTENT, CAPITAL.HALF_EXTENT), rect, player_world)
     var capital_rect := Rect2(Vector2(minf(a.x, b.x), minf(a.y, b.y)), Vector2(absf(b.x - a.x), absf(b.y - a.y)))
     draw_rect(capital_rect, Color(0.60, 0.70, 0.78, 0.78), false, 1.3)
 
     var district_labels := 0
     for district in CAPITAL.DISTRICTS:
-        var pos: Vector2 = district.get("center", Vector2.ZERO)
+        var local_pos: Vector2 = district.get("center", Vector2.ZERO)
+        var pos := CAPITAL.CENTER + local_pos
         if pos.distance_to(player_world) > LOCAL_RADIUS or not MapSystem.is_world_explored(pos):
             continue
         var show_name := pos.distance_to(player_world) <= 650.0 and district_labels < 4
