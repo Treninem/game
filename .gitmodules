@@ -31,3 +31,12 @@
 [submodule "assets/source_packs/kaykit_character_pack_adventures"]
 	path = assets/source_packs/kaykit_character_pack_adventures
 	url = https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0.git
+[submodule "assets/source_packs/kaykit_character_pack_skeletons"]
+	path = assets/source_packs/kaykit_character_pack_skeletons
+	url = https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0.git
+[submodule "assets/source_packs/kaykit_dungeon_remastered"]
+	path = assets/source_packs/kaykit_dungeon_remastered
+	url = https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0.git
+[submodule "assets/source_packs/kaykit_furniture_bits"]
+	path = assets/source_packs/kaykit_furniture_bits
+	url = https://github.com/KayKit-Game-Assets/KayKit-Furniture-Bits-1.0.git
