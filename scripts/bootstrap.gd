@@ -1,8 +1,9 @@
 extends Node
 
 const VERSION := "0.10.4-stable"
+const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PLAYER_GROUND_CLEARANCE := 0.08
-const RESPAWN_POSITION := Vector3(0, PLAYER_GROUND_CLEARANCE, 8)
+const RESPAWN_POSITION := Vector3(GEOGRAPHY.START_SPAWN.x, PLAYER_GROUND_CLEARANCE, GEOGRAPHY.START_SPAWN.y)
 
 @onready var player: CharacterBody3D = $World/Player
 
@@ -29,7 +30,8 @@ func _ready() -> void:
         GameState.revive()
         _place_player_safely(RESPAWN_POSITION)
 
-    GameState.notify("Мир ImPuls • ЛКМ — оружие • ПКМ — магия • Q — следующее заклинание • I/M/K/J — игровые панели")
+    # Early-game help must not advertise magic before the story unlocks it.
+    GameState.notify("Мир ImPuls • WASD — движение • Shift — бег • E — взаимодействие • I/M/K/J — игровые панели")
 
 func _process(delta: float) -> void:
     if not GameState.is_dead:
@@ -71,7 +73,7 @@ func _on_player_died() -> void:
     _place_player_safely(RESPAWN_POSITION)
     GameState.revive()
     respawning = false
-    GameState.notify("Вы возродились в безопасной зоне столицы.")
+    GameState.notify("Вы пришли в себя у лесной реки.")
 
 func spawn_house_from_state() -> void:
     pass
