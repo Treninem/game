@@ -1,0 +1,4 @@
+CC0 1.0 Universal
+
+The OpenGameArt source submission for the audio in this folder is marked CC0 / Creative Commons Zero.
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
