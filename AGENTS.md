@@ -3,9 +3,21 @@
 ## Shared assets
 All agents/chats working on this repository MUST read `assets/ASSET_PACKS.md` before creating or sourcing visual assets and should also inspect relevant detailed registries under `assets/registry/` before duplicating work.
 
+Before downloading, generating or importing any third-party asset, agents MUST also check `assets/staging/PHYSICAL_STAGING_INDEX.md` and the relevant `assets/staging/` folder. That index is the canonical list of source packs whose real files have been confirmed in `main`; do not redownload or regenerate an equivalent pack merely because it is only mentioned elsewhere in the registry.
+
 Use existing/imported packs from the repository whenever suitable instead of regenerating duplicates. Keep nature, buildings, animals and UI organized under `assets/` according to the registry.
 
 The physically integrated environment shader core is documented in `assets/shaders/environment/README.md` and `assets/registry/ENVIRONMENT_SHADER_CORE_2026-08-14.md`. Reuse and extend these shared underwater, snow, wind/cloth and seasonal material systems instead of creating incompatible one-off replacements.
+
+## Asset status vocabulary
+Use these exact meanings when reporting asset state across chats:
+- `DISCOVERED` — source found; no files confirmed in repository.
+- `APPROVED` — source/license reviewed; physical download may still be absent.
+- `STAGED_PHYSICAL` — real files confirmed under `assets/staging/` on `main`.
+- `PRODUCTION_READY` — selected asset has been normalized/tested for Godot production use.
+- `INTEGRATED` — the live game actually references the asset in scenes/resources/code.
+
+Do not use the word `imported` by itself when the exact state is unclear. A registry entry is not proof of physical files, and physical staging is not proof of gameplay integration.
 
 ## Source-only staging chats
 When a chat/session is explicitly assigned to asset sourcing/staging only, it MUST NOT modify runtime game integration. In source-only mode do not edit gameplay scripts, scenes, `project.godot`, autoloads, export/build configuration or connect assets to live gameplay.
@@ -17,7 +29,9 @@ This split exists to prevent parallel asset chats from breaking the playable bra
 When adding a third-party pack:
 - only add assets with verified compatible rights (CC0 preferred);
 - preserve license/readme information;
-- add its source and target path to `assets/ASSET_PACKS.md` or an appropriate detailed file under `assets/registry/`;
+- add its source and target path to `assets/ASSET_PACKS.md`, `assets/staging/PHYSICAL_STAGING_INDEX.md` once physically confirmed, or an appropriate detailed file under `assets/registry/`;
+- keep only a preferred/canonical interchange format for large source packs when practical instead of storing duplicate GLB/glTF, FBX and OBJ copies of the same models;
+- check the batch failure manifest before claiming the pack is `STAGED_PHYSICAL`;
 - if working in source-only staging mode, record the recommended integration target but do not integrate it yourself;
 - if working in the main integration chat, integrate selected useful assets after review rather than leaving production copies unused.
 
