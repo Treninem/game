@@ -46,6 +46,23 @@ func elevation_at(pos: Vector2) -> float:
     var macro_relief := 0.0
     var height := broad + detail + ridges
 
+    # Political regions describe inhabited pieces of the continent. Procedural
+    # noise may shape their coasts, lakes and lowlands, but it must never sink a
+    # state's geographic core into the ocean. The floor only affects low terrain
+    # and fades well before the ellipse boundary, so borders do not become hard
+    # terrain seams and coastal states can still have natural shorelines.
+    var sovereign_state := WORLD_GEOGRAPHY.state_at(pos)
+    if String(sovereign_state.get("id", "frontier")) != "frontier":
+        var sovereign_center: Vector2 = sovereign_state.get("center", Vector2.ZERO)
+        var sovereign_radius: Vector2 = sovereign_state.get("radius", Vector2.ONE)
+        var sovereign_dx := (pos.x - sovereign_center.x) / maxf(sovereign_radius.x, 1.0)
+        var sovereign_dz := (pos.y - sovereign_center.y) / maxf(sovereign_radius.y, 1.0)
+        var sovereign_normalized := sqrt(sovereign_dx * sovereign_dx + sovereign_dz * sovereign_dz)
+        var sovereign_weight := 1.0 - smoothstep(0.42, 0.92, sovereign_normalized)
+        if sovereign_weight > 0.0:
+            var sovereign_floor := lerpf(-3.5, 7.0, sovereign_weight)
+            height = maxf(height, sovereign_floor)
+
     # The canonical mountain federation must read as mountain country at macro
     # scale rather than depending on a lucky noise seed. The added relief blends
     # through the state's ellipse and leaves frontier terrain continuous.
