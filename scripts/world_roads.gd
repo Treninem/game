@@ -1,18 +1,31 @@
 extends Node
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
+const HYDROLOGY := preload("res://scripts/world_hydrology.gd")
 const CHUNK_SIZE := 192.0
 const PATCH_SPACING := 9.0
 const CHUNK_MARGIN := 8.0
+const BRIDGE_DECK_THICKNESS := 0.34
 
 var road_material: StandardMaterial3D
+var bridge_material: StandardMaterial3D
+var bridge_rail_material: StandardMaterial3D
 var materialized_road_chunks := 0
 var materialized_patches := 0
+var materialized_bridge_chunks := 0
 
 func _ready() -> void:
     road_material = StandardMaterial3D.new()
     road_material.albedo_color = Color(0.29, 0.20, 0.105, 1.0)
     road_material.roughness = 0.98
+
+    bridge_material = StandardMaterial3D.new()
+    bridge_material.albedo_color = Color(0.30, 0.19, 0.09, 1.0)
+    bridge_material.roughness = 0.91
+
+    bridge_rail_material = StandardMaterial3D.new()
+    bridge_rail_material.albedo_color = Color(0.20, 0.115, 0.055, 1.0)
+    bridge_rail_material.roughness = 0.94
     get_tree().node_added.connect(_on_node_added)
 
 func _on_node_added(node: Node) -> void:
@@ -24,6 +37,8 @@ func _materialize_chunk(chunk: Node3D) -> void:
         return
 
     var origin := Vector2(chunk.global_position.x, chunk.global_position.z)
+    _materialize_bridge_if_owned(chunk, origin)
+
     var transforms: Array[Transform3D] = []
     for road in WorldData.road_catalog():
         var points: Array = road.get("points", [])
@@ -52,6 +67,108 @@ func _materialize_chunk(chunk: Node3D) -> void:
     materialized_road_chunks += 1
     materialized_patches += transforms.size()
 
+func _materialize_bridge_if_owned(chunk: Node3D, origin: Vector2) -> void:
+    if chunk.get_node_or_null("RoadBridge") != null:
+        return
+
+    var center := HYDROLOGY.ROAD_BRIDGE_CENTER
+    if center.x < origin.x or center.x >= origin.x + CHUNK_SIZE \
+    or center.y < origin.y or center.y >= origin.y + CHUNK_SIZE:
+        return
+
+    var direction := HYDROLOGY.ROAD_BRIDGE_DIRECTION.normalized()
+    var half_length := HYDROLOGY.ROAD_BRIDGE_HALF_LENGTH
+    var a2 := center - direction * half_length
+    var b2 := center + direction * half_length
+    var water_level := WorldData.water_level_at(center)
+    var deck_y := maxf(
+        maxf(WorldData.elevation_at(a2), WorldData.elevation_at(b2)) + 0.12,
+        water_level + HYDROLOGY.ROAD_BRIDGE_CLEARANCE
+    )
+    var local_center := center - origin
+    var angle := atan2(direction.y, direction.x)
+    var bridge_basis := Basis(Vector3.UP, -angle)
+
+    var bridge := Node3D.new()
+    bridge.name = "RoadBridge"
+    chunk.add_child(bridge)
+
+    var deck_mesh := BoxMesh.new()
+    deck_mesh.size = Vector3(half_length * 2.0, BRIDGE_DECK_THICKNESS, HYDROLOGY.ROAD_BRIDGE_HALF_WIDTH * 2.0)
+    deck_mesh.material = bridge_material
+
+    var deck := MeshInstance3D.new()
+    deck.name = "Deck"
+    deck.mesh = deck_mesh
+    deck.transform = Transform3D(
+        bridge_basis,
+        Vector3(local_center.x, deck_y, local_center.y)
+    )
+    deck.visibility_range_end = CHUNK_SIZE * 3.5
+    bridge.add_child(deck)
+
+    # The bridge is a real load-bearing world object. Terrain collision remains
+    # below the river; this static deck collision is what the player, NPCs and
+    # later carts physically stand on while crossing.
+    var body := StaticBody3D.new()
+    body.name = "BridgeCollision"
+    body.transform = deck.transform
+    bridge.add_child(body)
+
+    var deck_shape := BoxShape3D.new()
+    deck_shape.size = deck_mesh.size
+    var collision := CollisionShape3D.new()
+    collision.name = "DeckShape"
+    collision.shape = deck_shape
+    body.add_child(collision)
+
+    _add_bridge_rail(bridge, local_center, deck_y, bridge_basis, -1.0)
+    _add_bridge_rail(bridge, local_center, deck_y, bridge_basis, 1.0)
+    _add_bridge_support(bridge, origin, center - direction * 18.0, deck_y, bridge_basis)
+    _add_bridge_support(bridge, origin, center + direction * 18.0, deck_y, bridge_basis)
+    materialized_bridge_chunks += 1
+
+func _add_bridge_rail(
+    bridge: Node3D,
+    local_center: Vector2,
+    deck_y: float,
+    bridge_basis: Basis,
+    side_sign: float
+) -> void:
+    var rail_mesh := BoxMesh.new()
+    rail_mesh.size = Vector3(HYDROLOGY.ROAD_BRIDGE_HALF_LENGTH * 2.0, 0.16, 0.18)
+    rail_mesh.material = bridge_rail_material
+    var rail := MeshInstance3D.new()
+    rail.name = "RailLeft" if side_sign < 0.0 else "RailRight"
+    var side_offset := HYDROLOGY.ROAD_BRIDGE_HALF_WIDTH - 0.22
+    var local_offset := bridge_basis * Vector3(0.0, 0.72, side_offset * side_sign)
+    rail.transform = Transform3D(
+        bridge_basis,
+        Vector3(local_center.x, deck_y, local_center.y) + local_offset
+    )
+    bridge.add_child(rail)
+
+func _add_bridge_support(
+    bridge: Node3D,
+    origin: Vector2,
+    world_pos: Vector2,
+    deck_y: float,
+    bridge_basis: Basis
+) -> void:
+    var bed_y := WorldData.elevation_at(world_pos)
+    var support_height := maxf(0.4, deck_y - bed_y)
+    var support_mesh := BoxMesh.new()
+    support_mesh.size = Vector3(0.9, support_height, HYDROLOGY.ROAD_BRIDGE_HALF_WIDTH * 1.72)
+    support_mesh.material = bridge_rail_material
+    var support := MeshInstance3D.new()
+    support.name = "Pier"
+    var local := world_pos - origin
+    support.transform = Transform3D(
+        bridge_basis,
+        Vector3(local.x, bed_y + support_height * 0.5, local.y)
+    )
+    bridge.add_child(support)
+
 func _append_segment_patches(transforms: Array[Transform3D], origin: Vector2, a: Vector2, b: Vector2) -> void:
     var segment := b - a
     var length := segment.length()
@@ -78,6 +195,12 @@ func _append_segment_patches(transforms: Array[Transform3D], origin: Vector2, a:
         var world_pos := a.lerp(b, t)
         if world_pos.x >= origin.x - CHUNK_MARGIN and world_pos.x < origin.x + CHUNK_SIZE + CHUNK_MARGIN \
         and world_pos.y >= origin.y - CHUNK_MARGIN and world_pos.y < origin.y + CHUNK_SIZE + CHUNK_MARGIN:
+            # Do not paint a dirt road underneath water. The bridge above owns
+            # this crossing; fords remain terrain features rather than submerged
+            # road boxes.
+            if not WorldData.water_kind_at(world_pos).is_empty():
+                distance += PATCH_SPACING
+                continue
             var local := world_pos - origin
             var height := WorldData.elevation_at(world_pos) + 0.035
             var basis := Basis(Vector3.UP, -angle)
@@ -89,3 +212,6 @@ func road_chunk_count() -> int:
 
 func road_patch_count() -> int:
     return materialized_patches
+
+func bridge_chunk_count() -> int:
+    return materialized_bridge_chunks
