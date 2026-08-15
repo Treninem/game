@@ -1,0 +1,55 @@
+name: Validate World Core
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "project.godot"
+      - "scripts/**"
+      - "scenes/**"
+      - "tests/**"
+      - ".github/workflows/validate-world-core.yml"
+  pull_request:
+    paths:
+      - "project.godot"
+      - "scripts/**"
+      - "scenes/**"
+      - "tests/**"
+      - ".github/workflows/validate-world-core.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: impuls-world-core-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  world-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+
+      - name: Parse project and scripts
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+
+      - name: Verify canonical regions and climate
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_canonical_regions.tscn
+
+      - name: Verify world boot and streamed roads
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn
+
+      - name: Verify player movement and physical terrain
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn
+
+      - name: Verify HUD menus and save slots
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn
