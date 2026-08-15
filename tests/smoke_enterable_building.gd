@@ -47,6 +47,31 @@ func _run_test() -> void:
         _fail(8, "front door is decorative and has no interact method")
         return
 
+    var furniture := building.get_node_or_null("InteriorFurniture") as Node3D
+    if furniture == null:
+        _fail(16, "interior is an empty room with no furniture root")
+        return
+    if building.interior_prop_count < 4:
+        _fail(17, "interior has fewer than four physical furniture pieces")
+        return
+    var required_props := ["Bed", "Table", "StorageChest", "Bench"]
+    for prop_name in required_props:
+        var prop := furniture.get_node_or_null(prop_name) as StaticBody3D
+        if prop == null:
+            _fail(18, "missing physical interior prop %s" % prop_name)
+            return
+        var has_collision := false
+        for child in prop.get_children():
+            if child is CollisionShape3D and (child as CollisionShape3D).shape != null:
+                has_collision = true
+                break
+        if not has_collision:
+            _fail(19, "interior prop %s is decorative and has no collision" % prop_name)
+            return
+        if absf(prop.position.x) < building.doorway_width * 0.65 and prop.position.z > -2.0:
+            _fail(20, "interior prop %s blocks the main doorway aisle" % prop_name)
+            return
+
     # Closed door must physically block a chest-height ray through the doorway.
     building.front_door.set_open(false, true)
     await get_tree().physics_frame
@@ -83,13 +108,13 @@ func _run_test() -> void:
         _fail(14, "window opening is physically sealed; collider=%s" % window_hit.get("collider"))
         return
 
-    # Interior must contain free standing space at human height.
+    # Main interior aisle must remain free at human height after furnishing.
     var interior_hit := _ray(Vector3(0.0, 1.25, 1.6), Vector3(0.0, 1.25, -1.6))
     if not interior_hit.is_empty():
-        _fail(15, "interior contains a whole-house collision or invisible blocker")
+        _fail(15, "furniture or a whole-house collision blocks the main interior aisle")
         return
 
-    print("Enterable building smoke passed: room=", building.room_count, " door=", building.door_count, " windows=", building.window_count, " structural_pieces=", building.structural_piece_count, " interior=", building.interior_size)
+    print("Enterable building smoke passed: room=", building.room_count, " door=", building.door_count, " windows=", building.window_count, " structural_pieces=", building.structural_piece_count, " furniture=", building.interior_prop_count, " interior=", building.interior_size)
     get_tree().quit(0)
 
 func _ray(from: Vector3, to: Vector3) -> Dictionary:
