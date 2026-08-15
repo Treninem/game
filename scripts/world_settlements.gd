@@ -3,6 +3,7 @@ extends Node3D
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const ENTERABLE_BUILDING := preload("res://scripts/enterable_building.gd")
+const SETTLEMENT_NPC := preload("res://scripts/settlement_npc.gd")
 
 const LOAD_RADIUS := 980.0
 const UNLOAD_RADIUS := 1280.0
@@ -21,6 +22,7 @@ var materialized_buildings := 0
 var materialized_settlements := 0
 var materialized_wall_segments := 0
 var materialized_gate_passages := 0
+var materialized_npcs := 0
 
 var earth_material: StandardMaterial3D
 var path_material: StandardMaterial3D
@@ -165,6 +167,7 @@ func _build_village(root: Node3D, center: Vector2, id: String) -> void:
     _add_village_fence(root, center)
     _add_well(root, center, Vector2(-8.0, 3.0))
     _add_crate_stack(root, center, Vector2(12.0, 8.0))
+    _populate_village(root, center, id)
 
 func _build_village_fence(root: Node3D, center: Vector2) -> void:
     var x := VILLAGE_HALF_SIZE.x
@@ -217,6 +220,7 @@ func _build_fortified_town(root: Node3D, center: Vector2) -> void:
     _add_well(root, center, Vector2(0.0, -18.0))
     _add_crate_stack(root, center, Vector2(24.0, -18.0))
     _add_crate_stack(root, center, Vector2(-26.0, -18.0))
+    _populate_town(root, center)
 
 func _build_town_walls(root: Node3D, center: Vector2) -> void:
     var x := TOWN_HALF_SIZE.x
@@ -243,6 +247,35 @@ func _build_town_walls(root: Node3D, center: Vector2) -> void:
     passage.set_meta("clear_height", TOWN_GATE_CLEAR_HEIGHT)
     root.add_child(passage)
     materialized_gate_passages += 1
+
+func _populate_village(root: Node3D, center: Vector2, id: String) -> void:
+    var palette_offset := 0 if id == "border_village_01" else 2
+    _add_settlement_npc(root, center, "Житель", "resident", palette_offset + 0, Vector2(-2,-30), [Vector3(-2,0,-30), Vector3(-2,0,24), Vector3(2,0,34)])
+    _add_settlement_npc(root, center, "Жительница", "resident", palette_offset + 1, Vector2(2,26), [Vector3(2,0,26), Vector3(2,0,-22), Vector3(-2,0,-30)])
+    _add_settlement_npc(root, center, "Торговец", "trader", palette_offset + 2, Vector2(-14,-8), [Vector3(-14,0,-8), Vector3(14,0,-8), Vector3(14,0,10), Vector3(-14,0,10)])
+    _add_settlement_npc(root, center, "Ремесленник", "craftsman", palette_offset + 3, Vector2(-18,15), [Vector3(-18,0,15), Vector3(-10,0,4), Vector3(-18,0,-7)])
+    _add_settlement_npc(root, center, "Страж", "watch", palette_offset + 4, Vector2(-3,55), [Vector3(-3,0,55), Vector3(3,0,62), Vector3(3,0,54)])
+
+func _populate_town(root: Node3D, center: Vector2) -> void:
+    _add_settlement_npc(root, center, "Горожанин", "resident", 0, Vector2(-2,-78), [Vector3(-2,0,-78), Vector3(-2,0,76)])
+    _add_settlement_npc(root, center, "Горожанка", "resident", 1, Vector2(2,70), [Vector3(2,0,70), Vector3(2,0,-76)])
+    _add_settlement_npc(root, center, "Торговец", "trader", 2, Vector2(-58,-4), [Vector3(-58,0,-4), Vector3(58,0,-4)])
+    _add_settlement_npc(root, center, "Торговка", "trader", 3, Vector2(52,0), [Vector3(52,0,0), Vector3(-52,0,0)])
+    _add_settlement_npc(root, center, "Ремесленник", "craftsman", 4, Vector2(-34,30), [Vector3(-34,0,30), Vector3(34,0,30)])
+    _add_settlement_npc(root, center, "Ремесленница", "craftsman", 0, Vector2(30,38), [Vector3(30,0,38), Vector3(-30,0,38)])
+    _add_settlement_npc(root, center, "Страж ворот", "watch", 2, Vector2(-4,96), [Vector3(-4,0,96), Vector3(-4,0,108)])
+    _add_settlement_npc(root, center, "Страж ворот", "watch", 3, Vector2(4,108), [Vector3(4,0,108), Vector3(4,0,96)])
+    _add_settlement_npc(root, center, "Патрульный", "watch", 4, Vector2(-60,92), [Vector3(-60,0,92), Vector3(60,0,92)])
+    _add_settlement_npc(root, center, "Патрульный", "watch", 1, Vector2(60,-92), [Vector3(60,0,-92), Vector3(-60,0,-92)])
+
+func _add_settlement_npc(root: Node3D, center: Vector2, display_name: String, role: String, palette: int, local_start: Vector2, route: Array) -> SettlementNPC:
+    var npc := SETTLEMENT_NPC.new() as SettlementNPC
+    npc.name = "SettlementNPC_%02d" % materialized_npcs
+    npc.configure(display_name, role, palette, route)
+    npc.position = _local_position_on_terrain(root, center, local_start, 0.08)
+    root.add_child(npc)
+    materialized_npcs += 1
+    return npc
 
 func _add_town_wall(root: Node3D, center: Vector2, node_name: String, size: Vector3, local_pos: Vector2) -> void:
     _add_static_box_local(root, center, node_name, size, local_pos, size.y * 0.5, stone_material)
