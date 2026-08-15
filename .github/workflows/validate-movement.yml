@@ -55,7 +55,16 @@ jobs:
             assets/vfx
             assets/shaders
             assets/staging/sourcechat_b47
-            assets/staging/nature/kenney_nature_kit
+            assets/staging/nature/kenney_nature_kit/License.txt
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/tree_oak.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/tree_detailed.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/tree_pineDefaultA.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/plant_bushDetailed.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/grass_large.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/rock_largeA.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/log_large.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/stump_roundDetailed.glb
+            assets/staging/nature/kenney_nature_kit/Models/GLTF format/mushroom_tanGroup.glb
             project.godot
           sparse-checkout-cone-mode: false
       - name: Install Godot 4.7.1
