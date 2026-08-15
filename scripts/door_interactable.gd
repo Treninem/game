@@ -21,7 +21,12 @@ func configure(label: String, open_direction: float = -1.0, start_open: bool = f
     configured = true
 
 func _ready() -> void:
-    sync_to_physics = true
+    # This door is rotated directly from script in physics processing. Keeping
+    # sync_to_physics enabled can defer the PhysicsServer transform and leave
+    # the previous closed collision in place for queries after an immediate
+    # state change. Direct scripted transforms already update AnimatableBody3D
+    # collision, so disable the extra AnimationPlayer-oriented synchronization.
+    sync_to_physics = false
     collision_layer = 1
     collision_mask = 1
     closed_rotation_y = rotation.y
