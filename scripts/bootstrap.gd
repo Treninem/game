@@ -19,6 +19,9 @@ func _ready() -> void:
     if SaveManager.consume_new_game_request():
         GameState.reset_new_game()
         _place_player_safely(RESPAWN_POSITION)
+        # A game started from the title screen must immediately become a real
+        # resumable game instead of waiting for the first periodic autosave.
+        SaveManager.save_game(player)
     elif not SaveManager.load_game(player):
         GameState.reset_new_game()
         _place_player_safely(RESPAWN_POSITION)
