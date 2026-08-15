@@ -1,0 +1,61 @@
+name: Import Kenney industry construction and vehicle source packs
+on:
+  push:
+    paths: ['.github/workflows/import_real_kenney_industry_transport.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: import-kenney-industry-transport
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/import_real_kenney_industry_transport.yml
+            assets/source_packs/opengameart/kenney
+          sparse-checkout-cone-mode: false
+      - name: Download validate and inventory CC0 packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='assets/source_packs/opengameart/kenney'
+          mkdir -p "$ROOT"/{factory_kit,city_kit_industrial,building_kit,car_kit}
+          getzip(){ url="$1"; out="$2"; [ -s "$out" ] || curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-AssetImporter/7.0' "$url" -o "$out"; test -s "$out"; unzip -tqq "$out" >/dev/null; head -c 1024 "$out" | grep -Eiq '<!doctype html|<html|<body' && { echo "ERROR HTML instead of ZIP: $out"; exit 1; } || true; }
+          getzip 'https://opengameart.org/sites/default/files/kenney_factory-kit_3.0.zip' "$ROOT/factory_kit/kenney_factory-kit_3.0.zip"
+          getzip 'https://opengameart.org/sites/default/files/kenney_city-kit-industrial_1.0.zip' "$ROOT/city_kit_industrial/kenney_city-kit-industrial_1.0.zip"
+          getzip 'https://opengameart.org/sites/default/files/kenney_building-kit.zip' "$ROOT/building_kit/kenney_building-kit.zip"
+          getzip 'https://opengameart.org/sites/default/files/kenney_car-kit_3.1.zip' "$ROOT/car_kit/kenney_car-kit_3.1.zip"
+          printf '%s\n' 'Source: https://opengameart.org/content/factory-kit' 'License: CC0' 'Author: Kenney' 'Coverage: 140+ optimized factory/warehouse/conveyor/industrial objects.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/factory_kit/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/city-kit-industrial' 'License: CC0' 'Author: Kenney' 'Coverage: 25+ optimized industrial city buildings; FBX/OBJ/glTF.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/city_kit_industrial/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/building-kit' 'License: CC0' 'Author: Kenney' 'Coverage: about 80 construction pieces including walls, windows, animated doors and roofs; Godot-compatible.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/building_kit/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/car-kit' 'License: CC0' 'Author: Kenney' 'Coverage: 45+ optimized vehicles including sedan, van, ambulance, firetruck and police, separate wheels and debris; FBX/OBJ/glTF.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/car_kit/SOURCE.md"
+          find "$ROOT" -type f -name '*.zip' -print0 | sort -z | xargs -0 sha256sum > "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+          { echo '# Kenney complete source ZIP inventory'; echo; echo '| File | Bytes | SHA256 |'; echo '|---|---:|---|'; while IFS= read -r -d '' f; do printf '| `%s` | %s | `%s` |\n' "${f#$ROOT/}" "$(stat -c %s "$f")" "$(sha256sum "$f"|awk '{print $1}')"; done < <(find "$ROOT" -type f -name '*.zip' -print0 | sort -z); } > "$ROOT/ALL_SOURCE_INVENTORY.md"
+          rm -rf /tmp/kenneybatch && mkdir -p /tmp/kenneybatch
+          for d in factory_kit city_kit_industrial building_kit car_kit; do cp -a "$ROOT/$d" /tmp/kenneybatch/; done
+          cp "$ROOT/ALL_SOURCE_SHA256SUMS.txt" /tmp/kenneybatch/
+          cp "$ROOT/ALL_SOURCE_INVENTORY.md" /tmp/kenneybatch/
+      - name: Commit safely over freshest main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          ROOT='assets/source_packs/opengameart/kenney'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main; git reset --hard FETCH_HEAD; mkdir -p "$ROOT"
+            for d in factory_kit city_kit_industrial building_kit car_kit; do rm -rf "$ROOT/$d"; cp -a "/tmp/kenneybatch/$d" "$ROOT/"; done
+            cp /tmp/kenneybatch/ALL_SOURCE_SHA256SUMS.txt "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+            cp /tmp/kenneybatch/ALL_SOURCE_INVENTORY.md "$ROOT/ALL_SOURCE_INVENTORY.md"
+            git add "$ROOT"
+            git diff --cached --quiet && exit 0
+            git commit -m 'assets: vendor Kenney industry construction and vehicle source packs'
+            git push origin HEAD:main && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
