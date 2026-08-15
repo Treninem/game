@@ -38,7 +38,10 @@ func _fail(code: int, message: String) -> void:
 
 func _run_test() -> void:
     _stage("create settlement streamer")
-    var settlements := SETTLEMENTS_SCRIPT.new() as WorldSettlements
+    var settlements = SETTLEMENTS_SCRIPT.new()
+    if settlements == null or not settlements is Node3D:
+        _fail(1, "settlement streamer could not be instantiated as Node3D")
+        return
     settlements.name = "TestSettlements"
     add_child(settlements)
 
