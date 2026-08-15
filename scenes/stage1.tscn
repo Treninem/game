@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/runtime_stability_guard.gd" id="13"]
 [ext_resource type="Script" path="res://scripts/start_spawn_surface.gd" id="14"]
 [ext_resource type="Script" path="res://scripts/start_region_streamer.gd" id="15"]
+[ext_resource type="Script" path="res://scripts/start_civilization_signs.gd" id="16"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -38,6 +39,9 @@ script = ExtResource("9")
 
 [node name="StartRegion" type="Node3D" parent="World"]
 script = ExtResource("15")
+
+[node name="CivilizationSigns" type="Node3D" parent="World/StartRegion"]
+script = ExtResource("16")
 
 [node name="CapitalPerimeter" type="Node3D" parent="World"]
 script = ExtResource("11")
