@@ -1,4 +1,4 @@
-# GodotShaders Portal Shaders — CC0 code-only staging
+# GodotShaders Portal / Gravity / Magic Glow — CC0 code-only staging
 
 This folder contains shader source code only. It is a shared asset-library package and is **not automatically connected to gameplay**.
 
@@ -17,6 +17,30 @@ This folder contains shader source code only. It is a shared asset-library packa
 - Engine family: Godot 4 / Spatial stencil shader
 - License for code: CC0 1.0 Universal
 - Purpose: stencil-mask portal surface suitable as a basis for 3D portal rendering.
+
+## `black_hole_3d.gdshader`
+- Title: Black Hole
+- Author: jamesdev
+- Source: https://godotshaders.com/shader/black-hole/
+- Engine family: Godot 4 / Spatial shader
+- License for code: CC0 1.0 Universal
+- Purpose: screen/depth-based gravitational lensing and black-hole core effect around a spherical mesh.
+
+## `black_hole_2d.gdshader`
+- Title: 2D Black Hole
+- Author: Dan
+- Source: https://godotshaders.com/shader/2d-black-hole/
+- Engine family: Godot 4 / CanvasItem shader
+- License for code: CC0 1.0 Universal
+- Purpose: lightweight radial screen distortion suitable for gravity, void, warp and compact portal effects.
+
+## `magic_pulse_glow_2d.gdshader`
+- Title: Sun Pulse Glow
+- Author: Riyan
+- Source: https://godotshaders.com/shader/sun-pulse-glow/
+- Engine family: Godot 4 / CanvasItem shader
+- License for code: CC0 1.0 Universal
+- Purpose: texture-free breathing radial glow suitable for magic circles, orbs, charge-up effects and ambient magical light.
 
 ## Import policy
 - Only shader source code is copied from the CC0 code snippets.
