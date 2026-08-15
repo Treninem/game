@@ -211,15 +211,16 @@ func _run_test() -> void:
         _fail(36, "Lumengrad townhouse back window is not a real physical opening")
         return
 
-    # At the first interstory boundary, the main floor must be solid while the
-    # stairwell strip is genuinely open. This catches a hidden full-floor box.
+    # At the first interstory boundary, the main floor must be solid while a
+    # clear strip beside the stair flights remains genuinely open. Probe near
+    # the outer edge of the shaft so the ray tests the opening, not a real step.
     var floor_hit := _ray(Vector3(18.5, 2.82, 0.0), Vector3(18.5, 3.36, 0.0))
     if floor_hit.is_empty():
         _fail(37, "townhouse first-floor slab is missing beside the stairwell")
         return
-    var stairwell_hit := _ray(Vector3(22.45, 2.82, 0.0), Vector3(22.45, 3.36, 0.0))
+    var stairwell_hit := _ray(Vector3(23.5, 2.82, 0.0), Vector3(23.5, 3.36, 0.0))
     if not stairwell_hit.is_empty():
-        _fail(38, "townhouse interstory floor seals the physical stairwell opening")
+        _fail(38, "townhouse interstory floor seals the physical stairwell opening; collider=%s" % stairwell_hit.get("collider"))
         return
 
     print("Enterable building smoke passed: starter_room=", building.room_count, " starter_furniture=", building.interior_prop_count, " city_stories=", townhouse.story_count, " city_stairs=", townhouse.stair_flight_count, " city_floor_area_m2=", townhouse.interior_floor_area_m2)
