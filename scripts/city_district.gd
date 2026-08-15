@@ -1,6 +1,7 @@
 extends Node3D
 
 const CAPITAL := preload("res://scripts/capital_data.gd")
+const ENTERABLE_TOWNHOUSE := preload("res://scripts/enterable_townhouse.gd")
 
 const CELL_SIZE := 192.0
 const LOAD_RADIUS_CELLS := 2
@@ -304,43 +305,27 @@ func _add_district_props(root: Node3D, district_id: String, rng: RandomNumberGen
     elif district_id == "stables":
         _instance_asset("wagon", root, Vector3(-28, 0.12, 30), Vector3(0, rng.randf_range(-PI, PI), 0))
 
-func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id: String, rng: RandomNumberGenerator) -> void:
-    var building := Node3D.new()
+func _build_medieval_house(parent: Node3D, pos: Vector3, yaw: float, district_id: String, rng: RandomNumberGenerator) -> EnterableTownhouse:
+    var brick_style: bool = district_id in ["old_town", "guards", "training", "training_mine", "warehouses", "port", "crafts"]
+    var stories: int = _story_count_for(district_id)
+    var label := "Городской дом"
+    if district_id in INDUSTRIAL_DISTRICTS:
+        label = "Городское рабочее здание"
+
+    var building := ENTERABLE_TOWNHOUSE.new() as EnterableTownhouse
     building.name = "House"
+    building.configure(Vector2(8.0, 8.0), stories, STORY_HEIGHT, 1 if brick_style else 0, label)
     building.position = pos
     building.rotation.y = yaw
+    building.set_meta("district_id", district_id)
+    building.set_meta("streamed_with_city_cell", true)
     parent.add_child(building)
-
-    var brick_style: bool = district_id in ["old_town", "guards", "training", "training_mine", "warehouses", "port", "crafts"]
-    var wall_key: String = "wall_brick" if brick_style else "wall_plaster"
-    var door_key: String = "door_brick" if brick_style else "door_plaster"
-    var window_key: String = "window_brick" if brick_style else "window_plaster"
-    var stories: int = _story_count_for(district_id)
-
-    for story in range(stories):
-        var y: float = float(story) * STORY_HEIGHT
-        for i in range(4):
-            var offset: float = -3.0 + float(i) * MODULE_WIDTH
-            var front_key: String = wall_key
-            if story == 0 and i == 1:
-                front_key = door_key
-            elif i == 0 or i == 3:
-                front_key = window_key
-            _instance_asset(front_key, building, Vector3(offset, y, 4.0), Vector3.ZERO)
-            _instance_asset(window_key if (i == 1 or i == 2) else wall_key, building, Vector3(offset, y, -4.0), Vector3(0, PI, 0))
-            _instance_asset(window_key if i % 2 == 0 else wall_key, building, Vector3(4.0, y, offset), Vector3(0, PI * 0.5, 0))
-            _instance_asset(window_key if i % 2 == 1 else wall_key, building, Vector3(-4.0, y, offset), Vector3(0, -PI * 0.5, 0))
-
-    _instance_asset("roof", building, Vector3(0, float(stories) * STORY_HEIGHT, 0), Vector3.ZERO)
-    _add_collision_box(
-        Vector3(8.0, float(stories) * STORY_HEIGHT, 8.0),
-        Vector3(0, float(stories) * STORY_HEIGHT * 0.5, 0),
-        building
-    )
 
     var clutter_chance: float = 0.55 if district_id in INDUSTRIAL_DISTRICTS else 0.24
     if rng.randf() < clutter_chance:
         _instance_asset("crate", building, Vector3(5.2, 0.08, 3.4), Vector3(0, rng.randf_range(-PI, PI), 0))
+
+    return building
 
 func _story_count_for(district_id: String) -> int:
     if district_id in ["warehouses", "port", "stables", "sawmill", "training_mine"]:

@@ -1,6 +1,7 @@
 extends Node3D
 
 const BUILDING_SCRIPT := preload("res://scripts/enterable_building.gd")
+const CITY_SCRIPT := preload("res://scripts/city_district.gd")
 
 var failed := false
 
@@ -114,7 +115,114 @@ func _run_test() -> void:
         _fail(15, "furniture or a whole-house collision blocks the main interior aisle")
         return
 
-    print("Enterable building smoke passed: room=", building.room_count, " door=", building.door_count, " windows=", building.window_count, " structural_pieces=", building.structural_piece_count, " furniture=", building.interior_prop_count, " interior=", building.interior_size)
+    # City houses used to be visual shells wrapped in one solid 8xN x8 collision.
+    # Materialize the exact house path used by Lumengrad and prove all represented
+    # floors are physical, connected by stairs and actually enterable.
+    var city := CITY_SCRIPT.new()
+    city.name = "CityDistrictHarness"
+    add_child(city)
+    await get_tree().process_frame
+
+    var city_cell := Node3D.new()
+    city_cell.name = "CityHouseTestCell"
+    city.add_child(city_cell)
+    var rng := RandomNumberGenerator.new()
+    rng.seed = 771331
+    var townhouse := city.call(
+        "_build_medieval_house",
+        city_cell,
+        Vector3(20.0, 0.0, 0.0),
+        0.0,
+        "aristocratic",
+        rng
+    ) as EnterableTownhouse
+
+    for _i in range(4):
+        await get_tree().physics_frame
+
+    if townhouse == null:
+        _fail(21, "Lumengrad house generator did not return an enterable townhouse")
+        return
+    if not townhouse.is_in_group("enterable_city_house") or not townhouse.is_in_group("enterable_building"):
+        _fail(22, "Lumengrad townhouse is not registered as an enterable world space")
+        return
+    if townhouse.story_count != 3 or townhouse.room_count != 3:
+        _fail(23, "elite Lumengrad townhouse lost its three physical represented floors")
+        return
+    if townhouse.stair_flight_count != townhouse.story_count - 1:
+        _fail(24, "represented townhouse floors are not connected by physical stair flights")
+        return
+    if townhouse.structural_piece_count < 70:
+        _fail(25, "townhouse structure is suspiciously simple and may have regressed to monolithic collision")
+        return
+    if townhouse.interior_prop_count < townhouse.story_count * 2:
+        _fail(26, "townhouse represented floors do not contain physical interior fixtures")
+        return
+    if townhouse.interior_floor_area_m2 <= 80.0:
+        _fail(27, "townhouse has no measurable multi-floor interior area")
+        return
+    if bool(townhouse.get_meta("monolithic_collision", true)):
+        _fail(28, "townhouse explicitly reports a monolithic whole-building collision")
+        return
+    if not bool(townhouse.get_meta("interior_fits_shell", false)):
+        _fail(29, "townhouse interior is not bounded by its physical exterior shell")
+        return
+    if townhouse.get_node_or_null("RealPackRoof") == null:
+        _fail(30, "townhouse lost the promoted production roof asset")
+        return
+
+    var townhouse_shell := townhouse.get_node_or_null("PhysicalShell") as Node3D
+    if townhouse_shell == null:
+        _fail(31, "townhouse has no physical shell root")
+        return
+    for flight_index in range(townhouse.story_count - 1):
+        var flight := townhouse_shell.get_node_or_null("StairFlight_%d" % flight_index) as Node3D
+        if flight == null or int(flight.get_meta("step_count", 0)) < 12:
+            _fail(32, "townhouse stair flight %d is missing a physically traversable step sequence" % flight_index)
+            return
+        var physical_steps := 0
+        for step_candidate in flight.get_children():
+            var step := step_candidate as StaticBody3D
+            if step == null:
+                continue
+            var step_collision := step.get_node_or_null("Collision") as CollisionShape3D
+            if step_collision != null and step_collision.shape != null:
+                physical_steps += 1
+        if physical_steps < 12:
+            _fail(33, "townhouse stair flight %d contains decorative rather than physical steps" % flight_index)
+            return
+
+    townhouse.front_door.set_open(false, true)
+    await get_tree().physics_frame
+    var townhouse_closed := _ray(Vector3(20.0, 1.25, 6.0), Vector3(20.0, 1.25, 2.6))
+    if townhouse_closed.is_empty() or townhouse_closed.get("collider") != townhouse.front_door:
+        _fail(34, "Lumengrad townhouse closed door does not physically control access")
+        return
+
+    townhouse.front_door.set_open(true, true)
+    await get_tree().physics_frame
+    var townhouse_open := _ray(Vector3(20.0, 1.25, 6.0), Vector3(20.0, 1.25, 0.8))
+    if not townhouse_open.is_empty():
+        _fail(35, "Lumengrad townhouse doorway remains sealed when the door is open; collider=%s" % townhouse_open.get("collider"))
+        return
+
+    var townhouse_window := _ray(Vector3(20.0, 1.55, -6.0), Vector3(20.0, 1.55, -3.0))
+    if not townhouse_window.is_empty():
+        _fail(36, "Lumengrad townhouse back window is not a real physical opening")
+        return
+
+    # At the first interstory boundary, the main floor must be solid while the
+    # stairwell strip is genuinely open. This catches a hidden full-floor box.
+    var floor_hit := _ray(Vector3(18.5, 2.82, 0.0), Vector3(18.5, 3.36, 0.0))
+    if floor_hit.is_empty():
+        _fail(37, "townhouse first-floor slab is missing beside the stairwell")
+        return
+    var stairwell_hit := _ray(Vector3(22.45, 2.82, 0.0), Vector3(22.45, 3.36, 0.0))
+    if not stairwell_hit.is_empty():
+        _fail(38, "townhouse interstory floor seals the physical stairwell opening")
+        return
+
+    print("Enterable building smoke passed: starter_room=", building.room_count, " starter_furniture=", building.interior_prop_count, " city_stories=", townhouse.story_count, " city_stairs=", townhouse.stair_flight_count, " city_floor_area_m2=", townhouse.interior_floor_area_m2)
     get_tree().quit(0)
 
 func _ray(from: Vector3, to: Vector3) -> Dictionary:
