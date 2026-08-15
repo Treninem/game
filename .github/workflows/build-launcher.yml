@@ -1,0 +1,78 @@
+name: Build ImPuls Launcher
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "launcher/**"
+      - ".github/workflows/build-launcher.yml"
+      - "assets/branding/impuls_icon.png"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-impuls-launcher
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build launcher
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $csc = "$env:WINDIR\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
+          if (-not (Test-Path $csc)) { throw "C# compiler not found: $csc" }
+          New-Item -ItemType Directory -Force dist | Out-Null
+
+          Add-Type -AssemblyName System.Drawing
+          $bitmap = [System.Drawing.Bitmap]::FromFile((Resolve-Path 'assets/branding/impuls_icon.png'))
+          $icon = [System.Drawing.Icon]::FromHandle($bitmap.GetHicon())
+          $stream = [System.IO.File]::Open('dist\ImPuls.ico', [System.IO.FileMode]::Create)
+          try { $icon.Save($stream) } finally { $stream.Dispose(); $icon.Dispose(); $bitmap.Dispose() }
+
+          & $csc /nologo /target:winexe /optimize+ /platform:anycpu /win32icon:dist\ImPuls.ico /out:dist\ImPuls-Launcher.exe `
+            /reference:System.dll `
+            /reference:System.Core.dll `
+            /reference:System.Windows.Forms.dll `
+            /reference:System.Drawing.dll `
+            /reference:System.Web.Extensions.dll `
+            /reference:System.IO.Compression.dll `
+            /reference:System.IO.Compression.FileSystem.dll `
+            launcher\ImPulsLauncher.cs
+          if ($LASTEXITCODE -ne 0) { throw "csc failed with exit code $LASTEXITCODE" }
+
+          $exe = Get-Item 'dist\ImPuls-Launcher.exe'
+          if ($exe.Length -lt 20000) { throw "Launcher executable is unexpectedly small: $($exe.Length) bytes" }
+          $bytes = [System.IO.File]::ReadAllBytes($exe.FullName)
+          if ($bytes[0] -ne 0x4d -or $bytes[1] -ne 0x5a) { throw 'Launcher is not a valid Windows PE executable.' }
+
+          $hash = (Get-FileHash $exe.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash *ImPuls-Launcher.exe" | Set-Content -Path 'dist\ImPuls-Launcher.exe.sha256' -Encoding ascii
+          Write-Host "Launcher SHA256: $hash"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ImPuls-Launcher
+          path: |
+            dist/ImPuls-Launcher.exe
+            dist/ImPuls-Launcher.exe.sha256
+          if-no-files-found: error
+
+      - name: Publish launcher prerelease
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          gh release view launcher --repo "$env:GITHUB_REPOSITORY" *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create launcher --repo "$env:GITHUB_REPOSITORY" --title "ImPuls Launcher" --notes "Standalone Windows launcher for downloading, updating and starting the latest published ImPuls game release." --prerelease
+          }
+          gh release upload launcher 'dist\ImPuls-Launcher.exe' 'dist\ImPuls-Launcher.exe.sha256' --clobber --repo "$env:GITHUB_REPOSITORY"
