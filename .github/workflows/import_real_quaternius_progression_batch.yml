@@ -1,0 +1,65 @@
+name: Import Quaternius progression source packs
+on:
+  push:
+    paths: ['.github/workflows/import_real_quaternius_progression_batch.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: import-quaternius-progression
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/import_real_quaternius_progression_batch.yml
+            assets/source_packs/opengameart/quaternius
+          sparse-checkout-cone-mode: false
+      - name: Download validate and inventory CC0 progression packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='assets/source_packs/opengameart/quaternius'
+          mkdir -p "$ROOT"/{rpg_items,medieval_weapons,animated_monsters,universal_animation_library_2,modular_scifi}
+          getzip(){ url="$1"; out="$2"; [ -s "$out" ] || curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 2400 -A 'ImPuls-CC0-AssetImporter/8.0' "$url" -o "$out"; test -s "$out"; unzip -tqq "$out" >/dev/null; head -c 1024 "$out" | grep -Eiq '<!doctype html|<html|<body' && { echo "ERROR HTML instead of ZIP: $out"; exit 1; } || true; }
+          getzip 'https://opengameart.org/sites/default/files/ultimate_rpg_items_pack_by_quaternius_0.zip' "$ROOT/rpg_items/ultimate_rpg_items_pack_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/Medieval%20Weapons%20Pack%20-%20Sept%202018.zip' "$ROOT/medieval_weapons/medieval_weapons_pack_sept_2018.zip"
+          getzip 'https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip' "$ROOT/animated_monsters/animated_monster_pack_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/universal_animation_library_2standard.zip' "$ROOT/universal_animation_library_2/universal_animation_library_2standard.zip"
+          getzip 'https://opengameart.org/sites/default/files/ultimate_modular_sci-fi_-_feb_2021.zip' "$ROOT/modular_scifi/ultimate_modular_scifi_feb_2021.zip"
+
+          printf '%s\n' 'Source: https://opengameart.org/content/low-poly-rpg-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: 100+ RPG/fantasy item models, plus PNG renders; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/rpg_items/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-medieval-weapons' 'License: CC0' 'Author: Quaternius' 'Coverage: medieval weapons including swords, scythes, shields, daggers, bows and axes.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/medieval_weapons/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-animated-monsters' 'License: CC0' 'Author: Quaternius' 'Coverage: animated slime, skeleton, dragon and bat with multiple movement/combat animations; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/animated_monsters/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/universal-animation-library-2' 'License: CC0' 'Author: Quaternius' 'Coverage: 130+ humanoid animations on a universal rig, including combat, parkour, farming, fishing and locomotion; source lists Godot compatibility.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/universal_animation_library_2/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-modular-sci-fi-environments' 'License: CC0' 'Author: Quaternius' 'Coverage: large modular sci-fi environment/interior/prop set; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/modular_scifi/SOURCE.md"
+
+          find "$ROOT" -type f -name '*.zip' -print0 | sort -z | xargs -0 sha256sum > "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+          { echo '# Quaternius complete source ZIP inventory'; echo; echo '| File | Bytes | SHA256 |'; echo '|---|---:|---|'; while IFS= read -r -d '' f; do printf '| `%s` | %s | `%s` |\n' "${f#$ROOT/}" "$(stat -c %s "$f")" "$(sha256sum "$f"|awk '{print $1}')"; done < <(find "$ROOT" -type f -name '*.zip' -print0 | sort -z); } > "$ROOT/ALL_SOURCE_INVENTORY.md"
+          rm -rf /tmp/qprogress && mkdir -p /tmp/qprogress
+          for d in rpg_items medieval_weapons animated_monsters universal_animation_library_2 modular_scifi; do cp -a "$ROOT/$d" /tmp/qprogress/; done
+          cp "$ROOT/ALL_SOURCE_SHA256SUMS.txt" /tmp/qprogress/
+          cp "$ROOT/ALL_SOURCE_INVENTORY.md" /tmp/qprogress/
+      - name: Commit safely over freshest main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          ROOT='assets/source_packs/opengameart/quaternius'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main; git reset --hard FETCH_HEAD; mkdir -p "$ROOT"
+            for d in rpg_items medieval_weapons animated_monsters universal_animation_library_2 modular_scifi; do rm -rf "$ROOT/$d"; cp -a "/tmp/qprogress/$d" "$ROOT/"; done
+            cp /tmp/qprogress/ALL_SOURCE_SHA256SUMS.txt "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+            cp /tmp/qprogress/ALL_SOURCE_INVENTORY.md "$ROOT/ALL_SOURCE_INVENTORY.md"
+            git add "$ROOT"
+            git diff --cached --quiet && exit 0
+            git commit -m 'assets: vendor Quaternius progression source packs'
+            git push origin HEAD:main && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
