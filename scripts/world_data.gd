@@ -1,30 +1,14 @@
 extends Node
 
+const WORLD_GEOGRAPHY := preload("res://scripts/world_geography.gd")
+
 const WORLD_HALF_SIZE := 32000.0
 const WORLD_MIN := Vector2(-WORLD_HALF_SIZE, -WORLD_HALF_SIZE)
 const WORLD_MAX := Vector2(WORLD_HALF_SIZE, WORLD_HALF_SIZE)
 const SEA_LEVEL := 0.0
-# Capital target from the master specification is roughly 4x4 km. Reserve a
-# stable, mostly level footprint now so districts can be built without later
-# tearing up terrain or moving quests/buildings.
 const CITY_FLAT_RADIUS := 2100.0
 const CITY_BLEND_RADIUS := 2700.0
 const WORLD_SEED := 260814
-
-const POIS := [
-    {"id": "lumengrad", "name": "Люменград", "pos": Vector2(0, -36), "kind": "capital"},
-    {"id": "north_pass", "name": "Северный перевал", "pos": Vector2(1200, -11800), "kind": "mountain"},
-    {"id": "pinewatch", "name": "Сосновый дозор", "pos": Vector2(-8600, -7200), "kind": "settlement"},
-    {"id": "lake_vael", "name": "Озеро Ваэль", "pos": Vector2(5200, -6900), "kind": "lake"},
-    {"id": "whisper_marsh", "name": "Шепчущие болота", "pos": Vector2(-9200, 5200), "kind": "marsh"},
-    {"id": "red_canyon", "name": "Красный каньон", "pos": Vector2(10800, 7600), "kind": "danger"},
-    {"id": "old_mines", "name": "Старые королевские шахты", "pos": Vector2(-3500, 9600), "kind": "mine"},
-    {"id": "sun_coast", "name": "Солнечное побережье", "pos": Vector2(13800, 15400), "kind": "coast"},
-    {"id": "frost_ruins", "name": "Руины ледяной башни", "pos": Vector2(-4300, -18400), "kind": "ruin"},
-    {"id": "ashen_peak", "name": "Пепельная вершина", "pos": Vector2(14200, -12200), "kind": "danger"},
-    {"id": "western_forest", "name": "Западный древний лес", "pos": Vector2(-15800, -1200), "kind": "forest"},
-    {"id": "south_isles", "name": "Южный архипелаг", "pos": Vector2(-2400, 23600), "kind": "coast"}
-]
 
 var elevation_noise := FastNoiseLite.new()
 var detail_noise := FastNoiseLite.new()
@@ -54,15 +38,31 @@ func inside_world(pos: Vector2) -> bool:
 func elevation_at(pos: Vector2) -> float:
     if not inside_world(pos):
         return -80.0
+
     var broad := elevation_noise.get_noise_2d(pos.x, pos.y) * 34.0
     var detail := detail_noise.get_noise_2d(pos.x, pos.y) * 7.0
     var ridges := pow(absf(ridge_noise.get_noise_2d(pos.x, pos.y)), 2.4) * 48.0
     var height := broad + detail + ridges
 
-    var city_distance := pos.length()
+    # The 4 x 4 km Asterna capital remains a stable buildable plateau, but it is
+    # deliberately far from the story spawn instead of flattening the origin.
+    var city_distance := pos.distance_to(WORLD_GEOGRAPHY.ASTERN_CAPITAL)
     if city_distance < CITY_BLEND_RADIUS:
         var city_factor := smoothstep(CITY_FLAT_RADIUS, CITY_BLEND_RADIUS, city_distance)
         height *= city_factor
+
+    # The prologue begins on a real river bank. Carve only the local river valley
+    # into the terrain; outside the start region the continent noise is untouched.
+    if WORLD_GEOGRAPHY.in_start_region(pos):
+        var river_distance := WORLD_GEOGRAPHY.distance_to_start_river(pos)
+        if river_distance < WORLD_GEOGRAPHY.START_RIVER_BANK_WIDTH:
+            var riverbed_y := WORLD_GEOGRAPHY.START_RIVER_WATER_LEVEL - 1.55
+            var bank_blend := smoothstep(
+                WORLD_GEOGRAPHY.START_RIVER_HALF_WIDTH,
+                WORLD_GEOGRAPHY.START_RIVER_BANK_WIDTH,
+                river_distance
+            )
+            height = lerpf(riverbed_y, height, bank_blend)
 
     var edge := maxf(absf(pos.x), absf(pos.y)) / WORLD_HALF_SIZE
     if edge > 0.84:
@@ -70,7 +70,12 @@ func elevation_at(pos: Vector2) -> float:
     return height
 
 func moisture_at(pos: Vector2) -> float:
-    return clampf(0.5 + moisture_noise.get_noise_2d(pos.x, pos.y) * 0.5, 0.0, 1.0)
+    var base := clampf(0.5 + moisture_noise.get_noise_2d(pos.x, pos.y) * 0.5, 0.0, 1.0)
+    if WORLD_GEOGRAPHY.in_start_region(pos):
+        var river_distance := WORLD_GEOGRAPHY.distance_to_start_river(pos)
+        if river_distance < 180.0:
+            base = maxf(base, lerpf(0.80, base, clampf(river_distance / 180.0, 0.0, 1.0)))
+    return base
 
 func temperature_at(pos: Vector2) -> float:
     var latitude := clampf((pos.y + WORLD_HALF_SIZE) / (WORLD_HALF_SIZE * 2.0), 0.0, 1.0)
@@ -81,6 +86,13 @@ func biome_at(pos: Vector2) -> String:
     var elevation := elevation_at(pos)
     if elevation < SEA_LEVEL - 2.0:
         return "ocean"
+
+    # The opening chapter is explicitly a forested river region of Asterna.
+    # Keep its ecological identity deterministic so story landmarks do not move
+    # between noise changes.
+    if WORLD_GEOGRAPHY.in_start_region(pos):
+        return "forest"
+
     if elevation > 50.0:
         return "mountains"
     var temperature := temperature_at(pos)
@@ -117,5 +129,14 @@ func biome_color(biome: String) -> Color:
         "forest": return Color(0.10, 0.27, 0.13, 1.0)
         _: return Color(0.24, 0.36, 0.18, 1.0)
 
+func political_region_at(pos: Vector2) -> Dictionary:
+    return WORLD_GEOGRAPHY.state_at(pos)
+
+func state_id_at(pos: Vector2) -> String:
+    return WORLD_GEOGRAPHY.state_id_at(pos)
+
 func poi_catalog() -> Array:
-    return POIS.duplicate(true)
+    return WORLD_GEOGRAPHY.poi_catalog()
+
+func road_catalog() -> Array:
+    return WORLD_GEOGRAPHY.road_catalog()
