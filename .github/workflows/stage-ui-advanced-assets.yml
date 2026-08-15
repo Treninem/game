@@ -1,0 +1,141 @@
+name: Stage advanced UI assets
+
+on:
+  push:
+    paths:
+      - .github/workflows/stage-ui-advanced-assets.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ui-advanced-staging-assets
+  cancel-in-progress: true
+
+jobs:
+  stage-ui-advanced:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            assets/staging/ui
+            .github/workflows/stage-ui-advanced-assets.yml
+          sparse-checkout-cone-mode: false
+
+      - name: Download verified CC0 UI assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/staging/ui"
+          mkdir -p "$ROOT"
+          FAILS="$ROOT/UI_ADVANCED_DOWNLOAD_FAILURES.txt"
+          : > "$FAILS"
+
+          write_source() {
+            local dir="$1" title="$2" page="$3" direct="$4" purpose="$5"
+            printf '# %s\n\n- Status: STAGED_PHYSICAL\n- Source page: %s\n- Direct download: %s\n- License: CC0\n- Intended use: %s\n- Note: Source-only staging. Main integration chat must review before production use.\n' \
+              "$title" "$page" "$direct" "$purpose" > "$dir/SOURCE.md"
+            printf 'Creative Commons Zero (CC0)\nSee SOURCE.md for verified source page.\n' > "$dir/LICENSE.txt"
+          }
+
+          zip_pack() {
+            local slug="$1" title="$2" page="$3" direct="$4" purpose="$5"
+            local dir="$ROOT/$slug" tmp
+            tmp="$(mktemp /tmp/ui-advanced-XXXXXX.zip)"
+            rm -rf "$dir" && mkdir -p "$dir"
+            if curl --retry 3 --retry-delay 2 -fL "$direct" -o "$tmp" && unzip -tq "$tmp" >/dev/null; then
+              unzip -oq "$tmp" -d "$dir"
+              write_source "$dir" "$title" "$page" "$direct" "$purpose"
+            else
+              echo "$slug | $direct" >> "$FAILS"
+              rm -rf "$dir"
+            fi
+            rm -f "$tmp"
+          }
+
+          one_file() {
+            local slug="$1" filename="$2" title="$3" page="$4" direct="$5" purpose="$6"
+            local dir="$ROOT/$slug"
+            rm -rf "$dir" && mkdir -p "$dir"
+            if curl --retry 3 --retry-delay 2 -fL "$direct" -o "$dir/$filename"; then
+              write_source "$dir" "$title" "$page" "$direct" "$purpose"
+            else
+              echo "$slug | $direct" >> "$FAILS"
+              rm -rf "$dir"
+            fi
+          }
+
+          file_into_pack() {
+            local slug="$1" filename="$2" direct="$3"
+            local dir="$ROOT/$slug"
+            mkdir -p "$dir"
+            if ! curl --retry 3 --retry-delay 2 -fL "$direct" -o "$dir/$filename"; then
+              echo "$slug/$filename | $direct" >> "$FAILS"
+              return 1
+            fi
+          }
+
+          one_file "health_mana_ui" "health_mana.png" "Health and Mana UI" "https://opengameart.org/content/health-and-mana-ui" "https://opengameart.org/sites/default/files/Health%20and%20Mana%20Redist.png" "Health/mana/energy HUD reference and production candidate."
+          zip_pack "health_breath_bars" "Health and Breath Bars" "https://opengameart.org/content/health-and-breath-bars" "https://opengameart.org/sites/default/files/bars.zip" "Twenty health/breath bar variations for HUD and underwater survival states."
+          zip_pack "experience_bar" "Experience Bar" "https://opengameart.org/content/experience-bar" "https://opengameart.org/sites/default/files/itsmars%20Experience%20Bar.zip" "Experience/progression bar styling."
+          zip_pack "quest_exclamation_icon" "Exclamation Quest Icon" "https://opengameart.org/content/exclamation-quest-icon" "https://opengameart.org/sites/default/files/quest_icon.zip" "Quest giver / new objective marker."
+          zip_pack "tiny_rpg_dragon_regalia_gui" "Tiny RPG Dragon Regalia GUI" "https://opengameart.org/content/tiny-rpg-dragon-regalia-gui" "https://opengameart.org/sites/default/files/tinyrpg_dragonregaliagui_v1_0.zip" "Complete alternate RPG GUI with multi-state buttons, equipment frames, bars, minimap frame, portrait and cursors."
+          one_file "compass_rose" "compass_rose.png" "Compass Rose" "https://opengameart.org/content/compass-rose" "https://opengameart.org/sites/default/files/compass%20rose_0.png" "Compass/minimap/world-map navigation decoration."
+          one_file "scroll_ui_container" "scroll_container.png" "Scroll UI Container" "https://opengameart.org/content/scroll-ui-container" "https://opengameart.org/sites/default/files/container_0.png" "Quest, dialogue, lore and notification scroll panel."
+          one_file "epic_book_ui" "book.png" "EPIC Collection Book" "https://opengameart.org/content/epic-collection-book" "https://opengameart.org/sites/default/files/book_12.png" "Journal, codex, lore, spellbook and quest-log background."
+          one_file "fantasy_map_scroll" "map_scroll.png" "Fantasy Map Scroll" "https://opengameart.org/content/map" "https://opengameart.org/sites/default/files/map_10.png" "Decorative world-map/parchment frame candidate."
+          zip_pack "fantasy_units_skills_icons" "Fantasy Units and Skills Icons" "https://opengameart.org/content/icons-for-fantasy-game-units-and-skills" "https://opengameart.org/sites/default/files/64x64_fantasy_icons.zip" "Faction, city, unit and skill icons: map, diplomacy, army and progression UI."
+          zip_pack "rpg_496_icons" "496 Medieval Fantasy RPG Icons" "https://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg" "https://opengameart.org/sites/default/files/496_RPG_icons.zip" "Large curated CC0 icon reserve for equipment, food, spells, materials and crafting."
+          zip_pack "fantasy_rpg_icons_handpainted" "Fantasy RPG Icons" "https://opengameart.org/content/fantasy-rpg-icons-0" "https://opengameart.org/sites/default/files/fantasy_rpg_icons.zip" "Hand-painted 128x128 RPG icons for weapons, armor, potions, magic, currency and books."
+          zip_pack "fantasy_rpg_icons_handpainted_2" "Fantasy RPG Icons 2" "https://opengameart.org/content/fantasy-rpg-icons-2" "https://opengameart.org/sites/default/files/fantasy_rpg_icons_2.zip" "Additional hand-painted currency, potion, healing, magic and weapon icons."
+          zip_pack "document_icons_scalable" "CC0 Document Icons Scalable" "https://opengameart.org/content/cc0-document-icons" "https://opengameart.org/sites/default/files/document-ocal-scalable_20201221.zip" "Documents, scrolls, maps, calendar and journal item icons."
+
+          rm -rf "$ROOT/parchment_gui"
+          mkdir -p "$ROOT/parchment_gui"
+          parchment_ok=1
+          file_into_pack "parchment_gui" "buttons.png" "https://opengameart.org/sites/default/files/buttons_14.png" || parchment_ok=0
+          file_into_pack "parchment_gui" "panels.png" "https://opengameart.org/sites/default/files/panels.png" || parchment_ok=0
+          file_into_pack "parchment_gui" "labels.png" "https://opengameart.org/sites/default/files/labels_0.png" || parchment_ok=0
+          file_into_pack "parchment_gui" "slots.png" "https://opengameart.org/sites/default/files/slots.png" || parchment_ok=0
+          if [ "$parchment_ok" -eq 1 ]; then
+            write_source "$ROOT/parchment_gui" "Parchment GUI" "https://opengameart.org/content/parchment-gui" "multiple PNG files from source page" "9-patch parchment panels, buttons, labels and item slots."
+          fi
+
+          printf '%s\n' \
+            '# Advanced UI staging' \
+            '' \
+            'Source-only CC0 options for HUD, map, quest, journal, progression and RPG systemic interface.' \
+            '' \
+            'Recommended style groups:' \
+            '- Hand-painted/adventure: fantasy_rpg_icons_handpainted*, scroll_ui_container, epic_book_ui, fantasy_map_scroll.' \
+            '- Broad neutral/systemic: health_mana_ui, experience_bar, quest_exclamation_icon, document_icons_scalable.' \
+            '- Pixel/fallback: tiny_rpg_dragon_regalia_gui, fantasy_units_skills_icons, rpg_496_icons, parchment_gui.' \
+            '' \
+            'Do not mix all style groups on one screen. Main integration chat should choose a coherent family per UI layer.' \
+            > "$ROOT/UI_ADVANCED_STAGING_README.md"
+
+      - name: Commit advanced UI assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain -- assets/staging/ui)" ]; then
+            echo "No advanced UI changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/ui
+          git commit -m "assets(staging): add advanced CC0 HUD map quest UI packs"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort || true
+            sleep $((attempt * 2))
+          done
+          exit 1
