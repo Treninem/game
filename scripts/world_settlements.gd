@@ -2,8 +2,8 @@ class_name WorldSettlements
 extends Node3D
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
-const ENTERABLE_BUILDING := preload("res://scripts/enterable_building.gd")
-const SETTLEMENT_NPC := preload("res://scripts/settlement_npc.gd")
+const ENTERABLE_BUILDING_PATH := "res://scripts/enterable_building.gd"
+const SETTLEMENT_NPC_PATH := "res://scripts/settlement_npc.gd"
 
 const LOAD_RADIUS := 980.0
 const UNLOAD_RADIUS := 1280.0
@@ -29,6 +29,8 @@ var path_material: StandardMaterial3D
 var stone_material: StandardMaterial3D
 var timber_material: StandardMaterial3D
 var water_material: StandardMaterial3D
+var _enterable_building_script: Script
+var _settlement_npc_script: Script
 
 func _ready() -> void:
     process_priority = 44
@@ -268,10 +270,33 @@ func _populate_town(root: Node3D, center: Vector2) -> void:
     _add_settlement_npc(root, center, "Патрульный", "watch", 4, Vector2(-60,92), [Vector3(-60,0,92), Vector3(60,0,92)])
     _add_settlement_npc(root, center, "Патрульный", "watch", 1, Vector2(60,-92), [Vector3(60,0,-92), Vector3(-60,0,-92)])
 
-func _add_settlement_npc(root: Node3D, center: Vector2, display_name: String, role: String, palette: int, local_start: Vector2, route: Array) -> SettlementNPC:
-    var npc := SETTLEMENT_NPC.new() as SettlementNPC
+func _get_settlement_npc_script() -> Script:
+    if _settlement_npc_script == null:
+        _settlement_npc_script = load(SETTLEMENT_NPC_PATH) as Script
+        if _settlement_npc_script == null:
+            push_error("WorldSettlements: failed to load settlement NPC script")
+    return _settlement_npc_script
+
+func _get_enterable_building_script() -> Script:
+    if _enterable_building_script == null:
+        _enterable_building_script = load(ENTERABLE_BUILDING_PATH) as Script
+        if _enterable_building_script == null:
+            push_error("WorldSettlements: failed to load enterable building script")
+    return _enterable_building_script
+
+func _add_settlement_npc(root: Node3D, center: Vector2, display_name: String, role: String, palette: int, local_start: Vector2, route: Array) -> Node3D:
+    var npc_script := _get_settlement_npc_script()
+    if npc_script == null:
+        return null
+    var instance := npc_script.new()
+    if not instance is Node3D:
+        push_error("WorldSettlements: settlement NPC script did not create a Node3D")
+        if instance != null:
+            instance.free()
+        return null
+    var npc := instance as Node3D
     npc.name = "SettlementNPC_%02d" % materialized_npcs
-    npc.configure(display_name, role, palette, route)
+    instance.call("configure", display_name, role, palette, route)
     npc.position = _local_position_on_terrain(root, center, local_start, 0.08)
     root.add_child(npc)
     materialized_npcs += 1
@@ -286,9 +311,18 @@ func _add_open_gate_leaf(root: Node3D, center: Vector2, node_name: String, local
     body.rotation.y = side_sign * deg_to_rad(68.0)
 
 func _add_enterable_building(root: Node3D, center: Vector2, local_pos: Vector2, size: Vector3, local_yaw: float, index: int, label: String) -> Node3D:
-    var building := ENTERABLE_BUILDING.new()
+    var building_script := _get_enterable_building_script()
+    if building_script == null:
+        return null
+    var instance := building_script.new()
+    if not instance is Node3D:
+        push_error("WorldSettlements: enterable building script did not create a Node3D")
+        if instance != null:
+            instance.free()
+        return null
+    var building := instance as Node3D
     building.name = "Enterable_%02d" % index
-    building.configure(size, index % 4, label)
+    instance.call("configure", size, index % 4, label)
     building.position = _local_position_on_terrain(root, center, local_pos, 0.02)
     building.rotation.y = local_yaw
     root.add_child(building)
