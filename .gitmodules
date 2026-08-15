@@ -28,3 +28,6 @@
 [submodule "assets/audio/source_packs/cc0_medieval_weapons"]
 	path = assets/audio/source_packs/cc0_medieval_weapons
 	url = https://github.com/PanderMusubi/sound-effects-library-weapons.git
+[submodule "assets/source_packs/kaykit_character_pack_adventures"]
+	path = assets/source_packs/kaykit_character_pack_adventures
+	url = https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0.git
