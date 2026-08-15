@@ -52,5 +52,9 @@ func _run_test() -> void:
         _fail(8, "streamed primary road surface did not materialize near the opening region")
         return
 
-    print("Boot smoke passed: world, camera, HUD, environment and streamed roads are stable")
+    if WorldWater.water_chunk_count() < 1 or WorldWater.patch_count_for("river") < 2:
+        _fail(9, "streamed prologue river surface did not materialize near the opening region")
+        return
+
+    print("Boot smoke passed: world, camera, HUD, environment, roads and streamed river water are stable")
     get_tree().quit(0)
