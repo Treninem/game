@@ -84,8 +84,12 @@ jobs:
           download_zip_pack "kenney_input_prompts" "Kenney Input Prompts" "https://opengameart.org/content/input-prompts" "https://opengameart.org/sites/default/files/kenney_input-prompts_1.zip" "CC0" "Keyboard, mouse, controller and generic control glyphs."
           download_zip_pack "kenney_cursor_pack" "Kenney Cursor Pack" "https://opengameart.org/content/cursor-pack-1" "https://opengameart.org/sites/default/files/kenney_cursor-pack.zip" "CC0" "180+ bitmap/vector cursors including pointer, hand and sword variants."
           download_zip_pack "simple_button_pack" "Simple Button Pack" "https://opengameart.org/content/simple-button-pack" "https://opengameart.org/sites/default/files/sbs_-_simple_button_pack_2.zip" "CC0" "Generic buttons and tabs with normal/pressed states."
-          download_zip_pack "rpg_inventory" "RPG Inventory" "https://opengameart.org/content/inventory" "https://opengameart.org/sites/default/files/Inventory.zip" "CC0" "Inventory UI with icons and dark/copper borders."
+          download_zip_pack "rpg_inventory" "RPG Inventory" "https://opengameart.org/content/inventory" "https://opengameart.org/sites/default/files/Inventory_0.zip" "CC0" "Inventory UI with icons and dark/copper borders."
           download_zip_pack "rpg_inventory_icons" "2D RPG Item Icons" "https://opengameart.org/content/2d-rpg-item-icons" "https://opengameart.org/sites/default/files/rpg_inventory.zip" "CC0" "Armor, swords, potions and crafting material icons."
+          download_zip_pack "rpg_ui_icons" "RPG UI Icons" "https://opengameart.org/content/rpg-ui-icons" "https://opengameart.org/sites/default/files/RPG_Icons_Pack_OwlishMedia.zip" "CC0" "16x16 and 32x32 status, magic, weapon, armor, item and medicine icons."
+          download_zip_pack "map_editor_ui_icons" "UI Icons 01" "https://opengameart.org/content/ui-icons-01" "https://opengameart.org/sites/default/files/UI-Icons01.zip" "CC0" "Small RPG map-editor icons useful for map markers and compact UI labels."
+          download_single_file "map_marker_active" "map-marker-23x31-active.svg" "Map Location Marker Active" "https://opengameart.org/content/map-location-marker" "https://opengameart.org/sites/default/files/map-marker-23x31-active.svg" "CC0" "Active/highlighted location marker for world map points of interest."
+          download_single_file "map_marker_normal" "map-marker-23x31.svg" "Map Location Marker" "https://opengameart.org/content/map-location-marker" "https://opengameart.org/sites/default/files/map-marker-23x31_0.svg" "CC0" "Normal location marker for world map points of interest."
           download_single_file "parchment_map_texture" "Parchment.jpg" "Parchement Textures" "https://opengameart.org/content/parchement-textures" "https://opengameart.org/sites/default/files/Parchment.jpg" "CC0" "Parchment/paper background for world map, journal and decorative panels."
 
           printf '%s\n' \
@@ -100,6 +104,8 @@ jobs:
             '- kenney_cursor_pack: cursor and pointer variants.' \
             '- simple_button_pack: fallback button/tab states.' \
             '- rpg_inventory / rpg_inventory_icons: inventory, loot and crafting UI.' \
+            '- rpg_ui_icons / map_editor_ui_icons: status, magic, map and compact systemic icons.' \
+            '- map_marker_active / map_marker_normal: vector world-map POI markers.' \
             '- parchment_map_texture: map/journal background.' \
             '' \
             'Main integration chat should review style fit and copy only selected assets into production UI folders.' \
