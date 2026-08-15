@@ -28,6 +28,7 @@ on:
       - "tests/smoke_ui_and_save.gd"
       - "tests/smoke_ui_and_save.tscn"
       - "assets/shaders/**"
+      - "assets/staging/nature/kenney_nature_kit/**"
       - ".github/workflows/validate-movement.yml"
   workflow_dispatch:
 
@@ -54,6 +55,7 @@ jobs:
             assets/vfx
             assets/shaders
             assets/staging/sourcechat_b47
+            assets/staging/nature/kenney_nature_kit
             project.godot
           sparse-checkout-cone-mode: false
       - name: Install Godot 4.7.1
