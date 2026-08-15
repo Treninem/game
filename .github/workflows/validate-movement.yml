@@ -88,12 +88,38 @@ jobs:
       - name: Prove canonical geography and regional climates
         shell: bash
         run: |
+          set -euo pipefail
+          smoke_root="$RUNNER_TEMP/impuls-canonical-smoke"
+          rm -rf "$smoke_root"
+          mkdir -p "$smoke_root/scripts" "$smoke_root/tests"
+          cp scripts/world_data.gd "$smoke_root/scripts/"
+          cp scripts/world_geography.gd "$smoke_root/scripts/"
+          cp scripts/world_hydrology.gd "$smoke_root/scripts/"
+          cp scripts/capital_data.gd "$smoke_root/scripts/"
+          cp tests/smoke_canonical_regions.gd "$smoke_root/tests/"
+          cp tests/smoke_canonical_regions.tscn "$smoke_root/tests/"
+          cat > "$smoke_root/project.godot" <<'EOF'
+          config_version=5
+
+          [application]
+          config/name="ImPuls Canonical Geography Smoke"
+          config/features=PackedStringArray("4.7", "GL Compatibility")
+
+          [autoload]
+          WorldData="*res://scripts/world_data.gd"
+
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          renderer/rendering_method.mobile="gl_compatibility"
+          EOF
+
           set +e
-          output=$(timeout 30s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_canonical_regions.tscn 2>&1)
+          output=$(timeout 30s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path "$smoke_root" tests/smoke_canonical_regions.tscn 2>&1)
           status=$?
+          set -e
           printf '%s\n' "$output"
           if [ "$status" -eq 124 ]; then
-            echo "::error title=Canonical regions smoke timeout::Regional geography test did not settle within 30 seconds"
+            echo "::error title=Canonical regions smoke timeout::Regional geography logic did not settle within 30 seconds in the isolated smoke project"
           elif [ "$status" -ne 0 ]; then
             detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Canonical regions raw Godot output::$detail"
