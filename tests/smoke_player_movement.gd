@@ -1,5 +1,6 @@
 extends Node
 
+const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const MIN_DISTANCE := 0.75
 const WARMUP_FRAMES := 60
 const MOVE_FRAMES := 45
@@ -46,8 +47,8 @@ func _run_test() -> void:
         _fail(5, "no physical world surface below player at spawn")
         return
 
-    if not _assert_streamed_city(scene):
-        _fail(13, "capital streamer did not materialize the starting city cell")
+    if not _assert_story_start_world(scene, world_data, player):
+        _fail(13, "story start is not the required Asterna forest river region")
         return
     if not _assert_hud(scene):
         _fail(14, "gameplay HUD/minimap/quickbar is missing or outside the viewport")
@@ -81,10 +82,6 @@ func _run_test() -> void:
         _fail(9, "no physical world surface below player after void recovery")
         return
 
-    # Godot documents InputEvent.is_action_pressed() as the authoritative check
-    # that a physical event belongs to an InputMap action. Synthetic key events
-    # are not equivalent to an OS-held key for Input polling, so movement state is
-    # held with action_press only after this physical mapping assertion succeeds.
     var physical_w := _physical_key_event(KEY_W, true)
     if not physical_w.is_action_pressed("move_forward"):
         _fail(15, "physical W is not mapped to move_forward")
@@ -104,8 +101,6 @@ func _run_test() -> void:
         _fail(4, "mapped move_forward leaves the player walking in place; distance=%s" % distance)
         return
 
-    # Escape is event-driven, so it can and should be tested through the same raw
-    # InputEventKey path used by the installed Windows build.
     var menu := scene.get_node_or_null("UI/GameMenu") as Control
     if menu == null:
         _fail(16, "game menu node missing")
@@ -126,7 +121,7 @@ func _run_test() -> void:
         _fail(18, "second physical ESC did not close the menu and resume gameplay")
         return
 
-    print("Physical key mapping + ESC + streamed city + HUD + surface + void recovery smoke passed")
+    print("Forest river story start + physical key mapping + ESC + HUD + surface + void recovery smoke passed")
     tree.quit(0)
 
 func _physical_key_event(code: Key, pressed: bool) -> InputEventKey:
@@ -139,15 +134,50 @@ func _physical_key_event(code: Key, pressed: bool) -> InputEventKey:
 func _send_physical_key(code: Key, pressed: bool) -> void:
     Input.parse_input_event(_physical_key_event(code, pressed))
 
-func _assert_streamed_city(scene: Node) -> bool:
+func _assert_story_start_world(scene: Node, world_data: Node, player: CharacterBody3D) -> bool:
+    var spawn_xz := Vector2(player.global_position.x, player.global_position.z)
+    var expected := GEOGRAPHY.START_SPAWN
+    if spawn_xz.distance_to(expected) > 6.0:
+        print("Story spawn mismatch: actual=", spawn_xz, " expected=", expected)
+        return false
+    if String(world_data.call("biome_at", spawn_xz)) != "forest":
+        print("Story start biome is not forest")
+        return false
+    if String(world_data.call("state_id_at", spawn_xz)) != "astern":
+        print("Story start political region is not Asterna")
+        return false
+    if GEOGRAPHY.distance_to_start_river(spawn_xz) > GEOGRAPHY.START_RIVER_BANK_WIDTH + 4.0:
+        print("Story spawn is not on the river bank")
+        return false
+    if expected.distance_to(GEOGRAPHY.ASTERN_CAPITAL) < 8000.0:
+        print("Asterna capital is not sufficiently far from the prologue spawn")
+        return false
+
+    var start_region := scene.get_node_or_null("World/StartRegion")
+    if start_region == null:
+        return false
+    if start_region.get_node_or_null("StartRiver") == null or start_region.get_node_or_null("OldFord") == null:
+        return false
+    var river_count := int(start_region.get("river_segment_count"))
+    var ford_count := int(start_region.get("ford_stone_count"))
+    if river_count < 20 or ford_count < 8:
+        print("Start region incomplete: river_segments=", river_count, " ford_stones=", ford_count)
+        return false
+
     var city := scene.get_node_or_null("World/CityDistrict")
     if city == null:
         return false
     var loaded = city.get("loaded_cells")
     if not (loaded is Dictionary):
         return false
-    print("City runtime smoke: loaded_cells=", loaded.size())
-    return loaded.size() >= 1 and city.get_node_or_null("CityCell_0_0") != null
+    if not loaded.is_empty():
+        print("Capital cells incorrectly loaded at forest spawn: ", loaded.size())
+        return false
+    if scene.get_node_or_null("World/StoryStartSurface") == null:
+        return false
+
+    print("Story world smoke: spawn=", spawn_xz, " river_segments=", river_count, " ford_stones=", ford_count, " capital_distance=", expected.distance_to(GEOGRAPHY.ASTERN_CAPITAL))
+    return true
 
 func _assert_hud(scene: Node) -> bool:
     var hud := scene.get_node_or_null("UI/HUD") as Control
