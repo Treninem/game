@@ -30,6 +30,16 @@ func _ready() -> void:
     if normal_depth <= ford_depth + 0.55:
         failures.append("Old Ford is not materially shallower than the normal river channel")
 
+    # The existing Asterna river road physically crosses the same river on a
+    # bridge. The bridge classification must never punch a dry hole in water.
+    var bridge_probe := HYDROLOGY.ROAD_BRIDGE_CENTER
+    if HYDROLOGY.crossing_kind_at(bridge_probe) != "bridge":
+        failures.append("Asterna river road crossing is not classified as a bridge")
+    if WorldData.water_kind_at(bridge_probe) != "river":
+        failures.append("Bridge incorrectly removes the flowing river below it")
+    if WorldData.water_level_at(bridge_probe) <= WorldData.elevation_at(bridge_probe):
+        failures.append("Bridge crossing no longer spans a physical river channel")
+
     var lake_center := HYDROLOGY.LAKE_VAEL_CENTER
     if WorldData.water_kind_at(lake_center) != "lake":
         failures.append("Lake Vael POI has no physical freshwater body")
@@ -50,7 +60,7 @@ func _ready() -> void:
             failures.append("Sea surface no longer matches global sea level")
 
     if failures.is_empty():
-        print("WORLD_HYDROLOGY_SMOKE_OK river=physical ford=shallow lake=basin sea=classified")
+        print("WORLD_HYDROLOGY_SMOKE_OK river=physical ford=shallow bridge=spanning lake=basin sea=classified")
         get_tree().quit(0)
         return
 
