@@ -22,6 +22,7 @@ var room_count := 0
 var door_count := 0
 var window_count := 0
 var structural_piece_count := 0
+var interior_prop_count := 0
 var interior_size := Vector3.ZERO
 var front_door: DoorInteractable
 
@@ -30,6 +31,9 @@ var floor_material: StandardMaterial3D
 var ceiling_material: StandardMaterial3D
 var timber_material: StandardMaterial3D
 var glass_material: StandardMaterial3D
+var bedding_material: StandardMaterial3D
+var cloth_material: StandardMaterial3D
+var iron_material: StandardMaterial3D
 
 func configure(size: Vector3, variant: int = 0, label: String = "Дом") -> void:
     footprint = Vector2(maxf(5.0, size.x), maxf(5.0, size.z))
@@ -47,6 +51,7 @@ func _build_structure() -> void:
     door_count = 0
     window_count = 0
     structural_piece_count = 0
+    interior_prop_count = 0
     interior_size = Vector3(
         footprint.x - wall_thickness * 2.0,
         wall_height - floor_thickness - ceiling_thickness,
@@ -78,6 +83,7 @@ func _build_structure() -> void:
     _build_side_wall_with_window(shell, "RightWall", 1.0)
     _build_roof_visual()
     _build_front_door()
+    _build_interior_furnishings()
 
 func _build_front_wall(shell: Node3D) -> void:
     var front_z := footprint.y * 0.5 - wall_thickness * 0.5
@@ -150,8 +156,6 @@ func _build_front_door() -> void:
     var door_visual := DOOR_SCENE.instantiate() as Node3D
     if door_visual != null:
         door_visual.name = "RealDoorModel"
-        # Source model is about 1.116 x 2.118 m and is authored close to its left
-        # hinge. Scale it to the physical doorway while preserving the hinge pivot.
         door_visual.scale = Vector3(doorway_width / 1.116, doorway_height / 2.118, 1.0)
         hinge.add_child(door_visual)
 
@@ -163,6 +167,66 @@ func _build_front_door() -> void:
     collision.position = Vector3(doorway_width * 0.5, doorway_height * 0.5, 0.0)
     hinge.add_child(collision)
     door_count = 1
+
+func _build_interior_furnishings() -> void:
+    var furniture := Node3D.new()
+    furniture.name = "InteriorFurniture"
+    add_child(furniture)
+
+    var inner_half_x := interior_size.x * 0.5
+    var inner_half_z := interior_size.z * 0.5
+    var floor_y := floor_thickness
+
+    # Keep a wide, collision-free central aisle from the front door through the room.
+    # Furniture hugs the side/back walls so entering and turning inside remain physical.
+    var bed_x := -inner_half_x + 1.15
+    var bed_z := -inner_half_z + 1.45
+    var bed := _add_furniture_box(furniture, "Bed", Vector3(1.75, 0.34, 2.25), Vector3(bed_x, floor_y + 0.17, bed_z), timber_material)
+    _add_visual_box(bed, "Mattress", Vector3(1.58, 0.18, 2.02), Vector3(0.0, 0.25, 0.0), bedding_material)
+    _add_visual_box(bed, "Pillow", Vector3(1.18, 0.16, 0.42), Vector3(0.0, 0.39, -0.72), cloth_material)
+
+    var table_x := inner_half_x - 1.35
+    var table_z := -0.45
+    var table := _add_furniture_box(furniture, "Table", Vector3(1.65, 0.15, 1.05), Vector3(table_x, floor_y + 0.82, table_z), timber_material)
+    for leg_pos in [Vector3(-0.62, -0.39, -0.32), Vector3(0.62, -0.39, -0.32), Vector3(-0.62, -0.39, 0.32), Vector3(0.62, -0.39, 0.32)]:
+        _add_visual_box(table, "Leg", Vector3(0.13, 0.78, 0.13), leg_pos, timber_material)
+
+    var chest_x := inner_half_x - 0.9
+    var chest_z := -inner_half_z + 0.75
+    var chest := _add_furniture_box(furniture, "StorageChest", Vector3(1.35, 0.68, 0.72), Vector3(chest_x, floor_y + 0.34, chest_z), timber_material)
+    _add_visual_box(chest, "IronBandA", Vector3(0.10, 0.72, 0.76), Vector3(-0.4, 0.04, 0.0), iron_material)
+    _add_visual_box(chest, "IronBandB", Vector3(0.10, 0.72, 0.76), Vector3(0.4, 0.04, 0.0), iron_material)
+
+    var bench_x := inner_half_x - 1.05
+    var bench_z := inner_half_z - 1.15
+    var bench := _add_furniture_box(furniture, "Bench", Vector3(1.8, 0.22, 0.48), Vector3(bench_x, floor_y + 0.53, bench_z), timber_material)
+    _add_visual_box(bench, "BenchLegA", Vector3(0.18, 0.52, 0.38), Vector3(-0.58, -0.26, 0.0), timber_material)
+    _add_visual_box(bench, "BenchLegB", Vector3(0.18, 0.52, 0.38), Vector3(0.58, -0.26, 0.0), timber_material)
+
+func _add_furniture_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, material: Material) -> StaticBody3D:
+    var body := StaticBody3D.new()
+    body.name = node_name
+    body.position = pos
+    body.collision_layer = 1
+    body.collision_mask = 1
+    parent.add_child(body)
+
+    var mesh_node := MeshInstance3D.new()
+    mesh_node.name = "Mesh"
+    var mesh := BoxMesh.new()
+    mesh.size = size
+    mesh.material = material
+    mesh_node.mesh = mesh
+    body.add_child(mesh_node)
+
+    var collision := CollisionShape3D.new()
+    collision.name = "Collision"
+    var shape := BoxShape3D.new()
+    shape.size = size
+    collision.shape = shape
+    body.add_child(collision)
+    interior_prop_count += 1
+    return body
 
 func _add_window_frame(center: Vector3, opening_size: Vector3, side_wall: bool, node_name: String) -> void:
     var root := Node3D.new()
@@ -244,6 +308,9 @@ func _prepare_materials() -> void:
     timber_material = _material(Color(0.18, 0.085, 0.035), 0.95)
     glass_material = _material(Color(0.58, 0.76, 0.82, 0.28), 0.16)
     glass_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+    bedding_material = _material(Color(0.54, 0.47, 0.36), 0.98)
+    cloth_material = _material(Color(0.72, 0.68, 0.57), 0.99)
+    iron_material = _material(Color(0.12, 0.13, 0.14), 0.73)
 
 func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
     var material := StandardMaterial3D.new()
