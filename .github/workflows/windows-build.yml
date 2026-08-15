@@ -50,7 +50,7 @@ jobs:
             assets/staging/nature/kenney_nature_kit
       - name: Prepare ImPuls branding
         run: |
-          python3 -m pip install --disable-pip-version-check pillow
+          python3 -m pip install --disable-pip-check pillow
           python3 tools/make_icon.py installer/impuls.ico
           test -s assets/branding/impuls_icon.png
           test -s installer/impuls.ico
@@ -68,6 +68,8 @@ jobs:
           cp -r templates_unpack/templates/* "$HOME/.local/share/godot/export_templates/4.7.1.stable/"
       - name: Validate project headlessly
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Verify startup main menu
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_startup_menu.tscn
       - name: Verify production world audio
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_audio.tscn
       - name: Verify stable gameplay boot
