@@ -60,6 +60,12 @@ jobs:
       - name: Verify bounded settlement and NPC streaming
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_streaming.tscn
 
+      - name: Verify settlement road gate topology
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_gate_network.tscn
+
+      - name: Verify physical roads pass through settlement gates
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_road_gate_overlay.tscn
+
       - name: Verify world boot, streamed roads and river water
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn
 
