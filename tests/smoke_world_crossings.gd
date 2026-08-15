@@ -42,6 +42,17 @@ func _ready() -> void:
                 if box.size.z < HYDROLOGY.ROAD_BRIDGE_HALF_WIDTH * 1.9:
                     failures.append("RoadBridge collision is narrower than its carriageway")
 
+            for guard_name in ["RailLeftShape", "RailRightShape"]:
+                var guard := body.get_node_or_null(guard_name) as CollisionShape3D
+                if guard == null or guard.shape == null:
+                    failures.append("RoadBridge is missing physical side guard %s" % guard_name)
+                elif guard.shape is BoxShape3D:
+                    var guard_box := guard.shape as BoxShape3D
+                    if guard_box.size.x < HYDROLOGY.ROAD_BRIDGE_HALF_LENGTH * 1.9:
+                        failures.append("RoadBridge guard %s does not protect full crossing length" % guard_name)
+                    if guard_box.size.y < 0.12:
+                        failures.append("RoadBridge guard %s is too low to be protective" % guard_name)
+
         if deck != null:
             var deck_world_y := chunk.global_position.y + deck.position.y
             var water_y := WorldData.water_level_at(bridge_center)
@@ -57,7 +68,7 @@ func _ready() -> void:
         failures.append("Physical bridge unexpectedly removes river water")
 
     if failures.is_empty():
-        print("WORLD_CROSSINGS_SMOKE_OK bridge=streamed deck=physical collision=present river=preserved")
+        print("WORLD_CROSSINGS_SMOKE_OK bridge=streamed deck=physical collision=present guards=physical river=preserved")
         get_tree().quit(0)
         return
 
