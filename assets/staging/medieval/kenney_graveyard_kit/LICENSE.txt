@@ -1,0 +1,3 @@
+Creative Commons Zero (CC0 1.0 Universal)
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+Preserve SOURCE.md with staged files.
