@@ -1,6 +1,8 @@
 extends Node3D
 
 const STREAMED_RESOURCE := preload("res://scripts/streamed_resource.gd")
+const CAPITAL := preload("res://scripts/capital_data.gd")
+const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 
 # The continent remains 64x64 km in WorldData, but only a small local window is
 # materialized around the player. This keeps traversal smooth and memory bounded.
@@ -77,13 +79,11 @@ func _refresh_streaming(center: Vector2i) -> void:
     generation_queue.clear()
     collision_queue.clear()
 
-    # Near-to-far order prevents the renderer from spending time on scenery the
-    # player cannot reach before the immediate walking surface is ready.
     for ring in range(0, VISUAL_RADIUS + 1):
         for x in range(center.x - ring, center.x + ring + 1):
             for z in range(center.y - ring, center.y + ring + 1):
                 var coord := Vector2i(x, z)
-                if maxi(abs(coord.x - center.x), abs(coord.y - center.y)) != ring:
+                if maxi(absi(coord.x - center.x), absi(coord.y - center.y)) != ring:
                     continue
                 if not _chunk_inside_world(coord):
                     continue
@@ -92,7 +92,6 @@ func _refresh_streaming(center: Vector2i) -> void:
                 if ring <= PHYSICS_RADIUS and not collision_chunks.has(coord):
                     collision_queue.append(coord)
 
-    # Physics exists only close to the player. Distant visible terrain is render-only.
     var collisions_to_remove: Array[Vector2i] = []
     for key in collision_chunks.keys():
         var coord: Vector2i = key
@@ -144,7 +143,9 @@ func _generate_chunk(coord: Vector2i) -> void:
     if _distance_chunks(coord, current_center) <= PHYSICS_RADIUS:
         _ensure_collision(coord)
 
-    if _chunk_needs_water(coord):
+    # Sea/ocean water remains chunk based. The opening river is a dedicated
+    # curved local water body and must never turn its entire terrain chunk into sea.
+    if not GEOGRAPHY.in_start_region(center_world) and _chunk_needs_water(coord):
         _add_water(chunk)
     _add_vegetation(chunk, coord, biome)
     _add_gatherables(chunk, coord, biome)
@@ -213,7 +214,7 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         return
     var origin := _chunk_origin(coord)
     var center_world := origin + Vector2(CHUNK_SIZE * 0.5, CHUNK_SIZE * 0.5)
-    if center_world.length() < CITY_NO_WILD_RADIUS:
+    if center_world.distance_to(CAPITAL.CENTER) < CITY_NO_WILD_RADIUS:
         return
 
     var tree_count := 8
@@ -227,12 +228,14 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         "mountains": tree_count = 3
 
     var rng := RandomNumberGenerator.new()
-    rng.seed = abs(hash("vegetation:%d:%d:%d" % [coord.x, coord.y, WorldData.WORLD_SEED]))
+    rng.seed = absi(hash("vegetation:%d:%d:%d" % [coord.x, coord.y, WorldData.WORLD_SEED]))
     var transforms: Array[Transform3D] = []
     for _i in range(tree_count):
         var lx := rng.randf_range(6.0, CHUNK_SIZE - 6.0)
         var lz := rng.randf_range(6.0, CHUNK_SIZE - 6.0)
         var world := origin + Vector2(lx, lz)
+        if GEOGRAPHY.in_start_region(world) and GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_BANK_WIDTH + 5.0:
+            continue
         var h := WorldData.elevation_at(world)
         if h < WorldData.SEA_LEVEL + 0.5:
             continue
@@ -251,16 +254,18 @@ func _add_gatherables(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         return
     var origin := _chunk_origin(coord)
     var center_world := origin + Vector2(CHUNK_SIZE * 0.5, CHUNK_SIZE * 0.5)
-    if center_world.length() < CITY_NO_WILD_RADIUS:
+    if center_world.distance_to(CAPITAL.CENTER) < CITY_NO_WILD_RADIUS:
         return
 
     var rng := RandomNumberGenerator.new()
-    rng.seed = abs(hash("gather:%d:%d:%d" % [coord.x, coord.y, WorldData.WORLD_SEED]))
+    rng.seed = absi(hash("gather:%d:%d:%d" % [coord.x, coord.y, WorldData.WORLD_SEED]))
     var count := 2 if biome in ["tundra", "drylands"] else 3
     for i in range(count):
         var lx := rng.randf_range(14.0, CHUNK_SIZE - 14.0)
         var lz := rng.randf_range(14.0, CHUNK_SIZE - 14.0)
         var world := origin + Vector2(lx, lz)
+        if GEOGRAPHY.in_start_region(world) and GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_HALF_WIDTH + 4.0:
+            continue
         var height := WorldData.elevation_at(world)
         if height < WorldData.SEA_LEVEL + 0.4:
             continue
@@ -342,26 +347,21 @@ func _spawn_rock_multimesh(chunk: Node3D, transforms: Array[Transform3D]) -> voi
     chunk.add_child(node)
 
 func _add_landmark_if_needed(chunk: Node3D, coord: Vector2i) -> void:
+    # POIs are logical/map anchors. Do not draw giant placeholder boxes in the
+    # finished world; dedicated streamed models will materialize them by region.
     var origin := _chunk_origin(coord)
     var max_pos := origin + Vector2(CHUNK_SIZE, CHUNK_SIZE)
     for poi in WorldData.poi_catalog():
         var p: Vector2 = poi.get("pos", Vector2.ZERO)
         if p.x < origin.x or p.x >= max_pos.x or p.y < origin.y or p.y >= max_pos.y:
             continue
-        if String(poi.get("id", "")) == "lumengrad":
+        var kind := String(poi.get("kind", ""))
+        if kind in ["river", "ford", "village", "fortified_town", "capital"]:
             continue
-        var h := WorldData.elevation_at(p)
-        if h < WorldData.SEA_LEVEL - 1.0:
+        # Natural landmarks are represented by terrain now; dedicated landmark
+        # art is added only once its final model is available.
+        if kind in ["mountain", "lake", "marsh", "forest", "coast", "danger", "mine"]:
             continue
-        var marker := MeshInstance3D.new()
-        marker.name = "Landmark_%s" % String(poi.get("id", "poi"))
-        var mesh := BoxMesh.new()
-        mesh.size = Vector3(3.0, 10.0, 3.0)
-        mesh.material = terrain_materials["mountains"]
-        marker.mesh = mesh
-        marker.position = Vector3(p.x - origin.x, h + 5.0, p.y - origin.y)
-        marker.visibility_range_end = 520.0
-        chunk.add_child(marker)
 
 func _chunk_needs_water(coord: Vector2i) -> bool:
     var origin := _chunk_origin(coord)
@@ -374,13 +374,16 @@ func _update_wilderness_location() -> void:
     if player == null:
         return
     var pos := Vector2(player.global_position.x, player.global_position.z)
-    if pos.length() < CITY_NO_WILD_RADIUS:
+    if pos.distance_to(CAPITAL.CENTER) < CITY_NO_WILD_RADIUS:
         GameState.set_location("Люменград • территория столицы")
         return
+    if GEOGRAPHY.in_start_region(pos):
+        GameState.set_location("Астэрн • пограничный лес")
+        return
     var biome := WorldData.biome_at(pos)
-    var sector_x := floori(pos.x / 1000.0)
-    var sector_z := floori(pos.y / 1000.0)
-    GameState.set_location("%s • сектор %d:%d" % [WorldData.biome_display_name(biome), sector_x, sector_z])
+    var region: Dictionary = WorldData.political_region_at(pos)
+    var region_name := String(region.get("name", "Свободные земли"))
+    GameState.set_location("%s • %s" % [region_name, WorldData.biome_display_name(biome)])
 
 func _world_to_chunk(pos: Vector2) -> Vector2i:
     return Vector2i(floori(pos.x / CHUNK_SIZE), floori(pos.y / CHUNK_SIZE))
@@ -393,7 +396,7 @@ func _chunk_inside_world(coord: Vector2i) -> bool:
     return WorldData.inside_world(center)
 
 func _distance_chunks(a: Vector2i, b: Vector2i) -> int:
-    return maxi(abs(a.x - b.x), abs(a.y - b.y))
+    return maxi(absi(a.x - b.x), absi(a.y - b.y))
 
 func _prepare_materials() -> void:
     for biome in ["plains", "forest", "taiga", "tundra", "drylands", "marsh", "mountains", "ocean"]:
@@ -407,8 +410,8 @@ func _prepare_materials() -> void:
     water_material = _material(Color(0.055, 0.24, 0.38, 0.72), 0.20)
     water_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 
-func _material(color: Color, roughness: float) -> StandardMaterial3D:
+func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
     var material := StandardMaterial3D.new()
     material.albedo_color = color
-    material.roughness = roughness
+    material.roughness = roughness_value
     return material
