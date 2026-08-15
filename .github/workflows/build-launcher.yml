@@ -19,8 +19,15 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout
+      - name: Checkout launcher only
         uses: actions/checkout@v4
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            launcher
+            assets/branding/impuls_icon.png
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
 
       - name: Build launcher
         shell: pwsh
