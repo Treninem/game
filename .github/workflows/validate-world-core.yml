@@ -9,6 +9,7 @@ on:
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
+      - "tools/run_godot_smoke.sh"
       - ".github/workflows/validate-world-core.yml"
   pull_request:
     paths:
@@ -17,6 +18,7 @@ on:
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
+      - "tools/run_godot_smoke.sh"
       - ".github/workflows/validate-world-core.yml"
   workflow_dispatch:
 
@@ -30,6 +32,7 @@ concurrency:
 jobs:
   world-core:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -50,6 +53,7 @@ jobs:
             scripts
             story
             tests
+            tools/run_godot_smoke.sh
 
       - name: Install Godot 4.7.1
         shell: bash
@@ -60,7 +64,8 @@ jobs:
           chmod +x Godot_v4.7.1-stable_linux.x86_64
 
       - name: Parse project and scripts
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+        shell: bash
+        run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
 
       - name: Verify enterable shell uses production assets only
         shell: bash
@@ -76,52 +81,52 @@ jobs:
           test -s assets/production/medieval/building_shell/QUATERNIUS_CC0_LICENSE.txt
 
       - name: Verify startup main menu flow
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_startup_menu.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
 
       - name: Verify canonical regions and climate
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_canonical_regions.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_canonical_regions.tscn 90
 
       - name: Verify physical hydrology
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_hydrology.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_hydrology.tscn 180
 
       - name: Verify spatial world audio and surface-aware footsteps
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_audio.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_audio.tscn 180
 
       - name: Verify physical river crossings
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_crossings.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_crossings.tscn 180
 
       - name: Verify real enterable building shell
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_enterable_building.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_enterable_building.tscn 180
 
       - name: Verify real production furniture in enterable interiors
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_interior_assets.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_interior_assets.tscn 240
 
       - name: Verify streamed physical settlements and gates
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_settlements.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements.tscn 300
 
       - name: Verify physical settlement markets water and warehouses
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_public_works.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_public_works.tscn 300
 
       - name: Verify physical civic hall and council interior
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_civic_spaces.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_civic_spaces.tscn 300
 
       - name: Verify bounded settlement and NPC streaming
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_streaming.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_streaming.tscn 300
 
       - name: Verify settlement road gate topology
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_gate_network.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_gate_network.tscn 240
 
       - name: Verify physical roads pass through settlement gates
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_road_gate_overlay.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_road_gate_overlay.tscn 240
 
       - name: Verify fortified town gate hinges and clearance
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_gate_overlay.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_settlement_gate_overlay.tscn 240
 
       - name: Verify world boot, streamed roads and river water
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_boot_world.tscn 300
 
       - name: Verify player movement and physical terrain
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_player_movement.tscn 240
 
       - name: Verify HUD menus and save slots
-        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_ui_and_save.tscn
+        run: bash tools/run_godot_smoke.sh tests/smoke_ui_and_save.tscn 180
