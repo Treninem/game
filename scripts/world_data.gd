@@ -42,6 +42,7 @@ func elevation_at(pos: Vector2) -> float:
     var broad := elevation_noise.get_noise_2d(pos.x, pos.y) * 34.0
     var detail := detail_noise.get_noise_2d(pos.x, pos.y) * 7.0
     var ridges := pow(absf(ridge_noise.get_noise_2d(pos.x, pos.y)), 2.4) * 48.0
+    var macro_relief := 0.0
     var height := broad + detail + ridges
 
     # The canonical mountain federation must read as mountain country at macro
@@ -55,7 +56,22 @@ func elevation_at(pos: Vector2) -> float:
         var dz := (pos.y - center.y) / maxf(radius.y, 1.0)
         var normalized := sqrt(dx * dx + dz * dz)
         var mountain_weight := 1.0 - smoothstep(0.35, 1.0, normalized)
-        height += mountain_weight * 42.0
+        macro_relief = mountain_weight * 42.0
+        height += macro_relief
+
+    # Primary roads are actual graded terrain corridors, not map-only lines.
+    # Suppress high-frequency bumps and most ridge noise at the carriageway,
+    # then blend through a broad shoulder so traversal stays smooth without a
+    # hard trench or political-border seam.
+    var road_distance := WORLD_GEOGRAPHY.distance_to_primary_road(pos)
+    if road_distance < WORLD_GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH:
+        var road_weight := 1.0 - smoothstep(
+            WORLD_GEOGRAPHY.PRIMARY_ROAD_HALF_WIDTH,
+            WORLD_GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH,
+            road_distance
+        )
+        var roadbed := broad + ridges * 0.34 + macro_relief
+        height = lerpf(height, roadbed, road_weight * 0.88)
 
     # The 4 x 4 km Asterna capital remains a stable buildable plateau, but it is
     # deliberately far from the story spawn instead of flattening the origin.
