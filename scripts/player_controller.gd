@@ -139,13 +139,16 @@ func _physics_process(delta: float) -> void:
     if not grounded_before and grounded_after and fall_speed_before_move > 3.4:
         footstep_distance_accum = 0.0
         WorldVFX.spawn_landing(global_position, fall_speed_before_move, "", -global_transform.basis.z)
+        _play_footstep_audio(clampf(fall_speed_before_move / 5.5, 0.75, 1.35))
         ScreenVFX.landing_feedback(fall_speed_before_move)
     elif grounded_after and input_vec.length() > 0.08:
         footstep_distance_accum += last_horizontal_motion.length()
         var step_distance := 1.75 if can_sprint else 2.35
         if footstep_distance_accum >= step_distance:
             footstep_distance_accum = 0.0
-            WorldVFX.spawn_footstep(global_position, 1.10 if can_sprint else 0.72, "", -global_transform.basis.z)
+            var footstep_strength := 1.10 if can_sprint else 0.72
+            WorldVFX.spawn_footstep(global_position, footstep_strength, "", -global_transform.basis.z)
+            _play_footstep_audio(footstep_strength)
     elif not grounded_after:
         footstep_distance_accum = 0.0
 
@@ -159,6 +162,11 @@ func _physics_process(delta: float) -> void:
 
 func actual_horizontal_speed(delta: float = 1.0 / 60.0) -> float:
     return last_horizontal_motion.length() / maxf(delta, 0.0001)
+
+func _play_footstep_audio(intensity: float) -> void:
+    var world_audio := get_tree().get_first_node_in_group("world_audio")
+    if world_audio != null and world_audio.has_method("play_footstep"):
+        world_audio.call("play_footstep", global_position, "", intensity)
 
 func _begin_ground_guard(force_snap_to_terrain: bool) -> void:
     var xz := Vector2(global_position.x, global_position.z)
