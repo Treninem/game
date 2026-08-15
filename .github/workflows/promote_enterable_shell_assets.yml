@@ -23,7 +23,6 @@ jobs:
           fetch-depth: 0
           filter: blob:none
           sparse-checkout: |
-            .github
             scripts
             assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard
             assets/production/medieval
@@ -94,29 +93,18 @@ jobs:
           old_roof = 'res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/Roof_RoundTiles_8x8.gltf'
           new_door = 'res://assets/production/medieval/building_shell/Door_1_Flat.gltf'
           new_roof = 'res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf'
-          if old_door in text:
-              text = text.replace(old_door, new_door)
-          if old_roof in text:
-              text = text.replace(old_roof, new_roof)
-          if "assets/staging" in "\n".join(line for line in text.splitlines() if "DOOR_SCENE" in line or "ROOF_SCENE" in line):
+          text = text.replace(old_door, new_door).replace(old_roof, new_roof)
+          shell_lines = "\n".join(line for line in text.splitlines() if "DOOR_SCENE" in line or "ROOF_SCENE" in line)
+          if "assets/staging" in shell_lines:
               raise SystemExit("enterable building still references staging shell assets")
           if new_door not in text or new_roof not in text:
               raise SystemExit("production shell paths were not installed")
           script.write_text(text, encoding="utf-8")
-
-          workflow = Path(".github/workflows/windows-build.yml")
-          stable = workflow.read_text(encoding="utf-8")
-          build_marker = "            assets/audio\n            assets/branding\n"
-          if "            assets/production\n" not in stable:
-              if build_marker not in stable:
-                  raise SystemExit("stable sparse-checkout marker changed")
-              stable = stable.replace(build_marker, "            assets/audio\n            assets/production\n            assets/branding\n", 1)
-          workflow.write_text(stable, encoding="utf-8")
           PY
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$TARGET" scripts/enterable_building.gd .github/workflows/windows-build.yml
+          git add "$TARGET" scripts/enterable_building.gd
           if git diff --cached --quiet; then
             echo "Production shell and runtime paths already up to date."
             exit 0
