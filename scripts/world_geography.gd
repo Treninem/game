@@ -75,14 +75,27 @@ static func distance_to_start_river(pos: Vector2) -> float:
     return absf(pos.x - start_river_x(pos.y))
 
 static func in_start_region(pos: Vector2) -> bool:
-    return pos.distance_to(START_SPAWN) <= START_REGION_RADIUS
+    return pos.distance_squared_to(START_SPAWN) <= START_REGION_RADIUS * START_REGION_RADIUS
 
 static func distance_to_primary_road(pos: Vector2) -> float:
     var best := INF
     for road in PRIMARY_ROADS:
         var points: Array = road.get("points", [])
         for i in range(points.size() - 1):
-            best = minf(best, _distance_to_segment(pos, points[i], points[i + 1]))
+            var a: Vector2 = points[i]
+            var b: Vector2 = points[i + 1]
+            # Terrain streaming calls this for every sampled vertex. Reject road
+            # segments whose expanded AABB cannot improve the current answer so
+            # distant states do not pay full projection/sqrt cost for every road.
+            var margin := best if is_finite(best) else 0.0
+            if margin > 0.0:
+                var min_x := minf(a.x, b.x) - margin
+                var max_x := maxf(a.x, b.x) + margin
+                var min_y := minf(a.y, b.y) - margin
+                var max_y := maxf(a.y, b.y) + margin
+                if pos.x < min_x or pos.x > max_x or pos.y < min_y or pos.y > max_y:
+                    continue
+            best = minf(best, _distance_to_segment(pos, a, b))
     return best
 
 static func is_on_primary_road(pos: Vector2) -> bool:
@@ -110,7 +123,10 @@ static func state_at(pos: Vector2) -> Dictionary:
             best = state
     if best_score > 1.0:
         return {"id":"frontier", "name":"Свободные и спорные земли", "culture":"mixed", "climate":"mixed"}
-    return best.duplicate(true)
+    # STATES is immutable canonical data in normal runtime use. Returning the
+    # selected dictionary directly removes a deep allocation from terrain and
+    # climate hot paths. Public catalog methods still return defensive copies.
+    return best
 
 static func state_id_at(pos: Vector2) -> String:
     return String(state_at(pos).get("id", "frontier"))
