@@ -44,6 +44,19 @@ func elevation_at(pos: Vector2) -> float:
     var ridges := pow(absf(ridge_noise.get_noise_2d(pos.x, pos.y)), 2.4) * 48.0
     var height := broad + detail + ridges
 
+    # The canonical mountain federation must read as mountain country at macro
+    # scale rather than depending on a lucky noise seed. The added relief blends
+    # through the state's ellipse and leaves frontier terrain continuous.
+    var state := WORLD_GEOGRAPHY.state_at(pos)
+    if String(state.get("id", "")) == "dor_karn":
+        var center: Vector2 = state.get("center", Vector2.ZERO)
+        var radius: Vector2 = state.get("radius", Vector2.ONE)
+        var dx := (pos.x - center.x) / maxf(radius.x, 1.0)
+        var dz := (pos.y - center.y) / maxf(radius.y, 1.0)
+        var normalized := sqrt(dx * dx + dz * dz)
+        var mountain_weight := 1.0 - smoothstep(0.35, 1.0, normalized)
+        height += mountain_weight * 42.0
+
     # The 4 x 4 km Asterna capital remains a stable buildable plateau, but it is
     # deliberately far from the story spawn instead of flattening the origin.
     var city_distance := pos.distance_to(WORLD_GEOGRAPHY.ASTERN_CAPITAL)
@@ -75,12 +88,30 @@ func moisture_at(pos: Vector2) -> float:
         var river_distance := WORLD_GEOGRAPHY.distance_to_start_river(pos)
         if river_distance < 180.0:
             base = maxf(base, lerpf(0.80, base, clampf(river_distance / 180.0, 0.0, 1.0)))
-    return base
+
+    var state_id := WORLD_GEOGRAPHY.state_id_at(pos)
+    match state_id:
+        "liorel": base += 0.24
+        "vardheim": base += 0.05
+        "saharin": base -= 0.34
+        "tarvel": base += 0.18
+        "ordan": base -= 0.18
+        "kaldera": base -= 0.04
+    return clampf(base, 0.0, 1.0)
 
 func temperature_at(pos: Vector2) -> float:
     var latitude := clampf((pos.y + WORLD_HALF_SIZE) / (WORLD_HALF_SIZE * 2.0), 0.0, 1.0)
     var altitude_penalty := maxf(0.0, elevation_at(pos) - 18.0) / 120.0
-    return clampf(0.18 + latitude * 0.72 - altitude_penalty, 0.0, 1.0)
+    var temperature := 0.18 + latitude * 0.72 - altitude_penalty
+
+    var state_id := WORLD_GEOGRAPHY.state_id_at(pos)
+    match state_id:
+        "vardheim": temperature -= 0.28
+        "dor_karn": temperature -= 0.14
+        "saharin": temperature += 0.22
+        "tarvel": temperature += 0.05
+        "ordan": temperature += 0.02
+    return clampf(temperature, 0.0, 1.0)
 
 func biome_at(pos: Vector2) -> String:
     var elevation := elevation_at(pos)
@@ -93,10 +124,36 @@ func biome_at(pos: Vector2) -> String:
     if WORLD_GEOGRAPHY.in_start_region(pos):
         return "forest"
 
-    if elevation > 50.0:
-        return "mountains"
+    var state_id := WORLD_GEOGRAPHY.state_id_at(pos)
     var temperature := temperature_at(pos)
     var moisture := moisture_at(pos)
+
+    # Canonical macro-regions bias biome selection without turning political
+    # borders into visible hard biome walls. Noise still controls local variety.
+    match state_id:
+        "dor_karn":
+            if elevation > 26.0:
+                return "mountains"
+            return "taiga" if moisture > 0.40 else "plains"
+        "vardheim":
+            if elevation > 48.0:
+                return "mountains"
+            return "taiga" if moisture > 0.36 else "tundra"
+        "liorel":
+            if elevation > 58.0:
+                return "mountains"
+            return "forest"
+        "saharin":
+            if moisture > 0.62 and elevation < 18.0:
+                return "plains"
+            return "drylands"
+        "ordan":
+            if elevation > 55.0:
+                return "mountains"
+            return "steppe"
+
+    if elevation > 50.0:
+        return "mountains"
     if temperature < 0.28:
         return "taiga" if moisture > 0.42 else "tundra"
     if temperature > 0.76 and moisture < 0.38:
@@ -116,6 +173,7 @@ func biome_display_name(biome: String) -> String:
         "drylands": return "Сухие земли"
         "marsh": return "Болота"
         "forest": return "Лес"
+        "steppe": return "Степь"
         _: return "Равнины"
 
 func biome_color(biome: String) -> Color:
@@ -127,6 +185,7 @@ func biome_color(biome: String) -> Color:
         "drylands": return Color(0.46, 0.35, 0.20, 1.0)
         "marsh": return Color(0.16, 0.23, 0.14, 1.0)
         "forest": return Color(0.10, 0.27, 0.13, 1.0)
+        "steppe": return Color(0.34, 0.39, 0.18, 1.0)
         _: return Color(0.24, 0.36, 0.18, 1.0)
 
 func political_region_at(pos: Vector2) -> Dictionary:
