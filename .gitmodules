@@ -61,3 +61,6 @@
 [submodule "assets/source_packs/cc0tree"]
 	path = assets/source_packs/cc0tree
 	url = https://github.com/SkywolfGameStudios/CC0Tree.git
+[submodule "assets/source_packs/open_source_3d_registry"]
+	path = assets/source_packs/open_source_3d_registry
+	url = https://github.com/ToxSam/open-source-3D-assets.git
