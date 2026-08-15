@@ -51,6 +51,8 @@ Use rowboats/small craft first for rivers/lakes, then fishing/sailing vessels fo
 - Quaternius Survival Pack — 53 survival assets, FBX/OBJ/Blend, CC0. Source: `https://quaternius.com/packs/survival.html`
 - KayKit Medieval Hexagon is already staged and includes roads, water/river pieces, bridge/building/settlement assets.
 - Quaternius Medieval Village/MegaKit should be preferred for carts/wagons/fences/market props where the required model exists.
+- OpenGameArt `Low Poly Cart` — simple low-poly cart in Blend format; CC0. Source: `https://opengameart.org/content/low-poly-cart`
+- OpenGameArt `Handwagon` — wagon in DAE + OBJ with AO textures; CC0. Source: `https://opengameart.org/content/handwagon`
 
 ### Dungeons / graveyards / dark locations
 
@@ -71,6 +73,11 @@ Additional verified CC0 fallback sources:
 - Plewr `3D Goose` — free CC0 goose, static + rigged Blend. Source: `https://plewr.itch.io/goose`
 - Plewr `3D Call Duck` — free CC0 low-poly duck pack. Source: `https://plewr.itch.io/call-duck`
 - OpenGameArt `CC0 - 3D Animals / Creatures` collection — rabbit, deer, raven, butterfly, rooster, chicken, wolf, fish and many more CC0 candidates. Source: `https://opengameart.org/content/cc0-3d-animals-creatures`
+- OpenGameArt `Boar` — ~1K tris, rigged + textured, walk and attack animations; CC0. Source: `https://opengameart.org/content/boar`
+- OpenGameArt `Low poly 3D Pigeon` — rigged + animated pigeon; CC0. Source: `https://opengameart.org/content/low-poly-3d-pigeon-model-rigged-animated-untextured`
+- OpenGameArt `Frog low poly animated 3d model` — 600 triangles, rigged + animated; CC0. Source: `https://opengameart.org/content/frog-low-poly-animated-3d-model`
+- OpenGameArt `Butterfly (animated)` — low-poly, rigged, animated and textured butterfly; CC0. Source: `https://opengameart.org/content/butterfly-animated`
+- OpenGameArt `Ant 3D Model + Rigging + Animated` — animated low-poly ant; CC0. Source: `https://opengameart.org/content/ant-3d-model-rigging-animated-low-poly-ish`
 
 Use these only when the main Quaternius animal style does not contain a required species or when low-cost ambient variants are needed.
 
@@ -81,7 +88,7 @@ Use these only when the main Quaternius animal style does not contain a required
 3. Add small boats and docks before large ships.
 4. Add road/travel props: carts/wagons, signs, campfires, fences and bridges.
 5. Fill graveyards/ruins/dungeons from staged modular packs.
-6. Add missing ambient species only after primary animal AI/LOD is stable.
+6. Add missing ambient species only after primary animal AI/LOD is stable: boar -> pigeon/raven -> frog -> butterfly/insects.
 7. Never bulk-import entire libraries into active Godot scenes. Select only needed files and preserve source/license metadata.
 
 ## License and safety rule
