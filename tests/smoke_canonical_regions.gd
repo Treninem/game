@@ -1,6 +1,7 @@
 extends Node
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
+const CAPITAL := preload("res://scripts/capital_data.gd")
 
 func _ready() -> void:
     await get_tree().process_frame
@@ -15,6 +16,20 @@ func _ready() -> void:
         var actual_id := WorldData.state_id_at(center)
         if actual_id != expected_id:
             failures.append("State center mismatch: %s resolved as %s" % [expected_id, actual_id])
+
+    if CAPITAL.CENTER != GEOGRAPHY.ASTERN_CAPITAL:
+        failures.append("CapitalData.CENTER must follow the canonical Asterna capital anchor")
+    if CAPITAL.CENTER == Vector2.ZERO:
+        failures.append("Asterna capital must stay far from the prologue origin")
+    if CAPITAL.CENTER.distance_to(GEOGRAPHY.START_SPAWN) < 5000.0:
+        failures.append("Asterna capital drifted too close to the prologue region")
+
+    var central_district := CAPITAL.district_at(CAPITAL.CENTER)
+    if String(central_district.get("id", "")) != "central":
+        failures.append("Capital center no longer resolves to the central district")
+    var central_world: Vector2 = central_district.get("center", Vector2.ZERO)
+    if central_world != CAPITAL.CENTER:
+        failures.append("Capital district coordinates must resolve in world space")
 
     if WorldData.biome_at(GEOGRAPHY.START_SPAWN) != "forest":
         failures.append("Asterna prologue spawn must remain forest")
@@ -56,7 +71,7 @@ func _ready() -> void:
         failures.append("Prologue river bed carving moved unexpectedly: %.3f" % river_height)
 
     if failures.is_empty():
-        print("CANONICAL_REGIONS_SMOKE_OK states=8 start=forest climates=locked river=stable")
+        print("CANONICAL_REGIONS_SMOKE_OK states=8 start=forest capital=anchored climates=locked river=stable")
         get_tree().quit(0)
         return
 
