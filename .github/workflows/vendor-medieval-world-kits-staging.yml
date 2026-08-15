@@ -1,0 +1,169 @@
+name: Vendor CC0 medieval world kits staging
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-medieval-world-kits-staging.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-medieval-world-kits-staging
+  cancel-in-progress: false
+
+jobs:
+  vendor-medieval-world:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout medieval staging
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            .github/workflows
+            assets/staging/medieval
+          sparse-checkout-cone-mode: true
+
+      - name: Download verified CC0 medieval packs
+        shell: bash
+        run: |
+          set -u
+          TMP=".medieval_world_tmp"
+          FAILS="$TMP/FAILED.txt"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" assets/staging/medieval
+          : > "$FAILS"
+
+          write_meta() {
+            local target="$1" key="$2" source="$3" download="$4" notes="$5" format="$6"
+            cat > "$target/SOURCE.md" <<EOF
+          # Source
+
+          Pack key: $key
+          Source page: $source
+          Download used: $download
+          License: CC0 1.0 Universal as stated by the source page.
+          Status: SOURCE-ONLY STAGING — not gameplay-integrated by this workflow.
+          Canonical staged format: $format.
+          Notes: $notes
+          EOF
+            cat > "$target/LICENSE.txt" <<'EOF'
+          Creative Commons Zero (CC0 1.0 Universal)
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          Preserve SOURCE.md with staged files.
+          EOF
+          }
+
+          import_zip_canonical() {
+            local key="$1" url="$2" source="$3" target="$4" notes="$5"
+            local work="$TMP/$key"
+            rm -rf "$target" "$work"
+            mkdir -p "$target" "$work/archive"
+            if ! curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 1200 -A 'ImPuls-CC0-Staging/1.0' "$url" -o "$work/pack.zip"; then
+              echo "$key | download failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+            if ! unzip -q "$work/pack.zip" -d "$work/archive"; then
+              echo "$key | unzip failed | $url" >> "$FAILS"
+              rm -rf "$target" "$work"
+              return 0
+            fi
+
+            local format=""
+            if find "$work/archive" -type f -iname '*.glb' -print -quit | grep -q .; then
+              format="GLB"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.glb' --include='*.GLB' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.gltf' -print -quit | grep -q .; then
+              format="glTF"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.gltf' --include='*.GLTF' --include='*.bin' --include='*.BIN' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.fbx' -print -quit | grep -q .; then
+              format="FBX"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.fbx' --include='*.FBX' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            elif find "$work/archive" -type f -iname '*.obj' -print -quit | grep -q .; then
+              format="OBJ"
+              rsync -a --prune-empty-dirs \
+                --include='*/' --include='*.obj' --include='*.OBJ' --include='*.mtl' --include='*.MTL' \
+                --include='*.png' --include='*.PNG' --include='*.jpg' --include='*.JPG' --include='*.jpeg' --include='*.JPEG' --include='*.webp' --include='*.WEBP' \
+                --include='*.txt' --include='*.TXT' --include='*.md' --include='*.MD' --include='*.json' --include='*.JSON' \
+                --exclude='*' "$work/archive/" "$target/"
+            else
+              echo "$key | no supported 3D format found | $url" >> "$FAILS"
+              rm -rf "$target"
+              return 0
+            fi
+            write_meta "$target" "$key" "$source" "$url" "$notes" "$format"
+          }
+
+          import_zip_canonical "kenney_castle_kit" \
+            "https://kenney.nl/media/pages/assets/castle-kit/a395102d20-1711543616/kenney_castle-kit.zip" \
+            "https://kenney.nl/assets/castle-kit" \
+            "assets/staging/medieval/kenney_castle_kit" \
+            "75-piece castle/medieval construction set for fortifications and state capitals."
+
+          import_zip_canonical "kenney_building_kit" \
+            "https://kenney.nl/media/pages/assets/building-kit/0de7aaa492-1743244741/kenney_building-kit.zip" \
+            "https://kenney.nl/assets/building-kit" \
+            "assets/staging/medieval/kenney_building_kit" \
+            "80 building/structure pieces with source animation support, useful for modular enterable construction."
+
+          import_zip_canonical "kenney_graveyard_kit" \
+            "https://www.kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip" \
+            "https://www.kenney.nl/assets/graveyard-kit" \
+            "assets/staging/medieval/kenney_graveyard_kit" \
+            "90 graveyard/horror environment assets with animation support in the source pack."
+
+          import_zip_canonical "quaternius_fantasy_props_megakit_standard" \
+            "https://opengameart.org/sites/default/files/fantasy_props_megakitstandard.zip" \
+            "https://opengameart.org/content/fantasy-props-megakit" \
+            "assets/staging/medieval/quaternius_fantasy_props_megakit_standard" \
+            "94 CC0 standard-edition medieval/fantasy props: weapons, tools, vegetables, potions, market stalls, chests and furniture."
+
+          cp "$FAILS" assets/staging/medieval/MEDIEVAL_WORLD_DOWNLOAD_FAILURES.txt
+          cat > assets/staging/medieval/MEDIEVAL_WORLD_MANIFEST.md <<'EOF'
+          # Medieval/fantasy world source-only staging
+
+          Coherent CC0 kits for castles, modular structures, graveyards, markets, workshops and everyday fantasy/medieval props. One preferred 3D format per pack is retained to avoid format duplication.
+          EOF
+          rm -rf "$TMP"
+
+      - name: Commit with concurrent-push retry
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/medieval
+          if git diff --cached --quiet; then
+            echo "No staging changes to commit."
+            exit 0
+          fi
+          git commit -m "assets(staging): add CC0 castle buildings graveyard and fantasy props"
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              sleep $((attempt * 2))
+              continue
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "Could not push after retries" >&2
+          exit 1
