@@ -9,6 +9,7 @@ const VILLAGE_GATE_HALF_WIDTH := 5.0
 const TOWN_GATE_HALF_WIDTH := 7.0
 const ROAD_OUTSIDE_LENGTH := 28.0
 const ROAD_PATCH_SPACING := 7.0
+const TOWN_GATE_OPEN_ANGLE := 72.0
 
 var processed: Dictionary = {}
 var stone_material: StandardMaterial3D
@@ -108,7 +109,6 @@ func _build_gate_passages(root: Node3D, network: Node3D, center: Vector2, half_s
     for i in range(gates.size()):
         var gate: Dictionary = gates[i]
         var point: Vector2 = gate.get("point", Vector2.ZERO)
-        var direction: Vector2 = gate.get("local_direction", Vector2(0, 1))
         var half_width := float(gate.get("half_width", 0.0))
         var marker := Marker3D.new()
         marker.name = "RoadGatePassage_%02d" % i
@@ -133,14 +133,23 @@ func _build_town_gate_arch(root: Node3D, network: Node3D, center: Vector2, gate:
     _add_static_box(root, network, center, "GateLintel_%02d" % index, lintel_size, point, 6.75, stone_material)
 
     var tangent := Vector2(1,0) if side == "front" or side == "back" else Vector2(0,1)
-    var leaf_size := Vector3(half_width - 0.55, 3.4, 0.32)
+    var leaf_length := half_width - 0.55
+    var leaf_size := Vector3(leaf_length, 3.4, 0.32)
     if side == "left" or side == "right":
-        leaf_size = Vector3(0.32, 3.4, half_width - 0.55)
+        leaf_size = Vector3(0.32, 3.4, leaf_length)
     for leaf_index in range(2):
         var sign_value := -1.0 if leaf_index == 0 else 1.0
         var hinge_pos := point + tangent * half_width * sign_value
-        var body := _add_static_box(root, network, center, "Gate_%02d_Leaf_%d" % [index, leaf_index], leaf_size, hinge_pos, 1.7, timber_material)
-        body.rotation.y = deg_to_rad(72.0) * sign_value
+        var closed_offset := tangent * (-sign_value * leaf_length * 0.5)
+        var open_angle := deg_to_rad(TOWN_GATE_OPEN_ANGLE) * sign_value
+        var rotated3 := Basis(Vector3.UP, open_angle) * Vector3(closed_offset.x, 0.0, closed_offset.y)
+        var leaf_center := hinge_pos + Vector2(rotated3.x, rotated3.z)
+        var body := _add_static_box(root, network, center, "Gate_%02d_Leaf_%d" % [index, leaf_index], leaf_size, leaf_center, 1.7, timber_material)
+        body.rotation.y = open_angle
+        body.set_meta("hinge_local", hinge_pos)
+        body.set_meta("open_angle_degrees", TOWN_GATE_OPEN_ANGLE * sign_value)
+        body.set_meta("gate_index", index)
+        body.set_meta("hinged_correctly", true)
 
 func _build_road_approach(root: Node3D, network: Node3D, center: Vector2, gate: Dictionary, index: int, kind: String) -> void:
     var direction: Vector2 = gate.get("local_direction", Vector2(0,1))
@@ -153,6 +162,8 @@ func _build_road_approach(root: Node3D, network: Node3D, center: Vector2, gate: 
     approach.name = "RoadApproach_%02d" % index
     approach.set_meta("extends_outside_perimeter", true)
     approach.set_meta("patch_count", patches)
+    approach.set_meta("gate_boundary", boundary)
+    approach.set_meta("outer_endpoint", outer)
     network.add_child(approach)
 
     var angle := atan2(direction.x, direction.y)
