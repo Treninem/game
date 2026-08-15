@@ -1,0 +1,66 @@
+name: Import Quaternius interiors and transport source packs
+on:
+  push:
+    paths: ['.github/workflows/import_real_quaternius_interior_transport.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: import-quaternius-interiors-transport
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/import_real_quaternius_interior_transport.yml
+            assets/source_packs/opengameart/quaternius
+          sparse-checkout-cone-mode: false
+      - name: Download validate and inventory CC0 packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='assets/source_packs/opengameart/quaternius'
+          mkdir -p "$ROOT"/{house_interior,furniture,public_transport,cars,ships,modular_street}
+          getzip(){ url="$1"; out="$2"; [ -s "$out" ] || curl -L --fail --retry 5 --retry-delay 3 --connect-timeout 20 --max-time 1800 -A 'ImPuls-CC0-AssetImporter/6.0' "$url" -o "$out"; test -s "$out"; unzip -tqq "$out" >/dev/null; head -c 1024 "$out" | grep -Eiq '<!doctype html|<html|<body' && { echo "ERROR HTML instead of ZIP: $out"; exit 1; } || true; }
+          getzip 'https://opengameart.org/sites/default/files/ultimate_house_interior_pack_-_june_2020.zip' "$ROOT/house_interior/ultimate_house_interior_pack_june_2020.zip"
+          getzip 'https://opengameart.org/sites/default/files/Furniture%20Pack%20by%20%40Quaternius.zip' "$ROOT/furniture/furniture_pack_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/Public%20Transport_0.zip' "$ROOT/public_transport/public_transport.zip"
+          getzip 'https://opengameart.org/sites/default/files/Car%20Pack.zip' "$ROOT/cars/car_pack.zip"
+          getzip 'https://opengameart.org/sites/default/files/Ships%20by%20%40Quaternius.zip' "$ROOT/ships/ships_by_quaternius.zip"
+          getzip 'https://opengameart.org/sites/default/files/Street%20Pack%20by%20%40Quaternius.zip' "$ROOT/modular_street/street_pack_by_quaternius.zip"
+
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-house-interior-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: 120+ interior models including doors/windows, kitchen, bathroom, beds, tables, lamps and plants; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/house_interior/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/furniture-low-poly' 'License: CC0' 'Author: Quaternius' 'Coverage: low-poly furniture including tables, chairs, sofas and lamps.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/furniture/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-public-transport' 'License: CC0' 'Author: Quaternius' 'Coverage: ambulance, bus, car, taxi, bicycle and related public transport; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/public_transport/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-cars' 'License: CC0' 'Author: Quaternius' 'Coverage: low-poly cars including sports/police/taxi variants; FBX/OBJ/Blend.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/cars/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-ship-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: low-poly ships including pirate, cruise and combat-oriented vessels.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/ships/SOURCE.md"
+          printf '%s\n' 'Source: https://opengameart.org/content/lowpoly-modular-street-pack' 'License: CC0' 'Author: Quaternius' 'Coverage: modular streets, bridges, signs and traffic/city-builder elements.' 'Status: source-only; not gameplay-integrated.' > "$ROOT/modular_street/SOURCE.md"
+
+          find "$ROOT" -type f -name '*.zip' -print0 | sort -z | xargs -0 sha256sum > "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+          { echo '# Quaternius complete source ZIP inventory'; echo; echo '| File | Bytes | SHA256 |'; echo '|---|---:|---|'; while IFS= read -r -d '' f; do printf '| `%s` | %s | `%s` |\n' "${f#$ROOT/}" "$(stat -c %s "$f")" "$(sha256sum "$f"|awk '{print $1}')"; done < <(find "$ROOT" -type f -name '*.zip' -print0 | sort -z); } > "$ROOT/ALL_SOURCE_INVENTORY.md"
+          rm -rf /tmp/qit && mkdir -p /tmp/qit && for d in house_interior furniture public_transport cars ships modular_street; do cp -a "$ROOT/$d" /tmp/qit/; done
+          cp "$ROOT/ALL_SOURCE_SHA256SUMS.txt" /tmp/qit/
+          cp "$ROOT/ALL_SOURCE_INVENTORY.md" /tmp/qit/
+      - name: Commit safely over freshest main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          ROOT='assets/source_packs/opengameart/quaternius'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --depth=1 origin main; git reset --hard FETCH_HEAD; mkdir -p "$ROOT"
+            for d in house_interior furniture public_transport cars ships modular_street; do rm -rf "$ROOT/$d"; cp -a "/tmp/qit/$d" "$ROOT/"; done
+            cp /tmp/qit/ALL_SOURCE_SHA256SUMS.txt "$ROOT/ALL_SOURCE_SHA256SUMS.txt"
+            cp /tmp/qit/ALL_SOURCE_INVENTORY.md "$ROOT/ALL_SOURCE_INVENTORY.md"
+            git add "$ROOT"
+            git diff --cached --quiet && exit 0
+            git commit -m 'assets: vendor Quaternius interiors and transport source packs'
+            git push origin HEAD:main && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
