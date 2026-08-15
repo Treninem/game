@@ -1,0 +1,43 @@
+name: Validate Quaternius source-pack batch
+on:
+  push:
+    paths:
+      - 'assets/source_packs/opengameart/quaternius/**'
+      - '.github/workflows/validate_quaternius_source_batch.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: validate-quaternius-source-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            assets/source_packs/opengameart/quaternius
+            .github/workflows/validate_quaternius_source_batch.yml
+          sparse-checkout-cone-mode: false
+      - name: Validate archives provenance and hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='assets/source_packs/opengameart/quaternius'
+          bad=0; count=0; hashes=$(mktemp)
+          while IFS= read -r -d '' f; do
+            count=$((count+1))
+            test -s "$f" || { echo "ERROR zero-byte: $f"; bad=1; continue; }
+            unzip -tqq "$f" >/dev/null || { echo "ERROR broken ZIP: $f"; bad=1; }
+            head -c 1024 "$f" | grep -Eaiq '<!doctype html|<html|<body' && { echo "ERROR HTML masquerading as ZIP: $f"; bad=1; } || true
+            d=$(dirname "$f")
+            [ -f "$d/SOURCE.md" ] || [ -f "$d/../SOURCE.md" ] || { echo "ERROR missing SOURCE.md near $f"; bad=1; }
+            sha256sum "$f" >> "$hashes"
+          done < <(find "$ROOT" -type f -iname '*.zip' -print0 | sort -z)
+          echo "Validated ZIP files: $count"
+          dup=$(awk '{print $1}' "$hashes" | sort | uniq -d || true)
+          if [ -n "$dup" ]; then echo 'Duplicate ZIP payloads:'; while read -r h; do [ -z "$h" ] || grep "^$h " "$hashes"; done <<< "$dup"; fi
+          [ "$bad" -eq 0 ]
