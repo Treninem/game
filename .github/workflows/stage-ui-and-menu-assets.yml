@@ -1,0 +1,230 @@
+name: Stage UI and menu assets
+
+on:
+  push:
+    paths:
+      - .github/workflows/stage-ui-and-menu-assets.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stage-ui-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and stage CC0 UI packs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ROOT="assets/staging/ui"
+          mkdir -p "$ROOT"
+          FAILS="$ROOT/UI_DOWNLOAD_FAILURES.txt"
+          : > "$FAILS"
+
+          write_source_md() {
+            local dir="$1"
+            local title="$2"
+            local page_url="$3"
+            local direct_url="$4"
+            local license="$5"
+            local summary="$6"
+            cat > "$dir/SOURCE.md" <<EOT
+# ${title}
+
+- Status: STAGED_PHYSICAL
+- Source page: ${page_url}
+- Direct download: ${direct_url}
+- License: ${license}
+- Intended use: ${summary}
+- Note: Source-only staging. Do not integrate automatically; the main integration chat should review and select assets deliberately.
+EOT
+          }
+
+          ensure_license_note() {
+            local dir="$1"
+            local license="$2"
+            if ! find "$dir" -maxdepth 2 \( -iname 'license*' -o -iname 'licence*' -o -iname 'copying*' \) | grep -q .; then
+              cat > "$dir/LICENSE.txt" <<EOT
+${license}
+
+This folder was staged from a verified free source for game UI development.
+Refer to SOURCE.md for the exact source page and download URL.
+EOT
+            fi
+          }
+
+          download_zip_pack() {
+            local slug="$1"
+            local title="$2"
+            local page_url="$3"
+            local direct_url="$4"
+            local license="$5"
+            local summary="$6"
+            local dir="$ROOT/$slug"
+            local tmp
+            tmp="$(mktemp /tmp/ui-pack-XXXXXX.zip)"
+            rm -rf "$dir"
+            mkdir -p "$dir"
+            if curl -fL "$direct_url" -o "$tmp"; then
+              unzip -oq "$tmp" -d "$dir"
+              write_source_md "$dir" "$title" "$page_url" "$direct_url" "$license" "$summary"
+              ensure_license_note "$dir" "$license"
+            else
+              echo "$slug | $direct_url" >> "$FAILS"
+              rm -rf "$dir"
+            fi
+            rm -f "$tmp"
+          }
+
+          download_single_file() {
+            local slug="$1"
+            local file_name="$2"
+            local title="$3"
+            local page_url="$4"
+            local direct_url="$5"
+            local license="$6"
+            local summary="$7"
+            local dir="$ROOT/$slug"
+            rm -rf "$dir"
+            mkdir -p "$dir"
+            if curl -fL "$direct_url" -o "$dir/$file_name"; then
+              write_source_md "$dir" "$title" "$page_url" "$direct_url" "$license" "$summary"
+              ensure_license_note "$dir" "$license"
+            else
+              echo "$slug | $direct_url" >> "$FAILS"
+              rm -rf "$dir"
+            fi
+          }
+
+          download_zip_pack \
+            "kenney_ui_pack" \
+            "Kenney UI Pack" \
+            "https://opengameart.org/content/ui-pack" \
+            "https://opengameart.org/sites/default/files/kenney_ui-pack.zip" \
+            "CC0" \
+            "General-purpose colorful menu buttons, sliders, panels, fonts and UI sounds for menus and HUDs."
+
+          download_zip_pack \
+            "kenney_ui_pack_adventure" \
+            "Kenney UI Pack Adventure" \
+            "https://opengameart.org/content/ui-pack-adventure" \
+            "https://opengameart.org/sites/default/files/kenney_ui-pack-adventure.zip" \
+            "CC0" \
+            "Adventure/fantasy themed buttons, panels and UI pieces for menus, map overlays and in-game interface decoration."
+
+          download_zip_pack \
+            "kenney_game_icons" \
+            "Kenney Game Icons" \
+            "https://opengameart.org/content/game-icons" \
+            "https://opengameart.org/sites/default/files/Kenney_gameIcons.zip" \
+            "CC0" \
+            "General icon set for settings, map, quest, save/load, inventory, alerts and HUD buttons."
+
+          download_zip_pack \
+            "kenney_board_game_icons" \
+            "Kenney Board Game Icons" \
+            "https://opengameart.org/content/board-game-icons" \
+            "https://opengameart.org/sites/default/files/kenney_board-game-icons.zip" \
+            "CC0" \
+            "Resource/action icons useful for map markers, inventory, crafting and systemic game UI."
+
+          download_zip_pack \
+            "kenney_input_prompts" \
+            "Kenney Input Prompts" \
+            "https://opengameart.org/content/input-prompts" \
+            "https://opengameart.org/sites/default/files/kenney_input-prompts_1.zip" \
+            "CC0" \
+            "Keyboard, mouse, controller and generic control glyphs for tooltips, tutorials and menu hints."
+
+          download_zip_pack \
+            "kenney_cursor_pack" \
+            "Kenney Cursor Pack" \
+            "https://opengameart.org/content/cursor-pack-1" \
+            "https://opengameart.org/sites/default/files/kenney_cursor-pack.zip" \
+            "CC0" \
+            "180+ bitmap/vector cursors including pointer, hand, sword and UI cursor variants."
+
+          download_zip_pack \
+            "simple_button_pack" \
+            "Simple Button Pack" \
+            "https://opengameart.org/content/simple-button-pack" \
+            "https://opengameart.org/sites/default/files/sbs_-_simple_button_pack_2.zip" \
+            "CC0" \
+            "Clean generic buttons and tabs with normal/pressed states for menus, tabs and modal dialogs."
+
+          download_zip_pack \
+            "rpg_inventory" \
+            "RPG Inventory" \
+            "https://opengameart.org/content/inventory" \
+            "https://opengameart.org/sites/default/files/Inventory.zip" \
+            "CC0" \
+            "Complete inventory UI with icons and dark/copper borders for equipment, inventory and loot screens."
+
+          download_zip_pack \
+            "rpg_inventory_icons" \
+            "2D RPG Item Icons" \
+            "https://opengameart.org/content/2d-rpg-item-icons" \
+            "https://opengameart.org/sites/default/files/rpg_inventory.zip" \
+            "CC0" \
+            "RPG armor, swords, potions and crafting material icons for inventory/crafting UI."
+
+          download_single_file \
+            "parchment_map_texture" \
+            "Parchment.jpg" \
+            "Parchement Textures" \
+            "https://opengameart.org/content/parchement-textures" \
+            "https://opengameart.org/sites/default/files/Parchment.jpg" \
+            "CC0" \
+            "Parchment/paper background texture for world map screens, quest journals and decorative UI panels."
+
+          cat > "$ROOT/UI_STAGING_README.md" <<'EOT'
+# UI staging
+
+This folder contains source-only staged UI assets for menus, maps, HUDs and decorative interface work.
+
+Suggested high-value packs:
+- `kenney_ui_pack/` — broad modern/default UI system.
+- `kenney_ui_pack_adventure/` — themed fantasy/adventure UI system.
+- `kenney_game_icons/` and `kenney_board_game_icons/` — icon libraries for map, inventory, settings and systemic UI.
+- `kenney_input_prompts/` — control glyphs.
+- `kenney_cursor_pack/` — cursor/pointer variants.
+- `simple_button_pack/` — fallback generic buttons.
+- `rpg_inventory/` and `rpg_inventory_icons/` — inventory, loot and crafting UI.
+- `parchment_map_texture/` — map/journal background texture.
+
+Main integration chat responsibilities:
+1. Review the style fit.
+2. Move only selected production assets into working UI folders.
+3. Normalize naming, slicing and theme usage.
+4. Avoid mixing too many incompatible UI styles in one screen.
+EOT
+
+      - name: Commit staged UI assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- assets/staging/ui; then
+            echo "No staged UI changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/staging/ui
+          git commit -m "assets(staging): add CC0 UI button menu map icon packs"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; sleep $((attempt * 2)); continue; }
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "Failed to push staged UI assets after retries" >&2
+          exit 1
