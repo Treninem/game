@@ -1,3 +1,4 @@
+# Refresh after interiors and transport source batch.
 name: Validate Quaternius source-pack batch
 on:
   push:
