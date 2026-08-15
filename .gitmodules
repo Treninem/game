@@ -4,3 +4,6 @@
 [submodule "assets/audio/source_packs/cc0_public_domain_sounds"]
 	path = assets/audio/source_packs/cc0_public_domain_sounds
 	url = https://github.com/lavenderdotpet/CC0-Public-Domain-Sounds.git
+[submodule "assets/audio/music/source_packs/efface_cc0_music_pack"]
+	path = assets/audio/music/source_packs/efface_cc0_music_pack
+	url = https://github.com/effacestudios/Royalty-Free-Music-Pack.git
