@@ -14,7 +14,7 @@ const LAKE_BANK_BLEND := 90.0
 # This matches the existing start_ford POI in world_geography.gd. The ford is
 # intentionally still water: traversal is created by a shallow raised bed, not
 # by cutting an unrealistic dry gap through the river.
-const START_FORD_CENTER := Vector2(180.0, -760.0)
+const START_FORD_CENTER := Vector2(59.36857, -760.0)
 const START_FORD_RADIUS := 46.0
 const START_FORD_DEPTH := 0.42
 const START_FORD_APPROACH_RADIUS := 96.0
