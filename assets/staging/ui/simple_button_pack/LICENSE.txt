@@ -1,0 +1,4 @@
+CC0
+
+This folder was staged from a verified free source for game UI development.
+Refer to SOURCE.md for the exact source page and download URL.
