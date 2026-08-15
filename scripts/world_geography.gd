@@ -6,7 +6,7 @@ extends RefCounted
 # future settlement, road, quest and political work does not require moving the
 # whole world again.
 
-const START_SPAWN := Vector2(-72.0, 48.0)
+const START_SPAWN := Vector2(65.0, 48.0)
 const ASTERN_CAPITAL := Vector2(13500.0, -7000.0)
 const START_REGION_RADIUS := 1800.0
 const START_RIVER_HALF_WIDTH := 26.0
@@ -29,7 +29,7 @@ const STATES := [
 # prologue. Names outside explicit story canon are implementation placeholders
 # and can be replaced by the story chat without moving their coordinates.
 const POIS := [
-    {"id":"start_river", "name":"Лесная река", "pos":Vector2(110, 40), "kind":"river", "state":"astern", "visibility":"local"},
+    {"id":"start_river", "name":"Лесная река", "pos":Vector2(132, 48), "kind":"river", "state":"astern", "visibility":"local"},
     {"id":"start_ford", "name":"Старый брод", "pos":Vector2(180, -760), "kind":"ford", "state":"astern", "visibility":"local"},
     {"id":"border_village_01", "name":"Пограничная деревня", "pos":Vector2(1650, -420), "kind":"village", "state":"astern", "visibility":"regional"},
     {"id":"border_village_02", "name":"Речная деревня", "pos":Vector2(-1350, 1180), "kind":"village", "state":"astern", "visibility":"regional"},
