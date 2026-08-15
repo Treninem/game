@@ -62,6 +62,9 @@ jobs:
       - name: Parse project and scripts
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
 
+      - name: Verify startup main menu flow
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_startup_menu.tscn
+
       - name: Verify canonical regions and climate
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_canonical_regions.tscn
 
