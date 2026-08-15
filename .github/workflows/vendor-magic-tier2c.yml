@@ -1,0 +1,100 @@
+name: Vendor CC0 Elemental Weapon and Dark Magic Icons
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-magic-tier2c.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-magic-tier2c
+  cancel-in-progress: false
+
+jobs:
+  vendor-magic-tier2c:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout game repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Import verified CC0 elemental weapon and dark magic icon packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/vfx/third_party"
+          TMP=".vendor_magic_tier2c_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$ROOT"
+
+          import_zip() {
+            local slug="$1" url="$2" title="$3" author="$4" page="$5"
+            local dst="$ROOT/$slug" zip="$TMP/$slug.zip" unpack="$TMP/$slug"
+            rm -rf "$dst" "$unpack"
+            mkdir -p "$dst" "$unpack"
+            curl -L --fail --retry 5 --retry-delay 2 -A 'Treninem-game-asset-vendor/1.0' "$url" -o "$zip"
+            unzip -q "$zip" -d "$unpack"
+            while IFS= read -r -d '' file; do
+              rel="${file#$unpack/}"
+              mkdir -p "$dst/$(dirname "$rel")"
+              cp "$file" "$dst/$rel"
+            done < <(find "$unpack" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.gif' -o -iname '*.svg' -o -iname '*.txt' -o -iname '*.md' \) -print0)
+            cat > "$dst/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          The OpenGameArt source submission for this pack is marked CC0 / Creative Commons Zero.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+            cat > "$dst/SOURCE.md" <<EOF
+          # Source
+
+          Pack: $title
+          Author: $author
+          Original page: $page
+          Source archive: $url
+          License: CC0 1.0 Universal
+
+          Staged asset-library content only; not connected to gameplay automatically.
+          EOF
+            test "$(find "$dst" -type f | wc -l)" -ge 3
+          }
+
+          import_zip \
+            "oga_elemental_weapons_magic" \
+            "https://opengameart.org/sites/default/files/Elemental%20Weapons%20Effect.zip" \
+            "Elemental Weapons - Effect" "Cethiel" \
+            "https://opengameart.org/content/elemental-weapons-effect"
+
+          import_zip \
+            "oga_dark_magic_icons" \
+            "https://opengameart.org/sites/default/files/icons_-_dark_magic.zip" \
+            "Icons - Dark Magic" "Cethiel" \
+            "https://opengameart.org/content/icons-dark-magic"
+
+          echo "Elemental weapon files: $(find "$ROOT/oga_elemental_weapons_magic" -type f | wc -l)"
+          echo "Dark magic icon files: $(find "$ROOT/oga_dark_magic_icons" -type f | wc -l)"
+          rm -rf "$TMP"
+
+      - name: Safe commit and push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/vfx/third_party/oga_elemental_weapons_magic assets/vfx/third_party/oga_dark_magic_icons
+          if git diff --cached --quiet; then
+            echo "No tier2c changes."
+            exit 0
+          fi
+          git commit -m "assets(vfx): vendor CC0 elemental weapon and dark magic icon packs"
+          for attempt in $(seq 1 30); do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
