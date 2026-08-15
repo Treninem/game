@@ -47,9 +47,21 @@ func _ready() -> void:
     var saharin := Vector2(9000.0, 22500.0)
     var ordan := Vector2(-10500.0, 20500.0)
 
-    print("CANONICAL_REGIONS_PROBE vardheim begin")
+    print("CANONICAL_REGIONS_PROBE vardheim.water begin")
+    var vardheim_water := WorldData.water_kind_at(vardheim)
+    print("CANONICAL_REGIONS_PROBE vardheim.water end kind=%s" % vardheim_water)
+    print("CANONICAL_REGIONS_PROBE vardheim.elevation begin")
+    var vardheim_elevation := WorldData.elevation_at(vardheim)
+    print("CANONICAL_REGIONS_PROBE vardheim.elevation end value=%.4f" % vardheim_elevation)
+    print("CANONICAL_REGIONS_PROBE vardheim.temperature begin")
+    var vardheim_probe_temperature := WorldData.temperature_at(vardheim)
+    print("CANONICAL_REGIONS_PROBE vardheim.temperature end value=%.4f" % vardheim_probe_temperature)
+    print("CANONICAL_REGIONS_PROBE vardheim.moisture begin")
+    var vardheim_probe_moisture := WorldData.moisture_at(vardheim)
+    print("CANONICAL_REGIONS_PROBE vardheim.moisture end value=%.4f" % vardheim_probe_moisture)
+    print("CANONICAL_REGIONS_PROBE vardheim.biome begin")
     var vardheim_biome := WorldData.biome_at(vardheim)
-    print("CANONICAL_REGIONS_PROBE vardheim end biome=%s" % vardheim_biome)
+    print("CANONICAL_REGIONS_PROBE vardheim.biome end biome=%s" % vardheim_biome)
     if vardheim_biome not in ["taiga", "tundra", "mountains"]:
         failures.append("Vardheim lost its cold-region biome: %s" % vardheim_biome)
 
