@@ -110,6 +110,26 @@ Physical asset commit: `a4a7d000c60f3403188db33639b7f6e5f1973e9f`
 - `assets/staging/ui/parchment_map_texture/` — parchment background for maps/journals/decorative panels.
 - Batch failure file: `assets/staging/ui/UI_DOWNLOAD_FAILURES.txt` — verified empty after corrected inventory source URL.
 
+### Advanced HUD, navigation, quest, journal and RPG icon reserve
+Physical asset commit: `4024d655ed3eac8b75278da124a5a97d84d643fa`
+
+- `assets/staging/ui/health_mana_ui/` — health/mana/energy HUD source.
+- `assets/staging/ui/health_breath_bars/` — 20 health/breath bar variations for survival and underwater states.
+- `assets/staging/ui/experience_bar/` — RPG progression/experience bar source.
+- `assets/staging/ui/quest_exclamation_icon/` — 128x128 quest/new-objective marker source.
+- `assets/staging/ui/tiny_rpg_dragon_regalia_gui/` — alternate complete GUI with button states, 9-slice frames, equipment frames, bars, minimap frame, portrait frame and cursors.
+- `assets/staging/ui/compass_rose/` — navigation/compass decoration for map and minimap.
+- `assets/staging/ui/scroll_ui_container/` — large scroll-style quest/dialogue/lore panel.
+- `assets/staging/ui/epic_book_ui/` — open-book background for journal, codex, lore and spellbook screens.
+- `assets/staging/ui/fantasy_map_scroll/` — fantasy parchment map frame/background.
+- `assets/staging/ui/fantasy_units_skills_icons/` — faction, city, unit and skill icon coverage.
+- `assets/staging/ui/rpg_496_icons/` — curated 496-icon CC0 medieval/fantasy reserve.
+- `assets/staging/ui/fantasy_rpg_icons_handpainted/` and `assets/staging/ui/fantasy_rpg_icons_handpainted_2/` — hand-painted 128x128 weapons, armor, potions, magic, books and currency icons.
+- `assets/staging/ui/document_icons_scalable/` — document, scroll, map, calendar and journal icons.
+- `assets/staging/ui/parchment_gui/` — parchment buttons, panels, labels and item slots.
+- Batch failure file: `assets/staging/ui/UI_ADVANCED_DOWNLOAD_FAILURES.txt` — verified empty.
+- Style/integration selection guide: `assets/staging/ui/UI_SELECTION_GUIDE.md` — source-only guidance; not gameplay integration.
+
 ## Main integration-chat checklist
 
 Before adding a model to gameplay:
