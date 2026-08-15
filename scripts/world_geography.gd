@@ -12,6 +12,8 @@ const START_REGION_RADIUS := 1800.0
 const START_RIVER_HALF_WIDTH := 26.0
 const START_RIVER_BANK_WIDTH := 72.0
 const START_RIVER_WATER_LEVEL := 1.2
+const PRIMARY_ROAD_HALF_WIDTH := 4.2
+const PRIMARY_ROAD_SHOULDER_WIDTH := 13.0
 
 const STATES := [
     {"id":"astern", "name":"Королевство Астэрн", "center":Vector2(6500, -1000), "radius":Vector2(11500, 12000), "culture":"human_feudal", "climate":"temperate"},
@@ -74,6 +76,25 @@ static func distance_to_start_river(pos: Vector2) -> float:
 
 static func in_start_region(pos: Vector2) -> bool:
     return pos.distance_to(START_SPAWN) <= START_REGION_RADIUS
+
+static func distance_to_primary_road(pos: Vector2) -> float:
+    var best := INF
+    for road in PRIMARY_ROADS:
+        var points: Array = road.get("points", [])
+        for i in range(points.size() - 1):
+            best = minf(best, _distance_to_segment(pos, points[i], points[i + 1]))
+    return best
+
+static func is_on_primary_road(pos: Vector2) -> bool:
+    return distance_to_primary_road(pos) <= PRIMARY_ROAD_HALF_WIDTH
+
+static func _distance_to_segment(point: Vector2, a: Vector2, b: Vector2) -> float:
+    var ab := b - a
+    var length_sq := ab.length_squared()
+    if length_sq <= 0.0001:
+        return point.distance_to(a)
+    var t := clampf((point - a).dot(ab) / length_sq, 0.0, 1.0)
+    return point.distance_to(a + ab * t)
 
 static func state_at(pos: Vector2) -> Dictionary:
     var best: Dictionary = {}
