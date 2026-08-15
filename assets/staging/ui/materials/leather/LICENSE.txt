@@ -1,0 +1,2 @@
+CC0
+See SOURCE.md for source details.
