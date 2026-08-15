@@ -16,6 +16,7 @@ on:
       - "assets/vfx/**"
       - "assets/shaders/**"
       - "assets/staging/sourcechat_b47/**"
+      - "assets/staging/nature/kenney_nature_kit/**"
       - ".github/workflows/windows-build.yml"
   workflow_dispatch:
 
@@ -44,6 +45,7 @@ jobs:
             assets/vfx
             assets/shaders
             assets/staging/sourcechat_b47
+            assets/staging/nature/kenney_nature_kit
       - name: Prepare ImPuls branding
         run: |
           python3 -m pip install --disable-pip-version-check pillow
