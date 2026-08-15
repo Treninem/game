@@ -17,6 +17,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          sparse-checkout: |
+            assets/staging/ui
+            .github/workflows/stage-ui-and-menu-assets.yml
+          sparse-checkout-cone-mode: false
 
       - name: Download and stage CC0 UI packs
         shell: bash
