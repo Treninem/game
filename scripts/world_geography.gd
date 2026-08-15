@@ -32,7 +32,7 @@ const STATES := [
 # and can be replaced by the story chat without moving their coordinates.
 const POIS := [
     {"id":"start_river", "name":"Лесная река", "pos":Vector2(132, 48), "kind":"river", "state":"astern", "visibility":"local"},
-    {"id":"start_ford", "name":"Старый брод", "pos":Vector2(180, -760), "kind":"ford", "state":"astern", "visibility":"local"},
+    {"id":"start_ford", "name":"Старый брод", "pos":Vector2(59.36857, -760), "kind":"ford", "state":"astern", "visibility":"local"},
     {"id":"border_village_01", "name":"Пограничная деревня", "pos":Vector2(1650, -420), "kind":"village", "state":"astern", "visibility":"regional"},
     {"id":"border_village_02", "name":"Речная деревня", "pos":Vector2(-1350, 1180), "kind":"village", "state":"astern", "visibility":"regional"},
     {"id":"first_fortified_town", "name":"Укреплённый город Астэрна", "pos":Vector2(3650, -1750), "kind":"fortified_town", "state":"astern", "visibility":"regional"},
