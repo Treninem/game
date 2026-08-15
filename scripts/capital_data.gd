@@ -134,11 +134,12 @@ static func can_build_at(pos: Vector2) -> bool:
 static func district_at(pos: Vector2) -> Dictionary:
     var local := to_local(pos)
     for district in DISTRICTS:
-        var center: Vector2 = district.get("center", Vector2.ZERO)
-        var size: Vector2 = district.get("size", Vector2.ZERO)
+        var district_data: Dictionary = district
+        var center: Vector2 = district_data.get("center", Vector2.ZERO)
+        var size: Vector2 = district_data.get("size", Vector2.ZERO)
         var half := size * 0.5
         if local.x >= center.x - half.x and local.x <= center.x + half.x and local.y >= center.y - half.y and local.y <= center.y + half.y:
-            var result := district.duplicate(true)
+            var result: Dictionary = district_data.duplicate(true)
             result["local_center"] = center
             result["center"] = CENTER + center
             return result
@@ -146,10 +147,11 @@ static func district_at(pos: Vector2) -> Dictionary:
 
 static func protected_infrastructure_near(pos: Vector2, radius: float = 90.0) -> Dictionary:
     for anchor in PROTECTED_ANCHORS:
-        var local_anchor: Vector2 = anchor.get("pos", Vector2.ZERO)
+        var anchor_data: Dictionary = anchor
+        var local_anchor: Vector2 = anchor_data.get("pos", Vector2.ZERO)
         var world_anchor := CENTER + local_anchor
         if world_anchor.distance_to(pos) <= radius:
-            var result := anchor.duplicate(true)
+            var result: Dictionary = anchor_data.duplicate(true)
             result["local_pos"] = local_anchor
             result["pos"] = world_anchor
             return result
