@@ -16,7 +16,7 @@ func _run_test() -> void:
         return
     var scene := packed.instantiate()
     get_tree().root.add_child(scene)
-    for _i in range(18):
+    for _i in range(24):
         await get_tree().process_frame
 
     var player := scene.get_node_or_null("World/Player") as CharacterBody3D
@@ -48,5 +48,9 @@ func _run_test() -> void:
         _fail(7, "world environment was not created")
         return
 
-    print("Boot smoke passed: world, camera, HUD and environment are stable")
+    if WorldRoads.road_chunk_count() < 1 or WorldRoads.road_patch_count() < 4:
+        _fail(8, "streamed primary road surface did not materialize near the opening region")
+        return
+
+    print("Boot smoke passed: world, camera, HUD, environment and streamed roads are stable")
     get_tree().quit(0)
