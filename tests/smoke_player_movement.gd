@@ -121,7 +121,7 @@ func _run_test() -> void:
         _fail(18, "second physical ESC did not close the menu and resume gameplay")
         return
 
-    print("Forest river story start + physical key mapping + ESC + HUD + surface + void recovery smoke passed")
+    print("Forest river story start + real nature + civilization signs + input + UI + recovery smoke passed")
     tree.quit(0)
 
 func _physical_key_event(code: Key, pressed: bool) -> InputEventKey:
@@ -158,10 +158,34 @@ func _assert_story_start_world(scene: Node, world_data: Node, player: CharacterB
         return false
     if start_region.get_node_or_null("StartRiver") == null or start_region.get_node_or_null("OldFord") == null:
         return false
+    if start_region.get_node_or_null("RealNatureDetails") == null:
+        print("Real CC0 nature detail layer missing")
+        return false
+
     var river_count := int(start_region.get("river_segment_count"))
     var ford_count := int(start_region.get("ford_stone_count"))
+    var real_tree_count := int(start_region.get("real_tree_count"))
+    var real_detail_count := int(start_region.get("real_nature_detail_count"))
     if river_count < 20 or ford_count < 8:
         print("Start region incomplete: river_segments=", river_count, " ford_stones=", ford_count)
+        return false
+    if real_tree_count < 12 or real_detail_count < 35:
+        print("Real nature layer too sparse: trees=", real_tree_count, " detail=", real_detail_count)
+        return false
+
+    var signs := start_region.get_node_or_null("CivilizationSigns")
+    if signs == null:
+        print("Civilization signs node missing")
+        return false
+    if signs.get_node_or_null("OldCartTrack") == null or signs.get_node_or_null("OldLoggingSigns") == null or signs.get_node_or_null("OldFishingPlace") == null:
+        print("Required prologue civilization evidence missing")
+        return false
+    var road_count := int(signs.get("road_segment_count"))
+    var evidence_count := int(signs.get("civilization_sign_count"))
+    var logging_count := int(signs.get("logging_sign_count"))
+    var fishing_count := int(signs.get("fishing_sign_count"))
+    if road_count < 35 or evidence_count < 45 or logging_count < 6 or fishing_count < 4:
+        print("Civilization evidence incomplete: road=", road_count, " total=", evidence_count, " logging=", logging_count, " fishing=", fishing_count)
         return false
 
     var city := scene.get_node_or_null("World/CityDistrict")
@@ -176,7 +200,7 @@ func _assert_story_start_world(scene: Node, world_data: Node, player: CharacterB
     if scene.get_node_or_null("World/StoryStartSurface") == null:
         return false
 
-    print("Story world smoke: spawn=", spawn_xz, " river_segments=", river_count, " ford_stones=", ford_count, " capital_distance=", expected.distance_to(GEOGRAPHY.ASTERN_CAPITAL))
+    print("Story world smoke: spawn=", spawn_xz, " river=", river_count, " ford=", ford_count, " real_trees=", real_tree_count, " real_detail=", real_detail_count, " road=", road_count, " evidence=", evidence_count, " capital_distance=", expected.distance_to(GEOGRAPHY.ASTERN_CAPITAL))
     return true
 
 func _assert_hud(scene: Node) -> bool:
