@@ -1,6 +1,7 @@
 extends Node
 
 const WORLD_GEOGRAPHY := preload("res://scripts/world_geography.gd")
+const WORLD_HYDROLOGY := preload("res://scripts/world_hydrology.gd")
 
 const WORLD_HALF_SIZE := 32000.0
 const WORLD_MIN := Vector2(-WORLD_HALF_SIZE, -WORLD_HALF_SIZE)
@@ -80,18 +81,10 @@ func elevation_at(pos: Vector2) -> float:
         var city_factor := smoothstep(CITY_FLAT_RADIUS, CITY_BLEND_RADIUS, city_distance)
         height *= city_factor
 
-    # The prologue begins on a real river bank. Carve only the local river valley
-    # into the terrain; outside the start region the continent noise is untouched.
-    if WORLD_GEOGRAPHY.in_start_region(pos):
-        var river_distance := WORLD_GEOGRAPHY.distance_to_start_river(pos)
-        if river_distance < WORLD_GEOGRAPHY.START_RIVER_BANK_WIDTH:
-            var riverbed_y := WORLD_GEOGRAPHY.START_RIVER_WATER_LEVEL - 1.55
-            var bank_blend := smoothstep(
-                WORLD_GEOGRAPHY.START_RIVER_HALF_WIDTH,
-                WORLD_GEOGRAPHY.START_RIVER_BANK_WIDTH,
-                river_distance
-            )
-            height = lerpf(riverbed_y, height, bank_blend)
+    # Freshwater features are physical basins/riverbeds, not map-only markers.
+    # The hydrology helper preserves the already-locked prologue river profile
+    # and gives existing Lake Vael a stable basin and shoreline.
+    height = WORLD_HYDROLOGY.carve_height(pos, height)
 
     var edge := maxf(absf(pos.x), absf(pos.y)) / WORLD_HALF_SIZE
     if edge > 0.84:
@@ -104,6 +97,10 @@ func moisture_at(pos: Vector2) -> float:
         var river_distance := WORLD_GEOGRAPHY.distance_to_start_river(pos)
         if river_distance < 180.0:
             base = maxf(base, lerpf(0.80, base, clampf(river_distance / 180.0, 0.0, 1.0)))
+
+    var lake_normalized := WORLD_HYDROLOGY.lake_normalized_distance(pos)
+    if lake_normalized < 1.45:
+        base = maxf(base, lerpf(0.86, base, clampf((lake_normalized - 1.0) / 0.45, 0.0, 1.0)))
 
     var state_id := WORLD_GEOGRAPHY.state_id_at(pos)
     match state_id:
@@ -129,14 +126,36 @@ func temperature_at(pos: Vector2) -> float:
         "ordan": temperature += 0.02
     return clampf(temperature, 0.0, 1.0)
 
+func water_kind_at(pos: Vector2) -> String:
+    var freshwater := WORLD_HYDROLOGY.freshwater_kind_at(pos)
+    if not freshwater.is_empty():
+        return freshwater
+    if elevation_at(pos) < SEA_LEVEL - 0.35:
+        return "sea"
+    return ""
+
+func water_level_at(pos: Vector2) -> float:
+    var freshwater := WORLD_HYDROLOGY.freshwater_kind_at(pos)
+    if not freshwater.is_empty():
+        return WORLD_HYDROLOGY.freshwater_level_at(pos)
+    if elevation_at(pos) < SEA_LEVEL - 0.35:
+        return SEA_LEVEL
+    return -INF
+
 func biome_at(pos: Vector2) -> String:
+    var water_kind := water_kind_at(pos)
+    if water_kind == "sea":
+        return "ocean"
+    if water_kind in ["river", "lake"]:
+        return "freshwater"
+
     var elevation := elevation_at(pos)
     if elevation < SEA_LEVEL - 2.0:
         return "ocean"
 
     # The opening chapter is explicitly a forested river region of Asterna.
     # Keep its ecological identity deterministic so story landmarks do not move
-    # between noise changes.
+    # between noise changes. The actual river cells above are freshwater.
     if WORLD_GEOGRAPHY.in_start_region(pos):
         return "forest"
 
@@ -183,6 +202,7 @@ func biome_at(pos: Vector2) -> String:
 func biome_display_name(biome: String) -> String:
     match biome:
         "ocean": return "Море"
+        "freshwater": return "Пресная вода"
         "mountains": return "Горный хребет"
         "taiga": return "Северная тайга"
         "tundra": return "Тундра"
@@ -195,6 +215,7 @@ func biome_display_name(biome: String) -> String:
 func biome_color(biome: String) -> Color:
     match biome:
         "ocean": return Color(0.06, 0.20, 0.31, 1.0)
+        "freshwater": return Color(0.08, 0.29, 0.40, 1.0)
         "mountains": return Color(0.31, 0.32, 0.33, 1.0)
         "taiga": return Color(0.10, 0.22, 0.17, 1.0)
         "tundra": return Color(0.45, 0.50, 0.48, 1.0)
