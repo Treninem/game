@@ -7,3 +7,6 @@
 [submodule "assets/audio/music/source_packs/efface_cc0_music_pack"]
 	path = assets/audio/music/source_packs/efface_cc0_music_pack
 	url = https://github.com/effacestudios/Royalty-Free-Music-Pack.git
+[submodule "assets/audio/third_party/kenney_rpg_audio"]
+	path = assets/audio/third_party/kenney_rpg_audio
+	url = https://github.com/Boyquotes/kenney-rpg-audio-for-godot.git
