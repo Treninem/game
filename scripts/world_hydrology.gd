@@ -11,6 +11,14 @@ const LAKE_VAEL_WATER_LEVEL := 3.4
 const LAKE_VAEL_MAX_DEPTH := 4.8
 const LAKE_BANK_BLEND := 90.0
 
+# This matches the existing start_ford POI in world_geography.gd. The ford is
+# intentionally still water: traversal is created by a shallow raised bed, not
+# by cutting an unrealistic dry gap through the river.
+const START_FORD_CENTER := Vector2(180.0, -760.0)
+const START_FORD_RADIUS := 46.0
+const START_FORD_DEPTH := 0.42
+const START_FORD_APPROACH_RADIUS := 96.0
+
 static func lake_normalized_distance(pos: Vector2) -> float:
     var offset := pos - LAKE_VAEL_CENTER
     return sqrt(
@@ -33,6 +41,15 @@ static func near_lake_vael(pos: Vector2) -> bool:
     )
     return normalized <= 1.0
 
+static func in_start_ford(pos: Vector2) -> bool:
+    return pos.distance_to(START_FORD_CENTER) <= START_FORD_RADIUS \
+        and GEOGRAPHY.distance_to_start_river(pos) <= GEOGRAPHY.START_RIVER_HALF_WIDTH
+
+static func crossing_kind_at(pos: Vector2) -> String:
+    if in_start_ford(pos):
+        return "ford"
+    return ""
+
 static func freshwater_kind_at(pos: Vector2) -> String:
     if GEOGRAPHY.in_start_region(pos) \
     and GEOGRAPHY.distance_to_start_river(pos) <= GEOGRAPHY.START_RIVER_HALF_WIDTH:
@@ -49,6 +66,12 @@ static func freshwater_level_at(pos: Vector2) -> float:
         return LAKE_VAEL_WATER_LEVEL
     return -INF
 
+static func water_depth_at(pos: Vector2, terrain_height: float) -> float:
+    var level := freshwater_level_at(pos)
+    if is_inf(level):
+        return 0.0
+    return maxf(0.0, level - terrain_height)
+
 static func carve_height(pos: Vector2, terrain_height: float) -> float:
     var height := terrain_height
 
@@ -63,6 +86,19 @@ static func carve_height(pos: Vector2, terrain_height: float) -> float:
                 river_distance
             )
             height = lerpf(riverbed_y, height, bank_blend)
+
+            # Raise the existing Old Ford riverbed into a broad shallow shelf.
+            # The blend extends onto both approaches so the player does not meet
+            # a vertical lip when entering or leaving the crossing.
+            var ford_distance := pos.distance_to(START_FORD_CENTER)
+            if ford_distance < START_FORD_APPROACH_RADIUS:
+                var ford_weight := 1.0 - smoothstep(
+                    START_FORD_RADIUS,
+                    START_FORD_APPROACH_RADIUS,
+                    ford_distance
+                )
+                var ford_bed := GEOGRAPHY.START_RIVER_WATER_LEVEL - START_FORD_DEPTH
+                height = maxf(height, lerpf(height, ford_bed, ford_weight))
 
     # Lake Vael is an existing POI. Give it a real basin with a shallow littoral
     # shelf and smooth banks instead of leaving a map marker on noisy terrain.
