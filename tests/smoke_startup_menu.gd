@@ -52,6 +52,30 @@ func _run_test() -> void:
         _fail(9, "Continue button visibility does not follow whether a game was started")
         return
 
+    var menu_music := menu.get_node_or_null("MenuMusic") as AudioStreamPlayer
+    if menu_music == null or menu_music.stream == null:
+        _fail(15, "startup menu has no real music stream")
+        return
+    var music_path := String(menu_music.stream.resource_path)
+    if not music_path.begins_with("res://assets/audio/music/production/"):
+        _fail(16, "menu music is not a production audio asset: %s" % music_path)
+        return
+    if "source_packs" in music_path or "assets/staging" in music_path:
+        _fail(17, "menu runtime depends on a staging/source-pack music path")
+        return
+    if menu_music.bus != "Music" or not bool(menu_music.call("uses_music_bus")):
+        _fail(18, "menu music bypasses the Music settings bus")
+        return
+    if not menu_music.autoplay:
+        _fail(19, "menu music is not configured to autoplay")
+        return
+    if menu_music.process_mode != Node.PROCESS_MODE_ALWAYS:
+        _fail(20, "menu music would pause while the settings overlay pauses the scene tree")
+        return
+    if not bool(menu_music.call("loop_enabled")):
+        _fail(21, "menu music stream is not looped")
+        return
+
     menu.call("show_page", "saves")
     await get_tree().process_frame
     if int(menu.get("save_row_count")) != SaveManager.SLOT_COUNT:
@@ -68,6 +92,9 @@ func _run_test() -> void:
     if settings_overlay == null or not settings_overlay.visible or not get_tree().paused:
         _fail(12, "Settings button does not open the existing settings UI")
         return
+    if menu_music.process_mode != Node.PROCESS_MODE_ALWAYS:
+        _fail(22, "menu music no longer remains active while settings are open")
+        return
     menu.call("close_settings_overlay")
     await get_tree().process_frame
     if get_tree().paused or settings_overlay.visible:
@@ -80,5 +107,5 @@ func _run_test() -> void:
         _fail(14, "update page is not wired to UpdateManager controls")
         return
 
-    print("STARTUP_MENU_SMOKE_OK actions=5 saves=10 settings=reused updates=wired world=deferred")
+    print("STARTUP_MENU_SMOKE_OK actions=5 saves=10 settings=reused updates=wired music=production-looped world=deferred")
     get_tree().quit(0)
