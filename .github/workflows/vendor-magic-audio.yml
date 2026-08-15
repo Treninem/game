@@ -1,0 +1,121 @@
+name: Vendor CC0 Magic Spell Audio
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-magic-audio.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-magic-audio
+  cancel-in-progress: false
+
+jobs:
+  vendor-magic-audio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout game repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Import verified CC0 spell audio
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/audio/third_party/oga_magic_cc0"
+          rm -rf "$ROOT"
+          mkdir -p "$ROOT"
+
+          meta() {
+            local dst="$1" title="$2" author="$3" page="$4"
+            cat > "$dst/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          The OpenGameArt source submission for the audio in this folder is marked CC0 / Creative Commons Zero.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+            cat > "$dst/SOURCE.md" <<EOF
+          # Source
+
+          Pack: $title
+          Author: $author
+          Original page: $page
+          License: CC0 1.0 Universal
+
+          Staged audio-library content only. It is not connected to gameplay automatically.
+          EOF
+          }
+
+          grab() {
+            local url="$1" out="$2"
+            curl -L --fail --retry 5 --retry-delay 2 \
+              -A 'Treninem-game-asset-vendor/1.0' "$url" -o "$out"
+            test -s "$out"
+          }
+
+          DST="$ROOT/general_cast"
+          mkdir -p "$DST"
+          grab 'https://opengameart.org/sites/default/files/magical_1_0.ogg' "$DST/magical_1.ogg"
+          grab 'https://opengameart.org/sites/default/files/magical_2.ogg' "$DST/magical_2.ogg"
+          grab 'https://opengameart.org/sites/default/files/magical_3.ogg' "$DST/magical_3.ogg"
+          grab 'https://opengameart.org/sites/default/files/magical_4.ogg' "$DST/magical_4.ogg"
+          grab 'https://opengameart.org/sites/default/files/magical_5.ogg' "$DST/magical_5.ogg"
+          grab 'https://opengameart.org/sites/default/files/magical_6_0.ogg' "$DST/magical_6.ogg"
+          grab 'https://opengameart.org/sites/default/files/magical_7_0.ogg' "$DST/magical_7.ogg"
+          meta "$DST" "Magic Spell SFX" "JaggedStone" \
+            'https://opengameart.org/content/magic-spell-sfx'
+
+          DST="$ROOT/healing"
+          mkdir -p "$DST"
+          grab 'https://opengameart.org/sites/default/files/magic_words.wav' "$DST/magic_words.wav"
+          grab 'https://opengameart.org/sites/default/files/health_restore.wav' "$DST/health_restore.wav"
+          meta "$DST" "Magic Words + Healing Sound Effect" "Spring Spring" \
+            'https://opengameart.org/content/magic-words-healing-sound-effect'
+
+          DST="$ROOT/teleport"
+          mkdir -p "$DST"
+          grab 'https://opengameart.org/sites/default/files/teleport.wav' "$DST/teleport.wav"
+          meta "$DST" "Teleport Spell" "Ogrebane" \
+            'https://opengameart.org/content/teleport-spell'
+
+          DST="$ROOT/freeze"
+          mkdir -p "$DST"
+          grab 'https://opengameart.org/sites/default/files/freeze.wav' "$DST/freeze.wav"
+          meta "$DST" "Freeze Spell" "artisticdude" \
+            'https://opengameart.org/content/freeze-spell-0'
+
+          DST="$ROOT/fire"
+          mkdir -p "$DST"
+          grab 'https://opengameart.org/sites/default/files/fire_sound_effect.mp3' "$DST/fire_sound_effect.mp3"
+          meta "$DST" "Synthesized Fire Sound Effect" "Spring Spring" \
+            'https://opengameart.org/content/synthesized-fire-sound-effect'
+
+          AUDIO_COUNT=$(find "$ROOT" -type f \( -iname '*.wav' -o -iname '*.ogg' -o -iname '*.mp3' \) | wc -l)
+          echo "Magic audio files: $AUDIO_COUNT"
+          test "$AUDIO_COUNT" -eq 12
+
+      - name: Safe commit and push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/audio/third_party/oga_magic_cc0
+          if git diff --cached --quiet; then
+            echo "No magic audio changes."
+            exit 0
+          fi
+          git commit -m "assets(audio): vendor CC0 magic spell SFX library"
+          for attempt in $(seq 1 30); do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
