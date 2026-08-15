@@ -38,6 +38,12 @@ func _ready() -> void:
                 var guard := body.get_node_or_null(guard_name) as CollisionShape3D
                 if guard == null or guard.shape == null:
                     failures.append("RoadBridge is missing physical side guard %s" % guard_name)
+                elif guard.shape is BoxShape3D:
+                    var guard_box := guard.shape as BoxShape3D
+                    if guard_box.size.x < HYDROLOGY.ROAD_BRIDGE_HALF_LENGTH * 1.9:
+                        failures.append("RoadBridge guard %s does not protect full crossing length" % guard_name)
+                    if guard_box.size.y < 0.12:
+                        failures.append("RoadBridge guard %s is too low to be protective" % guard_name)
         for approach_name in ["ApproachNear", "ApproachFar"]:
             var approach := bridge.get_node_or_null(approach_name) as MeshInstance3D
             if approach == null or approach.mesh == null:
