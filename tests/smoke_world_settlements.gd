@@ -41,7 +41,6 @@ func _run_test() -> void:
     var settlements := SETTLEMENTS_SCRIPT.new() as WorldSettlements
     settlements.name = "TestSettlements"
     add_child(settlements)
-    await get_tree().process_frame
 
     _stage("validate settlement catalog")
     var specs := settlements.settlement_specs()
