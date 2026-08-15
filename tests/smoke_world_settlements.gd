@@ -123,7 +123,23 @@ func _run_test() -> void:
         _fail(37, "thirty settlement interiors are not fully furnished; physical props=%d" % total_furniture)
         return
 
-    print("WORLD_SETTLEMENTS_SMOKE_OK settlements=3 enterable_buildings=", settlements.materialized_buildings, " physical_furniture=", total_furniture, " walls=", settlements.materialized_wall_segments, " gates=", settlements.materialized_gate_passages)
+    if _settlement_npc_count(village_a) != 5 or _settlement_npc_count(village_b) != 5:
+        _fail(38, "each border village must materialize exactly five physical residents")
+        return
+    if _settlement_npc_count(town) != 10:
+        _fail(39, "fortified town must materialize exactly ten physical residents and guards")
+        return
+    if settlements.materialized_npcs != 20:
+        _fail(47, "population counter disagrees with expected streamed population; got %d" % settlements.materialized_npcs)
+        return
+    if not _validate_population(village_a, "first border village"):
+        return
+    if not _validate_population(village_b, "river village"):
+        return
+    if not _validate_population(town, "fortified town"):
+        return
+
+    print("WORLD_SETTLEMENTS_SMOKE_OK settlements=3 enterable_buildings=", settlements.materialized_buildings, " physical_furniture=", total_furniture, " npcs=", settlements.materialized_npcs, " walls=", settlements.materialized_wall_segments, " gates=", settlements.materialized_gate_passages)
     get_tree().quit(0)
 
 func _enterable_count(root: Node3D) -> int:
@@ -179,6 +195,49 @@ func _physical_furniture_count(root: Node3D) -> int:
             if prop is StaticBody3D:
                 count += 1
     return count
+
+func _settlement_npc_count(root: Node3D) -> int:
+    var count := 0
+    for child in root.get_children():
+        if child is SettlementNPC:
+            count += 1
+    return count
+
+func _validate_population(root: Node3D, label: String) -> bool:
+    var roles := {}
+    var found := 0
+    for child in root.get_children():
+        if not child is SettlementNPC:
+            continue
+        found += 1
+        var npc := child as SettlementNPC
+        roles[npc.role] = true
+        if not npc.is_in_group("settlement_npc"):
+            _fail(60, "%s NPC is not registered in settlement_npc group" % label)
+            return false
+        if not npc.has_method("interact"):
+            _fail(61, "%s NPC cannot be interacted with" % label)
+            return false
+        if npc.route_points_local.size() < 2:
+            _fail(62, "%s NPC has no patrol/walking route" % label)
+            return false
+        if npc.visual == null:
+            _fail(63, "%s NPC has no humanoid visual" % label)
+            return false
+        var collision := npc.get_node_or_null("CollisionShape3D") as CollisionShape3D
+        if collision == null or collision.shape == null or not collision.shape is CapsuleShape3D:
+            _fail(64, "%s NPC has no physical capsule collision" % label)
+            return false
+    if found == 0:
+        _fail(65, "%s has no settlement population" % label)
+        return false
+    if not roles.has("resident") or not roles.has("watch"):
+        _fail(66, "%s population lacks residents or physical watch presence" % label)
+        return false
+    if label != "fortified town" and (not roles.has("trader") or not roles.has("craftsman")):
+        _fail(67, "%s village lacks trader or craftsman roles" % label)
+        return false
+    return true
 
 func _validate_static_shape(node: Node, label: String) -> bool:
     var body := node as StaticBody3D
