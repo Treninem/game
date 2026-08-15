@@ -40,3 +40,15 @@
 [submodule "assets/source_packs/kaykit_furniture_bits"]
 	path = assets/source_packs/kaykit_furniture_bits
 	url = https://github.com/KayKit-Game-Assets/KayKit-Furniture-Bits-1.0.git
+[submodule "assets/source_packs/kaykit_medieval_hexagon"]
+	path = assets/source_packs/kaykit_medieval_hexagon
+	url = https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0.git
+[submodule "assets/source_packs/kaykit_restaurant_bits"]
+	path = assets/source_packs/kaykit_restaurant_bits
+	url = https://github.com/KayKit-Game-Assets/KayKit-Restaurant-Bits-1.0.git
+[submodule "assets/source_packs/kaykit_city_builder_bits"]
+	path = assets/source_packs/kaykit_city_builder_bits
+	url = https://github.com/KayKit-Game-Assets/KayKit-City-Builder-Bits-1.0.git
+[submodule "assets/source_packs/kaykit_halloween_bits"]
+	path = assets/source_packs/kaykit_halloween_bits
+	url = https://github.com/KayKit-Game-Assets/KayKit-Halloween-Bits-1.0.git
