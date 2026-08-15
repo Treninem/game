@@ -2,8 +2,8 @@ class_name EnterableBuilding
 extends Node3D
 
 const DOOR_SCRIPT := preload("res://scripts/door_interactable.gd")
-const DOOR_SCENE: PackedScene = preload("res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/Door_1_Flat.gltf")
-const ROOF_SCENE: PackedScene = preload("res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/Roof_RoundTiles_8x8.gltf")
+const DOOR_SCENE: PackedScene = preload("res://assets/production/medieval/building_shell/Door_1_Flat.gltf")
+const ROOF_SCENE: PackedScene = preload("res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf")
 
 @export var building_label := "Дом"
 @export var footprint := Vector2(9.0, 8.0)
