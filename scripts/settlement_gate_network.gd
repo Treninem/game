@@ -129,9 +129,11 @@ static func _merge_overlapping_gates(gates: Array[Dictionary], half_size: Vector
             var delta := absf(float(existing.get("tangent", 0.0)) - float(gate.get("tangent", 0.0)))
             if delta > half_a + half_b:
                 continue
-            var combined_direction := (Vector2(existing.get("local_direction", Vector2.ZERO)) + Vector2(gate.get("local_direction", Vector2.ZERO))).normalized()
+            var existing_direction: Vector2 = existing.get("local_direction", Vector2.ZERO)
+            var incoming_direction: Vector2 = gate.get("local_direction", Vector2.ZERO)
+            var combined_direction := (existing_direction + incoming_direction).normalized()
             if combined_direction.length_squared() < 0.5:
-                combined_direction = Vector2(existing.get("local_direction", Vector2(0, 1)))
+                combined_direction = existing_direction if existing_direction.length_squared() > 0.5 else Vector2(0, 1)
             var hit := _rectangle_intersection(combined_direction, half_size)
             existing["point"] = hit
             existing["local_direction"] = combined_direction
