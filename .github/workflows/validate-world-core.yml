@@ -81,6 +81,9 @@ jobs:
       - name: Verify physical settlement markets water and warehouses
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_public_works.tscn
 
+      - name: Verify physical civic hall and council interior
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_civic_spaces.tscn
+
       - name: Verify bounded settlement and NPC streaming
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_streaming.tscn
 
