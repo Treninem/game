@@ -222,13 +222,14 @@ func _spawn_real_crate(parent: Node3D, pos: Vector3, yaw: float) -> void:
     parent.add_child(node)
 
 func _cell_for_world(pos: Vector3) -> Vector2i:
+    var local := Vector2(pos.x, pos.z) - CAPITAL.CENTER
     return Vector2i(
-        floori((pos.x + CELL_SIZE * 0.5) / CELL_SIZE),
-        floori((pos.z + CELL_SIZE * 0.5) / CELL_SIZE)
+        floori((local.x + CELL_SIZE * 0.5) / CELL_SIZE),
+        floori((local.y + CELL_SIZE * 0.5) / CELL_SIZE)
     )
 
 func _cell_center_2d(cell: Vector2i) -> Vector2:
-    return Vector2(float(cell.x) * CELL_SIZE, float(cell.y) * CELL_SIZE)
+    return CAPITAL.CENTER + Vector2(float(cell.x) * CELL_SIZE, float(cell.y) * CELL_SIZE)
 
 func _prepare_materials() -> void:
     ground_material = _material(Color(0.27, 0.28, 0.24), 0.98)
