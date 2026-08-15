@@ -10,3 +10,6 @@
 [submodule "assets/audio/third_party/kenney_rpg_audio"]
 	path = assets/audio/third_party/kenney_rpg_audio
 	url = https://github.com/Boyquotes/kenney-rpg-audio-for-godot.git
+[submodule "assets/audio/third_party/kenney_interface_sounds"]
+	path = assets/audio/third_party/kenney_interface_sounds
+	url = https://github.com/Calinou/kenney-interface-sounds.git
