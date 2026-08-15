@@ -1,0 +1,69 @@
+name: Promote CC0 Menu Music
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/promote_menu_music.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: impuls-promote-menu-music
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Promote pinned CC0 title track into production audio
+        shell: bash
+        run: |
+          set -euo pipefail
+          TARGET="assets/audio/music/production/impuls_menu_slow_down.mp3"
+          SOURCE_COMMIT="2ce8458293fe4eeb91414a19d6d7ecd1562a5949"
+          SOURCE_REPO="https://github.com/effacestudios/Royalty-Free-Music-Pack.git"
+          SOURCE_FILE="slow down.mp3"
+
+          if [[ -s "$TARGET" ]]; then
+            echo "Production menu track already exists; nothing to promote."
+            exit 0
+          fi
+
+          rm -rf /tmp/impuls-menu-music
+          git clone --quiet --no-checkout "$SOURCE_REPO" /tmp/impuls-menu-music
+          git -C /tmp/impuls-menu-music checkout --quiet "$SOURCE_COMMIT" -- "$SOURCE_FILE" LICENSE
+          test -s "/tmp/impuls-menu-music/$SOURCE_FILE"
+          test -s /tmp/impuls-menu-music/LICENSE
+
+          mkdir -p assets/audio/music/production
+          cp "/tmp/impuls-menu-music/$SOURCE_FILE" "$TARGET"
+          cp /tmp/impuls-menu-music/LICENSE assets/audio/music/production/EFFACE_CC0_LICENSE.txt
+          cat > assets/audio/music/production/MENU_THEME_SOURCE.md <<EOF
+          # ImPuls main-menu music source
+
+          - Runtime file: \`impuls_menu_slow_down.mp3\`
+          - Original file: \`slow down.mp3\`
+          - Source repository: \`effacestudios/Royalty-Free-Music-Pack\`
+          - Pinned source commit: \`$SOURCE_COMMIT\`
+          - License: CC0 1.0 Universal / public domain dedication (copied as \`EFFACE_CC0_LICENSE.txt\`).
+          - Intended use: calm atmospheric ImPuls title/main-menu music.
+
+          The game references only the production copy above. Runtime code must not depend on \`source_packs\` or \`assets/staging\`.
+          EOF
+
+          file "$TARGET"
+          sha256sum "$TARGET" | tee assets/audio/music/production/impuls_menu_slow_down.mp3.sha256
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/audio/music/production
+          git commit -m "assets(audio): promote CC0 main menu theme"
+          git pull --rebase origin main
+          git push origin HEAD:main
