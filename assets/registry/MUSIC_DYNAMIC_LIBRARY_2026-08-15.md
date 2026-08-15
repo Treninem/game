@@ -153,3 +153,23 @@ No runtime code is added here. When integration begins, prefer:
 - 0.88–1.00: combat / boss
 
 These values are design guidance only and are not wired to gameplay from this asset-research flow.
+
+## RPG / cinematic expansion — 2026-08-15
+Detailed verified discovery catalog:
+- `assets/audio/music/catalogs/CC0_RPG_MUSIC_DISCOVERY.md`
+
+New verified CC0 candidates registered there include:
+- `Pursuit` — tense loopable piano chase/battle;
+- `Enemy Ship Approaching` — short approaching-threat loop;
+- `Determined Pursuit` — orchestral pursuit/boss loop;
+- `Heartfelt Battle` — fantasy battle with separate intro/loop/outro assets;
+- `JRPG Epic Rock Battle Theme #1` — intro/loop/full combat set;
+- `Chase` — fast modern pursuit for special sequences;
+- `Creed of Course` — flute/violin/snare material useful for military/village contexts.
+
+Large external corpus `SoundSafari/CC0-1.0-Music` is registered as `DISCOVERY_ONLY`; do not vendor tens of gigabytes into core Git. Select individual tracks only after source/lineage verification.
+
+For future original ImPuls score production, CC0 orchestral/sample sources are registered at:
+- `assets/audio/music/composition_sources/README.md`
+
+That production path should prefer exportable stems (low intensity, percussion/pulse, melody/harmony and danger/combat augmentation) so later runtime integration can create genuinely adaptive music instead of only crossfading complete songs.
