@@ -1,0 +1,96 @@
+name: Promote Enterable Building Shell Assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/promote_enterable_shell_assets.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: impuls-promote-enterable-shell
+  cancel-in-progress: true
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard
+            assets/production/medieval
+
+      - name: Promote selected CC0 shell assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE="assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard"
+          SRC="$SOURCE/glTF"
+          TARGET="assets/production/medieval/building_shell"
+          mkdir -p "$TARGET"
+
+          FILES=(
+            Door_1_Flat.gltf
+            Door_1_Flat.bin
+            Roof_RoundTiles_8x8.gltf
+            Roof_RoundTiles_8x8.bin
+            T_WoodTrim_Normal.png
+            T_WoodTrim_BaseColor.png
+            T_WoodTrim_Roughness.png
+            T_RoundTiles_Normal.png
+            T_RoundTiles_BaseColor.png
+            T_RoundTiles_Roughness.png
+          )
+
+          for file in "${FILES[@]}"; do
+            test -s "$SRC/$file"
+            cp "$SRC/$file" "$TARGET/$file"
+          done
+          test -s "$SOURCE/LICENSE.txt"
+          cp "$SOURCE/LICENSE.txt" "$TARGET/QUATERNIUS_CC0_LICENSE.txt"
+          cp "$SOURCE/SOURCE.md" "$TARGET/UPSTREAM_SOURCE.md"
+
+          cat > "$TARGET/SOURCE.md" <<'EOF'
+          # ImPuls production enterable-building shell assets
+
+          Runtime subset promoted from the already staged Quaternius Medieval Village MegaKit Standard pack.
+
+          Selected assets:
+          - Door_1_Flat.gltf + Door_1_Flat.bin
+          - Roof_RoundTiles_8x8.gltf + Roof_RoundTiles_8x8.bin
+          - T_WoodTrim_Normal.png
+          - T_WoodTrim_BaseColor.png
+          - T_WoodTrim_Roughness.png
+          - T_RoundTiles_Normal.png
+          - T_RoundTiles_BaseColor.png
+          - T_RoundTiles_Roughness.png
+
+          License: CC0 1.0 Universal. The upstream license is copied as QUATERNIUS_CC0_LICENSE.txt.
+
+          These files are the game-facing production copies. Runtime scripts must not reference assets/staging or sourcechat paths.
+          EOF
+
+          sha256sum "$TARGET"/Door_1_Flat.gltf "$TARGET"/Door_1_Flat.bin \
+            "$TARGET"/Roof_RoundTiles_8x8.gltf "$TARGET"/Roof_RoundTiles_8x8.bin \
+            "$TARGET"/T_WoodTrim_Normal.png "$TARGET"/T_WoodTrim_BaseColor.png \
+            "$TARGET"/T_WoodTrim_Roughness.png "$TARGET"/T_RoundTiles_Normal.png \
+            "$TARGET"/T_RoundTiles_BaseColor.png "$TARGET"/T_RoundTiles_Roughness.png \
+            > "$TARGET/SHA256SUMS.txt"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$TARGET"
+          if git diff --cached --quiet; then
+            echo "Production shell assets already match staging subset."
+            exit 0
+          fi
+          git commit -m "assets(world): promote CC0 enterable building shell"
+          git pull --rebase origin main
+          git push origin HEAD:main
