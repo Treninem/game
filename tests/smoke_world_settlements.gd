@@ -31,7 +31,7 @@ func _run_test() -> void:
         if settlements.settlement_spec(required_id).is_empty():
             _fail(3, "missing established settlement spec %s" % required_id)
             return
-    if settlements.UNLOAD_RADIUS <= settlements.LOAD_RADIUS:
+    if SETTLEMENTS_SCRIPT.UNLOAD_RADIUS <= SETTLEMENTS_SCRIPT.LOAD_RADIUS:
         _fail(4, "settlement streamer has no unload hysteresis and may thrash near its boundary")
         return
 
@@ -59,11 +59,11 @@ func _run_test() -> void:
         _fail(9, "fortified town has fewer than fifteen real enterable buildings")
         return
 
-    if not _validate_enterable(village_a, "first border village"):
+    if not _validate_all_enterables(village_a, "first border village"):
         return
-    if not _validate_enterable(village_b, "river village"):
+    if not _validate_all_enterables(village_b, "river village"):
         return
-    if not _validate_enterable(town, "fortified town"):
+    if not _validate_all_enterables(town, "fortified town"):
         return
 
     for village in [village_a, village_b]:
@@ -104,7 +104,7 @@ func _run_test() -> void:
     var left_inner := left.position.x + left_shape.size.x * 0.5
     var right_inner := right.position.x - right_shape.size.x * 0.5
     var physical_gap := right_inner - left_inner
-    if physical_gap < settlements.TOWN_GATE_HALF_WIDTH * 2.0 - 0.2:
+    if physical_gap < SETTLEMENTS_SCRIPT.TOWN_GATE_HALF_WIDTH * 2.0 - 0.2:
         _fail(33, "town wall collision closes the declared gate passage; gap=%.2f" % physical_gap)
         return
 
@@ -118,7 +118,12 @@ func _run_test() -> void:
         _fail(36, "fortified town has no complete physical perimeter")
         return
 
-    print("WORLD_SETTLEMENTS_SMOKE_OK settlements=3 enterable_buildings=", settlements.materialized_buildings, " walls=", settlements.materialized_wall_segments, " gates=", settlements.materialized_gate_passages)
+    var total_furniture := _physical_furniture_count(village_a) + _physical_furniture_count(village_b) + _physical_furniture_count(town)
+    if total_furniture < 120:
+        _fail(37, "thirty settlement interiors are not fully furnished; physical props=%d" % total_furniture)
+        return
+
+    print("WORLD_SETTLEMENTS_SMOKE_OK settlements=3 enterable_buildings=", settlements.materialized_buildings, " physical_furniture=", total_furniture, " walls=", settlements.materialized_wall_segments, " gates=", settlements.materialized_gate_passages)
     get_tree().quit(0)
 
 func _enterable_count(root: Node3D) -> int:
@@ -128,25 +133,52 @@ func _enterable_count(root: Node3D) -> int:
             count += 1
     return count
 
-func _validate_enterable(root: Node3D, label: String) -> bool:
+func _validate_all_enterables(root: Node3D, label: String) -> bool:
+    var found := 0
     for child in root.get_children():
-        if child is EnterableBuilding:
-            var building := child as EnterableBuilding
-            if not building.is_in_group("enterable_building"):
-                _fail(40, "%s building is not registered as enterable" % label)
+        if not child is EnterableBuilding:
+            continue
+        found += 1
+        var building := child as EnterableBuilding
+        if not building.is_in_group("enterable_building"):
+            _fail(40, "%s building is not registered as enterable" % label)
+            return false
+        if building.front_door == null or building.door_count != 1:
+            _fail(41, "%s building has no real front door" % label)
+            return false
+        if building.structural_piece_count < 14:
+            _fail(42, "%s building is monolithic instead of having a physical shell" % label)
+            return false
+        if building.interior_size.x <= 4.0 or building.interior_size.z <= 4.0:
+            _fail(43, "%s building has no usable interior standing space" % label)
+            return false
+        if building.interior_prop_count < 4:
+            _fail(44, "%s building has an empty or decorative-only interior" % label)
+            return false
+        var furniture := building.get_node_or_null("InteriorFurniture") as Node3D
+        if furniture == null:
+            _fail(45, "%s building has no InteriorFurniture node" % label)
+            return false
+        for prop_name in ["Bed", "Table", "StorageChest", "Bench"]:
+            if not _validate_static_shape(furniture.get_node_or_null(prop_name), "%s/%s/%s" % [label, building.name, prop_name]):
                 return false
-            if building.front_door == null or building.door_count != 1:
-                _fail(41, "%s building has no real front door" % label)
-                return false
-            if building.structural_piece_count < 14:
-                _fail(42, "%s building is monolithic instead of having a physical shell" % label)
-                return false
-            if building.interior_size.x <= 4.0 or building.interior_size.z <= 4.0:
-                _fail(43, "%s building has no usable interior standing space" % label)
-                return false
-            return true
-    _fail(44, "%s contains no EnterableBuilding nodes" % label)
-    return false
+    if found == 0:
+        _fail(46, "%s contains no EnterableBuilding nodes" % label)
+        return false
+    return true
+
+func _physical_furniture_count(root: Node3D) -> int:
+    var count := 0
+    for child in root.get_children():
+        if not child is EnterableBuilding:
+            continue
+        var furniture := (child as EnterableBuilding).get_node_or_null("InteriorFurniture")
+        if furniture == null:
+            continue
+        for prop in furniture.get_children():
+            if prop is StaticBody3D:
+                count += 1
+    return count
 
 func _validate_static_shape(node: Node, label: String) -> bool:
     var body := node as StaticBody3D
