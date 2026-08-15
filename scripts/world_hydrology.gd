@@ -19,6 +19,16 @@ const START_FORD_RADIUS := 46.0
 const START_FORD_DEPTH := 0.42
 const START_FORD_APPROACH_RADIUS := 96.0
 
+# The already-existing astern_river_track crosses the physical opening river
+# here. This is implementation infrastructure rather than new story canon: the
+# road cannot remain submerged, so the crossing is represented by a streamed
+# load-bearing bridge while the river continues underneath it.
+const ROAD_BRIDGE_CENTER := Vector2(169.35, 329.0)
+const ROAD_BRIDGE_DIRECTION := Vector2(0.917070, -0.398727)
+const ROAD_BRIDGE_HALF_LENGTH := 44.0
+const ROAD_BRIDGE_HALF_WIDTH := 5.0
+const ROAD_BRIDGE_CLEARANCE := 0.62
+
 static func lake_normalized_distance(pos: Vector2) -> float:
     var offset := pos - LAKE_VAEL_CENTER
     return sqrt(
@@ -45,7 +55,16 @@ static func in_start_ford(pos: Vector2) -> bool:
     return pos.distance_to(START_FORD_CENTER) <= START_FORD_RADIUS \
         and GEOGRAPHY.distance_to_start_river(pos) <= GEOGRAPHY.START_RIVER_HALF_WIDTH
 
+static func in_road_bridge(pos: Vector2) -> bool:
+    var offset := pos - ROAD_BRIDGE_CENTER
+    var forward := ROAD_BRIDGE_DIRECTION.normalized()
+    var side := Vector2(-forward.y, forward.x)
+    return absf(offset.dot(forward)) <= ROAD_BRIDGE_HALF_LENGTH \
+        and absf(offset.dot(side)) <= ROAD_BRIDGE_HALF_WIDTH
+
 static func crossing_kind_at(pos: Vector2) -> String:
+    if in_road_bridge(pos):
+        return "bridge"
     if in_start_ford(pos):
         return "ford"
     return ""
