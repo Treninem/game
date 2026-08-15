@@ -30,6 +30,8 @@ on:
       - "tests/smoke_player_movement.tscn"
       - "tests/smoke_enterable_building.gd"
       - "tests/smoke_enterable_building.tscn"
+      - "tests/smoke_canonical_regions.gd"
+      - "tests/smoke_canonical_regions.tscn"
       - "tests/smoke_ui_and_save.gd"
       - "tests/smoke_ui_and_save.tscn"
       - "assets/shaders/**"
@@ -83,6 +85,20 @@ jobs:
       - name: Parse project
         shell: bash
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Prove canonical geography and regional climates
+        shell: bash
+        run: |
+          set +e
+          output=$(timeout 30s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_canonical_regions.tscn 2>&1)
+          status=$?
+          printf '%s\n' "$output"
+          if [ "$status" -eq 124 ]; then
+            echo "::error title=Canonical regions smoke timeout::Regional geography test did not settle within 30 seconds"
+          elif [ "$status" -ne 0 ]; then
+            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=Canonical regions raw Godot output::$detail"
+          fi
+          exit "$status"
       - name: Prove player surface, void recovery and movement
         shell: bash
         run: |
