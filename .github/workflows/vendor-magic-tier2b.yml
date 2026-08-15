@@ -1,0 +1,128 @@
+name: Vendor CC0 Ritual Barrier Rune VFX
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vendor-magic-tier2b.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-magic-tier2b
+  cancel-in-progress: false
+
+jobs:
+  vendor-magic-tier2b:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout game repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Import verified CC0 ritual and barrier assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="assets/vfx/third_party"
+          TMP=".vendor_magic_tier2b_tmp"
+          rm -rf "$TMP"
+          mkdir -p "$TMP" "$ROOT"
+
+          meta() {
+            local dst="$1" title="$2" author="$3" page="$4" source="$5"
+            cat > "$dst/LICENSE.txt" <<'EOF'
+          CC0 1.0 Universal
+
+          The OpenGameArt source submission for this asset is marked CC0 / Creative Commons Zero.
+          License reference: https://creativecommons.org/publicdomain/zero/1.0/
+          EOF
+            cat > "$dst/SOURCE.md" <<EOF
+          # Source
+
+          Pack: $title
+          Author: $author
+          Original page: $page
+          Source file: $source
+          License: CC0 1.0 Universal
+
+          This is staged asset-library content only. It is not connected to gameplay automatically.
+          EOF
+          }
+
+          # Fire trap rune spritesheet.
+          DST="$ROOT/oga_fire_trap_rune"
+          rm -rf "$DST" && mkdir -p "$DST"
+          curl -L --fail --retry 5 --retry-delay 2 \
+            -A 'Treninem-game-asset-vendor/1.0' \
+            'https://opengameart.org/sites/default/files/fireTrapRune001.png' \
+            -o "$DST/fireTrapRune001.png"
+          test -s "$DST/fireTrapRune001.png"
+          meta "$DST" "Fire Trap Rune Animation - Sprite Sheet" "gfroad" \
+            "https://opengameart.org/content/fire-trap-rune-animation-sprite-sheet" \
+            "https://opengameart.org/sites/default/files/fireTrapRune001.png"
+
+          # Animated barrier spritesheet.
+          DST="$ROOT/oga_magic_barrier_gfroad"
+          rm -rf "$DST" && mkdir -p "$DST"
+          curl -L --fail --retry 5 --retry-delay 2 \
+            -A 'Treninem-game-asset-vendor/1.0' \
+            'https://opengameart.org/sites/default/files/barrier000_0.png' \
+            -o "$DST/barrier000.png"
+          test -s "$DST/barrier000.png"
+          meta "$DST" "Barrier - Sprite Sheet" "gfroad" \
+            "https://opengameart.org/content/barrier-sprite-sheet" \
+            "https://opengameart.org/sites/default/files/barrier000_0.png"
+
+          # Four scalable summoning circles; retain SVG and original AI source files.
+          ZIP="$TMP/summoning_circles.zip"
+          UNPACK="$TMP/summoning_circles"
+          DST="$ROOT/oga_summoning_circles_vector"
+          rm -rf "$DST" "$UNPACK" && mkdir -p "$DST" "$UNPACK"
+          curl -L --fail --retry 5 --retry-delay 2 \
+            -A 'Treninem-game-asset-vendor/1.0' \
+            'https://opengameart.org/sites/default/files/summoning_circles.zip' \
+            -o "$ZIP"
+          unzip -q "$ZIP" -d "$UNPACK"
+          while IFS= read -r -d '' f; do
+            rel="${f#$UNPACK/}"
+            mkdir -p "$DST/$(dirname "$rel")"
+            cp "$f" "$DST/$rel"
+          done < <(find "$UNPACK" -type f \( -iname '*.svg' -o -iname '*.ai' -o -iname '*.png' -o -iname '*.txt' -o -iname '*.md' \) -print0)
+          meta "$DST" "4 Summoning Circles" "Luke.RUSTLTD" \
+            "https://opengameart.org/content/4-summoning-circles" \
+            "https://opengameart.org/sites/default/files/summoning_circles.zip"
+          test "$(find "$DST" -type f | wc -l)" -ge 6
+
+          echo "Ritual/barrier tier contents:"
+          for d in oga_fire_trap_rune oga_magic_barrier_gfroad oga_summoning_circles_vector; do
+            printf '%-34s %s files\n' "$d" "$(find "$ROOT/$d" -type f | wc -l)"
+          done
+          rm -rf "$TMP"
+
+      - name: Safe commit and push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            assets/vfx/third_party/oga_fire_trap_rune \
+            assets/vfx/third_party/oga_magic_barrier_gfroad \
+            assets/vfx/third_party/oga_summoning_circles_vector
+          if git diff --cached --quiet; then
+            echo "No ritual/barrier VFX changes."
+            exit 0
+          fi
+          git commit -m "assets(vfx): vendor CC0 ritual barrier rune effects"
+          for attempt in $(seq 1 30); do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
