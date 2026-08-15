@@ -26,6 +26,10 @@ func _ready() -> void:
     if not stage_text.contains("res://scripts/world_audio.gd") or not stage_text.contains("name=\"WorldAudio\""):
         failures.append("Main gameplay stage does not mount the world audio system")
 
+    var player_controller_text := FileAccess.get_file_as_string("res://scripts/player_controller.gd")
+    if not player_controller_text.contains("get_first_node_in_group(\"world_audio\")") or not player_controller_text.contains("world_audio.call(\"play_footstep\""):
+        failures.append("Player movement does not route physical footsteps into world audio")
+
     var world := Node3D.new()
     world.name = "AudioSmokeWorld"
     add_child(world)
@@ -79,7 +83,7 @@ func _ready() -> void:
         failures.append("Ford footstep did not use a promoted wet sound")
 
     if failures.is_empty():
-        print("WORLD_AUDIO_SMOKE_OK river=spatial footsteps=surface_aware production_audio=promoted")
+        print("WORLD_AUDIO_SMOKE_OK river=spatial footsteps=surface_aware production_audio=promoted player_hook=active")
         get_tree().quit(0)
         return
 
