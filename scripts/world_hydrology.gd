@@ -11,6 +11,16 @@ const LAKE_VAEL_WATER_LEVEL := 3.4
 const LAKE_VAEL_MAX_DEPTH := 4.8
 const LAKE_BANK_BLEND := 90.0
 
+# Whispering Marsh already exists in the canonical geography catalog. Give that
+# POI a physical wetland footprint made of a broad saturated basin plus several
+# shallow open-water pools. The shape is deterministic implementation geometry,
+# not additional story canon.
+const WHISPER_MARSH_CENTER := Vector2(-6300.0, 6400.0)
+const WHISPER_MARSH_RADIUS := Vector2(980.0, 720.0)
+const WHISPER_MARSH_WATER_LEVEL := 1.05
+const WHISPER_MARSH_MAX_DEPTH := 0.72
+const WHISPER_MARSH_BANK_BLEND := 150.0
+
 # This matches the existing start_ford POI in world_geography.gd. The ford is
 # intentionally still water: traversal is created by a shallow raised bed, not
 # by cutting an unrealistic dry gap through the river.
@@ -51,6 +61,35 @@ static func near_lake_vael(pos: Vector2) -> bool:
     )
     return normalized <= 1.0
 
+static func marsh_normalized_distance(pos: Vector2) -> float:
+    var offset := pos - WHISPER_MARSH_CENTER
+    return sqrt(
+        pow(offset.x / WHISPER_MARSH_RADIUS.x, 2.0)
+        + pow(offset.y / WHISPER_MARSH_RADIUS.y, 2.0)
+    )
+
+static func in_whisper_marsh(pos: Vector2) -> bool:
+    if marsh_normalized_distance(pos) > 1.0:
+        return false
+    # Break the wetland into connected shallow pools instead of one artificial
+    # oval lake. The deterministic wave mask leaves hummocks and walkable strips.
+    var local := pos - WHISPER_MARSH_CENTER
+    var pool_mask := sin(local.x / 145.0) * 0.42 + cos(local.y / 118.0) * 0.36 \
+        + sin((local.x + local.y) / 210.0) * 0.24
+    return pool_mask > -0.18
+
+static func near_whisper_marsh(pos: Vector2) -> bool:
+    var expanded := Vector2(
+        WHISPER_MARSH_RADIUS.x + WHISPER_MARSH_BANK_BLEND,
+        WHISPER_MARSH_RADIUS.y + WHISPER_MARSH_BANK_BLEND
+    )
+    var offset := pos - WHISPER_MARSH_CENTER
+    var normalized := sqrt(
+        pow(offset.x / expanded.x, 2.0)
+        + pow(offset.y / expanded.y, 2.0)
+    )
+    return normalized <= 1.0
+
 static func in_start_ford(pos: Vector2) -> bool:
     return pos.distance_to(START_FORD_CENTER) <= START_FORD_RADIUS \
         and GEOGRAPHY.distance_to_start_river(pos) <= GEOGRAPHY.START_RIVER_HALF_WIDTH
@@ -75,6 +114,8 @@ static func freshwater_kind_at(pos: Vector2) -> String:
         return "river"
     if in_lake_vael(pos):
         return "lake"
+    if in_whisper_marsh(pos):
+        return "marsh"
     return ""
 
 static func freshwater_level_at(pos: Vector2) -> float:
@@ -83,6 +124,8 @@ static func freshwater_level_at(pos: Vector2) -> float:
         return GEOGRAPHY.START_RIVER_WATER_LEVEL
     if kind == "lake":
         return LAKE_VAEL_WATER_LEVEL
+    if kind == "marsh":
+        return WHISPER_MARSH_WATER_LEVEL
     return -INF
 
 static func water_depth_at(pos: Vector2, terrain_height: float) -> float:
@@ -127,5 +170,20 @@ static func carve_height(pos: Vector2, terrain_height: float) -> float:
         var depth_weight := 1.0 - smoothstep(0.0, 0.92, normalized)
         var lakebed := LAKE_VAEL_WATER_LEVEL - lerpf(1.15, LAKE_VAEL_MAX_DEPTH, depth_weight)
         height = lerpf(height, lakebed, edge_weight)
+
+    # Whispering Marsh is intentionally shallow and discontinuous. Lower the
+    # whole saturated basin gently, then depress only open-water cells enough to
+    # keep them wadeable. This avoids a deep lake masquerading as a wetland.
+    var marsh_normalized := marsh_normalized_distance(pos)
+    if marsh_normalized <= 1.16:
+        var marsh_edge_weight := 1.0 - smoothstep(0.76, 1.16, marsh_normalized)
+        var saturated_ground := WHISPER_MARSH_WATER_LEVEL + 0.18
+        height = lerpf(height, minf(height, saturated_ground), marsh_edge_weight * 0.78)
+        if in_whisper_marsh(pos):
+            var local := pos - WHISPER_MARSH_CENTER
+            var micro := 0.5 + 0.5 * sin(local.x / 173.0) * cos(local.y / 137.0)
+            var marsh_depth := lerpf(0.24, WHISPER_MARSH_MAX_DEPTH, micro)
+            var marsh_bed := WHISPER_MARSH_WATER_LEVEL - marsh_depth
+            height = minf(height, lerpf(height, marsh_bed, marsh_edge_weight))
 
     return height

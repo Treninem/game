@@ -52,6 +52,36 @@ func _ready() -> void:
     if WorldData.water_kind_at(lake_shore) == "lake":
         failures.append("Lake Vael water mask leaks beyond its shoreline")
 
+    # Whispering Marsh already exists in the world catalog and must now resolve
+    # to a real shallow, discontinuous wetland rather than a map-only marker.
+    var marsh_probe := HYDROLOGY.WHISPER_MARSH_CENTER + Vector2(110.0, 40.0)
+    if not HYDROLOGY.in_whisper_marsh(marsh_probe):
+        # Deterministically search a nearby pool in case the center-side hummock
+        # changes after an intentional implementation tuning.
+        var found_pool := false
+        for z in range(-5, 6):
+            for x in range(-6, 7):
+                var candidate := HYDROLOGY.WHISPER_MARSH_CENTER + Vector2(float(x) * 70.0, float(z) * 70.0)
+                if HYDROLOGY.in_whisper_marsh(candidate):
+                    marsh_probe = candidate
+                    found_pool = true
+                    break
+            if found_pool:
+                break
+        if not found_pool:
+            failures.append("Whispering Marsh has no physical open-water pools")
+
+    if HYDROLOGY.in_whisper_marsh(marsh_probe):
+        if WorldData.water_kind_at(marsh_probe) != "marsh":
+            failures.append("Whispering Marsh pool is not classified as marsh water")
+        var marsh_depth := HYDROLOGY.water_depth_at(marsh_probe, WorldData.elevation_at(marsh_probe))
+        if marsh_depth <= 0.08 or marsh_depth > HYDROLOGY.WHISPER_MARSH_MAX_DEPTH + 0.12:
+            failures.append("Whispering Marsh water is not in the intended shallow wading range")
+
+    var marsh_outside := HYDROLOGY.WHISPER_MARSH_CENTER + Vector2(HYDROLOGY.WHISPER_MARSH_RADIUS.x * 1.08, 0.0)
+    if WorldData.water_kind_at(marsh_outside) == "marsh":
+        failures.append("Whispering Marsh water mask leaks beyond its physical wetland boundary")
+
     var sea_probe := Vector2(WorldData.WORLD_HALF_SIZE - 150.0, 0.0)
     if WorldData.elevation_at(sea_probe) < WorldData.SEA_LEVEL - 0.35:
         if WorldData.water_kind_at(sea_probe) != "sea":
@@ -60,7 +90,7 @@ func _ready() -> void:
             failures.append("Sea surface no longer matches global sea level")
 
     if failures.is_empty():
-        print("WORLD_HYDROLOGY_SMOKE_OK river=physical ford=shallow bridge=spanning lake=basin sea=classified")
+        print("WORLD_HYDROLOGY_SMOKE_OK river=physical ford=shallow bridge=spanning lake=basin marsh=shallow_pools sea=classified")
         get_tree().quit(0)
         return
 
