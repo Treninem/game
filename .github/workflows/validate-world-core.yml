@@ -48,6 +48,9 @@ jobs:
       - name: Verify physical hydrology
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_hydrology.tscn
 
+      - name: Verify physical river crossings
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_crossings.tscn
+
       - name: Verify world boot, streamed roads and river water
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn
 
