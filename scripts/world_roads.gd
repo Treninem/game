@@ -6,6 +6,9 @@ const CHUNK_SIZE := 192.0
 const PATCH_SPACING := 9.0
 const CHUNK_MARGIN := 8.0
 const BRIDGE_DECK_THICKNESS := 0.34
+const BRIDGE_RAIL_HEIGHT := 0.16
+const BRIDGE_RAIL_THICKNESS := 0.18
+const BRIDGE_RAIL_OFFSET_Y := 0.72
 
 var road_material: StandardMaterial3D
 var bridge_material: StandardMaterial3D
@@ -122,31 +125,51 @@ func _materialize_bridge_if_owned(chunk: Node3D, origin: Vector2) -> void:
     collision.shape = deck_shape
     body.add_child(collision)
 
-    _add_bridge_rail(bridge, local_center, deck_y, bridge_basis, -1.0)
-    _add_bridge_rail(bridge, local_center, deck_y, bridge_basis, 1.0)
+    # Visible rails alone are not enough for a physical world: their collision
+    # prevents characters, animals and future carts from simply clipping through
+    # the sides and falling into the river.
+    _add_bridge_rail(bridge, body, local_center, deck_y, bridge_basis, -1.0)
+    _add_bridge_rail(bridge, body, local_center, deck_y, bridge_basis, 1.0)
     _add_bridge_support(bridge, origin, center - direction * 18.0, deck_y, bridge_basis)
     _add_bridge_support(bridge, origin, center + direction * 18.0, deck_y, bridge_basis)
     materialized_bridge_chunks += 1
 
 func _add_bridge_rail(
     bridge: Node3D,
+    body: StaticBody3D,
     local_center: Vector2,
     deck_y: float,
     bridge_basis: Basis,
     side_sign: float
 ) -> void:
+    var rail_size := Vector3(
+        HYDROLOGY.ROAD_BRIDGE_HALF_LENGTH * 2.0,
+        BRIDGE_RAIL_HEIGHT,
+        BRIDGE_RAIL_THICKNESS
+    )
     var rail_mesh := BoxMesh.new()
-    rail_mesh.size = Vector3(HYDROLOGY.ROAD_BRIDGE_HALF_LENGTH * 2.0, 0.16, 0.18)
+    rail_mesh.size = rail_size
     rail_mesh.material = bridge_rail_material
     var rail := MeshInstance3D.new()
-    rail.name = "RailLeft" if side_sign < 0.0 else "RailRight"
+    var side_name := "Left" if side_sign < 0.0 else "Right"
+    rail.name = "Rail%s" % side_name
     var side_offset := HYDROLOGY.ROAD_BRIDGE_HALF_WIDTH - 0.22
-    var local_offset := bridge_basis * Vector3(0.0, 0.72, side_offset * side_sign)
+    var local_offset := bridge_basis * Vector3(0.0, BRIDGE_RAIL_OFFSET_Y, side_offset * side_sign)
     rail.transform = Transform3D(
         bridge_basis,
         Vector3(local_center.x, deck_y, local_center.y) + local_offset
     )
     bridge.add_child(rail)
+
+    # BridgeCollision already owns the same basis and origin as the deck, so the
+    # rail guard shape is expressed directly in deck-local coordinates.
+    var guard_shape := BoxShape3D.new()
+    guard_shape.size = rail_size
+    var guard := CollisionShape3D.new()
+    guard.name = "Rail%sShape" % side_name
+    guard.position = Vector3(0.0, BRIDGE_RAIL_OFFSET_Y, side_offset * side_sign)
+    guard.shape = guard_shape
+    body.add_child(guard)
 
 func _add_bridge_support(
     bridge: Node3D,
