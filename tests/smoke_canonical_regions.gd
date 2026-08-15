@@ -4,7 +4,7 @@ const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const CAPITAL := preload("res://scripts/capital_data.gd")
 
 func _ready() -> void:
-    await get_tree().process_frame
+    print("CANONICAL_REGIONS_SMOKE_START")
     var failures: Array[String] = []
 
     if GEOGRAPHY.STATES.size() != 8:
@@ -16,6 +16,8 @@ func _ready() -> void:
         var actual_id := WorldData.state_id_at(center)
         if actual_id != expected_id:
             failures.append("State center mismatch: %s resolved as %s" % [expected_id, actual_id])
+
+    print("CANONICAL_REGIONS_SMOKE_STAGE political")
 
     if CAPITAL.CENTER != GEOGRAPHY.ASTERN_CAPITAL:
         failures.append("CapitalData.CENTER must follow the canonical Asterna capital anchor")
@@ -30,6 +32,8 @@ func _ready() -> void:
     var central_world: Vector2 = central_district.get("center", Vector2.ZERO)
     if central_world != CAPITAL.CENTER:
         failures.append("Capital district coordinates must resolve in world space")
+
+    print("CANONICAL_REGIONS_SMOKE_STAGE capital")
 
     if WorldData.biome_at(GEOGRAPHY.START_SPAWN) != "forest":
         failures.append("Asterna prologue spawn must remain forest")
@@ -64,6 +68,8 @@ func _ready() -> void:
         failures.append("Liorel must remain wetter than Saharin")
     if WorldData.temperature_at(vardheim) >= WorldData.temperature_at(saharin):
         failures.append("Vardheim must remain colder than Saharin")
+
+    print("CANONICAL_REGIONS_SMOKE_STAGE climate")
 
     var river_center := Vector2(GEOGRAPHY.start_river_x(0.0), 0.0)
     var river_height := WorldData.elevation_at(river_center)
