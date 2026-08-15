@@ -83,6 +83,15 @@ Physical asset commit: `4c73f13c53077ebf7ee66fd7c1e37b0d43a11906`
 - `assets/staging/medieval/quaternius_fantasy_props_megakit_standard/` — weapons, tools, food/vegetables, potions, market stalls, chests, furniture and general props.
 - Batch failure file: `assets/staging/medieval/MEDIEVAL_WORLD_DOWNLOAD_FAILURES.txt` — verified empty.
 
+### Rail transport, modern emergency/road vehicles, fantasy town and retail interior
+Physical asset commit: `7810ade56829d5e74e3b2a1f8553d58a0d1647a7`
+
+- `assets/staging/vehicles/kenney_train_kit/` — train/tram/trolley/track source models for railway and logistics infrastructure.
+- `assets/staging/vehicles/kenney_car_kit_3_1/` — modern vehicle family including service/emergency variants, separate wheels and debris.
+- `assets/staging/medieval/kenney_fantasy_town_2/` — coherent modular fantasy/medieval town construction set.
+- `assets/staging/interiors/kenney_mini_market/` — supermarket/shop interior props with source variations/animation support.
+- Batch failure file: `assets/staging/vehicles/TRANSPORT_TOWN_MARKET_DOWNLOAD_FAILURES.txt` — verified empty.
+
 ## Main integration-chat checklist
 
 Before adding a model to gameplay:
