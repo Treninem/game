@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: ui-staging-assets
+  cancel-in-progress: true
+
 jobs:
   stage-ui-assets:
     runs-on: ubuntu-latest
