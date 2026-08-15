@@ -11,6 +11,7 @@ on:
       - "scripts/world_data.gd"
       - "scripts/world_geography.gd"
       - "scripts/start_region_streamer.gd"
+      - "scripts/start_civilization_signs.gd"
       - "scripts/start_spawn_surface.gd"
       - "scripts/capital_data.gd"
       - "scripts/capital_perimeter.gd"
