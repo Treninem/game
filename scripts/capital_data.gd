@@ -1,8 +1,12 @@
 class_name CapitalData
 extends RefCounted
 
-# Canonical capital geometry from the master specification.
-# The city occupies roughly 4 x 4 km, centered on the world origin.
+const WORLD_GEOGRAPHY := preload("res://scripts/world_geography.gd")
+
+# Canonical capital geometry from the master specification. District and gate
+# coordinates below remain local to the city, while CENTER places the whole
+# 4 x 4 km capital far from the prologue region as required by story canon.
+const CENTER := WORLD_GEOGRAPHY.ASTERN_CAPITAL
 const HALF_EXTENT := 2000.0
 const WALL_HEIGHT := 18.0
 const WALL_THICKNESS := 8.0
@@ -17,48 +21,22 @@ const TOTAL_GATES := 32
 const GATE_OFFSETS := [-1750.0, -1250.0, -750.0, -250.0, 250.0, 750.0, 1250.0, 1750.0]
 
 const NORTH_GATE_NAMES := [
-    "Ворота Ледяного Пика",
-    "Ворота Соснового Дозора",
-    "Ворота Серебряной Дороги",
-    "Ворота Рассветной Башни",
-    "Ворота Белого Оленя",
-    "Ворота Северного Тракта",
-    "Ворота Высокого Камня",
-    "Ворота Звёздного Моста"
+    "Ворота Ледяного Пика", "Ворота Соснового Дозора", "Ворота Серебряной Дороги", "Ворота Рассветной Башни",
+    "Ворота Белого Оленя", "Ворота Северного Тракта", "Ворота Высокого Камня", "Ворота Звёздного Моста"
 ]
 const EAST_GATE_NAMES := [
-    "Ворота Солнечного Тракта",
-    "Ворота Янтарного Рынка",
-    "Ворота Речной Дуги",
-    "Ворота Кузнечных Огней",
-    "Ворота Гильдейского Пути",
-    "Ворота Сапфировой Башни",
-    "Ворота Караванов",
-    "Ворота Восточного Порта"
+    "Ворота Солнечного Тракта", "Ворота Янтарного Рынка", "Ворота Речной Дуги", "Ворота Кузнечных Огней",
+    "Ворота Гильдейского Пути", "Ворота Сапфировой Башни", "Ворота Караванов", "Ворота Восточного Порта"
 ]
 const SOUTH_GATE_NAMES := [
-    "Ворота Золотых Полей",
-    "Ворота Южного Тракта",
-    "Ворота Паломников",
-    "Ворота Конного Двора",
-    "Ворота Арены",
-    "Ворота Садов",
-    "Ворота Красного Знамени",
-    "Ворота Тёплого Ветра"
+    "Ворота Золотых Полей", "Ворота Южного Тракта", "Ворота Паломников", "Ворота Конного Двора",
+    "Ворота Арены", "Ворота Садов", "Ворота Красного Знамени", "Ворота Тёплого Ветра"
 ]
 const WEST_GATE_NAMES := [
-    "Ворота Древнего Леса",
-    "Ворота Охотников",
-    "Ворота Старого Камня",
-    "Ворота Шахтёров",
-    "Ворота Лесопилки",
-    "Ворота Сумерек",
-    "Ворота Озёрного Пути",
-    "Ворота Западного Дозора"
+    "Ворота Древнего Леса", "Ворота Охотников", "Ворота Старого Камня", "Ворота Шахтёров",
+    "Ворота Лесопилки", "Ворота Сумерек", "Ворота Озёрного Пути", "Ворота Западного Дозора"
 ]
 
-# District footprints are implementation anchors for the exact district families
-# required by the master specification. They are not extra invented districts.
 const DISTRICTS := [
     {"id":"starter", "name":"Стартовая площадь", "center":Vector2(0, 1500), "size":Vector2(520, 360)},
     {"id":"central", "name":"Центральная площадь", "center":Vector2(0, 0), "size":Vector2(520, 520)},
@@ -105,18 +83,19 @@ static func gates() -> Array[Dictionary]:
 static func _append_side_gates(target: Array[Dictionary], side: String, names: Array, normal: Vector2) -> void:
     for i in range(GATES_PER_SIDE):
         var offset := float(GATE_OFFSETS[i])
-        var pos := Vector2.ZERO
+        var local_pos := Vector2.ZERO
         match side:
-            "north": pos = Vector2(offset, -HALF_EXTENT)
-            "south": pos = Vector2(offset, HALF_EXTENT)
-            "east": pos = Vector2(HALF_EXTENT, offset)
-            "west": pos = Vector2(-HALF_EXTENT, offset)
+            "north": local_pos = Vector2(offset, -HALF_EXTENT)
+            "south": local_pos = Vector2(offset, HALF_EXTENT)
+            "east": local_pos = Vector2(HALF_EXTENT, offset)
+            "west": local_pos = Vector2(-HALF_EXTENT, offset)
         target.append({
             "id": "%s_%02d" % [side, i + 1],
             "name": String(names[i]),
             "side": side,
             "index": i,
-            "position": pos,
+            "position": CENTER + local_pos,
+            "local_position": local_pos,
             "normal": normal
         })
 
@@ -130,33 +109,48 @@ static func gates_are_open(world_minutes: float) -> bool:
     var minute := int(world_minutes) % 1440
     return minute >= GATE_OPEN_MINUTE and minute < GATE_CLOSE_MINUTE
 
+static func to_local(pos: Vector2) -> Vector2:
+    return pos - CENTER
+
+static func to_world(local_pos: Vector2) -> Vector2:
+    return CENTER + local_pos
+
 static func inside_capital(pos: Vector2) -> bool:
-    return absf(pos.x) < HALF_EXTENT and absf(pos.y) < HALF_EXTENT
+    var local := to_local(pos)
+    return absf(local.x) < HALF_EXTENT and absf(local.y) < HALF_EXTENT
 
 static func in_defense_belt(pos: Vector2) -> bool:
-    var d := maxf(absf(pos.x), absf(pos.y))
+    var local := to_local(pos)
+    var d := maxf(absf(local.x), absf(local.y))
     return d >= HALF_EXTENT and d <= HALF_EXTENT + DEFENSE_BELT
 
 static func can_build_at(pos: Vector2) -> bool:
     if in_defense_belt(pos):
         return false
     if inside_capital(pos):
-        # City construction is allowed only on explicitly owned plots later.
         return false
     return true
 
 static func district_at(pos: Vector2) -> Dictionary:
+    var local := to_local(pos)
     for district in DISTRICTS:
         var center: Vector2 = district.get("center", Vector2.ZERO)
         var size: Vector2 = district.get("size", Vector2.ZERO)
         var half := size * 0.5
-        if pos.x >= center.x - half.x and pos.x <= center.x + half.x and pos.y >= center.y - half.y and pos.y <= center.y + half.y:
-            return district
+        if local.x >= center.x - half.x and local.x <= center.x + half.x and local.y >= center.y - half.y and local.y <= center.y + half.y:
+            var result := district.duplicate(true)
+            result["local_center"] = center
+            result["center"] = CENTER + center
+            return result
     return {}
 
 static func protected_infrastructure_near(pos: Vector2, radius: float = 90.0) -> Dictionary:
     for anchor in PROTECTED_ANCHORS:
-        var anchor_pos: Vector2 = anchor.get("pos", Vector2.ZERO)
-        if anchor_pos.distance_to(pos) <= radius:
-            return anchor
+        var local_anchor: Vector2 = anchor.get("pos", Vector2.ZERO)
+        var world_anchor := CENTER + local_anchor
+        if world_anchor.distance_to(pos) <= radius:
+            var result := anchor.duplicate(true)
+            result["local_pos"] = local_anchor
+            result["pos"] = world_anchor
+            return result
     return {}
