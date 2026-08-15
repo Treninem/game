@@ -54,6 +54,9 @@ jobs:
       - name: Verify real enterable building shell
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_enterable_building.tscn
 
+      - name: Verify real production furniture in enterable interiors
+        run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_settlement_interior_assets.tscn
+
       - name: Verify streamed physical settlements and gates
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_world_settlements.tscn
 
