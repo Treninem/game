@@ -6,6 +6,7 @@ const LEGACY_SAVE_PATH := "user://savegame.json"
 
 var current_slot: int = 1
 var pending_new_game: bool = false
+var pending_load_game: bool = false
 
 func _ready() -> void:
     _migrate_legacy_save_once()
@@ -13,6 +14,7 @@ func _ready() -> void:
 func prepare_new_game(slot: int) -> void:
     current_slot = _valid_slot(slot)
     pending_new_game = true
+    pending_load_game = false
 
 func prepare_load(slot: int) -> bool:
     slot = _valid_slot(slot)
@@ -20,11 +22,17 @@ func prepare_load(slot: int) -> bool:
         return false
     current_slot = slot
     pending_new_game = false
+    pending_load_game = true
     return true
 
 func consume_new_game_request() -> bool:
     var value := pending_new_game
     pending_new_game = false
+    return value
+
+func consume_load_request() -> bool:
+    var value := pending_load_game
+    pending_load_game = false
     return value
 
 func save_game(player: Node3D, slot: int = -1) -> bool:
