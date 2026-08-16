@@ -92,6 +92,7 @@ jobs:
           fi
           nature_root='assets/production/nature/kenney_nature_kit/Models/GLTF format'
           grep -Fq 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/' scripts/start_region_streamer.gd
+          grep -Fq 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/' scripts/start_civilization_signs.gd
           for asset in \
             tree_oak.glb \
             tree_detailed.glb \
@@ -106,6 +107,29 @@ jobs:
           done
           test -s assets/production/nature/kenney_nature_kit/LICENSE.txt
           test -s assets/production/nature/kenney_nature_kit/SOURCE.md
+
+          city_root='assets/production/medieval/quaternius_city_core'
+          grep -Fq 'res://assets/production/medieval/quaternius_city_core/' scripts/city_district.gd
+          grep -Fq 'res://assets/production/medieval/quaternius_city_core/' scripts/capital_landmarks.gd
+          for asset in \
+            Wall_Plaster_Straight.gltf Wall_Plaster_Straight.bin \
+            Wall_Plaster_Door_Round.gltf Wall_Plaster_Door_Round.bin \
+            Wall_Plaster_Window_Wide_Round.gltf Wall_Plaster_Window_Wide_Round.bin \
+            Wall_UnevenBrick_Straight.gltf Wall_UnevenBrick_Straight.bin \
+            Wall_UnevenBrick_Door_Round.gltf Wall_UnevenBrick_Door_Round.bin \
+            Wall_UnevenBrick_Window_Wide_Round.gltf Wall_UnevenBrick_Window_Wide_Round.bin \
+            Roof_RoundTiles_8x8.gltf Roof_RoundTiles_8x8.bin \
+            Prop_Wagon.gltf Prop_Wagon.bin \
+            Prop_Crate.gltf Prop_Crate.bin \
+            T_WoodTrim_BaseColor.png T_WoodTrim_Normal.png T_WoodTrim_Roughness.png \
+            T_Plaster_BaseColor.png T_Plaster_Normal.png T_Plaster_ORM.png \
+            T_UnevenBrick_BaseColor.png T_UnevenBrick_Normal.png T_UnevenBrick_Roughness.png \
+            T_RoundTiles_BaseColor.png T_RoundTiles_Normal.png T_RoundTiles_Roughness.png; do
+            test -s "$city_root/$asset"
+          done
+          test -s "$city_root/LICENSE.txt"
+          test -s "$city_root/License_Standard.txt"
+          test -s "$city_root/SOURCE.md"
 
       - name: Verify enterable shell uses production assets only
         shell: bash
