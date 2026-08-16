@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.10.4-stable"
+const VERSION := "0.10.5-stable"
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PLAYER_GROUND_CLEARANCE := 0.08
 const RESPAWN_POSITION := Vector3(GEOGRAPHY.START_SPAWN.x, PLAYER_GROUND_CLEARANCE, GEOGRAPHY.START_SPAWN.y)
@@ -9,18 +9,19 @@ const RESPAWN_POSITION := Vector3(GEOGRAPHY.START_SPAWN.x, PLAYER_GROUND_CLEARAN
 
 var autosave_elapsed := 0.0
 var respawning := false
+var startup_state_ready := false
 
 func _ready() -> void:
+    startup_state_ready = false
     add_to_group("world_root")
     get_tree().paused = false
-    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+    if not bool(get_meta("loading_gate_active", false)):
+        Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
     GameState.player_died.connect(_on_player_died)
 
     if SaveManager.consume_new_game_request():
         GameState.reset_new_game()
         _place_player_safely(RESPAWN_POSITION)
-        # A game started from the title screen must immediately become a real
-        # resumable game instead of waiting for the first periodic autosave.
         SaveManager.save_game(player)
     elif not SaveManager.load_game(player):
         GameState.reset_new_game()
@@ -33,7 +34,9 @@ func _ready() -> void:
         GameState.revive()
         _place_player_safely(RESPAWN_POSITION)
 
-    # Early-game help must not advertise magic before the story unlocks it.
+    # The loading gate may reveal the world only after the save/new-game state
+    # and a safe player position have actually been applied.
+    startup_state_ready = true
     GameState.notify("Мир ImPuls • WASD — движение • Shift — бег • E — взаимодействие • I/M/K/J — игровые панели")
 
 func _process(delta: float) -> void:
