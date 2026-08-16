@@ -23,12 +23,20 @@ func _ready() -> void:
         GameState.reset_new_game()
         _place_player_safely(RESPAWN_POSITION)
         SaveManager.save_game(player)
-    elif not SaveManager.load_game(player):
+    elif SaveManager.consume_load_request():
+        if SaveManager.load_game(player):
+            GameState.migrate_to_world_foundation()
+            _recover_loaded_player_position()
+        else:
+            GameState.reset_new_game()
+            _place_player_safely(RESPAWN_POSITION)
+    else:
+        # Entering the world without an explicit menu load must never silently
+        # restore whichever slot happened to be selected previously. This keeps
+        # direct world startup deterministic and prevents stale saves from moving
+        # a fresh story start away from the canonical Asterna river spawn.
         GameState.reset_new_game()
         _place_player_safely(RESPAWN_POSITION)
-    else:
-        GameState.migrate_to_world_foundation()
-        _recover_loaded_player_position()
 
     if GameState.is_dead:
         GameState.revive()
