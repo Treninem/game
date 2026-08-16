@@ -1,0 +1,160 @@
+class_name WorldLoadingReadiness
+extends RefCounted
+
+const CAPITAL := preload("res://scripts/capital_data.gd")
+const VISUAL_RADIUS := 2
+const PHYSICS_RADIUS := 1
+const SETTLEMENT_LOAD_RADIUS := 980.0
+
+static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
+    if world == null or player == null or not player.is_inside_tree():
+        return _empty("Ожидание игрового мира")
+
+    var streamer := world.get_node_or_null("World/WorldStreamer")
+    var start_region := world.get_node_or_null("World/StartRegion")
+    var settlements := world.get_node_or_null("World/Settlements")
+    var city := world.get_node_or_null("World/CityDistrict")
+    var interiors := world.get_node_or_null("World/SettlementInteriorVisuals")
+    var camera := world.get_node_or_null("World/Player/CameraPivot/Camera3D") as Camera3D
+    var pos2 := Vector2(player.global_position.x, player.global_position.z)
+
+    var stream := _stream_state(streamer, pos2)
+    var settlement := _settlement_state(settlements, interiors, pos2)
+    var in_capital := CAPITAL.inside_capital(pos2)
+    var city_ready := true
+    if in_capital:
+        var cells = city.get("loaded_cells") if city != null else null
+        city_ready = cells is Dictionary and not cells.is_empty()
+
+    var bootstrap_ready := bool(world.get("startup_state_ready"))
+    var spawn_ready := WorldData.inside_world(pos2)
+    var region_ready := float(stream.get("visual_ratio", 0.0)) >= 0.999
+    var terrain_ready := bool(stream.get("center_terrain", false))
+    var collision_ready := float(stream.get("collision_ratio", 0.0)) >= 0.999
+    var nature_ready := start_region != null and int(start_region.get("real_nature_detail_count")) > 0
+    var water_ready := start_region != null and int(start_region.get("river_segment_count")) > 0 and WorldWater != null
+    var roads_ready := WorldRoads != null and region_ready
+    var items_ready := bool(stream.get("items_ready", false)) or in_capital
+    var environment_ready := world.get_node_or_null("World/Sun") is DirectionalLight3D and world.get_node_or_null("World/WorldEnvironmentController") != null and EnvironmentState != null and WeatherVFX != null
+    var gameplay_ready := GameState != null and SaveManager != null and InventorySystem != null and DialogueManager != null
+    var camera_ready := camera != null and camera.current
+    var ground_ready := terrain_ready and collision_ready and _ground_below(player)
+
+    var checks := {
+        "save": bootstrap_ready,
+        "spawn": spawn_ready,
+        "region": region_ready,
+        "terrain": terrain_ready,
+        "collisions": collision_ready,
+        "roads": roads_ready,
+        "water": water_ready,
+        "nature": nature_ready,
+        "settlements": bool(settlement.get("settlements_ready", true)),
+        "buildings": bool(settlement.get("buildings_ready", true)) and city_ready,
+        "interiors": bool(settlement.get("interiors_ready", true)),
+        "npcs": bool(settlement.get("npcs_ready", true)),
+        "items": items_ready,
+        "gameplay": gameplay_ready,
+        "environment": environment_ready,
+        "camera": camera_ready,
+        "ground": ground_ready
+    }
+
+    var weights := {
+        "save":0.07, "spawn":0.05, "region":0.20, "terrain":0.06,
+        "collisions":0.15, "roads":0.04, "water":0.05, "nature":0.06,
+        "settlements":0.06, "buildings":0.05, "interiors":0.03, "npcs":0.04,
+        "items":0.03, "gameplay":0.05, "environment":0.04, "camera":0.03, "ground":0.04
+    }
+    var ratio := 0.0
+    var all_ready := true
+    for key in checks:
+        if bool(checks[key]):
+            ratio += float(weights.get(key, 0.0))
+        else:
+            all_ready = false
+
+    var stage := _stage_for(checks)
+    var detail := _detail_for(stage, stream, settlement)
+    return {"ratio":clampf(ratio, 0.0, 1.0), "all_ready":all_ready, "stage":stage, "detail":detail, "checks":checks}
+
+static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
+    if streamer == null:
+        return {"visual_ratio":0.0, "collision_ratio":0.0, "center_terrain":false, "items_ready":false, "visual_loaded":0, "visual_required":0, "collision_loaded":0, "collision_required":0}
+    var loaded = streamer.get("loaded_chunks")
+    var collisions = streamer.get("collision_chunks")
+    if not (loaded is Dictionary) or not (collisions is Dictionary):
+        return {"visual_ratio":0.0, "collision_ratio":0.0, "center_terrain":false, "items_ready":false, "visual_loaded":0, "visual_required":0, "collision_loaded":0, "collision_required":0}
+    var center: Vector2i = streamer.call("_world_to_chunk", pos)
+    var visual_required := 0
+    var visual_loaded := 0
+    var collision_required := 0
+    var collision_loaded := 0
+    var items := 0
+    for x in range(center.x - VISUAL_RADIUS, center.x + VISUAL_RADIUS + 1):
+        for z in range(center.y - VISUAL_RADIUS, center.y + VISUAL_RADIUS + 1):
+            var coord := Vector2i(x, z)
+            if not bool(streamer.call("_chunk_inside_world", coord)):
+                continue
+            visual_required += 1
+            if loaded.has(coord) and is_instance_valid(loaded.get(coord)):
+                visual_loaded += 1
+                var chunk: Node = loaded.get(coord)
+                items += chunk.find_children("Gatherable_*", "", true, false).size()
+            if maxi(absi(coord.x - center.x), absi(coord.y - center.y)) <= PHYSICS_RADIUS:
+                collision_required += 1
+                if collisions.has(coord) and is_instance_valid(collisions.get(coord)):
+                    collision_loaded += 1
+    var center_terrain := false
+    if loaded.has(center) and is_instance_valid(loaded.get(center)):
+        center_terrain = loaded.get(center).get_node_or_null("Terrain") != null
+    return {
+        "visual_ratio": 1.0 if visual_required <= 0 else float(visual_loaded) / float(visual_required),
+        "collision_ratio": 1.0 if collision_required <= 0 else float(collision_loaded) / float(collision_required),
+        "center_terrain":center_terrain, "items_ready":items > 0,
+        "visual_loaded":visual_loaded, "visual_required":visual_required,
+        "collision_loaded":collision_loaded, "collision_required":collision_required
+    }
+
+static func _settlement_state(settlements: Node, interiors: Node, pos: Vector2) -> Dictionary:
+    if settlements == null:
+        return {"settlements_ready":false, "buildings_ready":false, "interiors_ready":false, "npcs_ready":false, "loaded":0, "expected":0}
+    var specs: Array = settlements.call("settlement_specs") if settlements.has_method("settlement_specs") else []
+    var expected := 0
+    for variant in specs:
+        if variant is Dictionary and pos.distance_to(Vector2(variant.get("center", Vector2.ZERO))) <= SETTLEMENT_LOAD_RADIUS:
+            expected += 1
+    var loaded := int(settlements.call("loaded_settlement_count")) if settlements.has_method("loaded_settlement_count") else 0
+    var settlements_ready := expected <= 0 or loaded >= expected
+    var buildings_ready := expected <= 0 or (settlements_ready and int(settlements.get("materialized_buildings")) > 0)
+    var npcs_ready := expected <= 0 or (settlements_ready and int(settlements.get("materialized_npcs")) > 0)
+    var enterable_count := settlements.get_tree().get_nodes_in_group("enterable_building").size()
+    var interiors_ready := enterable_count <= 0 or (interiors != null and int(interiors.get("decorated_buildings")) > 0)
+    return {"settlements_ready":settlements_ready, "buildings_ready":buildings_ready, "interiors_ready":interiors_ready, "npcs_ready":npcs_ready, "loaded":loaded, "expected":expected}
+
+static func _ground_below(player: CharacterBody3D) -> bool:
+    var space := player.get_world_3d().direct_space_state
+    if space == null:
+        return false
+    var query := PhysicsRayQueryParameters3D.create(player.global_position + Vector3.UP * 2.0, player.global_position + Vector3.DOWN * 4.0)
+    query.exclude = [player.get_rid()]
+    query.collision_mask = 1
+    return not space.intersect_ray(query).is_empty()
+
+static func _stage_for(checks: Dictionary) -> String:
+    for pair in [["save","Подготовка сохранения"],["spawn","Определение точки появления"],["region","Загрузка стартовой области"],["terrain","Создание ландшафта"],["collisions","Подготовка физики и коллизий"],["water","Загрузка рек и воды"],["roads","Загрузка дорог"],["nature","Загрузка растительности"],["settlements","Загрузка поселений"],["buildings","Загрузка зданий"],["interiors","Загрузка интерьеров"],["npcs","Подготовка NPC"],["items","Подготовка предметов мира"],["gameplay","Квесты и инвентарь"],["environment","Погода, время и освещение"],["camera","Подготовка камеры"],["ground","Проверка земли под игроком"]]:
+        if not bool(checks.get(pair[0], false)):
+            return pair[1]
+    return "Финальная проверка стартовой области"
+
+static func _detail_for(stage: String, stream: Dictionary, settlement: Dictionary) -> String:
+    if stage == "Загрузка стартовой области" or stage == "Создание ландшафта":
+        return "Ближайшие чанки: %d из %d" % [int(stream.get("visual_loaded",0)), int(stream.get("visual_required",0))]
+    if stage == "Подготовка физики и коллизий" or stage == "Проверка земли под игроком":
+        return "Физические чанки: %d из %d" % [int(stream.get("collision_loaded",0)), int(stream.get("collision_required",0))]
+    if stage in ["Загрузка поселений","Загрузка зданий","Загрузка интерьеров","Подготовка NPC"]:
+        return "Поселения рядом: %d из %d" % [int(settlement.get("loaded",0)), int(settlement.get("expected",0))]
+    return "Проверяется реальная готовность обязательных систем"
+
+static func _empty(stage: String) -> Dictionary:
+    return {"ratio":0.0, "all_ready":false, "stage":stage, "detail":"Подготовка узлов игрового мира", "checks":{}}
