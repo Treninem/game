@@ -1,0 +1,7 @@
+Interface Sounds (1.0)
+Created/distributed by Kenney (www.kenney.nl)
+Creation date: 11-02-2020
+License: Creative Commons Zero (CC0 1.0)
+Free for personal, educational and commercial projects.
+Runtime files used by ImPuls: click_002.wav -> menu_hover.wav; click_003.wav -> menu_click.wav.
+Source: https://github.com/Calinou/kenney-interface-sounds
