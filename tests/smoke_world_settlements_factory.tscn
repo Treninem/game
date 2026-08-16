@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource path="res://tests/smoke_world_settlements_factory.gd" type="Script" id="1_factory"]
-
-[node name="WorldSettlementsFactorySmoke" type="Node"]
-script = ExtResource("1_factory")
