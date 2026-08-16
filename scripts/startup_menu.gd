@@ -4,9 +4,7 @@ const LOADING_SCENE := "res://scenes/world_loading.tscn"
 const BG_PREFIX := "res://assets/production/ui/menu_bg_small.webp.b64"
 const BG_PARTS := 4
 const EMBEDDED := preload("res://scripts/embedded_ui_texture.gd")
-const BUTTON_TEXTURE := preload("res://assets/production/ui/button_brown.png")
-const HOVER_SOUND := preload("res://assets/audio/ui/kenney_interface/menu_hover.wav")
-const CLICK_SOUND := preload("res://assets/audio/ui/kenney_interface/menu_click.wav")
+const MENU_ASSETS := preload("res://scripts/menu_runtime_assets.gd")
 
 @onready var settings_overlay: Control = $SettingsOverlay
 
@@ -24,6 +22,7 @@ var update_progress_detail: Label
 var install_update_button: Button
 var hover_player: AudioStreamPlayer
 var click_player: AudioStreamPlayer
+var button_texture: Texture2D
 var latest_slot := 0
 var save_row_count := 0
 var current_page := "home"
@@ -93,6 +92,8 @@ func close_settings_overlay() -> void:
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _build_ui() -> void:
+    button_texture = MENU_ASSETS.button_texture()
+
     var bg := TextureRect.new()
     bg.name = "MenuBackground"
     bg.texture = EMBEDDED.load_webp_parts(BG_PREFIX, BG_PARTS)
@@ -115,12 +116,12 @@ func _build_ui() -> void:
     add_child(left)
 
     hover_player = AudioStreamPlayer.new()
-    hover_player.stream = HOVER_SOUND
+    hover_player.stream = MENU_ASSETS.hover_sound()
     hover_player.volume_db = -15.0
     hover_player.bus = &"SFX"
     add_child(hover_player)
     click_player = AudioStreamPlayer.new()
-    click_player.stream = CLICK_SOUND
+    click_player.stream = MENU_ASSETS.click_sound()
     click_player.volume_db = -10.0
     click_player.bus = &"SFX"
     add_child(click_player)
@@ -406,7 +407,7 @@ func _panel_style(alpha: float) -> StyleBoxFlat:
 
 func _button_style(color: Color) -> StyleBoxTexture:
     var style := StyleBoxTexture.new()
-    style.texture = BUTTON_TEXTURE
+    style.texture = button_texture
     style.modulate_color = color
     style.texture_margin_left = 8
     style.texture_margin_right = 8
