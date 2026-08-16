@@ -7,7 +7,6 @@ on:
       - "project.godot"
       - "assets/audio/**"
       - "assets/staging/nature/kenney_nature_kit/**"
-      - "assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/**"
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
@@ -18,7 +17,6 @@ on:
       - "project.godot"
       - "assets/audio/**"
       - "assets/staging/nature/kenney_nature_kit/**"
-      - "assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/**"
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
@@ -49,7 +47,6 @@ jobs:
             assets/registry
             assets/shaders
             assets/staging/nature/kenney_nature_kit
-            assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard
             assets/ui
             assets/vfx
             scenes
