@@ -54,7 +54,7 @@ const POIS := [
 ]
 
 const PRIMARY_ROADS := [
-    {"id":"astern_border_road", "state":"astern", "points":[Vector2(1550,-420), Vector2(2450,-900), Vector2(3650,-1750), Vector2(7200,-3300), ASTERN_CAPITAL]},
+    {"id":"astern_border_road", "state":"astern", "points":[Vector2(1650,-420), Vector2(2450,-900), Vector2(3650,-1750), Vector2(7200,-3300), ASTERN_CAPITAL]},
     {"id":"astern_river_track", "state":"astern", "points":[Vector2(-1350,1180), Vector2(-500,620), Vector2(650,120), Vector2(1650,-420)]},
     {"id":"north_trade_road", "state":"frontier", "points":[ASTERN_CAPITAL, Vector2(8500,-11200), Vector2(2600,-16500), Vector2(1200,-24800)]},
     {"id":"western_trade_road", "state":"frontier", "points":[Vector2(1650,-420), Vector2(-6500,-2200), Vector2(-14500,-3500), Vector2(-23800,-4200)]},
