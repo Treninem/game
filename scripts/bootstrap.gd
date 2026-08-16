@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.10.5-stable"
+const VERSION := "0.10.6-stable"
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PLAYER_GROUND_CLEARANCE := 0.08
 const RESPAWN_POSITION := Vector3(GEOGRAPHY.START_SPAWN.x, PLAYER_GROUND_CLEARANCE, GEOGRAPHY.START_SPAWN.y)
@@ -88,6 +88,3 @@ func _on_player_died() -> void:
     GameState.revive()
     respawning = false
     GameState.notify("Вы пришли в себя у лесной реки.")
-
-func spawn_house_from_state() -> void:
-    pass
