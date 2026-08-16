@@ -1,7 +1,7 @@
 extends Node3D
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
-const NATURE_ROOT := "res://assets/staging/nature/kenney_nature_kit/Models/GLTF format/"
+const NATURE_ROOT := "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/"
 const LOG_LARGE: PackedScene = preload(NATURE_ROOT + "log_large.glb")
 const STUMP_DETAIL: PackedScene = preload(NATURE_ROOT + "stump_roundDetailed.glb")
 
