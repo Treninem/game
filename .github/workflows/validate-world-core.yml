@@ -98,8 +98,8 @@ jobs:
       - name: Verify real production furniture in enterable interiors
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_interior_assets.tscn 240
 
-      - name: Diagnose settlement streamer construction path
-        run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements_factory.tscn 30
+      - name: Verify scene-based settlement streamer construction
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements_fixture.tscn 60
 
       - name: Verify streamed physical settlements and gates
         run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements.tscn 300
