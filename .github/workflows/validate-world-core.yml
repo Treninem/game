@@ -64,6 +64,20 @@ jobs:
         shell: bash
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
 
+      - name: Compile settlement streamer explicitly
+        shell: bash
+        run: |
+          set +e
+          output=$(timeout --signal=TERM --kill-after=5s 30s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --check-only --script scripts/world_settlements.gd 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          if [ "$status" -ne 0 ]; then
+            clean=$(printf '%s' "$output" | tr '\r\n' ' ' | sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g' | cut -c1-6000)
+            echo "::error title=world_settlements.gd compile::$clean"
+            exit "$status"
+          fi
+
       - name: Verify enterable shell uses production assets only
         shell: bash
         run: |
