@@ -8,8 +8,6 @@ const SCENE_WEIGHT := 0.34
 const EMBEDDED_TEXTURE := preload("res://scripts/embedded_ui_texture.gd")
 const READINESS := preload("res://scripts/world_loading_readiness.gd")
 
-var progress_bar: ProgressBar
-var percent_label: Label
 var stage_label: Label
 var detail_label: Label
 var error_panel: PanelContainer
@@ -48,7 +46,7 @@ func _begin() -> void:
     ready_frames = 0
     load_requested = false
     error_panel.visible = false
-    _set_progress(0.0, "Подготовка загрузки", "Проверка обязательных ресурсов")
+    _set_progress(0.0, "Подготовка мира", "")
     for path in [WORLD_SCENE, "res://scripts/world_streamer.gd", "res://scripts/world_settlements.gd", "res://scripts/bootstrap.gd"]:
         if not ResourceLoader.exists(path):
             _fail("Отсутствует обязательный ресурс: %s" % path)
@@ -65,7 +63,7 @@ func _poll_scene_resource() -> void:
     var progress: Array = []
     var status := ResourceLoader.load_threaded_get_status(WORLD_SCENE, progress)
     var real_ratio := clampf(float(progress[0]), 0.0, 1.0) if not progress.is_empty() else 0.0
-    _set_progress(real_ratio * SCENE_WEIGHT, "Загрузка основной сцены", "Ресурсы сцены: %d%%" % roundi(real_ratio * 100.0))
+    _set_progress(real_ratio * SCENE_WEIGHT, "Загрузка мира", "" if real_ratio < 1.0 else "")
     if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
         _fail("Основная сцена мира не загрузилась. Проверьте целостность установленной версии.")
         return
@@ -79,7 +77,7 @@ func _poll_scene_resource() -> void:
     _instantiate_behind_loading_screen()
 
 func _instantiate_behind_loading_screen() -> void:
-    _set_progress(SCENE_WEIGHT, "Создание игрового мира", "Сцена создаётся за непрозрачным экраном загрузки")
+    _set_progress(SCENE_WEIGHT, "Создание игрового мира", "")
     world_instance = world_resource.instantiate()
     if world_instance == null:
         _fail("Не удалось создать игровую сцену.")
@@ -112,12 +110,12 @@ func _poll_prepared_world() -> void:
     if all_ready:
         ready_frames += 1
         stage = "Игровой мир готов"
-        detail = "Финальная физическая проверка %d/2" % mini(ready_frames, 2)
+        detail = "Финальная проверка"
     else:
         ready_frames = 0
 
     if ready_frames >= 2:
-        _set_progress(1.0, "Игровой мир готов", "Земля, коллизии, окружение, объекты, NPC и камера подтверждены")
+        _set_progress(1.0, "Игровой мир готов", "")
         _finish_into_world()
     else:
         _set_progress(minf(total_ratio, 0.995), stage, detail)
@@ -187,12 +185,10 @@ func _fail(message: String) -> void:
     error_panel.visible = true
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func _set_progress(ratio: float, stage: String, detail: String) -> void:
-    var safe := clampf(ratio, 0.0, 1.0)
-    progress_bar.value = safe * 100.0
-    percent_label.text = "%d%%" % roundi(safe * 100.0)
+func _set_progress(_ratio: float, stage: String, detail: String) -> void:
     stage_label.text = stage
     detail_label.text = detail
+    detail_label.visible = not detail.is_empty()
 
 func _build_ui() -> void:
     var background := TextureRect.new()
@@ -211,9 +207,9 @@ func _build_ui() -> void:
 
     var texts := VBoxContainer.new()
     texts.anchor_left = 0.20
-    texts.anchor_top = 0.705
+    texts.anchor_top = 0.735
     texts.anchor_right = 0.80
-    texts.anchor_bottom = 0.825
+    texts.anchor_bottom = 0.835
     texts.alignment = BoxContainer.ALIGNMENT_END
     texts.add_theme_constant_override("separation", 2)
     add_child(texts)
@@ -234,44 +230,6 @@ func _build_ui() -> void:
     detail_label.add_theme_color_override("font_color", Color(0.82, 0.81, 0.78))
     detail_label.add_theme_color_override("font_shadow_color", Color(0,0,0,0.95))
     texts.add_child(detail_label)
-
-    var bar_holder := Control.new()
-    bar_holder.anchor_left = 0.235
-    bar_holder.anchor_top = 0.833
-    bar_holder.anchor_right = 0.765
-    bar_holder.anchor_bottom = 0.902
-    add_child(bar_holder)
-
-    progress_bar = ProgressBar.new()
-    progress_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    progress_bar.offset_left = 34
-    progress_bar.offset_right = -34
-    progress_bar.offset_top = 18
-    progress_bar.offset_bottom = -18
-    progress_bar.min_value = 0
-    progress_bar.max_value = 100
-    progress_bar.show_percentage = false
-    var empty := StyleBoxFlat.new()
-    empty.bg_color = Color(0.015, 0.012, 0.012, 0.70)
-    empty.set_corner_radius_all(3)
-    progress_bar.add_theme_stylebox_override("background", empty)
-    var fill := StyleBoxFlat.new()
-    fill.bg_color = Color(0.72, 0.46, 0.18, 0.96)
-    fill.border_color = Color(0.96, 0.75, 0.34, 0.95)
-    fill.set_border_width_all(1)
-    fill.set_corner_radius_all(3)
-    progress_bar.add_theme_stylebox_override("fill", fill)
-    bar_holder.add_child(progress_bar)
-
-    percent_label = Label.new()
-    percent_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    percent_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    percent_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-    percent_label.add_theme_font_size_override("font_size", 15)
-    percent_label.add_theme_color_override("font_color", Color(1.0, 0.91, 0.72))
-    percent_label.add_theme_color_override("font_shadow_color", Color(0,0,0,1))
-    percent_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    bar_holder.add_child(percent_label)
 
     error_panel = PanelContainer.new()
     error_panel.anchor_left = 0.5
