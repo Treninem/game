@@ -1,10 +1,10 @@
 ; ImPuls PC — offline single-player RPG
-; Stable 0.10.5: menu first, real world loading gate, visible update progress
+; Stable 0.10.6: production city assets, verified world core, hardened Windows pipeline
 config_version=5
 
 [application]
 config/name="ImPuls"
-config/version="0.10.5-stable"
+config/version="0.10.6-stable"
 config/icon="res://assets/branding/impuls_icon.png"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
