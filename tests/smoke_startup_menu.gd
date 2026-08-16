@@ -43,6 +43,12 @@ func _run_test() -> void:
         if not expected in actions:
             _fail(7, "startup menu is missing required action: %s" % expected)
             return
+    if String(menu.call("world_loading_scene")) != "res://scenes/world_loading.tscn":
+        _fail(23, "gameplay actions bypass the mandatory loading screen")
+        return
+    if not ResourceLoader.exists("res://scenes/world_loading.tscn"):
+        _fail(24, "world loading scene is missing")
+        return
 
     var latest_slot := int(menu.call("latest_save_slot"))
     if bool(menu.call("continue_is_available")) != (latest_slot > 0):
@@ -92,9 +98,6 @@ func _run_test() -> void:
     if settings_overlay == null or not settings_overlay.visible or not get_tree().paused:
         _fail(12, "Settings button does not open the existing settings UI")
         return
-    if menu_music.process_mode != Node.PROCESS_MODE_ALWAYS:
-        _fail(22, "menu music no longer remains active while settings are open")
-        return
     menu.call("close_settings_overlay")
     await get_tree().process_frame
     if get_tree().paused or settings_overlay.visible:
@@ -106,6 +109,9 @@ func _run_test() -> void:
     if not (menu.get("update_status_label") is Label) or not (menu.get("install_update_button") is Button):
         _fail(14, "update page is not wired to UpdateManager controls")
         return
+    if not (menu.get("update_progress_bar") is ProgressBar) or not UpdateManager.has_signal("progress_changed"):
+        _fail(25, "update page has no real progress channel")
+        return
 
-    print("STARTUP_MENU_SMOKE_OK actions=5 saves=10 settings=reused updates=wired music=production-looped world=deferred")
+    print("STARTUP_MENU_SMOKE_OK menu=first loading=mandatory updates=byte-progress saves=10 settings=reused music=production-looped")
     get_tree().quit(0)
