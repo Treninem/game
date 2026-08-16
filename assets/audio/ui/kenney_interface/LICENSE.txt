@@ -3,5 +3,6 @@ Created/distributed by Kenney (www.kenney.nl)
 Creation date: 11-02-2020
 License: Creative Commons Zero (CC0 1.0)
 Free for personal, educational and commercial projects.
-Runtime files used by ImPuls: click_002.wav -> menu_hover.wav; click_003.wav -> menu_click.wav.
-Source: https://github.com/Calinou/kenney-interface-sounds
+Source reference: https://github.com/Calinou/kenney-interface-sounds
+
+ImPuls keeps this attribution/reference for the UI sound design source. Stable runtime interaction tones are generated in memory by scripts/menu_runtime_assets.gd so the Godot build does not depend on editor-side WAV import metadata.
