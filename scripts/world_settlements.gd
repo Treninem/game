@@ -1,4 +1,5 @@
 extends Node3D
+class_name WorldSettlements
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const ENTERABLE_BUILDING_PATH := "res://scripts/enterable_building.gd"
@@ -165,7 +166,7 @@ func _build_village(root: Node3D, center: Vector2, id: String) -> void:
             label = "Общий дом поселения"
         _add_enterable_building(root, center, item.get("p", Vector2.ZERO), item.get("s", Vector3(10,3.4,9)), float(item.get("r", 0.0)), i, label)
 
-    _add_village_fence(root, center)
+    _build_village_fence(root, center)
     _add_well(root, center, Vector2(-8.0, 3.0))
     _add_crate_stack(root, center, Vector2(12.0, 8.0))
     _populate_village(root, center, id)
@@ -287,7 +288,7 @@ func _add_settlement_npc(root: Node3D, center: Vector2, display_name: String, ro
     var npc_script := _get_settlement_npc_script()
     if npc_script == null:
         return null
-    var instance := npc_script.new()
+    var instance: Object = npc_script.new()
     if not instance is Node3D:
         push_error("WorldSettlements: settlement NPC script did not create a Node3D")
         if instance != null:
@@ -313,7 +314,7 @@ func _add_enterable_building(root: Node3D, center: Vector2, local_pos: Vector2, 
     var building_script := _get_enterable_building_script()
     if building_script == null:
         return null
-    var instance := building_script.new()
+    var instance: Object = building_script.new()
     if not instance is Node3D:
         push_error("WorldSettlements: enterable building script did not create a Node3D")
         if instance != null:
