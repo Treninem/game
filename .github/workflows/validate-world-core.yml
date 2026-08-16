@@ -6,6 +6,7 @@ on:
     paths:
       - "project.godot"
       - "assets/audio/**"
+      - "assets/staging/nature/kenney_nature_kit/**"
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
@@ -15,6 +16,7 @@ on:
     paths:
       - "project.godot"
       - "assets/audio/**"
+      - "assets/staging/nature/kenney_nature_kit/**"
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
@@ -44,6 +46,7 @@ jobs:
             assets/production
             assets/registry
             assets/shaders
+            assets/staging/nature/kenney_nature_kit
             assets/ui
             assets/vfx
             scenes
