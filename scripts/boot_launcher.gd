@@ -5,7 +5,6 @@ const MAIN_MENU_SCENE := "res://scenes/main_menu.tscn"
 var requested := false
 var menu_resource: PackedScene
 var status_label: Label
-var elapsed := 0.0
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -13,14 +12,11 @@ func _ready() -> void:
     _build_boot_ui()
     call_deferred("_begin")
 
-func _process(delta: float) -> void:
-    elapsed += delta
+func _process(_delta: float) -> void:
     if not requested:
         return
     var progress: Array = []
     var state := ResourceLoader.load_threaded_get_status(MAIN_MENU_SCENE, progress)
-    var ratio := float(progress[0]) if not progress.is_empty() else 0.0
-    status_label.text = "Подготовка главного меню… %d%%" % roundi(clampf(ratio, 0.0, 1.0) * 100.0)
     if state == ResourceLoader.THREAD_LOAD_FAILED or state == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
         status_label.text = "Не удалось загрузить главное меню. Проверьте установку ImPuls."
         requested = false
