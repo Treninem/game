@@ -8,7 +8,7 @@ const CHECK_INTERVAL := 0.25
 const MODULE_WIDTH := 2.0
 const STORY_HEIGHT := 3.12
 
-const ASSET_ROOT := "res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/"
+const ASSET_ROOT := "res://assets/production/medieval/quaternius_city_core/"
 const ASSET_PATHS := {
     "wall_plaster": ASSET_ROOT + "Wall_Plaster_Straight.gltf",
     "door_plaster": ASSET_ROOT + "Wall_Plaster_Door_Round.gltf",
