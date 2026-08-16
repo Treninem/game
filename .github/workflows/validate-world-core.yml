@@ -116,6 +116,9 @@ jobs:
       - name: Verify physical hydrology
         run: bash tools/run_godot_smoke.sh tests/smoke_world_hydrology.tscn 180
 
+      - name: Verify bounded start-region production nature streaming
+        run: bash tools/run_godot_smoke.sh tests/smoke_start_region_nature_streaming.tscn 180
+
       - name: Verify spatial world audio and surface-aware footsteps
         run: bash tools/run_godot_smoke.sh tests/smoke_world_audio.tscn 180
 
