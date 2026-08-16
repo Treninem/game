@@ -1,8 +1,8 @@
 extends Node3D
 
 const CAPITAL := preload("res://scripts/capital_data.gd")
-const ROOF_SCENE: PackedScene = preload("res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/Roof_RoundTiles_8x8.gltf")
-const CRATE_SCENE: PackedScene = preload("res://assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/glTF/Prop_Crate.gltf")
+const ROOF_SCENE: PackedScene = preload("res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf")
+const MARKET_STALL_SCENE: PackedScene = preload("res://assets/production/medieval/quaternius_market/Stall_Empty.gltf")
 
 const CELL_SIZE := 160.0
 const LOAD_RADIUS_CELLS := 2
@@ -152,10 +152,10 @@ func _build_cell(cell: Vector2i) -> void:
         var width := rng.randf_range(12.0, 18.0)
         var depth := rng.randf_range(11.0, 17.0)
         var height := rng.randf_range(6.5, 10.5)
-        _build_house(root, Vector3(lot.x, y, lot.y), Vector3(width, height, depth), i, rng)
+        _build_house(root, Vector3(lot.x, y, lot.y), Vector3(width, height, depth), i)
 
-    if cell.x % 2 == 0:
-        _spawn_real_crate(root, Vector3(18.0, base_y + 0.12, -22.0), float(cell.y) * 0.31)
+    if district_id == "market" and cell.x % 2 == 0:
+        _spawn_real_market_stall(root, Vector3(18.0, base_y + 0.12, -22.0), float(cell.y) * 0.31)
 
 func _build_spawn_square(root: Node3D, center: Vector2) -> void:
     var base_y := WorldData.elevation_at(center)
@@ -163,17 +163,17 @@ func _build_spawn_square(root: Node3D, center: Vector2) -> void:
 
     var hall_world := center + Vector2(0.0, -58.0)
     var hall_y := WorldData.elevation_at(hall_world)
-    _build_house(root, Vector3(0.0, hall_y, -58.0), Vector3(30.0, 14.0, 20.0), 0, null)
+    _build_house(root, Vector3(0.0, hall_y, -58.0), Vector3(30.0, 14.0, 20.0), 0)
 
     var left_world := center + Vector2(-45.0, -30.0)
     var right_world := center + Vector2(45.0, -30.0)
-    _build_house(root, Vector3(-45.0, WorldData.elevation_at(left_world), -30.0), Vector3(16.0, 8.0, 14.0), 1, null)
-    _build_house(root, Vector3(45.0, WorldData.elevation_at(right_world), -30.0), Vector3(16.0, 8.5, 14.0), 2, null)
+    _build_house(root, Vector3(-45.0, WorldData.elevation_at(left_world), -30.0), Vector3(16.0, 8.0, 14.0), 1)
+    _build_house(root, Vector3(45.0, WorldData.elevation_at(right_world), -30.0), Vector3(16.0, 8.5, 14.0), 2)
 
-    for i in range(4):
-        _spawn_real_crate(root, Vector3(-12.0 + float(i) * 8.0, base_y + 0.12, 28.0), float(i) * 0.35)
+    _spawn_real_market_stall(root, Vector3(-18.0, base_y + 0.12, 28.0), 0.0)
+    _spawn_real_market_stall(root, Vector3(18.0, base_y + 0.12, 28.0), PI)
 
-func _build_house(parent: Node3D, base_pos: Vector3, size: Vector3, variant: int, rng: RandomNumberGenerator) -> void:
+func _build_house(parent: Node3D, base_pos: Vector3, size: Vector3, variant: int) -> void:
     var body := StaticBody3D.new()
     body.name = "House_%d" % variant
     body.position = Vector3(base_pos.x, base_pos.y + size.y * 0.5, base_pos.z)
@@ -209,14 +209,11 @@ func _build_house(parent: Node3D, base_pos: Vector3, size: Vector3, variant: int
     door.position = Vector3(0.0, -size.y * 0.5 + 1.6, size.z * 0.5 + 0.10)
     body.add_child(door)
 
-    if rng != null and rng.randf() < 0.45:
-        _spawn_real_crate(parent, Vector3(base_pos.x + size.x * 0.6, base_pos.y + 0.1, base_pos.z + size.z * 0.35), rng.randf_range(-PI, PI))
-
-func _spawn_real_crate(parent: Node3D, pos: Vector3, yaw: float) -> void:
-    var node := CRATE_SCENE.instantiate() as Node3D
+func _spawn_real_market_stall(parent: Node3D, pos: Vector3, yaw: float) -> void:
+    var node := MARKET_STALL_SCENE.instantiate() as Node3D
     if node == null:
         return
-    node.name = "RealPackCrate"
+    node.name = "RealMarketStall"
     node.position = pos
     node.rotation.y = yaw
     parent.add_child(node)
