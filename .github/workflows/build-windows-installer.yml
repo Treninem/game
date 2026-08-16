@@ -10,6 +10,7 @@ on:
       - "scripts/**"
       - "story/**"
       - "tools/**"
+      - "export_presets.cfg"
       - ".github/workflows/build-windows-installer.yml"
   workflow_dispatch:
 
@@ -22,11 +23,12 @@ concurrency:
 
 env:
   GODOT_VERSION: "4.7.1"
+  GODOT_TEMPLATE_VERSION: "4.7.1.stable"
 
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -40,6 +42,26 @@ jobs:
           $godot = Get-ChildItem godot -Filter 'Godot_v*.exe' -Recurse | Select-Object -First 1
           if (-not $godot) { throw 'Godot executable not found' }
           "GODOT_EXE=$($godot.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Install matching Godot export templates
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $templatesRoot = Join-Path $env:APPDATA ('Godot\export_templates\' + $env:GODOT_TEMPLATE_VERSION)
+          $templatesArchive = 'Godot_v' + $env:GODOT_VERSION + '-stable_export_templates.tpz'
+          $templatesUrl = 'https://github.com/godotengine/godot/releases/download/' + $env:GODOT_VERSION + '-stable/' + $templatesArchive
+          Invoke-WebRequest -Uri $templatesUrl -OutFile export_templates.tpz
+          New-Item -ItemType Directory -Force -Path $templatesRoot | Out-Null
+          Expand-Archive export_templates.tpz -DestinationPath export_templates_unpack -Force
+          $templateFiles = Get-ChildItem export_templates_unpack -Recurse -File
+          if (-not $templateFiles) { throw 'Godot export templates archive is empty' }
+          $sourceTemplates = Join-Path (Get-Location) 'export_templates_unpack\templates'
+          if (-not (Test-Path $sourceTemplates)) { throw 'Godot export templates archive has unexpected layout' }
+          Copy-Item (Join-Path $sourceTemplates '*') $templatesRoot -Recurse -Force
+          '4.7.1.stable' | Set-Content -Path (Join-Path $templatesRoot 'version.txt') -Encoding ascii
+          $releaseTemplate = Join-Path $templatesRoot 'windows_release_x86_64.exe'
+          if (-not (Test-Path $releaseTemplate)) { throw "Windows x86_64 release template was not installed: $releaseTemplate" }
+          Write-Host "Installed export templates in $templatesRoot"
 
       - name: Read game version
         shell: pwsh
@@ -63,6 +85,7 @@ jobs:
       - name: Export Windows build
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
           New-Item -ItemType Directory -Force -Path build\windows | Out-Null
           & "$env:GODOT_EXE" --headless --path . --export-release "Windows Desktop" build\windows\ImPuls.exe
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -107,6 +130,7 @@ jobs:
       - name: Build installer with Inno Setup
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
           & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" build\installer.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           if (-not (Test-Path build\installer\ImPuls-Setup.exe)) { throw 'Installer was not created' }
