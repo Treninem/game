@@ -18,6 +18,11 @@ func _fail(code: int, message: String) -> void:
     push_error("Movement smoke failed: %s" % message)
     get_tree().quit(code)
 
+func _story_fail(message: String) -> bool:
+    var clean := message.replace("\r", " ").replace("\n", " ")
+    print("::error title=Story start detail::%s" % clean)
+    return false
+
 func _run_test() -> void:
     var tree := get_tree()
     var world_data := get_node_or_null("/root/WorldData")
@@ -138,69 +143,67 @@ func _assert_story_start_world(scene: Node, world_data: Node, player: CharacterB
     var spawn_xz := Vector2(player.global_position.x, player.global_position.z)
     var expected := GEOGRAPHY.START_SPAWN
     if spawn_xz.distance_to(expected) > 6.0:
-        print("Story spawn mismatch: actual=", spawn_xz, " expected=", expected)
-        return false
-    if String(world_data.call("biome_at", spawn_xz)) != "forest":
-        print("Story start biome is not forest")
-        return false
-    if String(world_data.call("state_id_at", spawn_xz)) != "astern":
-        print("Story start political region is not Asterna")
-        return false
-    if GEOGRAPHY.distance_to_start_river(spawn_xz) > GEOGRAPHY.START_RIVER_BANK_WIDTH + 4.0:
-        print("Story spawn is not on the river bank")
-        return false
-    if expected.distance_to(GEOGRAPHY.ASTERN_CAPITAL) < 8000.0:
-        print("Asterna capital is not sufficiently far from the prologue spawn")
-        return false
+        return _story_fail("spawn mismatch: actual=%s expected=%s distance=%.2f" % [spawn_xz, expected, spawn_xz.distance_to(expected)])
+    var biome := String(world_data.call("biome_at", spawn_xz))
+    if biome != "forest":
+        return _story_fail("story start biome is %s instead of forest at %s" % [biome, spawn_xz])
+    var state_id := String(world_data.call("state_id_at", spawn_xz))
+    if state_id != "astern":
+        return _story_fail("story start political region is %s instead of astern at %s" % [state_id, spawn_xz])
+    var river_distance := GEOGRAPHY.distance_to_start_river(spawn_xz)
+    if river_distance > GEOGRAPHY.START_RIVER_BANK_WIDTH + 4.0:
+        return _story_fail("story spawn is not on river bank: distance=%.2f limit=%.2f" % [river_distance, GEOGRAPHY.START_RIVER_BANK_WIDTH + 4.0])
+    var capital_distance := expected.distance_to(GEOGRAPHY.ASTERN_CAPITAL)
+    if capital_distance < 8000.0:
+        return _story_fail("Asterna capital is too close to prologue spawn: distance=%.2f" % capital_distance)
 
     var start_region := scene.get_node_or_null("World/StartRegion")
     if start_region == null:
-        return false
-    if start_region.get_node_or_null("StartRiver") == null or start_region.get_node_or_null("OldFord") == null:
-        return false
+        return _story_fail("World/StartRegion node is missing")
+    if start_region.get_node_or_null("StartRiver") == null:
+        return _story_fail("StartRegion/StartRiver is missing")
+    if start_region.get_node_or_null("OldFord") == null:
+        return _story_fail("StartRegion/OldFord is missing")
     if start_region.get_node_or_null("RealNatureDetails") == null:
-        print("Real CC0 nature detail layer missing")
-        return false
+        return _story_fail("StartRegion/RealNatureDetails is missing")
 
     var river_count := int(start_region.get("river_segment_count"))
     var ford_count := int(start_region.get("ford_stone_count"))
     var real_tree_count := int(start_region.get("real_tree_count"))
     var real_detail_count := int(start_region.get("real_nature_detail_count"))
     if river_count < 20 or ford_count < 8:
-        print("Start region incomplete: river_segments=", river_count, " ford_stones=", ford_count)
-        return false
+        return _story_fail("start region incomplete: river_segments=%d ford_stones=%d" % [river_count, ford_count])
     if real_tree_count < 12 or real_detail_count < 35:
-        print("Real nature layer too sparse: trees=", real_tree_count, " detail=", real_detail_count)
-        return false
+        return _story_fail("real nature layer too sparse: trees=%d detail=%d" % [real_tree_count, real_detail_count])
 
     var signs := start_region.get_node_or_null("CivilizationSigns")
     if signs == null:
-        print("Civilization signs node missing")
-        return false
-    if signs.get_node_or_null("OldCartTrack") == null or signs.get_node_or_null("OldLoggingSigns") == null or signs.get_node_or_null("OldFishingPlace") == null:
-        print("Required prologue civilization evidence missing")
-        return false
+        return _story_fail("CivilizationSigns node is missing")
+    if signs.get_node_or_null("OldCartTrack") == null:
+        return _story_fail("CivilizationSigns/OldCartTrack is missing")
+    if signs.get_node_or_null("OldLoggingSigns") == null:
+        return _story_fail("CivilizationSigns/OldLoggingSigns is missing")
+    if signs.get_node_or_null("OldFishingPlace") == null:
+        return _story_fail("CivilizationSigns/OldFishingPlace is missing")
     var road_count := int(signs.get("road_segment_count"))
     var evidence_count := int(signs.get("civilization_sign_count"))
     var logging_count := int(signs.get("logging_sign_count"))
     var fishing_count := int(signs.get("fishing_sign_count"))
     if road_count < 35 or evidence_count < 45 or logging_count < 6 or fishing_count < 4:
-        print("Civilization evidence incomplete: road=", road_count, " total=", evidence_count, " logging=", logging_count, " fishing=", fishing_count)
-        return false
+        return _story_fail("civilization evidence incomplete: road=%d total=%d logging=%d fishing=%d" % [road_count, evidence_count, logging_count, fishing_count])
 
     var city := scene.get_node_or_null("World/CityDistrict")
     if city == null:
-        return false
+        return _story_fail("World/CityDistrict node is missing")
     var loaded = city.get("loaded_cells")
     if not (loaded is Dictionary):
-        return false
+        return _story_fail("CityDistrict.loaded_cells is not a Dictionary")
     if not loaded.is_empty():
-        print("Capital cells incorrectly loaded at forest spawn: ", loaded.size())
-        return false
+        return _story_fail("capital cells incorrectly loaded at forest spawn: count=%d" % loaded.size())
     if scene.get_node_or_null("World/StoryStartSurface") == null:
-        return false
+        return _story_fail("World/StoryStartSurface node is missing")
 
-    print("Story world smoke: spawn=", spawn_xz, " river=", river_count, " ford=", ford_count, " real_trees=", real_tree_count, " real_detail=", real_detail_count, " road=", road_count, " evidence=", evidence_count, " capital_distance=", expected.distance_to(GEOGRAPHY.ASTERN_CAPITAL))
+    print("Story world smoke: spawn=", spawn_xz, " river=", river_count, " ford=", ford_count, " real_trees=", real_tree_count, " real_detail=", real_detail_count, " road=", road_count, " evidence=", evidence_count, " capital_distance=", capital_distance)
     return true
 
 func _assert_hud(scene: Node) -> bool:
