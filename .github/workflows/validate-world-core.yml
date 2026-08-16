@@ -73,7 +73,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if grep -R -n -F 'res://assets/staging/' --include='*.gd' --include='*.tscn' --include='*.tres' scripts scenes || grep -n -F 'res://assets/staging/' project.godot; then
+          staging_matches="$(
+            {
+              grep -R -n -F 'res://assets/staging/' --include='*.gd' --include='*.tscn' --include='*.tres' scripts scenes || true
+              grep -n -F 'res://assets/staging/' project.godot || true
+            }
+          )"
+          if [[ -n "$staging_matches" ]]; then
+            while IFS= read -r match; do
+              path="${match%%:*}"
+              rest="${match#*:}"
+              line="${rest%%:*}"
+              message="${rest#*:}"
+              echo "::error file=${path},line=${line},title=Staging runtime reference::${message}"
+            done <<< "$staging_matches"
             echo '::error::Active runtime must not reference res://assets/staging/. Promote runtime assets to assets/production first.'
             exit 1
           fi
