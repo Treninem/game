@@ -47,14 +47,14 @@ func choose(index: int) -> void:
             else:
                 close_dialogue()
         "start_city_quest":
-            if GameState.start_city_quest():
+            if CityQuestSystem.start_city_quest():
                 open_dialogue("Радан", "Материалы нужны крепкие: 6 камня и 4 древесины. Вернёшься — сразу пущу их на ремонт ворот.", [{"text": "Сделаю.", "action": "close"}])
             else:
                 close_dialogue()
         "complete_city_quest":
-            if GameState.complete_city_quest():
+            if CityQuestSystem.complete_city_quest():
                 open_dialogue("Радан", "Вот это дело. Скобы и подпорки подготовлю сам. Держи оплату — 35 монет. Стража запомнит, кто помог Южному кварталу.", [{"text": "Рад помочь.", "action": "close"}])
             else:
-                open_dialogue("Радан", "Материалов не хватает. Нужно ровно 6 камня и 4 древесины.", [{"text": "Вернусь позже.", "action": "close"}])
+                open_dialogue("Радан", "Материалов не хватает. Нужно 6 камня и 4 древесины.", [{"text": "Вернусь позже.", "action": "close"}])
         _:
             close_dialogue()
