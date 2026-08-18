@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.10.6-stable"
+const VERSION := "0.10.7-stable"
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PLAYER_GROUND_CLEARANCE := 0.08
 const RESPAWN_POSITION := Vector3(GEOGRAPHY.START_SPAWN.x, PLAYER_GROUND_CLEARANCE, GEOGRAPHY.START_SPAWN.y)
