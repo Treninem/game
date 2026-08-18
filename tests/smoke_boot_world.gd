@@ -1,60 +1,85 @@
 extends Node
 
+var finished := false
+
 func _ready() -> void:
-    call_deferred("_run_test")
+    process_mode = Node.PROCESS_MODE_ALWAYS
+    call_deferred("_run")
 
 func _fail(code: int, message: String) -> void:
-    var clean := message.replace("\r", " ").replace("\n", " ")
-    print("::error title=Boot smoke::%s" % clean)
-    push_error("Boot smoke: %s" % message)
+    if finished:
+        return
+    finished = true
+    push_error("Boot/world smoke: %s" % message)
+    print("BOOT_WORLD_SMOKE_FAIL: ", message)
     get_tree().quit(code)
 
-func _run_test() -> void:
-    var packed := load("res://scenes/stage1.tscn") as PackedScene
-    if packed == null:
-        _fail(2, "stage scene missing")
+func _pass(message: String) -> void:
+    if finished:
         return
-    var scene := packed.instantiate()
-    get_tree().root.add_child(scene)
-    for _i in range(24):
-        await get_tree().process_frame
-
-    var player := scene.get_node_or_null("World/Player") as CharacterBody3D
-    var camera := scene.get_node_or_null("World/Player/CameraPivot/Camera3D") as Camera3D
-    var env_host := scene.get_node_or_null("World/WorldEnvironmentController")
-    var hud := scene.get_node_or_null("UI/HUD") as Control
-    var pause_menu := scene.get_node_or_null("UI/GameMenu") as Control
-    var gameplay_panels := scene.get_node_or_null("UI/GameplayPanels") as Control
-
-    if player == null or camera == null or env_host == null or hud == null:
-        _fail(3, "mandatory world nodes missing")
-        return
-    if camera.far < 900.0:
-        _fail(4, "camera view distance regressed")
-        return
-    if pause_menu == null or gameplay_panels == null or pause_menu.visible or gameplay_panels.visible:
-        _fail(5, "blocking UI visible on gameplay start")
-        return
-    if not hud.visible:
-        _fail(6, "HUD is hidden")
-        return
-
-    var found_world_environment := false
-    for child in env_host.get_children():
-        if child is WorldEnvironment and (child as WorldEnvironment).environment != null:
-            found_world_environment = true
-            break
-    if not found_world_environment:
-        _fail(7, "world environment was not created")
-        return
-
-    if WorldRoads.road_chunk_count() < 1 or WorldRoads.road_patch_count() < 4:
-        _fail(8, "streamed primary road surface did not materialize near the opening region")
-        return
-
-    if WorldWater.water_chunk_count() < 1 or WorldWater.patch_count_for("river") < 2:
-        _fail(9, "streamed prologue river surface did not materialize near the opening region")
-        return
-
-    print("Boot smoke passed: world, camera, HUD, environment, roads and streamed river water are stable")
+    finished = true
+    print("BOOT_WORLD_SMOKE_PASS: ", message)
     get_tree().quit(0)
+
+func _wait_for_scene_name(name: String, timeout_seconds: float) -> bool:
+    var deadline := Time.get_ticks_msec() + roundi(timeout_seconds * 1000.0)
+    while Time.get_ticks_msec() < deadline:
+        var scene := get_tree().current_scene
+        if scene != null and scene.name == name:
+            return true
+        await get_tree().process_frame
+    return false
+
+func _run() -> void:
+    var boot := load("res://scenes/boot_launcher.tscn") as PackedScene
+    if boot == null:
+        _fail(2, "boot launcher scene is missing")
+        return
+    var instance := boot.instantiate()
+    if instance == null:
+        _fail(3, "boot launcher could not be instantiated")
+        return
+    get_tree().root.add_child(instance)
+
+    if not await _wait_for_scene_name("MainMenu", 15.0):
+        _fail(4, "main menu did not open from boot launcher")
+        return
+    var menu := get_tree().current_scene
+    var music := menu.get_node_or_null("MenuMusic") as AudioStreamPlayer
+    if music == null or music.stream == null:
+        _fail(5, "menu music stream is missing")
+        return
+    if not music.playing:
+        _fail(6, "menu music is not playing")
+        return
+    var button_texture = menu.get("button_texture")
+    if button_texture == null:
+        _fail(7, "menu button texture was not decoded")
+        return
+
+    if not menu.has_method("_new_game"):
+        _fail(8, "new game action is missing")
+        return
+    menu.call("_new_game")
+    if not await _wait_for_scene_name("WorldLoading", 8.0):
+        _fail(9, "new game did not open the world loading screen")
+        return
+
+    var deadline := Time.get_ticks_msec() + 35000
+    while Time.get_ticks_msec() < deadline:
+        var scene := get_tree().current_scene
+        if scene != null and scene.name == "Bootstrap":
+            var player := scene.get_node_or_null("World/Player") as CharacterBody3D
+            var streamer := scene.get_node_or_null("World/WorldStreamer")
+            if player != null and streamer != null:
+                var loaded = streamer.get("loaded_chunks")
+                var collisions = streamer.get("collision_chunks")
+                if loaded is Dictionary and collisions is Dictionary and not loaded.is_empty() and not collisions.is_empty():
+                    var ray := PhysicsRayQueryParameters3D.create(player.global_position + Vector3.UP * 2.0, player.global_position + Vector3.DOWN * 4.0)
+                    ray.exclude = [player.get_rid()]
+                    ray.collision_mask = 1
+                    if not player.get_world_3d().direct_space_state.intersect_ray(ray).is_empty():
+                        _pass("boot -> menu -> new game -> generated terrain/collision -> playable world")
+                        return
+        await get_tree().process_frame
+    _fail(10, "world did not become playable within 35 seconds")
