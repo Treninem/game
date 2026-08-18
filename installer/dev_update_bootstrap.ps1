@@ -46,6 +46,17 @@ function Resolve-GitExecutable {
     return $null
 }
 
+function Clear-GeneratedUntrackedFiles([string]$Git, [string]$Root) {
+    foreach ($relative in @(".godot", "build/windows", "installer/output", "dist")) {
+        $path = Join-Path $Root ($relative -replace '/', '\')
+        if (-not (Test-Path $path)) { continue }
+        & $Git -C $Root clean -fd -- $relative 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            throw "Не удалось очистить временные файлы: $relative"
+        }
+    }
+}
+
 try {
     $ProjectDir = [IO.Path]::GetFullPath($ProjectDir)
     if (-not (Test-Path (Join-Path $ProjectDir "project.godot"))) {
@@ -82,8 +93,12 @@ try {
         throw "Есть локальные изменения в отслеживаемых файлах. Чтобы ничего не потерять, автообновление остановлено. Сначала Commit/Stash/Discard этих изменений в GitHub Desktop."
     }
 
+    Clear-GeneratedUntrackedFiles $git $ProjectDir
+
     & $git -C $ProjectDir fetch origin main --prune
-    if ($LASTEXITCODE -ne 0) { throw "Не удалось получить изменения origin/main." }
+    if ($LASTEXITCODE -ne 0) {
+        throw "Не удалось получить изменения origin/main."
+    }
 
     $local = (& $git -C $ProjectDir rev-parse HEAD | Select-Object -First 1).ToString().Trim()
     $remote = (& $git -C $ProjectDir rev-parse origin/main | Select-Object -First 1).ToString().Trim()
@@ -94,7 +109,7 @@ try {
 
     & $git -C $ProjectDir merge --ff-only origin/main
     if ($LASTEXITCODE -ne 0) {
-        throw "Не удалось выполнить безопасное fast-forward обновление. Локальные файлы не перезаписывались принудительно."
+        throw "Не удалось выполнить безопасное fast-forward обновление. Локальные исходники не перезаписывались принудительно."
     }
 
     $newHead = (& $git -C $ProjectDir rev-parse --short=8 HEAD | Select-Object -First 1).ToString().Trim()
