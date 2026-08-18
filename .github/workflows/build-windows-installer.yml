@@ -10,6 +10,7 @@ on:
       - "scripts/**"
       - "story/**"
       - "tools/**"
+      - "installer/**"
       - "export_presets.cfg"
       - ".github/workflows/build-windows-installer.yml"
   workflow_dispatch:
@@ -32,6 +33,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Install Godot
         shell: pwsh
@@ -53,15 +56,12 @@ jobs:
           Invoke-WebRequest -Uri $templatesUrl -OutFile export_templates.tpz
           New-Item -ItemType Directory -Force -Path $templatesRoot | Out-Null
           Expand-Archive export_templates.tpz -DestinationPath export_templates_unpack -Force
-          $templateFiles = Get-ChildItem export_templates_unpack -Recurse -File
-          if (-not $templateFiles) { throw 'Godot export templates archive is empty' }
           $sourceTemplates = Join-Path (Get-Location) 'export_templates_unpack\templates'
           if (-not (Test-Path $sourceTemplates)) { throw 'Godot export templates archive has unexpected layout' }
           Copy-Item (Join-Path $sourceTemplates '*') $templatesRoot -Recurse -Force
           '4.7.1.stable' | Set-Content -Path (Join-Path $templatesRoot 'version.txt') -Encoding ascii
           $releaseTemplate = Join-Path $templatesRoot 'windows_release_x86_64.exe'
           if (-not (Test-Path $releaseTemplate)) { throw "Windows x86_64 release template was not installed: $releaseTemplate" }
-          Write-Host "Installed export templates in $templatesRoot"
 
       - name: Read game version
         shell: pwsh
@@ -74,7 +74,7 @@ jobs:
           if ($fullVersion -notmatch '^([0-9]+(?:\.[0-9]+){1,3})') { throw "Installer version is not numeric: $fullVersion" }
           $appVersion = $Matches[1]
           "IMPULS_VERSION=$appVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          Write-Host "Building ImPuls version $appVersion from project version $fullVersion"
+          "IMPULS_BUILD_TAG=build-${{ github.run_number }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Import and validate project
         shell: pwsh
@@ -91,76 +91,58 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           if (-not (Test-Path build\windows\ImPuls.exe)) { throw 'Windows export was not created' }
 
-      - name: Create installer script
-        shell: pwsh
-        run: |
-          $iss = @"
-          #define MyAppName "ImPuls"
-          #define MyAppVersion "$env:IMPULS_VERSION"
-          #define MyAppPublisher "ImPuls"
-          #define MyAppExeName "ImPuls.exe"
-
-          [Setup]
-          AppId={{9F4A0D68-1A8A-4F52-9F4B-IMPULS0001}}
-          AppName={#MyAppName}
-          AppVersion={#MyAppVersion}
-          AppPublisher={#MyAppPublisher}
-          DefaultDirName={autopf}\ImPuls
-          DefaultGroupName=ImPuls
-          OutputDir=build\installer
-          OutputBaseFilename=ImPuls-Setup
-          Compression=lzma2
-          SolidCompression=yes
-          ArchitecturesAllowed=x64compatible
-          ArchitecturesInstallIn64BitMode=x64compatible
-          UninstallDisplayIcon={app}\{#MyAppExeName}
-
-          [Files]
-          Source: "build\windows\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
-
-          [Icons]
-          Name: "{group}\ImPuls"; Filename: "{app}\{#MyAppExeName}"
-          Name: "{commondesktop}\ImPuls"; Filename: "{app}\{#MyAppExeName}"
-
-          [Run]
-          Filename: "{app}\{#MyAppExeName}"; Description: "Запустить ImPuls"; Flags: nowait postinstall skipifsilent
-          "@
-          $iss | Set-Content -Path build\installer.iss -Encoding UTF8
-
-      - name: Build installer with Inno Setup
+      - name: Prepare stable release metadata
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" build\installer.iss
+          $env:IMPULS_BUILD_TAG | Set-Content -Path installer\release_tag.txt -Encoding ascii
+
+      - name: Build updater-aware installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          & $iscc "/DMyBuildTag=$env:IMPULS_BUILD_TAG" "/DMyAppVersion=$env:IMPULS_VERSION" "installer\ImPuls.iss"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          if (-not (Test-Path build\installer\ImPuls-Setup.exe)) { throw 'Installer was not created' }
+          if (-not (Test-Path installer\output\ImPuls-Setup.exe)) { throw 'Installer was not created' }
 
       - name: Create SHA256
         shell: pwsh
         run: |
-          $hash = (Get-FileHash build\installer\ImPuls-Setup.exe -Algorithm SHA256).Hash.ToLower()
-          "$hash  ImPuls-Setup.exe" | Set-Content build\installer\ImPuls-Setup.exe.sha256 -Encoding ascii
+          $hash = (Get-FileHash installer\output\ImPuls-Setup.exe -Algorithm SHA256).Hash.ToLower()
+          "$hash  ImPuls-Setup.exe" | Set-Content installer\output\ImPuls-Setup.exe.sha256 -Encoding ascii
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
           name: ImPuls-Windows-Installer
           path: |
-            build/installer/ImPuls-Setup.exe
-            build/installer/ImPuls-Setup.exe.sha256
+            installer/output/ImPuls-Setup.exe
+            installer/output/ImPuls-Setup.exe.sha256
           if-no-files-found: error
           retention-days: 30
 
-      - name: Publish GitHub release
+      - name: Move stable tag to this build
+        if: github.ref == 'refs/heads/main'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f stable "$env:GITHUB_SHA"
+          git push origin refs/tags/stable --force
+
+      - name: Publish stable GitHub release
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: nightly
-          name: ImPuls Windows — latest
-          prerelease: true
-          make_latest: false
+          tag_name: stable
+          name: ${{ env.IMPULS_BUILD_TAG }}
+          prerelease: false
+          make_latest: true
+          fail_on_unmatched_files: true
           files: |
-            build/installer/ImPuls-Setup.exe
-            build/installer/ImPuls-Setup.exe.sha256
+            installer/output/ImPuls-Setup.exe
+            installer/output/ImPuls-Setup.exe.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
