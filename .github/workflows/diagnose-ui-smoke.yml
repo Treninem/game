@@ -6,13 +6,17 @@ on:
     paths:
       - ".github/workflows/diagnose-ui-smoke.yml"
       - "tests/smoke_ui_and_save.gd"
+      - "tests/smoke_boot_world.gd"
+      - "tests/smoke_boot_world.tscn"
       - "scripts/ui_layout_guard.gd"
+      - "scripts/world_loading_readiness.gd"
+      - "scripts/menu_music.gd"
   workflow_dispatch:
 
 jobs:
   diagnose-ui:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,6 +29,9 @@ jobs:
             assets/branding
             assets/ui
             assets/vfx
+            assets/audio/music
+            assets/production/ui
+            assets/production/nature/kenney_nature_kit
             assets/staging/sourcechat_b47
       - name: Install Godot 4.7.1
         shell: bash
@@ -51,9 +58,26 @@ jobs:
             exit 124
           fi
           exit "$status"
+      - name: Run end-to-end boot and world smoke
+        shell: bash
+        run: |
+          set -uo pipefail
+          set +e
+          timeout --signal=TERM --kill-after=5s 55s stdbuf -oL -eL ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_boot_world.tscn 2>&1 | tee boot-world-smoke.log
+          status=${PIPESTATUS[0]}
+          set -e
+          echo "BOOT_WORLD_SMOKE_EXIT=$status"
+          if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+            echo "::error title=Boot/world smoke timeout::Game did not reach a playable generated world"
+            tail -n 160 boot-world-smoke.log
+            exit 124
+          fi
+          exit "$status"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ui-smoke-log
-          path: ui-smoke.log
+          name: game-smoke-logs
+          path: |
+            ui-smoke.log
+            boot-world-smoke.log
           if-no-files-found: ignore
