@@ -43,10 +43,7 @@ func save_game(player: Node3D, slot: int = -1) -> bool:
         "slot": slot,
         "saved_at_unix": int(Time.get_unix_time_from_system()),
         "saved_at": Time.get_datetime_string_from_system(false, true),
-        "player": {
-            "position": [player.global_position.x, player.global_position.y, player.global_position.z],
-            "rotation_y": player.rotation.y
-        },
+        "player": {"position": [player.global_position.x, player.global_position.y, player.global_position.z], "rotation_y": player.rotation.y},
         "game_state": GameState.snapshot()
     }
     return _write_atomic(_slot_path(slot), _backup_path(slot), payload)
@@ -62,7 +59,7 @@ func load_game(player: Node3D, slot: int = -1) -> bool:
     if data.is_empty() or not data.has("player"):
         return false
     var p = data["player"]
-    if typeof(p) != TYPE_DICTIONARY or not p.has("position") or p["position"].size() != 3:
+    if typeof(p) != TYPE_DICTIONARY or not p.has("position") or typeof(p["position"]) != TYPE_ARRAY or p["position"].size() != 3:
         return false
     player.global_position = Vector3(float(p["position"][0]), float(p["position"][1]), float(p["position"][2]))
     player.rotation.y = float(p.get("rotation_y", 0.0))
@@ -74,18 +71,23 @@ func load_game(player: Node3D, slot: int = -1) -> bool:
 func delete_slot(slot: int) -> bool:
     slot = _valid_slot(slot)
     var removed := false
-    for path in [_slot_path(slot), _backup_path(slot)]:
+    for path in [_slot_path(slot), _backup_path(slot), _slot_path(slot) + ".tmp"]:
         if FileAccess.file_exists(path):
             var err := DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
             removed = removed or err == OK
     return removed
 
 func slot_exists(slot: int) -> bool:
-    return FileAccess.file_exists(_slot_path(_valid_slot(slot)))
+    slot = _valid_slot(slot)
+    return FileAccess.file_exists(_slot_path(slot)) or FileAccess.file_exists(_backup_path(slot))
 
 func slot_info(slot: int) -> Dictionary:
     slot = _valid_slot(slot)
     var data := _read_save(_slot_path(slot))
+    var from_backup := false
+    if data.is_empty():
+        data = _read_save(_backup_path(slot))
+        from_backup = not data.is_empty()
     if data.is_empty():
         return {"slot": slot, "exists": false}
     var state = data.get("game_state", {})
@@ -93,13 +95,7 @@ func slot_info(slot: int) -> Dictionary:
     var hour := int(world_minutes / 60.0) % 24
     var minute := int(world_minutes) % 60
     var location := String(state.get("current_location", "неизвестная локация")) if typeof(state) == TYPE_DICTIONARY else "неизвестная локация"
-    return {
-        "slot": slot,
-        "exists": true,
-        "saved_at": String(data.get("saved_at", "неизвестно")),
-        "location": location,
-        "world_time": "%02d:%02d" % [hour, minute]
-    }
+    return {"slot": slot, "exists": true, "saved_at": String(data.get("saved_at", "неизвестно")), "location": location, "world_time": "%02d:%02d" % [hour, minute], "recovered_from_backup": from_backup}
 
 func list_slots() -> Array[Dictionary]:
     var result: Array[Dictionary] = []
@@ -127,12 +123,24 @@ func _write_atomic(path: String, backup_path: String, payload: Dictionary) -> bo
         return false
     file.store_string(JSON.stringify(payload))
     file.close()
-    if FileAccess.file_exists(path):
+    var had_previous := FileAccess.file_exists(path)
+    if had_previous:
         if FileAccess.file_exists(backup_path):
-            DirAccess.remove_absolute(ProjectSettings.globalize_path(backup_path))
-        DirAccess.rename_absolute(ProjectSettings.globalize_path(path), ProjectSettings.globalize_path(backup_path))
+            var backup_remove := DirAccess.remove_absolute(ProjectSettings.globalize_path(backup_path))
+            if backup_remove != OK:
+                DirAccess.remove_absolute(ProjectSettings.globalize_path(temp_path))
+                push_error("Unable to replace previous save backup")
+                return false
+        var move_old := DirAccess.rename_absolute(ProjectSettings.globalize_path(path), ProjectSettings.globalize_path(backup_path))
+        if move_old != OK:
+            DirAccess.remove_absolute(ProjectSettings.globalize_path(temp_path))
+            push_error("Unable to protect previous save before writing new save")
+            return false
     var err := DirAccess.rename_absolute(ProjectSettings.globalize_path(temp_path), ProjectSettings.globalize_path(path))
     if err != OK:
+        if had_previous and not FileAccess.file_exists(path) and FileAccess.file_exists(backup_path):
+            DirAccess.rename_absolute(ProjectSettings.globalize_path(backup_path), ProjectSettings.globalize_path(path))
+        DirAccess.remove_absolute(ProjectSettings.globalize_path(temp_path))
         push_error("Unable to finalize save file")
         return false
     return true
