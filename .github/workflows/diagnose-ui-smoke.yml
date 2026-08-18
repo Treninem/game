@@ -30,6 +30,7 @@ jobs:
             assets/ui
             assets/vfx
             assets/audio/music
+            assets/audio/world
             assets/production/ui
             assets/production/nature/kenney_nature_kit
             assets/staging/sourcechat_b47
