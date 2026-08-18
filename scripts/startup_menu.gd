@@ -39,7 +39,8 @@ func _ready() -> void:
         UpdateManager.status_changed.connect(_on_update_status_changed)
     if not UpdateManager.progress_changed.is_connected(_on_update_progress_changed):
         UpdateManager.progress_changed.connect(_on_update_progress_changed)
-    get_viewport().size_changed.connect(_layout_ui)
+    if not get_viewport().size_changed.is_connected(_layout_ui):
+        get_viewport().size_changed.connect(_layout_ui)
     _refresh_continue_state()
     show_page("home")
     call_deferred("_layout_ui")
@@ -52,14 +53,16 @@ func world_loading_scene() -> String:
 
 func latest_save_slot() -> int:
     var result := 0
-    var newest := ""
+    var newest_unix := -1
     for info in SaveManager.list_slots():
         if not bool(info.get("exists", false)):
             continue
-        var saved_at := String(info.get("saved_at", ""))
-        if result == 0 or saved_at.naturalnocasecmp_to(newest) > 0:
+        var saved_unix := int(info.get("saved_at_unix", -1))
+        if saved_unix >= 0 and saved_unix > newest_unix:
             result = int(info.get("slot", 0))
-            newest = saved_at
+            newest_unix = saved_unix
+        elif newest_unix < 0 and result == 0:
+            result = int(info.get("slot", 0))
     return result
 
 func continue_is_available() -> bool:
@@ -96,7 +99,6 @@ func close_settings_overlay() -> void:
 func _build_ui() -> void:
     button_texture = MENU_ASSETS.button_texture()
     if button_texture == null:
-        push_error("Main menu button texture is unavailable; using procedural fallback")
         button_texture = _fallback_button_texture()
 
     var bg := TextureRect.new()
@@ -216,16 +218,20 @@ func _layout_ui() -> void:
     var size := get_viewport_rect().size
     var edge := clampf(size.x * 0.045, 18.0, 72.0)
     var width := clampf(size.x * 0.285, 300.0, 410.0)
-    var height := minf(clampf(size.y - edge * 2.0, 500.0, 690.0), size.y - 16.0)
+    var height := clampf(size.y - edge * 2.0, 500.0, 690.0)
+    if height > size.y - 16.0:
+        height = maxf(320.0, size.y - 16.0)
     frame.position = Vector2(edge, maxf(8.0, (size.y - height) * 0.5))
-    frame.size = Vector2(width, height)
-    var x := frame.position.x + width + clampf(size.x * 0.025, 16.0, 38.0)
+    frame.size = Vector2(minf(width, maxf(280.0, size.x - edge * 2.0)), height)
+    var x := frame.position.x + frame.size.x + clampf(size.x * 0.025, 16.0, 38.0)
     if size.x < 900.0:
-        x = maxf(edge, size.x * 0.34)
-    var cw := maxf(260.0, size.x - x - edge)
-    var ch := minf(height, maxf(390.0, size.y * 0.74))
-    content_frame.position = Vector2(x, maxf(8.0, (size.y - ch) * 0.5))
-    content_frame.size = Vector2(cw, ch)
+        x = edge
+    var cw := maxf(0.0, size.x - x - edge)
+    var ch := minf(height, maxf(320.0, size.y * 0.74))
+    content_frame.visible = current_page != "home" and cw >= 240.0
+    if content_frame.visible:
+        content_frame.position = Vector2(x, maxf(8.0, (size.y - ch) * 0.5))
+        content_frame.size = Vector2(cw, ch)
 
 func _show_saves() -> void:
     content_title.text = "Сохранения"
