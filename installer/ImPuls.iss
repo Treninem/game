@@ -1,9 +1,11 @@
 #ifndef MyBuildTag
-  #define MyBuildTag "local"
+  #define MyBuildTag "build-0"
+#endif
+#ifndef MyAppVersion
+  #define MyAppVersion "0.10.4"
 #endif
 
 #define MyAppName "ImPuls"
-#define MyAppVersion "0.10.4"
 #define MyAppPublisher "Treninem"
 
 [Setup]
@@ -16,7 +18,7 @@ DefaultDirName={localappdata}\Programs\ImPuls
 DefaultGroupName=ImPuls
 PrivilegesRequired=lowest
 OutputDir=output
-OutputBaseFilename=ImPuls-Setup-{#MyBuildTag}
+OutputBaseFilename=ImPuls-Setup
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
