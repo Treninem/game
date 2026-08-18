@@ -123,13 +123,13 @@ static func _safe_int_variant(value: Variant, fallback: int = 0) -> int:
     if value is int:
         return value
     if value is float:
-        return int(value)
+        return roundi(value)
     if value is String:
         var text := String(value).strip_edges()
         if text.is_valid_int():
             return text.to_int()
         if text.is_valid_float():
-            return int(text.to_float())
+            return roundi(text.to_float())
     return fallback
 
 static func _safe_ratio(value: Variant, fallback: float = 0.0) -> float:
@@ -267,11 +267,11 @@ static func _stage_for(checks: Dictionary) -> String:
 
 static func _detail_for(stage: String, stream: Dictionary, settlement: Dictionary) -> String:
     if stage == "Загрузка стартовой области":
-        return "Видимые чанки: %d из %d" % [int(stream.get("visual_loaded",0)), int(stream.get("visual_required",0))]
+        return "Видимые чанки: %d из %d" % [_safe_int_variant(stream.get("visual_loaded", 0), 0), _safe_int_variant(stream.get("visual_required", 0), 0)]
     if stage == "Подготовка физики и коллизий":
-        return "Физические чанки: %d из %d" % [int(stream.get("collision_loaded",0)), int(stream.get("collision_required",0))]
+        return "Физические чанки: %d из %d" % [_safe_int_variant(stream.get("collision_loaded", 0), 0), _safe_int_variant(stream.get("collision_required", 0), 0)]
     if stage in ["Загрузка поселений","Загрузка зданий","Загрузка интерьеров","Подготовка NPC"]:
-        return "Поселения рядом: %d из %d" % [int(settlement.get("loaded",0)), int(settlement.get("expected",0))]
+        return "Поселения рядом: %d из %d" % [_safe_int_variant(settlement.get("loaded", 0), 0), _safe_int_variant(settlement.get("expected", 0), 0)]
     return "Основные системы готовы; детали мира продолжают загружаться в фоне"
 
 static func _empty(stage: String) -> Dictionary:
