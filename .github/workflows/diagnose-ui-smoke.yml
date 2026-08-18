@@ -8,9 +8,11 @@ on:
       - "tests/smoke_ui_and_save.gd"
       - "tests/smoke_boot_world.gd"
       - "tests/smoke_boot_world.tscn"
+      - "tests/test_world_loading_readiness.gd"
       - "scripts/ui_layout_guard.gd"
       - "scripts/world_loading_readiness.gd"
       - "scripts/menu_music.gd"
+      - "scripts/world_loading.gd"
       - "scenes/main_menu.tscn"
       - "assets/audio/music/production/impuls_menu_slow_down.mp3"
   workflow_dispatch:
@@ -56,6 +58,21 @@ jobs:
       - name: Import project
         shell: bash
         run: timeout 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Test world readiness numeric guards
+        shell: bash
+        run: |
+          set -uo pipefail
+          set +e
+          timeout --signal=TERM --kill-after=5s 30s stdbuf -oL -eL ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/test_world_loading_readiness.gd 2>&1 | tee readiness-test.log
+          status=${PIPESTATUS[0]}
+          set -e
+          echo "READINESS_TEST_EXIT=$status"
+          if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+            echo "::error title=Readiness test timeout::World readiness numeric guard test did not exit"
+            tail -n 120 readiness-test.log
+            exit 124
+          fi
+          exit "$status"
       - name: Run bounded UI smoke
         shell: bash
         run: |
@@ -91,6 +108,7 @@ jobs:
         with:
           name: game-smoke-logs
           path: |
+            readiness-test.log
             ui-smoke.log
             boot-world-smoke.log
           if-no-files-found: ignore
