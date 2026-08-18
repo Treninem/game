@@ -101,10 +101,10 @@ func _on_request_completed(_result: int, response_code: int, _headers: PackedStr
     latest_tag = String(parsed.get("tag_name", "stable"))
     latest_name = String(parsed.get("name", ""))
     var local := local_build_tag()
-    update_available = _is_remote_newer(local, latest_name)
+    update_available = _is_remote_newer(local, latest_tag)
     progress_changed.emit("Проверка стабильного канала завершена", downloaded, maxi(downloaded, total), 100.0)
     if update_available:
-        status_changed.emit("Доступно стабильное обновление: %s (установлено: %s). Будет загружена только дельта." % [latest_name, local], true)
+        status_changed.emit("Доступно стабильное обновление: %s (установлено: %s). Будет загружена только дельта." % [latest_tag, local], true)
     else:
         status_changed.emit("Установлена последняя стабильная версия: %s" % local, false)
 
