@@ -4,10 +4,6 @@ const VISUAL_RADIUS: int = 2
 const PHYSICS_RADIUS: int = 1
 const SETTLEMENT_LOAD_RADIUS: float = 980.0
 
-# Startup must never deadlock because a non-critical decorative subsystem is late.
-# Terrain, collision, spawn, gameplay, environment, camera and ground are the
-# hard gate. Rivers, vegetation, buildings and NPCs continue streaming after
-# the playable surface is ready.
 const CRITICAL_CHECKS := [
     "save", "spawn", "region", "terrain", "collisions", "gameplay",
     "environment", "camera", "ground"
@@ -17,26 +13,24 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
     if world == null or player == null or not player.is_inside_tree():
         return _empty("Ожидание игрового мира")
 
-    var stream := _stream_state(world.get_node_or_null("World/WorldStreamer"), Vector2(player.global_position.x, player.global_position.z))
+    var pos2 := Vector2(player.global_position.x, player.global_position.z)
+    var stream := _stream_state(world.get_node_or_null("World/WorldStreamer"), pos2)
     var settlement := _settlement_state(
         world.get_node_or_null("World/Settlements"),
         world.get_node_or_null("World/SettlementInteriorVisuals"),
-        Vector2(player.global_position.x, player.global_position.z)
+        pos2
     )
     var start_region := world.get_node_or_null("World/StartRegion")
     var bootstrap := world.get_node_or_null("Bootstrap")
-    var world_data_ready := WorldData != null
-    var save_ready := SaveManager != null and bootstrap != null
-    var pos2 := Vector2(player.global_position.x, player.global_position.z)
-
     var city := world.get_node_or_null("World/CityDistrict")
+
     var city_ready := false
     if city != null:
         var cells: Variant = city.get("loaded_cells")
         city_ready = cells is Dictionary and not (cells as Dictionary).is_empty()
 
-    var bootstrap_ready: bool = bool(world.get("startup_state_ready"))
-    var spawn_ready: bool = world_data_ready and WorldData.inside_world(pos2)
+    var bootstrap_ready: bool = _safe_bool_property(world, "startup_state_ready", false)
+    var spawn_ready: bool = WorldData != null and WorldData.inside_world(pos2)
     var region_ready: bool = float(stream.get("visual_ratio", 0.0)) >= 0.999
     var terrain_ready: bool = bool(stream.get("center_terrain", false))
     var collision_ready: bool = float(stream.get("collision_ratio", 0.0)) >= 0.999
@@ -53,7 +47,7 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
     var ground_ready: bool = terrain_ready and collision_ready and _ground_below(player)
 
     var checks := {
-        "save": save_ready and bootstrap_ready,
+        "save": SaveManager != null and bootstrap != null and bootstrap_ready,
         "spawn": spawn_ready,
         "region": region_ready,
         "terrain": terrain_ready,
@@ -78,7 +72,7 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
         "interiors":0.03, "npcs":0.04, "items":0.03, "gameplay":0.05, "environment":0.04,
         "camera":0.03, "ground":0.04
     }
-    var ratio: float = 0.0
+    var ratio := 0.0
     for key: Variant in checks:
         if bool(checks[key]):
             ratio += float(weights.get(key, 0.0))
@@ -99,25 +93,27 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
         "checks":checks
     }
 
+static func _safe_bool_property(node: Object, property: StringName, fallback: bool = false) -> bool:
+    if node == null or not is_instance_valid(node):
+        return fallback
+    var value: Variant = node.get(property)
+    if value is bool:
+        return value
+    if value is int or value is float:
+        return float(value) != 0.0
+    if value is String:
+        var text := String(value).strip_edges().to_lower()
+        if text == "true" or text == "1":
+            return true
+        if text == "false" or text == "0":
+            return false
+    return fallback
+
 static func _safe_int_property(node: Object, property: StringName, fallback: int = 0) -> int:
     if node == null or not is_instance_valid(node):
         return fallback
     var value: Variant = node.get(property)
-    if value == null:
-        return fallback
-    if value is bool:
-        return 1 if value else 0
-    if value is int:
-        return value as int
-    if value is float:
-        return int(value)
-    if value is String:
-        var text := String(value).strip_edges()
-        if text.is_valid_int():
-            return text.to_int()
-        if text.is_valid_float():
-            return int(text.to_float())
-    return fallback
+    return _safe_int_variant(value, fallback)
 
 static func _safe_int_variant(value: Variant, fallback: int = 0) -> int:
     if value == null:
@@ -125,7 +121,7 @@ static func _safe_int_variant(value: Variant, fallback: int = 0) -> int:
     if value is bool:
         return 1 if value else 0
     if value is int:
-        return value as int
+        return value
     if value is float:
         return int(value)
     if value is String:
@@ -137,20 +133,24 @@ static func _safe_int_variant(value: Variant, fallback: int = 0) -> int:
     return fallback
 
 static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
-    if streamer == null:
-        return {"visual_ratio":0.0, "collision_ratio":0.0, "center_terrain":false, "items_ready":false, "visual_loaded":0, "visual_required":0, "collision_loaded":0, "collision_required":0}
+    var empty := {"visual_ratio":0.0,"collision_ratio":0.0,"center_terrain":false,"items_ready":false,"visual_loaded":0,"visual_required":0,"collision_loaded":0,"collision_required":0}
+    if streamer == null or not is_instance_valid(streamer):
+        return empty
 
     var loaded_variant: Variant = streamer.get("loaded_chunks")
     var collisions_variant: Variant = streamer.get("collision_chunks")
     if not (loaded_variant is Dictionary) or not (collisions_variant is Dictionary):
-        return {"visual_ratio":0.0, "collision_ratio":0.0, "center_terrain":false, "items_ready":false, "visual_loaded":0, "visual_required":0, "collision_loaded":0, "collision_required":0}
-
-    var loaded: Dictionary = loaded_variant as Dictionary
-    var collisions: Dictionary = collisions_variant as Dictionary
+        return empty
     if not streamer.has_method("_world_to_chunk") or not streamer.has_method("_chunk_inside_world"):
-        return {"visual_ratio":0.0, "collision_ratio":0.0, "center_terrain":false, "items_ready":false, "visual_loaded":0, "visual_required":0, "collision_loaded":0, "collision_required":0}
+        return empty
 
-    var center: Vector2i = streamer.call("_world_to_chunk", pos)
+    var loaded: Dictionary = loaded_variant
+    var collisions: Dictionary = collisions_variant
+    var center_variant: Variant = streamer.call("_world_to_chunk", pos)
+    if not center_variant is Vector2i:
+        return empty
+    var center: Vector2i = center_variant
+
     var visual_required := 0
     var visual_loaded := 0
     var collision_required := 0
@@ -159,12 +159,13 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
     for x: int in range(center.x - VISUAL_RADIUS, center.x + VISUAL_RADIUS + 1):
         for z: int in range(center.y - VISUAL_RADIUS, center.y + VISUAL_RADIUS + 1):
             var coord := Vector2i(x, z)
-            if not bool(streamer.call("_chunk_inside_world", coord)):
+            var inside_variant: Variant = streamer.call("_chunk_inside_world", coord)
+            if not bool(inside_variant):
                 continue
             visual_required += 1
             if loaded.has(coord) and is_instance_valid(loaded.get(coord)):
                 visual_loaded += 1
-                var chunk: Node = loaded.get(coord) as Node
+                var chunk := loaded.get(coord) as Node
                 if chunk != null and chunk.get_node_or_null("Items") != null:
                     items += 1
             if maxi(abs(coord.x - center.x), abs(coord.y - center.y)) <= PHYSICS_RADIUS:
@@ -174,7 +175,7 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
 
     var center_terrain := false
     if loaded.has(center) and is_instance_valid(loaded.get(center)):
-        var center_chunk: Node = loaded.get(center) as Node
+        var center_chunk := loaded.get(center) as Node
         center_terrain = center_chunk != null and center_chunk.get_node_or_null("Terrain") != null
 
     var visual_ratio := float(visual_loaded) / float(visual_required) if visual_required > 0 else 0.0
@@ -191,19 +192,24 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
     }
 
 static func _settlement_state(settlements: Node, interiors: Node, pos: Vector2) -> Dictionary:
-    if settlements == null:
-        return {"settlements_ready":false,"buildings_ready":false,"interiors_ready":false,"npcs_ready":false,"loaded":0,"expected":0}
+    var empty := {"settlements_ready":false,"buildings_ready":false,"interiors_ready":false,"npcs_ready":false,"loaded":0,"expected":0}
+    if settlements == null or not is_instance_valid(settlements):
+        return empty
 
-    var specs: Array = settlements.call("settlement_specs") if settlements.has_method("settlement_specs") else []
+    var specs_variant: Variant = settlements.call("settlement_specs") if settlements.has_method("settlement_specs") else []
+    if not specs_variant is Array:
+        return empty
+    var specs: Array = specs_variant
     var expected := 0
     for variant: Variant in specs:
         if variant is Dictionary:
-            var spec: Dictionary = variant as Dictionary
-            var center := Vector2(spec.get("center", Vector2.ZERO))
-            if pos.distance_to(center) <= SETTLEMENT_LOAD_RADIUS:
+            var spec: Dictionary = variant
+            var center_value: Variant = spec.get("center", Vector2.ZERO)
+            if center_value is Vector2 and pos.distance_to(center_value) <= SETTLEMENT_LOAD_RADIUS:
                 expected += 1
 
-    var loaded := _safe_int_variant(settlements.call("loaded_settlement_count") if settlements.has_method("loaded_settlement_count") else 0)
+    var loaded_value: Variant = settlements.call("loaded_settlement_count") if settlements.has_method("loaded_settlement_count") else 0
+    var loaded := _safe_int_variant(loaded_value, 0)
     var settlements_ready := expected <= 0 or loaded >= expected
     var buildings_ready := expected <= 0 or (settlements_ready and _safe_int_property(settlements, "materialized_buildings", 0) > 0)
     var npcs_ready := expected <= 0 or (settlements_ready and _safe_int_property(settlements, "materialized_npcs", 0) > 0)
