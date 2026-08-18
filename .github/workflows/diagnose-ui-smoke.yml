@@ -11,6 +11,8 @@ on:
       - "scripts/ui_layout_guard.gd"
       - "scripts/world_loading_readiness.gd"
       - "scripts/menu_music.gd"
+      - "scenes/main_menu.tscn"
+      - "assets/audio/music/production/impuls_menu_slow_down.mp3"
   workflow_dispatch:
 
 jobs:
@@ -34,6 +36,16 @@ jobs:
             assets/production/ui
             assets/production/nature/kenney_nature_kit
             assets/staging/sourcechat_b47
+      - name: Validate required production assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          audio="assets/audio/music/production/impuls_menu_slow_down.mp3"
+          if [ ! -s "$audio" ]; then
+            echo "::error title=Missing production menu music::Required asset is missing or empty: $audio"
+            exit 20
+          fi
+          echo "Production menu music present: $(stat -c '%s bytes' "$audio")"
       - name: Install Godot 4.7.1
         shell: bash
         run: |
