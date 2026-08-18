@@ -73,6 +73,7 @@ func install_latest_update() -> bool:
         return await _install_source_update()
 
     var root := _install_root()
+    _restore_embedded_updater(root)
     var bootstrap := root.path_join("updater_bootstrap.ps1")
     var updater_v4 := root.path_join("updater_v4.ps1")
     var updater_legacy := root.path_join("updater.ps1")
@@ -96,6 +97,22 @@ func install_latest_update() -> bool:
     await get_tree().create_timer(0.45).timeout
     get_tree().quit()
     return true
+
+func _restore_embedded_updater(root: String) -> void:
+    for name in ["updater_bootstrap.ps1", "updater_v4.ps1"]:
+        var destination := root.path_join(name)
+        if FileAccess.file_exists(destination):
+            continue
+        var source := "res://installer/%s" % name
+        if not FileAccess.file_exists(source):
+            continue
+        var source_file := FileAccess.open(source, FileAccess.READ)
+        if source_file == null:
+            continue
+        var text := source_file.get_as_text()
+        var destination_file := FileAccess.open(destination, FileAccess.WRITE)
+        if destination_file != null:
+            destination_file.store_string(text)
 
 func _install_source_update() -> bool:
     var root := _source_root()
