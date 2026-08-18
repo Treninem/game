@@ -147,7 +147,7 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
     var loaded: Dictionary = loaded_variant
     var collisions: Dictionary = collisions_variant
     var center_variant: Variant = streamer.call("_world_to_chunk", pos)
-    if not center_variant is Vector2i:
+    if not (center_variant is Vector2i):
         return empty
     var center: Vector2i = center_variant
 
@@ -197,7 +197,7 @@ static func _settlement_state(settlements: Node, interiors: Node, pos: Vector2) 
         return empty
 
     var specs_variant: Variant = settlements.call("settlement_specs") if settlements.has_method("settlement_specs") else []
-    if not specs_variant is Array:
+    if not (specs_variant is Array):
         return empty
     var specs: Array = specs_variant
     var expected := 0
