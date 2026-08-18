@@ -6,6 +6,15 @@ const VISUAL_RADIUS: int = 2
 const PHYSICS_RADIUS: int = 1
 const SETTLEMENT_LOAD_RADIUS: float = 980.0
 
+# Startup must never deadlock because a non-critical decorative subsystem is late.
+# Terrain, collision, spawn, gameplay, environment, camera and ground are the
+# hard gate. Rivers, vegetation, buildings and NPCs continue streaming after
+# the playable surface is ready.
+const CRITICAL_CHECKS := [
+    "save", "spawn", "region", "terrain", "collisions", "gameplay",
+    "environment", "camera", "ground"
+]
+
 static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
     if world == null or player == null or not player.is_inside_tree():
         return _empty("Ожидание игрового мира")
@@ -67,12 +76,15 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
         "items":0.03, "gameplay":0.05, "environment":0.04, "camera":0.03, "ground":0.04
     }
     var ratio: float = 0.0
-    var all_ready: bool = true
     for key: Variant in checks:
         if bool(checks[key]):
             ratio += float(weights.get(key, 0.0))
-        else:
+
+    var all_ready := true
+    for key: String in CRITICAL_CHECKS:
+        if not bool(checks.get(key, false)):
             all_ready = false
+            break
 
     var stage: String = _stage_for(checks)
     var detail: String = _detail_for(stage, stream, settlement)
@@ -88,14 +100,14 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
     var loaded: Dictionary = loaded_variant as Dictionary
     var collisions: Dictionary = collisions_variant as Dictionary
     var center: Vector2i = streamer.call("_world_to_chunk", pos)
-    var visual_required: int = 0
-    var visual_loaded: int = 0
-    var collision_required: int = 0
-    var collision_loaded: int = 0
-    var items: int = 0
+    var visual_required := 0
+    var visual_loaded := 0
+    var collision_required := 0
+    var collision_loaded := 0
+    var items := 0
     for x: int in range(center.x - VISUAL_RADIUS, center.x + VISUAL_RADIUS + 1):
         for z: int in range(center.y - VISUAL_RADIUS, center.y + VISUAL_RADIUS + 1):
-            var coord: Vector2i = Vector2i(x, z)
+            var coord := Vector2i(x, z)
             if not bool(streamer.call("_chunk_inside_world", coord)):
                 continue
             visual_required += 1
@@ -108,7 +120,7 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
                 collision_required += 1
                 if collisions.has(coord) and is_instance_valid(collisions.get(coord)):
                     collision_loaded += 1
-    var center_terrain: bool = false
+    var center_terrain := false
     if loaded.has(center) and is_instance_valid(loaded.get(center)):
         var center_chunk: Node = loaded.get(center) as Node
         center_terrain = center_chunk != null and center_chunk.get_node_or_null("Terrain") != null
@@ -124,52 +136,44 @@ static func _settlement_state(settlements: Node, interiors: Node, pos: Vector2) 
     if settlements == null:
         return {"settlements_ready":false, "buildings_ready":false, "interiors_ready":false, "npcs_ready":false, "loaded":0, "expected":0}
     var specs: Array = settlements.call("settlement_specs") if settlements.has_method("settlement_specs") else []
-    var expected: int = 0
+    var expected := 0
     for variant: Variant in specs:
         if variant is Dictionary:
             var spec: Dictionary = variant as Dictionary
-            var center: Vector2 = Vector2(spec.get("center", Vector2.ZERO))
+            var center := Vector2(spec.get("center", Vector2.ZERO))
             if pos.distance_to(center) <= SETTLEMENT_LOAD_RADIUS:
                 expected += 1
-    var loaded: int = int(settlements.call("loaded_settlement_count")) if settlements.has_method("loaded_settlement_count") else 0
-    var settlements_ready: bool = expected <= 0 or loaded >= expected
-    var buildings_ready: bool = expected <= 0 or (settlements_ready and int(settlements.get("materialized_buildings")) > 0)
-    var npcs_ready: bool = expected <= 0 or (settlements_ready and int(settlements.get("materialized_npcs")) > 0)
-    var enterable_count: int = settlements.get_tree().get_nodes_in_group("enterable_building").size()
-    var interiors_ready: bool = enterable_count <= 0 or (interiors != null and int(interiors.get("decorated_buildings")) > 0)
+    var loaded := int(settlements.call("loaded_settlement_count")) if settlements.has_method("loaded_settlement_count") else 0
+    var settlements_ready := expected <= 0 or loaded >= expected
+    var buildings_ready := expected <= 0 or (settlements_ready and int(settlements.get("materialized_buildings")) > 0)
+    var npcs_ready := expected <= 0 or (settlements_ready and int(settlements.get("materialized_npcs")) > 0)
+    var enterable_count := settlements.get_tree().get_nodes_in_group("enterable_building").size()
+    var interiors_ready := enterable_count <= 0 or (interiors != null and int(interiors.get("decorated_buildings")) > 0)
     return {"settlements_ready":settlements_ready, "buildings_ready":buildings_ready, "interiors_ready":interiors_ready, "npcs_ready":npcs_ready, "loaded":loaded, "expected":expected}
 
 static func _ground_below(player: CharacterBody3D) -> bool:
     var space: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
     if space == null:
         return false
-    var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(player.global_position + Vector3.UP * 2.0, player.global_position + Vector3.DOWN * 4.0)
+    var query := PhysicsRayQueryParameters3D.create(player.global_position + Vector3.UP * 2.0, player.global_position + Vector3.DOWN * 4.0)
     query.exclude = [player.get_rid()]
     query.collision_mask = 1
     return not space.intersect_ray(query).is_empty()
 
 static func _stage_for(checks: Dictionary) -> String:
     var stages: Array[Array] = [
-        ["save", "Подготовка сохранения"],
-        ["spawn", "Определение точки появления"],
-        ["region", "Загрузка стартовой области"],
-        ["terrain", "Создание ландшафта"],
-        ["collisions", "Подготовка физики и коллизий"],
-        ["water", "Загрузка рек и воды"],
-        ["roads", "Загрузка дорог"],
-        ["nature", "Загрузка растительности"],
-        ["settlements", "Загрузка поселений"],
-        ["buildings", "Загрузка зданий"],
-        ["interiors", "Загрузка интерьеров"],
-        ["npcs", "Подготовка NPC"],
-        ["items", "Подготовка предметов мира"],
-        ["gameplay", "Квесты и инвентарь"],
-        ["environment", "Погода, время и освещение"],
-        ["camera", "Подготовка камеры"],
+        ["save", "Подготовка сохранения"], ["spawn", "Определение точки появления"],
+        ["region", "Загрузка стартовой области"], ["terrain", "Создание ландшафта"],
+        ["collisions", "Подготовка физики и коллизий"], ["water", "Загрузка рек и воды"],
+        ["roads", "Загрузка дорог"], ["nature", "Загрузка растительности"],
+        ["settlements", "Загрузка поселений"], ["buildings", "Загрузка зданий"],
+        ["interiors", "Загрузка интерьеров"], ["npcs", "Подготовка NPC"],
+        ["items", "Подготовка предметов мира"], ["gameplay", "Квесты и инвентарь"],
+        ["environment", "Погода, время и освещение"], ["camera", "Подготовка камеры"],
         ["ground", "Проверка земли под игроком"]
     ]
     for pair: Array in stages:
-        var key: String = String(pair[0])
+        var key := String(pair[0])
         if not bool(checks.get(key, false)):
             return String(pair[1])
     return "Финальная проверка стартовой области"
@@ -181,7 +185,7 @@ static func _detail_for(stage: String, stream: Dictionary, settlement: Dictionar
         return "Физические чанки: %d из %d" % [int(stream.get("collision_loaded",0)), int(stream.get("collision_required",0))]
     if stage in ["Загрузка поселений","Загрузка зданий","Загрузка интерьеров","Подготовка NPC"]:
         return "Поселения рядом: %d из %d" % [int(settlement.get("loaded",0)), int(settlement.get("expected",0))]
-    return "Проверяется реальная готовность обязательных систем"
+    return "Основные системы готовы; детали мира продолжают загружаться в фоне"
 
 static func _empty(stage: String) -> Dictionary:
     return {"ratio":0.0, "all_ready":false, "stage":stage, "detail":"Подготовка узлов игрового мира", "checks":{}}
