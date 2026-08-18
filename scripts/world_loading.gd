@@ -5,6 +5,8 @@ const MAIN_MENU_SCENE := "res://scenes/main_menu.tscn"
 const BG_PREFIX := "res://assets/production/ui/loading_bg_small.webp.b64"
 const BG_PARTS := 4
 const SCENE_WEIGHT := 0.34
+const POLL_INTERVAL := 0.10
+const REQUIRED_READY_FRAMES := 2
 const EMBEDDED_TEXTURE := preload("res://scripts/embedded_ui_texture.gd")
 const READINESS := preload("res://scripts/world_loading_readiness.gd")
 
@@ -17,6 +19,7 @@ var load_requested := false
 var failed := false
 var finishing := false
 var ready_frames := 0
+var poll_elapsed := 0.0
 var world_resource: PackedScene
 var world_instance: Node
 var player: CharacterBody3D
@@ -30,11 +33,15 @@ func _ready() -> void:
     _build_ui()
     call_deferred("_begin")
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
     if failed or finishing:
         return
+    poll_elapsed += maxf(delta, 0.0)
+    if poll_elapsed < POLL_INTERVAL:
+        return
+    poll_elapsed = 0.0
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-    if world_instance == null:
+    if world_instance == null or not is_instance_valid(world_instance):
         _poll_scene_resource()
     else:
         _poll_prepared_world()
@@ -44,6 +51,7 @@ func _begin() -> void:
     failed = false
     finishing = false
     ready_frames = 0
+    poll_elapsed = POLL_INTERVAL
     load_requested = false
     error_panel.visible = false
     _set_progress(0.0, "Подготовка мира", "")
@@ -62,7 +70,13 @@ func _poll_scene_resource() -> void:
         return
     var progress: Array = []
     var status := ResourceLoader.load_threaded_get_status(WORLD_SCENE, progress)
-    var real_ratio := clampf(float(progress[0]), 0.0, 1.0) if not progress.is_empty() else 0.0
+    var real_ratio := 0.0
+    if not progress.is_empty():
+        var value: Variant = progress[0]
+        if value is int or value is float:
+            var numeric := float(value)
+            if is_finite(numeric):
+                real_ratio = clampf(numeric, 0.0, 1.0)
     _set_progress(real_ratio * SCENE_WEIGHT, "Загрузка мира", "" if real_ratio < 1.0 else "")
     if status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
         _fail("Основная сцена мира не загрузилась. Проверьте целостность установленной версии.")
@@ -99,9 +113,17 @@ func _instantiate_behind_loading_screen() -> void:
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _poll_prepared_world() -> void:
+    if world_instance == null or not is_instance_valid(world_instance):
+        ready_frames = 0
+        return
     player = world_instance.get_node_or_null("World/Player") as CharacterBody3D
-    var state := READINESS.snapshot(world_instance, player)
-    var world_ratio := clampf(float(state.get("ratio", 0.0)), 0.0, 1.0)
+    if player == null or not is_instance_valid(player) or not player.is_inside_tree():
+        ready_frames = 0
+        _set_progress(SCENE_WEIGHT, "Подготовка игрока", "Создание игрока и стартовой области")
+        return
+
+    var state: Dictionary = READINESS.snapshot(world_instance, player)
+    var world_ratio := _safe_ratio(state.get("ratio", 0.0))
     var total_ratio := SCENE_WEIGHT + (1.0 - SCENE_WEIGHT) * world_ratio
     var all_ready := bool(state.get("all_ready", false))
     var stage := String(state.get("stage", "Подготовка игрового мира"))
@@ -114,27 +136,33 @@ func _poll_prepared_world() -> void:
     else:
         ready_frames = 0
 
-    if ready_frames >= 2:
+    if ready_frames >= REQUIRED_READY_FRAMES:
         _set_progress(1.0, "Игровой мир готов", "")
         _finish_into_world()
     else:
         _set_progress(minf(total_ratio, 0.995), stage, detail)
 
 func _finish_into_world() -> void:
-    if finishing or world_instance == null:
+    if finishing or world_instance == null or not is_instance_valid(world_instance):
+        return
+    var tree := get_tree()
+    if tree == null or not is_inside_tree():
         return
     finishing = true
     fade_rect.mouse_filter = Control.MOUSE_FILTER_STOP
     var to_black := create_tween()
     to_black.tween_property(fade_rect, "color:a", 1.0, 0.18)
     await to_black.finished
+    if not is_inside_tree() or tree.current_scene == null:
+        finishing = false
+        return
 
     var prepared := world_instance
     world_instance = null
     prepared.set_meta("loading_gate_active", false)
     prepared.set_process(true)
     player = prepared.get_node_or_null("World/Player") as CharacterBody3D
-    if player != null:
+    if player != null and is_instance_valid(player):
         player.set_meta("loading_gate_active", false)
         player.set_process(true)
         player.set_physics_process(true)
@@ -144,8 +172,8 @@ func _finish_into_world() -> void:
     if world_ui != null:
         world_ui.visible = true
 
-    prepared.reparent(get_tree().root)
-    get_tree().current_scene = prepared
+    prepared.reparent(tree.root)
+    tree.current_scene = prepared
     Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
     var fade_layer := CanvasLayer.new()
@@ -184,6 +212,20 @@ func _fail(message: String) -> void:
     detail_label.text = message
     error_panel.visible = true
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func _safe_ratio(value: Variant) -> float:
+    if value is int or value is float:
+        var numeric := float(value)
+        if is_finite(numeric):
+            return clampf(numeric, 0.0, 1.0)
+        return 0.0
+    if value is String:
+        var text := String(value).strip_edges()
+        if text.is_valid_float():
+            var numeric := text.to_float()
+            if is_finite(numeric):
+                return clampf(numeric, 0.0, 1.0)
+    return 0.0
 
 func _set_progress(_ratio: float, stage: String, detail: String) -> void:
     stage_label.text = stage
