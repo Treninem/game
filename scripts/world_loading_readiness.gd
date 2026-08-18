@@ -21,14 +21,15 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
         pos2
     )
     var start_region := world.get_node_or_null("World/StartRegion")
-    var bootstrap := world.get_node_or_null("Bootstrap")
     var city := world.get_node_or_null("World/CityDistrict")
 
     var city_ready := false
-    if city != null:
+    if city != null and is_instance_valid(city):
         var cells: Variant = city.get("loaded_cells")
         city_ready = cells is Dictionary and not (cells as Dictionary).is_empty()
 
+    # `world` is the instantiated root node of stage1.tscn. Its script is
+    # bootstrap.gd, so startup_state_ready belongs to this node directly.
     var bootstrap_ready: bool = _safe_bool_property(world, "startup_state_ready", false)
     var spawn_ready: bool = WorldData != null and WorldData.inside_world(pos2)
     var region_ready: bool = _safe_ratio(stream.get("visual_ratio", 0.0)) >= 0.999
@@ -38,16 +39,19 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
     var water_ready: bool = _safe_int_property(start_region, "river_segment_count", 0) > 0 and WorldWater != null
     var roads_ready: bool = WorldRoads != null and region_ready
     var items_ready: bool = bool(stream.get("items_ready", false)) or city_ready
-    var environment_ready: bool = world.get_node_or_null("World/Sun") is DirectionalLight3D and world.get_node_or_null("World/WorldEnvironmentController") != null and EnvironmentState != null and WeatherVFX != null
+    var environment_ready: bool = (
+        world.get_node_or_null("World/Sun") is DirectionalLight3D
+        and world.get_node_or_null("World/WorldEnvironmentController") != null
+        and EnvironmentState != null
+        and WeatherVFX != null
+    )
     var gameplay_ready: bool = GameState != null and SaveManager != null and InventorySystem != null and DialogueManager != null
-    var camera := player.get_node_or_null("Camera3D") as Camera3D
-    if camera == null:
-        camera = world.get_node_or_null("World/Player/Camera3D") as Camera3D
-    var camera_ready: bool = camera != null and camera.current
+    var camera := _find_player_camera(world, player)
+    var camera_ready: bool = camera != null and is_instance_valid(camera) and camera.current
     var ground_ready: bool = terrain_ready and collision_ready and _ground_below(player)
 
     var checks := {
-        "save": SaveManager != null and bootstrap != null and bootstrap_ready,
+        "save": SaveManager != null and bootstrap_ready,
         "spawn": spawn_ready,
         "region": region_ready,
         "terrain": terrain_ready,
@@ -93,6 +97,23 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
         "checks":checks
     }
 
+static func _find_player_camera(world: Node, player: CharacterBody3D) -> Camera3D:
+    if player != null and is_instance_valid(player):
+        var camera := player.get_node_or_null("CameraPivot/Camera3D") as Camera3D
+        if camera != null:
+            return camera
+        camera = player.get_node_or_null("Camera3D") as Camera3D
+        if camera != null:
+            return camera
+    if world != null and is_instance_valid(world):
+        var world_camera := world.get_node_or_null("World/Player/CameraPivot/Camera3D") as Camera3D
+        if world_camera != null:
+            return world_camera
+        world_camera = world.get_node_or_null("World/Player/Camera3D") as Camera3D
+        if world_camera != null:
+            return world_camera
+    return null
+
 static func _safe_bool_property(node: Object, property: StringName, fallback: bool = false) -> bool:
     if node == null or not is_instance_valid(node):
         return fallback
@@ -115,6 +136,9 @@ static func _safe_int_property(node: Object, property: StringName, fallback: int
     var value: Variant = node.get(property)
     return _safe_int_variant(value, fallback)
 
+static func _truncate_float_to_int(value: float) -> int:
+    return floori(value) if value >= 0.0 else ceili(value)
+
 static func _safe_int_variant(value: Variant, fallback: int = 0) -> int:
     if value == null:
         return fallback
@@ -123,13 +147,17 @@ static func _safe_int_variant(value: Variant, fallback: int = 0) -> int:
     if value is int:
         return value
     if value is float:
-        return roundi(value)
+        if not is_finite(value):
+            return fallback
+        return _truncate_float_to_int(value)
     if value is String:
         var text := String(value).strip_edges()
         if text.is_valid_int():
             return text.to_int()
         if text.is_valid_float():
-            return roundi(text.to_float())
+            var numeric := text.to_float()
+            if is_finite(numeric):
+                return _truncate_float_to_int(numeric)
     return fallback
 
 static func _safe_ratio(value: Variant, fallback: float = 0.0) -> float:
