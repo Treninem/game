@@ -35,8 +35,10 @@ func _ready() -> void:
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
     _build_ui()
     _prepare_settings_overlay()
-    UpdateManager.status_changed.connect(_on_update_status_changed)
-    UpdateManager.progress_changed.connect(_on_update_progress_changed)
+    if not UpdateManager.status_changed.is_connected(_on_update_status_changed):
+        UpdateManager.status_changed.connect(_on_update_status_changed)
+    if not UpdateManager.progress_changed.is_connected(_on_update_progress_changed):
+        UpdateManager.progress_changed.connect(_on_update_progress_changed)
     get_viewport().size_changed.connect(_layout_ui)
     _refresh_continue_state()
     show_page("home")
@@ -93,6 +95,9 @@ func close_settings_overlay() -> void:
 
 func _build_ui() -> void:
     button_texture = MENU_ASSETS.button_texture()
+    if button_texture == null:
+        push_error("Main menu button texture is unavailable; using procedural fallback")
+        button_texture = _fallback_button_texture()
 
     var bg := TextureRect.new()
     bg.name = "MenuBackground"
@@ -342,8 +347,10 @@ func _clear_content() -> void:
     update_progress_detail = null
     install_update_button = null
     save_row_count = 0
+    if not is_instance_valid(content):
+        return
     for child in content.get_children():
-        child.free()
+        child.queue_free()
 
 func _menu_button(text: String, callback: Callable, primary: bool = false, danger: bool = false) -> Button:
     var button := _make_button(text, callback, primary, danger)
@@ -379,10 +386,12 @@ func _make_button(text: String, callback: Callable, primary: bool, danger: bool)
     return button
 
 func _play_hover() -> void:
-    hover_player.play()
+    if is_instance_valid(hover_player):
+        hover_player.play()
 
 func _play_click() -> void:
-    click_player.play()
+    if is_instance_valid(click_player):
+        click_player.play()
 
 func _body(text: String) -> Label:
     var label := _label(text, 13, Color(0.81,0.78,0.71))
@@ -418,6 +427,16 @@ func _button_style(color: Color) -> StyleBoxTexture:
     style.content_margin_top = 9
     style.content_margin_bottom = 9
     return style
+
+func _fallback_button_texture() -> Texture2D:
+    var image := Image.create(64, 32, false, Image.FORMAT_RGBA8)
+    image.fill(Color(0.20, 0.16, 0.12, 1.0))
+    for x in range(64):
+        var edge := x == 0 or x == 63
+        for y in range(32):
+            if edge or y == 0 or y == 31:
+                image.set_pixel(x, y, Color(0.58, 0.42, 0.22, 1.0))
+    return ImageTexture.create_from_image(image)
 
 func _progress_style(fill: bool) -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
