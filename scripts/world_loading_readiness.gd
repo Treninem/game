@@ -31,9 +31,9 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
 
     var bootstrap_ready: bool = _safe_bool_property(world, "startup_state_ready", false)
     var spawn_ready: bool = WorldData != null and WorldData.inside_world(pos2)
-    var region_ready: bool = float(stream.get("visual_ratio", 0.0)) >= 0.999
+    var region_ready: bool = _safe_ratio(stream.get("visual_ratio", 0.0)) >= 0.999
     var terrain_ready: bool = bool(stream.get("center_terrain", false))
-    var collision_ready: bool = float(stream.get("collision_ratio", 0.0)) >= 0.999
+    var collision_ready: bool = _safe_ratio(stream.get("collision_ratio", 0.0)) >= 0.999
     var nature_ready: bool = _safe_int_property(start_region, "real_nature_detail_count", 0) > 0
     var water_ready: bool = _safe_int_property(start_region, "river_segment_count", 0) > 0 and WorldWater != null
     var roads_ready: bool = WorldRoads != null and region_ready
@@ -132,6 +132,25 @@ static func _safe_int_variant(value: Variant, fallback: int = 0) -> int:
             return int(text.to_float())
     return fallback
 
+static func _safe_ratio(value: Variant, fallback: float = 0.0) -> float:
+    var numeric := _safe_float_variant(value, fallback)
+    if not is_finite(numeric):
+        return fallback
+    return clampf(numeric, 0.0, 1.0)
+
+static func _safe_float_variant(value: Variant, fallback: float = 0.0) -> float:
+    if value == null:
+        return fallback
+    if value is bool:
+        return 1.0 if value else 0.0
+    if value is int or value is float:
+        return float(value)
+    if value is String:
+        var text := String(value).strip_edges()
+        if text.is_valid_float():
+            return text.to_float()
+    return fallback
+
 static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
     var empty := {"visual_ratio":0.0,"collision_ratio":0.0,"center_terrain":false,"items_ready":false,"visual_loaded":0,"visual_required":0,"collision_loaded":0,"collision_required":0}
     if streamer == null or not is_instance_valid(streamer):
@@ -147,7 +166,7 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
     var loaded: Dictionary = loaded_variant
     var collisions: Dictionary = collisions_variant
     var center_variant: Variant = streamer.call("_world_to_chunk", pos)
-    if not (center_variant is Vector2i):
+    if not center_variant is Vector2i:
         return empty
     var center: Vector2i = center_variant
 
@@ -197,7 +216,7 @@ static func _settlement_state(settlements: Node, interiors: Node, pos: Vector2) 
         return empty
 
     var specs_variant: Variant = settlements.call("settlement_specs") if settlements.has_method("settlement_specs") else []
-    if not (specs_variant is Array):
+    if not specs_variant is Array:
         return empty
     var specs: Array = specs_variant
     var expected := 0
