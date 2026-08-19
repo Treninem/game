@@ -1,30 +1,30 @@
 {
-  "release_sha": "005092ee08615b4c9035fcb20ef02572609b9fce",
-  "captured_at": "2026-08-19T22:47:59.906685+00:00",
+  "release_sha": "1cbadb297ca6b73c3cf61f8c832715af3bb32a26",
+  "captured_at": "2026-08-19T22:57:27.745262+00:00",
   "runs": [
     {
       "name": "Build Stable Release and Installer",
-      "run_id": 32309385210,
-      "run_number": 618,
-      "status": "completed",
-      "conclusion": "failure",
-      "html_url": "https://github.com/Treninem/game/actions/runs/32309385210"
+      "run_id": 32311013395,
+      "run_number": 620,
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Treninem/game/actions/runs/32311013395"
     },
     {
       "name": "Validate Player Movement",
-      "run_id": 32309385278,
-      "run_number": 88,
-      "status": "completed",
-      "conclusion": "failure",
-      "html_url": "https://github.com/Treninem/game/actions/runs/32309385278"
+      "run_id": 32311013379,
+      "run_number": 90,
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Treninem/game/actions/runs/32311013379"
     },
     {
       "name": "Validate World Core",
-      "run_id": 32309385258,
-      "run_number": 196,
-      "status": "completed",
-      "conclusion": "failure",
-      "html_url": "https://github.com/Treninem/game/actions/runs/32309385258"
+      "run_id": 32311013359,
+      "run_number": 198,
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Treninem/game/actions/runs/32311013359"
     }
   ]
 }
