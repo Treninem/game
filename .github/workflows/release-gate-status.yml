@@ -1,0 +1,111 @@
+name: Record Stable Release Gate Status
+
+on:
+  workflow_run:
+    workflows:
+      - "Validate World Core"
+      - "Validate Player Movement"
+      - "Build Stable Release and Installer"
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: impuls-release-gate-status-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  record-gates:
+    if: ${{ github.event.workflow_run.head_branch == 'main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Collect mandatory workflow conclusions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "/repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${RELEASE_SHA}&per_page=100" > /tmp/runs.json
+          mkdir -p release
+          python3 - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          sha = os.environ["RELEASE_SHA"]
+          data = json.loads(Path("/tmp/runs.json").read_text(encoding="utf-8"))
+          expected = [
+              "Validate World Core",
+              "Validate Player Movement",
+              "Build Stable Release and Installer",
+          ]
+          rows = []
+          for name in expected:
+              matches = [
+                  run for run in data.get("workflow_runs", [])
+                  if run.get("name") == name and run.get("head_sha") == sha
+              ]
+              matches.sort(key=lambda run: int(run.get("run_number") or 0))
+              if not matches:
+                  Path("/tmp/gates_pending").write_text(name, encoding="utf-8")
+                  raise SystemExit(0)
+              run = matches[-1]
+              if run.get("status") != "completed":
+                  Path("/tmp/gates_pending").write_text(name, encoding="utf-8")
+                  raise SystemExit(0)
+              rows.append({
+                  "name": name,
+                  "run_id": run.get("id"),
+                  "run_number": run.get("run_number"),
+                  "conclusion": run.get("conclusion"),
+                  "html_url": run.get("html_url"),
+              })
+
+          ready = all(row["conclusion"] == "success" for row in rows)
+          build_row = next(row for row in rows if row["name"] == "Build Stable Release and Installer")
+          payload = {
+              "release_sha": sha,
+              "ready": ready,
+              "recorded_at": datetime.now(timezone.utc).isoformat(),
+              "workflows": rows,
+              "stable_build_run_number": build_row["run_number"],
+              "installer_url": "https://github.com/Treninem/game/releases/download/stable/ImPuls-Setup.exe" if ready else None,
+          }
+          Path("release/verified.json").write_text(
+              json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+          if [[ -f /tmp/gates_pending ]]; then
+            echo "Mandatory workflows are not all completed yet; a later workflow_run event will retry aggregation."
+            exit 0
+          fi
+
+      - name: Commit aggregate gate result
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -f release/verified.json ]]; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add release/verified.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git pull --rebase origin main
+          git add release/verified.json
+          git commit -m "ci: record stable release gate result [skip ci]"
+          git push origin HEAD:main
