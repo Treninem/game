@@ -1,0 +1,218 @@
+
+===== RUN 32309385210 =====
+build-game	Verify startup main menu	﻿2026-08-19T22:36:01.4466664Z ##[group]Run bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
+build-game	Verify startup main menu	2026-08-19T22:36:01.4467218Z ^[[36;1mbash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180^[[0m
+build-game	Verify startup main menu	2026-08-19T22:36:01.4508812Z shell: /usr/bin/bash -e {0}
+build-game	Verify startup main menu	2026-08-19T22:36:01.4509103Z ##[endgroup]
+build-game	Verify startup main menu	2026-08-19T22:36:01.4584331Z GODOT_SMOKE_START scene=tests/smoke_startup_menu.tscn timeout=180s
+build-game	Verify startup main menu	2026-08-19T22:36:01.4812266Z Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+build-game	Verify startup main menu	2026-08-19T22:36:01.5107923Z 
+build-game	Verify startup main menu	2026-08-19T22:36:01.9373727Z ERROR: Startup menu smoke failed: menu music is not configured to autoplay
+build-game	Verify startup main menu	2026-08-19T22:36:01.9374300Z    at: push_error (core/variant/variant_utility.cpp:1023)
+build-game	Verify startup main menu	2026-08-19T22:36:01.9374700Z    GDScript backtrace (most recent call first):
+build-game	Verify startup main menu	2026-08-19T22:36:01.9375099Z        [0] _fail (res://tests/smoke_startup_menu.gd:13)
+build-game	Verify startup main menu	2026-08-19T22:36:01.9375500Z        [1] _run_test (res://tests/smoke_startup_menu.gd:88)
+build-game	Verify startup main menu	2026-08-19T22:36:01.9780334Z WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+build-game	Verify startup main menu	2026-08-19T22:36:01.9780979Z    at: cleanup (core/object/object.cpp:2536)
+build-game	Verify startup main menu	2026-08-19T22:36:01.9783444Z ERROR: 1 resources still in use at exit (run with --verbose for details).
+build-game	Verify startup main menu	2026-08-19T22:36:01.9784240Z    at: clear (core/io/resource.cpp:822)
+build-game	Verify startup main menu	2026-08-19T22:36:01.9986625Z ##[error]tests/smoke_startup_menu.tscn exited with code 19
+build-game	Verify startup main menu	2026-08-19T22:36:01.9996788Z ##[error]Process completed with exit code 19.
+
+===== RUN 32309385278 =====
+movement-smoke	Prove player surface, void recovery and movement	﻿2026-08-19T22:35:37.7589948Z ##[group]Run set +e
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7590181Z ^[[36;1mset +e^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7590548Z ^[[36;1moutput=$(timeout 45s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_player_movement.tscn 2>&1)^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7591194Z ^[[36;1mstatus=$?^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7591410Z ^[[36;1mprintf '%s\n' "$output"^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7591621Z ^[[36;1mif [ "$status" -ne 0 ]; then^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7591917Z ^[[36;1m  detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7592270Z ^[[36;1m  echo "::error title=Player smoke raw Godot output::$detail"^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7592527Z ^[[36;1mfi^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7592683Z ^[[36;1mexit "$status"^[[0m
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7612085Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:37.7612367Z ##[endgroup]
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1274755Z Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1275165Z 
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1275708Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1280495Z           at: GDScript::reload (res://scripts/city_streamer_fast.gd:4)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1281038Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1281354Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1281842Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/medieval/quaternius_market/Stall_Empty.gltf" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1282367Z           at: GDScript::reload (res://scripts/city_streamer_fast.gd:5)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1282673Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1283209Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1283583Z ERROR: Failed to load script "res://scripts/city_streamer_fast.gd" with error "Parse error".
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1283966Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1284257Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1284655Z        [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1285291Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/tree_oak.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1285968Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:5)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1286380Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1286730Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1287344Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/tree_detailed.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1288143Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:6)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1288563Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1288956Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1289659Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/tree_pineDefaultA.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1290431Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:7)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1290992Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1291392Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1292100Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/plant_bushDetailed.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1292859Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:8)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1293286Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1293664Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1294585Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/grass_large.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1295278Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:9)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1295579Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1295855Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1296354Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/rock_largeA.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1296869Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:10)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1297171Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1297444Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1297921Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/log_large.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1298571Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:11)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1298956Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1299350Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1300020Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/stump_roundDetailed.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1300675Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:12)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1301212Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1301731Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1302253Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/mushroom_tanGroup.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1302795Z           at: GDScript::reload (res://scripts/start_region_streamer.gd:13)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1303102Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1303418Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1303805Z ERROR: Failed to load script "res://scripts/start_region_streamer.gd" with error "Parse error".
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1304200Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1304488Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1304765Z        [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1305254Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/log_large.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1305835Z           at: GDScript::reload (res://scripts/start_civilization_signs.gd:5)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1306132Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1306406Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1306920Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/stump_roundDetailed.glb" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1307463Z           at: GDScript::reload (res://scripts/start_civilization_signs.gd:6)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1307772Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1308047Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1308435Z ERROR: Failed to load script "res://scripts/start_civilization_signs.gd" with error "Parse error".
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1308836Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1309121Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1309396Z        [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1309842Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/interiors/quaternius_furniture/Bed.fbx" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1310411Z           at: GDScript::reload (res://scripts/settlement_interior_visuals.gd:7)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1310720Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1311178Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1311633Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/interiors/quaternius_furniture/Table.fbx" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1312130Z           at: GDScript::reload (res://scripts/settlement_interior_visuals.gd:8)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1312441Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1312715Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1313104Z ERROR: Failed to load script "res://scripts/settlement_interior_visuals.gd" with error "Parse error".
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1313516Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1313800Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1314069Z        [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1314520Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/medieval/quaternius_market/Stall_Empty.gltf" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1315011Z           at: GDScript::reload (res://scripts/settlement_public_works.gd:5)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1315312Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1315589Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1316056Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/medieval/quaternius_market/Stall_Cart_Empty.gltf" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1316665Z           at: GDScript::reload (res://scripts/settlement_public_works.gd:6)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1316965Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1317237Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1317622Z ERROR: Failed to load script "res://scripts/settlement_public_works.gd" with error "Parse error".
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1317995Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1318273Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1318545Z        [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1318984Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/medieval/building_shell/Door_1_Flat.gltf" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1319442Z           at: GDScript::reload (res://scripts/enterable_building.gd:5)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1319729Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1320002Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1320464Z SCRIPT ERROR: Parse Error: Preload file "res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1321160Z           at: GDScript::reload (res://scripts/enterable_building.gd:6)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1321462Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1321740Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1322060Z SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1322411Z           at: GDScript::reload (res://scripts/settlement_civic_spaces.gd:0)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1322715Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1322989Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1323396Z ERROR: Failed to load script "res://scripts/settlement_civic_spaces.gd" with error "Compilation failed".
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1323808Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1324084Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1324351Z        [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1324867Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_loop_water_01.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1325307Z           at: GDScript::reload (res://scripts/world_audio.gd:7)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1325575Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1325848Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1326276Z SCRIPT ERROR: Parse Error: Cannot infer the type of "RIVER_LOOP" constant because the value doesn't have a set type.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1326700Z           at: GDScript::reload (res://scripts/world_audio.gd:7)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1326974Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1327250Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1327699Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_01.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1328153Z           at: GDScript::reload (res://scripts/world_audio.gd:9)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1328418Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1328686Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1329136Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_02.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1329585Z           at: GDScript::reload (res://scripts/world_audio.gd:10)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1329863Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1330138Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1330647Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wet_01.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1331604Z           at: GDScript::reload (res://scripts/world_audio.gd:13)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1331891Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1332183Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1332627Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wet_02.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1333064Z           at: GDScript::reload (res://scripts/world_audio.gd:14)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1333347Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1333626Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1334078Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wet_03.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1334537Z           at: GDScript::reload (res://scripts/world_audio.gd:15)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1334813Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1335098Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1335552Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_01.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1336012Z           at: GDScript::reload (res://scripts/world_audio.gd:18)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1336288Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1336559Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1337007Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_02.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1337455Z           at: GDScript::reload (res://scripts/world_audio.gd:19)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1337737Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1338013Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1338460Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_03.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1338980Z           at: GDScript::reload (res://scripts/world_audio.gd:20)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1339244Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1339513Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1339957Z SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_04.ogg" does not exist.
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1340408Z           at: GDScript::reload (res://scripts/world_audio.gd:21)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1340686Z           GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1341073Z               [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1341492Z ERROR: Failed to load script "res://scripts/world_audio.gd" with error "Parse error".
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1341862Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1342139Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1342409Z        [0] _run_test (res://tests/smoke_player_movement.gd:33)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1342939Z Surface smoke [spawn]: collider=StoryStartSurface:<StaticBody3D#93465871974> position=(65.0, 4.651519, 48.0) terrain_y=4.65151962328417
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1357429Z ##[error]StartRegion/StartRiver is missing
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1363912Z ##[error]story start is not the required Asterna forest river region
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1364739Z ERROR: Movement smoke failed: story start is not the required Asterna forest river region
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1365116Z    at: push_error (core/variant/variant_utility.cpp:1023)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1365393Z    GDScript backtrace (most recent call first):
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1365672Z        [0] _fail (res://tests/smoke_player_movement.gd:18)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1366152Z        [1] _run_test (res://tests/smoke_player_movement.gd:56)
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1378179Z ##[error]SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wet_03.ogg" does not exist.           at: GDScript::reload (res://scripts/world_audio.gd:15)           GDScript backtrace (most recent call first):               [0] _run_test (res://tests/smoke_player_movement.gd:33) SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_01.ogg" does not exist.           at: GDScript::reload (res://scripts/world_audio.gd:18)           GDScript backtrace (most recent call first):               [0] _run_test (res://tests/smoke_player_movement.gd:33) SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_02.ogg" does not exist.           at: GDScript::reload (res://scripts/world_audio.gd:19)           GDScript backtrace (most recent call first):               [0] _run_test (res://tests/smoke_player_movement.gd:33) SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_03.ogg" does not exist.           at: GDScript::reload (res://scripts/world_audio.gd:20)           GDScript backtrace (most recent call first):               [0] _run_test (res://tests/smoke_player_movement.gd:33) SCRIPT ERROR: Parse Error: Preload file "res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_footstep_wood_04.ogg" does not exist.           at: GDScript::reload (res://scripts/world_audio.gd:21)           GDScript backtrace (most recent call first):               [0] _run_test (res://tests/smoke_player_movement.gd:33) ERROR: Failed to load script "res://scripts/world_audio.gd" with error "Parse error".    at: load (modules/gdscript/gdscript_resource_format.cpp:46)    GDScript backtrace (most recent call first):        [0] _run_test (res://tests/smoke_player_movement.gd:33) Surface smoke [spawn]: collider=StoryStartSurface:<StaticBody3D#93465871974> position=(65.0, 4.651519, 48.0) terrain_y=4.65151962328417 ::error title=Story start detail::StartRegion/StartRiver is missing ::error title=Player runtime smoke::story start is not the required Asterna forest river region ERROR: Movement smoke failed: story start is not the required Asterna forest river region    at: push_error (core/variant/variant_utility.cpp:1023)    GDScript backtrace (most recent call first):        [0] _fail (res://tests/smoke_player_movement.gd:18)        [1] _run_test (res://tests/smoke_player_movement.gd:56) 
+movement-smoke	Prove player surface, void recovery and movement	2026-08-19T22:35:39.1387280Z ##[error]Process completed with exit code 13.
+
+===== RUN 32309385258 =====
+world-core	Verify startup main menu flow	﻿2026-08-19T22:35:37.9331895Z ##[group]Run bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
+world-core	Verify startup main menu flow	2026-08-19T22:35:37.9332579Z ^[[36;1mbash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180^[[0m
+world-core	Verify startup main menu flow	2026-08-19T22:35:37.9348949Z shell: /usr/bin/bash -e {0}
+world-core	Verify startup main menu flow	2026-08-19T22:35:37.9349194Z ##[endgroup]
+world-core	Verify startup main menu flow	2026-08-19T22:35:37.9391216Z GODOT_SMOKE_START scene=tests/smoke_startup_menu.tscn timeout=180s
+world-core	Verify startup main menu flow	2026-08-19T22:35:37.9580553Z Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+world-core	Verify startup main menu flow	2026-08-19T22:35:37.9807092Z 
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.3555768Z ERROR: Startup menu smoke failed: menu music is not configured to autoplay
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.3556295Z    at: push_error (core/variant/variant_utility.cpp:1023)
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.3556623Z    GDScript backtrace (most recent call first):
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.3556970Z        [0] _fail (res://tests/smoke_startup_menu.gd:13)
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.3557288Z        [1] _run_test (res://tests/smoke_startup_menu.gd:88)
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.4484047Z WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.4484857Z    at: cleanup (core/object/object.cpp:2536)
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.4487411Z ERROR: 1 resources still in use at exit (run with --verbose for details).
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.4487893Z    at: clear (core/io/resource.cpp:822)
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.4705007Z ##[error]tests/smoke_startup_menu.tscn exited with code 19
+world-core	Verify startup main menu flow	2026-08-19T22:35:38.4711884Z ##[error]Process completed with exit code 19.
