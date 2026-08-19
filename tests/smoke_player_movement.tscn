@@ -1,4 +1,4 @@
-; Stable release gate refresh: 2026-08-20
+; Stable release gate refresh: 2026-08-20 production-runtime-deps
 [gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://tests/smoke_player_movement.gd" id="1"]
