@@ -34,6 +34,8 @@ on:
       - "tests/smoke_canonical_regions.tscn"
       - "tests/smoke_ui_and_save.gd"
       - "tests/smoke_ui_and_save.tscn"
+      - "assets/audio/**"
+      - "assets/production/**"
       - "assets/shaders/**"
       - "assets/staging/sourcechat_b47/**"
       - "assets/staging/nature/kenney_nature_kit/**"
@@ -50,10 +52,11 @@ permissions:
 jobs:
   movement-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
+          filter: blob:none
           sparse-checkout: |
             scripts
             scenes
@@ -62,6 +65,11 @@ jobs:
             assets/ui
             assets/vfx
             assets/shaders
+            assets/audio/world/oga_100_cc0_sfx_2
+            assets/production/nature/kenney_nature_kit
+            assets/production/medieval/building_shell
+            assets/production/medieval/quaternius_market
+            assets/production/interiors/quaternius_furniture
             assets/staging/sourcechat_b47
             assets/staging/nature/kenney_nature_kit/License.txt
             assets/staging/nature/kenney_nature_kit/Models/GLTF format/tree_oak.glb
