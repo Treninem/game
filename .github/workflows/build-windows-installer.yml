@@ -1,4 +1,4 @@
-name: Build Windows Installer
+name: Build Windows Installer Artifact
 
 on:
   push:
@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: impuls-windows-installer-${{ github.ref }}
@@ -91,7 +91,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           if (-not (Test-Path build\windows\ImPuls.exe)) { throw 'Windows export was not created' }
 
-      - name: Prepare stable release metadata
+      - name: Prepare installer metadata
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -122,27 +122,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Move stable tag to this build
-        if: github.ref == 'refs/heads/main'
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -f stable "$env:GITHUB_SHA"
-          git push origin refs/tags/stable --force
-
-      - name: Publish stable GitHub release
-        if: github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: stable
-          name: ${{ env.IMPULS_BUILD_TAG }}
-          prerelease: false
-          make_latest: true
-          fail_on_unmatched_files: true
-          files: |
-            installer/output/ImPuls-Setup.exe
-            installer/output/ImPuls-Setup.exe.sha256
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Stable publication is intentionally handled only by windows-build.yml,
+      # after the mandatory world-core, movement, gameplay, UI, export and
+      # installer gates have all passed.
