@@ -1,0 +1,56 @@
+name: Diagnose TZ Patch Workflow
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/actions-diagnose.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 5
+      - name: Capture patch workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ff92897835b67b59769f4b7496814b86bc35250f
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          gh api "/repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${TARGET_SHA}&per_page=100" > /tmp/runs.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/runs.json').read_text())
+          rows=[]
+          for r in data.get('workflow_runs',[]):
+              if r.get('name')=='Apply TZ Runtime Patches':
+                  rows.append({k:r.get(k) for k in ['id','name','status','conclusion','html_url','run_number','event','created_at','updated_at']})
+          Path('release/tz-patch-diagnose.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+          Path('/tmp/ids').write_text('\n'.join(str(x['id']) for x in rows if x.get('conclusion')=='failure')+'\n')
+          PY
+          : > release/tz-patch-diagnose.log
+          while IFS= read -r id; do
+            [[ -n "$id" ]] || continue
+            gh run view "$id" --repo "$GITHUB_REPOSITORY" --log-failed >> release/tz-patch-diagnose.log 2>&1 || true
+          done < /tmp/ids
+      - name: Publish diagnose
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add release/tz-patch-diagnose.json release/tz-patch-diagnose.log
+          git commit -m "ci: capture TZ patch diagnostics [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
