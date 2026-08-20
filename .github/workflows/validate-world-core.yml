@@ -69,6 +69,9 @@ jobs:
         shell: bash
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
 
+      - name: Verify mandatory ImPuls progression systems
+        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120
+
       - name: Verify active runtime uses production assets only
         shell: bash
         run: |
