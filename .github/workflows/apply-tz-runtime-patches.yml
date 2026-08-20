@@ -24,27 +24,46 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
-          p = Path('scripts/gameplay_panels.gd')
-          s = p.read_text(encoding='utf-8')
-          old = '''func _purchase_vip() -> void:\n    if ProgressionSystem.purchase_vip_pass():\n        GameState.notify("VIP-пропуск активирован.")\n    else:\n        GameState.notify("VIP-пропуск не приобретён.")\n    _rebuild_content()\n\nfunc _buy_flight_currency() -> void:\n    if not ProgressionSystem.buy_vip_flight_currency(60, 120):\n        GameState.notify("Не удалось пополнить валюту полёта.")\n    _rebuild_content()\n'''
-          new = '''func _purchase_vip() -> void:\n    var vip := ProgressionSystem.vip_status()\n    if bool(vip.get("enabled", false)):\n        GameState.notify("VIP-пропуск уже активен.")\n    elif GameState.coins < 2500:\n        GameState.notify("Для VIP-пропуска требуется 2500 монет.")\n    else:\n        GameState.coins -= 2500\n        ProgressionSystem.set_vip_enabled(true)\n        GameState.notify("VIP-пропуск активирован.")\n    _rebuild_content()\n\nfunc _buy_flight_currency() -> void:\n    var vip := ProgressionSystem.vip_status()\n    if not bool(vip.get("enabled", false)):\n        GameState.notify("Сначала активируйте VIP-пропуск.")\n    elif GameState.coins < 120:\n        GameState.notify("Недостаточно монет для валюты полёта.")\n    else:\n        GameState.coins -= 120\n        ProgressionSystem.add_vip_flight_currency(60)\n        GameState.notify("Валюта полёта пополнена на 60.")\n    _rebuild_content()\n'''
-          if old not in s:
-              raise SystemExit('gameplay panel VIP callback block changed; refusing unsafe patch')
-          p.write_text(s.replace(old, new), encoding='utf-8')
-
           p = Path('scripts/progression_system.gd')
           s = p.read_text(encoding='utf-8')
-          s = s.replace('posmod(seed / 7, maxi(1, floor_count - 3))', 'posmod(int(seed / 7), maxi(1, floor_count - 3))')
-          s = s.replace('var week := int(Time.get_unix_time_from_system()) / WEEK_SECONDS', 'var week := int(int(Time.get_unix_time_from_system()) / WEEK_SECONDS)')
+          old = '''        "war_wins": 0,\n        "war_losses": 0\n'''
+          new = '''        "war_wins": 0,\n        "war_losses": 0,\n        "last_treasury_seizure_week": -1\n'''
+          if old not in s:
+              raise SystemExit('guild state block changed; refusing unsafe patch')
+          s = s.replace(old, new, 1)
+          old = '''        if int(war.get("last_treasury_seizure_week", -1)) != week:\n            seized = maxi(0, int(floor(float(maxi(0, opponent_treasury)) * 0.10)))\n            guild_state["treasury"] = int(guild_state.get("treasury", 0)) + seized\n            war["last_treasury_seizure_week"] = week\n'''
+          new = '''        if int(guild_state.get("last_treasury_seizure_week", -1)) != week:\n            seized = maxi(0, int(floor(float(maxi(0, opponent_treasury)) * 0.10)))\n            guild_state["treasury"] = int(guild_state.get("treasury", 0)) + seized\n            guild_state["last_treasury_seizure_week"] = week\n            war["last_treasury_seizure_week"] = week\n'''
+          if old not in s:
+              raise SystemExit('guild seizure block changed; refusing unsafe patch')
+          s = s.replace(old, new, 1)
           p.write_text(s, encoding='utf-8')
 
-          p = Path('scripts/bootstrap.gd')
+          p = Path('scripts/world_data.gd')
           s = p.read_text(encoding='utf-8')
-          old = '''func _on_player_died() -> void:\n    if respawning:\n        return\n    respawning = true\n    await get_tree().create_timer(2.5).timeout\n'''
-          new = '''func _on_player_died() -> void:\n    if respawning:\n        return\n    respawning = true\n    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):\n        ProgressionSystem.fail_dungeon(true)\n    await get_tree().create_timer(2.5).timeout\n'''
+          old = '''func biome_at(pos: Vector2) -> String:\n    var water_kind := water_kind_at(pos)\n    if water_kind == "sea":\n        return "ocean"\n    if water_kind in ["river", "lake"]:\n        return "freshwater"\n\n    var elevation := elevation_at(pos)\n'''
+          new = '''func biome_at(pos: Vector2) -> String:\n    var water_kind := water_kind_at(pos)\n    var elevation := elevation_at(pos)\n    if water_kind == "sea":\n        return "underwater" if elevation < SEA_LEVEL - 8.0 else "ocean"\n    if water_kind in ["river", "lake"]:\n        return "freshwater"\n\n'''
           if old not in s:
-              raise SystemExit('bootstrap death block changed; refusing unsafe patch')
-          p.write_text(s.replace(old, new), encoding='utf-8')
+              raise SystemExit('biome water block changed; refusing unsafe patch')
+          s = s.replace(old, new, 1)
+          old = '''    var state_id := WORLD_GEOGRAPHY.state_id_at(pos)\n    var temperature := temperature_at(pos)\n    var moisture := moisture_at(pos)\n\n    # Canonical macro-regions bias biome selection without turning political\n'''
+          new = '''    var state_id := WORLD_GEOGRAPHY.state_id_at(pos)\n    var temperature := temperature_at(pos)\n    var moisture := moisture_at(pos)\n\n    if pos.distance_to(Vector2(21600.0, 26000.0)) < 5200.0 and moisture > 0.48:\n        return "tropical"\n    if temperature < 0.16 or (temperature < 0.26 and elevation > 42.0):\n        return "snow"\n\n    # Canonical macro-regions bias biome selection without turning political\n'''
+          if old not in s:
+              raise SystemExit('biome climate block changed; refusing unsafe patch')
+          s = s.replace(old, new, 1)
+          s = s.replace('''        "ocean": return "Море"\n        "freshwater": return "Пресная вода"\n''', '''        "ocean": return "Море"\n        "underwater": return "Подводный мир"\n        "freshwater": return "Пресная вода"\n        "tropical": return "Тропики"\n        "snow": return "Снежные земли"\n''', 1)
+          s = s.replace('''        "ocean": return Color(0.06, 0.20, 0.31, 1.0)\n        "freshwater": return Color(0.08, 0.29, 0.40, 1.0)\n''', '''        "ocean": return Color(0.06, 0.20, 0.31, 1.0)\n        "underwater": return Color(0.035, 0.10, 0.16, 1.0)\n        "freshwater": return Color(0.08, 0.29, 0.40, 1.0)\n        "tropical": return Color(0.08, 0.36, 0.15, 1.0)\n        "snow": return Color(0.72, 0.79, 0.82, 1.0)\n''', 1)
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('scripts/world_streamer.gd')
+          s = p.read_text(encoding='utf-8')
+          old = '''    for biome in ["plains", "forest", "taiga", "tundra", "drylands", "marsh", "mountains", "ocean"]:\n        terrain_materials[biome] = _material(WorldData.biome_color(biome), 0.94)\n'''
+          new = '''    for biome in ["plains", "forest", "taiga", "tundra", "drylands", "marsh", "mountains", "ocean", "freshwater", "underwater", "tropical", "snow", "steppe"]:\n        terrain_materials[biome] = _material(WorldData.biome_color(biome), 0.94)\n'''
+          if old not in s:
+              raise SystemExit('world streamer material block changed; refusing unsafe patch')
+          s = s.replace(old, new, 1)
+          s = s.replace('''        "mountains": tree_count = 3\n''', '''        "mountains": tree_count = 3\n        "tropical": tree_count = 28\n        "snow": tree_count = 2\n        "underwater": tree_count = 0\n''', 1)
+          s = s.replace('''    if biome in ["forest", "taiga", "marsh", "plains"]:\n''', '''    if biome in ["forest", "taiga", "marsh", "plains", "tropical"]:\n''', 1)
+          p.write_text(s, encoding='utf-8')
           PY
       - name: Commit integration fixes
         shell: bash
@@ -52,8 +71,8 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/gameplay_panels.gd scripts/progression_system.gd scripts/bootstrap.gd
+          git add scripts/progression_system.gd scripts/world_data.gd scripts/world_streamer.gd
           git diff --cached --check
-          git commit -m "fix: finish progression runtime integration [skip ci]"
+          git commit -m "feat: complete guild limits and biome coverage [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
