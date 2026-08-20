@@ -31,9 +31,7 @@ func _process(delta: float) -> void:
     if player == null:
         _finish(0, "Испытание остановлено: игрок недоступен.")
         return
-    if active_id == "rune_puzzle":
-        elapsed += delta
-    elif not get_tree().paused:
+    if active_id == "rune_puzzle" or not get_tree().paused:
         elapsed += delta
     _update_overlay()
     if GameState.is_dead:
@@ -43,13 +41,13 @@ func _process(delta: float) -> void:
         "arena_trial": _process_arena()
         "courier_race": _process_race()
         "rune_puzzle": _process_runes()
-    var duration := _duration_for(active_id)
-    if not active_id.is_empty() and elapsed >= duration:
-        var partial := _partial_score()
-        _finish(partial, "Время испытания истекло.")
+    if not active_id.is_empty() and elapsed >= _duration_for(active_id):
+        _finish(_partial_score(), "Время испытания истекло.")
 
 func _unhandled_input(event: InputEvent) -> void:
-    if active_id != "rune_puzzle" or not event.is_pressed() or event.is_echo():
+    if active_id != "rune_puzzle" or not event.is_pressed():
+        return
+    if event is InputEventKey and (event as InputEventKey).echo:
         return
     var token := ""
     if event.is_action_pressed("move_forward"):
@@ -60,10 +58,10 @@ func _unhandled_input(event: InputEvent) -> void:
         token = "S"
     elif event.is_action_pressed("move_right"):
         token = "D"
-    if token.is_empty():
+    if token.is_empty() or rune_sequence.is_empty():
         return
     get_viewport().set_input_as_handled()
-    if token == rune_sequence[rune_index]:
+    if rune_index < rune_sequence.size() and token == rune_sequence[rune_index]:
         rune_index += 1
         if rune_index >= rune_sequence.size():
             var score := target_score + maxi(0, int((RUNE_DURATION - elapsed) * 24.0))
@@ -109,7 +107,7 @@ func _start_arena() -> void:
     challenge_root = Node3D.new()
     challenge_root.name = "ArenaTrial"
     get_tree().current_scene.add_child(challenge_root)
-    var offsets := [Vector3(7,0,0), Vector3(-7,0,0), Vector3(0,0,7), Vector3(0,0,-7), Vector3(10,0,6)]
+    var offsets := [Vector3(7, 0, 0), Vector3(-7, 0, 0), Vector3(0, 0, 7), Vector3(0, 0, -7), Vector3(10, 0, 6)]
     for i in range(offsets.size()):
         _spawn_arena_enemy(i, start_position + offsets[i])
     GameState.notify("Испытание арены: победите всех противников до конца времени.")
@@ -163,7 +161,7 @@ func _start_race() -> void:
     challenge_root = Node3D.new()
     challenge_root.name = "CourierRace"
     get_tree().current_scene.add_child(challenge_root)
-    var offsets := [Vector3(18,0,0), Vector3(30,0,-14), Vector3(12,0,-28), Vector3(-12,0,-20), Vector3(-22,0,2), Vector3(0,0,14)]
+    var offsets := [Vector3(18, 0, 0), Vector3(30, 0, -14), Vector3(12, 0, -28), Vector3(-12, 0, -20), Vector3(-22, 0, 2), Vector3(0, 0, 14)]
     for offset in offsets:
         var raw := start_position + offset
         var xz := Vector2(raw.x, raw.z)
@@ -205,7 +203,6 @@ func _build_race_markers() -> void:
         challenge_root.add_child(marker)
 
 func _start_runes() -> void:
-    previous_pause = get_tree().paused
     get_tree().paused = true
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
     rune_index = 0
@@ -305,7 +302,7 @@ func _update_overlay() -> void:
         "courier_race":
             overlay_label.text = "ГОНКА КУРЬЕРОВ\nТочка %d/%d • время: %d с" % [mini(race_index + 1, race_points.size()), race_points.size(), remaining]
         "rune_puzzle":
-            var sequence := " ".join(rune_sequence)
+            var sequence := " ".join(PackedStringArray(rune_sequence))
             overlay_label.text = "РУННАЯ ГОЛОВОЛОМКА\n%s\nВерно: %d/%d • время: %d с" % [sequence, rune_index, rune_sequence.size(), remaining]
 
 func _resolve_player() -> void:
