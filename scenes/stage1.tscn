@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -23,6 +23,13 @@
 [ext_resource type="Script" path="res://scripts/world_audio.gd" id="22"]
 [ext_resource type="Script" path="res://scripts/dungeon_runtime.gd" id="23"]
 [ext_resource type="Script" path="res://scripts/dungeon_portal.gd" id="24"]
+[ext_resource type="Script" path="res://scripts/dungeon_manager_npc.gd" id="25"]
+[ext_resource type="Script" path="res://scripts/vip_flight_controller.gd" id="26"]
+[ext_resource type="Script" path="res://scripts/combat_state_controller.gd" id="27"]
+[ext_resource type="Script" path="res://scripts/capital_night_siege.gd" id="28"]
+[ext_resource type="Script" path="res://scripts/plot_runtime.gd" id="29"]
+[ext_resource type="Script" path="res://scripts/realm_runtime.gd" id="30"]
+[ext_resource type="Script" path="res://scripts/realm_portal.gd" id="31"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -72,6 +79,9 @@ script = ExtResource("16")
 [node name="CapitalPerimeter" type="Node3D" parent="World"]
 script = ExtResource("11")
 
+[node name="CapitalNightSiege" type="Node3D" parent="World"]
+script = ExtResource("28")
+
 [node name="CityDistrict" type="Node3D" parent="World"]
 script = ExtResource("6")
 
@@ -84,6 +94,28 @@ script = ExtResource("23")
 [node name="DungeonManagerPortal" type="StaticBody3D" parent="World"]
 position = Vector3(82, 0, 54)
 script = ExtResource("24")
+
+[node name="DungeonManagerNPC" type="StaticBody3D" parent="World"]
+position = Vector3(78, 0, 54)
+script = ExtResource("25")
+
+[node name="PlotRuntime" type="Node3D" parent="World"]
+script = ExtResource("29")
+
+[node name="RealmRuntime" type="Node3D" parent="World"]
+script = ExtResource("30")
+
+[node name="AshAbyssPortal" type="StaticBody3D" parent="World"]
+position = Vector3(92, 0, 58)
+script = ExtResource("31")
+realm_id = "ash_abyss"
+portal_name = "Портал в Пепельную Бездну"
+
+[node name="EchoEdgePortal" type="StaticBody3D" parent="World"]
+position = Vector3(98, 0, 58)
+script = ExtResource("31")
+realm_id = "echo_edge"
+portal_name = "Портал в Край Эха"
 
 [node name="StoryStartSurface" type="StaticBody3D" parent="World"]
 script = ExtResource("14")
@@ -117,6 +149,12 @@ near = 0.08
 target_position = Vector3(0, 0, -7)
 enabled = true
 collide_with_areas = true
+
+[node name="VIPFlightController" type="Node" parent="World"]
+script = ExtResource("26")
+
+[node name="CombatStateController" type="Node" parent="World"]
+script = ExtResource("27")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
