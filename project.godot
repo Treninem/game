@@ -14,6 +14,7 @@ boot_splash/fullsize=false
 
 [autoload]
 GameState="*res://scripts/game_state.gd"
+ProgressionSystem="*res://scripts/progression_system.gd"
 SaveManager="*res://scripts/save_manager.gd"
 SettingsManager="*res://scripts/settings_manager.gd"
 UILayoutGuard="*res://scripts/ui_layout_guard.gd"
