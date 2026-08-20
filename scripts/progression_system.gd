@@ -283,7 +283,8 @@ func create_guild(name: String) -> bool:
         "rating": 1000,
         "territories": [],
         "war_wins": 0,
-        "war_losses": 0
+        "war_losses": 0,
+        "last_treasury_seizure_week": -1
     }
     _commit(state)
     GameState.notify("Гильдия «%s» зарегистрирована." % clean)
@@ -349,9 +350,10 @@ func resolve_guild_war(opponent_name: String, player_won: bool, opponent_treasur
     if player_won:
         guild_state["war_wins"] = int(guild_state.get("war_wins", 0)) + 1
         guild_state["rating"] = int(guild_state.get("rating", 1000)) + 35
-        if int(war.get("last_treasury_seizure_week", -1)) != week:
+        if int(guild_state.get("last_treasury_seizure_week", -1)) != week:
             seized = maxi(0, int(floor(float(maxi(0, opponent_treasury)) * 0.10)))
             guild_state["treasury"] = int(guild_state.get("treasury", 0)) + seized
+            guild_state["last_treasury_seizure_week"] = week
             war["last_treasury_seizure_week"] = week
     else:
         guild_state["war_losses"] = int(guild_state.get("war_losses", 0)) + 1

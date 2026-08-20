@@ -226,6 +226,9 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         "tundra": tree_count = 4
         "drylands": tree_count = 3
         "mountains": tree_count = 3
+        "tropical": tree_count = 28
+        "snow": tree_count = 2
+        "underwater": tree_count = 0
 
     var rng := RandomNumberGenerator.new()
     rng.seed = absi(hash("vegetation:%d:%d:%d" % [coord.x, coord.y, WorldData.WORLD_SEED]))
@@ -244,7 +247,7 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
 
     if transforms.is_empty():
         return
-    if biome in ["forest", "taiga", "marsh", "plains"]:
+    if biome in ["forest", "taiga", "marsh", "plains", "tropical"]:
         _spawn_tree_multimeshes(chunk, transforms, biome)
     else:
         _spawn_rock_multimesh(chunk, transforms)
@@ -399,7 +402,7 @@ func _distance_chunks(a: Vector2i, b: Vector2i) -> int:
     return maxi(absi(a.x - b.x), absi(a.y - b.y))
 
 func _prepare_materials() -> void:
-    for biome in ["plains", "forest", "taiga", "tundra", "drylands", "marsh", "mountains", "ocean"]:
+    for biome in ["plains", "forest", "taiga", "tundra", "drylands", "marsh", "mountains", "ocean", "freshwater", "underwater", "tropical", "snow", "steppe"]:
         terrain_materials[biome] = _material(WorldData.biome_color(biome), 0.94)
     trunk_material = _material(Color(0.24, 0.13, 0.065), 0.96)
     foliage_materials["forest"] = _material(Color(0.08, 0.28, 0.10), 0.96)

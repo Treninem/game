@@ -161,12 +161,12 @@ func water_level_at(pos: Vector2) -> float:
 
 func biome_at(pos: Vector2) -> String:
     var water_kind := water_kind_at(pos)
+    var elevation := elevation_at(pos)
     if water_kind == "sea":
-        return "ocean"
+        return "underwater" if elevation < SEA_LEVEL - 8.0 else "ocean"
     if water_kind in ["river", "lake"]:
         return "freshwater"
 
-    var elevation := elevation_at(pos)
     if elevation < SEA_LEVEL - 2.0:
         return "ocean"
 
@@ -179,6 +179,11 @@ func biome_at(pos: Vector2) -> String:
     var state_id := WORLD_GEOGRAPHY.state_id_at(pos)
     var temperature := temperature_at(pos)
     var moisture := moisture_at(pos)
+
+    if pos.distance_to(Vector2(21600.0, 26000.0)) < 5200.0 and moisture > 0.48:
+        return "tropical"
+    if temperature < 0.16 or (temperature < 0.26 and elevation > 42.0):
+        return "snow"
 
     # Canonical macro-regions bias biome selection without turning political
     # borders into visible hard biome walls. Noise still controls local variety.
@@ -219,7 +224,10 @@ func biome_at(pos: Vector2) -> String:
 func biome_display_name(biome: String) -> String:
     match biome:
         "ocean": return "Море"
+        "underwater": return "Подводный мир"
         "freshwater": return "Пресная вода"
+        "tropical": return "Тропики"
+        "snow": return "Снежные земли"
         "mountains": return "Горный хребет"
         "taiga": return "Северная тайга"
         "tundra": return "Тундра"
@@ -232,7 +240,10 @@ func biome_display_name(biome: String) -> String:
 func biome_color(biome: String) -> Color:
     match biome:
         "ocean": return Color(0.06, 0.20, 0.31, 1.0)
+        "underwater": return Color(0.035, 0.10, 0.16, 1.0)
         "freshwater": return Color(0.08, 0.29, 0.40, 1.0)
+        "tropical": return Color(0.08, 0.36, 0.15, 1.0)
+        "snow": return Color(0.72, 0.79, 0.82, 1.0)
         "mountains": return Color(0.31, 0.32, 0.33, 1.0)
         "taiga": return Color(0.10, 0.22, 0.17, 1.0)
         "tundra": return Color(0.45, 0.50, 0.48, 1.0)
