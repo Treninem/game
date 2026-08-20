@@ -1,14 +1,16 @@
 extends Node
 
+const CAPITAL := preload("res://scripts/capital_data.gd")
+
 signal progression_changed
 signal dungeon_requested(run: Dictionary)
 signal dungeon_exit_requested(result: Dictionary)
 signal vip_flight_changed(active: bool)
 signal event_changed(event_data: Dictionary)
 
-const STATE_KEY := "impuls_progression_v1"
-const RANKS := PackedStringArray(["H", "G", "F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "SSS+"])
-const RANK_XP := PackedInt32Array([0, 120, 300, 600, 1050, 1700, 2550, 3650, 5100, 7000, 9500, 12500])
+const STATE_KEY := "impuls_progression_v2"
+const RANKS := ["H", "G", "F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "SSS+"]
+const RANK_XP := [0, 120, 300, 600, 1050, 1700, 2550, 3650, 5100, 7000, 9500, 12500]
 const MAX_LEVEL := 100
 const INACTIVITY_RELEASE_DAYS := 60
 const WEEK_SECONDS := 7 * 24 * 60 * 60
@@ -51,17 +53,19 @@ const MINIGAMES := {
     "rune_puzzle": {"name": "Рунная головоломка", "target": 650, "reward_coins": 70}
 }
 
-var _flight_cost_accumulator := 0.0
-var _last_event_id := ""
+var _flight_seconds := 0.0
+var _last_event_day := -999999
 
 func _ready() -> void:
     _ensure_state()
+    _refresh_event(true)
 
 func _process(delta: float) -> void:
-    _advance_time(delta)
-    _advance_vip_flight(delta)
+    _process_flight(delta)
     _release_inactive_plots()
-    _refresh_event()
+    var day := int(floor(GameState.world_minutes / 1440.0))
+    if day != _last_event_day:
+        _refresh_event()
 
 func _default_state() -> Dictionary:
     return {
@@ -81,35 +85,26 @@ func _default_state() -> Dictionary:
         "guild": {},
         "guild_wars": {},
         "plots": [],
-        "vip": {
-            "enabled": false,
-            "flight": false,
-            "creative": false,
-            "flight_currency": 120
-        },
+        "vip": {"enabled": false, "flight": false, "creative": false, "flight_currency": 120},
         "insurance_charges": 0,
         "combat_active": false,
         "in_dungeon": false,
         "dungeon_run": {},
         "dungeon_history": [],
-        "event_day": 0,
-        "elapsed_world_minutes": 0.0,
         "active_event": {},
         "event_claimed_day": -1,
         "minigame_records": {},
-        "creative_inventory": {},
-        "territories": [],
         "last_world_tick_unix": int(Time.get_unix_time_from_system())
     }
 
 func _ensure_state() -> Dictionary:
-    var state_value = GameState.get_world_value(STATE_KEY, null)
+    var raw = GameState.get_world_value(STATE_KEY, null)
     var state: Dictionary
-    if typeof(state_value) != TYPE_DICTIONARY:
+    if typeof(raw) != TYPE_DICTIONARY:
         state = _default_state()
         GameState.set_world_value(STATE_KEY, state)
         return state
-    state = state_value
+    state = raw
     var defaults := _default_state()
     for key in defaults:
         if not state.has(key):
@@ -119,10 +114,15 @@ func _ensure_state() -> Dictionary:
     GameState.set_world_value(STATE_KEY, state)
     return state
 
+func _commit(state: Dictionary) -> void:
+    state["last_world_tick_unix"] = int(Time.get_unix_time_from_system())
+    GameState.set_world_value(STATE_KEY, state)
+    progression_changed.emit()
+
 func reset_for_new_game() -> void:
+    _flight_seconds = 0.0
+    _last_event_day = -999999
     GameState.set_world_value(STATE_KEY, _default_state())
-    _flight_cost_accumulator = 0.0
-    _last_event_id = ""
     _refresh_event(true)
     progression_changed.emit()
 
@@ -135,12 +135,14 @@ func load_snapshot(data: Dictionary) -> void:
         merged[key] = data[key]
     GameState.set_world_value(STATE_KEY, merged)
     _ensure_state()
+    _refresh_event(true)
     progression_changed.emit()
 
 func rank_name(index: int = -1) -> String:
-    var state := _ensure_state()
-    var use_index := int(state.get("rank_index", 0)) if index < 0 else index
-    return RANKS[clampi(use_index, 0, RANKS.size() - 1)]
+    var use_index := index
+    if use_index < 0:
+        use_index = int(_ensure_state().get("rank_index", 0))
+    return String(RANKS[clampi(use_index, 0, RANKS.size() - 1)])
 
 func rank_index(rank_id: String) -> int:
     return RANKS.find(rank_id)
@@ -155,21 +157,23 @@ func add_xp(amount: int) -> void:
     if amount <= 0:
         return
     var state := _ensure_state()
-    state["xp"] = maxi(0, int(state.get("xp", 0)) + amount)
-    state["level"] = clampi(1 + int(state["xp"]) / 180, 1, MAX_LEVEL)
-    var new_rank := int(state.get("rank_index", 0))
+    var total := maxi(0, int(state.get("xp", 0)) + amount)
+    state["xp"] = total
+    state["level"] = clampi(1 + int(total / 180), 1, MAX_LEVEL)
+    var new_rank := 0
     for i in range(RANK_XP.size()):
-        if int(state["xp"]) >= RANK_XP[i]:
+        if total >= int(RANK_XP[i]):
             new_rank = i
-    if new_rank > int(state.get("rank_index", 0)):
-        state["rank_index"] = new_rank
-        GameState.notify("Новый ранг: %s." % rank_name(new_rank))
+    var old_rank := int(state.get("rank_index", 0))
+    state["rank_index"] = maxi(old_rank, new_rank)
     _sync_player_party_rank(state)
     _commit(state)
+    if new_rank > old_rank:
+        GameState.notify("Новый ранг: %s." % rank_name(new_rank))
 
 func medallion() -> Dictionary:
     var state := _ensure_state()
-    var guild: Dictionary = state.get("guild", {})
+    var guild_state: Dictionary = state.get("guild", {})
     return {
         "name": String(state.get("player_name", "Странник")),
         "rank": rank_name(),
@@ -177,7 +181,7 @@ func medallion() -> Dictionary:
         "xp": int(state.get("xp", 0)),
         "tasks": int(state.get("tasks_completed", 0)),
         "dungeons": int(state.get("dungeons_completed", 0)),
-        "guild": String(guild.get("name", "Нет гильдии"))
+        "guild": String(guild_state.get("name", "Нет гильдии"))
     }
 
 func set_player_name(value: String) -> bool:
@@ -186,41 +190,37 @@ func set_player_name(value: String) -> bool:
         return false
     var state := _ensure_state()
     state["player_name"] = clean
-    var party: Dictionary = state.get("party", {})
-    var members: Array = party.get("members", [])
-    for member in members:
-        if member is Dictionary and String(member.get("id", "")) == "player":
-            member["name"] = clean
-    party["members"] = members
-    state["party"] = party
+    _sync_player_party_rank(state)
     _commit(state)
     return true
 
 func party() -> Dictionary:
-    return _ensure_state().get("party", {}).duplicate(true)
+    return Dictionary(_ensure_state().get("party", {})).duplicate(true)
 
 func party_average_rank_index() -> float:
     var members: Array = party().get("members", [])
     if members.is_empty():
         return float(rank_index(rank_name()))
     var total := 0.0
+    var count := 0
     for member in members:
         if member is Dictionary:
             total += float(member.get("rank_index", 0))
-    return total / maxf(1.0, float(members.size()))
+            count += 1
+    return total / maxf(1.0, float(count))
 
 func register_party_member(member_id: String, member_name: String, member_rank: String) -> bool:
-    var id := member_id.strip_edges()
+    var clean_id := member_id.strip_edges()
     var ridx := rank_index(member_rank)
-    if id.is_empty() or ridx < 0:
+    if clean_id.is_empty() or ridx < 0:
         return false
     var state := _ensure_state()
     var party_state: Dictionary = state.get("party", {})
     var members: Array = party_state.get("members", [])
     for member in members:
-        if member is Dictionary and String(member.get("id", "")) == id:
+        if member is Dictionary and String(member.get("id", "")) == clean_id:
             return false
-    members.append({"id": id, "name": member_name.substr(0, 32), "rank_index": ridx})
+    members.append({"id": clean_id, "name": member_name.strip_edges().substr(0, 32), "rank_index": ridx})
     party_state["members"] = members
     state["party"] = party_state
     _commit(state)
@@ -261,17 +261,14 @@ func set_party_deputy(member_id: String) -> bool:
     return false
 
 func guild() -> Dictionary:
-    return _ensure_state().get("guild", {}).duplicate(true)
+    return Dictionary(_ensure_state().get("guild", {})).duplicate(true)
 
 func create_guild(name: String) -> bool:
     var clean := name.strip_edges().substr(0, 40)
     if clean.is_empty():
         return false
     var state := _ensure_state()
-    if not Dictionary(state.get("guild", {})).is_empty():
-        return false
-    if GameState.coins < 500:
-        GameState.notify("Для регистрации гильдии требуется 500 монет.")
+    if not Dictionary(state.get("guild", {})).is_empty() or GameState.coins < 500:
         return false
     GameState.coins -= 500
     state["guild"] = {
@@ -314,24 +311,16 @@ func guild_deposit(amount: int) -> bool:
     return true
 
 func request_guild_war(opponent_name: String, opponent_consents: bool) -> Dictionary:
-    var state := _ensure_state()
-    var guild_state: Dictionary = state.get("guild", {})
-    if guild_state.is_empty():
-        return {"ok": false, "reason": "no_guild"}
     var opponent := opponent_name.strip_edges().substr(0, 40)
+    var state := _ensure_state()
+    if Dictionary(state.get("guild", {})).is_empty():
+        return {"ok": false, "reason": "no_guild"}
     if opponent.is_empty():
         return {"ok": false, "reason": "invalid_opponent"}
     if not opponent_consents:
         return {"ok": false, "reason": "mutual_consent_required"}
     var wars: Dictionary = state.get("guild_wars", {})
-    wars[opponent] = {
-        "opponent": opponent,
-        "status": "active",
-        "started_unix": int(Time.get_unix_time_from_system()),
-        "last_treasury_seizure_week": -1,
-        "arena_score": 0,
-        "territory_score": 0
-    }
+    wars[opponent] = {"opponent": opponent, "status": "active", "started_unix": int(Time.get_unix_time_from_system())}
     state["guild_wars"] = wars
     _commit(state)
     return {"ok": true, "opponent": opponent}
@@ -350,11 +339,15 @@ func resolve_guild_war(opponent_name: String, player_won: bool, opponent_treasur
     if player_won:
         guild_state["war_wins"] = int(guild_state.get("war_wins", 0)) + 1
         guild_state["rating"] = int(guild_state.get("rating", 1000)) + 35
+        var territories: Array = guild_state.get("territories", [])
+        var territory_id := "war:%s" % opponent_name
+        if not territories.has(territory_id):
+            territories.append(territory_id)
+        guild_state["territories"] = territories
         if int(guild_state.get("last_treasury_seizure_week", -1)) != week:
             seized = maxi(0, int(floor(float(maxi(0, opponent_treasury)) * 0.10)))
             guild_state["treasury"] = int(guild_state.get("treasury", 0)) + seized
             guild_state["last_treasury_seizure_week"] = week
-            war["last_treasury_seizure_week"] = week
     else:
         guild_state["war_losses"] = int(guild_state.get("war_losses", 0)) + 1
         guild_state["rating"] = maxi(0, int(guild_state.get("rating", 1000)) - 25)
@@ -364,15 +357,15 @@ func resolve_guild_war(opponent_name: String, player_won: bool, opponent_treasur
     state["guild_wars"] = wars
     state["guild"] = guild_state
     _commit(state)
-    return {"ok": true, "seized": seized, "rating": int(guild_state.get("rating", 1000))}
+    return {"ok": true, "seized": seized, "rating": int(guild_state.get("rating", 1000)), "territories": Array(guild_state.get("territories", [])).duplicate()}
 
 func dungeon_catalog() -> Array[Dictionary]:
-    var result: Array[Dictionary] = []
+    var rows: Array[Dictionary] = []
     var player_rank := int(_ensure_state().get("rank_index", 0))
     for i in range(RANKS.size()):
-        var rank_id := RANKS[i]
+        var rank_id := String(RANKS[i])
         var definition: Dictionary = DUNGEONS[rank_id]
-        result.append({
+        rows.append({
             "rank": rank_id,
             "name": String(definition.get("name", rank_id)),
             "reward_coins": int(definition.get("reward_coins", 0)),
@@ -380,7 +373,7 @@ func dungeon_catalog() -> Array[Dictionary]:
             "difficulty": float(definition.get("difficulty", 1.0)),
             "available": i <= player_rank + 1
         })
-    return result
+    return rows
 
 func dungeon_warning(rank_id: String) -> String:
     var idx := rank_index(rank_id)
@@ -395,9 +388,9 @@ func dungeon_warning(rank_id: String) -> String:
 
 func start_dungeon(rank_id: String) -> Dictionary:
     var idx := rank_index(rank_id)
+    var state := _ensure_state()
     if idx < 0:
         return {"ok": false, "reason": "unknown_rank"}
-    var state := _ensure_state()
     if bool(state.get("in_dungeon", false)):
         return {"ok": false, "reason": "already_inside"}
     if idx > int(state.get("rank_index", 0)) + 1:
@@ -426,17 +419,17 @@ func start_dungeon(rank_id: String) -> Dictionary:
     state["dungeon_run"] = run
     state["in_dungeon"] = true
     state["combat_active"] = false
-    var vip: Dictionary = state.get("vip", {})
-    vip["flight"] = false
-    vip["creative"] = false
-    state["vip"] = vip
+    var vip_state: Dictionary = state.get("vip", {})
+    vip_state["flight"] = false
+    vip_state["creative"] = false
+    state["vip"] = vip_state
     _commit(state)
     vip_flight_changed.emit(false)
     dungeon_requested.emit(run.duplicate(true))
     return {"ok": true, "run": run.duplicate(true)}
 
 func dungeon_run() -> Dictionary:
-    return _ensure_state().get("dungeon_run", {}).duplicate(true)
+    return Dictionary(_ensure_state().get("dungeon_run", {})).duplicate(true)
 
 func dungeon_floor_victory() -> Dictionary:
     var state := _ensure_state()
@@ -444,19 +437,20 @@ func dungeon_floor_victory() -> Dictionary:
         return {"ok": false, "reason": "not_inside"}
     var run: Dictionary = state.get("dungeon_run", {})
     var floor_index := int(run.get("current_floor", 1))
-    var floor_count := int(run.get("floor_count", 5))
-    var definition: Dictionary = DUNGEONS.get(String(run.get("rank", "H")), DUNGEONS["H"])
-    var floor_reward_coins := maxi(5, int(definition.get("reward_coins", 80)) / maxi(1, floor_count))
-    var floor_reward_xp := maxi(8, int(definition.get("reward_xp", 90)) / maxi(1, floor_count))
-    run["earned_coins"] = int(run.get("earned_coins", 0)) + floor_reward_coins
-    run["earned_xp"] = int(run.get("earned_xp", 0)) + floor_reward_xp
+    var floor_count := maxi(DUNGEON_MIN_FLOORS, int(run.get("floor_count", DUNGEON_MIN_FLOORS)))
+    var rank_id := String(run.get("rank", "H"))
+    var definition: Dictionary = DUNGEONS.get(rank_id, DUNGEONS["H"])
+    var floor_coins := maxi(5, int(int(definition.get("reward_coins", 80)) / floor_count))
+    var floor_xp := maxi(8, int(int(definition.get("reward_xp", 90)) / floor_count))
+    run["earned_coins"] = int(run.get("earned_coins", 0)) + floor_coins
+    run["earned_xp"] = int(run.get("earned_xp", 0)) + floor_xp
     if floor_index == int(run.get("hidden_floor", -1)):
         run["hidden_discovered"] = true
-        run["earned_coins"] = int(run.get("earned_coins", 0)) + floor_reward_coins * 2
-        run["earned_xp"] = int(run.get("earned_xp", 0)) + floor_reward_xp
+        run["earned_coins"] = int(run.get("earned_coins", 0)) + floor_coins * 2
+        run["earned_xp"] = int(run.get("earned_xp", 0)) + floor_xp
     if floor_index >= floor_count:
         state["dungeon_run"] = run
-        _commit(state)
+        GameState.set_world_value(STATE_KEY, state)
         return complete_dungeon()
     run["current_floor"] = floor_index + 1
     state["dungeon_run"] = run
@@ -504,9 +498,9 @@ func fail_dungeon(death: bool = true) -> Dictionary:
     if not bool(state.get("in_dungeon", false)):
         return {"ok": false, "reason": "not_inside"}
     var run: Dictionary = state.get("dungeon_run", {})
-    var retained_ratio := 0.50 if death else 0.70
-    var retained_coins := int(floor(float(int(run.get("earned_coins", 0))) * retained_ratio))
-    var retained_xp := int(floor(float(int(run.get("earned_xp", 0))) * retained_ratio))
+    var ratio := 0.50 if death else 0.70
+    var retained_coins := int(floor(float(int(run.get("earned_coins", 0))) * ratio))
+    var retained_xp := int(floor(float(int(run.get("earned_xp", 0))) * ratio))
     var insured := false
     if death and int(state.get("insurance_charges", 0)) > 0:
         state["insurance_charges"] = int(state.get("insurance_charges", 0)) - 1
@@ -543,27 +537,34 @@ func inventory_insurance_charges() -> int:
 func purchase_plot(plot_type: String, position: Vector2 = Vector2.ZERO) -> Dictionary:
     var kind := plot_type.to_lower()
     var state := _ensure_state()
-    var vip: Dictionary = state.get("vip", {})
+    var vip_state: Dictionary = state.get("vip", {})
     var guild_state: Dictionary = state.get("guild", {})
     var size := NORMAL_PLOT_SIZE
     var price := NORMAL_PLOT_PRICE
     if kind == "vip":
-        if not bool(vip.get("enabled", false)):
+        if not bool(vip_state.get("enabled", false)):
             return {"ok": false, "reason": "vip_required"}
+        if not CAPITAL.inside_capital(position):
+            return {"ok": false, "reason": "vip_city_required"}
         size = VIP_PLOT_SIZE
         price = VIP_PLOT_PRICE
     elif kind == "guild":
         if guild_state.is_empty():
             return {"ok": false, "reason": "guild_required"}
+        if not CAPITAL.can_build_at(position):
+            return {"ok": false, "reason": "outside_capital_required"}
         size = GUILD_PLOT_SIZE
         price = GUILD_PLOT_PRICE
-    elif kind != "normal":
+    elif kind == "normal":
+        if not CAPITAL.can_build_at(position):
+            return {"ok": false, "reason": "outside_capital_required"}
+    else:
         return {"ok": false, "reason": "unknown_plot_type"}
     if GameState.coins < price:
         return {"ok": false, "reason": "insufficient_funds"}
     GameState.coins -= price
-    var plots: Array = state.get("plots", [])
-    var plot_id := "plot-%d-%d" % [int(Time.get_unix_time_from_system()), plots.size()]
+    var plots_state: Array = state.get("plots", [])
+    var plot_id := "plot-%d-%d" % [int(Time.get_unix_time_from_system()), plots_state.size()]
     var plot := {
         "id": plot_id,
         "type": kind,
@@ -573,15 +574,15 @@ func purchase_plot(plot_type: String, position: Vector2 = Vector2.ZERO) -> Dicti
         "last_active_unix": int(Time.get_unix_time_from_system()),
         "owner": String(guild_state.get("name", "player")) if kind == "guild" else "player"
     }
-    plots.append(plot)
-    state["plots"] = plots
+    plots_state.append(plot)
+    state["plots"] = plots_state
     _commit(state)
     return {"ok": true, "plot": plot.duplicate(true)}
 
 func expand_plot(plot_id: String) -> bool:
     var state := _ensure_state()
-    var plots: Array = state.get("plots", [])
-    for plot in plots:
+    var plots_state: Array = state.get("plots", [])
+    for plot in plots_state:
         if plot is Dictionary and String(plot.get("id", "")) == plot_id:
             var kind := String(plot.get("type", "normal"))
             var base_price := NORMAL_PLOT_PRICE
@@ -595,16 +596,16 @@ func expand_plot(plot_id: String) -> bool:
             GameState.coins -= price
             plot["parcels"] = int(plot.get("parcels", 1)) + 1
             plot["last_active_unix"] = int(Time.get_unix_time_from_system())
-            state["plots"] = plots
+            state["plots"] = plots_state
             _commit(state)
             return true
     return false
 
 func sell_plot(plot_id: String) -> bool:
     var state := _ensure_state()
-    var plots: Array = state.get("plots", [])
-    for i in range(plots.size() - 1, -1, -1):
-        var plot = plots[i]
+    var plots_state: Array = state.get("plots", [])
+    for i in range(plots_state.size() - 1, -1, -1):
+        var plot = plots_state[i]
         if plot is Dictionary and String(plot.get("id", "")) == plot_id:
             var kind := String(plot.get("type", "normal"))
             var original_price := NORMAL_PLOT_PRICE
@@ -612,30 +613,28 @@ func sell_plot(plot_id: String) -> bool:
                 original_price = VIP_PLOT_PRICE
             elif kind == "guild":
                 original_price = GUILD_PLOT_PRICE
-            var parcels := maxi(1, int(plot.get("parcels", 1)))
-            GameState.coins += int(round(float(original_price) * 0.65 * float(parcels)))
-            plots.remove_at(i)
-            state["plots"] = plots
+            GameState.coins += int(round(float(original_price) * 0.65 * float(maxi(1, int(plot.get("parcels", 1))))))
+            plots_state.remove_at(i)
+            state["plots"] = plots_state
             _commit(state)
             return true
     return false
 
 func plots() -> Array:
-    return _ensure_state().get("plots", []).duplicate(true)
+    return Array(_ensure_state().get("plots", [])).duplicate(true)
 
 func touch_plot(plot_id: String) -> void:
     var state := _ensure_state()
-    var plots: Array = state.get("plots", [])
-    for plot in plots:
+    var plots_state: Array = state.get("plots", [])
+    for plot in plots_state:
         if plot is Dictionary and String(plot.get("id", "")) == plot_id:
             plot["last_active_unix"] = int(Time.get_unix_time_from_system())
-    state["plots"] = plots
+    state["plots"] = plots_state
     _commit(state)
 
 func plot_build_allowed(plot_id: String, item_id: String, creative: bool = false) -> bool:
-    var state := _ensure_state()
     var selected: Dictionary = {}
-    for plot in state.get("plots", []):
+    for plot in _ensure_state().get("plots", []):
         if plot is Dictionary and String(plot.get("id", "")) == plot_id:
             selected = plot
             break
@@ -650,77 +649,71 @@ func plot_build_allowed(plot_id: String, item_id: String, creative: bool = false
 
 func set_vip_enabled(active: bool) -> void:
     var state := _ensure_state()
-    var vip: Dictionary = state.get("vip", {})
-    vip["enabled"] = active
+    var vip_state: Dictionary = state.get("vip", {})
+    vip_state["enabled"] = active
     if not active:
-        vip["flight"] = false
-        vip["creative"] = false
-    state["vip"] = vip
+        vip_state["flight"] = false
+        vip_state["creative"] = false
+    state["vip"] = vip_state
     _commit(state)
-    vip_flight_changed.emit(bool(vip.get("flight", false)))
+    vip_flight_changed.emit(bool(vip_state.get("flight", false)))
 
 func vip_status() -> Dictionary:
-    return _ensure_state().get("vip", {}).duplicate(true)
+    return Dictionary(_ensure_state().get("vip", {})).duplicate(true)
 
 func add_vip_flight_currency(amount: int) -> void:
     if amount <= 0:
         return
     var state := _ensure_state()
-    var vip: Dictionary = state.get("vip", {})
-    vip["flight_currency"] = int(vip.get("flight_currency", 0)) + amount
-    state["vip"] = vip
+    var vip_state: Dictionary = state.get("vip", {})
+    vip_state["flight_currency"] = int(vip_state.get("flight_currency", 0)) + amount
+    state["vip"] = vip_state
     _commit(state)
 
 func toggle_vip_flight() -> bool:
     var state := _ensure_state()
-    var vip: Dictionary = state.get("vip", {})
-    if not bool(vip.get("enabled", false)) or bool(state.get("combat_active", false)) or bool(state.get("in_dungeon", false)):
-        vip["flight"] = false
-        state["vip"] = vip
+    var vip_state: Dictionary = state.get("vip", {})
+    if not bool(vip_state.get("enabled", false)) or bool(state.get("combat_active", false)) or bool(state.get("in_dungeon", false)) or int(vip_state.get("flight_currency", 0)) <= 0:
+        vip_state["flight"] = false
+        state["vip"] = vip_state
         _commit(state)
         vip_flight_changed.emit(false)
         return false
-    if int(vip.get("flight_currency", 0)) <= 0:
-        vip["flight"] = false
-        state["vip"] = vip
-        _commit(state)
-        vip_flight_changed.emit(false)
-        return false
-    vip["flight"] = not bool(vip.get("flight", false))
-    state["vip"] = vip
+    vip_state["flight"] = not bool(vip_state.get("flight", false))
+    state["vip"] = vip_state
     _commit(state)
-    vip_flight_changed.emit(bool(vip.get("flight", false)))
-    return bool(vip.get("flight", false))
+    var active := bool(vip_state.get("flight", false))
+    vip_flight_changed.emit(active)
+    return active
 
 func set_vip_creative(active: bool) -> bool:
     var state := _ensure_state()
-    var vip: Dictionary = state.get("vip", {})
-    if active and (not bool(vip.get("enabled", false)) or bool(state.get("combat_active", false)) or bool(state.get("in_dungeon", false))):
+    var vip_state: Dictionary = state.get("vip", {})
+    if active and (not bool(vip_state.get("enabled", false)) or bool(state.get("combat_active", false)) or bool(state.get("in_dungeon", false))):
         return false
-    vip["creative"] = active
-    state["vip"] = vip
+    vip_state["creative"] = active
+    state["vip"] = vip_state
     _commit(state)
     return true
 
 func set_combat_active(active: bool) -> void:
     var state := _ensure_state()
     state["combat_active"] = active
-    if active:
-        var vip: Dictionary = state.get("vip", {})
-        if bool(vip.get("flight", false)):
-            vip["flight"] = false
-            state["vip"] = vip
-            vip_flight_changed.emit(false)
+    var vip_state: Dictionary = state.get("vip", {})
+    if active and bool(vip_state.get("flight", false)):
+        vip_state["flight"] = false
+        state["vip"] = vip_state
+        vip_flight_changed.emit(false)
     _commit(state)
 
 func active_event() -> Dictionary:
     _refresh_event()
-    return _ensure_state().get("active_event", {}).duplicate(true)
+    return Dictionary(_ensure_state().get("active_event", {})).duplicate(true)
 
 func claim_event_reward() -> bool:
     var state := _ensure_state()
     var event_data: Dictionary = state.get("active_event", {})
-    var day := int(state.get("event_day", 0))
+    var day := int(floor(GameState.world_minutes / 1440.0))
     if event_data.is_empty() or int(state.get("event_claimed_day", -1)) == day:
         return false
     var reward := int(event_data.get("reward_coins", 0))
@@ -728,21 +721,16 @@ func claim_event_reward() -> bool:
     state["event_claimed_day"] = day
     state["tasks_completed"] = int(state.get("tasks_completed", 0)) + 1
     _commit(state)
-    add_xp(maxi(20, reward / 2))
+    add_xp(maxi(20, int(reward / 2)))
     return true
 
 func minigame_catalog() -> Array[Dictionary]:
     var rows: Array[Dictionary] = []
     var records: Dictionary = _ensure_state().get("minigame_records", {})
-    for id in MINIGAMES:
+    for key in MINIGAMES:
+        var id := String(key)
         var definition: Dictionary = MINIGAMES[id]
-        rows.append({
-            "id": String(id),
-            "name": String(definition.get("name", id)),
-            "target": int(definition.get("target", 0)),
-            "reward_coins": int(definition.get("reward_coins", 0)),
-            "record": int(records.get(id, 0))
-        })
+        rows.append({"id": id, "name": String(definition.get("name", id)), "target": int(definition.get("target", 0)), "reward_coins": int(definition.get("reward_coins", 0)), "record": int(records.get(id, 0))})
     return rows
 
 func finish_minigame(minigame_id: String, score: int) -> Dictionary:
@@ -751,97 +739,96 @@ func finish_minigame(minigame_id: String, score: int) -> Dictionary:
     var definition: Dictionary = MINIGAMES[minigame_id]
     var state := _ensure_state()
     var records: Dictionary = state.get("minigame_records", {})
-    var old_record := int(records.get(minigame_id, 0))
-    var new_record := maxi(old_record, score)
+    var new_record := maxi(int(records.get(minigame_id, 0)), score)
     records[minigame_id] = new_record
     state["minigame_records"] = records
     var reached := score >= int(definition.get("target", 0))
-    var reward := int(definition.get("reward_coins", 0)) if reached else int(definition.get("reward_coins", 0)) / 4
+    var reward := int(definition.get("reward_coins", 0))
+    if not reached:
+        reward = int(reward / 4)
     GameState.coins += reward
     if reached:
         state["tasks_completed"] = int(state.get("tasks_completed", 0)) + 1
     _commit(state)
     if reached:
-        add_xp(maxi(15, reward / 2))
+        add_xp(maxi(15, int(reward / 2)))
     return {"ok": true, "reward": reward, "record": new_record, "target_reached": reached}
 
-func _advance_time(delta: float) -> void:
-    if delta <= 0.0:
-        return
+func _process_flight(delta: float) -> void:
     var state := _ensure_state()
-    state["elapsed_world_minutes"] = float(state.get("elapsed_world_minutes", 0.0)) + delta * 4.0
-    state["event_day"] = int(floor(float(state.get("elapsed_world_minutes", 0.0)) / 1440.0))
-    state["last_world_tick_unix"] = int(Time.get_unix_time_from_system())
-    GameState.set_world_value(STATE_KEY, state)
-
-func _advance_vip_flight(delta: float) -> void:
-    var state := _ensure_state()
-    var vip: Dictionary = state.get("vip", {})
-    if not bool(vip.get("flight", false)):
-        _flight_cost_accumulator = 0.0
+    var vip_state: Dictionary = state.get("vip", {})
+    if not bool(vip_state.get("flight", false)):
+        _flight_seconds = 0.0
         return
     if bool(state.get("combat_active", false)) or bool(state.get("in_dungeon", false)):
-        vip["flight"] = false
-        state["vip"] = vip
+        vip_state["flight"] = false
+        state["vip"] = vip_state
         _commit(state)
         vip_flight_changed.emit(false)
+        _flight_seconds = 0.0
         return
-    _flight_cost_accumulator += maxf(delta, 0.0)
-    while _flight_cost_accumulator >= 60.0:
-        _flight_cost_accumulator -= 60.0
-        var currency := int(vip.get("flight_currency", 0))
-        if currency < VIP_FLIGHT_COST_PER_MINUTE:
-            vip["flight"] = false
-            state["vip"] = vip
-            _commit(state)
-            vip_flight_changed.emit(false)
-            GameState.notify("Полёт отключён: закончилась валюта полёта.")
-            return
-        vip["flight_currency"] = currency - VIP_FLIGHT_COST_PER_MINUTE
-    state["vip"] = vip
+    _flight_seconds += maxf(0.0, delta)
+    if _flight_seconds < 60.0:
+        return
+    var whole_minutes := int(_flight_seconds / 60.0)
+    _flight_seconds -= float(whole_minutes) * 60.0
+    var cost := whole_minutes * VIP_FLIGHT_COST_PER_MINUTE
+    var currency := int(vip_state.get("flight_currency", 0))
+    if currency <= cost:
+        vip_state["flight_currency"] = 0
+        vip_state["flight"] = false
+        state["vip"] = vip_state
+        _commit(state)
+        vip_flight_changed.emit(false)
+        GameState.notify("Полёт отключён: закончилась валюта полёта.")
+        return
+    vip_state["flight_currency"] = currency - cost
+    state["vip"] = vip_state
     GameState.set_world_value(STATE_KEY, state)
 
 func _release_inactive_plots() -> void:
     var state := _ensure_state()
-    var plots: Array = state.get("plots", [])
-    if plots.is_empty():
+    var plots_state: Array = state.get("plots", [])
+    if plots_state.is_empty():
         return
     var now := int(Time.get_unix_time_from_system())
     var limit := INACTIVITY_RELEASE_DAYS * 24 * 60 * 60
     var changed := false
-    for i in range(plots.size() - 1, -1, -1):
-        var plot = plots[i]
+    for i in range(plots_state.size() - 1, -1, -1):
+        var plot = plots_state[i]
         if plot is Dictionary and now - int(plot.get("last_active_unix", now)) >= limit:
-            plots.remove_at(i)
+            plots_state.remove_at(i)
             changed = true
     if changed:
-        state["plots"] = plots
+        state["plots"] = plots_state
         _commit(state)
 
 func _refresh_event(force: bool = false) -> void:
+    var day := int(floor(GameState.world_minutes / 1440.0))
     var state := _ensure_state()
-    var day := int(state.get("event_day", 0))
-    var index := posmod(day, EVENTS.size())
-    var event_data: Dictionary = EVENTS[index].duplicate(true)
+    if not force and day == _last_event_day and not Dictionary(state.get("active_event", {})).is_empty():
+        return
+    var event_data: Dictionary = EVENTS[posmod(day, EVENTS.size())].duplicate(true)
     event_data["day"] = day
-    var id := String(event_data.get("id", ""))
-    if force or id != String(Dictionary(state.get("active_event", {})).get("id", "")):
-        state["active_event"] = event_data
-        _commit(state)
-        if id != _last_event_id:
-            _last_event_id = id
-            event_changed.emit(event_data.duplicate(true))
+    var old_id := String(Dictionary(state.get("active_event", {})).get("id", ""))
+    state["active_event"] = event_data
+    GameState.set_world_value(STATE_KEY, state)
+    _last_event_day = day
+    if force or old_id != String(event_data.get("id", "")):
+        event_changed.emit(event_data.duplicate(true))
 
 func _normalize_party(state: Dictionary) -> void:
     var party_state: Dictionary = state.get("party", {})
+    if party_state.is_empty():
+        party_state = Dictionary(_default_state().get("party", {})).duplicate(true)
     var members: Array = party_state.get("members", [])
-    var found_player := false
+    var found := false
     for member in members:
         if member is Dictionary and String(member.get("id", "")) == "player":
-            found_player = true
-            member["rank_index"] = int(state.get("rank_index", 0))
             member["name"] = String(state.get("player_name", "Странник"))
-    if not found_player:
+            member["rank_index"] = int(state.get("rank_index", 0))
+            found = true
+    if not found:
         members.push_front({"id": "player", "name": String(state.get("player_name", "Странник")), "rank_index": int(state.get("rank_index", 0))})
     party_state["registered"] = true
     party_state["leader"] = "player"
@@ -851,23 +838,12 @@ func _normalize_party(state: Dictionary) -> void:
     state["party"] = party_state
 
 func _normalize_vip(state: Dictionary) -> void:
-    var vip: Dictionary = state.get("vip", {})
-    var defaults: Dictionary = _default_state().get("vip", {})
+    var vip_state: Dictionary = state.get("vip", {})
+    var defaults := {"enabled": false, "flight": false, "creative": false, "flight_currency": 120}
     for key in defaults:
-        if not vip.has(key):
-            vip[key] = defaults[key]
-    state["vip"] = vip
+        if not vip_state.has(key):
+            vip_state[key] = defaults[key]
+    state["vip"] = vip_state
 
 func _sync_player_party_rank(state: Dictionary) -> void:
-    var party_state: Dictionary = state.get("party", {})
-    var members: Array = party_state.get("members", [])
-    for member in members:
-        if member is Dictionary and String(member.get("id", "")) == "player":
-            member["rank_index"] = int(state.get("rank_index", 0))
-            member["name"] = String(state.get("player_name", "Странник"))
-    party_state["members"] = members
-    state["party"] = party_state
-
-func _commit(state: Dictionary) -> void:
-    GameState.set_world_value(STATE_KEY, state)
-    progression_changed.emit()
+    _normalize_party(state)
