@@ -26,14 +26,18 @@ var realm_roots: Dictionary = {}
 
 func _ready() -> void:
     add_to_group("realm_runtime")
-    call_deferred("_resolve_player")
+    call_deferred("_recover_saved_realm")
 
 func enter_realm(realm_id: String, actor: Node = null) -> bool:
     _resolve_player()
-    var target_player := actor as CharacterBody3D if actor is CharacterBody3D else player
+    var target_player: CharacterBody3D = player
+    if actor is CharacterBody3D:
+        target_player = actor as CharacterBody3D
     if target_player == null:
         return false
     if realm_id == "main":
+        if not return_valid:
+            _restore_saved_return_position()
         if not return_valid:
             return false
         target_player.global_position = return_position
@@ -49,6 +53,7 @@ func enter_realm(realm_id: String, actor: Node = null) -> bool:
     if current_realm == "main":
         return_position = target_player.global_position
         return_valid = true
+        GameState.set_world_value("realm_return_position", [return_position.x, return_position.y, return_position.z])
     _ensure_realm(realm_id)
     var root: Node3D = realm_roots[realm_id]
     target_player.global_position = root.global_position + Vector3(0, 2.0, 12.0)
@@ -65,6 +70,29 @@ func realm_catalog() -> Array[Dictionary]:
         var data: Dictionary = REALMS[id]
         rows.append({"id": String(id), "name": String(data.get("name", id)), "anchor": data.get("anchor", Vector2.ZERO)})
     return rows
+
+func _recover_saved_realm() -> void:
+    _resolve_player()
+    _restore_saved_return_position()
+    var saved := String(GameState.get_world_value("current_realm", "main"))
+    if not REALMS.has(saved):
+        current_realm = "main"
+        return
+    current_realm = saved
+    _ensure_realm(saved)
+    if player == null:
+        return
+    var root: Node3D = realm_roots[saved]
+    if player.global_position.distance_to(root.global_position) > 90.0:
+        player.global_position = root.global_position + Vector3(0, 2.0, 12.0)
+        player.velocity = Vector3.ZERO
+    GameState.set_location(String(Dictionary(REALMS[saved]).get("name", saved)))
+
+func _restore_saved_return_position() -> void:
+    var raw = GameState.get_world_value("realm_return_position", [])
+    if raw is Array and raw.size() == 3:
+        return_position = Vector3(float(raw[0]), float(raw[1]), float(raw[2]))
+        return_valid = true
 
 func _ensure_realm(realm_id: String) -> void:
     if realm_roots.has(realm_id) and is_instance_valid(realm_roots[realm_id]):
