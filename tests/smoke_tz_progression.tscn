@@ -1,3 +1,4 @@
+; Mandatory master progression release gate for the complete ImPuls stable build.
 [gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://tests/smoke_tz_progression.gd" id="1"]
