@@ -1,0 +1,42 @@
+name: Promote Current ImPuls Stable
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/promote-current-stable.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 20
+      - name: Add mandatory master smoke to stable build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/windows-build.yml')
+          s=p.read_text(encoding='utf-8')
+          if 'Verify mandatory ImPuls progression systems' not in s:
+              needle='''      - name: Verify startup main menu\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
+              insert='''      - name: Verify mandatory ImPuls progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n''' + needle
+              if needle not in s:
+                  raise SystemExit('stable workflow insertion point missing')
+              s=s.replace(needle,insert,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/windows-build.yml
+          git diff --cached --check
+          git commit -m "[stable] complete ImPuls systems and rebuild installer"
+          git pull --rebase origin main
+          git push origin HEAD:main
