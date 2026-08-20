@@ -17,28 +17,57 @@ jobs:
         with:
           ref: main
           fetch-depth: 10
-      - name: Connect interactive minigames
+      - name: Wire TZ smoke into mandatory workflows
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          p = Path('scripts/gameplay_panels.gd')
+
+          p = Path('.github/workflows/validate-world-core.yml')
           s = p.read_text(encoding='utf-8')
-          old = '''func _play_minigame(minigame_id: String, target: int) -> void:\n    var state := ProgressionSystem.snapshot()\n    var seed := int(state.get("xp", 0)) + int(state.get("tasks_completed", 0)) * 97 + int(Time.get_ticks_msec() / 250)\n    var score := maxi(1, target - 180 + posmod(seed, 361))\n    var result := ProgressionSystem.finish_minigame(minigame_id, score)\n    GameState.notify("Результат: %d очков • награда %d монет." % [score, int(result.get("reward", 0))])\n    _rebuild_content()\n'''
-          new = '''func _play_minigame(minigame_id: String, _target: int) -> void:\n    var runtime := get_tree().get_first_node_in_group("minigame_runtime")\n    if runtime == null or not runtime.has_method("start_minigame"):\n        GameState.notify("Испытание временно недоступно.")\n        return\n    close_panel()\n    if not bool(runtime.call("start_minigame", minigame_id)):\n        GameState.notify("Сейчас нельзя начать это испытание.")\n'''
-          if old not in s:
-              raise SystemExit('minigame callback changed; refusing unsafe patch')
-          p.write_text(s.replace(old, new, 1), encoding='utf-8')
+          needle = '''      - name: Verify startup main menu flow\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
+          insert = '''      - name: Verify mandatory TZ progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n''' + needle
+          if 'smoke_tz_progression.tscn' not in s:
+              if needle not in s:
+                  raise SystemExit('world-core insertion point changed')
+              s = s.replace(needle, insert, 1)
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('.github/workflows/windows-build.yml')
+          s = p.read_text(encoding='utf-8')
+          needle = '''      - name: Verify startup main menu\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
+          insert = '''      - name: Verify mandatory TZ progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n''' + needle
+          if 'smoke_tz_progression.tscn' not in s:
+              if needle not in s:
+                  raise SystemExit('stable build insertion point changed')
+              s = s.replace(needle, insert, 1)
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('.github/workflows/validate-movement.yml')
+          s = p.read_text(encoding='utf-8')
+          if 'tests/smoke_tz_progression.gd' not in s:
+              needle = '''      - "tests/smoke_ui_and_save.tscn"\n'''
+              insert = needle + '''      - "tests/smoke_tz_progression.gd"\n      - "tests/smoke_tz_progression.tscn"\n'''
+              if needle not in s:
+                  raise SystemExit('movement path insertion point changed')
+              s = s.replace(needle, insert, 1)
+          if 'Prove mandatory TZ progression systems' not in s:
+              needle = '''      - name: Prove player surface, void recovery and movement\n'''
+              insert = '''      - name: Prove mandatory TZ progression systems\n        shell: bash\n        run: |\n          set +e\n          output=$(timeout 60s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_tz_progression.tscn 2>&1)\n          status=$?\n          printf '%s\\n' "$output"\n          if [ "$status" -ne 0 ]; then\n            detail=$(printf '%s\\n' "$output" | tail -n 48 | tr '\\n' ' ' | sed 's/%/%25/g')\n            echo "::error title=TZ progression raw Godot output::$detail"\n          fi\n          exit "$status"\n''' + needle
+              if needle not in s:
+                  raise SystemExit('movement step insertion point changed')
+              s = s.replace(needle, insert, 1)
+          p.write_text(s, encoding='utf-8')
           PY
-      - name: Commit integration fixes
+      - name: Commit release gate wiring
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/gameplay_panels.gd
+          git add .github/workflows/validate-world-core.yml .github/workflows/validate-movement.yml .github/workflows/windows-build.yml
           git diff --cached --check
-          git commit -m "feat: route minigames through interactive runtime [skip ci]"
+          git commit -m "ci: enforce master TZ progression smoke [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
