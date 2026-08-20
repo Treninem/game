@@ -1,0 +1,59 @@
+name: Apply TZ Runtime Patches
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/apply-tz-runtime-patches.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 10
+      - name: Apply narrow integration fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('scripts/gameplay_panels.gd')
+          s = p.read_text(encoding='utf-8')
+          old = '''func _purchase_vip() -> void:\n    if ProgressionSystem.purchase_vip_pass():\n        GameState.notify("VIP-пропуск активирован.")\n    else:\n        GameState.notify("VIP-пропуск не приобретён.")\n    _rebuild_content()\n\nfunc _buy_flight_currency() -> void:\n    if not ProgressionSystem.buy_vip_flight_currency(60, 120):\n        GameState.notify("Не удалось пополнить валюту полёта.")\n    _rebuild_content()\n'''
+          new = '''func _purchase_vip() -> void:\n    var vip := ProgressionSystem.vip_status()\n    if bool(vip.get("enabled", false)):\n        GameState.notify("VIP-пропуск уже активен.")\n    elif GameState.coins < 2500:\n        GameState.notify("Для VIP-пропуска требуется 2500 монет.")\n    else:\n        GameState.coins -= 2500\n        ProgressionSystem.set_vip_enabled(true)\n        GameState.notify("VIP-пропуск активирован.")\n    _rebuild_content()\n\nfunc _buy_flight_currency() -> void:\n    var vip := ProgressionSystem.vip_status()\n    if not bool(vip.get("enabled", false)):\n        GameState.notify("Сначала активируйте VIP-пропуск.")\n    elif GameState.coins < 120:\n        GameState.notify("Недостаточно монет для валюты полёта.")\n    else:\n        GameState.coins -= 120\n        ProgressionSystem.add_vip_flight_currency(60)\n        GameState.notify("Валюта полёта пополнена на 60.")\n    _rebuild_content()\n'''
+          if old not in s:
+              raise SystemExit('gameplay panel VIP callback block changed; refusing unsafe patch')
+          p.write_text(s.replace(old, new), encoding='utf-8')
+
+          p = Path('scripts/progression_system.gd')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('posmod(seed / 7, maxi(1, floor_count - 3))', 'posmod(int(seed / 7), maxi(1, floor_count - 3))')
+          s = s.replace('var week := int(Time.get_unix_time_from_system()) / WEEK_SECONDS', 'var week := int(int(Time.get_unix_time_from_system()) / WEEK_SECONDS)')
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('scripts/bootstrap.gd')
+          s = p.read_text(encoding='utf-8')
+          old = '''func _on_player_died() -> void:\n    if respawning:\n        return\n    respawning = true\n    await get_tree().create_timer(2.5).timeout\n'''
+          new = '''func _on_player_died() -> void:\n    if respawning:\n        return\n    respawning = true\n    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):\n        ProgressionSystem.fail_dungeon(true)\n    await get_tree().create_timer(2.5).timeout\n'''
+          if old not in s:
+              raise SystemExit('bootstrap death block changed; refusing unsafe patch')
+          p.write_text(s.replace(old, new), encoding='utf-8')
+          PY
+      - name: Commit integration fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/gameplay_panels.gd scripts/progression_system.gd scripts/bootstrap.gd
+          git diff --cached --check
+          git commit -m "fix: finish progression runtime integration [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
