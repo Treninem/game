@@ -1,0 +1,55 @@
+
+===== RUN 32330378577 =====
+world-core	Verify canonical regions and climate	﻿2026-08-20T04:03:24.3849401Z ##[group]Run bash tools/run_godot_smoke.sh tests/smoke_canonical_regions.tscn 90
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.3849734Z ^[[36;1mbash tools/run_godot_smoke.sh tests/smoke_canonical_regions.tscn 90^[[0m
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.3880234Z shell: /usr/bin/bash -e {0}
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.3880379Z ##[endgroup]
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.3934045Z GODOT_SMOKE_START scene=tests/smoke_canonical_regions.tscn timeout=90s
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4095025Z Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4299071Z 
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4908182Z SCRIPT ERROR: Parse Error: Assigned value for constant "RANKS" isn't a constant expression.
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4908827Z           at: GDScript::reload (res://scripts/progression_system.gd:10)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4909318Z SCRIPT ERROR: Parse Error: Assigned value for constant "RANK_XP" isn't a constant expression.
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4909846Z           at: GDScript::reload (res://scripts/progression_system.gd:11)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4911986Z ERROR: Failed to load script "res://scripts/progression_system.gd" with error "Parse error".
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4912550Z    at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4913070Z ERROR: Failed to instantiate an autoload, script 'res://scripts/progression_system.gd' does not inherit from 'Node'.
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.4913559Z    at: start (main/main.cpp:4535)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6660811Z CANONICAL_REGIONS_SMOKE_START
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6661129Z CANONICAL_REGIONS_SMOKE_STAGE political
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6661391Z CANONICAL_REGIONS_SMOKE_STAGE capital
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6661638Z CANONICAL_REGIONS_PROBE start_spawn begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6662005Z CANONICAL_REGIONS_PROBE start_spawn end biome=forest
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6662315Z CANONICAL_REGIONS_PROBE vardheim.water begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6662607Z CANONICAL_REGIONS_PROBE vardheim.water end kind=
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6662906Z CANONICAL_REGIONS_PROBE vardheim.elevation begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6663233Z CANONICAL_REGIONS_PROBE vardheim.elevation end value=7.0000
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6663612Z CANONICAL_REGIONS_PROBE vardheim.temperature begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6663949Z CANONICAL_REGIONS_PROBE vardheim.temperature end value=0.0000
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6664585Z CANONICAL_REGIONS_PROBE vardheim.moisture begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6664900Z CANONICAL_REGIONS_PROBE vardheim.moisture end value=0.6175
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6665212Z CANONICAL_REGIONS_PROBE vardheim.biome begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6665505Z CANONICAL_REGIONS_PROBE vardheim.biome end biome=snow
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6665789Z CANONICAL_REGIONS_PROBE liorel begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6666049Z CANONICAL_REGIONS_PROBE liorel end biome=forest
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6666323Z CANONICAL_REGIONS_PROBE dor_karn begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6666587Z CANONICAL_REGIONS_PROBE dor_karn end biome=snow
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6666852Z CANONICAL_REGIONS_PROBE saharin begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6667119Z CANONICAL_REGIONS_PROBE saharin end biome=drylands
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6667392Z CANONICAL_REGIONS_PROBE ordan begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6667651Z CANONICAL_REGIONS_PROBE ordan end biome=steppe
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6668072Z CANONICAL_REGIONS_PROBE moisture begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6668378Z CANONICAL_REGIONS_PROBE moisture end liorel=0.5291 saharin=0.2206
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6668710Z CANONICAL_REGIONS_PROBE temperature begin
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6668996Z ERROR: Vardheim lost its cold-region biome: snow
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6669306Z    at: push_error (core/variant/variant_utility.cpp:1023)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6669611Z    GDScript backtrace (most recent call first):
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6669924Z        [0] _ready (res://tests/smoke_canonical_regions.gd:119)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6670247Z ERROR: Dor-Karn resolved to invalid macro biome: snow
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6670561Z    at: push_error (core/variant/variant_utility.cpp:1023)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6670858Z    GDScript backtrace (most recent call first):
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6671154Z        [0] _ready (res://tests/smoke_canonical_regions.gd:119)
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6671546Z CANONICAL_REGIONS_PROBE temperature end vardheim=0.0000 saharin=1.0000
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.6671994Z CANONICAL_REGIONS_SMOKE_STAGE climate
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.7285405Z ##[error]tests/smoke_canonical_regions.tscn exited with code 1
+world-core	Verify canonical regions and climate	2026-08-20T04:03:24.7291035Z ##[error]Process completed with exit code 1.
