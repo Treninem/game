@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -21,6 +21,8 @@
 [ext_resource type="Script" path="res://scripts/settlement_public_works.gd" id="20"]
 [ext_resource type="Script" path="res://scripts/settlement_civic_spaces.gd" id="21"]
 [ext_resource type="Script" path="res://scripts/world_audio.gd" id="22"]
+[ext_resource type="Script" path="res://scripts/dungeon_runtime.gd" id="23"]
+[ext_resource type="Script" path="res://scripts/dungeon_portal.gd" id="24"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -75,6 +77,13 @@ script = ExtResource("6")
 
 [node name="RuntimeStabilityGuard" type="Node" parent="World"]
 script = ExtResource("13")
+
+[node name="DungeonRuntime" type="Node3D" parent="World"]
+script = ExtResource("23")
+
+[node name="DungeonManagerPortal" type="StaticBody3D" parent="World"]
+position = Vector3(82, 0, 54)
+script = ExtResource("24")
 
 [node name="StoryStartSurface" type="StaticBody3D" parent="World"]
 script = ExtResource("14")
