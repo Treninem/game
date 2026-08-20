@@ -4,6 +4,9 @@ extends StaticBody3D
 
 func _ready() -> void:
     add_to_group("dungeon_portal")
+    var xz := Vector2(global_position.x, global_position.z)
+    if WorldData.inside_world(xz):
+        global_position.y = WorldData.elevation_at(xz) + 0.05
     _ensure_visuals()
 
 func interaction_text() -> String:
