@@ -1,0 +1,80 @@
+name: Probe TZ Development Gates
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/tz-ci-probe.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 2
+      - name: Capture target workflow state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: "62fc26a8448ae25c568b21f9446d32a98d8c20f9"
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          for attempt in $(seq 1 30); do
+            gh api "/repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${TARGET_SHA}&per_page=100" > /tmp/runs.json
+            pending=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/runs.json').read_text())
+          watched={'Validate World Core','Validate Player Movement','Build Stable Release and Installer'}
+          rows=[r for r in data.get('workflow_runs',[]) if r.get('name') in watched]
+          print(sum(1 for r in rows if r.get('status') != 'completed'))
+          PY
+            )
+            found=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/runs.json').read_text())
+          watched={'Validate World Core','Validate Player Movement','Build Stable Release and Installer'}
+          print(sum(1 for r in data.get('workflow_runs',[]) if r.get('name') in watched))
+          PY
+            )
+            if [[ "$found" -gt 0 && "$pending" -eq 0 ]]; then break; fi
+            sleep 10
+          done
+          TARGET_SHA="$TARGET_SHA" python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          data=json.loads(Path('/tmp/runs.json').read_text())
+          watched={'Validate World Core','Validate Player Movement','Build Stable Release and Installer'}
+          rows=[]
+          for r in data.get('workflow_runs',[]):
+              if r.get('name') in watched:
+                  rows.append({'name':r.get('name'),'run_id':r.get('id'),'run_number':r.get('run_number'),'status':r.get('status'),'conclusion':r.get('conclusion'),'html_url':r.get('html_url')})
+          Path('release/tz-probe.json').write_text(json.dumps({'sha':os.environ['TARGET_SHA'],'captured_at':datetime.now(timezone.utc).isoformat(),'runs':rows},indent=2)+'\n')
+          Path('/tmp/failed.txt').write_text('\n'.join(str(r['run_id']) for r in rows if r.get('conclusion')=='failure')+'\n')
+          PY
+          : > release/tz-failure-logs.txt
+          while IFS= read -r run_id; do
+            [[ -n "$run_id" ]] || continue
+            printf '\n===== RUN %s =====\n' "$run_id" >> release/tz-failure-logs.txt
+            gh run view "$run_id" --repo "$GITHUB_REPOSITORY" --log-failed >> release/tz-failure-logs.txt 2>&1 || true
+          done < /tmp/failed.txt
+      - name: Publish probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add release/tz-probe.json release/tz-failure-logs.txt
+          git commit -m "ci: capture TZ development gate state [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
