@@ -27,9 +27,7 @@ func _process(delta: float) -> void:
     _resolve_player()
     if not bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
         return
-    if transition_pending:
-        return
-    if instance_root == null or not is_instance_valid(instance_root):
+    if transition_pending or instance_root == null or not is_instance_valid(instance_root):
         return
     var living := _living_dungeon_hostiles()
     if living > 0:
@@ -93,6 +91,8 @@ func _on_dungeon_exit_requested(_result: Dictionary) -> void:
     var target := return_position if return_position_valid else _safe_world_return_position()
     player.global_position = target
     player.velocity = Vector3.ZERO
+    if player.has_method("set_dungeon_mode"):
+        player.call("set_dungeon_mode", false)
     if player.has_method("prepare_for_streamed_surface"):
         player.call("prepare_for_streamed_surface", false)
     elif player.has_method("_begin_ground_guard"):
@@ -126,12 +126,12 @@ func _build_floor(run: Dictionary) -> void:
     var floor_count := int(run.get("floor_count", 5))
     var boss_floor := int(run.get("boss_floor", floor_count))
     var rank_id := String(run.get("rank", "H"))
-    var rank_index := maxi(0, ProgressionSystem.rank_index(rank_id))
+    var rank_idx := maxi(0, ProgressionSystem.rank_index(rank_id))
     var is_boss := active_floor >= boss_floor
-    var enemy_count := 2 + mini(6, active_floor / 2 + rank_index / 2)
+    var enemy_count := 2 + mini(6, int(active_floor / 2) + int(rank_idx / 2))
     if is_boss:
-        enemy_count = maxi(1, mini(4, 1 + rank_index / 4))
-    _spawn_floor_enemies(enemy_count, rank_index, is_boss)
+        enemy_count = maxi(1, mini(4, 1 + int(rank_idx / 4)))
+    _spawn_floor_enemies(enemy_count, rank_idx, is_boss)
 
     if int(run.get("hidden_floor", -1)) == active_floor:
         _add_hidden_floor_marker(instance_root)
@@ -145,25 +145,25 @@ func _build_floor(run: Dictionary) -> void:
     GameState.set_location("Подземелье %s • этаж %d/%d" % [String(run.get("name", "")), active_floor, floor_count])
     GameState.notify("Этаж %d/%d • победите всех противников." % [active_floor, floor_count])
 
-func _spawn_floor_enemies(count: int, rank_index: int, boss_floor: bool) -> void:
+func _spawn_floor_enemies(count: int, rank_idx: int, boss_floor: bool) -> void:
     var radius := 8.0
     for i in range(maxi(1, count)):
         var angle := TAU * float(i) / float(maxi(1, count))
         var pos := Vector3(cos(angle) * radius, 1.0, sin(angle) * radius - 3.0)
         var is_boss := boss_floor and i == 0
-        _spawn_enemy(i, pos, rank_index, is_boss)
+        _spawn_enemy(i, pos, rank_idx, is_boss)
 
-func _spawn_enemy(index: int, local_pos: Vector3, rank_index: int, boss: bool) -> void:
+func _spawn_enemy(index: int, local_pos: Vector3, rank_idx: int, boss: bool) -> void:
     var enemy := CharacterBody3D.new()
     enemy.name = "DungeonBoss" if boss else "DungeonEnemy_%02d" % index
     enemy.set_script(ENEMY_SCRIPT)
     enemy.set("enemy_id", "dungeon:%s:%d:%d" % [current_run_id, active_floor, index])
-    var scale_factor := 1.0 + float(rank_index) * 0.16 + float(active_floor - 1) * 0.06
+    var scale_factor := 1.0 + float(rank_idx) * 0.16 + float(active_floor - 1) * 0.06
     if boss:
         scale_factor *= 2.4
     enemy.set("max_health", 70.0 * scale_factor)
-    enemy.set("move_speed", clampf(2.8 + float(rank_index) * 0.08, 2.8, 4.2))
-    enemy.set("attack_damage", 6.0 + float(rank_index) * 1.5 + (10.0 if boss else 0.0))
+    enemy.set("move_speed", clampf(2.8 + float(rank_idx) * 0.08, 2.8, 4.2))
+    enemy.set("attack_damage", 6.0 + float(rank_idx) * 1.5 + (10.0 if boss else 0.0))
     enemy.set("detection_range", 40.0)
     enemy.position = local_pos
 
@@ -226,7 +226,6 @@ func _add_static_box(node_name: String, size: Vector3, position: Vector3, color:
     body.name = node_name
     body.position = position
     parent.add_child(body)
-
     var mesh_node := MeshInstance3D.new()
     var mesh := BoxMesh.new()
     mesh.size = size
@@ -236,7 +235,6 @@ func _add_static_box(node_name: String, size: Vector3, position: Vector3, color:
     mesh.material = material
     mesh_node.mesh = mesh
     body.add_child(mesh_node)
-
     var collision := CollisionShape3D.new()
     var shape := BoxShape3D.new()
     shape.size = size
@@ -249,7 +247,10 @@ func _clear_instance() -> void:
         instance_root.queue_free()
     instance_root = null
     for node in get_tree().get_nodes_in_group("dungeon_hostile"):
-        if is_instance_valid(node) and node.is_queued_for_deletion() == false and String(node.get("enemy_id") if node.get("enemy_id") != null else "").begins_with("dungeon:"):
+        if not is_instance_valid(node) or node.is_queued_for_deletion():
+            continue
+        var id_value = node.get("enemy_id")
+        if id_value != null and String(id_value).begins_with("dungeon:"):
             node.queue_free()
 
 func _safe_world_return_position() -> Vector3:
