@@ -1,14 +1,14 @@
 {
-  "sha": "2adf025fd4025d366a9df5cadde1c18b89468a4a",
-  "captured_at": "2026-08-20T04:34:44.917428+00:00",
+  "sha": "577428dcc8efe4d697d2e088c1cb83943bb600f3",
+  "captured_at": "2026-08-20T04:37:19.599612+00:00",
   "runs": [
     {
-      "name": "Validate Player Movement",
-      "run_id": 32332264683,
-      "run_number": 95,
+      "name": "Validate World Core",
+      "run_id": 32332235915,
+      "run_number": 226,
       "status": "completed",
       "conclusion": "success",
-      "html_url": "https://github.com/Treninem/game/actions/runs/32332264683"
+      "html_url": "https://github.com/Treninem/game/actions/runs/32332235915"
     }
   ]
 }
