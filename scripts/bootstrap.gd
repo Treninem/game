@@ -83,6 +83,8 @@ func _on_player_died() -> void:
     if respawning:
         return
     respawning = true
+    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+        ProgressionSystem.fail_dungeon(true)
     await get_tree().create_timer(2.5).timeout
     _place_player_safely(RESPAWN_POSITION)
     GameState.revive()

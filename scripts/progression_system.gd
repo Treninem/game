@@ -345,7 +345,7 @@ func resolve_guild_war(opponent_name: String, player_won: bool, opponent_treasur
         return {"ok": false, "reason": "war_not_active"}
     var guild_state: Dictionary = state.get("guild", {})
     var seized := 0
-    var week := int(Time.get_unix_time_from_system()) / WEEK_SECONDS
+    var week := int(int(Time.get_unix_time_from_system()) / WEEK_SECONDS)
     if player_won:
         guild_state["war_wins"] = int(guild_state.get("war_wins", 0)) + 1
         guild_state["rating"] = int(guild_state.get("rating", 1000)) + 35
@@ -405,7 +405,7 @@ func start_dungeon(rank_id: String) -> Dictionary:
     var floor_count := DUNGEON_MIN_FLOORS + posmod(seed, DUNGEON_MAX_FLOORS - DUNGEON_MIN_FLOORS + 1)
     var hidden_floor := -1
     if posmod(seed, 4) == 0:
-        hidden_floor = clampi(2 + posmod(seed / 7, maxi(1, floor_count - 3)), 2, floor_count - 1)
+        hidden_floor = clampi(2 + posmod(int(seed / 7), maxi(1, floor_count - 3)), 2, floor_count - 1)
     var run := {
         "id": "%s-%d" % [rank_id, int(Time.get_unix_time_from_system())],
         "rank": rank_id,

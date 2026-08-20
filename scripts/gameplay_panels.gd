@@ -521,15 +521,27 @@ func _start_guild_war() -> void:
     _rebuild_content()
 
 func _purchase_vip() -> void:
-    if ProgressionSystem.purchase_vip_pass():
-        GameState.notify("VIP-пропуск активирован.")
+    var vip := ProgressionSystem.vip_status()
+    if bool(vip.get("enabled", false)):
+        GameState.notify("VIP-пропуск уже активен.")
+    elif GameState.coins < 2500:
+        GameState.notify("Для VIP-пропуска требуется 2500 монет.")
     else:
-        GameState.notify("VIP-пропуск не приобретён.")
+        GameState.coins -= 2500
+        ProgressionSystem.set_vip_enabled(true)
+        GameState.notify("VIP-пропуск активирован.")
     _rebuild_content()
 
 func _buy_flight_currency() -> void:
-    if not ProgressionSystem.buy_vip_flight_currency(60, 120):
-        GameState.notify("Не удалось пополнить валюту полёта.")
+    var vip := ProgressionSystem.vip_status()
+    if not bool(vip.get("enabled", false)):
+        GameState.notify("Сначала активируйте VIP-пропуск.")
+    elif GameState.coins < 120:
+        GameState.notify("Недостаточно монет для валюты полёта.")
+    else:
+        GameState.coins -= 120
+        ProgressionSystem.add_vip_flight_currency(60)
+        GameState.notify("Валюта полёта пополнена на 60.")
     _rebuild_content()
 
 func _toggle_flight() -> void:
