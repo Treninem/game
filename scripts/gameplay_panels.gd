@@ -580,13 +580,14 @@ func _claim_event() -> void:
         GameState.notify("Награда этого события уже получена.")
     _rebuild_content()
 
-func _play_minigame(minigame_id: String, target: int) -> void:
-    var state := ProgressionSystem.snapshot()
-    var seed := int(state.get("xp", 0)) + int(state.get("tasks_completed", 0)) * 97 + int(Time.get_ticks_msec() / 250)
-    var score := maxi(1, target - 180 + posmod(seed, 361))
-    var result := ProgressionSystem.finish_minigame(minigame_id, score)
-    GameState.notify("Результат: %d очков • награда %d монет." % [score, int(result.get("reward", 0))])
-    _rebuild_content()
+func _play_minigame(minigame_id: String, _target: int) -> void:
+    var runtime := get_tree().get_first_node_in_group("minigame_runtime")
+    if runtime == null or not runtime.has_method("start_minigame"):
+        GameState.notify("Испытание временно недоступно.")
+        return
+    close_panel()
+    if not bool(runtime.call("start_minigame", minigame_id)):
+        GameState.notify("Сейчас нельзя начать это испытание.")
 
 func _text(text: String) -> Label:
     var label := Label.new()
