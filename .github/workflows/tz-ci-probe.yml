@@ -13,40 +13,32 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
         with:
           ref: main
           fetch-depth: 3
-      - name: Capture target workflow state
+      - name: Capture final stable workflow state
         env:
           GH_TOKEN: ${{ github.token }}
-          TARGET_SHA: "577428dcc8efe4d697d2e088c1cb83943bb600f3"
+          TARGET_SHA: "82651eb30b721d9020e4ba53e9fc0a848e53c25e"
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p release
-          for attempt in $(seq 1 60); do
+          for attempt in $(seq 1 150); do
             gh api "/repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${TARGET_SHA}&per_page=100" > /tmp/runs.json
-            pending=$(python3 - <<'PY'
+            read -r found pending < <(python3 - <<'PY'
           import json
           from pathlib import Path
           data=json.loads(Path('/tmp/runs.json').read_text())
           watched={'Validate World Core','Validate Player Movement','Build Stable Release and Installer'}
           rows=[r for r in data.get('workflow_runs',[]) if r.get('name') in watched]
-          print(sum(1 for r in rows if r.get('status') != 'completed'))
+          print(len(rows), sum(1 for r in rows if r.get('status') != 'completed'))
           PY
             )
-            found=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          data=json.loads(Path('/tmp/runs.json').read_text())
-          watched={'Validate World Core','Validate Player Movement','Build Stable Release and Installer'}
-          print(sum(1 for r in data.get('workflow_runs',[]) if r.get('name') in watched))
-          PY
-            )
-            if [[ "$found" -gt 0 && "$pending" -eq 0 ]]; then break; fi
+            if [[ "$found" -ge 3 && "$pending" -eq 0 ]]; then break; fi
             sleep 10
           done
           TARGET_SHA="$TARGET_SHA" python3 - <<'PY'
@@ -68,13 +60,13 @@ jobs:
             printf '\n===== RUN %s =====\n' "$run_id" >> release/tz-failure-logs.txt
             gh run view "$run_id" --repo "$GITHUB_REPOSITORY" --log-failed >> release/tz-failure-logs.txt 2>&1 || true
           done < /tmp/failed.txt
-      - name: Publish probe
+      - name: Publish final stable probe
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add release/tz-probe.json release/tz-failure-logs.txt
-          git commit -m "ci: capture world core master gate [skip ci]"
+          git commit -m "ci: capture final stable gate state [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
