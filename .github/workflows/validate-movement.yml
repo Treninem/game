@@ -4,17 +4,20 @@ on:
   push:
     branches: [main]
     paths:
+      - "project.godot"
       - "scripts/bootstrap.gd"
       - "scripts/player_controller.gd"
       - "scripts/humanoid_visual.gd"
       - "scripts/world_streamer.gd"
       - "scripts/world_data.gd"
+      - "scripts/world_data_runtime.gd"
       - "scripts/world_geography.gd"
       - "scripts/start_region_streamer.gd"
       - "scripts/start_civilization_signs.gd"
       - "scripts/start_spawn_surface.gd"
       - "scripts/capital_data.gd"
       - "scripts/capital_perimeter.gd"
+      - "scripts/capital_night_siege.gd"
       - "scripts/city_district.gd"
       - "scripts/city_streamer_fast.gd"
       - "scripts/door_interactable.gd"
@@ -25,6 +28,17 @@ on:
       - "scripts/ui_layout_guard.gd"
       - "scripts/game_menu.gd"
       - "scripts/gameplay_panels.gd"
+      - "scripts/progression_system.gd"
+      - "scripts/dungeon_runtime.gd"
+      - "scripts/dungeon_portal.gd"
+      - "scripts/dungeon_manager_npc.gd"
+      - "scripts/vip_flight_controller.gd"
+      - "scripts/combat_state_controller.gd"
+      - "scripts/plot_runtime.gd"
+      - "scripts/plot_beacon.gd"
+      - "scripts/realm_runtime.gd"
+      - "scripts/realm_portal.gd"
+      - "scripts/minigame_runtime.gd"
       - "scenes/stage1.tscn"
       - "tests/smoke_player_movement.gd"
       - "tests/smoke_player_movement.tscn"
@@ -34,6 +48,8 @@ on:
       - "tests/smoke_canonical_regions.tscn"
       - "tests/smoke_ui_and_save.gd"
       - "tests/smoke_ui_and_save.tscn"
+      - "tests/smoke_tz_progression.gd"
+      - "tests/smoke_tz_progression.tscn"
       - "assets/audio/**"
       - "assets/production/**"
       - "assets/shaders/**"
@@ -52,7 +68,7 @@ permissions:
 jobs:
   movement-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
         with:
@@ -93,6 +109,18 @@ jobs:
       - name: Parse project
         shell: bash
         run: ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Prove mandatory ImPuls progression systems
+        shell: bash
+        run: |
+          set +e
+          output=$(timeout 60s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_tz_progression.tscn 2>&1)
+          status=$?
+          printf '%s\n' "$output"
+          if [ "$status" -ne 0 ]; then
+            detail=$(printf '%s\n' "$output" | tail -n 64 | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=Mandatory progression raw Godot output::$detail"
+          fi
+          exit "$status"
       - name: Prove canonical geography and regional climates
         shell: bash
         run: |
@@ -101,6 +129,7 @@ jobs:
           rm -rf "$smoke_root"
           mkdir -p "$smoke_root/scripts" "$smoke_root/tests"
           cp scripts/world_data.gd "$smoke_root/scripts/"
+          cp scripts/world_data_runtime.gd "$smoke_root/scripts/"
           cp scripts/world_geography.gd "$smoke_root/scripts/"
           cp scripts/world_hydrology.gd "$smoke_root/scripts/"
           cp scripts/capital_data.gd "$smoke_root/scripts/"
@@ -114,7 +143,7 @@ jobs:
           config/features=PackedStringArray("4.7", "GL Compatibility")
 
           [autoload]
-          WorldData="*res://scripts/world_data.gd"
+          WorldData="*res://scripts/world_data_runtime.gd"
 
           [rendering]
           renderer/rendering_method="gl_compatibility"
@@ -141,7 +170,7 @@ jobs:
           status=$?
           printf '%s\n' "$output"
           if [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
+            detail=$(printf '%s\n' "$output" | tail -n 48 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Player smoke raw Godot output::$detail"
           fi
           exit "$status"
@@ -155,7 +184,7 @@ jobs:
           if [ "$status" -eq 124 ]; then
             echo "::error title=Enterable building smoke timeout::Building physics did not settle within 30 seconds"
           elif [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
+            detail=$(printf '%s\n' "$output" | tail -n 48 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Enterable building raw Godot output::$detail"
           fi
           exit "$status"
@@ -169,7 +198,7 @@ jobs:
           if [ "$status" -eq 124 ]; then
             echo "::error title=UI layout smoke timeout::Menu layout did not settle within 35 seconds"
           elif [ "$status" -ne 0 ]; then
-            detail=$(printf '%s\n' "$output" | tail -n 32 | tr '\n' ' ' | sed 's/%/%25/g')
+            detail=$(printf '%s\n' "$output" | tail -n 48 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=UI smoke raw Godot output::$detail"
           fi
           exit "$status"
