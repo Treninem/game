@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=32 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -30,6 +30,7 @@
 [ext_resource type="Script" path="res://scripts/plot_runtime.gd" id="29"]
 [ext_resource type="Script" path="res://scripts/realm_runtime.gd" id="30"]
 [ext_resource type="Script" path="res://scripts/realm_portal.gd" id="31"]
+[ext_resource type="Script" path="res://scripts/minigame_runtime.gd" id="32"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -104,6 +105,9 @@ script = ExtResource("29")
 
 [node name="RealmRuntime" type="Node3D" parent="World"]
 script = ExtResource("30")
+
+[node name="MinigameRuntime" type="Node" parent="World"]
+script = ExtResource("32")
 
 [node name="AshAbyssPortal" type="StaticBody3D" parent="World"]
 position = Vector3(92, 0, 58)
