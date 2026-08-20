@@ -12,62 +12,95 @@ permissions:
 jobs:
   patch:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
         with:
           ref: main
-          fetch-depth: 10
-      - name: Wire TZ smoke into mandatory workflows
+          fetch-depth: 20
+      - name: Repair TZ runtime and gates
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
 
-          p = Path('.github/workflows/validate-world-core.yml')
-          s = p.read_text(encoding='utf-8')
-          needle = '''      - name: Verify startup main menu flow\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
-          insert = '''      - name: Verify mandatory TZ progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n''' + needle
-          if 'smoke_tz_progression.tscn' not in s:
-              if needle not in s:
-                  raise SystemExit('world-core insertion point changed')
-              s = s.replace(needle, insert, 1)
-          p.write_text(s, encoding='utf-8')
+          p=Path('scripts/progression_system.gd')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('const RANKS := PackedStringArray(["H", "G", "F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "SSS+"])','const RANKS := ["H", "G", "F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "SSS+"]')
+          s=s.replace('const RANK_XP := PackedInt32Array([0, 120, 300, 600, 1050, 1700, 2550, 3650, 5100, 7000, 9500, 12500])','const RANK_XP := [0, 120, 300, 600, 1050, 1700, 2550, 3650, 5100, 7000, 9500, 12500]')
+          if 'const CAPITAL := preload("res://scripts/capital_data.gd")' not in s:
+              s=s.replace('extends Node\n','extends Node\n\nconst CAPITAL := preload("res://scripts/capital_data.gd")\n',1)
+          s=s.replace('state["level"] = clampi(1 + int(state["xp"]) / 180, 1, MAX_LEVEL)','state["level"] = clampi(1 + int(int(state["xp"]) / 180), 1, MAX_LEVEL)')
+          s=s.replace('var floor_reward_coins := maxi(5, int(definition.get("reward_coins", 80)) / maxi(1, floor_count))','var floor_reward_coins := maxi(5, int(int(definition.get("reward_coins", 80)) / maxi(1, floor_count)))')
+          s=s.replace('var floor_reward_xp := maxi(8, int(definition.get("reward_xp", 90)) / maxi(1, floor_count))','var floor_reward_xp := maxi(8, int(int(definition.get("reward_xp", 90)) / maxi(1, floor_count)))')
+          s=s.replace('add_xp(maxi(20, reward / 2))','add_xp(maxi(20, int(reward / 2)))')
+          s=s.replace('var reward := int(definition.get("reward_coins", 0)) if reached else int(definition.get("reward_coins", 0)) / 4','var reward := int(definition.get("reward_coins", 0)) if reached else int(int(definition.get("reward_coins", 0)) / 4)')
+          s=s.replace('add_xp(maxi(15, reward / 2))','add_xp(maxi(15, int(reward / 2)))')
+          old='''    if kind == "vip":\n        if not bool(vip.get("enabled", false)):\n            return {"ok": false, "reason": "vip_required"}\n        size = VIP_PLOT_SIZE\n        price = VIP_PLOT_PRICE\n    elif kind == "guild":\n        if guild_state.is_empty():\n            return {"ok": false, "reason": "guild_required"}\n        size = GUILD_PLOT_SIZE\n        price = GUILD_PLOT_PRICE\n    elif kind != "normal":\n        return {"ok": false, "reason": "unknown_plot_type"}\n'''
+          new='''    if kind == "vip":\n        if not bool(vip.get("enabled", false)):\n            return {"ok": false, "reason": "vip_required"}\n        if not CAPITAL.inside_capital(position):\n            return {"ok": false, "reason": "vip_city_required"}\n        size = VIP_PLOT_SIZE\n        price = VIP_PLOT_PRICE\n    elif kind == "guild":\n        if guild_state.is_empty():\n            return {"ok": false, "reason": "guild_required"}\n        if not CAPITAL.can_build_at(position):\n            return {"ok": false, "reason": "outside_capital_required"}\n        size = GUILD_PLOT_SIZE\n        price = GUILD_PLOT_PRICE\n    elif kind == "normal":\n        if not CAPITAL.can_build_at(position):\n            return {"ok": false, "reason": "outside_capital_required"}\n    else:\n        return {"ok": false, "reason": "unknown_plot_type"}\n'''
+          if old in s: s=s.replace(old,new,1)
+          old='''        guild_state["war_wins"] = int(guild_state.get("war_wins", 0)) + 1\n        guild_state["rating"] = int(guild_state.get("rating", 1000)) + 35\n'''
+          new='''        guild_state["war_wins"] = int(guild_state.get("war_wins", 0)) + 1\n        guild_state["rating"] = int(guild_state.get("rating", 1000)) + 35\n        var territories: Array = guild_state.get("territories", [])\n        var territory_id := "war:%s" % opponent_name\n        if not territories.has(territory_id):\n            territories.append(territory_id)\n        guild_state["territories"] = territories\n'''
+          if old in s and 'var territory_id := "war:%s" % opponent_name' not in s: s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
 
-          p = Path('.github/workflows/windows-build.yml')
-          s = p.read_text(encoding='utf-8')
-          needle = '''      - name: Verify startup main menu\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
-          insert = '''      - name: Verify mandatory TZ progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n''' + needle
-          if 'smoke_tz_progression.tscn' not in s:
-              if needle not in s:
-                  raise SystemExit('stable build insertion point changed')
-              s = s.replace(needle, insert, 1)
-          p.write_text(s, encoding='utf-8')
+          p=Path('scripts/world_data.gd')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('''    if pos.distance_to(Vector2(21600.0, 26000.0)) < 5200.0 and moisture > 0.48:\n        return "tropical"\n    if temperature < 0.16 or (temperature < 0.26 and elevation > 42.0):\n        return "snow"\n\n''','''    if state_id.is_empty() and pos.distance_to(Vector2(21600.0, 26000.0)) < 5200.0 and moisture > 0.48:\n        return "tropical"\n    if state_id.is_empty() and (temperature < 0.16 or (temperature < 0.26 and elevation > 42.0)):\n        return "snow"\n\n''')
+          p.write_text(s,encoding='utf-8')
 
-          p = Path('.github/workflows/validate-movement.yml')
-          s = p.read_text(encoding='utf-8')
+          p=Path('scripts/dungeon_runtime.gd')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('var enemy_count := 2 + mini(6, active_floor / 2 + rank_index / 2)','var enemy_count := 2 + mini(6, int(active_floor / 2) + int(rank_index / 2))')
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('scripts/minigame_runtime.gd')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('if not event.is_pressed() or event.is_echo():','if not event.is_pressed() or (event is InputEventKey and (event as InputEventKey).echo):')
+          s=s.replace('var sequence := " ".join(rune_sequence)','var sequence := " ".join(PackedStringArray(rune_sequence))')
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('tests/smoke_tz_progression.gd')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('var expected_ranks := PackedStringArray(["H", "G", "F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "SSS+"])','var expected_ranks := ["H", "G", "F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "SSS+"]')
+          s=s.replace('ProgressionSystem.purchase_plot("vip", Vector2(3200, 3000))','ProgressionSystem.purchase_plot("vip", CAPITAL.CENTER + Vector2(700, 700))')
+          s=s.replace('ProgressionSystem.purchase_plot("guild", Vector2(3400, 3000))','ProgressionSystem.purchase_plot("guild", Vector2(3400, 3000))')
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('.github/workflows/validate-world-core.yml')
+          s=p.read_text(encoding='utf-8')
+          if 'Verify mandatory TZ progression systems' not in s:
+              needle='''      - name: Verify startup main menu flow\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
+              s=s.replace(needle,'''      - name: Verify mandatory TZ progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n'''+needle,1)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('.github/workflows/windows-build.yml')
+          s=p.read_text(encoding='utf-8')
+          if 'Verify mandatory TZ progression systems' not in s:
+              needle='''      - name: Verify startup main menu\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
+              s=s.replace(needle,'''      - name: Verify mandatory TZ progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n'''+needle,1)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('.github/workflows/validate-movement.yml')
+          s=p.read_text(encoding='utf-8')
           if 'tests/smoke_tz_progression.gd' not in s:
-              needle = '''      - "tests/smoke_ui_and_save.tscn"\n'''
-              insert = needle + '''      - "tests/smoke_tz_progression.gd"\n      - "tests/smoke_tz_progression.tscn"\n'''
-              if needle not in s:
-                  raise SystemExit('movement path insertion point changed')
-              s = s.replace(needle, insert, 1)
+              needle='''      - "tests/smoke_ui_and_save.tscn"\n'''
+              s=s.replace(needle,needle+'''      - "tests/smoke_tz_progression.gd"\n      - "tests/smoke_tz_progression.tscn"\n''',1)
           if 'Prove mandatory TZ progression systems' not in s:
-              needle = '''      - name: Prove player surface, void recovery and movement\n'''
-              insert = '''      - name: Prove mandatory TZ progression systems\n        shell: bash\n        run: |\n          set +e\n          output=$(timeout 60s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_tz_progression.tscn 2>&1)\n          status=$?\n          printf '%s\\n' "$output"\n          if [ "$status" -ne 0 ]; then\n            detail=$(printf '%s\\n' "$output" | tail -n 48 | tr '\\n' ' ' | sed 's/%/%25/g')\n            echo "::error title=TZ progression raw Godot output::$detail"\n          fi\n          exit "$status"\n''' + needle
-              if needle not in s:
-                  raise SystemExit('movement step insertion point changed')
-              s = s.replace(needle, insert, 1)
-          p.write_text(s, encoding='utf-8')
+              needle='''      - name: Prove player surface, void recovery and movement\n'''
+              step='''      - name: Prove mandatory TZ progression systems\n        shell: bash\n        run: |\n          set +e\n          output=$(timeout 60s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_tz_progression.tscn 2>&1)\n          status=$?\n          printf '%s\\n' "$output"\n          if [ "$status" -ne 0 ]; then\n            detail=$(printf '%s\\n' "$output" | tail -n 48 | tr '\\n' ' ' | sed 's/%/%25/g')\n            echo "::error title=TZ progression raw Godot output::$detail"\n          fi\n          exit "$status"\n'''
+              s=s.replace(needle,step+needle,1)
+          p.write_text(s,encoding='utf-8')
           PY
-      - name: Commit release gate wiring
+      - name: Commit repairs
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .github/workflows/validate-world-core.yml .github/workflows/validate-movement.yml .github/workflows/windows-build.yml
+          git add scripts/progression_system.gd scripts/world_data.gd scripts/dungeon_runtime.gd scripts/minigame_runtime.gd tests/smoke_tz_progression.gd .github/workflows/validate-world-core.yml .github/workflows/validate-movement.yml .github/workflows/windows-build.yml
           git diff --cached --check
-          git commit -m "ci: enforce master TZ progression smoke [skip ci]"
+          git commit -m "fix: repair TZ runtime and enforce master gates [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
