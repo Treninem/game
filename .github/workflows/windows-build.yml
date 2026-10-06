@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "VERSION"
       - "project.godot"
       - "export_presets.cfg"
       - "scripts/**"
@@ -50,6 +51,8 @@ jobs:
             assets/vfx
             assets/shaders
             assets/staging/nature/kenney_nature_kit
+      - name: Verify synchronized version metadata
+        run: python3 tools/check_version_sync.py
       - name: Prepare ImPuls branding
         run: |
           python3 -m pip install --disable-pip-version-check pillow
