@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 VERSION_FILE = ROOT / "VERSION"
 PROJECT_FILE = ROOT / "project.godot"
 BOOTSTRAP_FILE = ROOT / "scripts" / "bootstrap.gd"
+INSTALLER_FILE = ROOT / "installer" / "ImPuls.iss"
 
 
 def read_text(path: Path) -> str:
@@ -31,6 +32,11 @@ def main() -> int:
         if not canonical:
             raise RuntimeError("VERSION is empty")
 
+        numeric_match = re.match(r"^([0-9]+(?:\.[0-9]+){1,3})(?:[-+].*)?$", canonical)
+        if numeric_match is None:
+            raise RuntimeError(f"VERSION has unsupported format: {canonical}")
+        numeric_version = numeric_match.group(1)
+
         project_version = require_match(
             r'^config/version="([^"]+)"\s*$',
             read_text(PROJECT_FILE),
@@ -41,6 +47,17 @@ def main() -> int:
             read_text(BOOTSTRAP_FILE),
             "scripts/bootstrap.gd VERSION",
         )
+
+        installer_text = read_text(INSTALLER_FILE)
+        installer_fallback = require_match(
+            r'^\s*#define MyAppVersion "([^"]+)"\s*$',
+            installer_text,
+            "installer/ImPuls.iss MyAppVersion fallback",
+        )
+        if "VersionInfoVersion={#MyAppVersion}" not in installer_text:
+            raise RuntimeError("installer VersionInfoVersion is not derived from MyAppVersion")
+        if "VersionInfoProductVersion={#MyAppVersion}" not in installer_text:
+            raise RuntimeError("installer VersionInfoProductVersion is not derived from MyAppVersion")
     except RuntimeError as exc:
         print(f"VERSION_SYNC_FAIL: {exc}", file=sys.stderr)
         return 2
@@ -57,7 +74,13 @@ def main() -> int:
             print(f"  {name}: {value}", file=sys.stderr)
         return 3
 
-    print(f"VERSION_SYNC_PASS: {canonical}")
+    if installer_fallback != numeric_version:
+        print("VERSION_SYNC_FAIL: installer fallback differs", file=sys.stderr)
+        print(f"  VERSION numeric: {numeric_version}", file=sys.stderr)
+        print(f"  installer/ImPuls.iss: {installer_fallback}", file=sys.stderr)
+        return 4
+
+    print(f"VERSION_SYNC_PASS: {canonical} (installer {numeric_version})")
     return 0
 
 
