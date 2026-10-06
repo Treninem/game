@@ -33,7 +33,7 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
     var bootstrap_ready: bool = _safe_bool_property(world, "startup_state_ready", false)
     var spawn_ready: bool = WorldData != null and WorldData.inside_world(pos2)
     var region_ready: bool = _safe_ratio(stream.get("visual_ratio", 0.0)) >= 0.999
-    var terrain_ready: bool = bool(stream.get("center_terrain", false))
+    var terrain_ready: bool = bool(stream.get("center_terrain_visual", false))
     var collision_ready: bool = _safe_ratio(stream.get("collision_ratio", 0.0)) >= 0.999
     var nature_ready: bool = _safe_int_property(start_region, "real_nature_detail_count", 0) > 0
     var water_ready: bool = _safe_int_property(start_region, "river_segment_count", 0) > 0 and WorldWater != null
@@ -41,7 +41,7 @@ static func snapshot(world: Node, player: CharacterBody3D) -> Dictionary:
     var items_ready: bool = bool(stream.get("items_ready", false)) or city_ready
     var environment_ready: bool = (
         world.get_node_or_null("World/Sun") is DirectionalLight3D
-        and world.get_node_or_null("World/WorldEnvironmentController") != null
+        and _environment_visual_ready(world)
         and EnvironmentState != null
         and WeatherVFX != null
     )
@@ -180,7 +180,7 @@ static func _safe_float_variant(value: Variant, fallback: float = 0.0) -> float:
     return fallback
 
 static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
-    var empty := {"visual_ratio":0.0,"collision_ratio":0.0,"center_terrain":false,"items_ready":false,"visual_loaded":0,"visual_required":0,"collision_loaded":0,"collision_required":0}
+    var empty := {"visual_ratio":0.0,"collision_ratio":0.0,"center_terrain":false,"center_terrain_visual":false,"items_ready":false,"visual_loaded":0,"visual_required":0,"collision_loaded":0,"collision_required":0}
     if streamer == null or not is_instance_valid(streamer):
         return empty
 
@@ -221,9 +221,13 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
                     collision_loaded += 1
 
     var center_terrain := false
+    var center_terrain_visual := false
     if loaded.has(center) and is_instance_valid(loaded.get(center)):
         var center_chunk := loaded.get(center) as Node
-        center_terrain = center_chunk != null and center_chunk.get_node_or_null("Terrain") != null
+        if center_chunk != null:
+            var terrain := center_chunk.get_node_or_null("Terrain") as MeshInstance3D
+            center_terrain = terrain != null
+            center_terrain_visual = _terrain_visual_ready(terrain)
 
     var visual_ratio := float(visual_loaded) / float(visual_required) if visual_required > 0 else 0.0
     var collision_ratio := float(collision_loaded) / float(collision_required) if collision_required > 0 else 0.0
@@ -231,12 +235,37 @@ static func _stream_state(streamer: Node, pos: Vector2) -> Dictionary:
         "visual_ratio":clampf(visual_ratio, 0.0, 1.0),
         "collision_ratio":clampf(collision_ratio, 0.0, 1.0),
         "center_terrain":center_terrain,
+        "center_terrain_visual":center_terrain_visual,
         "items_ready":visual_required > 0 and items >= visual_required,
         "visual_loaded":visual_loaded,
         "visual_required":visual_required,
         "collision_loaded":collision_loaded,
         "collision_required":collision_required
     }
+
+static func _terrain_visual_ready(terrain: MeshInstance3D) -> bool:
+    if terrain == null or not is_instance_valid(terrain) or not terrain.is_inside_tree():
+        return false
+    if not terrain.visible or not terrain.is_visible_in_tree() or terrain.mesh == null:
+        return false
+    if terrain.mesh.get_surface_count() <= 0:
+        return false
+    var bounds := terrain.get_aabb()
+    if bounds.size.x < 1.0 or bounds.size.z < 1.0:
+        return false
+    return terrain.material_override != null or terrain.mesh.surface_get_material(0) != null
+
+static func _environment_visual_ready(world: Node) -> bool:
+    if world == null or not is_instance_valid(world):
+        return false
+    var controller := world.get_node_or_null("World/WorldEnvironmentController")
+    if controller == null or not is_instance_valid(controller):
+        return false
+    var world_environment := controller.get_node_or_null("StableWorldEnvironment") as WorldEnvironment
+    if world_environment == null or world_environment.environment == null:
+        return false
+    var environment := world_environment.environment
+    return environment.background_mode == Environment.BG_SKY and environment.sky != null
 
 static func _settlement_state(settlements: Node, interiors: Node, pos: Vector2) -> Dictionary:
     var empty := {"settlements_ready":false,"buildings_ready":false,"interiors_ready":false,"npcs_ready":false,"loaded":0,"expected":0}
