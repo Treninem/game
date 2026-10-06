@@ -26,6 +26,7 @@ on:
       - "scenes/**"
       - "tests/**"
       - "tools/run_godot_smoke.sh"
+      - "tools/check_version_sync.py"
       - ".github/workflows/validate-world-core.yml"
   workflow_dispatch:
 
