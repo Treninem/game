@@ -2,7 +2,7 @@
   #define MyBuildTag "build-0"
 #endif
 #ifndef MyAppVersion
-  #define MyAppVersion "0.10.4"
+  #define MyAppVersion "0.10.7"
 #endif
 
 #define MyAppName "ImPuls"
@@ -28,11 +28,11 @@ ArchitecturesAllowed=x64compatible
 DisableProgramGroupPage=yes
 CloseApplications=yes
 RestartApplications=no
-VersionInfoVersion=0.10.4.0
+VersionInfoVersion={#MyAppVersion}.0
 VersionInfoCompany=Treninem
 VersionInfoDescription=ImPuls PC Installer
 VersionInfoProductName=ImPuls
-VersionInfoProductVersion=0.10.4.0
+VersionInfoProductVersion={#MyAppVersion}.0
 
 [Dirs]
 Name: "{app}\current"
