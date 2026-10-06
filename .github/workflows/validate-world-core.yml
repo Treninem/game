@@ -55,6 +55,7 @@ jobs:
             assets/staging/nature/kenney_nature_kit
             assets/ui
             assets/vfx
+            installer
             scenes
             scripts
             story
