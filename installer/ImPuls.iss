@@ -28,11 +28,11 @@ ArchitecturesAllowed=x64compatible
 DisableProgramGroupPage=yes
 CloseApplications=yes
 RestartApplications=no
-VersionInfoVersion={#MyAppVersion}.0
+VersionInfoVersion={#MyAppVersion}
 VersionInfoCompany=Treninem
 VersionInfoDescription=ImPuls PC Installer
 VersionInfoProductName=ImPuls
-VersionInfoProductVersion={#MyAppVersion}.0
+VersionInfoProductVersion={#MyAppVersion}
 
 [Dirs]
 Name: "{app}\current"
