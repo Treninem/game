@@ -65,7 +65,7 @@ A green parse alone is never sufficient.
 
 | Claim | Owner | Status | Scope / files | Intended result |
 |---|---|---|---|---|
-| STAB-001 | main integration chat | ACTIVE | `AGENTS.md`, `README.md`, `VERSION`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md` | Establish Fox-style coordination rules, engineering memory, stabilization freeze and remove metadata drift. No public version bump. |
+| STAB-001 | main integration chat | ACTIVE | `AGENTS.md`, `README.md`, `VERSION`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md`, `tools/check_version_sync.py`, `.github/workflows/validate-world-core.yml`, `.github/workflows/windows-build.yml` | Establish Fox-style coordination rules, engineering memory, stabilization freeze, remove metadata drift and enforce version sync in CI. No public version bump. |
 
 Before modifying a claimed file/subsystem, another executor must integrate fresh `main` and explicitly reconcile/take over the claim here.
 
