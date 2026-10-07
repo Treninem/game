@@ -1,7 +1,9 @@
 extends Node
 
+signal game_loaded(slot: int)
+
 const SLOT_COUNT := 10
-const SAVE_VERSION := 5
+const SAVE_VERSION := 6
 const LEGACY_SAVE_PATH := "user://savegame.json"
 
 var current_slot: int = 1
@@ -66,6 +68,7 @@ func load_game(player: Node3D, slot: int = -1) -> bool:
     var saved_state = data.get("game_state", {})
     if typeof(saved_state) == TYPE_DICTIONARY:
         GameState.load_snapshot(saved_state)
+    game_loaded.emit(slot)
     return true
 
 func delete_slot(slot: int) -> bool:

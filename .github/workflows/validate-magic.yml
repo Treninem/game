@@ -6,6 +6,21 @@ on:
     paths:
       - ".github/workflows/validate-magic.yml"
       - "scripts/magic_*.gd"
+      - "tests/smoke_magic_runtime.gd"
+      - "tests/smoke_magic_runtime.tscn"
+      - "tools/run_godot_smoke.sh"
+      - "scripts/player_controller.gd"
+      - "scripts/enemy.gd"
+      - "scripts/game_state.gd"
+      - "scripts/settings_manager.gd"
+      - "scripts/vfx_library.gd"
+      - "scripts/third_party_vfx.gd"
+      - "scripts/vfx_flipbook_3d.gd"
+      - "project.godot"
+  pull_request:
+    paths:
+      - ".github/workflows/validate-magic.yml"
+      - "scripts/magic_*.gd"
       - "scripts/player_controller.gd"
       - "scripts/enemy.gd"
       - "scripts/game_state.gd"
@@ -38,6 +53,10 @@ jobs:
         run: |
           set -euo pipefail
           ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+
+      - name: Verify player-facing magic runtime
+        shell: bash
+        run: bash tools/run_godot_smoke.sh tests/smoke_magic_runtime.tscn 90
 
       - name: Verify magic runtime files
         shell: bash

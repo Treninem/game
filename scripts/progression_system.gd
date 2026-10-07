@@ -15,6 +15,7 @@ const MAX_LEVEL := 100
 const INACTIVITY_RELEASE_DAYS := 60
 const WEEK_SECONDS := 7 * 24 * 60 * 60
 const VIP_FLIGHT_COST_PER_MINUTE := 2
+const PLOT_RELEASE_CHECK_INTERVAL := 60.0
 const NORMAL_PLOT_SIZE := 32
 const VIP_PLOT_SIZE := 96
 const GUILD_PLOT_SIZE := 128
@@ -54,16 +55,21 @@ const MINIGAMES := {
 }
 
 var _flight_seconds := 0.0
+var _plot_release_elapsed := 0.0
 var _last_event_day := -999999
 
 func _ready() -> void:
     _ensure_state()
     _refresh_event(true)
+    _release_inactive_plots()
 
 func _process(delta: float) -> void:
     _process_flight(delta)
-    _release_inactive_plots()
-    var day := int(floor(GameState.world_minutes / 1440.0))
+    _plot_release_elapsed += maxf(0.0, delta)
+    if _plot_release_elapsed >= PLOT_RELEASE_CHECK_INTERVAL:
+        _plot_release_elapsed = 0.0
+        _release_inactive_plots()
+    var day := GameState.world_day
     if day != _last_event_day:
         _refresh_event()
 
@@ -128,6 +134,21 @@ func reset_for_new_game() -> void:
 
 func snapshot() -> Dictionary:
     return _ensure_state().duplicate(true)
+
+func is_in_dungeon() -> bool:
+    var raw = GameState.get_world_value(STATE_KEY, null)
+    return raw is Dictionary and bool(raw.get("in_dungeon", false))
+
+func is_combat_active() -> bool:
+    var raw = GameState.get_world_value(STATE_KEY, null)
+    return raw is Dictionary and bool(raw.get("combat_active", false))
+
+func is_vip_flight_active() -> bool:
+    var raw = GameState.get_world_value(STATE_KEY, null)
+    if not (raw is Dictionary):
+        return false
+    var vip = raw.get("vip", {})
+    return vip is Dictionary and bool(vip.get("flight", false))
 
 func load_snapshot(data: Dictionary) -> void:
     var merged := _default_state()
@@ -393,6 +414,13 @@ func start_dungeon(rank_id: String) -> Dictionary:
         return {"ok": false, "reason": "unknown_rank"}
     if bool(state.get("in_dungeon", false)):
         return {"ok": false, "reason": "already_inside"}
+    if String(GameState.get_world_value("current_realm", "main")) != "main":
+        return {"ok": false, "reason": "realm_active"}
+    if bool(state.get("combat_active", false)):
+        return {"ok": false, "reason": "combat_active"}
+    var minigame := get_tree().get_first_node_in_group("minigame_runtime")
+    if minigame != null and minigame.has_method("is_active") and bool(minigame.call("is_active")):
+        return {"ok": false, "reason": "minigame_active"}
     if idx > int(state.get("rank_index", 0)) + 1:
         return {"ok": false, "reason": "rank_locked"}
     var definition: Dictionary = DUNGEONS[rank_id]
@@ -713,7 +741,7 @@ func active_event() -> Dictionary:
 func claim_event_reward() -> bool:
     var state := _ensure_state()
     var event_data: Dictionary = state.get("active_event", {})
-    var day := int(floor(GameState.world_minutes / 1440.0))
+    var day := GameState.world_day
     if event_data.is_empty() or int(state.get("event_claimed_day", -1)) == day:
         return false
     var reward := int(event_data.get("reward_coins", 0))
@@ -755,6 +783,16 @@ func finish_minigame(minigame_id: String, score: int) -> Dictionary:
     return {"ok": true, "reward": reward, "record": new_record, "target_reached": reached}
 
 func _process_flight(delta: float) -> void:
+    if not is_vip_flight_active():
+        _flight_seconds = 0.0
+        return
+    _flight_seconds += maxf(0.0, delta)
+    if _flight_seconds < 60.0:
+        return
+
+    var whole_minutes := int(_flight_seconds / 60.0)
+    _flight_seconds -= float(whole_minutes) * 60.0
+
     var state := _ensure_state()
     var vip_state: Dictionary = state.get("vip", {})
     if not bool(vip_state.get("flight", false)):
@@ -767,11 +805,7 @@ func _process_flight(delta: float) -> void:
         vip_flight_changed.emit(false)
         _flight_seconds = 0.0
         return
-    _flight_seconds += maxf(0.0, delta)
-    if _flight_seconds < 60.0:
-        return
-    var whole_minutes := int(_flight_seconds / 60.0)
-    _flight_seconds -= float(whole_minutes) * 60.0
+
     var cost := whole_minutes * VIP_FLIGHT_COST_PER_MINUTE
     var currency := int(vip_state.get("flight_currency", 0))
     if currency <= cost:
@@ -804,7 +838,7 @@ func _release_inactive_plots() -> void:
         _commit(state)
 
 func _refresh_event(force: bool = false) -> void:
-    var day := int(floor(GameState.world_minutes / 1440.0))
+    var day := GameState.world_day
     var state := _ensure_state()
     if not force and day == _last_event_day and not Dictionary(state.get("active_event", {})).is_empty():
         return

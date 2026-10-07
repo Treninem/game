@@ -38,6 +38,12 @@ func _process(delta: float) -> void:
     _repair_accidental_pause()
     if player == null:
         return
+    if bool(player.get("instanced_world_mode")):
+        guard_elapsed = 0.0
+        if fallback_floor != null:
+            fallback_floor.queue_free()
+            fallback_floor = null
+        return
 
     var guard_active := bool(player.get("ground_guard_active"))
     if guard_active:
@@ -67,7 +73,9 @@ func _repair_accidental_pause() -> void:
         return
     var menu := tree.get_first_node_in_group("game_menu") as Control
     var panels := tree.get_first_node_in_group("gameplay_panels") as Control
-    var legitimate_pause := (menu != null and menu.visible) or (panels != null and panels.visible)
+    var minigame := tree.get_first_node_in_group("minigame_runtime")
+    var minigame_active := minigame != null and minigame.has_method("is_active") and bool(minigame.call("is_active"))
+    var legitimate_pause := (menu != null and menu.visible) or (panels != null and panels.visible) or minigame_active
     if not legitimate_pause:
         tree.paused = false
         Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

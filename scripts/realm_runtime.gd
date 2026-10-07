@@ -26,6 +26,11 @@ var realm_roots: Dictionary = {}
 
 func _ready() -> void:
     add_to_group("realm_runtime")
+    if not SaveManager.game_loaded.is_connected(_on_game_loaded):
+        SaveManager.game_loaded.connect(_on_game_loaded)
+    call_deferred("_recover_saved_realm")
+
+func _on_game_loaded(_slot: int) -> void:
     call_deferred("_recover_saved_realm")
 
 func enter_realm(realm_id: String, actor: Node = null) -> bool:
@@ -45,10 +50,18 @@ func enter_realm(realm_id: String, actor: Node = null) -> bool:
         current_realm = "main"
         GameState.set_world_value("current_realm", "main")
         GameState.set_location("Материк Импульса")
+        if target_player.has_method("set_realm_mode"):
+            target_player.call("set_realm_mode", false)
         if target_player.has_method("prepare_for_streamed_surface"):
             target_player.call("prepare_for_streamed_surface", false)
         return true
     if not REALMS.has(realm_id):
+        return false
+    var progression := ProgressionSystem.snapshot()
+    if bool(progression.get("in_dungeon", false)) or bool(progression.get("combat_active", false)):
+        return false
+    var minigame := get_tree().get_first_node_in_group("minigame_runtime")
+    if minigame != null and minigame.has_method("is_active") and bool(minigame.call("is_active")):
         return false
     if current_realm == "main":
         return_position = target_player.global_position
@@ -60,6 +73,8 @@ func enter_realm(realm_id: String, actor: Node = null) -> bool:
     target_player.velocity = Vector3.ZERO
     current_realm = realm_id
     GameState.set_world_value("current_realm", realm_id)
+    if target_player.has_method("set_realm_mode"):
+        target_player.call("set_realm_mode", true)
     GameState.set_location(String(Dictionary(REALMS[realm_id]).get("name", realm_id)))
     GameState.notify("Вы вошли в изменённый мир: %s." % String(Dictionary(REALMS[realm_id]).get("name", realm_id)))
     return true
@@ -86,6 +101,8 @@ func _recover_saved_realm() -> void:
     if player.global_position.distance_to(root.global_position) > 90.0:
         player.global_position = root.global_position + Vector3(0, 2.0, 12.0)
         player.velocity = Vector3.ZERO
+    if player.has_method("set_realm_mode"):
+        player.call("set_realm_mode", true)
     GameState.set_location(String(Dictionary(REALMS[saved]).get("name", saved)))
 
 func _restore_saved_return_position() -> void:
@@ -102,7 +119,7 @@ func _ensure_realm(realm_id: String) -> void:
     var base_height := float(data.get("height", 100.0))
     var root := Node3D.new()
     root.name = "Realm_" + realm_id
-    root.global_position = Vector3(anchor.x, WorldData.elevation_at(anchor) + base_height, anchor.y)
+    root.position = Vector3(anchor.x, WorldData.elevation_at(anchor) + base_height, anchor.y)
     add_child(root)
     realm_roots[realm_id] = root
 

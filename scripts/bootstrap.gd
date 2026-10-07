@@ -83,8 +83,13 @@ func _on_player_died() -> void:
     if respawning:
         return
     respawning = true
-    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    if ProgressionSystem.is_in_dungeon():
         ProgressionSystem.fail_dungeon(true)
+    if String(GameState.get_world_value("current_realm", "main")) != "main":
+        GameState.set_world_value("current_realm", "main")
+        GameState.set_world_value("realm_return_position", [])
+        if player.has_method("set_realm_mode"):
+            player.call("set_realm_mode", false)
     await get_tree().create_timer(2.5).timeout
     _place_player_safely(RESPAWN_POSITION)
     GameState.revive()

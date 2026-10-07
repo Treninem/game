@@ -21,11 +21,21 @@ func _ready() -> void:
     process_priority = 5
     ProgressionSystem.dungeon_requested.connect(_on_dungeon_requested)
     ProgressionSystem.dungeon_exit_requested.connect(_on_dungeon_exit_requested)
+    if not SaveManager.game_loaded.is_connected(_on_game_loaded):
+        SaveManager.game_loaded.connect(_on_game_loaded)
+    call_deferred("_recover_from_saved_run")
+
+func _on_game_loaded(_slot: int) -> void:
+    _clear_instance()
+    current_run_id = ""
+    active_floor = 0
+    transition_pending = false
+    victory_delay = 0.0
     call_deferred("_recover_from_saved_run")
 
 func _process(delta: float) -> void:
     _resolve_player()
-    if not bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    if not ProgressionSystem.is_in_dungeon():
         return
     if transition_pending or instance_root == null or not is_instance_valid(instance_root):
         return
@@ -65,6 +75,9 @@ func _recover_from_saved_run() -> void:
         return
     current_run_id = String(run.get("id", "recovered"))
     active_floor = int(run.get("current_floor", 1))
+    if String(GameState.get_world_value("current_realm", "main")) != "main":
+        GameState.set_world_value("current_realm", "main")
+        GameState.set_world_value("realm_return_position", [])
     return_position = _safe_world_return_position()
     return_position_valid = true
     _build_floor(run)
@@ -103,7 +116,7 @@ func _on_dungeon_exit_requested(_result: Dictionary) -> void:
     transition_pending = false
 
 func abort_current_dungeon() -> void:
-    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    if ProgressionSystem.is_in_dungeon():
         ProgressionSystem.fail_dungeon(false)
 
 func _build_floor(run: Dictionary) -> void:

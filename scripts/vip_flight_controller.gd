@@ -21,7 +21,7 @@ func _physics_process(delta: float) -> void:
     _resolve_player()
     if player == null:
         return
-    var should_fly := bool(ProgressionSystem.vip_status().get("flight", false))
+    var should_fly := ProgressionSystem.is_vip_flight_active()
     if should_fly != flight_active:
         _set_flight_active(should_fly)
     if not flight_active:
@@ -60,7 +60,7 @@ func _resolve_player() -> void:
 
 func _sync_from_state() -> void:
     _resolve_player()
-    _set_flight_active(bool(ProgressionSystem.vip_status().get("flight", false)))
+    _set_flight_active(ProgressionSystem.is_vip_flight_active())
 
 func _on_vip_flight_changed(active: bool) -> void:
     _resolve_player()

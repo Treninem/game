@@ -3,7 +3,6 @@ extends Node3D
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const ENEMY_SCRIPT := preload("res://scripts/enemy.gd")
 const PLAYER_ACTIVATION_DISTANCE := 5200.0
-const WAVE_SLOTS := PackedInt32Array([0, 1, 2, 3])
 
 var player: Node3D
 var scan_elapsed := 0.0
@@ -29,7 +28,7 @@ func _process(delta: float) -> void:
     var slot := _night_wave_slot(GameState.world_minutes)
     if slot < 0:
         return
-    var day := int(ProgressionSystem.snapshot().get("event_day", 0))
+    var day := GameState.world_day
     var marker := "%d:%d" % [day, slot]
     if bool(GameState.get_world_value("capital_siege:" + marker, false)):
         return
