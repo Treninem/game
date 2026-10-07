@@ -276,3 +276,31 @@ Use statuses: `OPEN`, `RESOLVED`, `SUPERSEDED`, `UNCONFIRMED`.
 
 **Prevention**
 - Separate cyclical clock-of-day values from monotonic calendar identity.
+
+---
+
+## IMP-2026-10-07-011 — Candidate build and stable publication were coupled
+
+**Status:** RESOLVED in code on PR #11; candidate CI and installed-package acceptance pending.
+
+**Symptom/risk**
+- The comprehensive Windows workflow could build a candidate and immediately mutate the rolling `stable` release in the same run.
+- A manual workflow dispatch or a commit carrying the stable marker therefore had publication authority before an installed package had been accepted.
+- The old `promote-current-stable.yml` path self-modified the build workflow and pushed a stable-marked commit, creating a second indirect publication path.
+- Rebuilding during promotion would not prove that the bytes published to users are the same bytes that passed candidate tests.
+
+**Fix**
+- The comprehensive Windows workflow is candidate-only and has read-only repository contents permission.
+- Mandatory progression coverage is part of the candidate workflow itself rather than being injected by a later self-modifying workflow.
+- The generated installer is installed silently into a clean Windows runner path and the installed `ImPuls.exe` must start and exit cleanly.
+- Rolling stable promotion is a separate manual workflow.
+- Promotion validates an exact successful candidate workflow run ID and exact candidate SHA and requires the explicit `INSTALLED_ACCEPTED` acknowledgement.
+- Promotion downloads the already-tested artifacts from that exact candidate run instead of rebuilding them.
+- Pull-request CI verifies that candidate and promotion responsibilities remain separated.
+
+**Prevention**
+- Build/test and publication must remain separate operations.
+- A commit message marker alone must never grant rolling stable publication authority.
+- Stable artifacts should be the exact artifacts already accepted by candidate CI and installed-package testing.
+- Any GitHub Release mutation must require explicit acceptance evidence tied to one exact candidate lineage.
+
