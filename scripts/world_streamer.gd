@@ -13,13 +13,15 @@ const PHYSICS_RADIUS := 1
 const UNLOAD_RADIUS := 3
 const CITY_NO_WILD_RADIUS := 2250.0
 const MAX_CHUNKS_PER_FRAME := 1
+const CHUNK_SENTINEL := Vector2i(999999, 999999)
 
 var player: Node3D
 var loaded_chunks: Dictionary = {}
 var collision_chunks: Dictionary = {}
 var generation_queue: Array[Vector2i] = []
 var collision_queue: Array[Vector2i] = []
-var current_center := Vector2i(999999, 999999)
+var current_center := CHUNK_SENTINEL
+var streaming_suspended := false
 var terrain_materials: Dictionary = {}
 var trunk_material: StandardMaterial3D
 var foliage_materials: Dictionary = {}
@@ -36,23 +38,37 @@ func _bootstrap_streaming() -> void:
     player = get_tree().get_first_node_in_group("player") as Node3D
     if player == null:
         return
+    if not _mainland_streaming_allowed():
+        _suspend_streaming()
+        return
+    streaming_suspended = false
     current_center = _world_to_chunk(Vector2(player.global_position.x, player.global_position.z))
     _generate_chunk(current_center)
     _ensure_collision(current_center)
     _refresh_streaming(current_center)
 
 func _process(delta: float) -> void:
+    if not _mainland_streaming_allowed():
+        _suspend_streaming()
+        return
+
     if player == null or not is_instance_valid(player):
         player = get_tree().get_first_node_in_group("player") as Node3D
         if player == null:
             return
-        current_center = _world_to_chunk(Vector2(player.global_position.x, player.global_position.z))
+
+    if streaming_suspended:
+        streaming_suspended = false
+        current_center = CHUNK_SENTINEL
+
+    var center := _world_to_chunk(Vector2(player.global_position.x, player.global_position.z))
+    if current_center == CHUNK_SENTINEL:
+        current_center = center
         if not loaded_chunks.has(current_center):
             _generate_chunk(current_center)
         _ensure_collision(current_center)
         _refresh_streaming(current_center)
 
-    var center := _world_to_chunk(Vector2(player.global_position.x, player.global_position.z))
     if center != current_center:
         current_center = center
         _refresh_streaming(center)
@@ -74,6 +90,27 @@ func _process(delta: float) -> void:
         if not loaded_chunks.has(coord):
             _generate_chunk(coord)
             generated += 1
+
+func _mainland_streaming_allowed() -> bool:
+    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+        return false
+    return String(GameState.get_world_value("current_realm", "main")) == "main"
+
+func _suspend_streaming() -> void:
+    generation_queue.clear()
+    collision_queue.clear()
+    if loaded_chunks.is_empty() and collision_chunks.is_empty() and streaming_suspended:
+        return
+    for node in loaded_chunks.values():
+        if is_instance_valid(node):
+            if node is Node3D:
+                (node as Node3D).visible = false
+            node.queue_free()
+    loaded_chunks.clear()
+    collision_chunks.clear()
+    current_center = CHUNK_SENTINEL
+    location_elapsed = 0.0
+    streaming_suspended = true
 
 func _refresh_streaming(center: Vector2i) -> void:
     generation_queue.clear()
