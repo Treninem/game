@@ -48,6 +48,8 @@ jobs:
           CONCLUSION="$(jq -r '.conclusion' <<<"$META")"
           HEAD_SHA="$(jq -r '.head_sha' <<<"$META")"
           RUN_NUMBER="$(jq -r '.run_number' <<<"$META")"
+          HEAD_BRANCH="$(jq -r '.head_branch' <<<"$META")"
+          EVENT="$(jq -r '.event' <<<"$META")"
           if [[ "$NAME" != "Build ImPuls Release Candidate" ]]; then
             echo "::error title=Wrong candidate workflow::Expected Build ImPuls Release Candidate, got $NAME"
             exit 1
@@ -58,6 +60,14 @@ jobs:
           fi
           if [[ "$HEAD_SHA" != "$CANDIDATE_SHA" ]]; then
             echo "::error title=Candidate SHA mismatch::Run used $HEAD_SHA but requested promotion of $CANDIDATE_SHA"
+            exit 1
+          fi
+          if [[ "$HEAD_BRANCH" != "main" ]]; then
+            echo "::error title=Candidate is not main lineage::Run $CANDIDATE_RUN_ID used branch $HEAD_BRANCH; only an accepted main candidate can be promoted"
+            exit 1
+          fi
+          if [[ "$EVENT" != "workflow_dispatch" && "$EVENT" != "push" ]]; then
+            echo "::error title=Candidate event is not promotable::Run $CANDIDATE_RUN_ID came from $EVENT; PR runs cannot be promoted"
             exit 1
           fi
           echo "run_number=$RUN_NUMBER" >> "$GITHUB_OUTPUT"
