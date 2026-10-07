@@ -3,7 +3,6 @@ extends Node3D
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const ENEMY_SCRIPT := preload("res://scripts/enemy.gd")
 const PLAYER_ACTIVATION_DISTANCE := 5200.0
-const WAVE_SLOTS := PackedInt32Array([0, 1, 2, 3])
 
 var player: Node3D
 var scan_elapsed := 0.0
