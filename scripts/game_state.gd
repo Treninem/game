@@ -44,6 +44,7 @@ var world_day: int = 0
 var enemies_defeated: int = 0
 var is_dead: bool = false
 var world_state: Dictionary = {}
+var _survival_signal_elapsed := 0.0
 
 func reset_new_game() -> void:
     inventory = DEFAULT_INVENTORY.duplicate(true)
@@ -66,6 +67,7 @@ func reset_new_game() -> void:
     enemies_defeated = 0
     is_dead = false
     world_state = {"content_phase": CONTENT_PHASE, "world_foundation_v1": true}
+    _survival_signal_elapsed = 0.0
     _emit_all()
     location_changed.emit(current_location)
 
@@ -247,7 +249,10 @@ func advance_survival(real_seconds: float) -> void:
     temperature = move_toward(temperature, target_temperature, real_seconds * 0.02)
     if hunger <= 0.0 or thirst <= 0.0:
         apply_damage(real_seconds * 0.3)
-    survival_changed.emit()
+    _survival_signal_elapsed += maxf(0.0, real_seconds)
+    if _survival_signal_elapsed >= 0.25:
+        _survival_signal_elapsed = 0.0
+        survival_changed.emit()
 
 func quest_text() -> String:
     return ""
