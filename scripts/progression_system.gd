@@ -63,7 +63,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     _process_flight(delta)
     _release_inactive_plots()
-    var day := int(floor(GameState.world_minutes / 1440.0))
+    var day := GameState.world_day
     if day != _last_event_day:
         _refresh_event()
 
@@ -735,7 +735,7 @@ func active_event() -> Dictionary:
 func claim_event_reward() -> bool:
     var state := _ensure_state()
     var event_data: Dictionary = state.get("active_event", {})
-    var day := int(floor(GameState.world_minutes / 1440.0))
+    var day := GameState.world_day
     if event_data.is_empty() or int(state.get("event_claimed_day", -1)) == day:
         return false
     var reward := int(event_data.get("reward_coins", 0))
@@ -826,7 +826,7 @@ func _release_inactive_plots() -> void:
         _commit(state)
 
 func _refresh_event(force: bool = false) -> void:
-    var day := int(floor(GameState.world_minutes / 1440.0))
+    var day := GameState.world_day
     var state := _ensure_state()
     if not force and day == _last_event_day and not Dictionary(state.get("active_event", {})).is_empty():
         return
