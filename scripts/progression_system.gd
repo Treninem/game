@@ -15,6 +15,7 @@ const MAX_LEVEL := 100
 const INACTIVITY_RELEASE_DAYS := 60
 const WEEK_SECONDS := 7 * 24 * 60 * 60
 const VIP_FLIGHT_COST_PER_MINUTE := 2
+const PLOT_RELEASE_CHECK_INTERVAL := 60.0
 const NORMAL_PLOT_SIZE := 32
 const VIP_PLOT_SIZE := 96
 const GUILD_PLOT_SIZE := 128
@@ -54,15 +55,20 @@ const MINIGAMES := {
 }
 
 var _flight_seconds := 0.0
+var _plot_release_elapsed := 0.0
 var _last_event_day := -999999
 
 func _ready() -> void:
     _ensure_state()
     _refresh_event(true)
+    _release_inactive_plots()
 
 func _process(delta: float) -> void:
     _process_flight(delta)
-    _release_inactive_plots()
+    _plot_release_elapsed += maxf(0.0, delta)
+    if _plot_release_elapsed >= PLOT_RELEASE_CHECK_INTERVAL:
+        _plot_release_elapsed = 0.0
+        _release_inactive_plots()
     var day := GameState.world_day
     if day != _last_event_day:
         _refresh_event()
@@ -777,6 +783,16 @@ func finish_minigame(minigame_id: String, score: int) -> Dictionary:
     return {"ok": true, "reward": reward, "record": new_record, "target_reached": reached}
 
 func _process_flight(delta: float) -> void:
+    if not is_vip_flight_active():
+        _flight_seconds = 0.0
+        return
+    _flight_seconds += maxf(0.0, delta)
+    if _flight_seconds < 60.0:
+        return
+
+    var whole_minutes := int(_flight_seconds / 60.0)
+    _flight_seconds -= float(whole_minutes) * 60.0
+
     var state := _ensure_state()
     var vip_state: Dictionary = state.get("vip", {})
     if not bool(vip_state.get("flight", false)):
@@ -789,11 +805,7 @@ func _process_flight(delta: float) -> void:
         vip_flight_changed.emit(false)
         _flight_seconds = 0.0
         return
-    _flight_seconds += maxf(0.0, delta)
-    if _flight_seconds < 60.0:
-        return
-    var whole_minutes := int(_flight_seconds / 60.0)
-    _flight_seconds -= float(whole_minutes) * 60.0
+
     var cost := whole_minutes * VIP_FLIGHT_COST_PER_MINUTE
     var currency := int(vip_state.get("flight_currency", 0))
     if currency <= cost:
