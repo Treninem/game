@@ -1,7 +1,7 @@
 {
   "release_sha": "20f1298523c0cdbc21f1772e568682e940edb190",
   "ready": false,
-  "recorded_at": "2026-10-07T15:38:16.788844+00:00",
+  "recorded_at": "2026-10-07T15:39:45.299563+00:00",
   "workflows": [
     {
       "name": "Validate World Core",
