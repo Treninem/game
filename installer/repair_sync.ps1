@@ -244,6 +244,13 @@ if ($WaitForGameExit) {
         Start-Sleep -Milliseconds 250
         if (-not $Background) { [System.Windows.Forms.Application]::DoEvents() }
     }
+    if (Get-Process -Name "ImPuls" -ErrorAction SilentlyContinue) {
+        Write-Log "Game did not exit before timeout"
+        $message = "Игра всё ещё запущена. Восстановление файлов отменено, установленная версия не изменена."
+        Set-ProgressUi "Игра всё ещё запущена" 0 $message
+        if ($script:ProgressForm) { Start-Sleep -Milliseconds 1200; $script:ProgressForm.Close() }
+        exit 2
+    }
 }
 
 try {
