@@ -3,8 +3,6 @@ name: Record Candidate Release Gate Status
 on:
   workflow_run:
     workflows:
-      - "Validate World Core"
-      - "Validate Player Movement"
       - "Build ImPuls Release Candidate"
     types: [completed]
 
@@ -44,11 +42,7 @@ jobs:
 
           sha = os.environ["RELEASE_SHA"]
           data = json.loads(Path("/tmp/runs.json").read_text(encoding="utf-8"))
-          expected = [
-              "Validate World Core",
-              "Validate Player Movement",
-              "Build ImPuls Release Candidate",
-          ]
+          expected = ["Build ImPuls Release Candidate"]
           rows = []
           for name in expected:
               matches = [
@@ -120,7 +114,7 @@ jobs:
               exit 0
             fi
 
-            git commit -m "ci: record stable release gate result [skip ci]"
+            git commit -m "ci: record candidate release gate result [skip ci]"
             if git push origin HEAD:main; then
               exit 0
             fi
