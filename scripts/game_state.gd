@@ -40,6 +40,7 @@ var hunger: float = 100.0
 var thirst: float = 100.0
 var temperature: float = 36.6
 var world_minutes: float = 8.0 * 60.0
+var world_day: int = 0
 var enemies_defeated: int = 0
 var is_dead: bool = false
 var world_state: Dictionary = {}
@@ -61,6 +62,7 @@ func reset_new_game() -> void:
     thirst = 100.0
     temperature = 36.6
     world_minutes = 8.0 * 60.0
+    world_day = 0
     enemies_defeated = 0
     is_dead = false
     world_state = {"content_phase": CONTENT_PHASE, "world_foundation_v1": true}
@@ -229,7 +231,11 @@ func complete_city_quest() -> bool:
     return false
 
 func advance_survival(real_seconds: float) -> void:
-    world_minutes = fmod(world_minutes + real_seconds * 4.0, 1440.0)
+    var elapsed_minutes := maxf(0.0, real_seconds) * 4.0
+    var total_minutes := world_minutes + elapsed_minutes
+    if total_minutes >= 1440.0:
+        world_day += int(floor(total_minutes / 1440.0))
+    world_minutes = fmod(total_minutes, 1440.0)
     hunger = maxf(0.0, hunger - real_seconds * 0.025)
     thirst = maxf(0.0, thirst - real_seconds * 0.04)
     restore_stamina(real_seconds * 13.0)
@@ -264,6 +270,7 @@ func snapshot() -> Dictionary:
         "thirst": thirst,
         "temperature": temperature,
         "world_minutes": world_minutes,
+        "world_day": world_day,
         "enemies_defeated": enemies_defeated,
         "world_state": world_state.duplicate(true)
     }
@@ -290,7 +297,9 @@ func load_snapshot(data: Dictionary) -> void:
     hunger = clampf(float(data.get("hunger", 100.0)), 0.0, 100.0)
     thirst = clampf(float(data.get("thirst", 100.0)), 0.0, 100.0)
     temperature = clampf(float(data.get("temperature", 36.6)), 30.0, 42.0)
-    world_minutes = fmod(float(data.get("world_minutes", 480.0)), 1440.0)
+    var saved_minutes := maxf(0.0, float(data.get("world_minutes", 480.0)))
+    world_day = maxi(0, int(data.get("world_day", floor(saved_minutes / 1440.0))))
+    world_minutes = fmod(saved_minutes, 1440.0)
     enemies_defeated = maxi(0, int(data.get("enemies_defeated", 0)))
     var saved_world_state = data.get("world_state", {})
     world_state = saved_world_state.duplicate(true) if typeof(saved_world_state) == TYPE_DICTIONARY else {}
