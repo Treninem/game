@@ -21,6 +21,16 @@ func _ready() -> void:
     process_priority = 5
     ProgressionSystem.dungeon_requested.connect(_on_dungeon_requested)
     ProgressionSystem.dungeon_exit_requested.connect(_on_dungeon_exit_requested)
+    if not SaveManager.game_loaded.is_connected(_on_game_loaded):
+        SaveManager.game_loaded.connect(_on_game_loaded)
+    call_deferred("_recover_from_saved_run")
+
+func _on_game_loaded(_slot: int) -> void:
+    _clear_instance()
+    current_run_id = ""
+    active_floor = 0
+    transition_pending = false
+    victory_delay = 0.0
     call_deferred("_recover_from_saved_run")
 
 func _process(delta: float) -> void:
