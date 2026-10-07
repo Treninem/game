@@ -137,6 +137,13 @@ func is_combat_active() -> bool:
     var raw = GameState.get_world_value(STATE_KEY, null)
     return raw is Dictionary and bool(raw.get("combat_active", false))
 
+func is_vip_flight_active() -> bool:
+    var raw = GameState.get_world_value(STATE_KEY, null)
+    if not (raw is Dictionary):
+        return false
+    var vip = raw.get("vip", {})
+    return vip is Dictionary and bool(vip.get("flight", false))
+
 func load_snapshot(data: Dictionary) -> void:
     var merged := _default_state()
     for key in data:
