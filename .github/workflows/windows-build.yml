@@ -72,8 +72,8 @@ jobs:
           assert "candidate_run_id" in promote
           assert "candidate_sha" in promote
           assert "INSTALLED_ACCEPTED" in promote
-          assert "run-id: ${{ inputs.candidate_run_id }}" in promote
-          assert "github-token: ${{ github.token }}" in promote
+          assert "run-id: $" + "{{ inputs.candidate_run_id }}" in promote
+          assert "github-token: $" + "{{ github.token }}" in promote
           print("candidate/promotion separation contract OK")
           PY
       - name: Prepare ImPuls branding
