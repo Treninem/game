@@ -393,6 +393,13 @@ func start_dungeon(rank_id: String) -> Dictionary:
         return {"ok": false, "reason": "unknown_rank"}
     if bool(state.get("in_dungeon", false)):
         return {"ok": false, "reason": "already_inside"}
+    if String(GameState.get_world_value("current_realm", "main")) != "main":
+        return {"ok": false, "reason": "realm_active"}
+    if bool(state.get("combat_active", false)):
+        return {"ok": false, "reason": "combat_active"}
+    var minigame := get_tree().get_first_node_in_group("minigame_runtime")
+    if minigame != null and minigame.has_method("is_active") and bool(minigame.call("is_active")):
+        return {"ok": false, "reason": "minigame_active"}
     if idx > int(state.get("rank_index", 0)) + 1:
         return {"ok": false, "reason": "rank_locked"}
     var definition: Dictionary = DUNGEONS[rank_id]
