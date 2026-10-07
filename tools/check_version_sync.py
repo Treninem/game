@@ -33,29 +33,27 @@ def main() -> int:
         if not canonical:
             raise RuntimeError("VERSION is empty")
 
-        numeric_match = re.match(r"^([0-9]+(?:\.[0-9]+){1,3})(?:[-+].*)?$", canonical)
+        numeric_match = re.match(r"^([0-9]+(?:\\.[0-9]+){1,3})(?:[-+].*)?$", canonical)
         if numeric_match is None:
             raise RuntimeError(f"VERSION has unsupported format: {canonical}")
         numeric_version = numeric_match.group(1)
         numeric_parts = numeric_version.split(".")
-        if len(numeric_parts) > 4:
-            raise RuntimeError(f"VERSION has too many numeric components: {canonical}")
         windows_version = ".".join(numeric_parts + ["0"] * (4 - len(numeric_parts)))
 
         project_version = require_match(
-            r'^config/version="([^"]+)"\s*$',
+            r'^config/version="([^"]+)"\\s*$',
             read_text(PROJECT_FILE),
             "project.godot application version",
         )
         bootstrap_version = require_match(
-            r'^const VERSION\s*:=\s*"([^"]+)"\s*$',
+            r'^const VERSION\\s*:=\\s*"([^"]+)"\\s*$',
             read_text(BOOTSTRAP_FILE),
             "scripts/bootstrap.gd VERSION",
         )
 
         installer_text = read_text(INSTALLER_FILE)
         installer_fallback = require_match(
-            r'^\s*#define MyAppVersion "([^"]+)"\s*$',
+            r'^\\s*#define MyAppVersion "([^"]+)"\\s*$',
             installer_text,
             "installer/ImPuls.iss MyAppVersion fallback",
         )
@@ -66,7 +64,16 @@ def main() -> int:
 
         export_text = read_text(EXPORT_PRESETS_FILE)
         export_file_version = require_match(
-            r'^application/file_version="([^"]+)"\s*    except RuntimeError as exc:
+            r'^application/file_version="([^"]+)"\\s*$',
+            export_text,
+            "export_presets.cfg application/file_version",
+        )
+        export_product_version = require_match(
+            r'^application/product_version="([^"]+)"\\s*$',
+            export_text,
+            "export_presets.cfg application/product_version",
+        )
+    except RuntimeError as exc:
         print(f"VERSION_SYNC_FAIL: {exc}", file=sys.stderr)
         return 2
 
@@ -104,71 +111,6 @@ def main() -> int:
         f"VERSION_SYNC_PASS: {canonical} "
         f"(installer {numeric_version}, Windows executable {windows_version})"
     )
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-,
-            export_text,
-            "export_presets.cfg application/file_version",
-        )
-        export_product_version = require_match(
-            r'^application/product_version="([^"]+)"\s*    except RuntimeError as exc:
-        print(f"VERSION_SYNC_FAIL: {exc}", file=sys.stderr)
-        return 2
-
-    values = {
-        "VERSION": canonical,
-        "project.godot": project_version,
-        "scripts/bootstrap.gd": bootstrap_version,
-    }
-    mismatched = {name: value for name, value in values.items() if value != canonical}
-    if mismatched:
-        print("VERSION_SYNC_FAIL: version metadata differs", file=sys.stderr)
-        for name, value in values.items():
-            print(f"  {name}: {value}", file=sys.stderr)
-        return 3
-
-    if installer_fallback != numeric_version:
-        print("VERSION_SYNC_FAIL: installer fallback differs", file=sys.stderr)
-        print(f"  VERSION numeric: {numeric_version}", file=sys.stderr)
-        print(f"  installer/ImPuls.iss: {installer_fallback}", file=sys.stderr)
-        return 4
-
-    print(f"VERSION_SYNC_PASS: {canonical} (installer {numeric_version})")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-,
-            export_text,
-            "export_presets.cfg application/product_version",
-        )
-    except RuntimeError as exc:
-        print(f"VERSION_SYNC_FAIL: {exc}", file=sys.stderr)
-        return 2
-
-    values = {
-        "VERSION": canonical,
-        "project.godot": project_version,
-        "scripts/bootstrap.gd": bootstrap_version,
-    }
-    mismatched = {name: value for name, value in values.items() if value != canonical}
-    if mismatched:
-        print("VERSION_SYNC_FAIL: version metadata differs", file=sys.stderr)
-        for name, value in values.items():
-            print(f"  {name}: {value}", file=sys.stderr)
-        return 3
-
-    if installer_fallback != numeric_version:
-        print("VERSION_SYNC_FAIL: installer fallback differs", file=sys.stderr)
-        print(f"  VERSION numeric: {numeric_version}", file=sys.stderr)
-        print(f"  installer/ImPuls.iss: {installer_fallback}", file=sys.stderr)
-        return 4
-
-    print(f"VERSION_SYNC_PASS: {canonical} (installer {numeric_version})")
     return 0
 
 
