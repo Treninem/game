@@ -1,4 +1,4 @@
-name: Build Stable Release and Installer
+name: Build ImPuls Release Candidate
 
 on:
   push:
@@ -23,15 +23,15 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: impuls-stable-release
+  group: impuls-release-candidate
   cancel-in-progress: true
 
 jobs:
   build-game:
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[stable]') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[candidate]') || contains(github.event.head_commit.message, '[stable]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -74,6 +74,8 @@ jobs:
       - name: Validate project headlessly
         shell: bash
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Verify mandatory ImPuls progression systems
+        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120
       - name: Verify startup main menu
         run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
       - name: Verify player-facing magic runtime
@@ -230,115 +232,41 @@ jobs:
           & $iscc "/DMyBuildTag=build-${{ github.run_number }}" "/DMyAppVersion=$appVersion" "installer\ImPuls.iss"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           if (-not (Test-Path installer/output/ImPuls-Setup.exe)) { throw "Installer output missing" }
+      - name: Install candidate and prove installed game starts
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $installDir = Join-Path $env:RUNNER_TEMP "ImPulsCandidate"
+          if (Test-Path $installDir) { Remove-Item $installDir -Recurse -Force }
+          $installer = (Resolve-Path "installer/output/ImPuls-Setup.exe").Path
+          $proc = Start-Process -FilePath $installer -ArgumentList @(
+            "/VERYSILENT",
+            "/SUPPRESSMSGBOXES",
+            "/NORESTART",
+            "/SP-",
+            "/DIR=$installDir"
+          ) -PassThru -Wait
+          if ($proc.ExitCode -ne 0) { throw "Installer exited with code $($proc.ExitCode)" }
+          $exe = Join-Path $installDir "ImPuls.exe"
+          $pck = Join-Path $installDir "ImPuls.pck"
+          if (-not (Test-Path $exe)) { throw "Installed ImPuls.exe missing" }
+          if (-not (Test-Path $pck)) { throw "Installed ImPuls.pck missing" }
+
+          $game = Start-Process -FilePath $exe -ArgumentList @("--headless", "--quit-after", "180") -PassThru
+          $deadline = (Get-Date).AddSeconds(90)
+          while (-not $game.HasExited -and (Get-Date) -lt $deadline) {
+            Start-Sleep -Seconds 1
+            $game.Refresh()
+          }
+          if (-not $game.HasExited) {
+            Stop-Process -Id $game.Id -Force
+            throw "Installed game did not exit under --headless --quit-after within 90 seconds"
+          }
+          if ($game.ExitCode -ne 0) { throw "Installed game exited with code $($game.ExitCode)" }
+          Write-Host "Installed-package startup smoke OK: $installDir"
+
       - uses: actions/upload-artifact@v4
         with:
           name: ImPuls-Setup
           path: installer/output/ImPuls-Setup.exe
           if-no-files-found: error
-
-  publish-stable:
-    needs: [build-game, build-installer]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          filter: blob:none
-          sparse-checkout: |
-            tools
-            installer
-            assets/branding
-      - uses: actions/download-artifact@v4
-        with:
-          name: game-windows
-          path: game
-      - uses: actions/download-artifact@v4
-        with:
-          name: ImPuls-Setup
-          path: installer-artifact
-      - name: Capture previous stable build
-        id: previous
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p previous/windows
-          OLD_BUILD=""
-          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            OLD_BUILD="$(gh release view stable --repo "${{ github.repository }}" --json name --jq .name)"
-            if [[ "$OLD_BUILD" =~ ^build-[0-9]+$ ]]; then
-              gh release download stable --repo "${{ github.repository }}" --pattern "ImPuls-PC-Windows-x64.zip" --dir previous || true
-              if [[ -f previous/ImPuls-PC-Windows-x64.zip ]]; then
-                unzip -q previous/ImPuls-PC-Windows-x64.zip -d previous/windows
-              else
-                OLD_BUILD=""
-              fi
-            else
-              OLD_BUILD=""
-            fi
-          fi
-          echo "old_build=$OLD_BUILD" >> "$GITHUB_OUTPUT"
-      - name: Prepare stable release files and content delta
-        id: delta
-        shell: bash
-        run: |
-          set -euo pipefail
-          BUILD="build-${{ github.run_number }}"
-          OLD_BUILD="${{ steps.previous.outputs.old_build }}"
-          python3 -m pip install --disable-pip-version-check pillow
-          python3 tools/make_icon.py installer/impuls.ico
-          cp game/ImPuls-PC-Windows-x64.zip .
-          cp game/build/windows/ImPuls.exe ./ImPuls.exe
-          cp game/build/windows/ImPuls.pck ./ImPuls.pck
-          cp installer-artifact/ImPuls-Setup.exe ./ImPuls-Setup.exe
-
-          mkdir -p updater-runtime
-          cp installer/updater_bootstrap.ps1 installer/updater_v4.ps1 installer/repair_sync.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
-          (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
-
-          FROM_BUILD="${OLD_BUILD:-bootstrap}"
-          DELTA_NAME="ImPuls-Delta-${FROM_BUILD}-to-${BUILD}.zip"
-          python3 tools/build_delta.py \
-            --old-dir previous/windows \
-            --new-dir game/build/windows \
-            --from-build "$FROM_BUILD" \
-            --to-build "$BUILD" \
-            --output "$DELTA_NAME" \
-            --manifest ImPuls-File-Manifest.json
-
-          sha256sum ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json > SHA256SUMS.txt
-          if [[ -n "$OLD_BUILD" ]]; then
-            sha256sum "$DELTA_NAME" > "$DELTA_NAME.sha256"
-            echo "delta_name=$DELTA_NAME" >> "$GITHUB_OUTPUT"
-            echo "delta_sum=$DELTA_NAME.sha256" >> "$GITHUB_OUTPUT"
-          else
-            rm -f "$DELTA_NAME"
-            echo "delta_name=" >> "$GITHUB_OUTPUT"
-            echo "delta_sum=" >> "$GITHUB_OUTPUT"
-          fi
-
-          echo "Full first-install package: $(stat -c%s ImPuls-PC-Windows-x64.zip) bytes"
-          echo "Repair asset exe: $(stat -c%s ImPuls.exe) bytes"
-          echo "Repair asset pck: $(stat -c%s ImPuls.pck) bytes"
-          if [[ -n "$OLD_BUILD" ]]; then
-            echo "Delta-only update package: $(stat -c%s "$DELTA_NAME") bytes"
-          fi
-      - name: Publish rolling stable channel
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DELTA_NAME: ${{ steps.delta.outputs.delta_name }}
-          DELTA_SUM: ${{ steps.delta.outputs.delta_sum }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          BUILD="build-${{ github.run_number }}"
-          ASSETS=(ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json SHA256SUMS.txt)
-          if [[ -n "$DELTA_NAME" && -f "$DELTA_NAME" ]]; then
-            ASSETS+=("$DELTA_NAME" "$DELTA_SUM")
-          fi
-          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            gh release upload stable "${ASSETS[@]}" --clobber --repo "${{ github.repository }}"
-            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Normal installed builds update through retained content-aware delta chains; missing core files are repaired individually from signed manifest data. The full archive is for first installation/manual recovery only. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
-          else
-            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "ImPuls stable channel. Normal installed builds update through retained content-aware delta chains; missing core files are repaired individually from signed manifest data. The full archive is for first installation/manual recovery only. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
-          fi
