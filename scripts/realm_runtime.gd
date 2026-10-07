@@ -119,7 +119,7 @@ func _ensure_realm(realm_id: String) -> void:
     var base_height := float(data.get("height", 100.0))
     var root := Node3D.new()
     root.name = "Realm_" + realm_id
-    root.global_position = Vector3(anchor.x, WorldData.elevation_at(anchor) + base_height, anchor.y)
+    root.position = Vector3(anchor.x, WorldData.elevation_at(anchor) + base_height, anchor.y)
     add_child(root)
     realm_roots[realm_id] = root
 
