@@ -116,7 +116,7 @@ func _start_arena() -> void:
     challenge_root = Node3D.new()
     challenge_root.name = "ArenaTrial"
     get_tree().current_scene.add_child(challenge_root)
-    var offsets := [Vector3(7, 0, 0), Vector3(-7, 0, 0), Vector3(0, 0, 7), Vector3(0, 0, -7), Vector3(10, 0, 6)]
+    var offsets: Array[Vector3] = [Vector3(7, 0, 0), Vector3(-7, 0, 0), Vector3(0, 0, 7), Vector3(0, 0, -7), Vector3(10, 0, 6)]
     for i in range(offsets.size()):
         _spawn_arena_enemy(i, start_position + offsets[i])
     GameState.notify("Испытание арены: победите всех противников до конца времени.")
@@ -170,7 +170,7 @@ func _start_race() -> void:
     challenge_root = Node3D.new()
     challenge_root.name = "CourierRace"
     get_tree().current_scene.add_child(challenge_root)
-    var offsets := [Vector3(18, 0, 0), Vector3(30, 0, -14), Vector3(12, 0, -28), Vector3(-12, 0, -20), Vector3(-22, 0, 2), Vector3(0, 0, 14)]
+    var offsets: Array[Vector3] = [Vector3(18, 0, 0), Vector3(30, 0, -14), Vector3(12, 0, -28), Vector3(-12, 0, -20), Vector3(-22, 0, 2), Vector3(0, 0, 14)]
     for offset in offsets:
         var raw := start_position + offset
         var xz := Vector2(raw.x, raw.z)
