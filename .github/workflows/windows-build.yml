@@ -66,14 +66,17 @@ jobs:
           from pathlib import Path
           candidate = Path(".github/workflows/windows-build.yml").read_text(encoding="utf-8")
           promote = Path(".github/workflows/promote-current-stable.yml").read_text(encoding="utf-8")
-          assert "gh release upload stable" not in candidate
-          assert "gh release create stable" not in candidate
+          forbidden_publish = ("gh release " + "upload stable", "gh release " + "create stable")
+          assert all(marker not in candidate for marker in forbidden_publish)
           assert "Install candidate and prove installed game starts" in candidate
           assert "candidate_run_id" in promote
           assert "candidate_sha" in promote
           assert "INSTALLED_ACCEPTED" in promote
           assert "run-id: $" + "{{ inputs.candidate_run_id }}" in promote
           assert "github-token: $" + "{{ github.token }}" in promote
+          assert 'HEAD_BRANCH="$(jq -r \'.head_branch\' <<<"$META")"' in promote
+          assert '[[ "$HEAD_BRANCH" != "main" ]]' in promote
+          assert '[[ "$EVENT" != "workflow_dispatch" && "$EVENT" != "push" ]]' in promote
           print("candidate/promotion separation contract OK")
           PY
       - name: Prepare ImPuls branding
