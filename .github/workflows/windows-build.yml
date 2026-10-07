@@ -24,6 +24,8 @@ on:
     paths:
       - ".github/workflows/windows-build.yml"
       - ".github/workflows/promote-current-stable.yml"
+      - ".github/workflows/release-gate-status.yml"
+      - ".github/workflows/release-gate-probe.yml"
   workflow_dispatch:
 
 permissions:
@@ -66,6 +68,8 @@ jobs:
           from pathlib import Path
           candidate = Path(".github/workflows/windows-build.yml").read_text(encoding="utf-8")
           promote = Path(".github/workflows/promote-current-stable.yml").read_text(encoding="utf-8")
+          gate_status = Path(".github/workflows/release-gate-status.yml").read_text(encoding="utf-8")
+          gate_probe = Path(".github/workflows/release-gate-probe.yml").read_text(encoding="utf-8")
           forbidden_publish = ("gh release " + "upload stable", "gh release " + "create stable")
           assert all(marker not in candidate for marker in forbidden_publish)
           assert "Install candidate and prove installed game starts" in candidate
@@ -77,7 +81,14 @@ jobs:
           assert 'HEAD_BRANCH="$(jq -r \'.head_branch\' <<<"$META")"' in promote
           assert '[[ "$HEAD_BRANCH" != "main" ]]' in promote
           assert '[[ "$EVENT" != "workflow_dispatch" && "$EVENT" != "push" ]]' in promote
-          print("candidate/promotion separation contract OK")
+          expected_candidate_name = "Build ImPuls Release Candidate"
+          old_stable_name = "Build Stable Release and Installer"
+          assert expected_candidate_name in gate_status
+          assert old_stable_name not in gate_status
+          assert expected_candidate_name in gate_probe
+          assert old_stable_name not in gate_probe
+          assert "[candidate]" in gate_probe
+          print("candidate/promotion/release-gate separation contract OK")
           PY
       - name: Prepare ImPuls branding
         run: |
