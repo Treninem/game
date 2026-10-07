@@ -11,6 +11,15 @@ on:
       - "tools/build_delta.py"
       - ".github/workflows/windows-build.yml"
       - ".github/workflows/validate-updater.yml"
+  pull_request:
+    paths:
+      - "installer/updater_bootstrap.ps1"
+      - "installer/updater_v4.ps1"
+      - "installer/repair_sync.ps1"
+      - "installer/updater.ps1"
+      - "tools/build_delta.py"
+      - ".github/workflows/windows-build.yml"
+      - ".github/workflows/validate-updater.yml"
   workflow_dispatch:
 
 permissions:
