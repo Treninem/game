@@ -15,8 +15,8 @@ Repository state, current CI and reproducible logs override stale chat prose. Ev
 - Current phase: **STABILIZATION FREEZE — playable baseline before new content**
 - New world expansion, story expansion, item families, NPC families and new gameplay systems are deferred until the current baseline passes the acceptance gates below.
 
-PROGRESS_COMPLETE: 55%
-PROGRESS_REMAINING: 45%
+PROGRESS_COMPLETE: 60%
+PROGRESS_REMAINING: 40%
 
 DONE:
 - Current repository already contains the core RPG/runtime, world streaming, saves, settings, UI, combat, magic, map, quests, dungeons/realms, installer/updater and extensive smoke coverage.
@@ -27,7 +27,6 @@ DONE:
 
 REMAINING:
 - Finish all same-SHA stabilization CI and Windows package/install/update evidence.
-- Remove version/documentation drift and keep one canonical version across project/release metadata.
 - Audit current runtime for P0/P1 defects, stubs, accidental placeholder visuals and unbounded performance risks.
 - Convert useful staged assets from `STAGED_PHYSICAL` to `PRODUCTION_READY` and `INTEGRATED` only where they improve the current playable slice without destabilizing it.
 - Produce and verify the next stable candidate from one exact accepted SHA.
@@ -38,7 +37,7 @@ BLOCKERS:
 - Some current-main CI jobs were still running when this journal was created; they are evidence pending, not PASS.
 
 NEXT:
-- Complete governance/version-alignment batch, then audit P0/P1 runtime and integrate the smallest high-value asset set needed to make the existing playable slice coherent.
+- Merge PR #9, then start STAB-002: current-runtime P0/P1 audit, repair stale mandatory checks (including magic) and prove implemented systems on the new main before any asset-family integration.
 
 ## Stabilization acceptance gates
 
@@ -65,7 +64,7 @@ A green parse alone is never sufficient.
 
 | Claim | Owner | Status | Scope / files | Intended result |
 |---|---|---|---|---|
-| STAB-001 | main integration chat | ACTIVE | `AGENTS.md`, `README.md`, `VERSION`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md`, `tools/check_version_sync.py`, `.github/workflows/validate-world-core.yml`, `.github/workflows/windows-build.yml`, `.github/workflows/build-windows-installer.yml`, `.github/workflows/diagnose-ui-smoke.yml`, `.github/workflows/release-gate-status.yml`, `tests/test_world_loading_readiness.gd`, `tests/test_world_loading_readiness.tscn`, `installer/ImPuls.iss` | Establish Fox-style coordination rules, engineering memory, stabilization freeze, remove metadata drift, enforce version sync, make the fast installer artifact-only, and repair broken diagnostic/release-status CI. No public version bump. |
+| STAB-001 | main integration chat | DONE | `AGENTS.md`, `README.md`, `VERSION`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md`, `tools/check_version_sync.py`, `.github/workflows/validate-world-core.yml`, `.github/workflows/windows-build.yml`, `.github/workflows/build-windows-installer.yml`, `.github/workflows/diagnose-ui-smoke.yml`, `.github/workflows/release-gate-status.yml`, `tests/test_world_loading_readiness.gd`, `tests/test_world_loading_readiness.tscn`, `installer/ImPuls.iss` | Establish Fox-style coordination rules, engineering memory, stabilization freeze, remove metadata drift, enforce version sync, make the fast installer artifact-only, and repair broken diagnostic/release-status CI. No public version bump. |
 
 Before modifying a claimed file/subsystem, another executor must integrate fresh `main` and explicitly reconcile/take over the claim here.
 
@@ -154,6 +153,19 @@ Do not create another progress/development/coordination journal.
 - PR `Validate World Core`: success, run `37543723961`.
 - Main `Validate Player Movement`: success, run `37543968394`.
 - Stable release was intentionally not published from the fix commit.
+
+### 2026-10-07 — STAB-001 governance/release-infrastructure stabilization
+- PR #9: `Stabilize project governance and version metadata`.
+- Added the single master development journal, engineering memory and mandatory claim protocol.
+- Stabilization freeze recorded: existing playable baseline first; world/story/item/NPC expansion deferred until P0/P1 and release gates are clean.
+- `VERSION`, `project.godot`, `bootstrap.gd` and installer metadata aligned to the accepted `0.10.7-stable` runtime lineage; CI now rejects drift.
+- Fast `Build Windows Installer` is artifact-only and can no longer move/publish `stable`.
+- Fixed UI diagnostic project context/readiness test and release-gate recorder dirty-rebase failure.
+- PR #9 `Diagnose UI Smoke`: run `37545493981` — PASS.
+- PR #9 `Validate World Core`: run `37545493943` — PASS.
+- PR #9 `Build Windows Installer`: run `37545494001` — PASS (Windows export + installer + SHA-256 + artifact).
+- Historical PR #7 (`0.10.8`) closed unmerged as stale; no old asset/release branch was wholesale-merged.
+- No public rolling stable release was published by STAB-001.
 
 ## Required owner-facing status format
 
