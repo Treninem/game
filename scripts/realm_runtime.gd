@@ -50,6 +50,12 @@ func enter_realm(realm_id: String, actor: Node = null) -> bool:
         return true
     if not REALMS.has(realm_id):
         return false
+    var progression := ProgressionSystem.snapshot()
+    if bool(progression.get("in_dungeon", false)) or bool(progression.get("combat_active", false)):
+        return false
+    var minigame := get_tree().get_first_node_in_group("minigame_runtime")
+    if minigame != null and minigame.has_method("is_active") and bool(minigame.call("is_active")):
+        return false
     if current_realm == "main":
         return_position = target_player.global_position
         return_valid = true
