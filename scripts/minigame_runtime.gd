@@ -71,7 +71,10 @@ func _unhandled_input(event: InputEvent) -> void:
         GameState.notify("Руна сбилась — последовательность начинается заново.")
 
 func start_minigame(minigame_id: String) -> bool:
-    if not active_id.is_empty() or bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    var progression := ProgressionSystem.snapshot()
+    if not active_id.is_empty() or bool(progression.get("in_dungeon", false)) or bool(progression.get("combat_active", false)):
+        return false
+    if String(GameState.get_world_value("current_realm", "main")) != "main":
         return false
     var definition := _definition(minigame_id)
     if definition.is_empty():
