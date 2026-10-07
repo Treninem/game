@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
     _resolve_player()
     if player == null:
         return
-    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    if ProgressionSystem.is_in_dungeon():
         _set_combat(true)
         release_elapsed = 0.0
         return
