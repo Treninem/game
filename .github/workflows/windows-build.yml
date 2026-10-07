@@ -124,6 +124,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_ui_and_save.tscn 180
       - name: Verify player traverses the world
         run: bash tools/run_godot_smoke.sh tests/smoke_player_movement.tscn 240
+      - name: Verify bounded streaming outside the mainland
+        run: bash tools/run_godot_smoke.sh tests/smoke_offworld_streaming.tscn 120
       - name: Verify updater delta roundtrip
         run: python3 tools/verify_delta_roundtrip.py
       - name: Export Windows x64
