@@ -45,6 +45,8 @@ func enter_realm(realm_id: String, actor: Node = null) -> bool:
         current_realm = "main"
         GameState.set_world_value("current_realm", "main")
         GameState.set_location("Материк Импульса")
+        if target_player.has_method("set_realm_mode"):
+            target_player.call("set_realm_mode", false)
         if target_player.has_method("prepare_for_streamed_surface"):
             target_player.call("prepare_for_streamed_surface", false)
         return true
@@ -66,6 +68,8 @@ func enter_realm(realm_id: String, actor: Node = null) -> bool:
     target_player.velocity = Vector3.ZERO
     current_realm = realm_id
     GameState.set_world_value("current_realm", realm_id)
+    if target_player.has_method("set_realm_mode"):
+        target_player.call("set_realm_mode", true)
     GameState.set_location(String(Dictionary(REALMS[realm_id]).get("name", realm_id)))
     GameState.notify("Вы вошли в изменённый мир: %s." % String(Dictionary(REALMS[realm_id]).get("name", realm_id)))
     return true
@@ -92,6 +96,8 @@ func _recover_saved_realm() -> void:
     if player.global_position.distance_to(root.global_position) > 90.0:
         player.global_position = root.global_position + Vector3(0, 2.0, 12.0)
         player.velocity = Vector3.ZERO
+    if player.has_method("set_realm_mode"):
+        player.call("set_realm_mode", true)
     GameState.set_location(String(Dictionary(REALMS[saved]).get("name", saved)))
 
 func _restore_saved_return_position() -> void:
