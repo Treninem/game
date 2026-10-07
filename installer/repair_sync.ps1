@@ -20,6 +20,7 @@ $script:StatusLabel = $null
 $script:DetailLabel = $null
 $script:BytesPlanned = 0L
 $script:BytesFinished = 0L
+$script:RepairSucceeded = $false
 
 function Write-Log([string]$Text) {
     try {
@@ -105,33 +106,88 @@ function Format-Bytes([long]$Bytes) {
 function Download-File([string]$Url, [string]$Destination, [string]$Label, [long]$ExpectedBytes = 0L) {
     Add-Type -AssemblyName System.Net.Http
     $client = New-Object System.Net.Http.HttpClient
-    $client.DefaultRequestHeaders.UserAgent.ParseAdd("ImPuls-Repair/1.0")
+    $client.Timeout = [System.Threading.Timeout]::InfiniteTimeSpan
+    $client.DefaultRequestHeaders.UserAgent.ParseAdd("ImPuls-Repair/2.0")
+    $partPath = "$Destination.part"
     try {
-        $response = $client.GetAsync($Url, [System.Net.Http.HttpCompletionOption]::ResponseHeadersRead).GetAwaiter().GetResult()
-        $response.EnsureSuccessStatusCode()
-        $input = $response.Content.ReadAsStreamAsync().GetAwaiter().GetResult()
+        $parent = Split-Path $Destination -Parent
+        if ($parent) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
+
+        if (Test-Path $Destination) {
+            [long]$completeSize = (Get-Item $Destination).Length
+            if ($ExpectedBytes -le 0 -or $completeSize -eq $ExpectedBytes) {
+                $script:BytesFinished += $completeSize
+                Set-ProgressUi "Использование уже загруженных данных" -1 "$Label • $(Format-Bytes $completeSize)"
+                return
+            }
+            Remove-Item $Destination -Force -ErrorAction SilentlyContinue
+        }
+
+        [long]$existing = 0L
+        if (Test-Path $partPath) {
+            $existing = (Get-Item $partPath).Length
+            if ($ExpectedBytes -gt 0 -and $existing -gt $ExpectedBytes) {
+                Remove-Item $partPath -Force
+                $existing = 0L
+            } elseif ($ExpectedBytes -gt 0 -and $existing -eq $ExpectedBytes) {
+                Move-Item $partPath $Destination -Force
+                $script:BytesFinished += $existing
+                return
+            }
+        }
+
+        $request = New-Object System.Net.Http.HttpRequestMessage([System.Net.Http.HttpMethod]::Get, $Url)
+        if ($existing -gt 0) {
+            $request.Headers.Range = New-Object System.Net.Http.Headers.RangeHeaderValue($existing, $null)
+            Set-ProgressUi "Продолжение восстановления" -1 "$Label • уже есть $(Format-Bytes $existing)"
+        }
+
+        $response = $client.SendAsync($request, [System.Net.Http.HttpCompletionOption]::ResponseHeadersRead).GetAwaiter().GetResult()
         try {
-            $parent = Split-Path $Destination -Parent
-            if ($parent) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
-            $output = [System.IO.File]::Open($Destination, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+            $response.EnsureSuccessStatusCode()
+            $resuming = $existing -gt 0 -and [int]$response.StatusCode -eq 206
+            if ($existing -gt 0 -and -not $resuming) {
+                Remove-Item $partPath -Force -ErrorAction SilentlyContinue
+                $existing = 0L
+            }
+
+            [long]$responseBytes = 0L
+            if ($response.Content.Headers.ContentLength) { $responseBytes = [long]$response.Content.Headers.ContentLength }
+            [long]$total = if ($ExpectedBytes -gt 0) { $ExpectedBytes } elseif ($resuming) { $existing + $responseBytes } else { $responseBytes }
+
+            $input = $response.Content.ReadAsStreamAsync().GetAwaiter().GetResult()
             try {
-                $buffer = New-Object byte[] (1024 * 1024)
-                [long]$done = 0L
-                while (($read = $input.Read($buffer, 0, $buffer.Length)) -gt 0) {
-                    $output.Write($buffer, 0, $read)
-                    $done += $read
-                    [long]$overall = $script:BytesFinished + $done
-                    $percent = if ($script:BytesPlanned -gt 0) { [int](($overall * 100L) / $script:BytesPlanned) } else { -1 }
-                    $detail = if ($script:BytesPlanned -gt 0) {
-                        "$(Format-Bytes $overall) из $(Format-Bytes $script:BytesPlanned) • $Label"
-                    } else {
-                        "Загружено $(Format-Bytes $done) • $Label"
+                $mode = if ($resuming) { [System.IO.FileMode]::Append } else { [System.IO.FileMode]::Create }
+                $output = [System.IO.File]::Open($partPath, $mode, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+                try {
+                    $buffer = New-Object byte[] (1024 * 1024)
+                    [long]$downloaded = 0L
+                    while (($read = $input.Read($buffer, 0, $buffer.Length)) -gt 0) {
+                        $output.Write($buffer, 0, $read)
+                        $downloaded += $read
+                        [long]$fileDone = $existing + $downloaded
+                        [long]$overall = $script:BytesFinished + $fileDone
+                        $percent = if ($script:BytesPlanned -gt 0) { [int](($overall * 100L) / $script:BytesPlanned) } else { -1 }
+                        $detail = if ($total -gt 0) {
+                            "$(Format-Bytes $fileDone) из $(Format-Bytes $total) • $Label"
+                        } else {
+                            "Загружено $(Format-Bytes $fileDone) • $Label"
+                        }
+                        Set-ProgressUi "Загрузка только нужных файлов" $percent $detail
                     }
-                    Set-ProgressUi "Загрузка только нужных файлов" $percent $detail
-                }
-                $script:BytesFinished += $done
-            } finally { $output.Dispose() }
-        } finally { $input.Dispose() }
+                } finally { $output.Dispose() }
+            } finally { $input.Dispose() }
+
+            [long]$finalSize = (Get-Item $partPath).Length
+            if ($ExpectedBytes -gt 0 -and $finalSize -ne $ExpectedBytes) {
+                throw "Загрузка прервана: $Label. Файл сохранён для докачки."
+            }
+            Move-Item $partPath $Destination -Force
+            $script:BytesFinished += $finalSize
+        } finally {
+            $response.Dispose()
+            $request.Dispose()
+        }
     } finally { $client.Dispose() }
 }
 
@@ -145,7 +201,11 @@ function File-Matches([string]$Path, [long]$Size, [string]$Sha256) {
 function Verify-Hash([string]$Path, [string]$Expected) {
     if ($Expected -notmatch '^[0-9a-fA-F]{64}$') { throw "Некорректный SHA-256 для $Path" }
     $actual = (Get-FileHash $Path -Algorithm SHA256).Hash.ToLowerInvariant()
-    if ($actual -ne $Expected.ToLowerInvariant()) { throw "Проверка SHA-256 не пройдена: $([IO.Path]::GetFileName($Path))" }
+    if ($actual -ne $Expected.ToLowerInvariant()) {
+        Remove-Item $Path -Force -ErrorAction SilentlyContinue
+        Remove-Item "$Path.part" -Force -ErrorAction SilentlyContinue
+        throw "Проверка SHA-256 не пройдена: $([IO.Path]::GetFileName($Path)). Повреждённый кэш удалён."
+    }
 }
 
 function Asset-ByName($Assets, [string]$Name) {
@@ -156,7 +216,7 @@ function Get-ReleaseAssets($Release) {
     $all = @()
     $page = 1
     while ($page -le 20) {
-        $items = @(Invoke-RestMethod -Uri "$($Release.assets_url)?per_page=100&page=$page" -Headers $Headers -TimeoutSec 20)
+        $items = @(Invoke-RestMethod -Uri "$($Release.assets_url)?per_page=100&page=$page" -Headers $Headers -TimeoutSec 0)
         if ($items.Count -eq 0) { break }
         $all += $items
         if ($items.Count -lt 100) { break }
@@ -186,7 +246,7 @@ if ($WaitForGameExit) {
 }
 
 try {
-    $Release = Invoke-RestMethod -Uri $Api -Headers $Headers -TimeoutSec 20
+    $Release = Invoke-RestMethod -Uri $Api -Headers $Headers -TimeoutSec 0
     $Assets = @(Get-ReleaseAssets $Release)
 } catch {
     Write-Log "Repair channel unavailable: $($_.Exception.Message)"
@@ -199,16 +259,21 @@ $ManifestAsset = Asset-ByName $Assets "ImPuls-File-Manifest.json"
 $RuntimeAsset = Asset-ByName $Assets "ImPuls-Updater-Runtime.zip"
 if (-not $ManifestAsset -or -not $RuntimeAsset) { throw "Стабильный релиз не содержит служебные файлы восстановления" }
 
-$TempDir = Join-Path $env:TEMP ("ImPulsRepair-" + [guid]::NewGuid())
-$StageDir = Join-Path $TempDir "stage"
-$RuntimeDir = Join-Path $TempDir "runtime"
-$ManifestPath = Join-Path $TempDir "ImPuls-File-Manifest.json"
-$RuntimeZip = Join-Path $TempDir "ImPuls-Updater-Runtime.zip"
-New-Item -ItemType Directory -Path $TempDir,$StageDir,$RuntimeDir -Force | Out-Null
+$RemoteTag = [string]$Release.name
+$CacheDir = Join-Path $CacheRoot $RemoteTag
+$DownloadDir = Join-Path $CacheDir "downloads"
+$StageDir = Join-Path $CacheDir "stage"
+$RuntimeDir = Join-Path $CacheDir "runtime"
+$ManifestPath = Join-Path $DownloadDir "ImPuls-File-Manifest.json"
+$RuntimeZip = Join-Path $DownloadDir "ImPuls-Updater-Runtime.zip"
+New-Item -ItemType Directory -Path $CacheRoot,$CacheDir,$DownloadDir -Force | Out-Null
+Remove-Item $StageDir -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item $RuntimeDir -Recurse -Force -ErrorAction SilentlyContinue
+New-Item -ItemType Directory -Path $StageDir,$RuntimeDir -Force | Out-Null
 
 try {
     Set-ProgressUi "Чтение манифеста..." -1 "Определяем только отсутствующие или устаревшие файлы"
-    Invoke-WebRequest -Uri $ManifestAsset.browser_download_url -Headers $Headers -OutFile $ManifestPath -UseBasicParsing
+    Download-File $ManifestAsset.browser_download_url $ManifestPath "манифест файлов" ([long]$ManifestAsset.size)
     $Manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json
     if ([int]$Manifest.format -lt 2) { throw "Неподдерживаемый манифест" }
 
@@ -229,7 +294,7 @@ try {
         }
     }
 
-    [long]$planned = [long]$RuntimeAsset.size
+    [long]$planned = [long]$ManifestAsset.size + [long]$RuntimeAsset.size
     foreach ($item in $Needed) { $planned += [long]$item.Asset.size }
     $script:BytesPlanned = $planned
     $script:BytesFinished = 0L
@@ -238,10 +303,11 @@ try {
         Set-ProgressUi "Файлы игры уже целы" 70 "Загрузка игровых файлов не требуется"
     } else {
         foreach ($item in $Needed) {
-            $dest = Join-Path $StageDir ([string]$item.Name)
-            Download-File $item.Asset.browser_download_url $dest ([string]$item.Name) ([long]$item.Asset.size)
-            if ((Get-Item $dest).Length -ne [long]$item.Info.size) { throw "Неверный размер $($item.Name)" }
-            Verify-Hash $dest ([string]$item.Info.sha256)
+            $cached = Join-Path $DownloadDir ([string]$item.Name)
+            Download-File $item.Asset.browser_download_url $cached ([string]$item.Name) ([long]$item.Asset.size)
+            if ((Get-Item $cached).Length -ne [long]$item.Info.size) { throw "Неверный размер $($item.Name)" }
+            Verify-Hash $cached ([string]$item.Info.sha256)
+            Copy-Item $cached (Join-Path $StageDir ([string]$item.Name)) -Force
         }
     }
 
@@ -267,7 +333,8 @@ try {
     }
 
     if (Test-Path $BackupDir) { Remove-Item $BackupDir -Recurse -Force }
-    Write-Log "File repair complete. Needed=$($Needed.Count), network=$(Format-Bytes $script:BytesFinished)"
+    $script:RepairSucceeded = $true
+    Write-Log "File repair complete. Needed=$($Needed.Count), downloaded/cached=$(Format-Bytes $script:BytesFinished)"
     Set-ProgressUi "Готово" 100 "Загружено $(Format-Bytes $script:BytesFinished); полный архив не использовался"
     if ($script:ProgressForm) { Start-Sleep -Milliseconds 900 }
     Restart-GameIfRequested
@@ -282,5 +349,11 @@ try {
     Restart-GameIfRequested
 } finally {
     if ($script:ProgressForm) { $script:ProgressForm.Close() }
-    Remove-Item $TempDir -Recurse -Force -ErrorAction SilentlyContinue
+    if ($script:RepairSucceeded) {
+        Remove-Item $CacheDir -Recurse -Force -ErrorAction SilentlyContinue
+    } else {
+        Remove-Item $StageDir -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item $RuntimeDir -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Log "Repair download cache preserved for resume: $DownloadDir"
+    }
 }
