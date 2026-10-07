@@ -33,7 +33,7 @@ def main() -> int:
         if not canonical:
             raise RuntimeError("VERSION is empty")
 
-        numeric_match = re.match(r"^([0-9]+(?:\\.[0-9]+){1,3})(?:[-+].*)?$", canonical)
+        numeric_match = re.match(r"^([0-9]+(?:\.[0-9]+){1,3})(?:[-+].*)?$", canonical)
         if numeric_match is None:
             raise RuntimeError(f"VERSION has unsupported format: {canonical}")
         numeric_version = numeric_match.group(1)
@@ -41,19 +41,19 @@ def main() -> int:
         windows_version = ".".join(numeric_parts + ["0"] * (4 - len(numeric_parts)))
 
         project_version = require_match(
-            r'^config/version="([^"]+)"\\s*$',
+            r'^config/version="([^"]+)"\s*$',
             read_text(PROJECT_FILE),
             "project.godot application version",
         )
         bootstrap_version = require_match(
-            r'^const VERSION\\s*:=\\s*"([^"]+)"\\s*$',
+            r'^const VERSION\s*:=\s*"([^"]+)"\s*$',
             read_text(BOOTSTRAP_FILE),
             "scripts/bootstrap.gd VERSION",
         )
 
         installer_text = read_text(INSTALLER_FILE)
         installer_fallback = require_match(
-            r'^\\s*#define MyAppVersion "([^"]+)"\\s*$',
+            r'^\s*#define MyAppVersion "([^"]+)"\s*$',
             installer_text,
             "installer/ImPuls.iss MyAppVersion fallback",
         )
@@ -64,12 +64,12 @@ def main() -> int:
 
         export_text = read_text(EXPORT_PRESETS_FILE)
         export_file_version = require_match(
-            r'^application/file_version="([^"]+)"\\s*$',
+            r'^application/file_version="([^"]+)"\s*$',
             export_text,
             "export_presets.cfg application/file_version",
         )
         export_product_version = require_match(
-            r'^application/product_version="([^"]+)"\\s*$',
+            r'^application/product_version="([^"]+)"\s*$',
             export_text,
             "export_presets.cfg application/product_version",
         )
