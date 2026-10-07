@@ -33,11 +33,12 @@ REMAINING:
 - Perform final installed-package playability acceptance before publishing the next rolling `stable`.
 
 BLOCKERS:
-- No confirmed code blocker at journal creation.
-- Some current-main CI jobs were still running when this journal was created; they are evidence pending, not PASS.
+- PR #10 same-SHA stabilization CI is still pending on the latest head; no current branch result is accepted until all required checks finish on one head SHA.
+- Installed-package playability is still unproven for the next candidate, so rolling `stable` must not move yet.
 
 NEXT:
-- Merge PR #9, then start STAB-002: current-runtime P0/P1 audit, repair stale mandatory checks (including magic) and prove implemented systems on the new main before any asset-family integration.
+- Finish STAB-002 same-SHA CI on PR #10, repair any failures without weakening assertions, then merge only after magic/VFX/updater/movement/world-core/Windows installer evidence is green on the accepted head.
+- After merge, run the comprehensive stable candidate build from one exact main SHA and perform installed-package playability acceptance before any asset-family expansion.
 
 ## Stabilization acceptance gates
 
@@ -66,7 +67,7 @@ A green parse alone is never sufficient.
 |---|---|---|---|---|
 | STAB-001 | main integration chat | DONE | `AGENTS.md`, `README.md`, `VERSION`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md`, `tools/check_version_sync.py`, `.github/workflows/validate-world-core.yml`, `.github/workflows/windows-build.yml`, `.github/workflows/build-windows-installer.yml`, `.github/workflows/diagnose-ui-smoke.yml`, `.github/workflows/release-gate-status.yml`, `tests/test_world_loading_readiness.gd`, `tests/test_world_loading_readiness.tscn`, `installer/ImPuls.iss` | Establish Fox-style coordination rules, engineering memory, stabilization freeze, remove metadata drift, enforce version sync, make the fast installer artifact-only, and repair broken diagnostic/release-status CI. No public version bump. |
 
-| STAB-002 | main integration chat | ACTIVE | `.github/workflows/validate-magic.yml`, `.github/workflows/validate-world-vfx.yml`, `.github/workflows/validate-updater.yml`, `.github/workflows/validate-movement.yml`, `.github/workflows/windows-build.yml`, `.github/workflows/release-gate-status.yml`, `export_presets.cfg`, `tools/check_version_sync.py`, `tests/**` (only new/changed stabilization smokes), `tools/verify_delta_roundtrip.py`, magic/VFX/updater runtime files only if a confirmed defect requires it | Prove currently implemented magic/VFX/updater systems, repair stale/insufficient gates, and make the next stable candidate depend on real same-lineage runtime evidence. No new gameplay/content. |
+| STAB-002 | main integration chat | ACTIVE — SAME-SHA CI PENDING | `.github/workflows/validate-magic.yml`, `.github/workflows/validate-world-vfx.yml`, `.github/workflows/validate-updater.yml`, `.github/workflows/validate-movement.yml`, `.github/workflows/windows-build.yml`, `export_presets.cfg`, `tools/check_version_sync.py`, `tools/verify_delta_roundtrip.py`, `installer/updater_v4.ps1`, `installer/repair_sync.ps1`, `project.godot`, `scripts/{world_streamer,player_controller,runtime_stability_guard,save_manager,progression_system,dungeon_runtime,realm_runtime,minigame_runtime,combat_state_controller,vip_flight_controller,capital_night_siege,game_state}.gd`, and new/changed stabilization smokes under `tests/**` | Prove magic/VFX/updater and repair confirmed P0/P1 runtime defects found during the mandatory audit: corrupted version gate, unsafe repair while game is running, offworld mainland streaming, realm/dungeon fall recovery, save/load runtime resync, minigame pause/cancel exploit, per-frame deep-copy hot paths and broken multi-day event/siege identity. No new gameplay/content or public stable publication. |
 
 Before modifying a claimed file/subsystem, another executor must integrate fresh `main` and explicitly reconcile/take over the claim here.
 
@@ -155,6 +156,20 @@ Do not create another progress/development/coordination journal.
 - PR `Validate World Core`: success, run `37543723961`.
 - Main `Validate Player Movement`: success, run `37543968394`.
 - Stable release was intentionally not published from the fix commit.
+
+### 2026-10-07 — STAB-002 runtime P0/P1 audit (ACTIVE; CI pending)
+- PR #10: `Stabilize magic, updater and runtime release gates`.
+- MagicHUD runtime smoke, World VFX wiring gate, delta updater roundtrip and PR execution of the mandatory movement/updater checks were added before the wider audit.
+- Confirmed/fixed version-gate corruption: `tools/check_version_sync.py` had an unterminated regex/program fragment and blocked World Core + Windows Installer before any real build step.
+- Updater/repair safety: resumable `.part` + HTTP Range + persistent cache retained; repair now refuses to replace files while ImPuls is still running.
+- Offworld streaming: mainland `WorldStreamer` is suspended and cleared in dungeon/realm, then rebuilt on mainland return; a dedicated smoke covers suspension/resume.
+- Player instanced-world recovery: the previously referenced but missing dungeon-mode contract is implemented; realm/dungeon falls no longer recover against mainland height data while mainland streaming is disabled.
+- Save/load resync: `SaveManager.game_loaded` now resynchronizes player, realm and dungeon runtimes after in-session loads.
+- Minigame stability: intentional rune-puzzle pause is respected; combat/realm transition conflicts are blocked; cancellation/death no longer grants a reward.
+- Performance: per-frame deep copies of progression state were removed from WorldStreamer, DungeonRuntime, CombatStateController and VIP flight hot paths.
+- World calendar: `world_day` is persisted separately from minute-of-day, fixing daily event rotation and later-day capital siege identity.
+- Added/expanded smoke coverage for offworld transitions, save resync, cancel-reward protection, rune pause stability and multi-day event rotation.
+- Latest code is not yet accepted as PASS: all required PR #10 checks must finish green on one exact head SHA before STAB-002 can be marked DONE.
 
 ### 2026-10-07 — STAB-001 governance/release-infrastructure stabilization
 - PR #9: `Stabilize project governance and version metadata`.
