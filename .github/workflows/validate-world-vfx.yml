@@ -21,6 +21,25 @@ on:
       - "scripts/environment_state.gd"
       - "scripts/world_data.gd"
       - "project.godot"
+  pull_request:
+    paths:
+      - ".github/workflows/validate-world-vfx.yml"
+      - "scripts/world_vfx.gd"
+      - "scripts/weather_vfx.gd"
+      - "scripts/weather_hail_vfx.gd"
+      - "scripts/ambient_vfx.gd"
+      - "scripts/nature_vfx.gd"
+      - "scripts/world_effect_emitter.gd"
+      - "scripts/landmark_vfx.gd"
+      - "scripts/screen_vfx.gd"
+      - "scripts/environment_mark_pool.gd"
+      - "scripts/player_controller.gd"
+      - "scripts/enemy.gd"
+      - "scripts/vfx_library.gd"
+      - "scripts/third_party_vfx.gd"
+      - "scripts/environment_state.gd"
+      - "scripts/world_data.gd"
+      - "project.godot"
   workflow_dispatch:
 
 permissions:
