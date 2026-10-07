@@ -92,7 +92,7 @@ func _process(delta: float) -> void:
             generated += 1
 
 func _mainland_streaming_allowed() -> bool:
-    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    if ProgressionSystem.is_in_dungeon():
         return false
     return String(GameState.get_world_value("current_realm", "main")) == "main"
 
