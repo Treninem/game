@@ -28,6 +28,7 @@ var last_horizontal_motion := Vector2.ZERO
 var last_safe_position := Vector3.ZERO
 var has_safe_position := false
 var ground_guard_active := false
+var instanced_world_mode := false
 var surface_ready_frames := 0
 var footstep_distance_accum := 0.0
 
@@ -126,8 +127,12 @@ func _physics_process(delta: float) -> void:
     var fall_speed_before_move := maxf(0.0, -velocity.y)
     var before := global_position
     move_and_slide()
-    _enforce_world_bounds()
-    _recover_to_terrain_if_needed(false)
+    if instanced_world_mode:
+        if _recover_instanced_fall_if_needed():
+            return
+    else:
+        _enforce_world_bounds()
+        _recover_to_terrain_if_needed(false)
 
     var moved := global_position - before
     last_horizontal_motion = Vector2(moved.x, moved.z)
@@ -168,7 +173,50 @@ func _play_footstep_audio(intensity: float) -> void:
     if world_audio != null and world_audio.has_method("play_footstep"):
         world_audio.call("play_footstep", global_position, "", intensity)
 
+func set_dungeon_mode(active: bool) -> void:
+    _set_instanced_world_mode(active)
+
+func set_realm_mode(active: bool) -> void:
+    _set_instanced_world_mode(active)
+
+func prepare_for_streamed_surface(force_snap_to_terrain: bool = false) -> void:
+    _begin_ground_guard(force_snap_to_terrain)
+
+func _set_instanced_world_mode(active: bool) -> void:
+    instanced_world_mode = active
+    ground_guard_active = false
+    surface_ready_frames = 0
+    recovery_cooldown = 0.0
+    velocity = Vector3.ZERO
+    last_horizontal_motion = Vector2.ZERO
+    footstep_distance_accum = 0.0
+    if active:
+        last_safe_position = global_position
+        has_safe_position = true
+    else:
+        _begin_ground_guard(false)
+
+func _recover_instanced_fall_if_needed() -> bool:
+    if not instanced_world_mode:
+        return false
+    if not has_safe_position:
+        last_safe_position = global_position
+        has_safe_position = true
+        return false
+    if global_position.y >= last_safe_position.y - 24.0:
+        return false
+    global_position = last_safe_position + Vector3.UP * 0.08
+    velocity = Vector3.ZERO
+    last_horizontal_motion = Vector2.ZERO
+    footstep_distance_accum = 0.0
+    return true
+
 func _begin_ground_guard(force_snap_to_terrain: bool) -> void:
+    if instanced_world_mode:
+        ground_guard_active = false
+        surface_ready_frames = 0
+        velocity = Vector3.ZERO
+        return
     var xz := Vector2(global_position.x, global_position.z)
     if WorldData.inside_world(xz):
         var terrain_y := WorldData.elevation_at(xz)
