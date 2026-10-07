@@ -284,8 +284,8 @@ jobs:
             "/DIR=$installDir"
           ) -PassThru -Wait
           if ($proc.ExitCode -ne 0) { throw "Installer exited with code $($proc.ExitCode)" }
-          $exe = Join-Path $installDir "ImPuls.exe"
-          $pck = Join-Path $installDir "ImPuls.pck"
+          $exe = Join-Path $installDir "current\ImPuls.exe"
+          $pck = Join-Path $installDir "current\ImPuls.pck"
           if (-not (Test-Path $exe)) { throw "Installed ImPuls.exe missing" }
           if (-not (Test-Path $pck)) { throw "Installed ImPuls.pck missing" }
 
