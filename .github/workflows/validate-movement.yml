@@ -42,6 +42,8 @@ on:
       - "scenes/stage1.tscn"
       - "tests/smoke_player_movement.gd"
       - "tests/smoke_player_movement.tscn"
+      - "tests/smoke_offworld_streaming.gd"
+      - "tests/smoke_offworld_streaming.tscn"
       - "tests/smoke_enterable_building.gd"
       - "tests/smoke_enterable_building.tscn"
       - "tests/smoke_canonical_regions.gd"
@@ -226,6 +228,20 @@ jobs:
           if [ "$status" -ne 0 ]; then
             detail=$(printf '%s\n' "$output" | tail -n 48 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=Player smoke raw Godot output::$detail"
+          fi
+          exit "$status"
+      - name: Prove mainland streaming pauses outside the main world
+        shell: bash
+        run: |
+          set +e
+          output=$(timeout 55s ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/smoke_offworld_streaming.tscn 2>&1)
+          status=$?
+          printf '%s\n' "$output"
+          if [ "$status" -eq 124 ]; then
+            echo "::error title=Offworld streaming smoke timeout::Dungeon/realm streaming transition did not settle within 55 seconds"
+          elif [ "$status" -ne 0 ]; then
+            detail=$(printf '%s\n' "$output" | tail -n 64 | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=Offworld streaming raw Godot output::$detail"
           fi
           exit "$status"
       - name: Prove buildings are physically enterable
