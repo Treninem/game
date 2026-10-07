@@ -176,10 +176,12 @@ jobs:
             throw "Bootstrap does not enforce UTF-8 implementation loading"
           }
           $impl = [System.IO.File]::ReadAllText((Resolve-Path "installer/updater_v4.ps1"), (New-Object System.Text.UTF8Encoding($false)))
-          foreach ($required in @('Initialize-ProgressUi','Set-ProgressUi','Download-File','Get-DeltaChain','Apply-Delta','Verify-Manifest')) {
+          foreach ($required in @('Initialize-ProgressUi','Set-ProgressUi','Download-File','Get-DeltaChain','Apply-Delta','Verify-Manifest','RangeHeaderValue','InfiniteTimeSpan','update-cache','.part')) {
             if ($impl -notmatch [regex]::Escape($required)) { throw "Missing updater marker: $required" }
           }
-          if ($impl -match 'ImPuls-PC-Windows-x64\.zip.*Download-File') { throw "Delta updater contains forbidden full-package fallback" }
+          if ($impl -match 'ImPuls-PC-Windows-x64\.zip.*Download-File' -or $impl -match 'ImPuls-Setup\.exe.*Download-File') {
+            throw "Delta updater contains forbidden full-package/installer fallback"
+          }
 
           $repair = [System.IO.File]::ReadAllText((Resolve-Path "installer/repair_sync.ps1"), (New-Object System.Text.UTF8Encoding($false)))
           foreach ($required in @('ImPuls-File-Manifest.json','ImPuls.exe','ImPuls.pck','File-Matches','Verify-Hash','Download-File')) {
