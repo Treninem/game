@@ -76,7 +76,7 @@ jobs:
           }
 
           $repair = [System.IO.File]::ReadAllText((Resolve-Path "installer/repair_sync.ps1"), (New-Object System.Text.UTF8Encoding($false)))
-          foreach ($marker in @('ImPuls-File-Manifest.json','ImPuls.exe','ImPuls.pck','File-Matches','Verify-Hash','Download-File')) {
+          foreach ($marker in @('ImPuls-File-Manifest.json','ImPuls.exe','ImPuls.pck','File-Matches','Verify-Hash','Download-File','RangeHeaderValue','InfiniteTimeSpan','repair-cache','.part')) {
             if ($repair -notmatch [regex]::Escape($marker)) { throw "Missing repair marker: $marker" }
           }
           if ($repair -match 'ImPuls-PC-Windows-x64\.zip') { throw "Repair runtime must not download the full game archive" }
