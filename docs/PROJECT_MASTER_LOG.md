@@ -15,30 +15,29 @@ Repository state, current CI and reproducible logs override stale chat prose. Ev
 - Current phase: **STABILIZATION FREEZE — playable baseline before new content**
 - New world expansion, story expansion, item families, NPC families and new gameplay systems are deferred until the current baseline passes the acceptance gates below.
 
-PROGRESS_COMPLETE: 60%
-PROGRESS_REMAINING: 40%
+PROGRESS_COMPLETE: 75%
+PROGRESS_REMAINING: 25%
 
 DONE:
 - Current repository already contains the core RPG/runtime, world streaming, saves, settings, UI, combat, magic, map, quests, dungeons/realms, installer/updater and extensive smoke coverage.
 - Grey-void/falling startup class was fixed and merged in `c7cbd13a5b9541552ffeb85694f7dd4fcef3e5fe`.
 - PR #8 `Validate World Core` passed with the strengthened boot → menu → loading → visible world → grounded player smoke.
 - Main `Validate Player Movement` passed after the grey-void fix.
+- STAB-002 runtime P0/P1 audit is merged as `20f1298523c0cdbc21f1772e568682e940edb190`; all seven required PR #10 checks passed on exact head `2f2a8be7786c007a96fd3bfcbd52065aec93a1ed`.
 - Large verified CC0 libraries are physically present in the repository; they must be reused before drawing/downloading duplicates.
 
 REMAINING:
-- Finish all same-SHA stabilization CI and Windows package/install/update evidence.
-- Audit current runtime for P0/P1 defects, stubs, accidental placeholder visuals and unbounded performance risks.
-- Convert useful staged assets from `STAGED_PHYSICAL` to `PRODUCTION_READY` and `INTEGRATED` only where they improve the current playable slice without destabilizing it.
-- Produce and verify the next stable candidate from one exact accepted SHA.
-- Perform final installed-package playability acceptance before publishing the next rolling `stable`.
+- Produce and verify the next stable candidate from one exact accepted `main` SHA.
+- Perform installed-package playability acceptance, including boot/menu/world handoff and core controls, before publishing the next rolling `stable`.
+- Re-check updater/repair against the candidate artifact lineage and preserve user data.
+- Only after the stable candidate is accepted, continue bounded asset integration from existing `STAGED_PHYSICAL` libraries.
 
 BLOCKERS:
-- PR #10 same-SHA stabilization CI is still pending on the latest head; no current branch result is accepted until all required checks finish on one head SHA.
 - Installed-package playability is still unproven for the next candidate, so rolling `stable` must not move yet.
 
 NEXT:
-- Finish STAB-002 same-SHA CI on PR #10, repair any failures without weakening assertions, then merge only after magic/VFX/updater/movement/world-core/Windows installer evidence is green on the accepted head.
-- After merge, run the comprehensive stable candidate build from one exact main SHA and perform installed-package playability acceptance before any asset-family expansion.
+- Run the comprehensive stable candidate build from exact `main` lineage after merge commit `20f1298523c0cdbc21f1772e568682e940edb190`.
+- Verify the produced Windows package/installer and perform installed-package playability acceptance before any rolling `stable` publication or asset-family expansion.
 
 ## Stabilization acceptance gates
 
@@ -67,7 +66,7 @@ A green parse alone is never sufficient.
 |---|---|---|---|---|
 | STAB-001 | main integration chat | DONE | `AGENTS.md`, `README.md`, `VERSION`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md`, `tools/check_version_sync.py`, `.github/workflows/validate-world-core.yml`, `.github/workflows/windows-build.yml`, `.github/workflows/build-windows-installer.yml`, `.github/workflows/diagnose-ui-smoke.yml`, `.github/workflows/release-gate-status.yml`, `tests/test_world_loading_readiness.gd`, `tests/test_world_loading_readiness.tscn`, `installer/ImPuls.iss` | Establish Fox-style coordination rules, engineering memory, stabilization freeze, remove metadata drift, enforce version sync, make the fast installer artifact-only, and repair broken diagnostic/release-status CI. No public version bump. |
 
-| STAB-002 | main integration chat | ACTIVE — SAME-SHA CI PENDING | `.github/workflows/validate-magic.yml`, `.github/workflows/validate-world-vfx.yml`, `.github/workflows/validate-updater.yml`, `.github/workflows/validate-movement.yml`, `.github/workflows/windows-build.yml`, `export_presets.cfg`, `tools/check_version_sync.py`, `tools/verify_delta_roundtrip.py`, `installer/updater_v4.ps1`, `installer/repair_sync.ps1`, `project.godot`, `scripts/{world_streamer,player_controller,runtime_stability_guard,save_manager,progression_system,dungeon_runtime,realm_runtime,minigame_runtime,combat_state_controller,vip_flight_controller,capital_night_siege,game_state}.gd`, and new/changed stabilization smokes under `tests/**` | Prove magic/VFX/updater and repair confirmed P0/P1 runtime defects found during the mandatory audit: corrupted version gate, unsafe repair while game is running, offworld mainland streaming, realm/dungeon fall recovery, save/load runtime resync, minigame pause/cancel exploit, per-frame deep-copy hot paths and broken multi-day event/siege identity. No new gameplay/content or public stable publication. |
+| STAB-002 | main integration chat | DONE | `.github/workflows/validate-magic.yml`, `.github/workflows/validate-world-vfx.yml`, `.github/workflows/validate-updater.yml`, `.github/workflows/validate-movement.yml`, `.github/workflows/windows-build.yml`, `export_presets.cfg`, `tools/check_version_sync.py`, `tools/verify_delta_roundtrip.py`, `installer/updater_v4.ps1`, `installer/repair_sync.ps1`, `project.godot`, `scripts/{world_streamer,player_controller,runtime_stability_guard,save_manager,progression_system,dungeon_runtime,realm_runtime,minigame_runtime,combat_state_controller,vip_flight_controller,capital_night_siege,game_state}.gd`, and new/changed stabilization smokes under `tests/**` | Prove magic/VFX/updater and repair confirmed P0/P1 runtime defects found during the mandatory audit: corrupted version gate, unsafe repair while game is running, offworld mainland streaming, realm/dungeon fall recovery, save/load runtime resync, minigame pause/cancel exploit, per-frame deep-copy hot paths and broken multi-day event/siege identity. No new gameplay/content or public stable publication. |
 
 Before modifying a claimed file/subsystem, another executor must integrate fresh `main` and explicitly reconcile/take over the claim here.
 
@@ -157,7 +156,7 @@ Do not create another progress/development/coordination journal.
 - Main `Validate Player Movement`: success, run `37543968394`.
 - Stable release was intentionally not published from the fix commit.
 
-### 2026-10-07 — STAB-002 runtime P0/P1 audit (ACTIVE; CI pending)
+### 2026-10-07 — STAB-002 runtime P0/P1 audit (DONE; merged)
 - PR #10: `Stabilize magic, updater and runtime release gates`.
 - MagicHUD runtime smoke, World VFX wiring gate, delta updater roundtrip and PR execution of the mandatory movement/updater checks were added before the wider audit.
 - Confirmed/fixed version-gate corruption: `tools/check_version_sync.py` had an unterminated regex/program fragment and blocked World Core + Windows Installer before any real build step.
@@ -169,7 +168,15 @@ Do not create another progress/development/coordination journal.
 - Performance: per-frame deep copies of progression state were removed from WorldStreamer, DungeonRuntime, CombatStateController and VIP flight hot paths.
 - World calendar: `world_day` is persisted separately from minute-of-day, fixing daily event rotation and later-day capital siege identity.
 - Added/expanded smoke coverage for offworld transitions, save resync, cancel-reward protection, rune pause stability and multi-day event rotation.
-- Latest code is not yet accepted as PASS: all required PR #10 checks must finish green on one exact head SHA before STAB-002 can be marked DONE.
+- Exact accepted PR head: `2f2a8be7786c007a96fd3bfcbd52065aec93a1ed`.
+- `Validate Delta Updater`: run `37608635758` — PASS.
+- `Diagnose UI Smoke`: run `37608635663` — PASS.
+- `Validate Player Movement`: run `37608635765` — PASS.
+- `Validate World Core`: run `37608635739` — PASS.
+- `Validate World VFX`: run `37608635632` — PASS.
+- `Build Windows Installer`: run `37608635737` — PASS.
+- `Validate Magic Runtime`: run `37608635839` — PASS.
+- PR #10 merged to `main` as `20f1298523c0cdbc21f1772e568682e940edb190`.
 
 ### 2026-10-07 — STAB-001 governance/release-infrastructure stabilization
 - PR #9: `Stabilize project governance and version metadata`.
