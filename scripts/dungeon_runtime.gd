@@ -65,6 +65,9 @@ func _recover_from_saved_run() -> void:
         return
     current_run_id = String(run.get("id", "recovered"))
     active_floor = int(run.get("current_floor", 1))
+    if String(GameState.get_world_value("current_realm", "main")) != "main":
+        GameState.set_world_value("current_realm", "main")
+        GameState.set_world_value("realm_return_position", [])
     return_position = _safe_world_return_position()
     return_position_valid = true
     _build_floor(run)
