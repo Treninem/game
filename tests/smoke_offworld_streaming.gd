@@ -62,15 +62,20 @@ func _run_test() -> void:
         _fail(4, "mainland streaming did not bootstrap before transition")
         return
 
+    SaveManager.delete_slot(10)
+    if not SaveManager.save_game(player, 10):
+        _fail(5, "could not create mainland save for runtime resync test")
+        return
+
     if not bool(realm_runtime.call("enter_realm", "ash_abyss", player)):
-        _fail(5, "realm transition failed")
+        _fail(6, "realm transition failed")
         return
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
-    if not _assert_suspended(streamer, "realm", 6):
+    if not _assert_suspended(streamer, "realm", 7):
         return
     if not bool(player.get("instanced_world_mode")):
-        _fail(10, "player did not enter instanced-world recovery mode in realm")
+        _fail(11, "player did not enter instanced-world recovery mode in realm")
         return
     var realm_safe := player.global_position
     player.global_position.y -= 40.0
@@ -78,82 +83,107 @@ func _run_test() -> void:
     for _i in range(6):
         await tree.physics_frame
     if player.global_position.distance_to(realm_safe) > 2.0:
-        _fail(11, "realm fall recovery escaped the realm platform: safe=%s recovered=%s" % [realm_safe, player.global_position])
+        _fail(12, "realm fall recovery escaped the realm platform: safe=%s recovered=%s" % [realm_safe, player.global_position])
         return
 
     var realm_dungeon: Dictionary = ProgressionSystem.start_dungeon("H")
     if bool(realm_dungeon.get("ok", false)) or String(realm_dungeon.get("reason", "")) != "realm_active":
-        _fail(12, "dungeon entry was not blocked inside realm: %s" % realm_dungeon)
+        _fail(13, "dungeon entry was not blocked inside realm: %s" % realm_dungeon)
         return
     if bool(minigame_runtime.call("start_minigame", "courier_race")):
-        _fail(13, "minigame entry was not blocked inside realm")
+        _fail(14, "minigame entry was not blocked inside realm")
         return
 
     if not bool(realm_runtime.call("enter_realm", "main", player)):
-        _fail(14, "return from realm failed")
+        _fail(15, "return from realm failed")
         return
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
     if bool(streamer.get("streaming_suspended")) or _loaded_count(streamer) <= 0:
-        _fail(15, "mainland streaming did not resume after realm return")
+        _fail(16, "mainland streaming did not resume after realm return")
         return
     if bool(player.get("instanced_world_mode")):
-        _fail(16, "player remained in instanced-world mode after realm return")
+        _fail(17, "player remained in instanced-world mode after realm return")
         return
 
     ProgressionSystem.set_combat_active(true)
     if bool(realm_runtime.call("enter_realm", "echo_edge", player)):
-        _fail(17, "realm entry was not blocked during combat")
+        _fail(18, "realm entry was not blocked during combat")
         return
     ProgressionSystem.set_combat_active(false)
 
+    var coins_before_cancel := GameState.coins
     if not bool(minigame_runtime.call("start_minigame", "courier_race")):
-        _fail(18, "mainland minigame did not start for transition guard test")
+        _fail(19, "mainland minigame did not start for transition guard test")
         return
     if bool(realm_runtime.call("enter_realm", "echo_edge", player)):
-        _fail(19, "realm entry was not blocked during active minigame")
+        _fail(20, "realm entry was not blocked during active minigame")
         return
     minigame_runtime.call("cancel_active")
     for _i in range(3):
         await tree.process_frame
+    if GameState.coins != coins_before_cancel:
+        _fail(21, "cancelled minigame changed coin balance: before=%d after=%d" % [coins_before_cancel, GameState.coins])
+        return
 
     if not bool(minigame_runtime.call("start_minigame", "rune_puzzle")):
-        _fail(20, "rune minigame did not start")
+        _fail(22, "rune minigame did not start")
         return
     for _i in range(4):
         await tree.process_frame
     if not tree.paused:
-        _fail(21, "runtime stability guard cancelled the intentional rune-puzzle pause")
+        _fail(23, "runtime stability guard cancelled the intentional rune-puzzle pause")
         return
     minigame_runtime.call("cancel_active")
     for _i in range(3):
         await tree.process_frame
     if tree.paused:
-        _fail(22, "rune-puzzle cancellation did not restore unpaused gameplay")
+        _fail(24, "rune-puzzle cancellation did not restore unpaused gameplay")
+        return
+
+    if not bool(realm_runtime.call("enter_realm", "echo_edge", player)):
+        _fail(25, "second realm transition failed before save-load resync test")
+        return
+    for _i in range(TRANSITION_FRAMES):
+        await tree.process_frame
+    if not SaveManager.load_game(player, 10):
+        _fail(26, "mainland save could not be loaded from inside realm")
+        return
+    for _i in range(TRANSITION_FRAMES):
+        await tree.process_frame
+    if String(GameState.get_world_value("current_realm", "main")) != "main":
+        _fail(27, "loaded mainland save left current_realm active")
+        return
+    if bool(player.get("instanced_world_mode")):
+        _fail(28, "loaded mainland save left player in instanced-world mode")
+        return
+    if bool(streamer.get("streaming_suspended")) or _loaded_count(streamer) <= 0:
+        _fail(29, "loaded mainland save did not resume mainland streaming")
         return
 
     var dungeon_result: Dictionary = ProgressionSystem.start_dungeon("H")
     if not bool(dungeon_result.get("ok", false)):
-        _fail(23, "dungeon transition failed: %s" % dungeon_result)
+        _fail(30, "dungeon transition failed: %s" % dungeon_result)
         return
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
-    if not _assert_suspended(streamer, "dungeon", 24):
+    if not _assert_suspended(streamer, "dungeon", 31):
         return
     if not bool(player.get("instanced_world_mode")):
-        _fail(28, "player did not enter instanced-world recovery mode in dungeon")
+        _fail(35, "player did not enter instanced-world recovery mode in dungeon")
         return
 
     dungeon_runtime.call("abort_current_dungeon")
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
     if bool(streamer.get("streaming_suspended")) or _loaded_count(streamer) <= 0:
-        _fail(29, "mainland streaming did not resume after dungeon exit")
+        _fail(36, "mainland streaming did not resume after dungeon exit")
         return
 
     if bool(player.get("instanced_world_mode")):
-        _fail(30, "player remained in instanced-world mode after dungeon exit")
+        _fail(37, "player remained in instanced-world mode after dungeon exit")
         return
 
-    print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed fall_recovery=realm rune_pause=stable transition_guards=active")
+    SaveManager.delete_slot(10)
+    print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed fall_recovery=realm rune_pause=stable save_load=resynced cancel_reward=blocked transition_guards=active")
     tree.quit(0)
