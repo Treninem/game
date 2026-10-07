@@ -25,7 +25,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
     _resolve_player()
-    if not bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    if not ProgressionSystem.is_in_dungeon():
         return
     if transition_pending or instance_root == null or not is_instance_valid(instance_root):
         return
@@ -106,7 +106,7 @@ func _on_dungeon_exit_requested(_result: Dictionary) -> void:
     transition_pending = false
 
 func abort_current_dungeon() -> void:
-    if bool(ProgressionSystem.snapshot().get("in_dungeon", false)):
+    if ProgressionSystem.is_in_dungeon():
         ProgressionSystem.fail_dungeon(false)
 
 func _build_floor(run: Dictionary) -> void:
