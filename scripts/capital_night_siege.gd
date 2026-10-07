@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
     var slot := _night_wave_slot(GameState.world_minutes)
     if slot < 0:
         return
-    var day := int(floor(GameState.world_minutes / 1440.0))
+    var day := GameState.world_day
     var marker := "%d:%d" % [day, slot]
     if bool(GameState.get_world_value("capital_siege:" + marker, false)):
         return
