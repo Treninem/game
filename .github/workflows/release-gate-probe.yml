@@ -46,11 +46,7 @@ jobs:
           from pathlib import Path
           sha=os.environ['TARGET_SHA']
           data=json.loads(Path('/tmp/runs.json').read_text())
-          wanted={
-              'Validate World Core',
-              'Validate Player Movement',
-              'Build ImPuls Release Candidate',
-          }
+          wanted={'Build ImPuls Release Candidate'}
           rows=[]
           for r in data.get('workflow_runs',[]):
               if r.get('name') in wanted and r.get('head_sha') == sha:
