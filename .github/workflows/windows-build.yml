@@ -274,7 +274,48 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $installDir = Join-Path $env:RUNNER_TEMP "ImPulsCandidate"
+          $currentDir = Join-Path $installDir "current"
+          $stdoutLog = Join-Path $env:RUNNER_TEMP "impuls-installed-stdout.log"
+          $stderrLog = Join-Path $env:RUNNER_TEMP "impuls-installed-stderr.log"
+          $godotLog = Join-Path $env:RUNNER_TEMP "impuls-installed-godot.log"
+
+          function Write-InstalledGameDiagnostics {
+            Write-Host "===== installed game diagnostics ====="
+            Write-Host "InstallDir: $installDir"
+            Write-Host "CurrentDir: $currentDir"
+            if (Test-Path $stdoutLog) {
+              Write-Host "===== stdout ====="
+              Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue
+            }
+            if (Test-Path $stderrLog) {
+              Write-Host "===== stderr ====="
+              Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue
+            }
+            if (Test-Path $godotLog) {
+              Write-Host "===== explicit Godot log ====="
+              Get-Content $godotLog -Raw -ErrorAction SilentlyContinue
+            }
+            $godotUserRoot = Join-Path $env:APPDATA "Godot\app_userdata"
+            if (Test-Path $godotUserRoot) {
+              Get-ChildItem $godotUserRoot -Filter godot.log -Recurse -ErrorAction SilentlyContinue |
+                Sort-Object LastWriteTime -Descending |
+                Select-Object -First 3 |
+                ForEach-Object {
+                  Write-Host "===== Godot user log: $($_.FullName) ====="
+                  Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue
+                }
+            }
+            if (Test-Path $currentDir) {
+              Write-Host "===== installed current directory ====="
+              Get-ChildItem $currentDir -Force | Select-Object Name,Length,LastWriteTime | Format-Table -AutoSize
+            }
+          }
+
           if (Test-Path $installDir) { Remove-Item $installDir -Recurse -Force }
+          foreach ($log in @($stdoutLog, $stderrLog, $godotLog)) {
+            if (Test-Path $log) { Remove-Item $log -Force }
+          }
+
           $installer = (Resolve-Path "installer/output/ImPuls-Setup.exe").Path
           $proc = Start-Process -FilePath $installer -ArgumentList @(
             "/VERYSILENT",
@@ -284,12 +325,18 @@ jobs:
             "/DIR=$installDir"
           ) -PassThru -Wait
           if ($proc.ExitCode -ne 0) { throw "Installer exited with code $($proc.ExitCode)" }
-          $exe = Join-Path $installDir "current\ImPuls.exe"
-          $pck = Join-Path $installDir "current\ImPuls.pck"
-          if (-not (Test-Path $exe)) { throw "Installed ImPuls.exe missing" }
-          if (-not (Test-Path $pck)) { throw "Installed ImPuls.pck missing" }
 
-          $game = Start-Process -FilePath $exe -ArgumentList @("--headless", "--quit-after", "180") -PassThru
+          $exe = Join-Path $currentDir "ImPuls.exe"
+          $pck = Join-Path $currentDir "ImPuls.pck"
+          if (-not (Test-Path $exe)) { Write-InstalledGameDiagnostics; throw "Installed ImPuls.exe missing" }
+          if (-not (Test-Path $pck)) { Write-InstalledGameDiagnostics; throw "Installed ImPuls.pck missing" }
+
+          $game = Start-Process -FilePath $exe -WorkingDirectory $currentDir -ArgumentList @(
+            "--headless",
+            "--verbose",
+            "--log-file", $godotLog,
+            "--quit-after", "180"
+          ) -RedirectStandardOutput $stdoutLog -RedirectStandardError $stderrLog -PassThru
           $deadline = (Get-Date).AddSeconds(90)
           while (-not $game.HasExited -and (Get-Date) -lt $deadline) {
             Start-Sleep -Seconds 1
@@ -297,9 +344,13 @@ jobs:
           }
           if (-not $game.HasExited) {
             Stop-Process -Id $game.Id -Force
+            Write-InstalledGameDiagnostics
             throw "Installed game did not exit under --headless --quit-after within 90 seconds"
           }
-          if ($game.ExitCode -ne 0) { throw "Installed game exited with code $($game.ExitCode)" }
+
+          $exitCode = $game.ExitCode
+          Write-InstalledGameDiagnostics
+          if ($exitCode -ne 0) { throw "Installed game exited with code $exitCode" }
           Write-Host "Installed-package startup smoke OK: $installDir"
 
       - uses: actions/upload-artifact@v4
