@@ -112,3 +112,85 @@ Use statuses: `OPEN`, `RESOLVED`, `SUPERSEDED`, `UNCONFIRMED`.
 **Prevention**
 - Check `assets/ASSET_PACKS.md` and `assets/staging/PHYSICAL_STAGING_INDEX.md` first.
 - Compare a branch against current `main` before any merge.
+
+
+---
+
+## IMP-2026-10-07-004 — UI diagnostic false-red from incomplete project context
+
+**Status:** RESOLVED.
+
+**Symptom**
+- `Diagnose UI Smoke` failed before reaching the real UI/boot smoke.
+- Errors included missing `WorldData`, missing environment shader files and a timeout in the numeric readiness guard test.
+
+**Root cause**
+- The workflow launched `tests/test_world_loading_readiness.gd` as a raw `--script` while that script preloaded runtime code that expects normal project autoload context.
+- Sparse checkout omitted required shader/runtime dependencies.
+
+**Fix**
+- Convert the numeric readiness guard into a normal Godot test scene.
+- Run it with `--path . tests/test_world_loading_readiness.tscn`.
+- Include the required shader/audio/production project context in the diagnostic checkout.
+
+**Evidence**
+- PR #9 `Diagnose UI Smoke` run `37545493981` — PASS.
+- Numeric readiness guards, bounded UI smoke and end-to-end boot/world smoke all passed.
+
+**Prevention**
+- Runtime scripts that depend on project autoloads must be tested inside a real project scene unless the test intentionally supplies all dependencies.
+- Sparse checkout must include every resource reachable by autoload/preload for the tested path.
+
+---
+
+## IMP-2026-10-07-005 — Stable gate recorder dirty-rebase failure
+
+**Status:** RESOLVED in PR #9.
+
+**Symptom**
+- `Record Stable Release Gate Status` failed in the commit step even after mandatory workflow conclusions were collected successfully.
+
+**Root cause**
+- The workflow staged `release/verified.json` and then executed `git pull --rebase origin main`.
+- Git refuses rebase when the index contains staged changes.
+
+**Fix**
+- Preserve the generated verification payload outside the working tree.
+- Refresh/reset from current `origin/main` first.
+- Reapply the payload, commit and push.
+- Retry non-destructively if main moves concurrently.
+
+**Prevention**
+- Never rebase/pull a CI checkout after staging generated state.
+- For generated coordination files, refresh base first, then regenerate/reapply and commit.
+
+---
+
+## IMP-2026-10-07-006 — Fast Windows installer could publish stable and also failed to build
+
+**Status:** RESOLVED in PR #9.
+
+**Symptom**
+- `Build Windows Installer` was allowed to move the `stable` tag and publish the rolling stable release directly from a normal push.
+- The same workflow failed in Inno Setup before those publish steps.
+
+**Root causes**
+- Release authority was duplicated between the fast installer workflow and the comprehensive stable workflow.
+- The fast workflow did not generate `installer/impuls.ico` although `ImPuls.iss` requires it via `SetupIconFile`.
+- Installer metadata still carried stale `0.10.4` defaults while runtime was `0.10.7-stable`.
+
+**Fix**
+- Make the fast Windows installer workflow **artifact-only** with read-only contents permission.
+- Remove stable-tag movement and GitHub release publication from that workflow.
+- Generate the installer icon before Inno Setup.
+- Pass/verify canonical app version and align `ImPuls.iss` fallback/version-info metadata.
+- Add pull-request execution so installer regressions are caught before merge.
+
+**Evidence**
+- PR #9 `Build Windows Installer` run `37545494001` — PASS.
+- Windows export, icon preparation, Inno Setup, SHA-256 and artifact upload all succeeded.
+
+**Prevention**
+- Only the comprehensive release workflow may update rolling `stable`.
+- Installer metadata must derive from the canonical version source and be checked in CI.
+- A fast packaging workflow must not have release-publication authority.
