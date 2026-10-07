@@ -9,6 +9,22 @@ on:
       - "tests/smoke_boot_world.gd"
       - "tests/smoke_boot_world.tscn"
       - "tests/test_world_loading_readiness.gd"
+      - "tests/test_world_loading_readiness.tscn"
+      - "scripts/ui_layout_guard.gd"
+      - "scripts/world_loading_readiness.gd"
+      - "scripts/world_loading.gd"
+      - "scripts/bootstrap.gd"
+      - "scripts/menu_music.gd"
+      - "scenes/main_menu.tscn"
+      - "assets/audio/music/production/impuls_menu_slow_down.mp3"
+  pull_request:
+    paths:
+      - ".github/workflows/diagnose-ui-smoke.yml"
+      - "tests/smoke_ui_and_save.gd"
+      - "tests/smoke_boot_world.gd"
+      - "tests/smoke_boot_world.tscn"
+      - "tests/test_world_loading_readiness.gd"
+      - "tests/test_world_loading_readiness.tscn"
       - "scripts/ui_layout_guard.gd"
       - "scripts/world_loading_readiness.gd"
       - "scripts/world_loading.gd"
@@ -34,10 +50,9 @@ jobs:
             assets/branding
             assets/ui
             assets/vfx
-            assets/audio/music
-            assets/audio/world
-            assets/production/ui
-            assets/production/nature/kenney_nature_kit
+            assets/shaders
+            assets/audio
+            assets/production
             assets/staging/sourcechat_b47
       - name: Validate required production assets
         shell: bash
@@ -64,7 +79,7 @@ jobs:
         run: |
           set -uo pipefail
           set +e
-          timeout --signal=TERM --kill-after=5s 30s stdbuf -oL -eL ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/test_world_loading_readiness.gd 2>&1 | tee readiness-test.log
+          timeout --signal=TERM --kill-after=5s 30s stdbuf -oL -eL ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . tests/test_world_loading_readiness.tscn 2>&1 | tee readiness-test.log
           status=${PIPESTATUS[0]}
           set -e
           echo "READINESS_TEST_EXIT=$status"

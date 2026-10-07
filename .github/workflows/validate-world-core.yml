@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "VERSION"
       - "project.godot"
       - "assets/audio/**"
       - "assets/production/**"
@@ -12,9 +13,11 @@ on:
       - "scenes/**"
       - "tests/**"
       - "tools/run_godot_smoke.sh"
+      - "tools/check_version_sync.py"
       - ".github/workflows/validate-world-core.yml"
   pull_request:
     paths:
+      - "VERSION"
       - "project.godot"
       - "assets/audio/**"
       - "assets/production/**"
@@ -23,6 +26,7 @@ on:
       - "scenes/**"
       - "tests/**"
       - "tools/run_godot_smoke.sh"
+      - "tools/check_version_sync.py"
       - ".github/workflows/validate-world-core.yml"
   workflow_dispatch:
 
@@ -51,11 +55,16 @@ jobs:
             assets/staging/nature/kenney_nature_kit
             assets/ui
             assets/vfx
+            installer
             scenes
             scripts
             story
             tests
             tools/run_godot_smoke.sh
+            tools/check_version_sync.py
+
+      - name: Verify synchronized version metadata
+        run: python3 tools/check_version_sync.py
 
       - name: Install Godot 4.7.1
         shell: bash
