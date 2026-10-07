@@ -194,3 +194,85 @@ Use statuses: `OPEN`, `RESOLVED`, `SUPERSEDED`, `UNCONFIRMED`.
 - Only the comprehensive release workflow may update rolling `stable`.
 - Installer metadata must derive from the canonical version source and be checked in CI.
 - A fast packaging workflow must not have release-publication authority.
+
+
+---
+
+## IMP-2026-10-07-007 — Version gate source corruption can mask the real build
+
+**Status:** RESOLVED in code on PR #10; same-SHA CI evidence pending.
+
+**Symptom**
+- `Validate World Core` and `Build Windows Installer` failed immediately in `tools/check_version_sync.py`.
+- Python reported an unterminated string literal in the export metadata regex.
+
+**Root cause**
+- A duplicated program tail was accidentally embedded into two regex literals while extending the checker to `export_presets.cfg`.
+- Because version sync is the first mandatory step, every later build/test step was skipped.
+
+**Fix / prevention**
+- Rebuilt the checker as one clean program and kept Windows executable metadata validation.
+- Any file used as an early release gate must itself be parsed/executed by PR CI whenever it changes.
+- Do not interpret downstream skipped jobs as independent failures when the first gate script does not parse.
+
+---
+
+## IMP-2026-10-07-008 — Instanced worlds must not run mainland streaming/recovery
+
+**Status:** RESOLVED in code on PR #10; same-SHA runtime smoke pending.
+
+**Symptom/risk**
+- Dungeon and realm coordinates are still inside the continent coordinate bounds.
+- `WorldStreamer` therefore continued generating mainland terrain around instanced-world coordinates.
+- `PlayerController` had no implementation of the `set_dungeon_mode` method already expected by `DungeonRuntime`.
+- Falling far enough in a realm could invoke mainland height recovery while mainland streaming was intentionally absent.
+
+**Fix**
+- Suspend/clear mainland WorldStreamer queues, chunks and collision while `in_dungeon` or `current_realm != main`; rebuild around the player after return.
+- Add explicit player instanced-world mode for dungeon/realm.
+- In instanced mode, never use mainland terrain recovery; recover deep falls to the last valid instanced position instead.
+- Runtime emergency fallback floor is disabled in instanced-world mode.
+- Block conflicting realm/dungeon/minigame/combat transitions.
+- Add `SaveManager.game_loaded` so player/realm/dungeon runtimes resynchronize after in-session load.
+
+**Performance lesson**
+- Never call `ProgressionSystem.snapshot()` in per-frame/physics hot paths: it performs a deep duplicate.
+- Use allocation-free boolean runtime accessors for high-frequency checks.
+
+---
+
+## IMP-2026-10-07-009 — Intentional minigame pause and cancellation were unsafe
+
+**Status:** RESOLVED in code on PR #10; same-SHA runtime smoke pending.
+
+**Symptom/risk**
+- Rune puzzle intentionally pauses the tree, but `RuntimeStabilityGuard` treated the pause as accidental and unpaused it.
+- `cancel_active()` used the normal minigame completion path with score 0; the scoring contract grants a partial reward below target, allowing repeated start/cancel reward farming.
+- Realm entry during an active minigame could leave challenge state attached to the old world.
+
+**Fix**
+- Active minigames are a legitimate pause owner.
+- Cancel, death, missing-player and load interruption clean up without calling reward/scoring completion.
+- Realm entry is blocked while a minigame or combat is active; minigames are blocked in realms/dungeons/combat.
+- Loading a save terminates any local active minigame without reward.
+
+---
+
+## IMP-2026-10-07-010 — Day identity was lost every midnight
+
+**Status:** RESOLVED in code on PR #10; same-SHA progression smoke pending.
+
+**Symptom/risk**
+- `GameState.world_minutes` is intentionally wrapped to 0..1439 each day.
+- Daily event rotation and capital siege markers derived day as `floor(world_minutes / 1440)`, which therefore remained 0 forever.
+- Later days could not rotate events correctly and siege wave completion keys collided with day 0.
+
+**Fix**
+- Add persisted `GameState.world_day`.
+- Keep `world_minutes` as minute-of-day for UI, gates and day/night behavior.
+- Increment `world_day` when survival time crosses midnight.
+- Save schema 6 stores the day while older saves default/derive safely.
+- Progression daily events and capital siege wave identity use `world_day`.
+
+**Prevention**
+- Separate cyclical clock-of-day values from monotonic calendar identity.
