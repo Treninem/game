@@ -20,6 +20,10 @@ on:
       - "assets/shaders/**"
       - "assets/staging/nature/kenney_nature_kit/**"
       - ".github/workflows/windows-build.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/windows-build.yml"
+      - ".github/workflows/promote-current-stable.yml"
   workflow_dispatch:
 
 permissions:
@@ -31,7 +35,7 @@ concurrency:
 
 jobs:
   build-game:
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[candidate]') || contains(github.event.head_commit.message, '[stable]') }}
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[candidate]') || contains(github.event.head_commit.message, '[stable]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -51,8 +55,27 @@ jobs:
             assets/vfx
             assets/shaders
             assets/staging/nature/kenney_nature_kit
+            .github/workflows
       - name: Verify synchronized version metadata
         run: python3 tools/check_version_sync.py
+      - name: Verify candidate/promotion separation contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          candidate = Path(".github/workflows/windows-build.yml").read_text(encoding="utf-8")
+          promote = Path(".github/workflows/promote-current-stable.yml").read_text(encoding="utf-8")
+          assert "gh release upload stable" not in candidate
+          assert "gh release create stable" not in candidate
+          assert "Install candidate and prove installed game starts" in candidate
+          assert "candidate_run_id" in promote
+          assert "candidate_sha" in promote
+          assert "INSTALLED_ACCEPTED" in promote
+          assert "run-id: ${{ inputs.candidate_run_id }}" in promote
+          assert "github-token: ${{ github.token }}" in promote
+          print("candidate/promotion separation contract OK")
+          PY
       - name: Prepare ImPuls branding
         run: |
           python3 -m pip install --disable-pip-version-check pillow
