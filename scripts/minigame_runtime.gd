@@ -22,20 +22,26 @@ var previous_pause := false
 func _ready() -> void:
     add_to_group("minigame_runtime")
     process_mode = Node.PROCESS_MODE_ALWAYS
+    if not SaveManager.game_loaded.is_connected(_on_game_loaded):
+        SaveManager.game_loaded.connect(_on_game_loaded)
     call_deferred("_resolve_player")
+
+func _on_game_loaded(_slot: int) -> void:
+    if not active_id.is_empty():
+        _finish(0, "Испытание остановлено после загрузки сохранения.", false)
 
 func _process(delta: float) -> void:
     if active_id.is_empty():
         return
     _resolve_player()
     if player == null:
-        _finish(0, "Испытание остановлено: игрок недоступен.")
+        _finish(0, "Испытание остановлено: игрок недоступен.", false)
         return
     if active_id == "rune_puzzle" or not get_tree().paused:
         elapsed += delta
     _update_overlay()
     if GameState.is_dead:
-        _finish(0, "Испытание прервано поражением.")
+        _finish(0, "Испытание прервано поражением.", false)
         return
     match active_id:
         "arena_trial": _process_arena()
@@ -93,13 +99,13 @@ func start_minigame(minigame_id: String) -> bool:
         "courier_race": _start_race()
         "rune_puzzle": _start_runes()
         _:
-            _finish(0, "Неизвестное испытание.")
+            _finish(0, "Неизвестное испытание.", false)
             return false
     return true
 
 func cancel_active() -> void:
     if not active_id.is_empty():
-        _finish(0, "Испытание отменено.")
+        _finish(0, "Испытание отменено.", false)
 
 func is_active() -> bool:
     return not active_id.is_empty()
@@ -232,7 +238,7 @@ func _partial_score() -> int:
             return int(float(target_score) * float(rune_index) / maxf(1.0, float(rune_sequence.size())))
     return 0
 
-func _finish(score: int, message: String) -> void:
+func _finish(score: int, message: String, grant_reward: bool = true) -> void:
     var finished_id := active_id
     if finished_id.is_empty():
         return
@@ -250,8 +256,11 @@ func _finish(score: int, message: String) -> void:
     get_tree().paused = previous_pause
     if not previous_pause:
         Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-    var result := ProgressionSystem.finish_minigame(finished_id, maxi(0, score))
-    GameState.notify("%s Результат: %d • награда: %d монет." % [message, maxi(0, score), int(result.get("reward", 0))])
+    var reward := 0
+    if grant_reward:
+        var result := ProgressionSystem.finish_minigame(finished_id, maxi(0, score))
+        reward = int(result.get("reward", 0))
+    GameState.notify("%s Результат: %d • награда: %d монет." % [message, maxi(0, score), reward])
 
 func _definition(id: String) -> Dictionary:
     for row in ProgressionSystem.minigame_catalog():
