@@ -41,6 +41,8 @@ func _ready() -> void:
     motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
     _apply_settings()
     SettingsManager.settings_changed.connect(_apply_settings)
+    if not SaveManager.game_loaded.is_connected(_on_game_loaded):
+        SaveManager.game_loaded.connect(_on_game_loaded)
     Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
     # Never let gravity race ahead of streamed terrain. The guard releases only
     # after the physics server reports a real surface below the player's feet on
@@ -49,6 +51,12 @@ func _ready() -> void:
 
 func _apply_settings() -> void:
     camera.fov = float(SettingsManager.get_value("gameplay", "camera_fov"))
+
+func _on_game_loaded(_slot: int) -> void:
+    var loaded_instanced := ProgressionSystem.is_in_dungeon() or String(GameState.get_world_value("current_realm", "main")) != "main"
+    _set_instanced_world_mode(loaded_instanced)
+    if not loaded_instanced:
+        _recover_to_terrain_if_needed(true)
 
 func _unhandled_input(event: InputEvent) -> void:
     if DialogueManager.is_open or get_tree().paused:
@@ -297,6 +305,8 @@ func _attempt_unstick(direction: Vector3, delta: float, target_speed: float) -> 
             _begin_ground_guard(false)
 
 func _recover_to_terrain_if_needed(force_check: bool) -> void:
+    if instanced_world_mode:
+        return
     if recovery_cooldown > 0.0 and not force_check:
         return
     recovery_cooldown = 0.25
