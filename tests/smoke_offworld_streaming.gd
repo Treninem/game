@@ -69,55 +69,91 @@ func _run_test() -> void:
         await tree.process_frame
     if not _assert_suspended(streamer, "realm", 6):
         return
+    if not bool(player.get("instanced_world_mode")):
+        _fail(10, "player did not enter instanced-world recovery mode in realm")
+        return
+    var realm_safe := player.global_position
+    player.global_position.y -= 40.0
+    player.velocity = Vector3(0.0, -20.0, 0.0)
+    for _i in range(6):
+        await tree.physics_frame
+    if player.global_position.distance_to(realm_safe) > 2.0:
+        _fail(11, "realm fall recovery escaped the realm platform: safe=%s recovered=%s" % [realm_safe, player.global_position])
+        return
 
     var realm_dungeon: Dictionary = ProgressionSystem.start_dungeon("H")
     if bool(realm_dungeon.get("ok", false)) or String(realm_dungeon.get("reason", "")) != "realm_active":
-        _fail(10, "dungeon entry was not blocked inside realm: %s" % realm_dungeon)
+        _fail(12, "dungeon entry was not blocked inside realm: %s" % realm_dungeon)
         return
     if bool(minigame_runtime.call("start_minigame", "courier_race")):
-        _fail(11, "minigame entry was not blocked inside realm")
+        _fail(13, "minigame entry was not blocked inside realm")
         return
 
     if not bool(realm_runtime.call("enter_realm", "main", player)):
-        _fail(12, "return from realm failed")
+        _fail(14, "return from realm failed")
         return
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
     if bool(streamer.get("streaming_suspended")) or _loaded_count(streamer) <= 0:
-        _fail(13, "mainland streaming did not resume after realm return")
+        _fail(15, "mainland streaming did not resume after realm return")
+        return
+    if bool(player.get("instanced_world_mode")):
+        _fail(16, "player remained in instanced-world mode after realm return")
         return
 
     ProgressionSystem.set_combat_active(true)
     if bool(realm_runtime.call("enter_realm", "echo_edge", player)):
-        _fail(14, "realm entry was not blocked during combat")
+        _fail(17, "realm entry was not blocked during combat")
         return
     ProgressionSystem.set_combat_active(false)
 
     if not bool(minigame_runtime.call("start_minigame", "courier_race")):
-        _fail(15, "mainland minigame did not start for transition guard test")
+        _fail(18, "mainland minigame did not start for transition guard test")
         return
     if bool(realm_runtime.call("enter_realm", "echo_edge", player)):
-        _fail(16, "realm entry was not blocked during active minigame")
+        _fail(19, "realm entry was not blocked during active minigame")
         return
     minigame_runtime.call("cancel_active")
     for _i in range(3):
         await tree.process_frame
 
+    if not bool(minigame_runtime.call("start_minigame", "rune_puzzle")):
+        _fail(20, "rune minigame did not start")
+        return
+    for _i in range(4):
+        await tree.process_frame
+    if not tree.paused:
+        _fail(21, "runtime stability guard cancelled the intentional rune-puzzle pause")
+        return
+    minigame_runtime.call("cancel_active")
+    for _i in range(3):
+        await tree.process_frame
+    if tree.paused:
+        _fail(22, "rune-puzzle cancellation did not restore unpaused gameplay")
+        return
+
     var dungeon_result: Dictionary = ProgressionSystem.start_dungeon("H")
     if not bool(dungeon_result.get("ok", false)):
-        _fail(17, "dungeon transition failed: %s" % dungeon_result)
+        _fail(23, "dungeon transition failed: %s" % dungeon_result)
         return
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
-    if not _assert_suspended(streamer, "dungeon", 18):
+    if not _assert_suspended(streamer, "dungeon", 24):
+        return
+    if not bool(player.get("instanced_world_mode")):
+        _fail(28, "player did not enter instanced-world recovery mode in dungeon")
         return
 
     dungeon_runtime.call("abort_current_dungeon")
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
     if bool(streamer.get("streaming_suspended")) or _loaded_count(streamer) <= 0:
-        _fail(22, "mainland streaming did not resume after dungeon exit")
+        _fail(29, "mainland streaming did not resume after dungeon exit")
         return
 
-    print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed transition_guards=active")
+    if bool(player.get("instanced_world_mode")):
+        _fail(30, "player remained in instanced-world mode after dungeon exit")
+        return
+
+    print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed fall_recovery=realm rune_pause=stable transition_guards=active")
     tree.quit(0)
