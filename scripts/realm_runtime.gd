@@ -26,6 +26,11 @@ var realm_roots: Dictionary = {}
 
 func _ready() -> void:
     add_to_group("realm_runtime")
+    if not SaveManager.game_loaded.is_connected(_on_game_loaded):
+        SaveManager.game_loaded.connect(_on_game_loaded)
+    call_deferred("_recover_saved_realm")
+
+func _on_game_loaded(_slot: int) -> void:
     call_deferred("_recover_saved_realm")
 
 func enter_realm(realm_id: String, actor: Node = null) -> bool:
