@@ -53,7 +53,8 @@ func _run_test() -> void:
     var streamer := scene.get_node_or_null("World/WorldStreamer")
     var realm_runtime := scene.get_node_or_null("World/RealmRuntime")
     var dungeon_runtime := scene.get_node_or_null("World/DungeonRuntime")
-    if player == null or streamer == null or realm_runtime == null or dungeon_runtime == null:
+    var minigame_runtime := scene.get_node_or_null("World/MinigameRuntime")
+    if player == null or streamer == null or realm_runtime == null or dungeon_runtime == null or minigame_runtime == null:
         _fail(3, "required runtime node is missing")
         return
 
@@ -69,30 +70,54 @@ func _run_test() -> void:
     if not _assert_suspended(streamer, "realm", 6):
         return
 
+    var realm_dungeon: Dictionary = ProgressionSystem.start_dungeon("H")
+    if bool(realm_dungeon.get("ok", false)) or String(realm_dungeon.get("reason", "")) != "realm_active":
+        _fail(10, "dungeon entry was not blocked inside realm: %s" % realm_dungeon)
+        return
+    if bool(minigame_runtime.call("start_minigame", "courier_race")):
+        _fail(11, "minigame entry was not blocked inside realm")
+        return
+
     if not bool(realm_runtime.call("enter_realm", "main", player)):
-        _fail(10, "return from realm failed")
+        _fail(12, "return from realm failed")
         return
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
     if bool(streamer.get("streaming_suspended")) or _loaded_count(streamer) <= 0:
-        _fail(11, "mainland streaming did not resume after realm return")
+        _fail(13, "mainland streaming did not resume after realm return")
         return
+
+    ProgressionSystem.set_combat_active(true)
+    if bool(realm_runtime.call("enter_realm", "echo_edge", player)):
+        _fail(14, "realm entry was not blocked during combat")
+        return
+    ProgressionSystem.set_combat_active(false)
+
+    if not bool(minigame_runtime.call("start_minigame", "courier_race")):
+        _fail(15, "mainland minigame did not start for transition guard test")
+        return
+    if bool(realm_runtime.call("enter_realm", "echo_edge", player)):
+        _fail(16, "realm entry was not blocked during active minigame")
+        return
+    minigame_runtime.call("cancel_active")
+    for _i in range(3):
+        await tree.process_frame
 
     var dungeon_result: Dictionary = ProgressionSystem.start_dungeon("H")
     if not bool(dungeon_result.get("ok", false)):
-        _fail(12, "dungeon transition failed: %s" % dungeon_result)
+        _fail(17, "dungeon transition failed: %s" % dungeon_result)
         return
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
-    if not _assert_suspended(streamer, "dungeon", 13):
+    if not _assert_suspended(streamer, "dungeon", 18):
         return
 
     dungeon_runtime.call("abort_current_dungeon")
     for _i in range(TRANSITION_FRAMES):
         await tree.process_frame
     if bool(streamer.get("streaming_suspended")) or _loaded_count(streamer) <= 0:
-        _fail(17, "mainland streaming did not resume after dungeon exit")
+        _fail(22, "mainland streaming did not resume after dungeon exit")
         return
 
-    print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed")
+    print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed transition_guards=active")
     tree.quit(0)
