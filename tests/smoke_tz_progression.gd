@@ -137,6 +137,16 @@ func _run_test() -> void:
     if not _check(not ProgressionSystem.claim_event_reward(), 37, "event reward can be claimed twice in one event day"):
         return
 
+    var first_event_id := String(event_data.get("id", ""))
+    GameState.advance_survival(241.0)
+    if not _check(GameState.world_day == 1, 45, "world day did not advance across midnight"):
+        return
+    var next_event := ProgressionSystem.active_event()
+    if not _check(int(next_event.get("day", -1)) == 1 and String(next_event.get("id", "")) != first_event_id, 46, "daily event rotation did not advance to world day 1"):
+        return
+    if not _check(ProgressionSystem.claim_event_reward(), 47, "new world day did not unlock the next event reward"):
+        return
+
     var mini_catalog := ProgressionSystem.minigame_catalog()
     if not _check(mini_catalog.size() >= 3, 38, "mandatory minigame catalog is incomplete"):
         return
@@ -174,5 +184,5 @@ func _run_test() -> void:
     if not _check(ProgressionSystem.rank_name() == "SSS+" and not ProgressionSystem.guild().is_empty(), 44, "progression state is not restorable for save/load"):
         return
 
-    print("TZ_PROGRESSION_SMOKE_OK ranks=12 dungeons=5-10 guilds=mutual-consent+territory plots=32/96/128 vip=restricted insurance=one-death events=minigames realms=2 gates=32 biomes=extended")
+    print("TZ_PROGRESSION_SMOKE_OK ranks=12 dungeons=5-10 guilds=mutual-consent+territory plots=32/96/128 vip=restricted insurance=one-death events=daily-rotation minigames realms=2 gates=32 biomes=extended")
     get_tree().quit(0)
