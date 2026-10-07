@@ -129,6 +129,14 @@ func reset_for_new_game() -> void:
 func snapshot() -> Dictionary:
     return _ensure_state().duplicate(true)
 
+func is_in_dungeon() -> bool:
+    var raw = GameState.get_world_value(STATE_KEY, null)
+    return raw is Dictionary and bool(raw.get("in_dungeon", false))
+
+func is_combat_active() -> bool:
+    var raw = GameState.get_world_value(STATE_KEY, null)
+    return raw is Dictionary and bool(raw.get("combat_active", false))
+
 func load_snapshot(data: Dictionary) -> void:
     var merged := _default_state()
     for key in data:
