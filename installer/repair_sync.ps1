@@ -6,12 +6,13 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Repo = "Treninem/game"
-$Headers = @{ "User-Agent" = "ImPuls-Repair/1.0"; "Accept" = "application/vnd.github+json" }
+$Headers = @{ "User-Agent" = "ImPuls-Repair/2.0"; "Accept" = "application/vnd.github+json" }
 $Api = "https://api.github.com/repos/$Repo/releases/tags/stable"
 $TagFile = Join-Path $InstallDir "release_tag.txt"
 $CurrentDir = Join-Path $InstallDir "current"
 $BackupDir = Join-Path $InstallDir "backup"
 $LogPath = Join-Path $InstallDir "update.log"
+$CacheRoot = Join-Path $InstallDir "repair-cache"
 $CoreFiles = @("ImPuls.exe", "ImPuls.pck")
 
 $script:ProgressForm = $null
