@@ -19,6 +19,7 @@ on:
       - "installer/repair_sync.ps1"
       - "installer/updater.ps1"
       - "tools/build_delta.py"
+      - "tools/verify_delta_roundtrip.py"
       - ".github/workflows/windows-build.yml"
       - ".github/workflows/validate-updater.yml"
   workflow_dispatch:
