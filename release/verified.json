@@ -1,19 +1,19 @@
 {
-  "release_sha": "fd933ff51b2fa36311e3555d3d0975078580f112",
-  "ready": false,
-  "recorded_at": "2026-10-09T20:37:03.145330+00:00",
+  "release_sha": "f5bfac037fe332ed6f8f8caafcb6e15db3a90403",
+  "ready": true,
+  "recorded_at": "2026-10-09T20:44:42.558923+00:00",
   "workflows": [
     {
       "name": "Build ImPuls Release Candidate",
-      "run_id": 37988030719,
-      "run_number": 670,
-      "conclusion": "skipped",
-      "html_url": "https://github.com/Treninem/game/actions/runs/37988030719"
+      "run_id": 37988368766,
+      "run_number": 671,
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/37988368766"
     }
   ],
-  "candidate_run_id": 37988030719,
-  "candidate_build_run_number": 670,
-  "candidate_run_url": "https://github.com/Treninem/game/actions/runs/37988030719",
-  "stable_build_run_number": 670,
+  "candidate_run_id": 37988368766,
+  "candidate_build_run_number": 671,
+  "candidate_run_url": "https://github.com/Treninem/game/actions/runs/37988368766",
+  "stable_build_run_number": 671,
   "installer_url": null
 }
