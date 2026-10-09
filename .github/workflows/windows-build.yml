@@ -349,9 +349,20 @@ jobs:
             throw "Installed game did not exit under --headless --quit-after within 90 seconds"
           }
 
+          $game.WaitForExit()
           $exitCode = $game.ExitCode
           Write-InstalledGameDiagnostics
+          if ($null -eq $exitCode) { throw "Installed game exit code was unavailable" }
           if ($exitCode -ne 0) { throw "Installed game exited with code $exitCode" }
+          if (-not (Test-Path $godotLog)) { throw "Installed game did not create a Godot startup log" }
+          $startupLog = Get-Content $godotLog -Raw
+          if ($startupLog -match 'SCRIPT ERROR:|Parse Error:|Failed loading scene:|Failed to instantiate an autoload') {
+            throw "Installed game reported a startup script or scene failure"
+          }
+          foreach ($scene in @('boot_launcher.tscn', 'main_menu.tscn')) {
+            $loaded = "Completed load for: 'res://scenes/$scene'"
+            if (-not $startupLog.Contains($loaded)) { throw "Installed game did not load $scene" }
+          }
           Write-Host "Installed-package startup smoke OK: $installDir"
 
       - uses: actions/upload-artifact@v4
