@@ -36,8 +36,8 @@ BLOCKERS:
 - Installed-package playability is still unproven for the next candidate, so rolling `stable` must not move yet.
 
 NEXT:
-- Run the comprehensive stable candidate build from exact `main` lineage after merge commit `20f1298523c0cdbc21f1772e568682e940edb190`.
-- Verify the produced Windows package/installer and perform installed-package playability acceptance before any rolling `stable` publication or asset-family expansion.
+- STAB-003: make the comprehensive Windows workflow candidate-only by default and require explicit publication opt-in.
+- Run the candidate build, verify the produced Windows package/installer, then perform installed-package playability acceptance before any rolling `stable` publication or asset-family expansion.
 
 ## Stabilization acceptance gates
 
@@ -67,6 +67,7 @@ A green parse alone is never sufficient.
 | STAB-001 | main integration chat | DONE | `AGENTS.md`, `README.md`, `VERSION`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md`, `tools/check_version_sync.py`, `.github/workflows/validate-world-core.yml`, `.github/workflows/windows-build.yml`, `.github/workflows/build-windows-installer.yml`, `.github/workflows/diagnose-ui-smoke.yml`, `.github/workflows/release-gate-status.yml`, `tests/test_world_loading_readiness.gd`, `tests/test_world_loading_readiness.tscn`, `installer/ImPuls.iss` | Establish Fox-style coordination rules, engineering memory, stabilization freeze, remove metadata drift, enforce version sync, make the fast installer artifact-only, and repair broken diagnostic/release-status CI. No public version bump. |
 
 | STAB-002 | main integration chat | DONE | `.github/workflows/validate-magic.yml`, `.github/workflows/validate-world-vfx.yml`, `.github/workflows/validate-updater.yml`, `.github/workflows/validate-movement.yml`, `.github/workflows/windows-build.yml`, `export_presets.cfg`, `tools/check_version_sync.py`, `tools/verify_delta_roundtrip.py`, `installer/updater_v4.ps1`, `installer/repair_sync.ps1`, `project.godot`, `scripts/{world_streamer,player_controller,runtime_stability_guard,save_manager,progression_system,dungeon_runtime,realm_runtime,minigame_runtime,combat_state_controller,vip_flight_controller,capital_night_siege,game_state}.gd`, and new/changed stabilization smokes under `tests/**` | Prove magic/VFX/updater and repair confirmed P0/P1 runtime defects found during the mandatory audit: corrupted version gate, unsafe repair while game is running, offworld mainland streaming, realm/dungeon fall recovery, save/load runtime resync, minigame pause/cancel exploit, per-frame deep-copy hot paths and broken multi-day event/siege identity. No new gameplay/content or public stable publication. |
+| STAB-003 | main integration chat | ACTIVE | `.github/workflows/windows-build.yml`, `.github/workflows/promote-current-stable.yml`, `.github/workflows/release-gate-status.yml`, `.github/workflows/release-gate-probe.yml`, `docs/PROJECT_MASTER_LOG.md`, `docs/IMPULS_ENGINEERING_MEMORY.md` | Separate candidate build from rolling stable publication, add installed-package launch evidence, and promote only artifacts from an explicitly accepted exact candidate run/SHA. |
 
 Before modifying a claimed file/subsystem, another executor must integrate fresh `main` and explicitly reconcile/take over the claim here.
 

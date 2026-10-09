@@ -1,5 +1,5 @@
-# probe refresh 2026-08-20 v2
-name: Probe Stable Release Gates
+# probe refresh 2026-10-07 v3
+name: Probe Candidate Release Gates
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 1
-      - name: Capture latest stable-trigger workflow failures
+      - name: Capture latest candidate-trigger workflow failures
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -32,7 +32,7 @@ jobs:
           from pathlib import Path
           commits=json.loads(Path('/tmp/commits.json').read_text())
           for c in commits:
-              if '[stable]' in c.get('commit',{}).get('message',''):
+              if '[candidate]' in c.get('commit',{}).get('message',''):
                   print(c['sha'])
                   break
           PY
@@ -46,11 +46,7 @@ jobs:
           from pathlib import Path
           sha=os.environ['TARGET_SHA']
           data=json.loads(Path('/tmp/runs.json').read_text())
-          wanted={
-              'Validate World Core',
-              'Validate Player Movement',
-              'Build Stable Release and Installer',
-          }
+          wanted={'Build ImPuls Release Candidate'}
           rows=[]
           for r in data.get('workflow_runs',[]):
               if r.get('name') in wanted and r.get('head_sha') == sha:
@@ -82,12 +78,27 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          cp release/probe.json /tmp/impuls-probe.json
+          cp release/failure-logs.txt /tmp/impuls-failure-logs.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add release/probe.json release/failure-logs.txt
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m "ci: capture stable gate failure logs [skip ci]"
-          git pull --rebase origin main
-          git push origin HEAD:main
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p release
+            cp /tmp/impuls-probe.json release/probe.json
+            cp /tmp/impuls-failure-logs.txt release/failure-logs.txt
+            git add release/probe.json release/failure-logs.txt
+            if git diff --cached --quiet; then
+              exit 0
+            fi
+            git commit -m "ci: capture candidate gate failure logs [skip ci]"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Main moved while recording probe data; retrying from fresh origin/main (attempt $attempt/3)."
+          done
+
+          echo "::error::Unable to record candidate probe data after 3 non-destructive retries."
+          exit 1

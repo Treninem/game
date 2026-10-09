@@ -1,42 +1,196 @@
-name: Promote Current ImPuls Stable
+name: Promote Accepted ImPuls Candidate
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/promote-current-stable.yml"
+  workflow_dispatch:
+    inputs:
+      candidate_run_id:
+        description: "Successful Build ImPuls Release Candidate workflow run ID"
+        required: true
+        type: string
+      candidate_sha:
+        description: "Exact candidate commit SHA used by that run"
+        required: true
+        type: string
+      installed_acceptance:
+        description: "Type INSTALLED_ACCEPTED only after installed-package playability acceptance"
+        required: true
+        type: string
 
 permissions:
+  actions: read
   contents: write
+
+concurrency:
+  group: impuls-stable-promotion
+  cancel-in-progress: false
 
 jobs:
   promote:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: main
-          fetch-depth: 20
-      - name: Add mandatory master smoke to stable build
+      - name: Verify explicit acceptance and exact candidate run
+        id: candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+          INSTALLED_ACCEPTANCE: ${{ inputs.installed_acceptance }}
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('.github/workflows/windows-build.yml')
-          s=p.read_text(encoding='utf-8')
-          if 'Verify mandatory ImPuls progression systems' not in s:
-              needle='''      - name: Verify startup main menu\n        run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180\n'''
-              insert='''      - name: Verify mandatory ImPuls progression systems\n        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120\n''' + needle
-              if needle not in s:
-                  raise SystemExit('stable workflow insertion point missing')
-              s=s.replace(needle,insert,1)
-          p.write_text(s,encoding='utf-8')
-          PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .github/workflows/windows-build.yml
-          git diff --cached --check
-          git commit -m "[stable] complete ImPuls systems and rebuild installer"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          if [[ "$INSTALLED_ACCEPTANCE" != "INSTALLED_ACCEPTED" ]]; then
+            echo "::error title=Installed acceptance missing::Promotion requires the exact INSTALLED_ACCEPTED acknowledgement"
+            exit 1
+          fi
+          META="$(gh api "repos/${{ github.repository }}/actions/runs/$CANDIDATE_RUN_ID")"
+          NAME="$(jq -r '.name' <<<"$META")"
+          STATUS="$(jq -r '.status' <<<"$META")"
+          CONCLUSION="$(jq -r '.conclusion' <<<"$META")"
+          HEAD_SHA="$(jq -r '.head_sha' <<<"$META")"
+          RUN_NUMBER="$(jq -r '.run_number' <<<"$META")"
+          HEAD_BRANCH="$(jq -r '.head_branch' <<<"$META")"
+          EVENT="$(jq -r '.event' <<<"$META")"
+          if [[ "$NAME" != "Build ImPuls Release Candidate" ]]; then
+            echo "::error title=Wrong candidate workflow::Expected Build ImPuls Release Candidate, got $NAME"
+            exit 1
+          fi
+          if [[ "$STATUS" != "completed" || "$CONCLUSION" != "success" ]]; then
+            echo "::error title=Candidate run not accepted::Run $CANDIDATE_RUN_ID is $STATUS/$CONCLUSION"
+            exit 1
+          fi
+          if [[ "$HEAD_SHA" != "$CANDIDATE_SHA" ]]; then
+            echo "::error title=Candidate SHA mismatch::Run used $HEAD_SHA but requested promotion of $CANDIDATE_SHA"
+            exit 1
+          fi
+          if [[ "$HEAD_BRANCH" != "main" ]]; then
+            echo "::error title=Candidate is not main lineage::Run $CANDIDATE_RUN_ID used branch $HEAD_BRANCH; only an accepted main candidate can be promoted"
+            exit 1
+          fi
+          if [[ "$EVENT" != "workflow_dispatch" && "$EVENT" != "push" ]]; then
+            echo "::error title=Candidate event is not promotable::Run $CANDIDATE_RUN_ID came from $EVENT; PR runs cannot be promoted"
+            exit 1
+          fi
+          echo "run_number=$RUN_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "Candidate run $CANDIDATE_RUN_ID / build-$RUN_NUMBER / $HEAD_SHA accepted for exact-artifact promotion"
+
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.candidate_sha }}
+          filter: blob:none
+          sparse-checkout: |
+            tools
+            installer
+            assets/branding
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: game-windows
+          path: game
+          run-id: ${{ inputs.candidate_run_id }}
+          github-token: ${{ github.token }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ImPuls-Setup
+          path: installer-artifact
+          run-id: ${{ inputs.candidate_run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Verify exact candidate artifacts exist
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s game/ImPuls-PC-Windows-x64.zip
+          test -s game/build/windows/ImPuls.exe
+          test -s game/build/windows/ImPuls.pck
+          test -s installer-artifact/ImPuls-Setup.exe
+
+      - name: Capture previous stable build
+        id: previous
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p previous/windows
+          OLD_BUILD=""
+          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            OLD_BUILD="$(gh release view stable --repo "${{ github.repository }}" --json name --jq .name)"
+            if [[ "$OLD_BUILD" =~ ^build-[0-9]+$ ]]; then
+              gh release download stable --repo "${{ github.repository }}" --pattern "ImPuls-PC-Windows-x64.zip" --dir previous || true
+              if [[ -f previous/ImPuls-PC-Windows-x64.zip ]]; then
+                unzip -q previous/ImPuls-PC-Windows-x64.zip -d previous/windows
+              else
+                OLD_BUILD=""
+              fi
+            else
+              OLD_BUILD=""
+            fi
+          fi
+          echo "old_build=$OLD_BUILD" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare stable files from accepted candidate artifacts
+        id: delta
+        env:
+          CANDIDATE_RUN_NUMBER: ${{ steps.candidate.outputs.run_number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          BUILD="build-$CANDIDATE_RUN_NUMBER"
+          OLD_BUILD="${{ steps.previous.outputs.old_build }}"
+          python3 -m pip install --disable-pip-version-check pillow
+          python3 tools/make_icon.py installer/impuls.ico
+          cp game/ImPuls-PC-Windows-x64.zip .
+          cp game/build/windows/ImPuls.exe ./ImPuls.exe
+          cp game/build/windows/ImPuls.pck ./ImPuls.pck
+          cp installer-artifact/ImPuls-Setup.exe ./ImPuls-Setup.exe
+
+          mkdir -p updater-runtime
+          cp installer/updater_bootstrap.ps1 installer/updater_v4.ps1 installer/repair_sync.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
+          (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
+
+          FROM_BUILD="${OLD_BUILD:-bootstrap}"
+          DELTA_NAME="ImPuls-Delta-${FROM_BUILD}-to-${BUILD}.zip"
+          python3 tools/build_delta.py \
+            --old-dir previous/windows \
+            --new-dir game/build/windows \
+            --from-build "$FROM_BUILD" \
+            --to-build "$BUILD" \
+            --output "$DELTA_NAME" \
+            --manifest ImPuls-File-Manifest.json
+
+          sha256sum ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json > SHA256SUMS.txt
+          if [[ -n "$OLD_BUILD" ]]; then
+            sha256sum "$DELTA_NAME" > "$DELTA_NAME.sha256"
+            echo "delta_name=$DELTA_NAME" >> "$GITHUB_OUTPUT"
+            echo "delta_sum=$DELTA_NAME.sha256" >> "$GITHUB_OUTPUT"
+          else
+            rm -f "$DELTA_NAME"
+            echo "delta_name=" >> "$GITHUB_OUTPUT"
+            echo "delta_sum=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish accepted artifacts to rolling stable
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DELTA_NAME: ${{ steps.delta.outputs.delta_name }}
+          DELTA_SUM: ${{ steps.delta.outputs.delta_sum }}
+          CANDIDATE_RUN_NUMBER: ${{ steps.candidate.outputs.run_number }}
+          CANDIDATE_SHA: ${{ steps.candidate.outputs.head_sha }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          BUILD="build-$CANDIDATE_RUN_NUMBER"
+          ASSETS=(ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json SHA256SUMS.txt)
+          if [[ -n "$DELTA_NAME" && -f "$DELTA_NAME" ]]; then
+            ASSETS+=("$DELTA_NAME" "$DELTA_SUM")
+          fi
+          NOTES="ImPuls stable channel. Promoted from accepted candidate run $CANDIDATE_RUN_ID at exact SHA $CANDIDATE_SHA after installed-package acceptance. Normal installed builds update through retained content-aware delta chains; missing core files are repaired individually from manifest data. The full archive is for first installation/manual recovery only."
+          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release upload stable "${ASSETS[@]}" --clobber --repo "${{ github.repository }}"
+            gh release edit stable --title "$BUILD" --notes "$NOTES" --repo "${{ github.repository }}"
+          else
+            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "$NOTES" --repo "${{ github.repository }}"
+          fi

@@ -1,4 +1,4 @@
-name: Build Stable Release and Installer
+name: Build ImPuls Release Candidate
 
 on:
   push:
@@ -20,18 +20,25 @@ on:
       - "assets/shaders/**"
       - "assets/staging/nature/kenney_nature_kit/**"
       - ".github/workflows/windows-build.yml"
+  pull_request:
+    paths:
+      - "export_presets.cfg"
+      - ".github/workflows/windows-build.yml"
+      - ".github/workflows/promote-current-stable.yml"
+      - ".github/workflows/release-gate-status.yml"
+      - ".github/workflows/release-gate-probe.yml"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: impuls-stable-release
+  group: impuls-release-candidate
   cancel-in-progress: true
 
 jobs:
   build-game:
-    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[stable]') }}
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[candidate]') || contains(github.event.head_commit.message, '[stable]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -51,8 +58,39 @@ jobs:
             assets/vfx
             assets/shaders
             assets/staging/nature/kenney_nature_kit
+            .github/workflows
       - name: Verify synchronized version metadata
         run: python3 tools/check_version_sync.py
+      - name: Verify candidate/promotion separation contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          candidate = Path(".github/workflows/windows-build.yml").read_text(encoding="utf-8")
+          promote = Path(".github/workflows/promote-current-stable.yml").read_text(encoding="utf-8")
+          gate_status = Path(".github/workflows/release-gate-status.yml").read_text(encoding="utf-8")
+          gate_probe = Path(".github/workflows/release-gate-probe.yml").read_text(encoding="utf-8")
+          forbidden_publish = ("gh release " + "upload stable", "gh release " + "create stable")
+          assert all(marker not in candidate for marker in forbidden_publish)
+          assert "Install candidate and prove installed game starts" in candidate
+          assert "candidate_run_id" in promote
+          assert "candidate_sha" in promote
+          assert "INSTALLED_ACCEPTED" in promote
+          assert "run-id: $" + "{{ inputs.candidate_run_id }}" in promote
+          assert "github-token: $" + "{{ github.token }}" in promote
+          assert 'HEAD_BRANCH="$(jq -r \'.head_branch\' <<<"$META")"' in promote
+          assert '[[ "$HEAD_BRANCH" != "main" ]]' in promote
+          assert '[[ "$EVENT" != "workflow_dispatch" && "$EVENT" != "push" ]]' in promote
+          expected_candidate_name = "Build ImPuls Release Candidate"
+          old_stable_name = "Build Stable Release and Installer"
+          assert expected_candidate_name in gate_status
+          assert old_stable_name not in gate_status
+          assert expected_candidate_name in gate_probe
+          assert old_stable_name not in gate_probe
+          assert "[candidate]" in gate_probe
+          print("candidate/promotion/release-gate separation contract OK")
+          PY
       - name: Prepare ImPuls branding
         run: |
           python3 -m pip install --disable-pip-version-check pillow
@@ -74,6 +112,8 @@ jobs:
       - name: Validate project headlessly
         shell: bash
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Verify mandatory ImPuls progression systems
+        run: bash tools/run_godot_smoke.sh tests/smoke_tz_progression.tscn 120
       - name: Verify startup main menu
         run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
       - name: Verify player-facing magic runtime
@@ -230,115 +270,109 @@ jobs:
           & $iscc "/DMyBuildTag=build-${{ github.run_number }}" "/DMyAppVersion=$appVersion" "installer\ImPuls.iss"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           if (-not (Test-Path installer/output/ImPuls-Setup.exe)) { throw "Installer output missing" }
+      - name: Install candidate and prove installed game starts
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $installDir = Join-Path $env:RUNNER_TEMP "ImPulsCandidate"
+          $currentDir = Join-Path $installDir "current"
+          $stdoutLog = Join-Path $env:RUNNER_TEMP "impuls-installed-stdout.log"
+          $stderrLog = Join-Path $env:RUNNER_TEMP "impuls-installed-stderr.log"
+          $godotLog = Join-Path $env:RUNNER_TEMP "impuls-installed-godot.log"
+
+          function Write-InstalledGameDiagnostics {
+            Write-Host "===== installed game diagnostics ====="
+            Write-Host "InstallDir: $installDir"
+            Write-Host "CurrentDir: $currentDir"
+            if (Test-Path $stdoutLog) {
+              Write-Host "===== stdout ====="
+              Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue
+            }
+            if (Test-Path $stderrLog) {
+              Write-Host "===== stderr ====="
+              Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue
+            }
+            if (Test-Path $godotLog) {
+              Write-Host "===== explicit Godot log ====="
+              Get-Content $godotLog -Raw -ErrorAction SilentlyContinue
+            }
+            $godotUserRoot = Join-Path $env:APPDATA "Godot\app_userdata"
+            if (Test-Path $godotUserRoot) {
+              Get-ChildItem $godotUserRoot -Filter godot.log -Recurse -ErrorAction SilentlyContinue |
+                Sort-Object LastWriteTime -Descending |
+                Select-Object -First 3 |
+                ForEach-Object {
+                  Write-Host "===== Godot user log: $($_.FullName) ====="
+                  Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue
+                }
+            }
+            if (Test-Path $currentDir) {
+              Write-Host "===== installed current directory ====="
+              Get-ChildItem $currentDir -Force | Select-Object Name,Length,LastWriteTime | Format-Table -AutoSize
+            }
+          }
+
+          if (Test-Path $installDir) { Remove-Item $installDir -Recurse -Force }
+          foreach ($log in @($stdoutLog, $stderrLog, $godotLog)) {
+            if (Test-Path $log) { Remove-Item $log -Force }
+          }
+
+          $installer = (Resolve-Path "installer/output/ImPuls-Setup.exe").Path
+          $proc = Start-Process -FilePath $installer -ArgumentList @(
+            "/VERYSILENT",
+            "/SUPPRESSMSGBOXES",
+            "/NORESTART",
+            "/SP-",
+            "/DIR=$installDir"
+          ) -PassThru -Wait
+          if ($proc.ExitCode -ne 0) { throw "Installer exited with code $($proc.ExitCode)" }
+
+          $exe = Join-Path $currentDir "ImPuls.exe"
+          $pck = Join-Path $currentDir "ImPuls.pck"
+          if (-not (Test-Path $exe)) { Write-InstalledGameDiagnostics; throw "Installed ImPuls.exe missing" }
+          if (-not (Test-Path $pck)) { Write-InstalledGameDiagnostics; throw "Installed ImPuls.pck missing" }
+
+          $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+          $processInfo.FileName = $exe
+          $processInfo.WorkingDirectory = $currentDir
+          $processInfo.Arguments = "--headless --verbose --log-file `"$godotLog`" --quit-after 180"
+          $processInfo.UseShellExecute = $false
+          $processInfo.CreateNoWindow = $true
+          $processInfo.RedirectStandardOutput = $true
+          $processInfo.RedirectStandardError = $true
+          $game = New-Object System.Diagnostics.Process
+          $game.StartInfo = $processInfo
+          if (-not $game.Start()) { throw "Installed game process did not start" }
+          $stdoutTask = $game.StandardOutput.ReadToEndAsync()
+          $stderrTask = $game.StandardError.ReadToEndAsync()
+          $completed = $game.WaitForExit(90000)
+          if (-not $completed) {
+            $game.Kill()
+            $game.WaitForExit()
+          }
+          [System.IO.File]::WriteAllText($stdoutLog, $stdoutTask.GetAwaiter().GetResult())
+          [System.IO.File]::WriteAllText($stderrLog, $stderrTask.GetAwaiter().GetResult())
+          if (-not $completed) {
+            Write-InstalledGameDiagnostics
+            throw "Installed game did not exit under --headless --quit-after within 90 seconds"
+          }
+          $exitCode = $game.ExitCode
+          Write-InstalledGameDiagnostics
+          if ($null -eq $exitCode) { throw "Installed game exit code was unavailable" }
+          if ($exitCode -ne 0) { throw "Installed game exited with code $exitCode" }
+          if (-not (Test-Path $godotLog)) { throw "Installed game did not create a Godot startup log" }
+          $startupLog = Get-Content $godotLog -Raw
+          if ($startupLog -match 'SCRIPT ERROR:|Parse Error:|Failed loading scene:|Failed to instantiate an autoload') {
+            throw "Installed game reported a startup script or scene failure"
+          }
+          foreach ($scene in @('boot_launcher.tscn', 'main_menu.tscn')) {
+            $loaded = "Completed load for: 'res://scenes/$scene'"
+            if (-not $startupLog.Contains($loaded)) { throw "Installed game did not load $scene" }
+          }
+          Write-Host "Installed-package startup smoke OK: $installDir"
+
       - uses: actions/upload-artifact@v4
         with:
           name: ImPuls-Setup
           path: installer/output/ImPuls-Setup.exe
           if-no-files-found: error
-
-  publish-stable:
-    needs: [build-game, build-installer]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          filter: blob:none
-          sparse-checkout: |
-            tools
-            installer
-            assets/branding
-      - uses: actions/download-artifact@v4
-        with:
-          name: game-windows
-          path: game
-      - uses: actions/download-artifact@v4
-        with:
-          name: ImPuls-Setup
-          path: installer-artifact
-      - name: Capture previous stable build
-        id: previous
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p previous/windows
-          OLD_BUILD=""
-          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            OLD_BUILD="$(gh release view stable --repo "${{ github.repository }}" --json name --jq .name)"
-            if [[ "$OLD_BUILD" =~ ^build-[0-9]+$ ]]; then
-              gh release download stable --repo "${{ github.repository }}" --pattern "ImPuls-PC-Windows-x64.zip" --dir previous || true
-              if [[ -f previous/ImPuls-PC-Windows-x64.zip ]]; then
-                unzip -q previous/ImPuls-PC-Windows-x64.zip -d previous/windows
-              else
-                OLD_BUILD=""
-              fi
-            else
-              OLD_BUILD=""
-            fi
-          fi
-          echo "old_build=$OLD_BUILD" >> "$GITHUB_OUTPUT"
-      - name: Prepare stable release files and content delta
-        id: delta
-        shell: bash
-        run: |
-          set -euo pipefail
-          BUILD="build-${{ github.run_number }}"
-          OLD_BUILD="${{ steps.previous.outputs.old_build }}"
-          python3 -m pip install --disable-pip-version-check pillow
-          python3 tools/make_icon.py installer/impuls.ico
-          cp game/ImPuls-PC-Windows-x64.zip .
-          cp game/build/windows/ImPuls.exe ./ImPuls.exe
-          cp game/build/windows/ImPuls.pck ./ImPuls.pck
-          cp installer-artifact/ImPuls-Setup.exe ./ImPuls-Setup.exe
-
-          mkdir -p updater-runtime
-          cp installer/updater_bootstrap.ps1 installer/updater_v4.ps1 installer/repair_sync.ps1 installer/updater.ps1 installer/launcher.vbs installer/install_update_task.ps1 installer/refresh_shortcuts.ps1 installer/impuls.ico updater-runtime/
-          (cd updater-runtime && zip -9 -r ../ImPuls-Updater-Runtime.zip .)
-
-          FROM_BUILD="${OLD_BUILD:-bootstrap}"
-          DELTA_NAME="ImPuls-Delta-${FROM_BUILD}-to-${BUILD}.zip"
-          python3 tools/build_delta.py \
-            --old-dir previous/windows \
-            --new-dir game/build/windows \
-            --from-build "$FROM_BUILD" \
-            --to-build "$BUILD" \
-            --output "$DELTA_NAME" \
-            --manifest ImPuls-File-Manifest.json
-
-          sha256sum ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json > SHA256SUMS.txt
-          if [[ -n "$OLD_BUILD" ]]; then
-            sha256sum "$DELTA_NAME" > "$DELTA_NAME.sha256"
-            echo "delta_name=$DELTA_NAME" >> "$GITHUB_OUTPUT"
-            echo "delta_sum=$DELTA_NAME.sha256" >> "$GITHUB_OUTPUT"
-          else
-            rm -f "$DELTA_NAME"
-            echo "delta_name=" >> "$GITHUB_OUTPUT"
-            echo "delta_sum=" >> "$GITHUB_OUTPUT"
-          fi
-
-          echo "Full first-install package: $(stat -c%s ImPuls-PC-Windows-x64.zip) bytes"
-          echo "Repair asset exe: $(stat -c%s ImPuls.exe) bytes"
-          echo "Repair asset pck: $(stat -c%s ImPuls.pck) bytes"
-          if [[ -n "$OLD_BUILD" ]]; then
-            echo "Delta-only update package: $(stat -c%s "$DELTA_NAME") bytes"
-          fi
-      - name: Publish rolling stable channel
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DELTA_NAME: ${{ steps.delta.outputs.delta_name }}
-          DELTA_SUM: ${{ steps.delta.outputs.delta_sum }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          BUILD="build-${{ github.run_number }}"
-          ASSETS=(ImPuls-PC-Windows-x64.zip ImPuls.exe ImPuls.pck ImPuls-Setup.exe ImPuls-Updater-Runtime.zip ImPuls-File-Manifest.json SHA256SUMS.txt)
-          if [[ -n "$DELTA_NAME" && -f "$DELTA_NAME" ]]; then
-            ASSETS+=("$DELTA_NAME" "$DELTA_SUM")
-          fi
-          if gh release view stable --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            gh release upload stable "${ASSETS[@]}" --clobber --repo "${{ github.repository }}"
-            gh release edit stable --title "$BUILD" --notes "ImPuls stable channel. Normal installed builds update through retained content-aware delta chains; missing core files are repaired individually from signed manifest data. The full archive is for first installation/manual recovery only. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
-          else
-            gh release create stable "${ASSETS[@]}" --title "$BUILD" --notes "ImPuls stable channel. Normal installed builds update through retained content-aware delta chains; missing core files are repaired individually from signed manifest data. The full archive is for first installation/manual recovery only. Visible verified progress, responsive UI auto-alignment, rollback and offline-safe startup are mandatory." --repo "${{ github.repository }}"
-          fi

@@ -1,11 +1,9 @@
-name: Record Stable Release Gate Status
+name: Record Candidate Release Gate Status
 
 on:
   workflow_run:
     workflows:
-      - "Validate World Core"
-      - "Validate Player Movement"
-      - "Build Stable Release and Installer"
+      - "Build ImPuls Release Candidate"
     types: [completed]
 
 permissions:
@@ -44,11 +42,7 @@ jobs:
 
           sha = os.environ["RELEASE_SHA"]
           data = json.loads(Path("/tmp/runs.json").read_text(encoding="utf-8"))
-          expected = [
-              "Validate World Core",
-              "Validate Player Movement",
-              "Build Stable Release and Installer",
-          ]
+          expected = ["Build ImPuls Release Candidate"]
           rows = []
           for name in expected:
               matches = [
@@ -72,14 +66,18 @@ jobs:
               })
 
           ready = all(row["conclusion"] == "success" for row in rows)
-          build_row = next(row for row in rows if row["name"] == "Build Stable Release and Installer")
+          build_row = next(row for row in rows if row["name"] == "Build ImPuls Release Candidate")
           payload = {
               "release_sha": sha,
               "ready": ready,
               "recorded_at": datetime.now(timezone.utc).isoformat(),
               "workflows": rows,
+              "candidate_run_id": build_row["run_id"],
+              "candidate_build_run_number": build_row["run_number"],
+              "candidate_run_url": build_row["html_url"],
+              # Compatibility field retained for older readers; publication has not happened yet.
               "stable_build_run_number": build_row["run_number"],
-              "installer_url": "https://github.com/Treninem/game/releases/download/stable/ImPuls-Setup.exe" if ready else None,
+              "installer_url": None,
           }
           Path("release/verified.json").write_text(
               json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
@@ -116,7 +114,7 @@ jobs:
               exit 0
             fi
 
-            git commit -m "ci: record stable release gate result [skip ci]"
+            git commit -m "ci: record candidate release gate result [skip ci]"
             if git push origin HEAD:main; then
               exit 0
             fi
