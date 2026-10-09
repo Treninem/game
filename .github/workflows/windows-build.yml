@@ -332,24 +332,30 @@ jobs:
           if (-not (Test-Path $exe)) { Write-InstalledGameDiagnostics; throw "Installed ImPuls.exe missing" }
           if (-not (Test-Path $pck)) { Write-InstalledGameDiagnostics; throw "Installed ImPuls.pck missing" }
 
-          $game = Start-Process -FilePath $exe -WorkingDirectory $currentDir -ArgumentList @(
-            "--headless",
-            "--verbose",
-            "--log-file", $godotLog,
-            "--quit-after", "180"
-          ) -RedirectStandardOutput $stdoutLog -RedirectStandardError $stderrLog -PassThru
-          $deadline = (Get-Date).AddSeconds(90)
-          while (-not $game.HasExited -and (Get-Date) -lt $deadline) {
-            Start-Sleep -Seconds 1
-            $game.Refresh()
+          $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+          $processInfo.FileName = $exe
+          $processInfo.WorkingDirectory = $currentDir
+          $processInfo.Arguments = "--headless --verbose --log-file `"$godotLog`" --quit-after 180"
+          $processInfo.UseShellExecute = $false
+          $processInfo.CreateNoWindow = $true
+          $processInfo.RedirectStandardOutput = $true
+          $processInfo.RedirectStandardError = $true
+          $game = New-Object System.Diagnostics.Process
+          $game.StartInfo = $processInfo
+          if (-not $game.Start()) { throw "Installed game process did not start" }
+          $stdoutTask = $game.StandardOutput.ReadToEndAsync()
+          $stderrTask = $game.StandardError.ReadToEndAsync()
+          $completed = $game.WaitForExit(90000)
+          if (-not $completed) {
+            $game.Kill()
+            $game.WaitForExit()
           }
-          if (-not $game.HasExited) {
-            Stop-Process -Id $game.Id -Force
+          [System.IO.File]::WriteAllText($stdoutLog, $stdoutTask.GetAwaiter().GetResult())
+          [System.IO.File]::WriteAllText($stderrLog, $stderrTask.GetAwaiter().GetResult())
+          if (-not $completed) {
             Write-InstalledGameDiagnostics
             throw "Installed game did not exit under --headless --quit-after within 90 seconds"
           }
-
-          $game.WaitForExit()
           $exitCode = $game.ExitCode
           Write-InstalledGameDiagnostics
           if ($null -eq $exitCode) { throw "Installed game exit code was unavailable" }
