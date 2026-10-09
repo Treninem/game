@@ -24,6 +24,7 @@ DONE:
 - PR #8 `Validate World Core` passed with the strengthened boot → menu → loading → visible world → grounded player smoke.
 - Main `Validate Player Movement` passed after the grey-void fix.
 - STAB-002 runtime P0/P1 audit is merged as `20f1298523c0cdbc21f1772e568682e940edb190`; all seven required PR #10 checks passed on exact head `2f2a8be7786c007a96fd3bfcbd52065aec93a1ed`.
+- PR #11 release-candidate separation and complete Windows resource export merged as `fd933ff51b2fa36311e3555d3d0975078580f112`; the PR candidate on `1a9bde2dcba283370db1a400fd8f96a3cce93fce` passed export, gameplay smokes, installer build and installed startup.
 - Large verified CC0 libraries are physically present in the repository; they must be reused before drawing/downloading duplicates.
 
 REMAINING:
@@ -36,7 +37,7 @@ BLOCKERS:
 - Installed-package playability is still unproven for the next candidate, so rolling `stable` must not move yet.
 
 NEXT:
-- STAB-003: make the comprehensive Windows workflow candidate-only by default and require explicit publication opt-in.
+- Run `Validate World Core`, `Validate Player Movement` and the comprehensive candidate on this exact `main` commit; inspect installed startup logs and package lineage.
 - Run the candidate build, verify the produced Windows package/installer, then perform installed-package playability acceptance before any rolling `stable` publication or asset-family expansion.
 
 ## Stabilization acceptance gates

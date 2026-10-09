@@ -6,6 +6,7 @@ on:
     paths:
       - "VERSION"
       - "project.godot"
+      - "export_presets.cfg"
       - "assets/audio/**"
       - "assets/production/**"
       - "assets/staging/nature/kenney_nature_kit/**"
@@ -19,6 +20,7 @@ on:
     paths:
       - "VERSION"
       - "project.godot"
+      - "export_presets.cfg"
       - "assets/audio/**"
       - "assets/production/**"
       - "assets/staging/nature/kenney_nature_kit/**"

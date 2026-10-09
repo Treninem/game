@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "project.godot"
+      - "export_presets.cfg"
       - "scripts/bootstrap.gd"
       - "scripts/player_controller.gd"
       - "scripts/humanoid_visual.gd"
@@ -63,6 +64,7 @@ on:
   pull_request:
     paths:
       - "project.godot"
+      - "export_presets.cfg"
       - "scripts/bootstrap.gd"
       - "scripts/player_controller.gd"
       - "scripts/humanoid_visual.gd"
