@@ -89,6 +89,7 @@ func _build() -> void:
     columns.add_child(preview)
     viewport = SubViewport.new()
     viewport.own_world_3d = true
+    viewport.msaa_3d = Viewport.MSAA_4X
     viewport.size = Vector2i(480, 580)
     viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
     preview.add_child(viewport)

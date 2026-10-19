@@ -1,3 +1,6 @@
+## Character surfaces — unreleased follow-up — 2026-10-19
+- Reuse existing authored garment normal/AO and footwear albedo, mipmapped anisotropic filtering and editor MSAA. Both bodies checked in the native editor and bounded weapon gameplay. Materials only; face/hair topology and natural combat remain unfinished. Evidence: docs/DEVELOPMENT_LOG_2026-10-19_CHARACTER_SURFACES.json.
+
 ## 0.10.7.3 — unreleased weapon grip review — 2026-10-19
 - Align axe/bow handles to measured palms, close native fingers, animate the bow cord and preserve arrow size. Retain walking legs and camera pitch during attacks.
 - Delay arrow release/ammo and axe impact until animation contact; cancel stale attacks and recheck short-tool reach.

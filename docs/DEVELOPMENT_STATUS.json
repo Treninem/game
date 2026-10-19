@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Проверены хват, пальцы, тетива, движение при натяжении и задержанные попадания топора/стрел. Три проверки замороженного пакета прошли; world-core ещё выполняется.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-19_WEAPON_GRIP.json",
-  "review_launcher": "build/review-2026-10-19-weapon-grip/ImPuls-weapon-test.cmd",
+  "current_stage": "Подключены карты складок одежды и текстура обуви; проверены обе основы в редакторе и бою. Геометрия лиц/волос и естественные движения остаются в работе.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CHARACTER_SURFACES.json",
+  "review_launcher": "build/review-2026-10-19-character-surfaces/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -157,5 +157,5 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-19_WEAPON_GRIP.json"
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CHARACTER_SURFACES.json"
 }

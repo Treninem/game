@@ -38,6 +38,16 @@ func _run() -> void:
         var parts := {}
         for mesh: MeshInstance3D in visual.find_children("*", "MeshInstance3D", true, false):
             parts[String(mesh.name)] = true
+            for surface in range(mesh.mesh.get_surface_count()):
+                var material := mesh.get_active_material(surface) as StandardMaterial3D
+                if material == null:
+                    continue
+                if String(mesh.name) == "Clothing":
+                    if not _check(material.normal_enabled and material.normal_texture != null and material.albedo_texture != null and material.roughness >= 0.8, "Garment lost authored matte fold/detail maps"):
+                        return
+                elif String(mesh.name) == "Boots":
+                    if not _check(material.albedo_texture != null, "Boot leather is flat-colored again"):
+                        return
             if not _check(mesh.find_blend_shape_by_name("FaceWidth") >= 0, "Character part has no face/shape morph contract: " + String(mesh.name)):
                 return
         if not _check(parts.has("HumanBody") and parts.has("Clothing") and parts.has("Boots") and parts.has("Eyes") and parts.has("Brows"), "Missing physical human/garment parts"):
@@ -88,9 +98,9 @@ func _run() -> void:
         return
     neighbor.queue_free()
     creator.call("select_preview_motion", 0)
-    creator.name_edit.text = "Элина"
+    creator.name_edit.text = "Ð­Ð»Ð¸Ð½Ð°"
     creator.call("select_preset", 8)
-    if not _check(creator.name_edit.text == "Элина", "Selecting a new appearance erased the entered name"):
+    if not _check(creator.name_edit.text == "Ð­Ð»Ð¸Ð½Ð°", "Selecting a new appearance erased the entered name"):
         return
     var visual = creator.visual
     var before: int = preload("res://scripts/humanoid_visual.gd").palette_materials.size()
@@ -99,7 +109,7 @@ func _run() -> void:
         creator.call("_apply_preview")
     if not _check(preload("res://scripts/humanoid_visual.gd").palette_materials.size() == before, "Dragging morph sliders grows the shared material cache"):
         return
-    creator.profile.name = "Проверка образа"
+    creator.profile.name = "ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¾Ð±Ñ€Ð°Ð·Ð°"
     var expected := APPEARANCE.normalized(creator.profile)
     if not _check(APPEARANCE.save_look(expected) == OK and APPEARANCE.load_look() == expected, "Saved look did not round-trip"):
         return

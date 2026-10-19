@@ -4,6 +4,9 @@ const GRIP := preload("res://scripts/weapon_grip_modifier.gd")
 const GRIP_POINTS := {"starter_axe": Vector3(-0.09865, -0.18, 0), "stone_knife": Vector3(0.0006, -0.12, 0), "short_bow": Vector3(-0.070708, 0, 0)}
 
 const APPEARANCE := preload("res://scripts/character_appearance.gd")
+const GARMENT_NORMAL := preload("res://assets/production/characters/realistic/details/garment_normal.png")
+const GARMENT_AO := preload("res://assets/production/characters/realistic/details/garment_ao.png")
+const SHOE_ALBEDO := preload("res://assets/production/characters/realistic/details/shoes_albedo.png")
 const HAIR_SHADER := preload("res://assets/shaders/characters/hair_tint.gdshader")
 const HUMANS := {"male": preload("res://assets/production/characters/realistic/male.glb"), "female": preload("res://assets/production/characters/realistic/female.glb")}
 const PALETTES := [null, preload("res://assets/production/characters/citizen/citizen_dark.png"), preload("res://assets/production/characters/citizen/citizen_light.png")]
@@ -131,10 +134,30 @@ func _style_model() -> void:
                     continue
                 var material := source.duplicate() as StandardMaterial3D
                 var label := String(source.resource_name)
+                material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
                 if label.begins_with("SkinHuman"):
                     material.albedo_color = APPEARANCE.SKINS[int(current_profile.skin)]
-                elif label.begins_with("ClothTunic"):
-                    material.albedo_color = APPEARANCE.CLOTH[int(current_profile.cloth)]
+                    material.roughness = 0.64
+                elif label.begins_with("ClothTunic") or label.begins_with("ClothTrousers"):
+                    # Reuse the garment's authored UV-aligned folds, not a tiled
+                    # replacement. The source diffuse depicts denim, so retain
+                    # the fantasy palette while using its neutral AO/normal.
+                    material.albedo_color = APPEARANCE.CLOTH[int(current_profile.cloth)].lightened(0.18) if label.begins_with("ClothTunic") else Color(0.24, 0.21, 0.17)
+                    material.albedo_texture = GARMENT_AO
+                    material.normal_enabled = true
+                    material.normal_texture = GARMENT_NORMAL
+                    material.normal_scale = 0.65
+                    material.ao_enabled = true
+                    material.ao_texture = GARMENT_AO
+                    material.ao_light_affect = 0.25
+                    material.roughness = 0.9
+                elif label.begins_with("LeatherBoots"):
+                    material.albedo_texture = SHOE_ALBEDO
+                    material.albedo_color = Color(0.72, 0.62, 0.50)
+                    material.roughness = 0.73
+                elif label.begins_with("EyesHuman"):
+                    material.roughness = 0.22
+                    material.metallic_specular = 0.65
                 palette_materials[key] = material
             mesh.set_surface_override_material(surface, palette_materials[key])
 
