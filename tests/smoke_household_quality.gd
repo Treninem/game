@@ -10,6 +10,10 @@ func _run() -> void:
     add_child(square)
     var light := square.get_node("HomeLanternLight") as OmniLight3D
     assert(light != null)
+    var trader := square.get_node("SquareTrader") as SettlementNPC
+    var artisan := square.get_node("SquareArtisan") as SettlementNPC
+    assert(trader.visual.current_profile.sex == "female", "Marta did not get her authored female body")
+    assert(artisan.visual.current_profile.sex == "male", "Marek did not get his authored male body")
     for resident in get_tree().get_nodes_in_group("settlement_npc"):
         assert(resident.find_children("*", "Label3D", true, false).is_empty(), "Resident has floating labels")
     var manager := preload("res://scripts/dungeon_manager_npc.gd").new()

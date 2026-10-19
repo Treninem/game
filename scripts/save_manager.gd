@@ -9,14 +9,21 @@ const LEGACY_SAVE_PATH := "user://savegame.json"
 var current_slot: int = 1
 var pending_new_game: bool = false
 var pending_load_game: bool = false
+var pending_character_profile: Dictionary = {}
 
 func _ready() -> void:
     _migrate_legacy_save_once()
 
-func prepare_new_game(slot: int) -> void:
+func prepare_new_game(slot: int, appearance: Dictionary = {}) -> void:
     current_slot = _valid_slot(slot)
     pending_new_game = true
     pending_load_game = false
+    pending_character_profile = preload("res://scripts/character_appearance.gd").normalized(appearance)
+
+func consume_character_profile() -> Dictionary:
+    var profile := preload("res://scripts/character_appearance.gd").normalized(pending_character_profile)
+    pending_character_profile = {}
+    return profile
 
 func prepare_load(slot: int) -> bool:
     slot = _valid_slot(slot)
@@ -25,6 +32,7 @@ func prepare_load(slot: int) -> bool:
     current_slot = slot
     pending_new_game = false
     pending_load_game = true
+    pending_character_profile = {}
     return true
 
 func consume_new_game_request() -> bool:

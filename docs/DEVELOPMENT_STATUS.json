@@ -1,15 +1,20 @@
 {
   "date": "2026-10-19",
-  "project_version_label": "0.10.7.1",
+  "project_version_label": "0.10.7.2",
   "engine_verified": "Godot 4.7.1.stable.official.a13da4feb",
   "renderer": "GL Compatibility",
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
-  "delivery": "Unreleased tested household review. Stable release gates remain pending.",
-  "current_stage": "Рабочая мебель и сохранённые домашние действия в одном доме столицы",
+  "delivery": "Unreleased character and household review; remote stable gates unverified.",
+  "current_stage": "Рабочие мужская/женская модели MakeHuman и начальный редактор персонажа; повторный игровой осмотр походки, боя и мебели.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-19_HOUSEHOLD.json",
-  "review_launcher": "build/review-2026-10-19-household/ImPuls-review.cmd",
+  "review_launcher": "build/review-2026-10-19-characters/ImPuls-review.cmd",
   "systems": [
+    {
+      "system": "Модели людей и редактор",
+      "status": "Начальная версия проверена",
+      "scope": "Две основы MakeHuman, 10 геометрических пресетов, отдельная одежда/обувь/глаза/волосы, четыре параметра, сохранение. Проверены ходьба, бег, прыжок, бой, камера, домашние позы. Полный гардероб/возраст/LOD остаются открытыми."
+    },
     {
       "system": "Рубка деревьев",
       "status": "Проверено",
@@ -138,7 +143,7 @@
     "Один живой домашний интерьер: сон, скамьи, конечные вещи и сундуки работают и сохраняются. Остальные дома и непрерывная дальняя симуляция не завершены. Переходы в позы пока простые; согласие владельцев и криминальная система не реализованы."
   ],
   "next_stage": [
-    "Ранний редактор персонажа по новой редакции ТЗ: 5 мужских и 5 женских пресетов, изменения внешности, трёхмерный просмотр и сохранение.",
+    "Расширить рабочий редактор: средневековый гардероб и броня, возраст, дополнительные параметры лица и LOD.",
     "Распространить проверенный дом, ресурсные бытовые действия и ограниченное продвижение дальнего распорядка.",
     "Законченный игровой цикл стартового региона без расширения карты.",
     "Доработать точный хват пальцев и траекторию лезвия, звук падения и последствия для окружения; затем расширить рубку на дальние леса. Пространственный звук контакта, ближняя дальность и карта вырубки подключены.",
@@ -146,5 +151,6 @@
     "Отдельное измерение производительности леса, поселения и боя на встроенной графике."
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked."
+  "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CHARACTERS.json"
 }

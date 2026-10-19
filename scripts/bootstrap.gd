@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.10.7.1"
+const VERSION := "0.10.7.2"
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PLAYER_GROUND_CLEARANCE := 0.08
 const RESPAWN_POSITION := Vector3(GEOGRAPHY.START_SPAWN.x, PLAYER_GROUND_CLEARANCE, GEOGRAPHY.START_SPAWN.y)
@@ -21,6 +21,7 @@ func _ready() -> void:
 
     if SaveManager.consume_new_game_request():
         GameState.reset_new_game()
+        GameState.set_world_value("player_appearance", SaveManager.consume_character_profile())
         _place_player_safely(RESPAWN_POSITION)
         GameState.set_location("Астэрн • пограничный лес")
         SaveManager.save_game(player)

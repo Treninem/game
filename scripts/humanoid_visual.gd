@@ -1,6 +1,8 @@
 extends Node3D
 
-const HUMAN: PackedScene = preload("res://assets/production/characters/citizen/citizen.glb")
+const APPEARANCE := preload("res://scripts/character_appearance.gd")
+const HAIR_SHADER := preload("res://assets/shaders/characters/hair_tint.gdshader")
+const HUMANS := {"male": preload("res://assets/production/characters/realistic/male.glb"), "female": preload("res://assets/production/characters/realistic/female.glb")}
 const PALETTES := [null, preload("res://assets/production/characters/citizen/citizen_dark.png"), preload("res://assets/production/characters/citizen/citizen_light.png")]
 static var palette_materials: Dictionary = {}
 const WEAPONS := {
@@ -20,6 +22,10 @@ const WEAPONS := {
 @export var has_guard_armor := false
 @export var palette_variant := 0
 
+@export var appearance_profile: Dictionary = {}
+var current_profile: Dictionary = {}
+var appearance_revision := -1
+var model: Node3D
 var animation_player: AnimationPlayer
 var standing_hip_height := 0.95
 var measured_speed := 0.0
@@ -30,38 +36,38 @@ var held_weapon: Node3D
 var held_item := ""
 
 func _ready() -> void:
+    var profile: Variant = appearance_profile
+    if get_parent().name == "Player":
+        profile = GameState.get_world_value("player_appearance", {})
+    elif profile.is_empty():
+        profile = APPEARANCE.preset(palette_variant % 5)
+    apply_appearance(profile)
+
+func apply_appearance(value: Variant) -> void:
+    var profile := APPEARANCE.normalized(value)
+    if is_instance_valid(model) and profile.sex == current_profile.get("sex", ""):
+        current_profile = profile
+        _style_model()
+        return
+    if is_instance_valid(model):
+        model.free()
+    weapon_socket = null
+    held_weapon = null
+    held_item = ""
+    active_animation = ""
+    current_profile = profile
     scale = Vector3.ONE * body_scale
-    var model := HUMAN.instantiate() as Node3D
+    model = (HUMANS[profile.sex] as PackedScene).instantiate() as Node3D
     model.name = "HumanModel"
     model.rotation.y = PI
     add_child(model)
-    if get_parent().name != "Player":
-        for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
-            for surface in range(mesh.mesh.get_surface_count()):
-                var material := mesh.get_active_material(surface) as StandardMaterial3D
-                if material == null:
-                    continue
-                var cloth := String(material.resource_name).begins_with("Cloth")
-                var skin := material.resource_name == "SkinHuman"
-                if not cloth and not skin and (material.albedo_texture == null or palette_variant == 0):
-                    continue
-                var key := "%d:%d:%s:%s" % [material.get_instance_id(), palette_variant % PALETTES.size(), primary_color.to_html(), secondary_color.to_html()]
-                if not palette_materials.has(key):
-                    var variant := material.duplicate() as StandardMaterial3D
-                    if cloth:
-                        variant.albedo_color = primary_color if material.resource_name == "ClothTunic" else secondary_color.darkened(0.30)
-                    elif skin:
-                        variant.albedo_color = [Color(0.62, 0.43, 0.32), Color(0.32, 0.18, 0.12), Color(0.80, 0.61, 0.47)][palette_variant % 3]
-                    else:
-                        variant.albedo_texture = PALETTES[palette_variant % PALETTES.size()]
-                    palette_materials[key] = variant
-                mesh.set_surface_override_material(surface, palette_materials[key])
+    _style_model()
     var players := model.find_children("*", "AnimationPlayer", true, false)
     if not players.is_empty():
         animation_player = players[0] as AnimationPlayer
         for key in animation_player.get_animation_list():
             var animation := animation_player.get_animation(key)
-            if String(key) in ["Idle", "Walk", "Run"]:
+            if String(key) in ["Idle", "Walk", "Run", "Working"]:
                 animation.loop_mode = Animation.LOOP_LINEAR
         _play("Idle", 1.0)
         animation_player.advance(0.0)
@@ -76,8 +82,42 @@ func _ready() -> void:
             weapon_socket.bone_name = "RightHand"
             skeletons[0].add_child(weapon_socket)
             skeletons[0].connect("skeleton_updated", _update_bow_transform)
-            InventorySystem.equipment_changed.connect(_refresh_weapon)
+            if not InventorySystem.equipment_changed.is_connected(_refresh_weapon):
+                InventorySystem.equipment_changed.connect(_refresh_weapon)
             _refresh_weapon()
+
+func _style_model() -> void:
+    for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
+        if String(mesh.name).begins_with("HairShort"):
+            mesh.visible = int(current_profile.hair) == 0
+        elif String(mesh.name).begins_with("HairPonytail"):
+            mesh.visible = int(current_profile.hair) == 1
+        for key: String in APPEARANCE.SHAPES:
+            var index := mesh.find_blend_shape_by_name(key)
+            if index >= 0:
+                mesh.set_blend_shape_value(index, float(current_profile[key]))
+        for surface in range(mesh.mesh.get_surface_count()):
+            var source := mesh.mesh.surface_get_material(surface) as StandardMaterial3D
+            if source == null:
+                continue
+            var key := "%d:%d:%d:%d" % [source.get_instance_id(), current_profile.skin, current_profile.hair_color, current_profile.cloth]
+            if not palette_materials.has(key):
+                if String(source.resource_name).begins_with("HairHuman") or String(source.resource_name).begins_with("BrowsHuman"):
+                    var hair := ShaderMaterial.new()
+                    hair.shader = HAIR_SHADER
+                    hair.set_shader_parameter("hair_texture", source.albedo_texture)
+                    hair.set_shader_parameter("hair_color", APPEARANCE.HAIR[int(current_profile.hair_color)])
+                    palette_materials[key] = hair
+                    mesh.set_surface_override_material(surface, hair)
+                    continue
+                var material := source.duplicate() as StandardMaterial3D
+                var label := String(source.resource_name)
+                if label.begins_with("SkinHuman"):
+                    material.albedo_color = APPEARANCE.SKINS[int(current_profile.skin)]
+                elif label.begins_with("ClothTunic"):
+                    material.albedo_color = APPEARANCE.CLOTH[int(current_profile.cloth)]
+                palette_materials[key] = material
+            mesh.set_surface_override_material(surface, palette_materials[key])
 
 func _refresh_weapon() -> void:
     if weapon_socket == null:
@@ -107,6 +147,14 @@ func _refresh_weapon() -> void:
         model.position.y += 0.18
 
 func _process(delta: float) -> void:
+    if get_parent().name == "Player" and appearance_revision != GameState.state_revision:
+        appearance_revision = GameState.state_revision
+        apply_appearance(GameState.get_world_value("player_appearance", {}))
+    if get_parent().has_meta("preview_animation"):
+        if animation_player != null and not animation_player.is_playing():
+            active_animation = ""
+        _play(String(get_parent().get_meta("preview_animation")), 1.0)
+        return
     var body := get_parent() as CharacterBody3D
     if body == null or animation_player == null:
         return
@@ -185,18 +233,29 @@ func _prepare_airborne_pose(model: Node3D) -> void:
     clip.loop_mode = Animation.LOOP_NONE
     var root := animation_player.get_node(animation_player.root_node)
     var skeleton_path := String(root.get_path_to(skeleton))
-    for bone_name: String in ["LeftUpLeg", "RightUpLeg", "LeftLeg", "RightLeg", "LeftArm", "RightArm"]:
-        var bone := skeleton.find_bone(bone_name)
-        var path := NodePath(skeleton_path + ":" + bone_name)
+    var original := {}
+    for side: String in ["Left", "Right"]:
+        for suffix: String in ["UpLeg", "Leg", "Foot", "Arm", "ForeArm"]:
+            var bone := skeleton.find_bone(side + suffix)
+            if bone >= 0:
+                original[bone] = skeleton.get_bone_pose_rotation(bone)
+        _align_sitting_bone(skeleton, side + "UpLeg", side + "Leg", Vector3(0, -1, -0.35))
+        _align_sitting_bone(skeleton, side + "Leg", side + "Foot", Vector3(0, -1, 0.2))
+        _align_sitting_bone(skeleton, side + "Foot", side + "ToeBase", Vector3(0, -0.15, -1))
+        _align_sitting_bone(skeleton, side + "Arm", side + "ForeArm", Vector3(0.12 if side == "Left" else -0.12, -1, 0.1))
+        _align_sitting_bone(skeleton, side + "ForeArm", side + "Hand", Vector3(0, -1, -0.2))
+    for bone: int in original:
+        var path := NodePath(skeleton_path + ":" + skeleton.get_bone_name(bone))
         var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
         if track >= 0:
             clip.remove_track(track)
         track = clip.add_track(Animation.TYPE_ROTATION_3D)
         clip.track_set_path(track, path)
-        var base := skeleton.get_bone_pose_rotation(bone)
-        var angle := -0.42 if bone_name.ends_with("UpLeg") else (0.78 if bone_name.ends_with("Leg") else -0.20)
-        clip.rotation_track_insert_key(track, 0.0, base)
-        clip.rotation_track_insert_key(track, 0.16, base * Quaternion(Vector3.RIGHT, angle))
+        clip.rotation_track_insert_key(track, 0.0, original[bone])
+        clip.rotation_track_insert_key(track, 0.16, skeleton.get_bone_pose_rotation(bone))
+    for bone: int in original:
+        skeleton.set_bone_pose_rotation(bone, original[bone])
+    skeleton.force_update_all_bone_transforms()
     animation_player.get_animation_library("").add_animation("Airborne", clip)
 
 func _prepare_sitting_pose(model: Node3D) -> void:

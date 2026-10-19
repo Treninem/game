@@ -42,6 +42,13 @@ func _run() -> void:
         _fail("Production menu music is absent or not playing in the package")
         return
     menu.call("_new_game")
+    var creator := await _wait_for("CharacterCreator", 8.0)
+    if creator == null:
+        _fail("Packaged new game bypassed character creation")
+        return
+    creator.set("profile", load("res://scripts/character_appearance.gd").preset(7))
+    creator.call("_refresh")
+    creator.call("start_journey")
     if await _wait_for("WorldLoading", 8.0) == null:
         _fail("Packaged new game bypassed the loading screen")
         return
@@ -57,12 +64,18 @@ func _run() -> void:
     if human == null or human.find_children("*", "Skeleton3D", true, false).is_empty():
         _fail("Packaged human skeleton or model is missing")
         return
-    if human.scene_file_path != "res://assets/production/characters/citizen/citizen.glb":
-        _fail("Package does not contain the selected adult human")
+    if human.scene_file_path != "res://assets/production/characters/realistic/female.glb":
+        _fail("Package did not instantiate the selected female human")
         return
-    var anatomical := human.find_child("AnatomicalHuman", true, false) as MeshInstance3D
+    var anatomical := human.find_child("HumanBody", true, false) as MeshInstance3D
     if anatomical == null or anatomical.skin == null:
         _fail("Packaged human lost its anatomical skinned mesh")
+        return
+    if anatomical.find_blend_shape_by_name("FaceWidth") < 0 or human.find_child("Clothing", true, false) == null or human.find_child("Boots", true, false) == null:
+        _fail("Packaged character lost morphs, separate garments or footwear")
+        return
+    if root.get_node("GameState").call("get_world_value", "player_appearance", {}).get("preset", -1) != 7:
+        _fail("Packaged creator did not persist the chosen appearance")
         return
     for resource_path in [
         "res://assets/production/nature/temperate/TemperateTree_Broad.glb",

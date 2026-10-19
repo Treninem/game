@@ -2,7 +2,7 @@
   #define MyBuildTag "build-0"
 #endif
 #ifndef MyAppVersion
-  #define MyAppVersion "0.10.7.1"
+  #define MyAppVersion "0.10.7.2"
 #endif
 
 #define MyAppName "ImPuls"

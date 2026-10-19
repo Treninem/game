@@ -9,6 +9,7 @@ const RUNTIME_STATE := preload("res://scripts/citizen_runtime_state.gd")
 @export var move_speed := 1.45
 @export var palette_index := 0
 @export var autonomous := false
+@export_enum("male", "female") var body_sex := "male"
 
 var route_points_local: Array[Vector3] = []
 var route_index := 0
@@ -53,9 +54,9 @@ func _ready() -> void:
     floor_snap_length = 0.35
     floor_max_angle = deg_to_rad(48.0)
     up_direction = Vector3.UP
+    citizen_id = String(get_meta("citizen_id", "%s:%s:%d:%d" % [display_name, role, roundi(global_position.x), roundi(global_position.z)]))
     _build_collision()
     _build_visual()
-    citizen_id = String(get_meta("citizen_id", "%s:%s:%d:%d" % [display_name, role, roundi(global_position.x), roundi(global_position.z)]))
     authored_position = position
     authored_yaw = rotation.y
     authored_route_index = route_index
@@ -207,6 +208,8 @@ func capture_runtime_state() -> void:
     if parent == null:
         return
     var anchor := parent.global_position
+    if is_instance_valid(visual):
+        GameState.set_world_value("appearance:" + citizen_id, visual.current_profile.duplicate(true))
     GameState.set_world_value("citizen:" + citizen_id, {
         "runtime_version": 1, "role": role, "phase": routine_phase,
         "anchor": [anchor.x, anchor.y, anchor.z],
@@ -220,6 +223,9 @@ func restore_runtime_state() -> void:
     state_revision = GameState.state_revision
     if not has_meta("citizen_id") or citizen_id.is_empty():
         return
+    var saved_appearance = GameState.get_world_value("appearance:" + citizen_id)
+    if typeof(saved_appearance) == TYPE_DICTIONARY and is_instance_valid(visual):
+        visual.call("apply_appearance", saved_appearance)
     var decoded := RUNTIME_STATE.decode(GameState.get_world_value("citizen:" + citizen_id), get_parent_node_3d().global_position, authored_position, role)
     position = decoded.get("position", authored_position)
     rotation.y = float(decoded.get("yaw", authored_yaw))
@@ -496,6 +502,11 @@ func _build_visual() -> void:
     visual.has_hood = role == "trader"
     visual.has_apron = role == "craftsman"
     visual.palette_variant = palette_index % 3
+    # Authored identity survives streaming; a model is not chosen by a random
+    # node instance or a temporary palette index on reload.
+    var appearance_id := "appearance:" + citizen_id
+    var fallback := preload("res://scripts/character_appearance.gd").preset((5 if body_sex == "female" else 0) + palette_index % 5)
+    visual.appearance_profile = preload("res://scripts/character_appearance.gd").normalized(GameState.get_world_value(appearance_id, fallback))
     add_child(visual)
 
 func _household_plan(plan: Dictionary) -> Dictionary:

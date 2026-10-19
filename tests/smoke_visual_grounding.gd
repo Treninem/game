@@ -17,9 +17,11 @@ func _run() -> void:
     if human == null or human.find_children("*", "Skeleton3D", true, false).is_empty():
         errors.append("Avatar is missing its authored, skinned human model")
     if human != null:
-        var anatomical := human.find_children("AnatomicalHuman", "MeshInstance3D", true, false)
+        var anatomical := human.find_children("HumanBody", "MeshInstance3D", true, false)
         if anatomical.is_empty() or (anatomical[0] as MeshInstance3D).skin == null:
             errors.append("Selected anatomical human mesh is not connected to the live skeleton")
+        if human.find_child("Clothing", true, false) == null or human.find_child("Boots", true, false) == null:
+            errors.append("Character is missing its separate clothing or footwear")
     if human != null and absf(absf(human.rotation.y) - PI) > 0.01:
         errors.append("Imported human is facing backward relative to walking direction")
     var animation_player := avatar.get("animation_player") as AnimationPlayer

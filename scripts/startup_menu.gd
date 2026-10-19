@@ -341,8 +341,10 @@ func _new_game() -> void:
     _start_new_game_in_slot(slot)
 
 func _start_new_game_in_slot(slot: int) -> void:
-    SaveManager.prepare_new_game(slot)
-    _enter_loading_screen()
+    SaveManager.current_slot = clampi(slot, 1, SaveManager.SLOT_COUNT)
+    var error := get_tree().change_scene_to_file("res://scenes/character_creator.tscn")
+    if error != OK:
+        status_label.text = "Не удалось открыть создание персонажа. Код: %d" % error
 
 func _load_slot(slot: int) -> void:
     if SaveManager.prepare_load(slot):

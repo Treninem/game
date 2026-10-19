@@ -1,0 +1,127 @@
+{
+  "status": "APPROVED",
+  "physical_files": true,
+  "main_confirmed": false,
+  "files": [
+    {
+      "path": "3dobjs/base.obj",
+      "sha256": "8e761e6624b8f54536409135d1636da63b32486a90d4897f84e121d144f6fb4c",
+      "bytes": 1749303
+    },
+    {
+      "path": "LICENSE.ASSETS.md",
+      "sha256": "f6089cba01cb570a24712b41ab8a586ccd3cc5ef53dc266ca50b95c288956d2c",
+      "bytes": 6962
+    },
+    {
+      "path": "mesh_metadata/basemesh_vertex_groups.json",
+      "sha256": "8cb1417bc55ae5ec8aa99f90734e81ed5fbb556511ff6a2c00e0534b70911444",
+      "bytes": 81984
+    },
+    {
+      "path": "rigs/standard/rig.mixamo.json",
+      "sha256": "b4e491bacdcae797e53b7692169cf6a160c50fcc1eda5f0982e92fac1561ae56",
+      "bytes": 84107
+    },
+    {
+      "path": "rigs/standard/weights.mixamo.json",
+      "sha256": "4561be4d7c0093d70e3dba4fbacbbbb6d66781573779fb12a0509cefa181b8ae",
+      "bytes": 2372203
+    },
+    {
+      "path": "SOURCE.md",
+      "sha256": "eaabfd488a2b5dfc7030204ebb41b57de178cadcd5b49dc44a4cfb732e4301c0",
+      "bytes": 326
+    },
+    {
+      "path": "targets/chin/chin-width-decr.target.gz",
+      "sha256": "6c3aaca074630e89951184130a4a158b6f62c9d0cf57cf8eb828c445ff40c21a",
+      "bytes": 768
+    },
+    {
+      "path": "targets/chin/chin-width-incr.target.gz",
+      "sha256": "68764b6ec7c923597beaaf643f71c41f00c93639d9bb522c169c279db2ad299e",
+      "bytes": 1110
+    },
+    {
+      "path": "targets/head/head-scale-depth-decr.target.gz",
+      "sha256": "2bc2c4906b12000800c10e938bcab102814a33c2db0fbe021b3bba1be4c356bf",
+      "bytes": 14718
+    },
+    {
+      "path": "targets/head/head-scale-depth-incr.target.gz",
+      "sha256": "2e7eb5bf8cf73c780ff66610cb15d97a2496c5c2855612bbf6c6f8fcf36c7ddd",
+      "bytes": 14650
+    },
+    {
+      "path": "targets/head/head-scale-horiz-decr.target.gz",
+      "sha256": "ddec139b27d1f9b7a90f6474450c56897a4e417334af083e87e988fdf94ca343",
+      "bytes": 21427
+    },
+    {
+      "path": "targets/head/head-scale-horiz-incr.target.gz",
+      "sha256": "671542640aec14d1740c1263deb0e274f3044edec761e6d4171329f0419be084",
+      "bytes": 21695
+    },
+    {
+      "path": "targets/head/head-scale-vert-decr.target.gz",
+      "sha256": "64e86d59a469eeeb0201026880bcd6ebb0cbd590a74b179f58efa879b3772f6c",
+      "bytes": 19252
+    },
+    {
+      "path": "targets/head/head-scale-vert-incr.target.gz",
+      "sha256": "be8b270ec67817578128396433d6e8ab9d530c9d81ea21db92cd1b9627a8110b",
+      "bytes": 19171
+    },
+    {
+      "path": "targets/macrodetails/caucasian-female-young.target.gz",
+      "sha256": "e9d6212373ac5f1e2c596fa145e363385f4d169c3c6c88ede3bab93b681af041",
+      "bytes": 127369
+    },
+    {
+      "path": "targets/macrodetails/caucasian-male-young.target.gz",
+      "sha256": "ffe69537e53148edff2776204ba48cf3bf1f3cbc72966592c8a562ab80b07333",
+      "bytes": 127922
+    },
+    {
+      "path": "targets/macrodetails/universal-female-young-averagemuscle-averageweight.target.gz",
+      "sha256": "30046c85a461249824548d5319d74c16392842a1ee00ca9a4485ea3eeb06e2e8",
+      "bytes": 78
+    },
+    {
+      "path": "targets/macrodetails/universal-male-young-averagemuscle-averageweight.target.gz",
+      "sha256": "e814651195c53971503d9823d6841216718a561951ef064f81d132297f4fa494",
+      "bytes": 76
+    },
+    {
+      "path": "targets/nose/nose-scale-depth-decr.target.gz",
+      "sha256": "0842aa0f4265fef85b6e708cdd0b0665e9a951c08a1c768dc285206f0ae4c7ad",
+      "bytes": 1503
+    },
+    {
+      "path": "targets/nose/nose-scale-depth-incr.target.gz",
+      "sha256": "49f63b72f04f637ed38061acce579c0948d29175d949bf21e6bfed354c0a10bf",
+      "bytes": 1384
+    },
+    {
+      "path": "targets/nose/nose-scale-horiz-decr.target.gz",
+      "sha256": "95d8dc4a3589bbb6105191abc6e3cae47c3c424ce189b5f0a611dc098806060d",
+      "bytes": 1234
+    },
+    {
+      "path": "targets/nose/nose-scale-horiz-incr.target.gz",
+      "sha256": "ba550cc15c894a4412bb368acc92bd6ad94bbb63d0135c561fe30230ef6344bd",
+      "bytes": 1802
+    },
+    {
+      "path": "targets/nose/nose-scale-vert-decr.target.gz",
+      "sha256": "3eea81bc82ddca8e20c8fc4279092eb2c8540d05e0c2aacf868af5da4ebac108",
+      "bytes": 1352
+    },
+    {
+      "path": "targets/nose/nose-scale-vert-incr.target.gz",
+      "sha256": "63d297c237e7054a1ea700b83454ef508bf5f42ba8f2eb6bc1eb747ad261f34b",
+      "bytes": 1580
+    }
+  ]
+}

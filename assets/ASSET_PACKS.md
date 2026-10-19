@@ -141,3 +141,6 @@ Every development session working on `Treninem/game` must read this file before 
 - INTEGRATED — existing CC0 OpenGameArt seamless photograph `100_1453_seamless.JPG` selected as `assets/production/materials/ground/stone_paving.jpg` for capital paving. Mipmapped, world-scaled diffuse only.
 
 - INTEGRATED — 2026-10-19 household furniture: existing B46 CC0 Chest_Wood glTF, buffer and shared textures selected into `assets/production/medieval/capital_square/`; original open/close clips drive actual storage. Existing production Bench and Quaternius Bed/Table reused for household places. Physical source and both source licenses checked on main; no new download.
+
+## Character family review — 2026-10-19
+- INTEGRATED in the 0.10.7.2 review candidate: MakeHuman native male/female bodies, separate face/hair/garments and a playable creator. Source selections: `assets/staging/characters/makehuman_mpfb_core/` and `makehuman_system_selected/`; target: `assets/production/characters/realistic/`. Official core/system graphics are CC0; no tool code embedded. Main physical confirmation and final production readiness are pending. See `assets/registry/REALISTIC_HUMANS_2026-10-19.md`.

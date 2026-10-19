@@ -139,6 +139,7 @@ func _resident(label: String, role: String, node_name: String, id: String, workp
     resident.set_meta("work_facing", facing)
     resident.set_meta("work_approach_path", [Vector3(-35, 0, -4), Vector3(workplace.x, 0, -4)])
     resident.configure(label, role, palette, [])
+    resident.body_sex = "female" if id == SHOP_ID else "male"
     resident.position = Vector3(workplace.x, _ground_y(workplace) + 0.08, workplace.z)
     add_child(resident)
     return resident

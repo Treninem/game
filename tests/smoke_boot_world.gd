@@ -63,8 +63,15 @@ func _run() -> void:
         _fail(8, "new game action is missing")
         return
     menu.call("_new_game")
+    if not await _wait_for_scene_name("CharacterCreator", 8.0):
+        _fail(9, "new game bypassed the character creator")
+        return
+    var creator := get_tree().current_scene
+    creator.set("profile", preload("res://scripts/character_appearance.gd").preset(7))
+    creator.call("_refresh")
+    creator.call("start_journey")
     if not await _wait_for_scene_name("WorldLoading", 8.0):
-        _fail(9, "new game did not open the world loading screen")
+        _fail(9, "character creator did not open the world loading screen")
         return
 
     var deadline := Time.get_ticks_msec() + 35000

@@ -1,3 +1,9 @@
+## 0.10.7.2 — unreleased character review — 2026-10-19
+- Replaced the temporary body with separate authored MakeHuman male/female models, textured skin/eyes/hair and fitted clothing/boots. Preserved source licenses and reproducible build/validation tools.
+- New Game opens a working 3D creator with ten shape presets, bounded face/body controls, color/style selection and appearance persistence. Marta and Marek use their respective bodies.
+- Fixed garment stretch, cuffs, reversed knees, backward walking lean, shoe contact and skeleton-dependent seated/jump poses.
+- Repeated affected local checks, frozen-package boot and graphical forest/home interactions. Evidence and remaining warnings: docs/DEVELOPMENT_LOG_2026-10-19_CHARACTERS.json. Full armor wardrobe, advanced age/face controls and stable release gates remain open.
+
 ## 0.10.7.1 — unreleased household review — 2026-10-19
 - Removed floating resident name/activity labels. Corrected seated thigh/calf axes with an actual joint-direction regression; low graphics now disables the indoor lantern shadow.
 - Two named capital residents physically use their own beds and benches and store finite personal goods. Rest, ownership, contents and bounded activity progress survive JSON/disk saves and streamed recreation. Player rest ends through ordinary movement.
