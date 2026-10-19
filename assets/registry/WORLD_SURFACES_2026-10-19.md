@@ -9,3 +9,7 @@ INTEGRATED in the review source: 4 m shared physical/rendered terrain grid with 
 ## Original bark restoration — 2026-10-20
 
 INTEGRATED in the review: same CC0 Free Vegetation packs original `bark.JPG`, copied unmodified to `production/nature/temperate/bark_albedo.jpg`, explicit mipmaps, shared idempotent bark overrides and anisotropic foliage filtering. Shared wind now has a stable per-instance phase. Existing meshes and cutout branch cards remain; no new tree sculpt or scanned PBR claim. Evidence: `docs/DEVELOPMENT_LOG_2026-10-20_NATURE_MATERIALS.json`.
+
+## Near-forest composition correction — 2026-10-20
+
+INTEGRATED: original CC0 `bush_higher` with `leaf_small.png`, normalized as `TemperateBush.glb`; same family license/source retained. The near palette now uses two temperate models and excludes the visually incompatible pine; taiga pine remains. Near roots have 5.5 m minimum separation; ground texture scale and linear black-key cutoff corrected. Native and frozen evidence: `docs/DEVELOPMENT_LOG_2026-10-20_FOREST_CORRECTION.json`.

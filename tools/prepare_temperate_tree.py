@@ -110,6 +110,7 @@ def prepare(name,filename,height,leaf_image='branches_small_leaves.png'):
 prepare('tree_leaves_particles_higher','TemperateTree.glb',12)
 prepare('tree_leaves_particles_lod_1','TemperateTree_LOD.glb',12)
 prepare('tree_leaves_higher','TemperateTree_Broad.glb',11,'branches_leaves.png')
+prepare('bush_higher','TemperateBush.glb',1.8,'leaf_small.png')
 shutil.copy2(SOURCE/'LICENSE.txt',DEST/'LICENSE.txt')
 (DEST/'SOURCE.md').write_text('CC0 Free Vegetation Asset Pack with LOD, existing assets/staging/sourcechat_b44/models/oga_free_vegetation_lod_pack. Original authored tree meshes and branches_small_leaves.png, with seeded nearby card layers for a fuller canopy. Missing legacy Blender materials restored by connected-component leaf-card classification. Bark reuses the existing CC0 Quaternius Stylized Nature MegaKit Bark_NormalTree texture. Near mesh and authored LOD normalized to 12 m with grounded trunk pivots. Runtime requires the shared foliage_wind.gdshader black_key cutout for the original branch texture. Reproduce with tools/prepare_temperate_tree.py.\n',encoding='utf-8')
 with (DEST/'SOURCE.md').open('a',encoding='utf-8') as provenance:
@@ -119,3 +120,6 @@ with (DEST/'SOURCE.md').open('a',encoding='utf-8') as provenance:
 shutil.copy2(SOURCE/'textures/bark.JPG', DEST/'bark_albedo.jpg')
 with (DEST/'SOURCE.md').open('a', encoding='utf-8') as provenance:
     provenance.write('\nRuntime surface follow-up, 2026-10-20: INTEGRATED original CC0 `textures/bark.JPG` from this same Free Vegetation pack as `bark_albedo.jpg` (byte-identical copy). `production_nature.gd` restores it on Bark_Temperate surfaces using original UVs and shared materials; embedded stylized bark remains a fallback. Explicit mipmaps and anisotropic filtering; no generated normal/PBR channel. The preparation tool also copies this external runtime texture.\n')
+
+with (DEST/'SOURCE.md').open('a', encoding='utf-8') as provenance:
+    provenance.write('\nNear-forest correction, 2026-10-20: INTEGRATED `TemperateBush.glb` from the same packs authored `bush_higher`, normalized to 1.8 m with grounded pivot. Uses original `leaf_small.png` on individual leaf cards; the first branch-atlas trial was rejected after native inspection. Existing CC0 license retained; no new download or generated bitmap. Near trees now use the two compatible temperate models; the stylized pine remains available to the taiga system.\n')

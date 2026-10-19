@@ -17,8 +17,8 @@ void fragment() {
     vec2 p=ground_world.xz;
     float patch=field(p*0.035);
     vec2 rotated=mat2(vec2(0.8,0.6),vec2(-0.6,0.8))*p;
-    vec3 grass_a=texture(grass_texture,p*0.22).rgb;
-    vec3 grass_b=texture(grass_texture,rotated*0.137+vec2(0.37,0.61)).rgb;
+    vec3 grass_a=texture(grass_texture,p*0.65).rgb;
+    vec3 grass_b=texture(grass_texture,rotated*0.43+vec2(0.37,0.61)).rgb;
     vec3 grass=mix(grass_a,grass_b,smoothstep(0.2,0.8,patch));
     float macro=field(p*0.009);
     vec3 tint=mix(vec3(0.40,0.46,0.31),vec3(0.63,0.65,0.49),macro);

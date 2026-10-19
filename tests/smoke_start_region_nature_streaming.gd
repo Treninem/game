@@ -19,9 +19,9 @@ func _wait_frames(count: int) -> void:
 
 func _run_test() -> void:
     var variants := {}
-    for scene: PackedScene in [START_REGION_STREAMER.TREE_OAK, START_REGION_STREAMER.TREE_DETAILED, START_REGION_STREAMER.TREE_BROAD]:
+    for scene: PackedScene in START_REGION_STREAMER.TREE_PALETTE:
         variants[scene.resource_path] = true
-    if variants.size() != 3:
+    if variants.size() != START_REGION_STREAMER.TREE_PALETTE.size() or variants.size() < 2:
         _fail(2, "tree variation aliases the same model more than once")
         return
     var nature := preload("res://scripts/production_nature.gd")
@@ -71,6 +71,20 @@ func _run_test() -> void:
         _fail(4, "production nature did not materialize around the start spawn")
         return
 
+    var roots: Array[Vector2] = []
+    for cell: Node in streamer.get("loaded_detail_cells").values():
+        if int(cell.get_meta("detail_count", 0)) > 164:
+            _fail(4, "understory exceeded the fixed per-cell detail budget")
+            return
+        for child in cell.get_children():
+            if child.is_in_group("map_tree"):
+                var point: Vector3 = child.global_position
+                var xz := Vector2(point.x,point.z)
+                for other in roots:
+                    if other.distance_to(xz) < START_REGION_STREAMER.TREE_TRUNK_CLEARANCE - 0.01:
+                        _fail(4, "near physical tree trunks intersect the minimum clearance")
+                        return
+                roots.append(xz)
     player.position = Vector3(1000.0, 3.0, 800.0)
     await _wait_frames(38)
     var moved_center: Vector2i = streamer.call("detail_center_cell")

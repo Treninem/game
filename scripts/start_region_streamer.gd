@@ -4,9 +4,10 @@ const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PRODUCTION_NATURE := preload("res://scripts/production_nature.gd")
 const NATURE_ROOT := "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/"
 const TREE_OAK: PackedScene = preload("res://assets/production/nature/temperate/TemperateTree.glb")
-const TREE_DETAILED: PackedScene = preload("res://assets/production/nature/woodland/Pine_1.glb")
 const TREE_BROAD: PackedScene = preload("res://assets/production/nature/temperate/TemperateTree_Broad.glb")
-const BUSH_DETAILED: PackedScene = preload("res://assets/production/nature/woodland/Bush_Common.glb")
+const TREE_PALETTE := [TREE_OAK, TREE_BROAD]
+const TREE_TRUNK_CLEARANCE := 5.5
+const BUSH_DETAILED: PackedScene = preload("res://assets/production/nature/temperate/TemperateBush.glb")
 const GRASS_LARGE: PackedScene = preload("res://assets/production/nature/woodland/Grass_Wispy_Tall.glb")
 const ROCK_LARGE: PackedScene = preload(NATURE_ROOT + "rock_largeA.glb")
 const LOG_LARGE: PackedScene = preload(NATURE_ROOT + "log_large.glb")
@@ -223,7 +224,8 @@ func _populate_detail_cell(cell: Node3D, coord: Vector2i) -> Dictionary:
 
     var rng := RandomNumberGenerator.new()
     rng.seed = absi(hash("start_detail:%d:%d:%d" % [coord.x, coord.y, NATURE_SEED]))
-    var tree_scenes: Array[PackedScene] = [TREE_OAK, TREE_DETAILED, TREE_BROAD]
+    var tree_scenes: Array[PackedScene] = []
+    tree_scenes.assign(TREE_PALETTE)
     var tree_target := 14
     match biome:
         "forest": tree_target = 18
@@ -234,18 +236,32 @@ func _populate_detail_cell(cell: Node3D, coord: Vector2i) -> Dictionary:
 
     var trees := 0
     var details := 0
+    var accepted_roots: Array[Vector2] = []
     for i in range(tree_target):
         var world := _sample_cell_position(rng, coord, 17.0, 6.0)
         if world == Vector2.INF:
             continue
         var scene := tree_scenes[rng.randi_range(0, tree_scenes.size() - 1)]
-        if _spawn_physical_tree(cell, scene, world, rng.randf_range(0.80, 1.18), rng.randf_range(-PI, PI), i):
+        var tree_scale := rng.randf_range(0.80, 1.18)
+        var yaw := rng.randf_range(-PI, PI)
+        var crowded := false
+        for root_pos in accepted_roots:
+            if root_pos.distance_squared_to(world) < TREE_TRUNK_CLEARANCE * TREE_TRUNK_CLEARANCE:
+                crowded = true
+                break
+        # Consume the existing candidate's random values before skipping it.
+        # Later roots/IDs stay stable; do not relocate a saved tree elsewhere.
+        if crowded:
+            continue
+        if _spawn_physical_tree(cell, scene, world, tree_scale, yaw, i):
+            accepted_roots.append(world)
             trees += 1
             details += 1
 
-    var bush_world := _sample_cell_position(rng, coord, 7.0, 3.5)
-    if bush_world != Vector2.INF and _spawn_visual(cell, BUSH_DETAILED, bush_world, rng.randf_range(0.80, 1.35), rng.randf_range(-PI, PI), "Bush", 0, DETAIL_SMALL_VISIBILITY):
-        details += 1
+    for i in range(4):
+        var bush_world := _sample_cell_position(rng, coord, 7.0, 3.5)
+        if bush_world != Vector2.INF and _spawn_visual(cell, BUSH_DETAILED, bush_world, rng.randf_range(0.70, 1.15), rng.randf_range(-PI, PI), "Bush", i, DETAIL_SMALL_VISIBILITY):
+            details += 1
 
     for i in range(120):
         var grass_world := _sample_cell_position(rng, coord, 4.0, 2.0, 2.0)
@@ -253,7 +269,7 @@ func _populate_detail_cell(cell: Node3D, coord: Vector2i) -> Dictionary:
             details += 1
 
     if biome in ["forest", "taiga", "marsh"]:
-        for i in range(8):
+        for i in range(16):
             var fern_world := _sample_cell_position(rng, coord, 5.0, 2.0)
             if fern_world != Vector2.INF and _spawn_visual(cell, FERN, fern_world, rng.randf_range(0.75, 1.25), rng.randf_range(-PI, PI), "Fern", i, 150.0):
                 details += 1

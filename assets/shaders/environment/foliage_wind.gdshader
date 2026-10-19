@@ -24,7 +24,9 @@ void vertex() {
 
 void fragment() {
     vec4 tex = texture(albedo_texture, UV);
-    if (tex.a < 0.35 || (black_key && max(tex.r, max(tex.g, tex.b)) < 0.10)) {
+    // source_color sampling is linear: 0.10 removes real dark green leaves.
+    // Keep alpha coverage and reject only a near-black backing (~0.07 sRGB).
+    if (tex.a < 0.35 || (black_key && max(tex.r, max(tex.g, tex.b)) < 0.006)) {
         discard;
     }
     // Foliage is opaque where a leaf exists. Avoid transparent sorting/overdraw.

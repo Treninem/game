@@ -48,6 +48,8 @@ static func prepare(node: Node) -> void:
                     material.set_shader_parameter("height_anchor", true)
                 elif "Pine" in base.resource_name:
                     material.set_shader_parameter("vegetation_tint", Color(0.72, 0.79, 0.62))
+                elif base.resource_name == "Leaves":
+                    material.set_shader_parameter("vegetation_tint", Color(0.52, 0.65, 0.37))
                 wind_materials[key] = material
             visual.set_surface_override_material(index, wind_materials[key])
     for child in node.get_children():
