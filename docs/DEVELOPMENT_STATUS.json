@@ -144,5 +144,7 @@
     "Доработать точный хват пальцев и траекторию лезвия, звук падения и последствия для окружения; затем расширить рубку на дальние леса. Пространственный звук контакта, ближняя дальность и карта вырубки подключены.",
     "Действительные рабочие места и реакция нескольких NPC на события, затем гильдейский цикл.",
     "Отдельное измерение производительности леса, поселения и боя на встроенной графике."
-  ]
+  ],
+  "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
+  "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked."
 }
