@@ -65,6 +65,11 @@ func apply_appearance(value: Variant) -> void:
     var players := model.find_children("*", "AnimationPlayer", true, false)
     if not players.is_empty():
         animation_player = players[0] as AnimationPlayer
+        # Generated poses belong to this actor. Replacing a shared library
+        # while another streamed actor is aiming would interrupt its clip.
+        var local_library := animation_player.get_animation_library("").duplicate() as AnimationLibrary
+        animation_player.remove_animation_library("")
+        animation_player.add_animation_library("", local_library)
         for key in animation_player.get_animation_list():
             var animation := animation_player.get_animation(key)
             if String(key) in ["Idle", "Walk", "Run", "Working"]:
@@ -73,6 +78,7 @@ func apply_appearance(value: Variant) -> void:
         animation_player.advance(0.0)
         _prepare_airborne_pose(model)
         _prepare_sitting_pose(model)
+        _prepare_bow_poses(model)
     last_position = get_parent_node_3d().global_position
     if get_parent().name == "Player" or get_parent().has_meta("preview_animation"):
         var skeletons := model.find_children("*", "Skeleton3D", true, false)
@@ -220,6 +226,51 @@ func begin_axe_stroke() -> void:
 func play_death() -> void:
     _play("Death", 1.0)
     set_process(false)
+
+func _prepare_bow_poses(human: Node3D) -> void:
+    var skeleton := human.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    var original := {}
+    for side: String in ["Left", "Right"]:
+        for suffix: String in ["Arm", "ForeArm", "Hand"]:
+            var bone := skeleton.find_bone(side + suffix)
+            if bone >= 0:
+                original[bone] = skeleton.get_bone_pose_rotation(bone)
+    # Aim in actor space: left arm toward the target, right elbow outward.
+    # Source bow clips use a different shoulder frame; copying their absolute
+    # rotations onto this rig folds the hands behind the actor's back.
+    _align_sitting_bone(skeleton, "LeftArm", "LeftForeArm", Vector3(-0.10, 0.10, -1))
+    _align_sitting_bone(skeleton, "LeftForeArm", "LeftHand", Vector3(-0.03, 0, -1))
+    _align_sitting_bone(skeleton, "RightArm", "RightForeArm", Vector3(0.9, 0.2, 0.15))
+    _align_sitting_bone(skeleton, "RightForeArm", "RightHand", Vector3(-0.65, 0.15, -0.75))
+    var drawn := {}
+    for bone: int in original:
+        drawn[bone] = skeleton.get_bone_pose_rotation(bone)
+    var root := animation_player.get_node(animation_player.root_node)
+    for key: String in ["Bow_Attack_Draw", "Bow_Attack_Shoot"]:
+        var clip := animation_player.get_animation("Idle").duplicate() as Animation
+        clip.length = 0.8 if key == "Bow_Attack_Draw" else 0.5
+        clip.loop_mode = Animation.LOOP_NONE
+        for bone: int in original:
+            var path := NodePath(String(root.get_path_to(skeleton)) + ":" + skeleton.get_bone_name(bone))
+            var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
+            if track >= 0:
+                clip.remove_track(track)
+            track = clip.add_track(Animation.TYPE_ROTATION_3D)
+            clip.track_set_path(track, path)
+            if key == "Bow_Attack_Draw":
+                clip.rotation_track_insert_key(track, 0.0, original[bone])
+                clip.rotation_track_insert_key(track, 0.4, drawn[bone])
+                clip.rotation_track_insert_key(track, 0.8, drawn[bone])
+            else:
+                clip.rotation_track_insert_key(track, 0.0, drawn[bone])
+                clip.rotation_track_insert_key(track, 0.12, drawn[bone])
+                clip.rotation_track_insert_key(track, 0.5, original[bone])
+        var library := animation_player.get_animation_library("")
+        library.remove_animation(key)
+        library.add_animation(key, clip)
+    for bone: int in original:
+        skeleton.set_bone_pose_rotation(bone, original[bone])
+    skeleton.force_update_all_bone_transforms()
 
 func _prepare_airborne_pose(model: Node3D) -> void:
     if animation_player.has_animation("Airborne"):

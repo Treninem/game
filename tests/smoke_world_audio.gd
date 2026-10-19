@@ -82,6 +82,9 @@ func _ready() -> void:
     if String(audio.get("last_footstep_surface")) != "wet" or not String(audio.get("last_footstep_stream_path")).contains("footstep_wet"):
         failures.append("Ford footstep did not use a promoted wet sound")
 
+    audio.call("shutdown")
+    if emitter.playing or emitter.stream != null:
+        failures.append("Audio shutdown retains active river playback or its stream")
     world.queue_free()
     await get_tree().create_timer(0.1).timeout
     if failures.is_empty():

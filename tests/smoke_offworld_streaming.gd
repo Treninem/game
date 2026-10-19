@@ -185,5 +185,8 @@ func _run_test() -> void:
         return
 
     SaveManager.delete_slot(10)
+    # Release the owned world, then allow queued audio stops to drain.
+    scene.queue_free()
+    await get_tree().create_timer(0.15, true).timeout
     print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed fall_recovery=realm rune_pause=stable save_load=resynced cancel_reward=blocked transition_guards=active")
     tree.quit(0)

@@ -176,7 +176,7 @@ func _build_ui() -> void:
     status_label = _label("", 11, Color(0.78,0.72,0.63))
     status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     menu_column.add_child(status_label)
-    _menu_button("Выйти из игры", Callable(get_tree(), "quit"), false, true)
+    _menu_button("Выйти из игры", _quit_game, false, true)
 
     content_frame = PanelContainer.new()
     content_frame.name = "ContentFrame"
@@ -479,3 +479,8 @@ func _format_bytes(value: int) -> String:
     if value >= 1024:
         return "%.0f КБ" % (float(value) / 1024.0)
     return "%d Б" % value
+
+func _quit_game() -> void:
+    get_tree().call_group("world_audio", "shutdown")
+    await get_tree().create_timer(0.15, true).timeout
+    get_tree().quit()

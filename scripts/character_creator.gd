@@ -182,6 +182,13 @@ func _refresh() -> void:
 
 func select_preview_motion(index: int) -> void:
     index = clampi(index, 0, 6)
+    var selector := find_child("PreviewMotion", true, false) as OptionButton
+    if selector != null:
+        selector.select(index)
+    if index >= 4:
+        camera_height = 1.1
+        zoom = maxf(zoom, 3.9)
+        _camera()
     actor.set_meta("preview_animation", ["Idle", "Walk", "Run", "Punch", "Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot"][index])
     actor.set_meta("preview_item", ["", "", "", "", "starter_axe", "short_bow", "short_bow"][index])
     visual.call("_refresh_weapon")

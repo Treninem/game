@@ -57,6 +57,15 @@ func _run() -> void:
             var weapon: Node3D = creator.visual.held_weapon
             if not _check(is_instance_valid(weapon) and creator.visual.held_item == ("starter_axe" if motion == 4 else "short_bow"), "Combat preview has empty hands"):
                 return
+            if motion == 5:
+                creator.visual.animation_player.play("Bow_Attack_Draw")
+                creator.visual.animation_player.advance(0.6)
+                var skeleton := creator.visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+                skeleton.force_update_all_bone_transforms()
+                var shoulder: Vector3 = creator.visual.to_local(skeleton.global_transform * skeleton.get_bone_global_pose(skeleton.find_bone("LeftArm")).origin)
+                var wrist: Vector3 = creator.visual.to_local(skeleton.global_transform * skeleton.get_bone_global_pose(skeleton.find_bone("LeftHand")).origin)
+                if not _check(wrist.z < shoulder.z - 0.35 and absf(wrist.y - shoulder.y) < 0.2, "Bow arm folds behind the back instead of aiming forward"):
+                    return
             creator.call("select_preset", 5 if preset_index == 0 else 0)
             if not _check(is_instance_valid(creator.visual.held_weapon), "Changing body loses preview equipment"):
                 return
@@ -65,6 +74,20 @@ func _run() -> void:
             return
     if not _check(GameState.snapshot() == inventory_before and InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == equipped_before, "Preview modifies real game inventory or appearance state"):
         return
+    creator.call("select_preview_motion", 5)
+    await get_tree().process_frame
+    var aiming_player: AnimationPlayer = creator.visual.animation_player
+    var local_library := aiming_player.get_animation_library("")
+    var neighbor := CharacterBody3D.new()
+    neighbor.name = "StreamedNeighborFixture"
+    add_child(neighbor)
+    var neighbor_visual := preload("res://scripts/humanoid_visual.gd").new()
+    neighbor_visual.appearance_profile = creator.profile.duplicate(true)
+    neighbor.add_child(neighbor_visual)
+    if not _check(neighbor_visual.animation_player.get_animation_library("") != local_library and aiming_player.is_playing(), "Spawning another human shares/replaces the active actor animation library"):
+        return
+    neighbor.queue_free()
+    creator.call("select_preview_motion", 0)
     creator.name_edit.text = "Элина"
     creator.call("select_preset", 8)
     if not _check(creator.name_edit.text == "Элина", "Selecting a new appearance erased the entered name"):

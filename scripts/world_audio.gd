@@ -77,15 +77,17 @@ func _ready() -> void:
     _update_river_ambience()
 
 func _exit_tree() -> void:
-    # Disable the finished callback before retiring a looping river emitter.
+    shutdown()
+
+func shutdown() -> void:
+    # Retire playback while the audio server can still process its stop queue.
+    # Child teardown alone can leave the Ogg decoder retained at engine exit.
+    set_process(false)
     _river_should_play = false
-    if is_instance_valid(_river_player):
-        _river_player.stop()
-        _river_player.stream = null
-    for step_player in _footstep_players:
-        if is_instance_valid(step_player):
-            step_player.stop()
-            step_player.stream = null
+    for child in get_children():
+        if child is AudioStreamPlayer3D:
+            child.stop()
+            child.stream = null
 
 func _process(delta: float) -> void:
     if not is_instance_valid(_player):

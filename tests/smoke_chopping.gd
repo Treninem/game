@@ -208,6 +208,10 @@ func _run() -> void:
     if not trader.complete_trade("starter_axe", false) or not trader.complete_trade("starter_axe", false) or trader.complete_trade("starter_axe", false):
         failures.append("Axe shop migration or finite stock is broken")
     trader.free()
+    # Release the owned world, then allow queued audio stops to drain.
+    audio.queue_free()
+    player.queue_free()
+    await get_tree().create_timer(0.15, true).timeout
     if failures.is_empty():
         print("CHOPPING_OK physical_axe=true windup=true reach_rechecked=true cut_reload=true fall_animated=true save_during_fall=true finite_loot=true authored_stump=true axe_shop=true forest_batch=promoted neighbour=unchanged")
     for failure in failures:

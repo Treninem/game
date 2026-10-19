@@ -99,5 +99,8 @@ func _run() -> void:
     else:
         for failure in failures:
             push_error(failure)
+    # Release the owned world, then allow queued audio stops to drain.
+    world.queue_free()
+    await get_tree().create_timer(0.15, true).timeout
     finished = true
     get_tree().quit(0 if failures.is_empty() else 1)
