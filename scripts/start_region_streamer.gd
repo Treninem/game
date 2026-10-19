@@ -4,7 +4,7 @@ const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PRODUCTION_NATURE := preload("res://scripts/production_nature.gd")
 const NATURE_ROOT := "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/"
 const TREE_OAK: PackedScene = preload("res://assets/production/nature/temperate/TemperateTree.glb")
-const TREE_DETAILED: PackedScene = preload("res://assets/production/nature/temperate/TemperateTree.glb")
+const TREE_DETAILED: PackedScene = preload("res://assets/production/nature/woodland/Pine_1.glb")
 const TREE_BROAD: PackedScene = preload("res://assets/production/nature/temperate/TemperateTree_Broad.glb")
 const BUSH_DETAILED: PackedScene = preload("res://assets/production/nature/woodland/Bush_Common.glb")
 const GRASS_LARGE: PackedScene = preload("res://assets/production/nature/woodland/Grass_Wispy_Tall.glb")
@@ -247,8 +247,8 @@ func _populate_detail_cell(cell: Node3D, coord: Vector2i) -> Dictionary:
     if bush_world != Vector2.INF and _spawn_visual(cell, BUSH_DETAILED, bush_world, rng.randf_range(0.80, 1.35), rng.randf_range(-PI, PI), "Bush", 0, DETAIL_SMALL_VISIBILITY):
         details += 1
 
-    for i in range(40):
-        var grass_world := _sample_cell_position(rng, coord, 4.0, 2.0)
+    for i in range(120):
+        var grass_world := _sample_cell_position(rng, coord, 4.0, 2.0, 2.0)
         if grass_world != Vector2.INF and _spawn_visual(cell, GRASS_LARGE, grass_world, rng.randf_range(0.65, 1.15), rng.randf_range(-PI, PI), "Grass", i, DETAIL_SMALL_VISIBILITY):
             details += 1
 
@@ -276,7 +276,7 @@ func _populate_detail_cell(cell: Node3D, coord: Vector2i) -> Dictionary:
 
     return {"trees":trees, "details":details}
 
-func _sample_cell_position(rng: RandomNumberGenerator, coord: Vector2i, river_clearance: float, road_clearance: float) -> Vector2:
+func _sample_cell_position(rng: RandomNumberGenerator, coord: Vector2i, river_clearance: float, road_clearance: float, spawn_clearance: float = 6.0) -> Vector2:
     var origin := _detail_cell_origin(coord)
     for _attempt in range(24):
         var world := origin + Vector2(
@@ -285,7 +285,7 @@ func _sample_cell_position(rng: RandomNumberGenerator, coord: Vector2i, river_cl
         )
         if not GEOGRAPHY.in_start_region(world):
             continue
-        if world.distance_to(GEOGRAPHY.START_SPAWN) < 6.0:
+        if world.distance_to(GEOGRAPHY.START_SPAWN) < spawn_clearance:
             continue
         if GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_HALF_WIDTH + river_clearance:
             continue

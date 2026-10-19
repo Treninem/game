@@ -1,3 +1,7 @@
+## Coast and nature — unreleased follow-up — 2026-10-20
+- Refine physical/rendered terrain from 8 m to 4 m spacing and share halo-derived normals at chunk edges. Add strict seam/collision regression.
+- Replace a duplicate tree alias with the existing pine, retain tree positions/IDs, triple bounded grass targets, mute neon vegetation color and anchor grass wind at its roots. Startup, streaming, movement, chopping and native views pass. Existing tree art, cleanup warnings and broader performance work remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_COAST_NATURE.json.
+
 ## World surfaces — unreleased follow-up — 2026-10-19
 - Retire the emergency start pad visual with its physics once real ground is confirmed; native before/after shows the large flat green overlay removed.
 - Blend existing terrain textures at multiple scales, extend shared water/ice wave normals in world space and reduce the oversized sun disk. Startup/movement/nature/hydrology and three native views pass; sparse trees, angular banks and cleanup warnings remain. Evidence: docs/DEVELOPMENT_LOG_2026-10-19_WORLD_SURFACES.json.

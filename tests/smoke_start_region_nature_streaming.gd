@@ -18,6 +18,12 @@ func _wait_frames(count: int) -> void:
         await get_tree().process_frame
 
 func _run_test() -> void:
+    var variants := {}
+    for scene: PackedScene in [START_REGION_STREAMER.TREE_OAK, START_REGION_STREAMER.TREE_DETAILED, START_REGION_STREAMER.TREE_BROAD]:
+        variants[scene.resource_path] = true
+    if variants.size() != 3:
+        _fail(2, "tree variation aliases the same model more than once")
+        return
     var player := CharacterBody3D.new()
     player.name = "NatureStreamingTestPlayer"
     player.add_to_group("player")

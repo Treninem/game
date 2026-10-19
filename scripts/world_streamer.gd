@@ -12,7 +12,7 @@ const FERN_SCENE := preload("res://assets/production/nature/woodland/Fern_1.glb"
 # The continent remains 64x64 km in WorldData, but only a small local window is
 # materialized around the player. This keeps traversal smooth and memory bounded.
 const CHUNK_SIZE := 192.0
-const GRID_RESOLUTION := 24
+const GRID_RESOLUTION := 48
 const VISUAL_RADIUS := 2
 const PHYSICS_RADIUS := 1
 const UNLOAD_RADIUS := 3
@@ -215,15 +215,23 @@ func _build_terrain_mesh(coord: Vector2i) -> ArrayMesh:
     var st := SurfaceTool.new()
     st.begin(Mesh.PRIMITIVE_TRIANGLES)
     var origin := _chunk_origin(coord)
+    # One halo sample on each side gives identical central-difference normals
+    # at shared chunk edges; physics is built from this same rendered mesh.
+    var spacing := CHUNK_SIZE / float(GRID_RESOLUTION)
+    var stride := GRID_RESOLUTION + 3
+    var heights := PackedFloat32Array()
+    heights.resize(stride * stride)
+    for z in range(-1, GRID_RESOLUTION + 2):
+        for x in range(-1, GRID_RESOLUTION + 2):
+            heights[(z + 1) * stride + x + 1] = WorldData.elevation_at(origin + Vector2(x, z) * spacing)
     for z in range(GRID_RESOLUTION + 1):
         for x in range(GRID_RESOLUTION + 1):
-            var fx := float(x) / float(GRID_RESOLUTION)
-            var fz := float(z) / float(GRID_RESOLUTION)
-            var local_x := fx * CHUNK_SIZE
-            var local_z := fz * CHUNK_SIZE
-            var world := origin + Vector2(local_x, local_z)
-            st.set_uv(Vector2(fx, fz))
-            st.add_vertex(Vector3(local_x, WorldData.elevation_at(world), local_z))
+            var offset := (z + 1) * stride + x + 1
+            var dx := (heights[offset + 1] - heights[offset - 1]) / (2.0 * spacing)
+            var dz := (heights[offset + stride] - heights[offset - stride]) / (2.0 * spacing)
+            st.set_normal(Vector3(-dx, 1.0, -dz).normalized())
+            st.set_uv(Vector2(x, z) / float(GRID_RESOLUTION))
+            st.add_vertex(Vector3(x * spacing, heights[offset], z * spacing))
 
     var row := GRID_RESOLUTION + 1
     for z in range(GRID_RESOLUTION):
@@ -238,7 +246,6 @@ func _build_terrain_mesh(coord: Vector2i) -> ArrayMesh:
             st.add_index(i1)
             st.add_index(i3)
             st.add_index(i2)
-    st.generate_normals()
     return st.commit()
 
 func _add_water(chunk: Node3D) -> void:
