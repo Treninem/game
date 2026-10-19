@@ -145,11 +145,8 @@ jobs:
             assets/ui
             assets/vfx
             assets/shaders
-            assets/audio/world/oga_100_cc0_sfx_2
-            assets/production/nature/kenney_nature_kit
-            assets/production/medieval/building_shell
-            assets/production/medieval/quaternius_market
-            assets/production/interiors/quaternius_furniture
+            assets/production
+            assets/audio
             assets/staging/sourcechat_b47
             assets/staging/nature/kenney_nature_kit/License.txt
             assets/staging/nature/kenney_nature_kit/Models/GLTF format/tree_oak.glb
