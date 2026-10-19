@@ -131,11 +131,11 @@ func _run() -> void:
             streamed_mid_door = true
         if frame % 600 == 0:
             print("HOME_PROGRESS frame=", frame, " trader=", square.to_local(trader.global_position), " artisan=", square.to_local(artisan.global_position))
-        if trader.activity == "Отдыхает дома" and artisan.activity == "Отдыхает дома":
+        if trader.activity == "Спит дома" and artisan.activity == "Спит дома":
             break
     for npc in [trader, artisan]:
         var local := home.to_local(npc.global_position)
-        if local.z > 4 or absf(local.x) > 5.5 or npc.activity != "Отдыхает дома":
+        if local.z > 4 or absf(local.x) > 5.5 or npc.activity != "Спит дома":
             errors.append("Resident did not return through the real doorway: %s %s %s" % [npc.display_name, local, npc.activity])
     if not streamed_mid_door:
         errors.append("Home streaming fixture never exercised a real doorway transition")

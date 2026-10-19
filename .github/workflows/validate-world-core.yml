@@ -76,6 +76,9 @@ jobs:
           unzip -q godot.zip
           chmod +x Godot_v4.7.1-stable_linux.x86_64
 
+      - name: Verify production model dependencies
+        run: python3 tests/test_production_asset_dependencies.py
+
       - name: Parse project and scripts
         shell: bash
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
@@ -184,9 +187,66 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_gate_overlay.tscn 240
       - name: Verify world boot, streamed roads and river water
         run: bash tools/run_godot_smoke.sh tests/smoke_boot_world.tscn 300
+      - name: Verify terrain faces upward and produces collision
+        run: bash tools/run_godot_smoke.sh tests/smoke_terrain_surface.tscn 60
+      - name: Verify skinned human, ground contact and joined river banks
+        run: bash tools/run_godot_smoke.sh tests/smoke_visual_grounding.tscn 120
+      - name: Verify graphics presets, equipment, physical arrows and magic
+        run: bash tools/run_godot_smoke.sh tests/smoke_gameplay_actions.tscn 120
+      - name: Verify canonical capital residents, dialogue and walking
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_gameplay.tscn 120
+      - name: Verify terrain map and persistent discovered features
+        run: bash tools/run_godot_smoke.sh tests/smoke_cartography.tscn 90
+      - name: Verify citizen routines and finite paid trading
+        run: bash tools/run_godot_smoke.sh tests/smoke_citizen_life.tscn 90
+      - name: Verify player traverses bridge approaches
+        run: bash tools/run_godot_smoke.sh tests/smoke_bridge_traversal.tscn 120
+      - name: Verify capital road stays above the sea
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_road.tscn 90
+      - name: Verify supported steps and tall wall grounding
+        run: bash tools/run_godot_smoke.sh tests/smoke_step_grounding.tscn 120
+      - name: Verify authored resources and persistent encounters
+        run: bash tools/run_godot_smoke.sh tests/smoke_living_world.tscn 90
+      - name: Verify axe contact, tree fall, forest batches and persistent wood
+        run: bash tools/run_godot_smoke.sh tests/smoke_chopping.tscn 90
+      - name: Verify capital gate collisions and physical street access
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_gate_traversal.tscn 180
       - name: Verify player movement and physical terrain
         run: bash tools/run_godot_smoke.sh tests/smoke_player_movement.tscn 240
       - name: Verify South Gate repair quest progression
         run: bash tools/run_godot_smoke.sh tests/smoke_city_quest.tscn 90
       - name: Verify HUD menus and save slots
         run: bash tools/run_godot_smoke.sh tests/smoke_ui_and_save.tscn 180
+      - name: Verify corrupt save recovery and backup preservation
+        run: bash tools/run_godot_smoke.sh tests/smoke_save_recovery.tscn 60
+      - name: Verify loading readiness conversions
+        run: bash tools/run_godot_smoke.sh tests/test_world_loading_readiness.tscn 60
+      - name: Verify menus across resolutions and UI scales
+        run: bash tools/run_godot_smoke.sh tests/smoke_ui_responsive.tscn 180
+      - name: Install virtual display for camera validation
+        # Geometry obstruction is also checked with the normal physics backend.
+        run: sudo apt-get update && sudo apt-get install -y xvfb libgl1-mesa-dri
+      - name: Verify third-person camera obstruction and persistent zoom
+        run: bash tools/run_godot_smoke.sh tests/smoke_camera_obstruction.tscn 120
+      - name: Verify captured mouse and gameplay camera
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_camera_input.tscn 180
+      - name: Verify chopping removes real rendered forest instances
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_chopping.tscn 90
+      - name: Verify saved household furniture
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_furniture.tscn 180
+      - name: Verify private storage and bulk capacity
+        run: bash tools/run_godot_smoke.sh tests/smoke_storage_access.tscn 60
+      - name: Verify anatomical seated joint directions
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_pose.tscn 45
+      - name: Verify graphics presets and absent NPC nameplates
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_quality.tscn 60
+      - name: Verify household clearance past a stationary hero
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_aisle.tscn 60
+      - name: Verify live home and workplace routes
+        run: bash tools/run_godot_smoke.sh tests/smoke_square_home_life.tscn 300
+      - name: Verify streamed citizen persistence
+        run: bash tools/run_godot_smoke.sh tests/smoke_citizen_persistence.tscn 90
+      - name: Verify runtime transforms before tree entry
+        run: bash tools/run_godot_smoke.sh tests/smoke_runtime_spawn_transforms.tscn 60
+      - name: Verify capital square recipe and production assets
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_square.tscn 180

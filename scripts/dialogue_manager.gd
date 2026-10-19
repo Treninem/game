@@ -33,6 +33,14 @@ func choose(index: int) -> void:
         return
     var action := String(option.get("action", "close"))
     match action:
+        "furniture_transfer":
+            var furniture := instance_from_id(int(option.get("furniture", 0))) as Node
+            var actor := get_tree().get_first_node_in_group("player") as Node3D
+            if is_instance_valid(furniture) and furniture.is_inside_tree() and furniture.has_method("transfer"):
+                furniture.call("transfer", actor, String(option.get("item", "")), bool(option.get("deposit", false)), int(option.get("amount", 1)))
+                furniture.call("open_storage", actor)
+            else:
+                close_dialogue()
         "merchant_trade":
             var merchant := instance_from_id(int(option.get("merchant", 0))) as Node
             if is_instance_valid(merchant) and merchant.is_inside_tree() and merchant.has_method("complete_trade"):

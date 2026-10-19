@@ -1,3 +1,10 @@
+## 0.10.7.1 — unreleased household review — 2026-10-19
+- Removed floating resident name/activity labels. Corrected seated thigh/calf axes with an actual joint-direction regression; low graphics now disables the indoor lantern shadow.
+- Two named capital residents physically use their own beds and benches and store finite personal goods. Rest, ownership, contents and bounded activity progress survive JSON/disk saves and streamed recreation. Player rest ends through ordinary movement.
+- Reused the existing authored animated chest and wall lantern; measured actual mattress/seat support also controls physical collision. Separate player storage supports bulk transfer, finite capacity, atomic failure and private-owner access checks.
+- Combined the current main runtime with preceding local integration, preserving remote workflows and progression. Fixed pre-tree world-transform errors in siege, arena, race and plot placement. A package test exposed missing boot resources; restored the upstream complete-resource export and repeated the packaged checks.
+- Nineteen unique affected local scenarios, an external packaged-game smoke and a bounded graphical household walk passed. Actual evidence, hardware samples and limitations: docs/DEVELOPMENT_LOG_2026-10-19_HOUSEHOLD.json. This is not a certified stable release.
+
 # Changelog
 
 ## Unreleased workspace — 2026-10-19 — persistent streamed residents

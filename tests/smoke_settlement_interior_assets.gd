@@ -51,7 +51,9 @@ func _run_test() -> void:
 
     var checks := [
         {"proxy":"Bed", "model":"RealBedModel"},
-        {"proxy":"Table", "model":"RealTableModel"}
+        {"proxy":"Table", "model":"RealTableModel"},
+        {"proxy":"Bench", "model":"RealBenchModel"},
+        {"proxy":"StorageChest", "model":"RealChestModel"}
     ]
     for check in checks:
         var proxy_name := String(check.get("proxy", ""))
@@ -68,7 +70,8 @@ func _run_test() -> void:
         if model == null:
             _fail(9, "%s does not contain its production Quaternius model" % proxy_name)
             return
-        if String(model.get_meta("source_pack", "")) != "quaternius_furniture_pack":
+        var expected_pack := "quaternius_fantasy_props_megakit_standard" if proxy_name in ["Bench", "StorageChest"] else "quaternius_furniture_pack"
+        if String(model.get_meta("source_pack", "")) != expected_pack:
             _fail(10, "%s model lacks verified source-pack metadata" % proxy_name)
             return
         if String(model.get_meta("license", "")) != "CC0":
@@ -83,6 +86,23 @@ func _run_test() -> void:
             _fail(12, "%s production model has no visible imported mesh" % proxy_name)
             return
 
+    var chest := furniture.get_node("StorageChest") as HouseholdFurniture
+    var players := chest.get_node("RealChestModel").find_children("*", "AnimationPlayer", true, false)
+    if players.is_empty() or not players[0].has_animation("Chest_Open") or not players[0].has_animation("Chest_Close"):
+        _fail(18, "authored chest has no real opening/closing animations")
+        return
+    for prop_name in ["Bed", "Bench"]:
+        var prop := furniture.get_node(prop_name) as StaticBody3D
+        if not prop.has_meta("rest_support_y") or not is_finite(float(prop.get_meta("rest_support_y"))):
+            _fail(19, "authored rest surface was not measured for " + prop_name)
+            return
+        var expected_y := prop.global_position.y + float(prop.get_meta("rest_support_y"))
+        var query := PhysicsRayQueryParameters3D.create(prop.global_position + Vector3.UP * 1.2, Vector3(prop.global_position.x, expected_y - 0.04, prop.global_position.z), 1)
+        var hit := get_world_3d().direct_space_state.intersect_ray(query)
+        if hit.get("collider") != prop or absf(Vector3(hit.get("position", Vector3.ZERO)).y - expected_y) > 0.02:
+            _fail(20, "physical support floats above or below the authored surface: " + prop_name)
+            return
+    print("HOUSEHOLD_MEASURED_SUPPORT bed=", furniture.get_node("Bed").get_meta("rest_support_y"), " bench=", furniture.get_node("Bench").get_meta("rest_support_y"))
     var primitive_bed_mesh := furniture.get_node_or_null("Bed/Mesh") as MeshInstance3D
     var primitive_table_mesh := furniture.get_node_or_null("Table/Mesh") as MeshInstance3D
     if primitive_bed_mesh == null or primitive_table_mesh == null:
@@ -92,7 +112,7 @@ func _run_test() -> void:
         _fail(14, "primitive placeholder furniture is still visibly overlapping real models")
         return
 
-    if decorator.real_furniture_model_count() < 2:
+    if decorator.real_furniture_model_count() < 4:
         _fail(15, "decorator did not account for both production furniture instances")
         return
 

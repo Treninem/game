@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="ImPuls"
-config/version="0.10.7-stable"
+config/version="0.10.7.1"
 run/main_scene="res://scenes/boot_launcher.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.015, 0.02, 0.035, 1)

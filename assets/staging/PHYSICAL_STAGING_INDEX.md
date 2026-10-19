@@ -185,3 +185,5 @@ The following existing source folders were checked directly, including source/li
 - STAGED_PHYSICAL: `sourcechat_b44/models/quaternius_stylized_nature_megakit_standard/` — six selected models are INTEGRATED in `assets/production/nature/woodland/`.
 - STAGED_PHYSICAL: `materials/oga_seamless_textures/` — two selected photographic diffuse images are INTEGRATED in `assets/production/materials/ground/`.
 - STAGED_PHYSICAL: `sourcechat_b36/models/quaternius_ultimate_rpg_items/` — selected axe, dagger, wooden bow and arrow are INTEGRATED in `assets/production/weapons/woodland/`. Source OBJ/MTL files and CC0 license were checked directly; no batch failure manifest was present in this source folder.
+
+- STAGED_PHYSICAL selection checked 2026-10-19: B46 `quaternius_fantasy_props_megakit_standard/Exports/glTF/Chest_Wood.gltf` and `.bin`, original texture dependencies and CC0 LICENSE.txt/License_Standard.txt confirmed on main fd61e21. No failure manifest found in B46. Selected animated chest is INTEGRATED under `assets/production/medieval/capital_square/`.

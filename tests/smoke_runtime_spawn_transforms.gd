@@ -13,6 +13,9 @@ func _run() -> void:
     siege._spawn_siege_enemy(0, 0, "fixture", 0, xz)
     var enemy := siege.get_child(0) as Node3D
     assert(enemy.global_position.distance_to(expected) < 0.01, "Siege spawn ignores translated parent")
+    for child in enemy.get_children():
+        if child is MeshInstance3D and child.mesh is PrimitiveMesh:
+            assert(not child.visible, "Siege primitive body overlays the actual human")
     var mini := preload("res://scripts/minigame_runtime.gd").new()
     add_child(mini)
     mini.challenge_root = Node3D.new()
@@ -21,6 +24,9 @@ func _run() -> void:
     mini._spawn_arena_enemy(0, expected)
     var arena := mini.challenge_root.get_child(0) as Node3D
     assert(arena.global_position.distance_to(expected) < 0.01, "Arena spawn ignores transformed challenge root")
+    for child in arena.get_children():
+        if child is MeshInstance3D and child.mesh is PrimitiveMesh:
+            assert(not child.visible, "Arena primitive body overlays the actual human")
     mini.race_points = [expected + Vector3(10, 0, 10)]
     mini._build_race_markers()
     var marker := mini.challenge_root.get_node("Checkpoint_00") as Node3D

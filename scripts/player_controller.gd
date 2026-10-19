@@ -144,6 +144,7 @@ func _physics_process(delta: float) -> void:
     cast_elapsed = maxf(0.0, cast_elapsed - delta)
     recovery_cooldown = maxf(0.0, recovery_cooldown - delta)
     if GameState.is_dead:
+        _furniture_rest_step(0)
         velocity = Vector3.ZERO
         last_horizontal_motion = Vector2.ZERO
         footstep_distance_accum = 0.0
@@ -153,6 +154,8 @@ func _physics_process(delta: float) -> void:
         _hold_until_physical_surface_ready()
         return
 
+    if _furniture_rest_step(delta):
+        return
     var grounded_before := is_on_floor()
     if not grounded_before:
         velocity.y -= gravity * delta
@@ -502,3 +505,31 @@ func _reachable_hit(collider: Object, point: Vector3, reach: float) -> bool:
     query.collide_with_areas = interaction_ray.collide_with_areas
     var hit := get_world_3d().direct_space_state.intersect_ray(query)
     return not hit.is_empty() and hit.collider == collider
+
+func _furniture_rest_step(delta: float) -> bool:
+    var saved: Variant = GameState.get_world_value("player:rest_furniture", "")
+    var id := String(saved) if saved is String else ""
+    var model := get_node_or_null("Avatar") as Node3D
+    if model == null:
+        return false
+    if id.is_empty() and not model.top_level:
+        return false
+    var furniture: HouseholdFurniture
+    for candidate in get_tree().get_nodes_in_group("household_furniture"):
+        if candidate.furniture_id == id:
+            furniture = candidate
+            break
+    var moving := Input.get_vector("move_left", "move_right", "move_forward", "move_back").length() > 0 or Input.is_action_pressed("jump") or attack_elapsed > 0 or cast_elapsed > 0
+    if id.is_empty() or furniture == null or moving or not furniture._reachable(self) or not furniture.claim("player"):
+        for candidate in get_tree().get_nodes_in_group("household_furniture"):
+            candidate.release("player")
+        if not id.is_empty():
+            GameState.set_world_value("player:rest_furniture", "")
+        if model.top_level:
+            HouseholdFurniture.clear_pose(self, model)
+        return false
+    furniture.apply_rest_pose(self, model)
+    velocity = Vector3(0, -0.15, 0)
+    move_and_slide()
+    GameState.restore_stamina(delta * 8)
+    return true

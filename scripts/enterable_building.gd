@@ -185,6 +185,10 @@ func _build_interior_furnishings() -> void:
     _add_visual_box(bed, "Mattress", Vector3(1.58, 0.18, 2.02), Vector3(0.0, 0.25, 0.0), bedding_material)
     _add_visual_box(bed, "Pillow", Vector3(1.18, 0.16, 0.42), Vector3(0.0, 0.39, -0.72), cloth_material)
 
+    if footprint.y >= 9.5:
+        var second := _add_furniture_box(furniture, "BedSecond", Vector3(1.75, 0.34, 2.25), Vector3(bed_x, floor_y + 0.17, bed_z + 3.0), timber_material)
+        _add_visual_box(second, "Mattress", Vector3(1.58, 0.18, 2.02), Vector3(0, 0.25, 0), bedding_material)
+
     var table_x := inner_half_x - 1.35
     var table_z := -0.45
     var table := _add_furniture_box(furniture, "Table", Vector3(1.65, 0.15, 1.05), Vector3(table_x, floor_y + 0.82, table_z), timber_material)
@@ -197,15 +201,20 @@ func _build_interior_furnishings() -> void:
     _add_visual_box(chest, "IronBandA", Vector3(0.10, 0.72, 0.76), Vector3(-0.4, 0.04, 0.0), iron_material)
     _add_visual_box(chest, "IronBandB", Vector3(0.10, 0.72, 0.76), Vector3(0.4, 0.04, 0.0), iron_material)
 
+    if footprint.y >= 9.5:
+        _add_furniture_box(furniture, "GuestChest", Vector3(1.35, 0.68, 0.72), Vector3(-inner_half_x + 0.9, floor_y + 0.34, 1.9), timber_material)
+
     var bench_x := inner_half_x - 1.05
     var bench_z := inner_half_z - 1.15
     var bench := _add_furniture_box(furniture, "Bench", Vector3(1.8, 0.22, 0.48), Vector3(bench_x, floor_y + 0.53, bench_z), timber_material)
     _add_visual_box(bench, "BenchLegA", Vector3(0.18, 0.52, 0.38), Vector3(-0.58, -0.26, 0.0), timber_material)
     _add_visual_box(bench, "BenchLegB", Vector3(0.18, 0.52, 0.38), Vector3(0.58, -0.26, 0.0), timber_material)
+    if footprint.y >= 9.5:
+        _add_furniture_box(furniture, "BenchSecond", Vector3(1.8, 0.22, 0.48), Vector3(-bench_x, floor_y + 0.53, bench_z), timber_material)
 
 
 func _add_furniture_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, material: Material) -> StaticBody3D:
-    var body := StaticBody3D.new()
+    var body := preload("res://scripts/household_furniture.gd").new()
     body.name = node_name
     body.position = pos
     body.collision_layer = 1

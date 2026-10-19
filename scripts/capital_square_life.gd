@@ -6,6 +6,7 @@ const STALL := preload("res://assets/production/medieval/quaternius_market/Stall
 const SHOP_ID := "capital:square:provisions"
 var lamps: Array[OmniLight3D] = []
 var light_elapsed := 1.0
+var indoor_light: OmniLight3D
 
 func _ready() -> void:
     var home := preload("res://scripts/enterable_building.gd").new()
@@ -16,6 +17,7 @@ func _ready() -> void:
     home.position = Vector3(-45, _ground_y(Vector3(-45, 0, -30)) + 0.03 - home.floor_thickness, -30)
     home.add_to_group("map_building")
     home.set_meta("map_footprint", Vector2(12, 10))
+    home.set_meta("household_owners", [SHOP_ID, "capital:square:fletcher"])
     add_child(home)
     home.front_door.persistence_key = "door:capital:square:home"
     home.front_door.set_open(bool(GameState.get_world_value(home.front_door.persistence_key, false)), true)
@@ -29,6 +31,20 @@ func _ready() -> void:
         material.uv1_triplanar = true
         material.uv1_world_triplanar = true
         material.uv1_scale = Vector3.ONE * 0.35
+    # A real wall lantern lights the occupied room, including the beds. The
+    # exterior stall lights cannot reach it through the physical house walls.
+    var indoor_lantern := _prop("Lantern_Wall", Vector3.ZERO, 0.42, 0, false)
+    indoor_lantern.name = "HomeWallLantern"
+    indoor_lantern.position = home.position + Vector3(0, 2.35, -4.64)
+    indoor_light = OmniLight3D.new()
+    indoor_light.name = "HomeLanternLight"
+    indoor_light.position = home.position + Vector3(0, 2.5, -4.1)
+    indoor_light.light_color = Color(1.0, 0.78, 0.53)
+    indoor_light.light_energy = 2.5
+    indoor_light.omni_range = 11.0
+    _apply_indoor_quality()
+    SettingsManager.settings_changed.connect(_apply_indoor_quality)
+    add_child(indoor_light)
     for side: float in [-1.0, 1.0]:
         _prop("Bench", Vector3(side * 10, 0, 12), 0.47, PI)
         _prop("Bench", Vector3(side * 30, 0, -8), 0.47, side * PI * 0.5)
@@ -121,7 +137,12 @@ func _resident(label: String, role: String, node_name: String, id: String, workp
     resident.set_meta("routine_places", {"work": workplace, "home": Vector3(-45 + (-1.4 if role == "trader" else 1.4), 0, -29), "meal": Vector3(-10, 0, 13.5), "social": Vector3(10, 0, 13.5)})
     resident.set_meta("home_building", "SquareHome")
     resident.set_meta("work_facing", facing)
+    resident.set_meta("work_approach_path", [Vector3(-35, 0, -4), Vector3(workplace.x, 0, -4)])
     resident.configure(label, role, palette, [])
     resident.position = Vector3(workplace.x, _ground_y(workplace) + 0.08, workplace.z)
     add_child(resident)
     return resident
+
+func _apply_indoor_quality() -> void:
+    if is_instance_valid(indoor_light):
+        indoor_light.shadow_enabled = bool(SettingsManager.quality_profile().get("shadows", false))

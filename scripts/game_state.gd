@@ -331,6 +331,8 @@ func load_snapshot(data: Dictionary) -> void:
         for door in get_tree().get_nodes_in_group("world_state_door"):
             if door.has_method("restore_saved_state"):
                 door.call("restore_saved_state")
+        for furniture in get_tree().get_nodes_in_group("household_furniture"):
+            furniture.call("restore_saved_state")
         for citizen in get_tree().get_nodes_in_group("settlement_npc"):
             if citizen.has_method("restore_runtime_state"):
                 citizen.call("restore_runtime_state")

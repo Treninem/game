@@ -138,3 +138,8 @@ The human and nature art remain stylized. This is not Witcher-3-level realism.
 - Marta and Marek physically enter this one home after 21:00 and leave for work in the morning. A shared doorway queue and threshold occupancy prevent the observed deadlock and automatic closure into a passing resident/player. Door target state is stored in world state.
 - This is one accessible home, with indoor idle rest rather than a complete sleep/household animation. Most capital homes remain sealed, furniture storage interactions are unfinished and streamed residents still resume from authored spawn positions.
 - Local dialogue uses actual finite shop money/stock, supply history, equipped weapon and nearby visible successful spell events. This is deterministic local game behavior, not an external AI service or a complete social simulation.
+
+### Household furniture follow-up — 2026-10-19
+
+- INTEGRATED: existing physically staged B46 CC0 Chest_Wood with original opening/closing animation clips and shared textures; existing Bench reused indoors and existing Quaternius Bed duplicated into an individual place for each resident. No new source pack or download.
+- Two residents now use supported lying/seated human poses and finite storage interactions in the first capital home. The previous idle-only description above records the earlier stage. Most other homes and complete household simulation remain unfinished.

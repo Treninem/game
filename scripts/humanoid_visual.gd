@@ -21,6 +21,7 @@ const WEAPONS := {
 @export var palette_variant := 0
 
 var animation_player: AnimationPlayer
+var standing_hip_height := 0.95
 var measured_speed := 0.0
 var active_animation := ""
 var last_position := Vector3.ZERO
@@ -65,6 +66,7 @@ func _ready() -> void:
         _play("Idle", 1.0)
         animation_player.advance(0.0)
         _prepare_airborne_pose(model)
+        _prepare_sitting_pose(model)
     last_position = get_parent_node_3d().global_position
     if get_parent().name == "Player":
         var skeletons := model.find_children("*", "Skeleton3D", true, false)
@@ -117,7 +119,11 @@ func _process(delta: float) -> void:
     var physical_motion := body.get_real_velocity()
     var speed := Vector2(physical_motion.x, physical_motion.z).length()
     measured_speed = lerpf(measured_speed, speed, minf(1.0, delta * 12.0))
-    if not body.is_on_floor():
+    if String(body.get_meta("activity", "idle")) == "sit":
+        _play("Sitting", 1.0)
+    elif String(body.get_meta("activity", "idle")) == "sleep":
+        _play("Idle", 0.35)
+    elif not body.is_on_floor():
         _play("Airborne", 1.0)
     elif body.name == "Player" and float(body.get("cast_elapsed")) > 0.0:
         _play("Punch", 1.0)
@@ -192,3 +198,54 @@ func _prepare_airborne_pose(model: Node3D) -> void:
         clip.rotation_track_insert_key(track, 0.0, base)
         clip.rotation_track_insert_key(track, 0.16, base * Quaternion(Vector3.RIGHT, angle))
     animation_player.get_animation_library("").add_animation("Airborne", clip)
+
+func _prepare_sitting_pose(model: Node3D) -> void:
+    var skeleton := model.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    var hip := skeleton.find_bone("Hips")
+    if hip >= 0:
+        standing_hip_height = to_local(skeleton.global_transform * skeleton.get_bone_global_pose(hip).origin).y
+    if animation_player.has_animation("Sitting"):
+        return
+    var clip := animation_player.get_animation("Idle").duplicate() as Animation
+    clip.length = 1.0
+    clip.loop_mode = Animation.LOOP_LINEAR
+    var root := animation_player.get_node(animation_player.root_node)
+    var original := {}
+    for side: String in ["Left", "Right"]:
+        for suffix: String in ["UpLeg", "Leg", "Foot"]:
+            var bone := skeleton.find_bone(side + suffix)
+            if bone >= 0:
+                original[bone] = skeleton.get_bone_pose_rotation(bone)
+        _align_sitting_bone(skeleton, side + "UpLeg", side + "Leg", Vector3.FORWARD)
+        _align_sitting_bone(skeleton, side + "Leg", side + "Foot", Vector3.DOWN)
+        _align_sitting_bone(skeleton, side + "Foot", side + "ToeBase", Vector3.FORWARD)
+    for bone: int in original:
+        var path := NodePath(String(root.get_path_to(skeleton)) + ":" + skeleton.get_bone_name(bone))
+        var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
+        if track >= 0:
+            clip.remove_track(track)
+        track = clip.add_track(Animation.TYPE_ROTATION_3D)
+        clip.track_set_path(track, path)
+        clip.rotation_track_insert_key(track, 0, skeleton.get_bone_pose_rotation(bone))
+    for bone: int in original:
+        skeleton.set_bone_pose_rotation(bone, original[bone])
+    skeleton.force_update_all_bone_transforms()
+    animation_player.get_animation_library("").add_animation("Sitting", clip)
+
+func _align_sitting_bone(skeleton: Skeleton3D, bone_name: String, child_name: String, direction: Vector3) -> void:
+    var bone := skeleton.find_bone(bone_name)
+    var child := skeleton.find_bone(child_name)
+    if bone < 0 or child < 0:
+        return
+    skeleton.force_update_all_bone_transforms()
+    var pose := skeleton.get_bone_global_pose(bone)
+    var current := (skeleton.get_bone_global_pose(child).origin - pose.origin).normalized()
+    var desired := (skeleton.global_basis.inverse() * global_basis * direction).normalized()
+    # Imported bone axes and roll differ from the actor axes. Solve in skeleton
+    # space, then convert the alignment into the actual animated local frame.
+    var rotation := skeleton.get_bone_pose_rotation(bone)
+    var frame := pose.basis.orthonormalized() * Basis(rotation).inverse()
+    var alignment := Basis(Quaternion(current, desired))
+    var local_alignment := frame.inverse() * alignment * frame
+    skeleton.set_bone_pose_rotation(bone, (local_alignment.get_rotation_quaternion() * rotation).normalized())
+    skeleton.force_update_all_bone_transforms()

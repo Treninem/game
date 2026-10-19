@@ -139,3 +139,5 @@ Every development session working on `Treninem/game` must read this file before 
 
 - INTEGRATED — 2026-10-19 capital-square follow-up: Bench, Lantern_Wall, Workbench, Barrel and Barrel_Apples from the existing physically staged B46 CC0 Quaternius Fantasy Props MegaKit Standard, selected into `assets/production/medieval/capital_square/`. Original glTF buffers and OpenGL furniture/metal textures plus source licenses retained. Props are measured, grounded and given collision; no new download. Existing market-stall scene reused.
 - INTEGRATED — existing CC0 OpenGameArt seamless photograph `100_1453_seamless.JPG` selected as `assets/production/materials/ground/stone_paving.jpg` for capital paving. Mipmapped, world-scaled diffuse only.
+
+- INTEGRATED — 2026-10-19 household furniture: existing B46 CC0 Chest_Wood glTF, buffer and shared textures selected into `assets/production/medieval/capital_square/`; original open/close clips drive actual storage. Existing production Bench and Quaternius Bed/Table reused for household places. Physical source and both source licenses checked on main; no new download.

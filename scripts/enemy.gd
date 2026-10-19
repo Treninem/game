@@ -45,6 +45,11 @@ func _ready() -> void:
         avatar.primary_color = Color(0.28, 0.10, 0.07)
         avatar.secondary_color = Color(0.17, 0.14, 0.10)
         add_child(avatar)
+    # Legacy spawners still provide primitive body meshes for their old
+    # placeholders. Keep collision, but let the skinned human own appearance.
+    for child in get_children():
+        if child is MeshInstance3D and child.mesh is PrimitiveMesh:
+            child.visible = false
     visible = false
 
 func _physics_process(delta: float) -> void:

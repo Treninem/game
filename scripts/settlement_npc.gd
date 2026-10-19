@@ -18,11 +18,12 @@ var ground_ready := false
 var activity := ""
 var routine_phase := ""
 var talking_to_player := false
-var activity_label: Label3D
 var citizen_id := ""
 var avoid_elapsed := 0.0
 var avoid_heading := Vector3.ZERO
 var home_crossing := false
+var used_furniture: Node3D
+var household_elapsed := 0.0
 var witnessed_pause := 0.0
 var authored_position := Vector3.ZERO
 var authored_yaw := 0.0
@@ -61,14 +62,6 @@ func _ready() -> void:
     restore_runtime_state()
     DialogueManager.dialogue_closed.connect(_end_conversation)
     MagicSystem.spell_cast.connect(_witness_spell)
-    if autonomous:
-        activity_label = Label3D.new()
-        activity_label.position.y = 2.1
-        activity_label.font_size = 28
-        activity_label.pixel_size = 0.004
-        activity_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-        activity_label.visibility_range_end = 24.0
-        add_child(activity_label)
 
 func _physics_process(delta: float) -> void:
     if state_revision != GameState.state_revision:
@@ -152,20 +145,21 @@ func routine_plan(minutes: float) -> Dictionary:
 func _follow_routine(delta: float) -> void:
     var plan := routine_plan(GameState.world_minutes)
     plan = _home_route(plan)
+    plan = _work_approach(plan)
+    plan = _household_plan(plan)
     var target: Vector3 = get_parent_node_3d().to_global(plan.target)
     var flat := target - global_position
     flat.y = 0
-    var arrived := flat.length() < 0.75
+    var arrived := flat.length() < float(plan.get("arrival_radius", 0.75))
     activity = String(plan.activity if arrived else plan.walking)
     if witnessed_pause > 0.0:
+        _leave_furniture()
         activity = "Осторожно! Не колдуйте рядом с людьми."
         velocity.x = move_toward(velocity.x, 0.0, delta * 8.0)
         velocity.z = move_toward(velocity.z, 0.0, delta * 8.0)
-        activity_label.text = display_name + " · " + activity
         set_meta("activity", "idle")
         move_and_slide()
         return
-    activity_label.text = display_name + " · " + activity
     set_meta("activity", "work" if arrived and plan.phase == "work" and role == "craftsman" else "social" if arrived and plan.phase == "social" else "idle")
     if routine_phase != plan.phase:
         routine_phase = plan.phase
@@ -174,7 +168,11 @@ func _follow_routine(delta: float) -> void:
         record["phase"] = routine_phase
         record["role"] = role
         GameState.set_world_value("citizen:" + citizen_id, record)
+    if not arrived:
+        HouseholdFurniture.clear_pose(self, visual)
     if arrived:
+        if plan.has("furniture"):
+            _use_household(plan.furniture, delta)
         velocity.x = move_toward(velocity.x, 0.0, delta * 6.0)
         velocity.z = move_toward(velocity.z, 0.0, delta * 6.0)
         if plan.phase == "work" and has_meta("work_facing"):
@@ -183,7 +181,6 @@ func _follow_routine(delta: float) -> void:
             var crafting := _workbench_step(delta)
             if has_meta("work_shop_id"):
                 activity = "Изготавливает стрелы" if crafting else "Ждёт материалы у верстака"
-                activity_label.text = display_name + " · " + activity
                 set_meta("activity", "work" if crafting else "idle")
         if plan.phase == "social":
             for other: Node3D in get_tree().get_nodes_in_group("settlement_npc"):
@@ -219,6 +216,7 @@ func capture_runtime_state() -> void:
     })
 
 func restore_runtime_state() -> void:
+    _leave_furniture(false)
     state_revision = GameState.state_revision
     if not has_meta("citizen_id") or citizen_id.is_empty():
         return
@@ -241,6 +239,8 @@ func _home_route(plan: Dictionary) -> Dictionary:
     var home := get_parent().get_node_or_null(String(get_meta("home_building"))) as EnterableBuilding
     if home == null:
         return plan
+    if plan.phase == "home":
+        GameState.set_world_value("commute:" + citizen_id, 0)
     var local := home.to_local(global_position)
     var front := home.footprint.y * 0.5
     var inside := absf(local.x) < home.footprint.x * 0.5 and local.z < front - 1.0 and local.z > -front
@@ -275,6 +275,9 @@ func _home_route(plan: Dictionary) -> Dictionary:
         home.set_meta("auto_close", true)
         home.front_door.set_open(true)
         plan.target = approach
+        if local.z < front + 1.0 and absf(local.x) > 0.18:
+            plan.target = home.position + Vector3(0, 0, clampf(local.z, -front + 2.0, front - 2.0))
+            plan.arrival_radius = 0.1
         plan.walking = "Выходит из дома"
         # Routine arrival accepts a 0.75 m radius around the +2 m approach.
         # Release before that stopping radius, after clearing the actual leaf.
@@ -494,3 +497,182 @@ func _build_visual() -> void:
     visual.has_apron = role == "craftsman"
     visual.palette_variant = palette_index % 3
     add_child(visual)
+
+func _household_plan(plan: Dictionary) -> Dictionary:
+    if not has_meta("home_building"):
+        return plan
+    var home := get_parent().get_node_or_null(String(get_meta("home_building"))) as EnterableBuilding
+    if home == null or plan.phase != "home" or home_crossing or home.to_local(global_position).z >= home.footprint.y * 0.5 - 1.0:
+        _leave_furniture()
+        if routine_plan(GameState.world_minutes).phase != "home":
+            var record: Dictionary = _household_state()
+            if float(record.get("seated_seconds", 0)) > 0 or float(record.get("seated_wait_seconds", 0)) > 0 or bool(record.get("clearing_storage", false)):
+                record = record.duplicate(true)
+                record.seated_seconds = 0
+                record.seated_wait_seconds = 0
+                record.clearing_storage = false
+                GameState.set_world_value("household:" + citizen_id, record)
+        return plan
+    var saved := _household_state()
+    if bool(saved.get("clearing_storage", false)):
+        var storage_body := home.get_node_or_null("InteriorFurniture/StorageChest") as HouseholdFurniture
+        if storage_body != null and storage_body.claim(citizen_id):
+            used_furniture = storage_body
+            var storage_local := home.to_local(global_position)
+            var exit_point := Vector3(2.4, storage_local.y, -1.2) if role == "trader" else Vector3(2.2, storage_local.y, -2.92)
+            if Vector2(storage_local.x - exit_point.x, storage_local.z - exit_point.z).length() > 0.25:
+                plan.target = get_parent_node_3d().to_local(home.to_global(exit_point))
+                plan.arrival_radius = 0.20
+                plan.activity = "Освобождает место у сундука"
+                plan.walking = plan.activity
+                return plan
+        saved.clearing_storage = false
+        GameState.set_world_value("household:" + citizen_id, saved)
+        _leave_furniture()
+    var object_name := "Bed" if role == "trader" else "BedSecond"
+    # Arrival drives finite household actions. Short clock windows used to expire
+    # before a resident could physically walk home at the normal 4 min/s rate.
+    if not bool(saved.get("stored", false)):
+        object_name = "StorageChest"
+    elif float(saved.get("seated_seconds", 0)) < 12.0:
+        object_name = "Bench"
+    if object_name == "Bench" and role != "trader" and home.has_node("InteriorFurniture/BenchSecond"):
+        object_name = "BenchSecond"
+    var furniture := home.get_node_or_null("InteriorFurniture/" + object_name) as HouseholdFurniture
+    if furniture == null:
+        return plan
+    if is_instance_valid(used_furniture) and used_furniture != furniture:
+        _leave_furniture()
+    # Only one user per seat/container, with a clear waiting position.
+    if not furniture.occupant.is_empty() and furniture.occupant != citizen_id:
+        plan.target = home.position + Vector3(2.7, 0, 0.8)
+        plan.activity = "Ждёт свободное место"
+        return plan
+    if not furniture.claim(citizen_id):
+        return plan
+    used_furniture = furniture
+    var destination := home.to_local(furniture.approach_point())
+    var local := home.to_local(global_position)
+    var waypoint := destination
+    # Side-wall furniture is reached via the clear central aisle rather than
+    # steering straight through the dining table from chest to bench/bed.
+    var aligning_lane := false
+    if absf(local.z - destination.z) > 0.85:
+        # Clear both the resident and stationary hero capsules before moving
+        # along the aisle. A broad lateral arrival radius left residents wedged
+        # against the hero despite the authored lane itself being clear.
+        var lane := 1.1 if furniture.kind == "chest" else 2.4 if object_name == "Bench" else -1.1
+        aligning_lane = absf(local.x - lane) > 0.10
+        waypoint = Vector3(lane, local.y, local.z) if aligning_lane else Vector3(lane, local.y, destination.z)
+    plan.target = get_parent_node_3d().to_local(home.to_global(waypoint))
+    plan.arrival_radius = 0.06 if aligning_lane else 0.28
+    if waypoint.distance_to(destination) < 0.1:
+        plan.furniture = furniture
+        plan.arrival_radius = 0.65
+    plan.activity = "Спит дома" if furniture.kind == "bed" else "Сидит дома" if furniture.kind == "bench" else "Убирает вещи в сундук"
+    plan.walking = "Идёт к кровати" if furniture.kind == "bed" else "Идёт к скамье" if furniture.kind == "bench" else "Идёт к сундуку"
+    if not plan.has("furniture"):
+        plan.activity = "Проходит между мебелью"
+    return plan
+
+func _use_household(furniture: HouseholdFurniture, delta: float) -> void:
+    if not furniture.claim(citizen_id):
+        return
+    used_furniture = furniture
+    if furniture.kind in ["bed", "bench"]:
+        furniture.apply_rest_pose(self, visual)
+        if furniture.kind == "bench":
+            var key := "household:" + citizen_id
+            var saved: Dictionary = _household_state()
+            if _home_rest_companions_ready() or float(saved.get("seated_wait_seconds", 0)) >= 20.0:
+                saved.seated_seconds = minf(12, maxf(0, float(saved.get("seated_seconds", 0))) + delta)
+            else:
+                saved.seated_wait_seconds = minf(20, float(saved.get("seated_wait_seconds", 0)) + delta)
+            GameState.set_world_value(key, saved)
+    else:
+        set_meta("activity", "work")
+        var toward := furniture.global_position - global_position
+        rotation.y = atan2(-toward.x, -toward.z)
+        var key := "household:" + citizen_id
+        var saved: Dictionary = _household_state()
+        var progress := clampf(float(saved.get("progress", 0)), 0, 3) + delta
+        if not bool(saved.get("stored", false)) and progress >= 3 and furniture.free_capacity() > 0 and furniture.allows(citizen_id):
+            # One authored personal berry, never minted again on reload/day loop.
+            var items := furniture.contents()
+            items.berries = int(items.get("berries", 0)) + 1
+            var chest := furniture.state()
+            chest.items = items
+            GameState.set_world_value(furniture.furniture_id, chest)
+            saved.personal_berries = 0
+            saved.stored = true
+            saved.clearing_storage = true
+        saved.progress = minf(progress, 3)
+        GameState.set_world_value(key, saved)
+        if bool(saved.get("stored", false)):
+            # Keep the exclusive reservation until the resident physically clears
+            # the chest approach; the next user must not collide head-on here.
+            set_meta("activity", "idle")
+
+func _home_rest_companions_ready() -> bool:
+    # A shared evening pause starts once the other present household member is
+    # seated too. The saved 20-second bound prevents waiting for a blocked or
+    # unavailable neighbour forever; furniture still remains exclusive.
+    for child in get_parent().get_children():
+        var other := child as SettlementNPC
+        if other == null or other == self:
+            continue
+        if other.get_meta("home_building", "") != get_meta("home_building", ""):
+            continue
+        var other_state: Dictionary = other._household_state()
+        if other.get_meta("activity", "idle") != "sit" and float(other_state.get("seated_seconds", 0)) < 12.0:
+            return false
+    return true
+
+func _leave_furniture(write_state: bool = true) -> void:
+    if write_state and state_revision == GameState.state_revision and is_inside_tree():
+        for furniture in get_tree().get_nodes_in_group("household_furniture"):
+            furniture.release(citizen_id)
+    if is_instance_valid(used_furniture):
+        if write_state and state_revision == GameState.state_revision:
+            used_furniture.release(citizen_id)
+        used_furniture = null
+    if is_instance_valid(visual):
+        HouseholdFurniture.clear_pose(self, visual)
+
+func _work_approach(plan: Dictionary) -> Dictionary:
+    if plan.phase != "work" or home_crossing or not has_meta("work_approach_path"):
+        return plan
+    var raw: Variant = GameState.get_world_value("commute:" + citizen_id, -1)
+    var stage := clampi(int(raw), -1, 100) if RUNTIME_STATE._number(raw) else -1
+    if stage < 0:
+        return plan
+    var home := get_parent().get_node_or_null(String(get_meta("home_building", ""))) as EnterableBuilding
+    if home != null and home.to_local(global_position).z < home.footprint.y * 0.5 + 1:
+        return plan
+    var path: Array = get_meta("work_approach_path")
+    if stage >= path.size():
+        GameState.set_world_value("commute:" + citizen_id, -1)
+        return plan
+    var target: Vector3 = get_parent_node_3d().to_global(path[stage])
+    if Vector2(target.x - global_position.x, target.z - global_position.z).length() < 0.65:
+        stage += 1
+        GameState.set_world_value("commute:" + citizen_id, stage if stage < path.size() else -1)
+        if stage >= path.size():
+            return plan
+    plan.target = path[stage]
+    plan.phase = "commute"
+    plan.arrival_radius = 0.45
+    plan.activity = "Возвращается к рабочему месту"
+    plan.walking = "Идёт на работу"
+    return plan
+
+func _household_state() -> Dictionary:
+    var value: Variant = GameState.get_world_value("household:" + citizen_id, {})
+    var saved: Dictionary = value.duplicate(true) if value is Dictionary else {}
+    saved.stored = saved.get("stored") is bool and bool(saved.get("stored"))
+    saved.clearing_storage = saved.get("clearing_storage") is bool and bool(saved.get("clearing_storage"))
+    saved.personal_berries = 0 if saved.stored else 1
+    saved.progress = RUNTIME_STATE._bounded(saved.get("progress"), 3.0)
+    saved.seated_seconds = RUNTIME_STATE._bounded(saved.get("seated_seconds"), 12.0)
+    saved.seated_wait_seconds = RUNTIME_STATE._bounded(saved.get("seated_wait_seconds"), 20.0)
+    return saved
