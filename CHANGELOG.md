@@ -1,3 +1,7 @@
+## River ripple correction — unreleased — 2026-10-20
+- Replace coherent sine-wave water bands with advected irregular gradient ripples and filtered fine detail; soften liquid highlights while retaining ice controls. No river-level or traversal geometry changes.
+- Hydrology/boot and frozen boot/nature checks pass; actual source and frozen graphical walks cover 18.72 m each. Inspect noon/dawn/dusk and a full-freeze material probe. Coarse shores, simple reflections, crude ice and 91 cleanup warnings remain. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_WATER.json.
+
 ## Continuous sunlight — unreleased — 2026-10-20
 - Fix abrupt solar direction/color switches at sunrise and sunset. Continue the solar orbit below the horizon, fade direct light smoothly and add dawn sky color while retaining night ambient fill.
 - Lighting boundary, boot and movement checks pass after refreshing the QA resource cache; actual graphical walk captured noon, dawn and dusk. Striped water, crude canopies and cleanup warnings remain open. No new frozen package. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_LIGHTING.json.

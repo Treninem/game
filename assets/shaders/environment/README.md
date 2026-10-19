@@ -29,3 +29,6 @@ These shader files are project-owned and may be used as part of ImPuls. External
 radial alpha falloff for atmospheric motes, dust, mist and snow sprites. Generic
 billboards no longer expose their rectangular bounds. Pollen is seasonal; dust
 is limited to arid biomes or actual strong dust storms.
+
+## Water ripple extension
+`ice_surface.gdshader` uses world-space advected noise gradients for liquid ripples, with pixel-footprint filtering for the fine layer. Liquid highlights are softer than ice. Existing freeze/crack/frost/thaw uniforms remain; the rendering probe does not establish automatic weather integration. The river level and physical hydrology remain owned by the world systems.

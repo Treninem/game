@@ -13,3 +13,7 @@ INTEGRATED in the review: same CC0 Free Vegetation packs original `bark.JPG`, co
 ## Near-forest composition correction — 2026-10-20
 
 INTEGRATED: original CC0 `bush_higher` with `leaf_small.png`, normalized as `TemperateBush.glb`; same family license/source retained. The near palette now uses two temperate models and excludes the visually incompatible pine; taiga pine remains. Near roots have 5.5 m minimum separation; ground texture scale and linear black-key cutoff corrected. Native and frozen evidence: `docs/DEVELOPMENT_LOG_2026-10-20_FOREST_CORRECTION.json`.
+
+## River ripple correction — 2026-10-20
+
+INTEGRATED in the source review: the shared water/ice shader now uses advected analytic noise gradients instead of coherent sine bands; fine ripple detail fades by pixel footprint. Liquid roughness/specular are softened; ice controls remain. No new source pack or changed physical water levels. Source and frozen graphical captures, ice material probe and limits: `docs/DEVELOPMENT_LOG_2026-10-20_WATER.json`.

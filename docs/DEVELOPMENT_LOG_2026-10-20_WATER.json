@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased water follow-up",
+  "parent": "9b19f6244da202f651aa8d4debf396a5bbd1bdad",
+  "changes": [
+    "Replace coherent directional sine-wave normals with two advected world-space noise gradients",
+    "Attenuate fine ripple detail by pixel footprint; soften liquid highlights while retaining existing ice/frost/crack/thaw parameters",
+    "Use the same nonperiodic field for small liquid vertex motion; physical water levels and river geometry unchanged"
+  ],
+  "source_checks": [
+    {
+      "name": "world_hydrology",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.45
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 32.27
+    }
+  ],
+  "source_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 51.58,
+    "marker": true
+  },
+  "frozen_checks": {
+    "pack_sha256": "e815caca886f809b440c514659611d2d66e190a0d6b816a995d76fd08af868cd",
+    "results": [
+      {
+        "case": "boot",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 14.89
+      },
+      {
+        "case": "nature",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 3.83
+      }
+    ]
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 47.98,
+    "marker": true
+  },
+  "native_markers": [
+    "RIVER_ICE_RENDER_PROBE surfaces=34",
+    "WORLD_SURFACE_NATIVE_OK walked=18.7248644083738 player_position_assignments=0 cameras=inspection quality=high"
+  ],
+  "cleanup_warnings": [
+    "WARNING: 91 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+  ],
+  "visual_findings": [
+    "Compared actual renderer captures with the preceding lighting review at matching camera positions",
+    "Wide coherent river stripes reduced; daylight and dusk screenshots inspected",
+    "Full-freeze material draws on 34 river surfaces; existing ice remains visually crude"
+  ],
+  "review_launcher": "build/review-2026-10-20-water/ImPuls-world.cmd",
+  "evidence": "build/acceptance/water-frozen-native/appdata/Godot/app_userdata/ImPuls",
+  "limitations": [
+    "Coarse staircase shoreline and sparse distant terrain remain",
+    "No screen-space reflection, refraction or physically simulated waves added",
+    "Material ice probe is an inspection override; it does not certify weather-driven freezing",
+    "Native input driver, not manual complete world traversal; no new city/combat/character acceptance",
+    "91 ObjectDB cleanup warnings remain; no stable release publication",
+    "Remote checks for this revision will run after push"
+  ]
+}

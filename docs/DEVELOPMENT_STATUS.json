@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлены скачки направления и цвета солнца на рассвете/закате, добавлена непрерывная орбита и проверка границ суток. Освещение, запуск и движение прошли повторно; выполнен графический проход с кадрами полудня, рассвета и заката. Полосатая вода, грубые кроны и плоская растительность остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LIGHTING.json",
-  "review_launcher": "build/review-2026-10-20-forest-correction/ImPuls-world.cmd",
+  "current_stage": "В общем материале реки регулярные полосы заменены неоднородной рябью, мелкая детализация приглушается вдали, блики смягчены. Гидрология и запуск прошли; готовый пакет проверен на запуск/лес и графический проход 18.72 м, дневную/вечернюю воду и материал льда. Ступенчатый берег, простые отражения и грубая растительность остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_WATER.json",
+  "review_launcher": "build/review-2026-10-20-water/ImPuls-world.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -158,5 +158,5 @@
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_FOREST_CORRECTION.json",
-  "review_launcher_revision": "Previous frozen forest-correction package; lighting follow-up tested from QA source mirror, not repackaged"
+  "review_launcher_revision": "Water and continuous-sunlight review; frozen package SHA256 e815caca886f809b440c514659611d2d66e190a0d6b816a995d76fd08af868cd"
 }
