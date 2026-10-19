@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Сетка берегов уплотнена до 4 м, проверены стыки и физика; добавлены существующие сосны и более плотная трава, исправлен её чрезмерно яркий цвет. Старт, движение, рубка и графический осмотр прошли. Качество моделей природы и производительность требуют дальнейшей работы.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_COAST_NATURE.json",
-  "review_launcher": "build/review-2026-10-20-coast-nature/ImPuls-world.cmd",
+  "current_stage": "Восстановлена оригинальная кора деревьев, улучшена фильтрация листвы и разнесены фазы ветра. Проверены материалы, рубка, старт, звук, реальный лес и новый замороженный пакет. Низкая детализация крон и предупреждения очистки остаются.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_NATURE_MATERIALS.json",
+  "review_launcher": "build/review-2026-10-20-nature-materials/ImPuls-review.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -157,5 +157,5 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_COAST_NATURE.json"
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_NATURE_MATERIALS.json"
 }

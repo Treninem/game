@@ -2,8 +2,10 @@ extends RefCounted
 
 const TREE: PackedScene = preload("res://assets/production/nature/temperate/TemperateTree_LOD.glb")
 const PINE: PackedScene = preload("res://assets/production/nature/woodland/Pine_1.glb")
+const BARK := preload("res://assets/production/nature/temperate/bark_albedo.jpg")
 const WIND := preload("res://assets/shaders/environment/foliage_wind.gdshader")
 static var wind_materials: Dictionary = {}
+static var bark_materials: Dictionary = {}
 static var render_meshes: Dictionary = {}
 static var trunk_radii: Dictionary = {}
 static var collision_parts: Dictionary = {}
@@ -14,6 +16,22 @@ static func prepare(node: Node) -> void:
         for index in range(visual.mesh.get_surface_count()):
             var base := visual.get_active_material(index) as StandardMaterial3D
             if base == null or base.albedo_texture == null:
+                continue
+            if "Bark" in base.resource_name:
+                if bool(base.get_meta("impuls_bark_prepared", false)):
+                    continue
+                var bark_key := base.get_instance_id()
+                if not bark_materials.has(bark_key):
+                    var bark := base.duplicate() as StandardMaterial3D
+                    bark.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+                    if "Temperate" in base.resource_name:
+                        # Restore this tree pack's own photographic bark and UVs.
+                        bark.albedo_texture = BARK
+                        bark.albedo_color = Color(0.67, 0.63, 0.52)
+                        bark.roughness = 0.96
+                    bark.set_meta("impuls_bark_prepared", true)
+                    bark_materials[bark_key] = bark
+                visual.set_surface_override_material(index, bark_materials[bark_key])
                 continue
             if "Leaves" not in base.resource_name and "Grass" not in base.resource_name:
                 continue

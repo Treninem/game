@@ -24,6 +24,30 @@ func _run_test() -> void:
     if variants.size() != 3:
         _fail(2, "tree variation aliases the same model more than once")
         return
+    var nature := preload("res://scripts/production_nature.gd")
+    for scene: PackedScene in [START_REGION_STREAMER.TREE_OAK, START_REGION_STREAMER.TREE_BROAD]:
+        var prototype := scene.instantiate()
+        nature.prepare(prototype)
+        var count_before := nature.bark_materials.size()
+        nature.prepare(prototype)
+        if nature.bark_materials.size() != count_before:
+            _fail(2, "repeated tree preparation leaks bark materials")
+            return
+        var bark_count := 0
+        for mesh: MeshInstance3D in prototype.find_children("*", "MeshInstance3D", true, false):
+            for surface in range(mesh.mesh.get_surface_count()):
+                var original := mesh.mesh.surface_get_material(surface) as StandardMaterial3D
+                if original == null or "Bark_Temperate" not in original.resource_name:
+                    continue
+                var bark := mesh.get_active_material(surface) as StandardMaterial3D
+                if bark == null or bark.albedo_texture != nature.BARK or original.albedo_texture == nature.BARK:
+                    _fail(2, "original bark restoration missing or shared source was mutated")
+                    return
+                bark_count += 1
+        prototype.free()
+        if bark_count == 0:
+            _fail(2, "no actual bark surface validated")
+            return
     var player := CharacterBody3D.new()
     player.name = "NatureStreamingTestPlayer"
     player.add_to_group("player")

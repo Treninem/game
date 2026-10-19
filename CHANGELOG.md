@@ -1,3 +1,7 @@
+## Tree materials and frozen review — unreleased — 2026-10-20
+- Restore original photographic bark from the existing CC0 tree pack, retain UVs/source materials, cache prepared surfaces and enable mipmapped anisotropic filtering. Shared foliage wind now varies phase by instance.
+- Fix owned offworld-test audio teardown ordering with explicit shutdown assertions; retain strict CI errors. Five affected local scenarios, same-camera native bark comparison, native world views and two frozen-package checks pass. Linux CI confirmation and cleanup warnings remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_NATURE_MATERIALS.json.
+
 ## Coast and nature — unreleased follow-up — 2026-10-20
 - Refine physical/rendered terrain from 8 m to 4 m spacing and share halo-derived normals at chunk edges. Add strict seam/collision regression.
 - Replace a duplicate tree alias with the existing pine, retain tree positions/IDs, triple bounded grass targets, mute neon vegetation color and anchor grass wind at its roots. Startup, streaming, movement, chopping and native views pass. Existing tree art, cleanup warnings and broader performance work remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_COAST_NATURE.json.

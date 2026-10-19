@@ -5,3 +5,7 @@ INTEGRATED in the source review: project-owned `terrain_ground.gdshader` reuses 
 ## Coast and planting — 2026-10-20
 
 INTEGRATED in the review source: 4 m shared physical/rendered terrain grid with halo normals; existing woodland Pine_1 replaces duplicate near-tree alias, grass remains bounded in MultiMesh cells. Shared foliage wind adds `vegetation_tint` and optional `height_anchor` for grass; defaults preserve other foliage. No new source pack or photorealistic claim. Evidence: `docs/DEVELOPMENT_LOG_2026-10-20_COAST_NATURE.json`.
+
+## Original bark restoration — 2026-10-20
+
+INTEGRATED in the review: same CC0 Free Vegetation packs original `bark.JPG`, copied unmodified to `production/nature/temperate/bark_albedo.jpg`, explicit mipmaps, shared idempotent bark overrides and anisotropic foliage filtering. Shared wind now has a stable per-instance phase. Existing meshes and cutout branch cards remain; no new tree sculpt or scanned PBR claim. Evidence: `docs/DEVELOPMENT_LOG_2026-10-20_NATURE_MATERIALS.json`.

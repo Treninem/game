@@ -3,7 +3,7 @@ render_mode cull_disabled, diffuse_lambert_wrap, specular_disabled, depth_draw_o
 
 #include "wind_motion.gdshaderinc"
 
-uniform sampler2D albedo_texture : source_color, filter_linear_mipmap;
+uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic;
 uniform bool black_key = false;
 uniform vec4 vegetation_tint : source_color = vec4(1.0);
 uniform bool height_anchor = false;
@@ -16,7 +16,10 @@ uniform vec3 wind_direction = vec3(1.0, 0.0, 0.0);
 
 void vertex() {
     float anchor_weight = height_anchor ? clamp(VERTEX.y * 1.5, 0.0, 1.0) : clamp(UV.x, 0.0, 1.0);
-    VERTEX += environment_wind_motion(UV, TIME, anchor_weight, wind_direction, wind_strength, wave_frequency, wind_speed, gust_frequency, gust_strength);
+    // Each actual instance has a stable phase. Repeated leaf UVs no longer
+    // make every tree/grass clump swing as one rigid synchronized field.
+    float instance_phase = fract(dot(MODEL_MATRIX[3].xz, vec2(0.173, 0.117))) * 6.2831853;
+    VERTEX += environment_wind_motion(UV, TIME + instance_phase, anchor_weight, wind_direction, wind_strength, wave_frequency, wind_speed, gust_frequency, gust_strength);
 }
 
 void fragment() {

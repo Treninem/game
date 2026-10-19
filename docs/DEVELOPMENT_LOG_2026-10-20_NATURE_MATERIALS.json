@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 nature-material review",
+  "parent": "8a54a996f88a7dde4cb6ce76cb1431e05c00a67f",
+  "changes": [
+    "Restore this tree packs original photographic bark without changing mesh/UV/collision",
+    "Share prepared bark materials, keep source resources unchanged and repeated preparation idempotent",
+    "Explicit mipmaps and anisotropic filtering for bark and leaves",
+    "Stable per-instance wind phase instead of synchronized repeated-UV motion",
+    "Owned offworld test retires its river decoder while emitter is still in tree; strict shutdown assertion and log errors retained"
+  ],
+  "source": {
+    "path": "assets/staging/sourcechat_b44/models/oga_free_vegetation_lod_pack/textures/bark.JPG",
+    "production": "assets/production/nature/temperate/bark_albedo.jpg",
+    "license": "Existing CC0 pack LICENSE.txt",
+    "sha256": "81dc62b2a57c4369bd6ea2eee535d7316661ea8b0771fe713b90898e2bb9e9a0",
+    "downloaded": false
+  },
+  "local_visual_checks": [
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.78
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.26
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.5
+    }
+  ],
+  "audio_checks": [
+    {
+      "name": "offworld_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.14
+    },
+    {
+      "name": "world_audio",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 1.95
+    }
+  ],
+  "frozen_package": {
+    "pack_sha256": "c8f5a0e4b24cdc7deb1afe8d468c9f4848f83077eee8400d87a69f0d5002a8c5",
+    "results": [
+      {
+        "case": "boot",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 20.72
+      },
+      {
+        "case": "nature",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 4.53
+      }
+    ]
+  },
+  "native_gallery": {
+    "exit_code": 0,
+    "comparison": "same tree/camera/light, only bark surface override differs",
+    "log": "build/acceptance/bark-gallery-native/stdout.log"
+  },
+  "native_world": {
+    "exit_code": 0,
+    "walked_m": 3.75489735603333,
+    "player_position_assignments": 0,
+    "views": 3,
+    "quality": "high",
+    "input": "automated ordinary Input; separate inspection camera; fixture sets noon then clock advances",
+    "log": "build/acceptance/bark-world-native/stdout.log",
+    "errors": [],
+    "warnings": [
+      "90 ObjectDB instances leaked at shutdown"
+    ]
+  },
+  "ci_prior_failure": "8a54a996 build-game failed on AudioStreamOggVorbis river resource at owned offworld fixture shutdown; other seven gates included skipped installer. Fixture teardown corrected; new remote run pending.",
+  "limits": [
+    "Actual meshes and canopy silhouette remain low-detail; photographic bark is not a new realistic tree sculpt",
+    "No full city route, full performance benchmark or stable release",
+    "Preparation tool syntax checked; Blender geometry rebuild not rerun because mesh unchanged",
+    "Windows local shutdown passes; Linux CI fix awaits remote confirmation"
+  ]
+}
