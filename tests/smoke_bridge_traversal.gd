@@ -32,4 +32,6 @@ func _run() -> void:
         get_tree().quit(1)
         return
     print("BRIDGE_TRAVERSAL_OK bank_to_bank=continuous player=grounded position=", player.global_position)
+    world.queue_free()
+    await get_tree().create_timer(0.15, true).timeout
     get_tree().quit(0)

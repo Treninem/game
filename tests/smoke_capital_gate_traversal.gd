@@ -56,4 +56,6 @@ func _run() -> void:
         print("CAPITAL_GATE_TRAVERSAL_OK open_gates=32 closed_gates=32 west_entry=walked approaches=clear")
     for failure in failures:
         push_error(failure)
+    world.queue_free()
+    await get_tree().create_timer(0.15, true).timeout
     get_tree().quit(0 if failures.is_empty() else 1)

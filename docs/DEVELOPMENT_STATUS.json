@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased character and household review; remote stable gates unverified.",
-  "current_stage": "Рабочие мужская/женская модели MakeHuman и начальный редактор персонажа; повторный игровой осмотр походки, боя и мебели.",
+  "current_stage": "Проверен боевой предпросмотр, руки при натяжении и изоляция поз. Linux build-game/installer прошли; world-core требует повторной проверки после очистки стенда моста.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-19_HOUSEHOLD.json",
-  "review_launcher": "build/review-2026-10-19-characters/ImPuls-review.cmd",
+  "review_launcher": "build/review-2026-10-19-characters-combat/ImPuls-review.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -152,5 +152,5 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CHARACTERS.json"
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-19_COMBAT_PREVIEW.json"
 }
