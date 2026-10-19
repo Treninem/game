@@ -54,9 +54,10 @@ func _build_environment() -> void:
 func set_time_of_day(minutes: float) -> void:
     if sky_material == null:
         return
-    var hour := fmod(minutes / 60.0, 24.0)
+    var hour := fposmod(minutes / 60.0, 24.0)
     var daylight := clampf(sin((hour - 6.0) / 12.0 * PI), 0.0, 1.0)
-    var dusk := clampf(1.0 - absf(hour - 18.0) / 4.0, 0.0, 1.0)
+    var horizon_distance := minf(absf(hour - 6.0), absf(hour - 18.0))
+    var dusk := 1.0 - smoothstep(0.0, 2.0, horizon_distance)
     sky_material.sky_top_color = Color(0.018, 0.035, 0.09).lerp(Color(0.075, 0.24, 0.48), daylight).lerp(Color(0.20, 0.08, 0.13), dusk * 0.35)
     sky_material.sky_horizon_color = Color(0.10, 0.12, 0.20).lerp(Color(0.64, 0.78, 0.92), daylight).lerp(Color(0.95, 0.42, 0.20), dusk * 0.48)
     # A dark procedural sky erased skin/clothes in Compatibility shadows.
@@ -67,6 +68,8 @@ func set_time_of_day(minutes: float) -> void:
     environment.fog_density = 0.0015 + EnvironmentState.fog_density * 0.015
     var sun := get_parent().get_node_or_null("Sun") as DirectionalLight3D
     if sun != null:
-        sun.rotation_degrees.x = -(hour - 6.0) * 15.0 if daylight > 0.0 else -50.0
-        sun.light_energy = lerpf(0.16, 1.25, daylight)
-        sun.light_color = Color(0.45, 0.58, 0.90) if daylight <= 0.0 else Color(1.0, 0.64, 0.38).lerp(Color(1.0, 0.95, 0.85), daylight)
+        # Keep the solar orbit continuous below the horizon too. Night readability
+        # comes from ambient fill; a fake overhead sun must not jump at dawn.
+        sun.rotation_degrees.x = -(hour - 6.0) * 15.0
+        sun.light_energy = 1.25 * daylight * smoothstep(0.0, 0.12, daylight)
+        sun.light_color = Color(1.0, 0.64, 0.38).lerp(Color(1.0, 0.95, 0.85), daylight)

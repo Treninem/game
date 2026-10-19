@@ -1,3 +1,7 @@
+## Continuous sunlight — unreleased — 2026-10-20
+- Fix abrupt solar direction/color switches at sunrise and sunset. Continue the solar orbit below the horizon, fade direct light smoothly and add dawn sky color while retaining night ambient fill.
+- Lighting boundary, boot and movement checks pass after refreshing the QA resource cache; actual graphical walk captured noon, dawn and dusk. Striped water, crude canopies and cleanup warnings remain open. No new frozen package. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_LIGHTING.json.
+
 ## Forest composition correction — unreleased — 2026-10-20
 - Remove the incompatible near pine, enforce 5.5 m near-trunk spacing and use the actual coherent two-tree palette. Add the existing authored shrub with its correct individual-leaf map; reject the initial branch-atlas trial.
 - Correct ground detail scale, bright fern tint and linear-space black-key threshold. Startup/movement/chopping/nature and frozen package checks pass; native movement covered 18.72 m without player position assignments. Lighting, canopy silhouette and cleanup warnings remain unfinished. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_FOREST_CORRECTION.json.

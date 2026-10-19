@@ -187,6 +187,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_road_gate_overlay.tscn 240
       - name: Verify fortified town gate hinges and clearance
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_gate_overlay.tscn 240
+      - name: Verify continuous sunrise, sunset and midnight lighting
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_lighting.tscn 60
       - name: Verify world boot, streamed roads and river water
         run: bash tools/run_godot_smoke.sh tests/smoke_boot_world.tscn 300
       - name: Verify terrain faces upward and produces collision

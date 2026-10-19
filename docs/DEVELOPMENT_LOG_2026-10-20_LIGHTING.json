@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased lighting follow-up",
+  "parent": "ee2d999c760d79c7e641796510ea9e9f0a88af5d",
+  "changes": [
+    "Continuous solar orbit across sunrise, sunset and midnight; remove fake overhead night sun and keep ambient night fill",
+    "Smooth direct solar energy at the horizon; symmetric dawn and dusk sky tint; wrap negative time",
+    "Add bounded regression to World Core without weakening existing gates"
+  ],
+  "checks": [
+    {
+      "name": "world_lighting",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 1.91
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 41.38
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 27.75
+    }
+  ],
+  "native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 103.56,
+    "marker": true
+  },
+  "native_marker": [
+    "WORLD_SURFACE_NATIVE_OK walked=18.7248644083738 player_position_assignments=0 cameras=inspection quality=high"
+  ],
+  "native_evidence": "build/acceptance/lighting-native/appdata/Godot/app_userdata/ImPuls",
+  "earlier_failed_attempt": "Initial boot failed loading imported models/shader in QA mirror. Headless editor cache refresh completed, then lighting/boot/movement and graphical scene passed. Source assets were present.",
+  "remote_before_this_commit": "All eight PR checks for ee2d999c succeeded; this does not certify the new revision.",
+  "limitations": [
+    "Real screenshots still show coarse canopy silhouettes, pale flat vegetation, striped water and sparse distant banks",
+    "No new character, weapon or city-route verification in this follow-up",
+    "Existing ObjectDB cleanup warnings remain; no stable release and no new frozen review package",
+    "Native input driver, not manual full-world traversal; no player coordinate assignment"
+  ]
+}
