@@ -455,10 +455,12 @@ func _prepare_materials() -> void:
         material.uv1_world_triplanar = true
         material.uv1_scale = Vector3.ONE * 0.055
         if biome in ["plains", "forest", "taiga", "marsh"]:
-            material.albedo_texture = preload("res://assets/production/materials/ground/grass_meadow.jpg")
-            material.albedo_color = Color(0.56, 0.62, 0.49)
-            material.uv1_scale = Vector3.ONE * 0.30
-            material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+            var ground := ShaderMaterial.new()
+            ground.shader = preload("res://assets/shaders/environment/terrain_ground.gdshader")
+            ground.set_shader_parameter("grass_texture", preload("res://assets/production/materials/ground/grass_meadow.jpg"))
+            ground.set_shader_parameter("rock_texture", preload("res://assets/production/materials/ground/lichen_rock.jpg"))
+            terrain_materials[biome] = ground
+            continue
         elif biome == "mountains":
             material.albedo_texture = preload("res://assets/production/materials/ground/lichen_rock.jpg")
             material.uv1_scale = Vector3.ONE * 0.25

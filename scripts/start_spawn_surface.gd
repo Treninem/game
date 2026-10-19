@@ -47,6 +47,9 @@ func _physics_process(_delta: float) -> void:
     var hit := get_world_3d().direct_space_state.intersect_ray(query)
     var collider := hit.get("collider") as Node
     if collider != null and collider.name == "TerrainCollision":
+        # A flat emergency pad can protrude above the sloped terrain. Once
+        # real streamed ground is confirmed, retire its visual as well.
+        $StoryStartVisualFallback.hide()
         collision_layer = 0
         collision_mask = 0
         $StoryStartSurfaceCollision.set_deferred("disabled", true)

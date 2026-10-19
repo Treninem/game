@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7.3 world-surface source follow-up",
+  "parent": "9cabac1930768fc233eeffd044bb7a12479a7421",
+  "changes": [
+    "Hide emergency start visual after real TerrainCollision is confirmed; fixes large flat green patch protruding through terrain",
+    "Blend two existing grass texture scales with world-space macro variation, low-altitude damp tint and slope rock",
+    "Extend shared ice/water shader with world-space directional wave slopes, distance filtering and restrained specular; remove multiplied sine checkerboard",
+    "Reduce oversized procedural sun disk from 14 to 1 degree"
+  ],
+  "checks": [
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 29.83
+    },
+    {
+      "name": "world_hydrology",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 7.0
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 32.72
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.8
+    }
+  ],
+  "final_boot_regression": [
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 13.08
+    }
+  ],
+  "native": {
+    "status": "pass",
+    "exit_code": 0,
+    "walked_m": 3.75678014755249,
+    "player_position_assignments": 0,
+    "quality": "high",
+    "camera": "three inspection viewpoints; river camera moved independently; player not teleported",
+    "clock": "fixture sets noon then time advances normally",
+    "log": "build/acceptance/world-surface-final/stdout.log",
+    "screenshots": "build/acceptance/world-surface-final/appdata/Godot/app_userdata/ImPuls/world-surface-*.png",
+    "observed_fix": "before/after actual renderer confirms flat green emergency pad disappeared",
+    "shader_errors": []
+  },
+  "warnings": [
+    "89 ObjectDB instances leaked at native shutdown"
+  ],
+  "limits": [
+    "No new geometry or tree assets; sparse/repeated trees and angular shoreline remain",
+    "No modern-renderer or AAA-quality claim; faces, hair, buildings and animation quality remain unfinished",
+    "No full route/city replay, winter ice visual replay or new frozen export",
+    "Earlier player_movement pass took 137.77 seconds while an old editor remained open; final repeat passed in 15.8 seconds; no performance benchmark claimed",
+    "No stable release; remote checks for new commit must complete"
+  ],
+  "assets": "Existing production grass_meadow.jpg and lichen_rock.jpg reused; no external download or generated image"
+}

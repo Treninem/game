@@ -30,7 +30,8 @@ float frost_pattern(vec2 p) {
 
 void vertex() {
     float liquid = 1.0 - freeze_amount;
-    VERTEX.y += (sin(VERTEX.x * 1.6 + TIME * 1.4) + cos(VERTEX.z * 1.25 - TIME * 1.1)) * wave_strength * liquid;
+    vec3 position_world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+    VERTEX.y += (sin(dot(position_world.xz, vec2(0.32, 0.17)) + TIME * 0.8) + cos(dot(position_world.xz, vec2(-0.19, 0.27)) - TIME * 0.6)) * wave_strength * liquid;
     world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 }
 
@@ -44,12 +45,21 @@ void fragment() {
     base *= mix(1.0, 0.80, thaw_amount * 0.45);
     base = mix(base, vec3(0.72, 0.90, 1.0), cracks * 0.70);
 
-    float ripple = sin(world_pos.x * 2.3 + world_pos.z * 0.8 + TIME * 1.7) * cos(world_pos.z * 3.1 - TIME * 1.2);
-    base *= 1.0 + ripple * 0.045 * (1.0 - freeze_amount);
-    NORMAL_MAP = vec3(0.5 + ripple * 0.07 * (1.0 - freeze_amount), 0.5 + cos(world_pos.x * 2.3 + TIME) * 0.06 * (1.0 - freeze_amount), 1.0);
+    // Directional wave slopes, not a multiplied sine checkerboard. All
+    // sampling uses world space so separately streamed surfaces agree.
+    vec2 q = world_pos.xz;
+    float phase_a = dot(q, vec2(0.63, 0.28)) + TIME * 1.05;
+    float phase_b = dot(q, vec2(-0.31, 0.77)) - TIME * 0.74;
+    float phase_c = dot(q, vec2(1.37, 0.92)) + TIME * 1.33;
+    float fine = 1.0 - smoothstep(0.35, 1.5, max(fwidth(phase_c), 0.0));
+    vec2 slope = vec2(0.63,0.28)*cos(phase_a)*0.055
+        + vec2(-0.31,0.77)*cos(phase_b)*0.035
+        + vec2(1.37,0.92)*cos(phase_c)*0.012*fine;
+    vec3 surface_normal = normalize(vec3(-slope.x*(1.0-freeze_amount),1.0,-slope.y*(1.0-freeze_amount)));
+    NORMAL = normalize((VIEW_MATRIX * vec4(surface_normal, 0.0)).xyz);
     ALBEDO = base;
-    ROUGHNESS = clamp(mix(0.09, 0.28, freeze_amount) + frost * 0.30 - thaw_amount * 0.12, 0.04, 0.72);
-    SPECULAR = 0.88;
+    ROUGHNESS = clamp(mix(0.24, 0.28, freeze_amount) + frost * 0.30 - thaw_amount * 0.12, 0.04, 0.72);
+    SPECULAR = 0.55;
     METALLIC = 0.0;
     EMISSION = vec3(0.14, 0.26, 0.34) * cracks * 0.10;
     ALPHA = mix(water_color.a, ice_color.a, freeze_amount);

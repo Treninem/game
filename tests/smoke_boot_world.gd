@@ -106,6 +106,11 @@ func _run() -> void:
                             _fail(14, "player is falling after world reveal; initial_y=%s current_y=%s velocity_y=%s" % [initial_y, player.global_position.y, player.velocity.y])
                             return
 
+                        var start_surface := scene.get_node_or_null("World/StoryStartSurface")
+                        var emergency := scene.get_node_or_null("World/StoryStartSurface/StoryStartVisualFallback") as GeometryInstance3D
+                        if start_surface != null and int(start_surface.get("collision_layer")) == 0 and emergency != null and emergency.visible:
+                            _fail(14, "retired emergency ground still covers the real streamed terrain")
+                            return
                         if not await _assert_pause_load_roundtrip(scene, player):
                             return
                         _pass("boot -> menu -> new game -> physical world -> save -> loading screen -> restored world")

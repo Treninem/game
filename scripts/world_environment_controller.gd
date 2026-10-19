@@ -41,7 +41,7 @@ func _build_environment() -> void:
     sky_material.ground_bottom_color = Color(0.10, 0.13, 0.15, 1.0)
     sky_material.sky_curve = 0.12
     sky_material.ground_curve = 0.10
-    sky_material.sun_angle_max = 14.0
+    sky_material.sun_angle_max = 1.0
     sky_material.sun_curve = 0.08
     sky_material.use_debanding = true
 
