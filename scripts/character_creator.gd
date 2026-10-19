@@ -77,8 +77,9 @@ func _build() -> void:
     _button(identity, "Лицо", func(): camera_height = 1.60; zoom = 0.85; _camera())
     _button(identity, "В полный рост", func(): camera_height = 1.0; zoom = 3.1; _camera())
     _text(identity, "Движение для осмотра")
-    _choice(identity, ["Покой", "Ходьба", "Бег", "Удар", "Лук"], func(index: int):
-        actor.set_meta("preview_animation", ["Idle", "Walk", "Run", "Punch", "Bow_Attack_Draw"][index]))
+    var movement := _choice(identity, ["Покой", "Ходьба", "Бег", "Безоружный удар", "Топор", "Лук: натяжение", "Лук: выстрел"], select_preview_motion)
+    movement.name = "PreviewMotion"
+    _text(identity, "Оружие здесь только для осмотра. В начальный инвентарь оно не добавляется.")
     _text(identity, "Зажмите левую кнопку мыши, чтобы повернуть модель. Колесо — приближение.")
     preview = SubViewportContainer.new()
     preview.name = "CharacterPreview"
@@ -178,6 +179,12 @@ func _refresh() -> void:
         traits.add_child(slider)
     rebuilding = false
     _apply_preview()
+
+func select_preview_motion(index: int) -> void:
+    index = clampi(index, 0, 6)
+    actor.set_meta("preview_animation", ["Idle", "Walk", "Run", "Punch", "Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot"][index])
+    actor.set_meta("preview_item", ["", "", "", "", "starter_axe", "short_bow", "short_bow"][index])
+    visual.call("_refresh_weapon")
 
 func _apply_preview() -> void:
     if is_instance_valid(visual) and visual.has_method("apply_appearance"):

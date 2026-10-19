@@ -15,9 +15,9 @@ if [[ ! -f "$SCENE" ]]; then
   exit 2
 fi
 
-runtime_args=(--headless)
+runtime_args=(--headless --verbose)
 if [[ "${GODOT_SMOKE_GRAPHICAL:-0}" == 1 ]]; then
-  runtime_args=(--rendering-method gl_compatibility)
+  runtime_args=(--rendering-method gl_compatibility --verbose)
 fi
 if [[ -n "${GODOT_SMOKE_PACK:-}" ]]; then
   if [[ ! -f "$GODOT_SMOKE_PACK" ]]; then

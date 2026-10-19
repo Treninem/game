@@ -47,6 +47,24 @@ func _run() -> void:
                 return
     if not _check(signatures.size() == 10, "Ten presets only duplicate the same anatomy"):
         return
+    var inventory_before := GameState.snapshot()
+    var equipped_before := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
+    for preset_index in [0, 5]:
+        creator.call("select_preset", preset_index)
+        for motion in [4, 5, 6]:
+            creator.call("select_preview_motion", motion)
+            await get_tree().process_frame
+            var weapon: Node3D = creator.visual.held_weapon
+            if not _check(is_instance_valid(weapon) and creator.visual.held_item == ("starter_axe" if motion == 4 else "short_bow"), "Combat preview has empty hands"):
+                return
+            creator.call("select_preset", 5 if preset_index == 0 else 0)
+            if not _check(is_instance_valid(creator.visual.held_weapon), "Changing body loses preview equipment"):
+                return
+        creator.call("select_preview_motion", 0)
+        if not _check(creator.visual.held_weapon == null, "Returning to Idle leaves preview weapon visible"):
+            return
+    if not _check(GameState.snapshot() == inventory_before and InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == equipped_before, "Preview modifies real game inventory or appearance state"):
+        return
     creator.name_edit.text = "Элина"
     creator.call("select_preset", 8)
     if not _check(creator.name_edit.text == "Элина", "Selecting a new appearance erased the entered name"):

@@ -74,7 +74,7 @@ func apply_appearance(value: Variant) -> void:
         _prepare_airborne_pose(model)
         _prepare_sitting_pose(model)
     last_position = get_parent_node_3d().global_position
-    if get_parent().name == "Player":
+    if get_parent().name == "Player" or get_parent().has_meta("preview_animation"):
         var skeletons := model.find_children("*", "Skeleton3D", true, false)
         if not skeletons.is_empty():
             weapon_socket = BoneAttachment3D.new()
@@ -82,7 +82,7 @@ func apply_appearance(value: Variant) -> void:
             weapon_socket.bone_name = "RightHand"
             skeletons[0].add_child(weapon_socket)
             skeletons[0].connect("skeleton_updated", _update_bow_transform)
-            if not InventorySystem.equipment_changed.is_connected(_refresh_weapon):
+            if get_parent().name == "Player" and not InventorySystem.equipment_changed.is_connected(_refresh_weapon):
                 InventorySystem.equipment_changed.connect(_refresh_weapon)
             _refresh_weapon()
 
@@ -122,7 +122,7 @@ func _style_model() -> void:
 func _refresh_weapon() -> void:
     if weapon_socket == null:
         return
-    held_item = InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
+    held_item = String(get_parent().get_meta("preview_item", "")) if get_parent().has_meta("preview_animation") else InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
     if held_weapon != null:
         held_weapon.free()
         held_weapon = null
