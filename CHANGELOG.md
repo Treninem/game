@@ -1,3 +1,7 @@
+## Conforming river bank — unreleased — 2026-10-20
+- Split crossed opening-river terrain triangles at the actual height-field water contour; share edge vertices and retain matching rendered/physical terrain. Keep the 4 m grid elsewhere and a fast path for ordinary dry/submerged cells.
+- Accuracy/seam/budget, terrain, hydrology, movement, grounding and bridge checks pass. Frozen boot/nature/shore checks and a grounded native river-bank walk pass; screenshots show a smoother outline. Vegetation, distant terrain and cleanup warnings remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_SHORELINE.json.
+
 ## River ripple correction — unreleased — 2026-10-20
 - Replace coherent sine-wave water bands with advected irregular gradient ripples and filtered fine detail; soften liquid highlights while retaining ice controls. No river-level or traversal geometry changes.
 - Hydrology/boot and frozen boot/nature checks pass; actual source and frozen graphical walks cover 18.72 m each. Inspect noon/dawn/dusk and a full-freeze material probe. Coarse shores, simple reflections, crude ice and 91 cleanup warnings remain. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_WATER.json.

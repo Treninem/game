@@ -17,3 +17,7 @@ INTEGRATED: original CC0 `bush_higher` with `leaf_small.png`, normalized as `Tem
 ## River ripple correction — 2026-10-20
 
 INTEGRATED in the source review: the shared water/ice shader now uses advected analytic noise gradients instead of coherent sine bands; fine ripple detail fades by pixel footprint. Liquid roughness/specular are softened; ice controls remain. No new source pack or changed physical water levels. Source and frozen graphical captures, ice material probe and limits: `docs/DEVELOPMENT_LOG_2026-10-20_WATER.json`.
+
+## Conforming opening-river shore — 2026-10-20
+
+INTEGRATED in the source review: only river-crossed terrain triangles gain cached height-field contour vertices. Visual terrain and collision share the resulting mesh; the ordinary 4 m grid remains elsewhere. No third-party pack, altered water level or continent-wide coastline claim. Accuracy, seam, bounded geometry, bridge and frozen native bank-walk evidence: `docs/DEVELOPMENT_LOG_2026-10-20_SHORELINE.json`.

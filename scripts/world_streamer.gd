@@ -224,29 +224,103 @@ func _build_terrain_mesh(coord: Vector2i) -> ArrayMesh:
     for z in range(-1, GRID_RESOLUTION + 2):
         for x in range(-1, GRID_RESOLUTION + 2):
             heights[(z + 1) * stride + x + 1] = WorldData.elevation_at(origin + Vector2(x, z) * spacing)
+    var vertices := PackedVector3Array()
+    var normals := PackedVector3Array()
     for z in range(GRID_RESOLUTION + 1):
         for x in range(GRID_RESOLUTION + 1):
             var offset := (z + 1) * stride + x + 1
             var dx := (heights[offset + 1] - heights[offset - 1]) / (2.0 * spacing)
             var dz := (heights[offset + stride] - heights[offset - stride]) / (2.0 * spacing)
-            st.set_normal(Vector3(-dx, 1.0, -dz).normalized())
+            var normal := Vector3(-dx, 1.0, -dz).normalized()
+            normals.append(normal)
+            vertices.append(Vector3(x * spacing, heights[offset], z * spacing))
+            st.set_normal(normal)
             st.set_uv(Vector2(x, z) / float(GRID_RESOLUTION))
             st.add_vertex(Vector3(x * spacing, heights[offset], z * spacing))
 
     var row := GRID_RESOLUTION + 1
+    var shore_edges := {"next": vertices.size()}
+    var river_level := GEOGRAPHY.START_RIVER_WATER_LEVEL
     for z in range(GRID_RESOLUTION):
         for x in range(GRID_RESOLUTION):
             var i0 := z * row + x
             var i1 := i0 + 1
             var i2 := i0 + row
             var i3 := i2 + 1
-            st.add_index(i0)
-            st.add_index(i1)
-            st.add_index(i2)
-            st.add_index(i1)
-            st.add_index(i3)
-            st.add_index(i2)
+            var minimum := minf(minf(vertices[i0].y,vertices[i1].y),minf(vertices[i2].y,vertices[i3].y))
+            var maximum := maxf(maxf(vertices[i0].y,vertices[i1].y),maxf(vertices[i2].y,vertices[i3].y))
+            if minimum >= river_level or maximum <= river_level:
+                st.add_index(i0)
+                st.add_index(i1)
+                st.add_index(i2)
+                st.add_index(i1)
+                st.add_index(i3)
+                st.add_index(i2)
+            else:
+                for triangle in [PackedInt32Array([i0,i1,i2]), PackedInt32Array([i1,i3,i2])]:
+                    _append_shore_triangle(st, origin, triangle, vertices, normals, shore_edges)
     return st.commit()
+
+func _append_shore_triangle(st: SurfaceTool, origin: Vector2, triangle: PackedInt32Array, vertices: PackedVector3Array, normals: PackedVector3Array, cache: Dictionary) -> void:
+    var level := GEOGRAPHY.START_RIVER_WATER_LEVEL
+    var a := vertices[triangle[0]]
+    var b := vertices[triangle[1]]
+    var c := vertices[triangle[2]]
+    var center := origin + Vector2((a.x+b.x+c.x)/3.0, (a.z+b.z+c.z)/3.0)
+    if minf(a.y,minf(b.y,c.y)) >= level or maxf(a.y,maxf(b.y,c.y)) <= level or not GEOGRAPHY.in_start_region(center) or GEOGRAPHY.distance_to_start_river(center) > GEOGRAPHY.START_RIVER_BANK_WIDTH:
+        for index in triangle:
+            st.add_index(index)
+        return
+    # Split crossed faces at the actual height-field contour. Both sides share
+    # cached edge vertices; physics is built from this same rendered mesh.
+    for above in [true,false]:
+        var polygon := PackedInt32Array()
+        for edge in range(3):
+            var current := triangle[edge]
+            var next := triangle[(edge+1)%3]
+            var inside: bool = (vertices[current].y >= level) == above
+            var next_inside: bool = (vertices[next].y >= level) == above
+            if inside:
+                polygon.append(current)
+            if inside != next_inside:
+                polygon.append(_shore_edge_index(st, origin, current, next, vertices, normals, cache))
+        for corner in range(1,polygon.size()-1):
+            if polygon[0] != polygon[corner] and polygon[corner] != polygon[corner+1] and polygon[0] != polygon[corner+1]:
+                st.add_index(polygon[0])
+                st.add_index(polygon[corner])
+                st.add_index(polygon[corner+1])
+
+func _shore_edge_index(st: SurfaceTool, origin: Vector2, first: int, second: int, vertices: PackedVector3Array, normals: PackedVector3Array, cache: Dictionary) -> int:
+    var key := Vector2i(mini(first,second),maxi(first,second))
+    if cache.has(key):
+        return int(cache[key])
+    var a := vertices[key.x]
+    var b := vertices[key.y]
+    var level := GEOGRAPHY.START_RIVER_WATER_LEVEL
+    if absf(a.y-level) < 0.000001:
+        return key.x
+    if absf(b.y-level) < 0.000001:
+        return key.y
+    var low := 0.0
+    var high := 1.0
+    for iteration in range(12):
+        var middle := (low+high)*0.5
+        var sample := a.lerp(b,middle)
+        var height := WorldData.elevation_at(origin+Vector2(sample.x,sample.z))
+        if (height >= level) == (a.y >= level):
+            low = middle
+        else:
+            high = middle
+    var fraction := (low+high)*0.5
+    var point := a.lerp(b,fraction)
+    point.y = level
+    st.set_normal(normals[key.x].lerp(normals[key.y],fraction).normalized())
+    st.set_uv(Vector2(point.x,point.z)/CHUNK_SIZE)
+    st.add_vertex(point)
+    var index := int(cache["next"])
+    cache["next"] = index+1
+    cache[key] = index
+    return index
 
 func _add_water(chunk: Node3D) -> void:
     var water := MeshInstance3D.new()
