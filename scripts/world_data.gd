@@ -45,6 +45,7 @@ func elevation_at(pos: Vector2) -> float:
     var ridges := pow(absf(ridge_noise.get_noise_2d(pos.x, pos.y)), 2.4) * 48.0
     var macro_relief := 0.0
     var height := broad + detail + ridges
+    var continental_floor := -INF
 
     # Political regions describe inhabited pieces of the continent. Procedural
     # noise may shape their coasts, lakes and lowlands, but it must never sink a
@@ -61,6 +62,7 @@ func elevation_at(pos: Vector2) -> float:
         var sovereign_weight := 1.0 - smoothstep(0.42, 0.92, sovereign_normalized)
         if sovereign_weight > 0.0:
             var sovereign_floor := lerpf(-3.5, 7.0, sovereign_weight)
+            continental_floor = sovereign_floor
             height = maxf(height, sovereign_floor)
 
     # The canonical mountain federation must read as mountain country at macro
@@ -88,7 +90,9 @@ func elevation_at(pos: Vector2) -> float:
             WORLD_GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH,
             road_distance
         )
-        var roadbed := broad + ridges * 0.34 + macro_relief
+        # Road smoothing must retain the continental floor established above.
+        # Otherwise low noise excavates a sea trench through inhabited land.
+        var roadbed := maxf(broad + ridges * 0.34 + macro_relief, continental_floor)
         height = lerpf(height, roadbed, road_weight * 0.88)
 
     # The 4 x 4 km Asterna capital remains a stable buildable plateau, but it is

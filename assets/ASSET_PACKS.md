@@ -115,3 +115,27 @@ Support dry↔wet, clean↔dirty, intact↔cracked/broken, warm↔frosted/conden
 `nature`, `materials`, `lighting`, `world`, `buildings`, `interiors`, `characters`, `animations`, `animals`, `food`, `items`, `resources`, `tools`, `weapons`, `clothing`, `props`, `vehicles`, `machines`, `technology`, `shaders`, `vfx`, `decals`, `audio`, `music`, `ui`, `icons`, `prototype`.
 
 Every development session working on `Treninem/game` must read this file before adding art and update it when approving another pack. Goal: a coherent reusable production library, not a random pile of downloads.
+## Integrated woodland and animated human selection — 2026-10-18
+
+- PRODUCTION_READY: Quaternius RPG Ranger from existing source chat B36, normalized skinned GLB retained under `assets/production/characters/ranger/`; the live human selection below supersedes its body mesh. Its bow animation source is reused for retargeting.
+- INTEGRATED: six selected Quaternius Stylized Nature MegaKit models from existing source chat B44: `assets/production/nature/woodland/`. Authored textured trees replace geometric crowns in near and far rendering; shared wind animates leaves.
+- INTEGRATED: two CC0 photographic diffuse ground textures from the existing OpenGameArt Seamless Textures pack: `assets/production/materials/ground/`.
+- Every production selection preserves source and license metadata. Detailed record: `assets/registry/VISUAL_WORLD_INTEGRATION_2026-10-18.md`.
+
+- INTEGRATED: one existing CC0 Tree Leaves Pack 1 silhouette atlas by TrachinusDraco, runtime-capped to 256 px with mipmaps, for seasonal wind leaves under `assets/production/nature/woodland/`.
+- INTEGRATED: axe, dagger visual proxy, wooden bow and arrow from the existing B36 Quaternius Low Poly RPG Pack, normalized under `assets/production/weapons/woodland/`; animated equipment and physical bow projectiles.
+
+### Adult human and temperate tree selection — 2026-10-19
+
+- INTEGRATED: existing CC0 byzmod3d B89 anatomical human geometry (`homen_base.obj`) under `assets/production/characters/citizen/`, normalized to 1.8 m and fitted to the existing Quaternius Animated Human rig. Ten clips, clothing and skin variants retained; Axe_Chop reuses the physically staged CC0 Universal Animation Library 2 Standard. Project materials replace the source OBJ's absent MTL. This is an anatomical mesh, not a photorealistic scan.
+- INTEGRATED: existing CC0 Free Vegetation Asset Pack with LOD, physically present on `main` under B44, selected into `assets/production/nature/temperate/`. Reconstructed materials reuse original branch textures and existing Quaternius bark. Shared environment wind shader supplies required black-key cutout; seeded card layers enrich the canopy.
+- INTEGRATED: existing production city-core wall, window, door, tile roof and gable modules now form ordinary capital house facades in batched geometry. Solid collision shells remain; this does not establish enterable capital homes.
+- Details and limitations: `assets/registry/VISUAL_WORLD_INTEGRATION_2026-10-18.md`.
+
+- INTEGRATED: `TemperateTree_Broad.glb`, the existing B44 Free Vegetation `tree_leaves_higher` mesh with original `branches_leaves.png`, grounded to 11 m and using shared foliage wind/cutout. Selected for the near-start forest.
+- INTEGRATED: existing B47 Quaternius city-core `Prop_Chimney.gltf` and its buffer/textures, selected for ordinary capital roofs with wider eaves. Ordinary houses still have solid collision shells.
+
+- INTEGRATED — 2026-10-19 contact refinement: three existing CC0 rubberduck wood-hit sounds from B04, preserving original filenames under `assets/audio/world/oga_100_cc0_sfx_2/`. Source/license metadata retained; no download. Axe_Chop retargeting now aligns the source and target shoulder axes before transferring motion.
+
+- INTEGRATED — 2026-10-19 capital-square follow-up: Bench, Lantern_Wall, Workbench, Barrel and Barrel_Apples from the existing physically staged B46 CC0 Quaternius Fantasy Props MegaKit Standard, selected into `assets/production/medieval/capital_square/`. Original glTF buffers and OpenGL furniture/metal textures plus source licenses retained. Props are measured, grounded and given collision; no new download. Existing market-stall scene reused.
+- INTEGRATED — existing CC0 OpenGameArt seamless photograph `100_1453_seamless.JPG` selected as `assets/production/materials/ground/stone_paving.jpg` for capital paving. Mipmapped, world-scaled diffuse only.

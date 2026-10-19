@@ -8,6 +8,7 @@ signal door_state_changed(opened: bool)
 @export var starts_open := false
 @export var locked := false
 @export var interaction_label := "Дверь"
+@export var persistence_key := ""
 
 var opened := false
 var closed_rotation_y := 0.0
@@ -21,6 +22,7 @@ func configure(label: String, open_direction: float = -1.0, start_open: bool = f
     configured = true
 
 func _ready() -> void:
+    add_to_group("world_state_door")
     # This door is rotated directly from script in physics processing. Keeping
     # sync_to_physics enabled can defer the PhysicsServer transform and leave
     # the previous closed collision in place for queries after an immediate
@@ -30,7 +32,7 @@ func _ready() -> void:
     collision_layer = 1
     collision_mask = 1
     closed_rotation_y = rotation.y
-    opened = starts_open
+    opened = bool(GameState.get_world_value(persistence_key, starts_open)) if not persistence_key.is_empty() else starts_open
     target_rotation_y = closed_rotation_y + deg_to_rad(open_angle_degrees if opened else 0.0)
     if opened:
         rotation.y = target_rotation_y
@@ -52,6 +54,8 @@ func set_open(value: bool, immediate: bool = false) -> void:
     if opened == value and not immediate:
         return
     opened = value
+    if not persistence_key.is_empty():
+        GameState.set_world_value(persistence_key, opened)
     target_rotation_y = closed_rotation_y + deg_to_rad(open_angle_degrees if opened else 0.0)
     if immediate:
         rotation.y = target_rotation_y
@@ -64,3 +68,9 @@ func set_locked(value: bool) -> void:
 
 func is_open() -> bool:
     return opened
+
+func restore_saved_state() -> void:
+    if persistence_key.is_empty():
+        return
+    var saved: Variant = GameState.get_world_value(persistence_key, starts_open)
+    set_open(saved if saved is bool else starts_open, true)

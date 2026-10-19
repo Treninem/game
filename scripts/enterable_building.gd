@@ -203,6 +203,7 @@ func _build_interior_furnishings() -> void:
     _add_visual_box(bench, "BenchLegA", Vector3(0.18, 0.52, 0.38), Vector3(-0.58, -0.26, 0.0), timber_material)
     _add_visual_box(bench, "BenchLegB", Vector3(0.18, 0.52, 0.38), Vector3(0.58, -0.26, 0.0), timber_material)
 
+
 func _add_furniture_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, material: Material) -> StaticBody3D:
     var body := StaticBody3D.new()
     body.name = node_name
@@ -258,6 +259,14 @@ func _build_roof_visual() -> void:
     roof.position = Vector3(0.0, wall_height + 0.03, 0.0)
     roof.scale = Vector3(maxf(0.75, footprint.x / 8.0), 1.0, maxf(0.75, footprint.y / 8.0))
     add_child(roof)
+    # Reuse the capital facade's shared textured roof ends. The authored tile
+    # module alone leaves a large open attic triangle above the room ceiling.
+    var gables := MeshInstance3D.new()
+    gables.name = "SharedRoofGables"
+    gables.mesh = preload("res://scripts/modular_city_facades.gd").new()._gables()
+    gables.position = roof.position
+    gables.scale = roof.scale
+    add_child(gables)
 
 func _add_static_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, material: Material) -> StaticBody3D:
     var body := StaticBody3D.new()

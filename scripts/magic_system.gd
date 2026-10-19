@@ -159,16 +159,25 @@ func _cast_projectile(data: Dictionary, caster: CharacterBody3D, camera: Camera3
     if host == null:
         return false
     var direction := -camera.global_transform.basis.z.normalized()
+    var origin := caster.global_position + Vector3.UP * 1.35 + direction * 0.30
+    if caster.has_method("projectile_aim"):
+        var aim: Dictionary = caster.call("projectile_aim", float(data.get("speed", 19.0)) * float(data.get("lifetime", 3.0)))
+        origin = aim["origin"]
+        direction = aim["direction"]
     var projectile = PROJECTILE_SCRIPT.new()
     host.add_child(projectile)
-    projectile.global_position = camera.global_position + direction * 0.85
+    projectile.global_position = origin
     projectile.setup(data, caster, direction)
     VFXLibrary.spawn_magic(String(data.get("element", "arcane")), projectile.global_position, host, 0.65)
     return true
 
 func _cast_instant(data: Dictionary, caster: CharacterBody3D, camera: Camera3D) -> bool:
     var direction := -camera.global_transform.basis.z.normalized()
-    var from := camera.global_position
+    var from := caster.global_position + Vector3.UP * 1.35 + direction * 0.30
+    if caster.has_method("projectile_aim"):
+        var aim: Dictionary = caster.call("projectile_aim", float(data.get("range", 30.0)))
+        from = aim["origin"]
+        direction = aim["direction"]
     var to := from + direction * float(data.get("range", 30.0))
     var query := PhysicsRayQueryParameters3D.create(from, to)
     query.collide_with_areas = false
@@ -276,7 +285,13 @@ func resolve_projectile_hit(
         caster: Node3D
     ) -> void:
     if explosion_radius > 0.0:
-        _apply_area_damage(hit_position, explosion_radius, damage, status_name, status_duration, caster)
+        # A direct hit also damages destructible targets outside the hostile
+        # group. Exclude it from splash so an enemy is never damaged twice.
+        if collider != null and collider != caster and collider.has_method("take_damage"):
+            collider.take_damage(damage, caster)
+            if not status_name.is_empty() and collider.has_method("apply_status"):
+                collider.apply_status(status_name, status_duration, caster)
+        _apply_area_damage(hit_position, explosion_radius, damage, status_name, status_duration, caster, collider as Node)
         if element == "fire":
             VFXLibrary.spawn_explosion(hit_position, "small", get_tree().current_scene, 0.85)
         else:
@@ -290,8 +305,10 @@ func resolve_projectile_hit(
     else:
         VFXLibrary.spawn_collision(_surface_from_element(element), hit_position, hit_normal, get_tree().current_scene, 0.8)
 
-func _apply_area_damage(center: Vector3, radius: float, damage: float, status_name: String, status_duration: float, caster: Node3D) -> void:
+func _apply_area_damage(center: Vector3, radius: float, damage: float, status_name: String, status_duration: float, caster: Node3D, direct_target: Node = null) -> void:
     for hostile in get_tree().get_nodes_in_group("hostile"):
+        if hostile == caster or hostile == direct_target:
+            continue
         if not is_instance_valid(hostile) or not (hostile is Node3D):
             continue
         var body := hostile as Node3D

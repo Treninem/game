@@ -14,24 +14,25 @@ func _ready() -> void:
     call_deferred("_resolve_player")
 
 func _input(event: InputEvent) -> void:
-    if event is InputEventKey:
-        var key_event := event as InputEventKey
-        if key_event.pressed and not key_event.echo and (key_event.physical_keycode == KEY_ESCAPE or key_event.keycode == KEY_ESCAPE):
-            if DialogueManager.is_open:
-                return
-            var menu := get_tree().get_first_node_in_group("game_menu") as Control
-            var panels := get_tree().get_first_node_in_group("gameplay_panels") as Control
-            if menu == null:
-                return
-            if panels != null and panels.visible:
-                panels.call("close_panel")
-            if menu.visible:
-                menu.call("close_menu")
-            else:
-                menu.call("open_menu", "main")
-            var viewport := get_viewport()
-            if viewport != null:
-                viewport.set_input_as_handled()
+    var physical_escape: bool = event is InputEventKey and event.pressed and not event.echo and (event.physical_keycode == KEY_ESCAPE or event.keycode == KEY_ESCAPE)
+    if event.is_echo() or not (physical_escape or event.is_action_pressed("pause_menu")) or DialogueManager.is_open:
+        return
+    var menu := get_tree().get_first_node_in_group("game_menu") as Control
+    var panels := get_tree().get_first_node_in_group("gameplay_panels") as Control
+    if menu == null:
+        return
+    # The settings screen owns all input while recording a new binding.
+    if menu.visible and not String(menu.get("awaiting_action")).is_empty():
+        return
+    if panels != null and panels.visible:
+        panels.call("close_panel")
+    elif menu.visible:
+        menu.call("close_menu")
+    else:
+        menu.call("open_menu", "main")
+    var viewport := get_viewport()
+    if viewport != null:
+        viewport.set_input_as_handled()
 
 func _process(delta: float) -> void:
     _resolve_player()
@@ -78,7 +79,7 @@ func _repair_accidental_pause() -> void:
     var legitimate_pause := (menu != null and menu.visible) or (panels != null and panels.visible) or minigame_active
     if not legitimate_pause:
         tree.paused = false
-        Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+        SettingsManager.capture_gameplay_mouse()
 
 func _create_fallback_surface() -> void:
     if player == null or not is_instance_valid(player):

@@ -22,6 +22,11 @@ const WOOD_STEPS := [
 ]
 
 const FOOTSTEP_POOL_SIZE := 4
+const WOOD_HITS := [
+    preload("res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_wood_hit_01.ogg"),
+    preload("res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_wood_hit_02.ogg"),
+    preload("res://assets/audio/world/oga_100_cc0_sfx_2/sfx100v2_wood_hit_03.ogg"),
+]
 const FOOTSTEP_MAX_DISTANCE := 42.0
 
 @export var player_path := NodePath("../Player")
@@ -39,6 +44,30 @@ var _river_should_play := false
 
 var last_footstep_surface := ""
 var last_footstep_stream_path := ""
+var wood_hit_count := 0
+var last_wood_hit_position := Vector3.ZERO
+
+func play_wood_hit(point: Vector3) -> void:
+    var emitter := AudioStreamPlayer3D.new()
+    emitter.name = "WoodContact"
+    emitter.stream = WOOD_HITS[wood_hit_count % WOOD_HITS.size()]
+    emitter.bus = &"SFX"
+    emitter.volume_db = -5.0
+    emitter.max_distance = 38.0
+    emitter.unit_size = 5.0
+    add_child(emitter)
+    emitter.global_position = point
+    emitter.finished.connect(emitter.queue_free)
+    emitter.play()
+    # Also retire silent/paused emitters when a backend cannot finish playback.
+    var weak_emitter: WeakRef = weakref(emitter)
+    get_tree().create_timer(3.0, false).timeout.connect(func():
+        var active := weak_emitter.get_ref() as AudioStreamPlayer3D
+        if active != null:
+            active.queue_free()
+    )
+    wood_hit_count += 1
+    last_wood_hit_position = point
 
 func _ready() -> void:
     add_to_group("world_audio")
@@ -46,6 +75,17 @@ func _ready() -> void:
     _create_footstep_pool()
     _resolve_player()
     _update_river_ambience()
+
+func _exit_tree() -> void:
+    # Disable the finished callback before retiring a looping river emitter.
+    _river_should_play = false
+    if is_instance_valid(_river_player):
+        _river_player.stop()
+        _river_player.stream = null
+    for step_player in _footstep_players:
+        if is_instance_valid(step_player):
+            step_player.stop()
+            step_player.stream = null
 
 func _process(delta: float) -> void:
     if not is_instance_valid(_player):

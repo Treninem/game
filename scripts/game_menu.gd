@@ -9,6 +9,8 @@ const ACTION_LABELS := {
     "jump": "Прыжок",
     "interact": "Взаимодействие",
     "attack": "Атака",
+    "cast_magic": "Магия",
+    "next_spell": "Следующее заклинание",
     "use_food": "Быстрая еда",
     "use_water": "Быстрая вода",
     "open_inventory": "Инвентарь",
@@ -52,13 +54,22 @@ func _ready() -> void:
     call_deferred("_apply_responsive_layout")
     visible = false
 
+func _input(event: InputEvent) -> void:
+    if awaiting_action.is_empty() or not visible:
+        return
+    # Capture before focused buttons consume Space/Enter as GUI activation.
+    if event is InputEventKey and event.pressed and not event.echo and (event.physical_keycode == KEY_ESCAPE or event.keycode == KEY_ESCAPE):
+        awaiting_action = ""
+        _show_section("controls")
+        get_viewport().set_input_as_handled()
+    elif (event is InputEventKey and not event.echo) or event is InputEventMouseButton:
+        if SettingsManager.rebind_action(awaiting_action, event):
+            awaiting_action = ""
+            _show_section("controls")
+            get_viewport().set_input_as_handled()
+
 func _unhandled_input(event: InputEvent) -> void:
     if not awaiting_action.is_empty():
-        if event is InputEventKey or event is InputEventMouseButton:
-            if SettingsManager.rebind_action(awaiting_action, event):
-                awaiting_action = ""
-                _show_section("controls")
-                get_viewport().set_input_as_handled()
         return
     if DialogueManager.is_open:
         return
@@ -85,7 +96,7 @@ func close_menu() -> void:
     current_section = "main"
     visible = false
     get_tree().paused = false
-    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+    SettingsManager.capture_gameplay_mouse()
 
 func _build_shell() -> void:
     var backdrop := ColorRect.new()
@@ -246,8 +257,8 @@ func _refresh_nav() -> void:
     for section in nav_buttons:
         var button: Button = nav_buttons[section]
         var selected := String(section) == current_section
-        var bg := Color(0.055, 0.16, 0.23, 0.98) if selected else Color(0.025, 0.04, 0.06, 0.92)
-        var border := Color(0.18, 0.68, 0.92, 0.96) if selected else Color(0.08, 0.18, 0.26, 0.70)
+        var bg := Color(0.18, 0.25, 0.19, 0.98) if selected else Color(0.055, 0.075, 0.06, 0.92)
+        var border := Color(0.62, 0.65, 0.44, 0.65) if selected else Color(0.28, 0.34, 0.25, 0.50)
         button.add_theme_stylebox_override("normal", _button_style(bg, border))
         button.add_theme_stylebox_override("hover", _button_style(bg.lightened(0.07), border.lightened(0.12)))
         button.add_theme_color_override("font_color", Color(0.82, 0.94, 1.0) if selected else Color(0.72, 0.78, 0.84))
@@ -263,7 +274,7 @@ func _show_main() -> void:
     title_label.text = "Пауза"
     _hero_card("Мир продолжается с вашего сохранения", GameState.current_location)
     _button("Продолжить игру", Callable(self, "close_menu"), null, false, true)
-    _info_card("Текущее состояние", "Задания и строительство временно отложены. Сейчас приоритет — стабильный мир, столица, леса, поля, дороги, вода и регионы.")
+    _info_card("Перед дорогой", "Сохраните путешествие перед выходом. Ягоды утоляют голод, фляга помогает восстановить запас воды.")
     _body("Быстрые экраны: I — инвентарь   •   M — карта   •   K — крафт   •   J — журнал")
     _button("Сохранения", Callable(self, "_show_section").bind("saves"))
     _button("Настройки", Callable(self, "_show_section").bind("settings"))
@@ -283,7 +294,7 @@ func _show_saves() -> void:
         margin.add_theme_constant_override("margin_top", 9)
         margin.add_theme_constant_override("margin_bottom", 9)
         card.add_child(margin)
-        var row := HBoxContainer.new()
+        var row := VBoxContainer.new()
         row.add_theme_constant_override("separation", 8)
         margin.add_child(row)
         var label := Label.new()
@@ -291,11 +302,19 @@ func _show_saves() -> void:
         label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
         label.text = "Слот %02d\n%s  •  %s" % [slot, String(info.get("location", "Пустой слот")) if bool(info.get("exists", false)) else "Пустой слот", String(info.get("world_time", "--:--"))]
         row.add_child(label)
-        _button("Сохранить" if bool(info.get("exists", false)) else "Создать", Callable(self, "_save_to_slot").bind(slot), row).custom_minimum_size.x = 92
-        var load_button := _button("Загрузить", Callable(self, "_load_slot").bind(slot), row)
+        var actions := HFlowContainer.new()
+        actions.add_theme_constant_override("h_separation", 8)
+        actions.add_theme_constant_override("v_separation", 8)
+        row.add_child(actions)
+        var save_button := _button("Сохранить" if bool(info.get("exists", false)) else "Создать", Callable(self, "_save_to_slot").bind(slot), actions)
+        save_button.autowrap_mode = TextServer.AUTOWRAP_OFF
+        save_button.custom_minimum_size.x = 92
+        var load_button := _button("Загрузить", Callable(self, "_load_slot").bind(slot), actions)
+        load_button.autowrap_mode = TextServer.AUTOWRAP_OFF
         load_button.custom_minimum_size.x = 92
         load_button.disabled = not bool(info.get("exists", false))
-        var delete_button := _button("Удалить", Callable(self, "_delete_slot").bind(slot), row, true)
+        var delete_button := _button("Удалить", Callable(self, "_delete_slot").bind(slot), actions, true)
+        delete_button.autowrap_mode = TextServer.AUTOWRAP_OFF
         delete_button.custom_minimum_size.x = 82
         delete_button.disabled = not bool(info.get("exists", false))
 
@@ -311,8 +330,8 @@ func _load_slot(slot: int) -> void:
     awaiting_action = ""
     visible = false
     get_tree().paused = false
-    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-    get_tree().reload_current_scene()
+    Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+    get_tree().change_scene_to_file("res://scenes/world_loading.tscn")
 
 func _delete_slot(slot: int) -> void:
     SaveManager.delete_slot(slot)
@@ -329,7 +348,7 @@ func _show_settings() -> void:
 
 func _show_controls() -> void:
     title_label.text = "Управление"
-    rebinding_label = _body("Нажмите на назначение, затем нажмите новую клавишу или кнопку мыши.")
+    rebinding_label = _body("Нажмите на назначение, затем нажмите новую клавишу или кнопку мыши. Esc — отмена.")
     for action in ACTION_LABELS:
         var card := PanelContainer.new()
         card.add_theme_stylebox_override("panel", _row_style())
@@ -344,6 +363,7 @@ func _show_controls() -> void:
         margin.add_child(row)
         var label := Label.new()
         label.text = String(ACTION_LABELS[action])
+        label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
         label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
         row.add_child(label)
         var key_button := _button(SettingsManager.binding_text(action), Callable(self, "_begin_rebind").bind(action), row)
@@ -352,7 +372,7 @@ func _show_controls() -> void:
 func _begin_rebind(action: String) -> void:
     awaiting_action = action
     if is_instance_valid(rebinding_label):
-        rebinding_label.text = "Ожидаю новую кнопку для: %s" % String(ACTION_LABELS.get(action, action))
+        rebinding_label.text = "Ожидаю новую кнопку для: %s. Esc — отмена." % String(ACTION_LABELS.get(action, action))
 
 func _show_graphics() -> void:
     title_label.text = "Графика"
@@ -372,8 +392,20 @@ func _show_graphics() -> void:
     resolutions.item_selected.connect(Callable(self, "_set_resolution").bind(resolutions))
     content.add_child(resolutions)
     _section_label("Качество и масштаб")
+    var quality := OptionButton.new()
+    quality.name = "GraphicsQualityPreset"
+    quality.custom_minimum_size.y = 42
+    for profile in SettingsManager.QUALITY_PRESETS:
+        quality.add_item(String(profile["name"]))
+    quality.select(clampi(int(SettingsManager.get_value("graphics", "quality_preset")), 0, 3))
+    quality.item_selected.connect(_set_quality_preset)
+    content.add_child(quality)
     _add_slider("Масштаб 3D", float(SettingsManager.get_value("graphics", "render_scale")), 0.5, 1.5, 0.05, Callable(self, "_set_setting_float").bind("graphics", "render_scale"))
     _add_slider("Масштаб интерфейса", float(SettingsManager.get_value("graphics", "ui_scale")), 0.75, 1.5, 0.05, Callable(self, "_set_setting_float").bind("graphics", "ui_scale"))
+
+func _set_quality_preset(index: int) -> void:
+    SettingsManager.set_quality_preset(index)
+    _show_section("graphics")
 
 func _show_audio() -> void:
     title_label.text = "Звук"
@@ -384,8 +416,10 @@ func _show_audio() -> void:
 
 func _show_other() -> void:
     title_label.text = "Игра и интерфейс"
+    _add_checkbox("Совместимое управление мышью", bool(SettingsManager.get_value("gameplay", "compatible_mouse")), Callable(self, "_set_setting_bool").bind("gameplay", "compatible_mouse"))
     _add_slider("Чувствительность мыши", float(SettingsManager.get_value("gameplay", "mouse_sensitivity")), 0.001, 0.01, 0.0005, Callable(self, "_set_setting_float").bind("gameplay", "mouse_sensitivity"))
     _add_slider("Поле зрения", float(SettingsManager.get_value("gameplay", "camera_fov")), 60.0, 100.0, 1.0, Callable(self, "_set_setting_float").bind("gameplay", "camera_fov"))
+    _add_slider("Расстояние камеры · колёсико мыши", float(SettingsManager.get_value("gameplay", "camera_distance")), 2.0, 9.0, 0.5, Callable(self, "_set_setting_float").bind("gameplay", "camera_distance"))
     _add_slider("Автосохранение, сек.", float(SettingsManager.get_value("gameplay", "autosave_seconds")), 30.0, 300.0, 30.0, Callable(self, "_set_setting_float").bind("gameplay", "autosave_seconds"))
     _add_checkbox("Субтитры", bool(SettingsManager.get_value("gameplay", "subtitles")), Callable(self, "_set_setting_bool").bind("gameplay", "subtitles"))
 
@@ -401,14 +435,15 @@ func _button(text: String, callback: Callable, parent: Container = null, danger:
     var target: Container = content if parent == null else parent
     var button := Button.new()
     button.text = text
+    button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     button.custom_minimum_size.y = 44
     button.focus_mode = Control.FOCUS_ALL
     button.add_theme_font_size_override("font_size", 14)
-    var bg := Color(0.045, 0.07, 0.10, 0.98)
-    var border := Color(0.12, 0.28, 0.40, 0.80)
+    var bg := Color(0.075, 0.105, 0.08, 0.98)
+    var border := Color(0.36, 0.40, 0.29, 0.50)
     if primary:
-        bg = Color(0.04, 0.20, 0.28, 0.98)
-        border = Color(0.18, 0.72, 0.92, 0.96)
+        bg = Color(0.21, 0.29, 0.22, 0.98)
+        border = Color(0.65, 0.68, 0.46, 0.70)
     elif danger:
         bg = Color(0.17, 0.045, 0.055, 0.98)
         border = Color(0.60, 0.15, 0.20, 0.86)
@@ -432,6 +467,7 @@ func _body(text: String) -> Label:
 func _section_label(text: String) -> void:
     var label := Label.new()
     label.text = text.to_upper()
+    label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     label.modulate = Color(0.38, 0.68, 0.86)
     label.add_theme_font_size_override("font_size", 11)
     label.custom_minimum_size.y = 26
@@ -452,6 +488,7 @@ func _hero_card(title: String, text: String) -> void:
     margin.add_child(stack)
     var heading := Label.new()
     heading.text = title
+    heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     heading.add_theme_font_size_override("font_size", 20)
     heading.modulate = Color(0.75, 0.92, 1.0)
     stack.add_child(heading)
@@ -476,6 +513,7 @@ func _info_card(title: String, text: String) -> void:
     margin.add_child(stack)
     var heading := Label.new()
     heading.text = title
+    heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     heading.modulate = Color(0.45, 0.74, 0.93)
     heading.add_theme_font_size_override("font_size", 11)
     stack.add_child(heading)
@@ -497,6 +535,7 @@ func _add_checkbox(text: String, value: bool, callback: Callable) -> void:
     card.add_child(margin)
     var box := CheckBox.new()
     box.text = text
+    box.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     box.button_pressed = value
     box.custom_minimum_size.y = 36
     box.toggled.connect(callback)
@@ -520,6 +559,7 @@ func _add_slider(text: String, value: float, min_value: float, max_value: float,
     var label := Label.new()
     label.text = text
     label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     top.add_child(label)
     var value_label := Label.new()
     value_label.text = _format_setting_value(value, step)
@@ -572,8 +612,8 @@ func _on_update_status_changed(text: String, available: bool) -> void:
 
 func _panel_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.010, 0.016, 0.026, 0.985)
-    style.border_color = Color(0.12, 0.42, 0.62, 0.92)
+    style.bg_color = Color(0.025, 0.040, 0.033, 0.96)
+    style.border_color = Color(0.55, 0.57, 0.44, 0.38)
     style.set_border_width_all(1)
     style.set_corner_radius_all(14)
     style.shadow_color = Color(0, 0, 0, 0.50)
@@ -582,16 +622,16 @@ func _panel_style() -> StyleBoxFlat:
 
 func _sidebar_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.012, 0.028, 0.043, 0.98)
-    style.border_color = Color(0.06, 0.20, 0.31, 0.85)
+    style.bg_color = Color(0.035, 0.053, 0.043, 0.98)
+    style.border_color = Color(0.35, 0.39, 0.29, 0.35)
     style.set_border_width_all(1)
     style.set_corner_radius_all(10)
     return style
 
 func _hero_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.025, 0.105, 0.145, 0.96)
-    style.border_color = Color(0.14, 0.58, 0.78, 0.86)
+    style.bg_color = Color(0.11, 0.17, 0.13, 0.96)
+    style.border_color = Color(0.48, 0.53, 0.35, 0.45)
     style.set_border_width_all(1)
     style.set_corner_radius_all(10)
     return style

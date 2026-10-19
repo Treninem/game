@@ -120,3 +120,7 @@ Only physically import files after the exact upstream file/package license is ve
 - Verified source registry: COMPLETE for this batch.
 - Runtime integration: intentionally NOT DONE in this chat.
 - Main chat action: consume these sources before generating duplicate NPC/model/material assets.
+
+### Main integration follow-up — 2026-10-19
+
+INTEGRATED: existing physically staged B89 byzmod3d CC0 `3D Character Pack` anatomical `homen_base.obj`, fitted to the existing Quaternius rig in `assets/production/characters/citizen/citizen.glb`. Ten clips retained. Source and licenses are preserved next to the production asset. Simple project skin/clothing materials replace an absent source MTL. This anatomical mesh is not a photorealistic character; finger grip remains unfinished.

@@ -62,6 +62,18 @@ func _ready() -> void:
                     if approach_box.size.z < HYDROLOGY.ROAD_BRIDGE_HALF_WIDTH * 1.9:
                         failures.append("RoadBridge %s ramp is narrower than the carriageway" % approach_name)
         if deck != null:
+            for end_sign: float in [-1.0, 1.0]:
+                var approach_name := "ApproachNear" if end_sign < 0 else "ApproachFar"
+                var approach := bridge.get_node(approach_name) as MeshInstance3D
+                var length := (approach.mesh as BoxMesh).size.x
+                var inner := approach.global_transform * Vector3(-end_sign * length * 0.5, 0, 0)
+                var outer := approach.global_transform * Vector3(end_sign * length * 0.5, 0, 0)
+                var expected_inner := bridge_center + HYDROLOGY.ROAD_BRIDGE_DIRECTION.normalized() * HYDROLOGY.ROAD_BRIDGE_HALF_LENGTH * end_sign
+                var expected_outer := expected_inner + HYDROLOGY.ROAD_BRIDGE_DIRECTION.normalized() * WorldRoads.BRIDGE_APPROACH_LENGTH * end_sign
+                if Vector2(inner.x, inner.z).distance_to(expected_inner) > 0.02 or absf(inner.y - deck.global_position.y) > 0.02:
+                    failures.append("Bridge ramp does not join its deck: %s" % approach_name)
+                if Vector2(outer.x, outer.z).distance_to(expected_outer) > 0.02 or absf(outer.y - WorldData.elevation_at(expected_outer) - 0.08) > 0.02:
+                    failures.append("Bridge ramp does not join its bank: %s" % approach_name)
             var deck_world_y := chunk.global_position.y + deck.position.y
             var water_y := WorldData.water_level_at(bridge_center)
             if deck_world_y < water_y + HYDROLOGY.ROAD_BRIDGE_CLEARANCE - 0.05:

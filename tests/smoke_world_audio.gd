@@ -82,6 +82,8 @@ func _ready() -> void:
     if String(audio.get("last_footstep_surface")) != "wet" or not String(audio.get("last_footstep_stream_path")).contains("footstep_wet"):
         failures.append("Ford footstep did not use a promoted wet sound")
 
+    world.queue_free()
+    await get_tree().create_timer(0.1).timeout
     if failures.is_empty():
         print("WORLD_AUDIO_SMOKE_OK river=spatial footsteps=surface_aware production_audio=promoted player_hook=active")
         get_tree().quit(0)

@@ -18,3 +18,14 @@ Project-owned reusable Godot 4.7 / GL Compatibility environment shaders.
 
 ## License
 These shader files are project-owned and may be used as part of ImPuls. External reference shaders listed in `assets/ASSET_PACKS.md` remain subject to their recorded source/license and are not physically imported unless their files exist in the repository.
+
+## Foliage extension
+- `wind_motion.gdshaderinc` shares the original cloth gust/displacement function.
+- `foliage_wind.gdshader` uses that function and the same EnvironmentState wind parameters for opaque alpha-cutout leaves and grass. It writes ordinary depth and avoids transparent sorting; cloth retains its existing transparency behavior.
+- Optional `black_key` also removes the legacy black backing of the B44 temperate branch texture. `production_nature.gd` enables it only for the selected temperate leaf material; other foliage keeps its original alpha behavior.
+
+## Soft environmental particles
+`soft_particle.gdshader` and `environment_particle_material.gd` share an analytic
+radial alpha falloff for atmospheric motes, dust, mist and snow sprites. Generic
+billboards no longer expose their rectangular bounds. Pollen is seasonal; dust
+is limited to arid biomes or actual strong dust storms.

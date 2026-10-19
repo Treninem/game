@@ -1,5 +1,65 @@
 # Changelog
 
+## Unreleased workspace — 2026-10-19 — persistent streamed residents
+- Residents with stable IDs retain validated local transforms, parent anchors, doorway transit, route index and bounded activity/reaction timers. Save snapshots capture live state at the actual boundary; unloading records the last grounded position. No Node references or transient doorway owners enter save data.
+- Loading restores existing residents and physical door openings, then revalidates floor collision before showing the human. State revisions prevent teardown of an old scene from repopulating a clean new game. Legacy phase-only records and malformed/nonfinite coordinates have bounded fallbacks.
+- Added a regression that reproduced five failures before the fix and now passes real-slot/JSON/streaming/reset/corrupt-state checks. The live square test also rebuilds during doorway transit and requires completion of both home and work routes. Nine unique affected scenarios passed.
+- Official graphical inspection walked 1368.68 m through ordinary movement Input, confirmed the original square nodes were freed beyond the actual unload radius, returned to both residents still indoors, entered through a real ray interaction and saved/loaded slot 3. Only the inspection fixture holds clock/survival at 22:00; this is not a manual full-world or performance certification.
+- Prepared a seven-file runtime/test patch relative to the preceding home-life integration working tree and validated it without modifying the index. No commit or stable release was created. Evidence: docs/DEVELOPMENT_LOG_2026-10-19_CITIZEN_STATE.json. Continuous distant simulation, household actions and the remaining master-specification systems are unfinished.
+
+## Unreleased workspace — 2026-10-19 — square home and local NPC context
+- Replaced one sealed square house with the existing physical room/door and authored furniture. Residents return inside at night and leave for work; doorway ownership fixes the observed deadlock. Player-opened doors are no longer immediately closed by an unrelated work routine.
+- Native review exposed coplanar paving/floor flicker, blank FBX furniture slots and open roof ends. Added a small physical threshold, reused wood/cloth materials and shared roof gables, then repeated affected movement/room/furniture checks.
+- Shop hours and finite merchant money now govern real trades. Failed purchases/sales preserve goods; supply history and visible nearby successful spells inform saved contextual dialogue. Dangerous magic temporarily interrupts activity. No external LLM or full social simulation is claimed.
+- Thirteen unique affected local scenarios passed, plus a full graphical home/life fixture and a 135.32 m native walk from the previously earned arrival save, with actual ray interactions, purchases, weapon equip/unequip and shield. A final sentence-only wording edit received a separate exported-package saved-dialogue check. Strict error detection remains enabled; short tests now allow proper asynchronous audio teardown.
+- An immediate post-load dialogue could freeze the opaque reveal overlay. Its tween now continues during pause; the final saved-dialogue probe asserts a nonblack real frame and functioning close, and boot_world passed again.
+- Evidence, snapshots and limitations: docs/DEVELOPMENT_LOG_2026-10-19_HOME_LIFE.json. Most houses, household activities, persistent citizen positions, full performance and stable release certification remain unfinished.
+
+## Unreleased workspace — 2026-10-19 — bounded merchant dialogue
+- Native review found seven merchant choices expanding a bottom-anchored panel beyond both 1280×720 and 800×450 viewports. Replaced the unbounded layout with a viewport-fitted panel, scrolling body and keyboard-focus following; removing old choice rows immediately also prevents transient doubled layout size during trade refreshes.
+- Real purchase, supply-sale and close choices remain available; the actual close button resumes gameplay. Added a failing-before/passing-after merchant regression, graphical captures and exported-package checks. Responsive UI and affected gameplay scenarios bring acceptance to nineteen unique local cases.
+- The final frozen PCK completed a fresh 16911.59 m input-driven forest-to-capital route after this UI change: all sixteen waypoints, no driver position assignments, arrival saved. Nineteen local scenarios passed. Final evidence and limitations: docs/DEVELOPMENT_LOG_2026-10-19_CAPITAL_SQUARE_UI.json. This is an unreleased review, not a certified stable release.
+
+## Unreleased workspace — 2026-10-19 — working capital square
+- Selected existing CC0 authored benches, lanterns, workbench and produce barrels for the central square, with measured grounding, collision and 47 cm bench seats. Reused existing market stalls; main crossings remain clear.
+- Added an existing photographic stone texture with world-space scale and mipmaps. Corrected paving height and removed duplicate world dirt overlays inside the capital; bridge and roadbed physics remain unchanged.
+- Added bounded readable night fill and warm evening stall lights; reduced daytime overexposure after native visual review.
+- Linked two citizens to actual workplaces, meal/social spots and home approaches. Players can sell wood and stone; the artisan uses the existing arrow recipe over eight seconds to replenish finite shop stock. Progress/stock survive streaming, and missing materials produce a waiting state rather than fake work.
+- Map records actual street furniture footprints beneath living markers. Paved walking no longer produces dirt prints or stone fragments; actual tool-impact effects remain.
+- Fixed composed VFX expiry callbacks with weak references after native walking exposed already-freed child objects. Added ownership/natural-expiry regression coverage.
+- Seventeen unique local scenarios and graphical square/gameplay-action checks passed. Frozen-package traversal and export evidence are recorded in the acceptance journal. This remains an unreleased review; ordinary capital homes lack full interiors and realistic character/forest materials are unfinished.
+
+## Unreleased workspace — 2026-10-19 — anatomical human and living-world refresh
+- Replaced the previous citizen geometry with an existing CC0 B89 anatomical human fitted to the existing Quaternius rig; retained ten animations and skin/clothing variants. Connected-arm transfer and smoothed joint weights prevent previously observed bow/hand stretching. Exact grip and realistic surface materials remain unfinished.
+- Selected an additional existing B44 authored broadleaf tree with its original branch texture for the start forest, reusing shared foliage wind/cutout.
+- Added the existing B47 authored chimney and wider roof eaves to ordinary capital roofs. Homes still have solid collision shells and do not yet provide full interiors.
+- Civilian legacy patrols now enter day/night work, meal, social and home routines; watchmen retain their patrols. Obstacle steering and a street-side work target prevent tested workplace blockage.
+- Local-map features now include actual rock batches and persistent felled stumps, preserving existing terrain, water, roads, houses and live markers.
+- Fourteen local gameplay/physics/UI scenarios and fifty sampled animation poses passed; four affected scenarios repeated after bow/gait fixes. Native forest/capital inspection, graphical gameplay actions and an external packaged-game smoke passed. A fresh continuous 16.91 km input-driven autopilot route reached the capital square without driver position assignments. Headless fixed 1/60-second simulation can run faster than wall time; normal movement parameters/time scale remain. Evidence: `docs/DEVELOPMENT_LOG_2026-10-19_WORLD_REFRESH.json`. No stable release is certified here.
+
+## Unreleased workspace — 2026-10-19 — tree contact refinement
+- Tree-impact particles and spatial sound now originate at the ray-confirmed bark surface after a valid axe stroke. Cancelled strokes do not emit wood-hit audio; three existing CC0 samples provide variation.
+- Short sound emitters retire safely after playback; fallback cleanup uses weak references.
+- Corrected source/target shoulder orientation during chopping-animation retargeting.
+- Standing-tree map footprints disappear after felling even when the cell is unloaded or restored from a saved feature dictionary. Ordinary stone/plant melee surface effects are preserved.
+
+## Unreleased workspace — 2026-10-19 — axe harvesting
+- Standing resource trees and ordinary start-forest trees require an equipped axe and three reachable strokes; contact is delayed and rechecks equipment, distance and obstacles.
+- Reused the physically staged CC0 TreeChopping_Loop on the existing human skeleton as Axe_Chop, replacing the generic gesture for axe swings.
+- Undamaged forest trees retain shared draw batches. Only a struck tree becomes independently animated; neighbouring instances remain unchanged.
+- Controlled tree falls leave authored Kenney stump/log models. E collects nearby fallen wood once; partial cuts, felling and collected loot persist through streaming and saves, including saves during a fall.
+- Traders now sell finite axe stock, including migration of older saved shops. Existing berries, stone, combat and camera checks remain required.
+- This is a private working-tree review. Falling crowns do not use destructive rigid-body physics; distant batched forests outside the start region are not fully harvestable.
+
+## Unreleased workspace — 2026-10-19 — camera stabilization
+- Integrated a sphere-tested third-person camera with immediate wall clearance and smooth distance recovery, including initially overlapping geometry.
+- Added persistent 2–9 m zoom using the mouse wheel and the gameplay settings slider; zoom does not reapply display settings.
+- Windows-compatible pointing now handles absolute cursor events even when both relative-motion fields are empty.
+- Returning from a menu discards buffered pointer motion during recapture, preventing the observed yaw/pitch snap while retaining subsequent camera control.
+- Interaction rays follow camera distance, while actual reach remains measured from the hero. Melee and interaction reject targets behind the hero and obstacles between hero and target.
+- Added physical obstruction/reach regression coverage and extended graphical input checks for wheel zoom, paused menus and absolute pointing. Results and unresolved issues are recorded with each private review package.
+- Added the factual system inventory in `docs/DEVELOPMENT_STATUS.json`; unimplemented guild, wildlife, terrain editing and social-memory systems are explicitly separated from integrated functionality. This workspace entry is not a stable release.
+
 ## 0.10.2-stable — 2026-08-14
 - Added `updater_v4.ps1`: normal updates for an installed game now use retained content-aware delta chains only and no longer fall back to downloading the full game archive.
 - Full `ImPuls-PC-Windows-x64.zip` is reserved for first installation/manual recovery; ordinary updates download only the missing delta payload plus small manifests/runtime metadata.

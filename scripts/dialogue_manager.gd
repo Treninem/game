@@ -33,6 +33,12 @@ func choose(index: int) -> void:
         return
     var action := String(option.get("action", "close"))
     match action:
+        "merchant_trade":
+            var merchant := instance_from_id(int(option.get("merchant", 0))) as Node
+            if is_instance_valid(merchant) and merchant.is_inside_tree() and merchant.has_method("complete_trade"):
+                merchant.call("complete_trade", String(option.get("item", "")), bool(option.get("sell", false)))
+            else:
+                close_dialogue()
         "start_quest":
             GameState.start_quest()
             open_dialogue("Мира", "Хорошо. Принеси мне 8 единиц древесины и 4 камня. Эти материалы нужны для первого убежища.", [{"text": "Я вернусь с материалами.", "action": "close"}])

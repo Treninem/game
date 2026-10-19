@@ -1,18 +1,26 @@
-; ImPuls PC — offline single-player RPG
-; Stable 0.10.7: non-blocking boot launcher and production world pipeline
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
 config_version=5
 
 [application]
+
 config/name="ImPuls"
 config/version="0.10.7-stable"
-config/icon="res://assets/branding/impuls_icon.png"
 run/main_scene="res://scenes/boot_launcher.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-boot_splash/image="res://assets/branding/impuls_icon.png"
 boot_splash/bg_color=Color(0.015, 0.02, 0.035, 1)
-boot_splash/fullsize=false
+boot_splash/stretch_mode=0
+boot_splash/image="res://assets/branding/impuls_icon.png"
+config/icon="res://assets/branding/impuls_icon.png"
 
 [autoload]
+
 GameState="*res://scripts/game_state.gd"
 ProgressionSystem="*res://scripts/progression_system.gd"
 SaveManager="*res://scripts/save_manager.gd"
@@ -42,6 +50,7 @@ LandmarkVFX="*res://scripts/landmark_vfx.gd"
 ScreenVFX="*res://scripts/screen_vfx.gd"
 
 [display]
+
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/window_width_override=1280
@@ -49,9 +58,6 @@ window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 
 [rendering]
+
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-textures/default_filters/use_nearest_mipmap_filter=false
-
-[audio]
-driver/enable_input=false

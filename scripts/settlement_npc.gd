@@ -2,16 +2,33 @@ class_name SettlementNPC
 extends CharacterBody3D
 
 const HUMANOID := preload("res://scripts/humanoid_visual.gd")
+const RUNTIME_STATE := preload("res://scripts/citizen_runtime_state.gd")
 
 @export var display_name := "Житель"
 @export var role := "resident"
 @export var move_speed := 1.45
 @export var palette_index := 0
+@export var autonomous := false
 
 var route_points_local: Array[Vector3] = []
 var route_index := 0
 var pause_elapsed := 0.0
 var visual: Node3D
+var ground_ready := false
+var activity := ""
+var routine_phase := ""
+var talking_to_player := false
+var activity_label: Label3D
+var citizen_id := ""
+var avoid_elapsed := 0.0
+var avoid_heading := Vector3.ZERO
+var home_crossing := false
+var witnessed_pause := 0.0
+var authored_position := Vector3.ZERO
+var authored_yaw := 0.0
+var authored_route_index := 0
+var state_revision := -1
+const SHOP_PRICES := {"berries": 2, "water_flask": 3, "arrow": 1, "starter_axe": 12}
 
 func configure(name_value: String, role_value: String, palette_value: int, route_points: Array) -> void:
     display_name = name_value
@@ -23,7 +40,13 @@ func configure(name_value: String, role_value: String, palette_value: int, route
             route_points_local.append(point)
 
 func _ready() -> void:
+    # Legacy civilian routes described four patrol corners. Civilians now use
+    # time-of-day destinations; only watchmen keep their authored patrol route.
+    if role != "watch" and route_points_local.size() >= 2:
+        autonomous = true
     add_to_group("settlement_npc")
+    if role == "watch":
+        add_to_group("ally")
     collision_layer = 1
     collision_mask = 1
     floor_snap_length = 0.35
@@ -31,16 +54,47 @@ func _ready() -> void:
     up_direction = Vector3.UP
     _build_collision()
     _build_visual()
+    citizen_id = String(get_meta("citizen_id", "%s:%s:%d:%d" % [display_name, role, roundi(global_position.x), roundi(global_position.z)]))
+    authored_position = position
+    authored_yaw = rotation.y
+    authored_route_index = route_index
+    restore_runtime_state()
+    DialogueManager.dialogue_closed.connect(_end_conversation)
+    MagicSystem.spell_cast.connect(_witness_spell)
+    if autonomous:
+        activity_label = Label3D.new()
+        activity_label.position.y = 2.1
+        activity_label.font_size = 28
+        activity_label.pixel_size = 0.004
+        activity_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+        activity_label.visibility_range_end = 24.0
+        add_child(activity_label)
 
 func _physics_process(delta: float) -> void:
-    if DialogueManager.is_open:
+    if state_revision != GameState.state_revision:
+        # Old scene teardown must never repopulate a freshly reset new game.
+        if GameState.state_transition_kind != "load":
+            return
+        restore_runtime_state()
+    var xz := Vector2(global_position.x, global_position.z)
+    var terrain_y := WorldData.elevation_at(xz)
+    if not ground_ready or global_position.y < terrain_y - 0.5:
+        ground_ready = _wait_for_ground(terrain_y)
+        if not ground_ready:
+            return
+    if talking_to_player and DialogueManager.is_open:
         velocity = Vector3.ZERO
         return
+    witnessed_pause = maxf(0.0, witnessed_pause - delta)
 
     if not is_on_floor():
         velocity.y -= 18.0 * delta
     elif velocity.y < 0.0:
         velocity.y = -0.15
+
+    if autonomous:
+        _follow_routine(delta)
+        return
 
     if route_points_local.size() < 2:
         velocity.x = move_toward(velocity.x, 0.0, delta * 7.0)
@@ -75,16 +129,337 @@ func _physics_process(delta: float) -> void:
     rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), minf(1.0, delta * 7.0))
     move_and_slide()
 
+func routine_plan(minutes: float) -> Dictionary:
+    var hour := fmod(minutes / 60.0, 24.0)
+    var side := -1.0 if name.ends_with("0") else 1.0
+    var home := Vector3(28.0 * side, 0, 16.0 * side)
+    var work := home if role == "craftsman" else Vector3(12.0 * side, 0, -12.0 * side)
+    if role == "trader":
+        work = Vector3(9, 0, -12)
+    var places: Dictionary = get_meta("routine_places", {})
+    home = places.get("home", home)
+    work = places.get("work", work)
+    if hour < 6.0 or hour >= 21.0:
+        return {"phase": "home", "target": home, "activity": "Отдыхает у дома", "walking": "Идёт домой"}
+    if hour >= 12.0 and hour < 14.0:
+        return {"phase": "meal", "target": places.get("meal", Vector3(12 * side, 0, 12)), "activity": "Обедает", "walking": "Идёт на обед"}
+    if hour >= 18.0:
+        return {"phase": "social", "target": places.get("social", Vector3(1.3 * side, 0, 12)), "activity": "Общается", "walking": "Идёт на встречу"}
+    if role == "traveler":
+        return {"phase": "travel_morning" if hour < 12 else "travel_afternoon", "target": Vector3(0, 0, 156 if hour < 12 else -156), "activity": "Остановился в пути", "walking": "Путешествует"}
+    return {"phase": "work", "target": work, "activity": "Торгует" if role == "trader" else "Ремонтирует" if role == "craftsman" else "На работе", "walking": "Идёт на работу"}
+
+func _follow_routine(delta: float) -> void:
+    var plan := routine_plan(GameState.world_minutes)
+    plan = _home_route(plan)
+    var target: Vector3 = get_parent_node_3d().to_global(plan.target)
+    var flat := target - global_position
+    flat.y = 0
+    var arrived := flat.length() < 0.75
+    activity = String(plan.activity if arrived else plan.walking)
+    if witnessed_pause > 0.0:
+        activity = "Осторожно! Не колдуйте рядом с людьми."
+        velocity.x = move_toward(velocity.x, 0.0, delta * 8.0)
+        velocity.z = move_toward(velocity.z, 0.0, delta * 8.0)
+        activity_label.text = display_name + " · " + activity
+        set_meta("activity", "idle")
+        move_and_slide()
+        return
+    activity_label.text = display_name + " · " + activity
+    set_meta("activity", "work" if arrived and plan.phase == "work" and role == "craftsman" else "social" if arrived and plan.phase == "social" else "idle")
+    if routine_phase != plan.phase:
+        routine_phase = plan.phase
+        var saved_record: Variant = GameState.get_world_value("citizen:" + citizen_id, {})
+        var record: Dictionary = saved_record.duplicate(true) if saved_record is Dictionary else {}
+        record["phase"] = routine_phase
+        record["role"] = role
+        GameState.set_world_value("citizen:" + citizen_id, record)
+    if arrived:
+        velocity.x = move_toward(velocity.x, 0.0, delta * 6.0)
+        velocity.z = move_toward(velocity.z, 0.0, delta * 6.0)
+        if plan.phase == "work" and has_meta("work_facing"):
+            var toward_work: Vector3 = get_meta("work_facing") - plan.target
+            rotation.y = lerp_angle(rotation.y, atan2(-toward_work.x, -toward_work.z), minf(1.0, delta * 5.0))
+            var crafting := _workbench_step(delta)
+            if has_meta("work_shop_id"):
+                activity = "Изготавливает стрелы" if crafting else "Ждёт материалы у верстака"
+                activity_label.text = display_name + " · " + activity
+                set_meta("activity", "work" if crafting else "idle")
+        if plan.phase == "social":
+            for other: Node3D in get_tree().get_nodes_in_group("settlement_npc"):
+                if other != self and global_position.distance_squared_to(other.global_position) < 16.0:
+                    var toward := other.global_position - global_position
+                    rotation.y = lerp_angle(rotation.y, atan2(-toward.x, -toward.z), delta * 3.0)
+                    break
+    else:
+        var direction := _routine_direction(flat.normalized(), delta)
+        velocity.x = move_toward(velocity.x, direction.x * move_speed, delta * 5.5)
+        velocity.z = move_toward(velocity.z, direction.z * move_speed, delta * 5.5)
+        rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), minf(1.0, delta * 7.0))
+    move_and_slide()
+
+func _exit_tree() -> void:
+    capture_runtime_state()
+
+func capture_runtime_state() -> void:
+    if not is_instance_valid(GameState) or state_revision != GameState.state_revision or not ground_ready:
+        return
+    if not has_meta("citizen_id") or citizen_id.is_empty() or not is_inside_tree():
+        return
+    var parent := get_parent_node_3d()
+    if parent == null:
+        return
+    var anchor := parent.global_position
+    GameState.set_world_value("citizen:" + citizen_id, {
+        "runtime_version": 1, "role": role, "phase": routine_phase,
+        "anchor": [anchor.x, anchor.y, anchor.z],
+        "position": [position.x, position.y, position.z], "yaw": rotation.y,
+        "home_crossing": home_crossing, "route_index": route_index,
+        "pause_elapsed": pause_elapsed, "witnessed_pause": witnessed_pause
+    })
+
+func restore_runtime_state() -> void:
+    state_revision = GameState.state_revision
+    if not has_meta("citizen_id") or citizen_id.is_empty():
+        return
+    var decoded := RUNTIME_STATE.decode(GameState.get_world_value("citizen:" + citizen_id), get_parent_node_3d().global_position, authored_position, role)
+    position = decoded.get("position", authored_position)
+    rotation.y = float(decoded.get("yaw", authored_yaw))
+    home_crossing = bool(decoded.get("home_crossing", false))
+    route_index = clampi(int(decoded.get("route_index", authored_route_index)), 0, maxi(0, route_points_local.size() - 1))
+    pause_elapsed = float(decoded.get("pause_elapsed", 0.0))
+    witnessed_pause = float(decoded.get("witnessed_pause", 0.0))
+    avoid_elapsed = 0.0
+    routine_phase = ""
+    ground_ready = false
+    velocity = Vector3.ZERO
+    visual.visible = false
+
+func _home_route(plan: Dictionary) -> Dictionary:
+    if not has_meta("home_building"):
+        return plan
+    var home := get_parent().get_node_or_null(String(get_meta("home_building"))) as EnterableBuilding
+    if home == null:
+        return plan
+    var local := home.to_local(global_position)
+    var front := home.footprint.y * 0.5
+    var inside := absf(local.x) < home.footprint.x * 0.5 and local.z < front - 1.0 and local.z > -front
+    var approach := home.position + Vector3(0, 0, front + 2.0)
+    var owner_id := int(home.get_meta("door_user", 0))
+    var owner := instance_from_id(owner_id) if owner_id != 0 else null
+    var needs_crossing: bool = (plan.phase == "home" and not inside) or (plan.phase != "home" and (inside or home_crossing))
+    if needs_crossing and is_instance_valid(owner) and owner != self:
+        # A single narrow entrance is a shared resource. Wait away from the
+        # threshold instead of two avoidance rays deadlocking face to face.
+        plan.target = home.position + Vector3(-2.5 if role == "trader" else 2.5, 0, front - 2.8 if inside else front + 3.0)
+        plan.phase = "door_wait"
+        plan.activity = "Пропускает соседа в дверях"
+        plan.walking = "Освобождает проход"
+        return plan
+    if plan.phase == "home" and not inside:
+        var to_approach := Vector2(local.x, local.z - front - 2.0).length()
+        if to_approach < 0.8:
+            home_crossing = true
+        if home_crossing:
+            home.set_meta("door_user", get_instance_id())
+            home.set_meta("auto_close", true)
+            home.front_door.set_open(true)
+            plan.target = home.position + Vector3(0, 0, front - 1.8)
+        else:
+            plan.target = approach
+        plan.walking = "Идёт домой"
+        plan.activity = "Открывает дверь"
+    elif plan.phase != "home" and (inside or home_crossing):
+        home_crossing = true
+        home.set_meta("door_user", get_instance_id())
+        home.set_meta("auto_close", true)
+        home.front_door.set_open(true)
+        plan.target = approach
+        plan.walking = "Выходит из дома"
+        # Routine arrival accepts a 0.75 m radius around the +2 m approach.
+        # Release before that stopping radius, after clearing the actual leaf.
+        if local.z > front + 1.0:
+            home_crossing = false
+            home.set_meta("door_user", 0)
+    else:
+        home_crossing = false
+        if owner == self:
+            home.set_meta("door_user", 0)
+        if plan.phase == "home":
+            plan.activity = "Отдыхает дома"
+        # Leave the door open while anyone occupies the full swing/threshold.
+        # Never swing it shut into the player or the other returning resident.
+        var occupied := false
+        for actor in get_tree().get_nodes_in_group("settlement_npc") + get_tree().get_nodes_in_group("player"):
+            if actor is Node3D:
+                var p := home.to_local(actor.global_position)
+                if absf(p.x) < 2.2 and absf(p.z - front) < 2.5:
+                    occupied = true
+                    break
+        if not occupied and bool(home.get_meta("auto_close", false)):
+            home.front_door.set_open(false)
+            home.set_meta("auto_close", false)
+    return plan
+
+func _witness_spell(spell_id: String) -> void:
+    var actor := get_tree().get_first_node_in_group("player") as Node3D
+    if actor == null or global_position.distance_squared_to(actor.global_position) > 144.0:
+        return
+    var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 1.5, actor.global_position + Vector3.UP * 1.1, 1, [get_rid()])
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    if not hit.is_empty() and hit.collider != actor:
+        return
+    var memory: Dictionary = GameState.get_world_value("memory:" + citizen_id, {}).duplicate(true)
+    memory["spell"] = spell_id
+    GameState.set_world_value("memory:" + citizen_id, memory)
+    if spell_id not in ["heal", "shield", "blink"]:
+        witnessed_pause = 6.0
+
+func _context_line() -> String:
+    var memory: Dictionary = GameState.get_world_value("memory:" + citizen_id, {})
+    var line := ""
+    if int(memory.get("supplies", 0)) > 0:
+        line += "Спасибо за материалы: вы уже продали мне %d ед. сырья. " % int(memory.supplies)
+    if memory.has("spell"):
+        line += "Помню ваше заклинание «%s». " % String(MagicSystem.SPELLS.get(String(memory.spell), {}).get("label", memory.spell))
+    if not InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON).is_empty():
+        line += "Осторожнее с оружием у прилавка. "
+    return line
+
+func _routine_direction(desired: Vector3, delta: float) -> Vector3:
+    avoid_elapsed = maxf(0.0, avoid_elapsed - delta)
+    if avoid_elapsed > 0 and _routine_way_clear(avoid_heading):
+        return avoid_heading
+    if _routine_way_clear(desired):
+        return desired
+    for angle in [0.65, -0.65, 1.05, -1.05, 1.55, -1.55]:
+        var candidate := desired.rotated(Vector3.UP, angle)
+        if _routine_way_clear(candidate):
+            avoid_heading = candidate
+            avoid_elapsed = 1.1
+            return candidate
+    return Vector3.ZERO
+
+func _routine_way_clear(direction: Vector3) -> bool:
+    var origin := global_position + Vector3.UP * 0.8
+    var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * 1.8, 1, [get_rid()])
+    return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+func _end_conversation() -> void:
+    talking_to_player = false
+
+func _workbench_step(delta: float) -> bool:
+    if role != "craftsman" or not has_meta("work_shop_id"):
+        return false
+    var recipe_id := String(get_meta("work_recipe", ""))
+    if not InventorySystem.RECIPES.has(recipe_id):
+        return false
+    var recipe: Dictionary = InventorySystem.RECIPES[recipe_id]
+    var shop_key := "shop:" + String(get_meta("work_shop_id"))
+    var stock: Dictionary = GameState.get_world_value(shop_key, {})
+    for item: String in recipe.requirements:
+        if int(stock.get(item, 0)) < int(recipe.requirements[item]):
+            return false
+    var progress_key := "workshop:" + citizen_id
+    var progress := float(GameState.get_world_value(progress_key, 0.0)) + delta
+    if progress >= 8.0:
+        for item: String in recipe.requirements:
+            stock[item] = int(stock[item]) - int(recipe.requirements[item])
+        stock[recipe.result] = int(stock.get(recipe.result, 0)) + int(recipe.amount)
+        GameState.set_world_value(shop_key, stock)
+        progress = 0.0
+    GameState.set_world_value(progress_key, progress)
+    return true
+
+func _shop_stock() -> Dictionary:
+    var stock: Dictionary = GameState.get_world_value("shop:" + citizen_id, {"berries": 12, "water_flask": 8, "arrow": 30, "wood": 0})
+    # Migrate existing shops once; an explicitly sold-out axe stays sold out.
+    if not stock.has("starter_axe"):
+        stock["starter_axe"] = 2
+    if not stock.has("stone"):
+        stock["stone"] = 0
+    if not stock.has("coins"):
+        stock["coins"] = 100
+    return stock
+
+func _open_shop() -> void:
+    var stock := _shop_stock()
+    var choices: Array = []
+    for item: String in SHOP_PRICES:
+        var label := String(InventorySystem.item_info(item).get("name", item))
+        choices.append({"text": "%s — %d мон. (осталось %d)" % [label, SHOP_PRICES[item], stock.get(item, 0)], "action": "merchant_trade", "merchant": get_instance_id(), "item": item, "sell": false})
+    choices.append({"text": "Продать древесину — 1 мон.", "action": "merchant_trade", "merchant": get_instance_id(), "item": "wood", "sell": true})
+    choices.append({"text": "Продать камень — 1 мон.", "action": "merchant_trade", "merchant": get_instance_id(), "item": "stone", "sell": true})
+    choices.append({"text": "До встречи.", "action": "close"})
+    DialogueManager.open_dialogue(display_name, _context_line() + "Выберите товар. У вас %d монет, у меня %d." % [GameState.coins, int(stock.coins)], choices)
+
+func complete_trade(item: String, sell: bool) -> bool:
+    if role != "trader":
+        return false
+    if has_meta("home_building") and routine_plan(GameState.world_minutes).phase != "work":
+        GameState.notify("Лавка закрыта. Приходите в рабочее время.")
+        return false
+    var stock := _shop_stock()
+    var success := false
+    if sell and item in ["wood", "stone"] and int(stock.coins) >= 1 and GameState.remove_item(item, 1):
+        GameState.coins += 1
+        stock.coins = int(stock.coins) - 1
+        stock[item] = int(stock.get(item, 0)) + 1
+        var memory: Dictionary = GameState.get_world_value("memory:" + citizen_id, {}).duplicate(true)
+        memory["supplies"] = int(memory.get("supplies", 0)) + 1
+        GameState.set_world_value("memory:" + citizen_id, memory)
+        success = true
+    elif not sell and SHOP_PRICES.has(item):
+        var price := int(SHOP_PRICES[item])
+        if GameState.coins >= price and int(stock.get(item, 0)) > 0:
+            GameState.coins -= price
+            stock.coins = int(stock.coins) + price
+            stock[item] = int(stock[item]) - 1
+            GameState.add_item(item, 1)
+            success = true
+    if success:
+        GameState.set_world_value("shop:" + citizen_id, stock)
+        GameState.inventory_changed.emit()
+    else:
+        GameState.notify("Не хватает монет у покупателя, товара или ресурса для продажи.")
+    if talking_to_player:
+        _open_shop()
+    return success
+
+func _wait_for_ground(terrain_y: float) -> bool:
+    # Residents can stream in before the terrain physics chunk. Never let them
+    # fall below the arriving mesh or display a person standing in empty air.
+    var from := Vector3(global_position.x, terrain_y + 2.0, global_position.z)
+    var to := Vector3(global_position.x, terrain_y - 2.0, global_position.z)
+    var query := PhysicsRayQueryParameters3D.create(from, to, 1, [get_rid()])
+    query.collide_with_areas = false
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    velocity = Vector3.ZERO
+    if hit.is_empty() or not hit.get("collider") is StaticBody3D:
+        visual.visible = false
+        return false
+    global_position.y = Vector3(hit["position"]).y + 0.04
+    visual.visible = true
+    return true
+
 func interact(_player: Node) -> void:
+    talking_to_player = true
     velocity.x = 0.0
     velocity.z = 0.0
     match role:
         "watch":
             DialogueManager.open_dialogue(display_name, "Ворота и дорога перед ними должны оставаться свободными. Проходите, но не стойте в проезде.", [{"text":"Понял.", "action":"close"}])
         "trader":
-            DialogueManager.open_dialogue(display_name, "Товары складывают у площади. Пока можно осмотреться и поговорить с местными.", [{"text":"Хорошо.", "action":"close"}])
+            if has_meta("home_building") and routine_plan(GameState.world_minutes).phase != "work":
+                DialogueManager.open_dialogue(display_name, _context_line() + "Лавка закрыта. Торгую с 6 до 12 и с 14 до 18 часов; сейчас у меня личное время.", [{"text":"Зайду позже.", "action":"close"}])
+            else:
+                _open_shop()
         "craftsman":
-            DialogueManager.open_dialogue(display_name, "Здесь всё приходится чинить руками: дома, ограды, телеги и инструмент.", [{"text":"Ясно.", "action":"close"}])
+            var line := "Продайте Марте древесину и камень: у верстака я делаю из них стрелы для её лавки." if has_meta("work_shop_id") else "Здесь всё приходится чинить руками: дома, ограды, телеги и инструмент."
+            if has_meta("work_shop_id"):
+                var stock: Dictionary = GameState.get_world_value("shop:" + String(get_meta("work_shop_id")), {})
+                line += " Сейчас в лавке: древесина %d, камень %d, стрелы %d." % [int(stock.get("wood", 0)), int(stock.get("stone", 0)), int(stock.get("arrow", 30))]
+            DialogueManager.open_dialogue(display_name, _context_line() + line, [{"text":"Ясно.", "action":"close"}])
         _:
             DialogueManager.open_dialogue(display_name, "Добрый день. Держитесь дороги — между домами проходы узкие.", [{"text":"До встречи.", "action":"close"}])
 
@@ -117,4 +492,5 @@ func _build_visual() -> void:
     visual.has_guard_armor = role == "watch"
     visual.has_hood = role == "trader"
     visual.has_apron = role == "craftsman"
+    visual.palette_variant = palette_index % 3
     add_child(visual)

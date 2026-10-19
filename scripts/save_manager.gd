@@ -98,7 +98,9 @@ func slot_info(slot: int) -> Dictionary:
     var hour := int(world_minutes / 60.0) % 24
     var minute := int(world_minutes) % 60
     var location := String(state.get("current_location", "неизвестная локация")) if typeof(state) == TYPE_DICTIONARY else "неизвестная локация"
-    return {"slot": slot, "exists": true, "saved_at": String(data.get("saved_at", "неизвестно")), "location": location, "world_time": "%02d:%02d" % [hour, minute], "recovered_from_backup": from_backup}
+    var timestamp = data.get("saved_at_unix", -1)
+    var saved_at_unix := int(timestamp) if _is_finite_number(timestamp) else -1
+    return {"slot": slot, "exists": true, "saved_at": String(data.get("saved_at", "неизвестно")), "saved_at_unix": saved_at_unix, "location": location, "world_time": "%02d:%02d" % [hour, minute], "recovered_from_backup": from_backup}
 
 func list_slots() -> Array[Dictionary]:
     var result: Array[Dictionary] = []
@@ -125,8 +127,20 @@ func _write_atomic(path: String, backup_path: String, payload: Dictionary) -> bo
         push_error("Unable to open temporary save file for writing")
         return false
     file.store_string(JSON.stringify(payload))
+    file.flush()
+    var write_error := file.get_error()
     file.close()
-    var had_previous := FileAccess.file_exists(path)
+    if write_error != OK:
+        DirAccess.remove_absolute(ProjectSettings.globalize_path(temp_path))
+        push_error("Unable to write complete save file")
+        return false
+    # Never rotate a corrupt primary over the last recoverable backup.
+    var had_previous := not _read_save(path).is_empty()
+    if FileAccess.file_exists(path) and not had_previous:
+        var remove_invalid := DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+        if remove_invalid != OK:
+            DirAccess.remove_absolute(ProjectSettings.globalize_path(temp_path))
+            return false
     if had_previous:
         if FileAccess.file_exists(backup_path):
             var backup_remove := DirAccess.remove_absolute(ProjectSettings.globalize_path(backup_path))
@@ -154,14 +168,39 @@ func _read_save(path: String) -> Dictionary:
     var file := FileAccess.open(path, FileAccess.READ)
     if file == null:
         return {}
-    var parsed = JSON.parse_string(file.get_as_text())
+    var json := JSON.new()
+    if json.parse(file.get_as_text()) != OK:
+        return {}
+    var parsed = json.data
     if typeof(parsed) != TYPE_DICTIONARY:
         return {}
-    var version := int(parsed.get("save_version", 1))
+    var raw_version = parsed.get("save_version", 1)
+    if not _is_finite_number(raw_version) or float(raw_version) != floorf(float(raw_version)):
+        return {}
+    var version := int(raw_version)
+    if version < 1:
+        return {}
     if version > SAVE_VERSION:
         push_error("Save file is newer than this game build")
         return {}
+    # Validate before choosing primary versus backup or mutating the player.
+    var player_data = parsed.get("player")
+    if typeof(player_data) != TYPE_DICTIONARY:
+        return {}
+    var position_data = player_data.get("position")
+    if typeof(position_data) != TYPE_ARRAY or position_data.size() != 3:
+        return {}
+    for component in position_data:
+        if not _is_finite_number(component):
+            return {}
+    if not _is_finite_number(player_data.get("rotation_y", 0.0)):
+        return {}
+    if typeof(parsed.get("game_state", {})) != TYPE_DICTIONARY:
+        return {}
     return parsed
+
+func _is_finite_number(value: Variant) -> bool:
+    return (typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT) and is_finite(float(value))
 
 func _migrate_legacy_save_once() -> void:
     if not FileAccess.file_exists(LEGACY_SAVE_PATH) or slot_exists(1):

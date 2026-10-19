@@ -2,6 +2,7 @@ extends Node
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const HYDROLOGY := preload("res://scripts/world_hydrology.gd")
+const CAPITAL := preload("res://scripts/capital_data.gd")
 const CHUNK_SIZE := 192.0
 const PATCH_SPACING := 9.0
 const CHUNK_MARGIN := 8.0
@@ -146,8 +147,8 @@ func _add_bridge_approach(bridge: Node3D, origin: Vector2, center: Vector2, dire
     var terrain_y := WorldData.elevation_at(outer_world) + 0.08
     var rise := deck_y - terrain_y
     var length := sqrt(BRIDGE_APPROACH_LENGTH * BRIDGE_APPROACH_LENGTH + rise * rise)
-    var pitch := atan2(rise * end_sign, BRIDGE_APPROACH_LENGTH)
-    var approach_basis := bridge_basis.rotated(Vector3(0.0, 0.0, 1.0), pitch)
+    var pitch := atan2(-rise * end_sign, BRIDGE_APPROACH_LENGTH)
+    var approach_basis := bridge_basis * Basis(Vector3(0.0, 0.0, 1.0), pitch)
     var midpoint := (end_world + outer_world) * 0.5 - origin
     var midpoint_y := (deck_y + terrain_y) * 0.5
     var mesh := BoxMesh.new()
@@ -191,6 +192,11 @@ func _append_segment_patches(transforms: Array[Transform3D], origin: Vector2, a:
         var t := clampf(distance / length, 0.0, 1.0)
         var world_pos := a.lerp(b, t)
         if world_pos.x >= origin.x - CHUNK_MARGIN and world_pos.x < origin.x + CHUNK_SIZE + CHUNK_MARGIN and world_pos.y >= origin.y - CHUNK_MARGIN and world_pos.y < origin.y + CHUNK_SIZE + CHUNK_MARGIN:
+            # City streaming owns its paved streets. The world dirt strip sat
+            # above those surfaces and painted a brown cross over the plaza.
+            if CAPITAL.inside_capital(world_pos):
+                distance += PATCH_SPACING
+                continue
             if not WorldData.water_kind_at(world_pos).is_empty():
                 distance += PATCH_SPACING
                 continue

@@ -44,6 +44,9 @@ void fragment() {
     base *= mix(1.0, 0.80, thaw_amount * 0.45);
     base = mix(base, vec3(0.72, 0.90, 1.0), cracks * 0.70);
 
+    float ripple = sin(world_pos.x * 2.3 + world_pos.z * 0.8 + TIME * 1.7) * cos(world_pos.z * 3.1 - TIME * 1.2);
+    base *= 1.0 + ripple * 0.045 * (1.0 - freeze_amount);
+    NORMAL_MAP = vec3(0.5 + ripple * 0.07 * (1.0 - freeze_amount), 0.5 + cos(world_pos.x * 2.3 + TIME) * 0.06 * (1.0 - freeze_amount), 1.0);
     ALBEDO = base;
     ROUGHNESS = clamp(mix(0.09, 0.28, freeze_amount) + frost * 0.30 - thaw_amount * 0.12, 0.04, 0.72);
     SPECULAR = 0.88;

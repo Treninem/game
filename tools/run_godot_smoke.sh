@@ -15,11 +15,31 @@ if [[ ! -f "$SCENE" ]]; then
   exit 2
 fi
 
+runtime_args=(--headless)
+if [[ "${GODOT_SMOKE_GRAPHICAL:-0}" == 1 ]]; then
+  runtime_args=(--rendering-method gl_compatibility)
+fi
+if [[ -n "${GODOT_SMOKE_PACK:-}" ]]; then
+  if [[ ! -f "$GODOT_SMOKE_PACK" ]]; then
+    echo "::error title=Exported package missing::$GODOT_SMOKE_PACK does not exist"
+    exit 2
+  fi
+  runtime_args+=(--main-pack "$(realpath "$GODOT_SMOKE_PACK")")
+fi
+if [[ "$SCENE" == *.gd ]]; then
+  runtime_args+=(--script "$(realpath "$SCENE")")
+else
+  runtime_args+=("$SCENE")
+fi
+
 echo "GODOT_SMOKE_START scene=$SCENE timeout=${TIMEOUT_SECONDS}s"
+output_log="$(mktemp)"
+trap 'rm -f "$output_log"' EXIT
 set +e
 timeout --signal=TERM --kill-after=15s "${TIMEOUT_SECONDS}s" \
-  "$GODOT_BIN" --headless --path . "$SCENE"
-status=$?
+  "$GODOT_BIN" --path . "${runtime_args[@]}" 2>&1 | tee "$output_log"
+statuses=("${PIPESTATUS[@]}")
+status="${statuses[0]}"
 set -e
 
 if [[ $status -eq 124 || $status -eq 137 ]]; then
@@ -30,6 +50,18 @@ fi
 if [[ $status -ne 0 ]]; then
   echo "::error title=Godot smoke failed::$SCENE exited with code $status"
   exit "$status"
+fi
+
+if [[ ${statuses[1]} -ne 0 ]]; then
+  echo "::error title=Godot smoke log failed::Could not capture output for $SCENE"
+  exit 1
+fi
+
+# Godot can exit zero after parse/runtime errors if the test later calls quit(0).
+# Such a run does not prove that the scene or its dependencies are healthy.
+if grep -Eq '(^|[[:space:]])(SCRIPT ERROR:|ERROR:|::error)' "$output_log"; then
+  echo "::error title=Godot runtime error::$SCENE emitted errors despite exiting zero"
+  exit 1
 fi
 
 echo "GODOT_SMOKE_OK scene=$SCENE"

@@ -1,0 +1,5 @@
+CC0 1.0 Universal
+
+Source page identifies this asset pack as Creative Commons CC0 / public-domain dedication.
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+Preserve SOURCE.md beside staged files.

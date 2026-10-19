@@ -4,6 +4,12 @@ signal settings_changed
 signal bindings_changed
 
 const SETTINGS_PATH := "user://settings.cfg"
+const QUALITY_PRESETS := [
+    {"name": "Низкий", "scale": 0.70, "msaa": 0, "shadows": false, "shadow_distance": 0.0, "nature": 0.70},
+    {"name": "Средний", "scale": 0.85, "msaa": 0, "shadows": true, "shadow_distance": 40.0, "nature": 0.85},
+    {"name": "Высокий", "scale": 1.0, "msaa": 1, "shadows": true, "shadow_distance": 65.0, "nature": 1.0},
+    {"name": "Ультра", "scale": 1.0, "msaa": 2, "shadows": true, "shadow_distance": 100.0, "nature": 1.35}
+]
 
 const DEFAULTS := {
     "graphics": {
@@ -12,6 +18,7 @@ const DEFAULTS := {
         "resolution_width": 1280,
         "resolution_height": 720,
         "render_scale": 1.0,
+        "quality_preset": 2,
         "ui_scale": 1.0
     },
     "audio": {
@@ -22,8 +29,10 @@ const DEFAULTS := {
     },
     "gameplay": {
         "mouse_sensitivity": 0.0025,
+        "compatible_mouse": true,
         "autosave_seconds": 60.0,
         "camera_fov": 75.0,
+        "camera_distance": 5.5,
         "subtitles": true
     }
 }
@@ -51,6 +60,7 @@ const DEFAULT_BINDINGS := {
 }
 
 var config := ConfigFile.new()
+var mouse_capture_frame := -10
 var bindings: Dictionary = DEFAULT_BINDINGS.duplicate(true)
 
 func _ready() -> void:
@@ -105,6 +115,12 @@ func set_value(section: String, key: String, value) -> void:
     apply_all()
     settings_changed.emit()
 
+func set_camera_distance(value: float) -> void:
+    # Zoom changes must not reapply window size, render quality or mouse mode.
+    config.set_value("gameplay", "camera_distance", clampf(value, 2.0, 9.0))
+    save_settings()
+    settings_changed.emit()
+
 func rebind_action(action: String, event: InputEvent) -> bool:
     if not DEFAULT_BINDINGS.has(action):
         return false
@@ -154,11 +170,67 @@ func apply_all() -> void:
     var viewport := get_viewport()
     if viewport != null:
         viewport.scaling_3d_scale = clampf(float(get_value("graphics", "render_scale")), 0.5, 1.5)
+        viewport.msaa_3d = quality_profile()["msaa"]
+    call_deferred("apply_world_quality")
     if get_tree() != null and get_tree().root != null:
         get_tree().root.content_scale_factor = clampf(float(get_value("graphics", "ui_scale")), 0.75, 1.5)
     _apply_volume("Master", float(get_value("audio", "master_volume")), bool(get_value("audio", "muted")))
     _apply_volume("Music", float(get_value("audio", "music_volume")), false)
     _apply_volume("SFX", float(get_value("audio", "sfx_volume")), false)
+
+func quality_profile() -> Dictionary:
+    return QUALITY_PRESETS[clampi(int(get_value("graphics", "quality_preset")), 0, QUALITY_PRESETS.size() - 1)]
+
+func uses_compatible_mouse() -> bool:
+    return OS.get_name() == "Windows" and bool(get_value("gameplay", "compatible_mouse"))
+
+func gameplay_mouse_mode() -> int:
+    # Windows remote/absolute pointing devices can stop emitting WM_INPUT
+    # entirely in CAPTURED mode (Godot #95501). Hidden confinement uses normal
+    # mouse events; recentering below keeps unlimited camera rotation.
+    return Input.MOUSE_MODE_CONFINED_HIDDEN if uses_compatible_mouse() else Input.MOUSE_MODE_CAPTURED
+
+func capture_gameplay_mouse() -> void:
+    mouse_capture_frame = Engine.get_process_frames()
+    Input.mouse_mode = gameplay_mouse_mode()
+    recenter_gameplay_mouse()
+
+func ignore_recapture_motion() -> bool:
+    # A menu click can leave cursor events buffered until after gameplay resumes.
+    return Engine.get_process_frames() <= mouse_capture_frame + 1
+
+func is_gameplay_mouse_captured() -> bool:
+    return Input.mouse_mode == gameplay_mouse_mode()
+
+func recenter_gameplay_mouse() -> void:
+    if uses_compatible_mouse() and get_viewport() != null:
+        get_viewport().warp_mouse(get_viewport().get_visible_rect().get_center())
+
+func set_quality_preset(index: int) -> void:
+    index = clampi(index, 0, QUALITY_PRESETS.size() - 1)
+    config.set_value("graphics", "quality_preset", index)
+    config.set_value("graphics", "render_scale", QUALITY_PRESETS[index]["scale"])
+    save_settings()
+    apply_all()
+    settings_changed.emit()
+
+func apply_world_quality() -> void:
+    if get_tree() == null:
+        return
+    var profile := quality_profile()
+    for light in get_tree().root.find_children("*", "DirectionalLight3D", true, false):
+        light.shadow_enabled = profile["shadows"]
+        light.directional_shadow_max_distance = profile["shadow_distance"]
+    for instance in get_tree().get_nodes_in_group("quality_nature"):
+        apply_geometry_quality(instance)
+
+func apply_geometry_quality(instance: GeometryInstance3D) -> void:
+    var profile := quality_profile()
+    # Scale both ends together so the transition between near and far LODs
+    # remains continuous. Collision and gameplay streaming never change.
+    instance.visibility_range_begin = float(instance.get_meta("quality_begin", 0.0)) * float(profile["nature"])
+    instance.visibility_range_end = float(instance.get_meta("quality_end", 150.0)) * float(profile["nature"])
+    instance.cast_shadow = int(instance.get_meta("quality_shadows", 0)) if bool(profile["shadows"]) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func _write_defaults() -> void:
     for section in DEFAULTS:

@@ -23,6 +23,9 @@ func surface_at(world_position: Vector3) -> String:
     if EnvironmentState.snow_intensity >= 0.15 or winter_snow or (EnvironmentState.frost_amount > 0.55 and biome in ["tundra", "taiga"]):
         return "snow"
 
+    if CapitalData.inside_capital(xz):
+        return "stone"
+
     match biome:
         "mountains": return "stone"
         "marsh": return "mud"
@@ -83,7 +86,9 @@ func spawn_footstep(
         "water":
             VFXLibrary.spawn_collision("water", world_position + Vector3.UP * 0.05, Vector3.UP, host, 0.45 * s)
         "stone":
-            VFXLibrary.spawn_collision("stone", world_position + Vector3.UP * 0.05, Vector3.UP, host, 0.22 * s)
+            # Walking on intact paving does not chip it or leave soil prints.
+            # Impact/break effects remain available for actual tool strikes.
+            pass
         "snow":
             VFXLibrary.spawn("magic_frost", world_position + Vector3.UP * 0.06, host, Vector3.UP, Vector3.ZERO, 0.18 * s)
             _spawn_flipbook([KENNEY + "smoke_03.png"], world_position + Vector3.UP * 0.10, 0.38 * s, Color(0.90, 0.96, 1.0, 0.68), 0.12)

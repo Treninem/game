@@ -1,5 +1,14 @@
 extends Node3D
 
+const HUMAN: PackedScene = preload("res://assets/production/characters/citizen/citizen.glb")
+const PALETTES := [null, preload("res://assets/production/characters/citizen/citizen_dark.png"), preload("res://assets/production/characters/citizen/citizen_light.png")]
+static var palette_materials: Dictionary = {}
+const WEAPONS := {
+    "starter_axe": preload("res://assets/production/weapons/woodland/Axe_small.glb"),
+    "stone_knife": preload("res://assets/production/weapons/woodland/Dagger.glb"),
+    "short_bow": preload("res://assets/production/weapons/woodland/Bow_Wooden.glb")
+}
+
 @export var skin_color := Color(0.72, 0.55, 0.42)
 @export var primary_color := Color(0.11, 0.18, 0.28)
 @export var secondary_color := Color(0.22, 0.34, 0.44)
@@ -9,146 +18,177 @@ extends Node3D
 @export var has_hood := false
 @export var has_apron := false
 @export var has_guard_armor := false
+@export var palette_variant := 0
 
-var left_arm: Node3D
-var right_arm: Node3D
-var left_leg: Node3D
-var right_leg: Node3D
-var torso: MeshInstance3D
-var walk_time := 0.0
-var base_position := Vector3.ZERO
-var last_parent_position := Vector3.ZERO
+var animation_player: AnimationPlayer
 var measured_speed := 0.0
+var active_animation := ""
+var last_position := Vector3.ZERO
+var weapon_socket: BoneAttachment3D
+var held_weapon: Node3D
+var held_item := ""
 
 func _ready() -> void:
-    base_position = position
-    var body := get_parent() as CharacterBody3D
-    if body != null:
-        last_parent_position = body.global_position
-    _build_character()
+    scale = Vector3.ONE * body_scale
+    var model := HUMAN.instantiate() as Node3D
+    model.name = "HumanModel"
+    model.rotation.y = PI
+    add_child(model)
+    if get_parent().name != "Player":
+        for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
+            for surface in range(mesh.mesh.get_surface_count()):
+                var material := mesh.get_active_material(surface) as StandardMaterial3D
+                if material == null:
+                    continue
+                var cloth := String(material.resource_name).begins_with("Cloth")
+                var skin := material.resource_name == "SkinHuman"
+                if not cloth and not skin and (material.albedo_texture == null or palette_variant == 0):
+                    continue
+                var key := "%d:%d:%s:%s" % [material.get_instance_id(), palette_variant % PALETTES.size(), primary_color.to_html(), secondary_color.to_html()]
+                if not palette_materials.has(key):
+                    var variant := material.duplicate() as StandardMaterial3D
+                    if cloth:
+                        variant.albedo_color = primary_color if material.resource_name == "ClothTunic" else secondary_color.darkened(0.30)
+                    elif skin:
+                        variant.albedo_color = [Color(0.62, 0.43, 0.32), Color(0.32, 0.18, 0.12), Color(0.80, 0.61, 0.47)][palette_variant % 3]
+                    else:
+                        variant.albedo_texture = PALETTES[palette_variant % PALETTES.size()]
+                    palette_materials[key] = variant
+                mesh.set_surface_override_material(surface, palette_materials[key])
+    var players := model.find_children("*", "AnimationPlayer", true, false)
+    if not players.is_empty():
+        animation_player = players[0] as AnimationPlayer
+        for key in animation_player.get_animation_list():
+            var animation := animation_player.get_animation(key)
+            if String(key) in ["Idle", "Walk", "Run"]:
+                animation.loop_mode = Animation.LOOP_LINEAR
+        _play("Idle", 1.0)
+        animation_player.advance(0.0)
+        _prepare_airborne_pose(model)
+    last_position = get_parent_node_3d().global_position
+    if get_parent().name == "Player":
+        var skeletons := model.find_children("*", "Skeleton3D", true, false)
+        if not skeletons.is_empty():
+            weapon_socket = BoneAttachment3D.new()
+            weapon_socket.name = "WeaponSocket"
+            weapon_socket.bone_name = "RightHand"
+            skeletons[0].add_child(weapon_socket)
+            skeletons[0].connect("skeleton_updated", _update_bow_transform)
+            InventorySystem.equipment_changed.connect(_refresh_weapon)
+            _refresh_weapon()
+
+func _refresh_weapon() -> void:
+    if weapon_socket == null:
+        return
+    held_item = InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
+    if held_weapon != null:
+        held_weapon.free()
+        held_weapon = null
+    if not WEAPONS.has(held_item):
+        return
+    weapon_socket.bone_name = "LeftHand" if held_item == "short_bow" else "RightHand"
+    # Keep the asset's normalization transform intact. Compensate the human
+    # skeleton's imported scale so a 65 cm axe stays 65 cm in the world.
+    held_weapon = Node3D.new()
+    held_weapon.name = "EquippedWeapon"
+    held_weapon.set_meta("item_id", held_item)
+    weapon_socket.add_child(held_weapon)
+    held_weapon.position = Vector3(0.0, 0.10, 0.0)
+    held_weapon.scale = Vector3.ONE / weapon_socket.global_basis.get_scale()
+    var model := (WEAPONS[held_item] as PackedScene).instantiate() as Node3D
+    held_weapon.add_child(model)
+    if held_item == "short_bow":
+        held_weapon.top_level = true
+        held_weapon.scale = Vector3.ONE
+        _update_bow_transform()
+    else:
+        model.position.y += 0.18
 
 func _process(delta: float) -> void:
     var body := get_parent() as CharacterBody3D
-    if body == null:
+    if body == null or animation_player == null:
         return
-
-    var displacement := body.global_position - last_parent_position
-    last_parent_position = body.global_position
-    var horizontal_distance := Vector2(displacement.x, displacement.z).length()
-    var instantaneous_speed := horizontal_distance / maxf(delta, 0.0001)
-    measured_speed = lerpf(measured_speed, instantaneous_speed, minf(1.0, delta * 12.0))
-
-    var target_swing := 0.0
-    if measured_speed > 0.18 and not get_tree().paused:
-        walk_time += delta * clampf(measured_speed * 1.7, 4.0, 12.0)
-        target_swing = sin(walk_time) * 0.62
-        position.y = base_position.y + abs(sin(walk_time * 2.0)) * 0.025
+    if body.name == "Player" and held_item != InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON):
+        _refresh_weapon()
+    last_position = body.global_position
+    # Physics can tick several times (or not at all) between rendered frames.
+    # Render-frame displacement produced false Run/Idle switches while walking.
+    # The last resolved slide velocity also stays zero when pushing into a wall.
+    var physical_motion := body.get_real_velocity()
+    var speed := Vector2(physical_motion.x, physical_motion.z).length()
+    measured_speed = lerpf(measured_speed, speed, minf(1.0, delta * 12.0))
+    if not body.is_on_floor():
+        _play("Airborne", 1.0)
+    elif body.name == "Player" and float(body.get("cast_elapsed")) > 0.0:
+        _play("Punch", 1.0)
+    elif body.name == "Player" and float(body.get("attack_elapsed")) > 0.0:
+        var stroke := "Axe_Chop" if held_item == "starter_axe" else "Punch"
+        _play("Bow_Attack_Shoot" if held_item == "short_bow" else stroke, 1.8 if held_item == "starter_axe" else 1.0)
+    elif body.is_in_group("hostile") and float(body.get("attack_elapsed")) > float(body.get("attack_interval")) - 0.55:
+        _play("Punch", 1.0)
+    elif measured_speed > 5.7:
+        _play("Run", clampf(measured_speed / 7.5, 0.75, 1.35))
+    elif measured_speed > 0.16:
+        _play("Walk", clampf(measured_speed / 3.8, 0.65, 1.5))
+    elif String(body.get_meta("activity", "idle")) == "work":
+        _play("Working" if animation_player.has_animation("Working") else "PickUp", 0.8)
     else:
-        measured_speed = move_toward(measured_speed, 0.0, delta * 7.0)
-        walk_time += delta * 1.2
-        position.y = lerpf(position.y, base_position.y, minf(1.0, delta * 8.0))
+        _play("Idle", 1.0)
+    _update_bow_transform()
 
-    if is_instance_valid(left_arm):
-        left_arm.rotation.x = lerpf(left_arm.rotation.x, target_swing, minf(1.0, delta * 10.0))
-    if is_instance_valid(right_arm):
-        right_arm.rotation.x = lerpf(right_arm.rotation.x, -target_swing, minf(1.0, delta * 10.0))
-    if is_instance_valid(left_leg):
-        left_leg.rotation.x = lerpf(left_leg.rotation.x, -target_swing * 0.72, minf(1.0, delta * 10.0))
-    if is_instance_valid(right_leg):
-        right_leg.rotation.x = lerpf(right_leg.rotation.x, target_swing * 0.72, minf(1.0, delta * 10.0))
+func _update_bow_transform() -> void:
+    if held_item != "short_bow" or not is_instance_valid(held_weapon):
+        return
+    var body := get_parent_node_3d()
+    var aim := body.global_basis.orthonormalized()
+    var pivot := body.get_node_or_null("CameraPivot") as Node3D
+    if pivot != null:
+        aim = aim * Basis(Vector3.RIGHT, pivot.rotation.x)
+    # The authored bow is tall along Y and its arrow points along -X.
+    # Keep that plane aligned with the aim instead of inheriting wrist roll.
+    held_weapon.global_transform = Transform3D(aim * Basis(Vector3.UP, -PI * 0.5), weapon_socket.global_transform * Vector3(0, 0.10, 0))
 
-func _build_character() -> void:
-    scale = Vector3.ONE * body_scale
+func _play(key: String, rate: float) -> void:
+    if animation_player == null or not animation_player.has_animation(key):
+        return
+    animation_player.speed_scale = rate
+    if active_animation != key or (key in ["Working", "PickUp"] and not animation_player.is_playing()):
+        active_animation = key
+        animation_player.play(key, 0.18)
 
-    torso = _box("Torso", Vector3(0.72, 0.82, 0.36), Vector3(0, 1.25, 0), primary_color, self)
-    _box("Belt", Vector3(0.75, 0.12, 0.39), Vector3(0, 0.88, 0), accent_color.darkened(0.35), self)
-    _box("Hips", Vector3(0.62, 0.28, 0.34), Vector3(0, 0.72, 0), secondary_color.darkened(0.12), self)
+func begin_axe_stroke() -> void:
+    if animation_player != null and animation_player.has_animation("Axe_Chop"):
+        active_animation = "Axe_Chop"
+        animation_player.speed_scale = 1.8
+        animation_player.play("Axe_Chop", 0.06)
+        animation_player.seek(0.0, true)
 
-    var neck := _cylinder("Neck", 0.12, 0.18, Vector3(0, 1.73, 0), skin_color, self)
-    neck.rotation_degrees.x = 90.0
-    _sphere("Head", 0.29, Vector3(0, 1.98, 0), skin_color, self)
-    _box("Hair", Vector3(0.54, 0.16, 0.55), Vector3(0, 2.19, -0.01), hair_color, self)
-    _box("Nose", Vector3(0.08, 0.10, 0.08), Vector3(0, 1.97, -0.285), skin_color.lightened(0.04), self)
+func play_death() -> void:
+    _play("Death", 1.0)
+    set_process(false)
 
-    if has_hood:
-        var hood := _sphere("Hood", 0.37, Vector3(0, 2.02, 0.04), primary_color.darkened(0.12), self)
-        hood.scale = Vector3(1.0, 1.05, 0.92)
-    if has_apron:
-        _box("Apron", Vector3(0.60, 0.70, 0.07), Vector3(0, 1.15, -0.225), Color(0.30, 0.20, 0.12), self)
-    if has_guard_armor:
-        _box("ChestPlate", Vector3(0.78, 0.68, 0.10), Vector3(0, 1.33, -0.235), Color(0.31, 0.36, 0.40), self)
-        _box("ShoulderL", Vector3(0.30, 0.16, 0.42), Vector3(-0.47, 1.55, 0), Color(0.31, 0.36, 0.40), self)
-        _box("ShoulderR", Vector3(0.30, 0.16, 0.42), Vector3(0.47, 1.55, 0), Color(0.31, 0.36, 0.40), self)
-
-    left_arm = Node3D.new()
-    left_arm.name = "LeftArmPivot"
-    left_arm.position = Vector3(-0.47, 1.58, 0)
-    add_child(left_arm)
-    _box("LeftArm", Vector3(0.22, 0.72, 0.24), Vector3(0, -0.34, 0), secondary_color, left_arm)
-    _sphere("LeftHand", 0.12, Vector3(0, -0.73, 0), skin_color, left_arm)
-
-    right_arm = Node3D.new()
-    right_arm.name = "RightArmPivot"
-    right_arm.position = Vector3(0.47, 1.58, 0)
-    add_child(right_arm)
-    _box("RightArm", Vector3(0.22, 0.72, 0.24), Vector3(0, -0.34, 0), secondary_color, right_arm)
-    _sphere("RightHand", 0.12, Vector3(0, -0.73, 0), skin_color, right_arm)
-
-    left_leg = Node3D.new()
-    left_leg.name = "LeftLegPivot"
-    left_leg.position = Vector3(-0.18, 0.69, 0)
-    add_child(left_leg)
-    _box("LeftLeg", Vector3(0.25, 0.72, 0.28), Vector3(0, -0.34, 0), primary_color.darkened(0.2), left_leg)
-    _box("LeftBoot", Vector3(0.28, 0.18, 0.42), Vector3(0, -0.72, -0.05), Color(0.10, 0.07, 0.05), left_leg)
-
-    right_leg = Node3D.new()
-    right_leg.name = "RightLegPivot"
-    right_leg.position = Vector3(0.18, 0.69, 0)
-    add_child(right_leg)
-    _box("RightLeg", Vector3(0.25, 0.72, 0.28), Vector3(0, -0.34, 0), primary_color.darkened(0.2), right_leg)
-    _box("RightBoot", Vector3(0.28, 0.18, 0.42), Vector3(0, -0.72, -0.05), Color(0.10, 0.07, 0.05), right_leg)
-
-func _material(color: Color) -> StandardMaterial3D:
-    var mat := StandardMaterial3D.new()
-    mat.albedo_color = color
-    mat.roughness = 0.78
-    return mat
-
-func _box(node_name: String, size: Vector3, pos: Vector3, color: Color, parent: Node3D) -> MeshInstance3D:
-    var mesh := BoxMesh.new()
-    mesh.size = size
-    var node := MeshInstance3D.new()
-    node.name = node_name
-    node.mesh = mesh
-    node.position = pos
-    node.material_override = _material(color)
-    parent.add_child(node)
-    return node
-
-func _sphere(node_name: String, radius: float, pos: Vector3, color: Color, parent: Node3D) -> MeshInstance3D:
-    var mesh := SphereMesh.new()
-    mesh.radius = radius
-    mesh.height = radius * 2.0
-    mesh.radial_segments = 16
-    mesh.rings = 8
-    var node := MeshInstance3D.new()
-    node.name = node_name
-    node.mesh = mesh
-    node.position = pos
-    node.material_override = _material(color)
-    parent.add_child(node)
-    return node
-
-func _cylinder(node_name: String, radius: float, height: float, pos: Vector3, color: Color, parent: Node3D) -> MeshInstance3D:
-    var mesh := CylinderMesh.new()
-    mesh.top_radius = radius
-    mesh.bottom_radius = radius
-    mesh.height = height
-    mesh.radial_segments = 12
-    var node := MeshInstance3D.new()
-    node.name = node_name
-    node.mesh = mesh
-    node.position = pos
-    node.material_override = _material(color)
-    parent.add_child(node)
-    return node
+func _prepare_airborne_pose(model: Node3D) -> void:
+    if animation_player.has_animation("Airborne"):
+        return
+    var skeletons := model.find_children("*", "Skeleton3D", true, false)
+    if skeletons.is_empty():
+        return
+    var skeleton := skeletons[0] as Skeleton3D
+    var clip := animation_player.get_animation("Idle").duplicate() as Animation
+    clip.length = 0.22
+    clip.loop_mode = Animation.LOOP_NONE
+    var root := animation_player.get_node(animation_player.root_node)
+    var skeleton_path := String(root.get_path_to(skeleton))
+    for bone_name: String in ["LeftUpLeg", "RightUpLeg", "LeftLeg", "RightLeg", "LeftArm", "RightArm"]:
+        var bone := skeleton.find_bone(bone_name)
+        var path := NodePath(skeleton_path + ":" + bone_name)
+        var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
+        if track >= 0:
+            clip.remove_track(track)
+        track = clip.add_track(Animation.TYPE_ROTATION_3D)
+        clip.track_set_path(track, path)
+        var base := skeleton.get_bone_pose_rotation(bone)
+        var angle := -0.42 if bone_name.ends_with("UpLeg") else (0.78 if bone_name.ends_with("Leg") else -0.20)
+        clip.rotation_track_insert_key(track, 0.0, base)
+        clip.rotation_track_insert_key(track, 0.16, base * Quaternion(Vector3.RIGHT, angle))
+    animation_player.get_animation_library("").add_animation("Airborne", clip)

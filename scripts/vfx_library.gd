@@ -333,8 +333,9 @@ func _material(color: Color, emission_energy: float = 2.0, alpha: float = 1.0) -
 func _expire(node: Node, delay: float) -> void:
     if node == null or not is_instance_valid(node):
         return
-    get_tree().create_timer(maxf(delay, 0.02)).timeout.connect(_free_if_valid.bind(node))
+    get_tree().create_timer(maxf(delay, 0.02)).timeout.connect(_free_if_valid.bind(weakref(node)))
 
-func _free_if_valid(node: Node) -> void:
+func _free_if_valid(reference: WeakRef) -> void:
+    var node := reference.get_ref() as Node
     if is_instance_valid(node):
         node.queue_free()

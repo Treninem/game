@@ -14,6 +14,11 @@ This file lists third-party asset packs whose real files are physically present 
 
 ## Verified physical batches
 
+### Medieval Village MegaKit Standard (source chat B47)
+
+- `assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/` — STAGED_PHYSICAL on `main`; verified models, texture families and CC0 license files. No batch failure manifest is present in this pack folder; the six Brick/RockTrim textures were checked directly against `main`.
+- Selected models and their Brick/RockTrim dependencies are INTEGRATED under `assets/production/medieval/quaternius_city_core/`; see that folder's `SOURCE.md` for provenance.
+
 ### Fauna, characters, animation and general items
 Physical asset commit: `fef2efd7606e53c8755a7e7e45a02274dac8aa8b`
 
@@ -167,3 +172,16 @@ Before adding a model to gameplay:
 - `INTEGRATED` — asset is actually referenced by game scenes/resources/code.
 
 Never use `IMPORTED` ambiguously; state the exact status above.
+
+## Physically checked selections — 2026-10-18
+
+- STAGED_PHYSICAL selection checked 2026-10-19: `sourcechat_b89/models/oga_character_pack_2026/y2024/BRAVOS_GAME_BR_2024/homen_base.obj` plus pack SOURCE.md/LICENSE.txt, confirmed on main. Only this selected mesh is verified here, not every nested archive in B89. Its missing MTL is replaced by documented project materials. Geometry is INTEGRATED in `assets/production/characters/citizen/citizen.glb` on the existing animated human skeleton; no new download. No selected-pack batch failure manifest was found.
+
+- STAGED_PHYSICAL: `sourcechat_b04/audio/oga_100_cc0_sfx_2/` — source, CC0 license and three wood-hit OGG files verified directly on `main` for the 2026-10-19 contact-audio selection. Selected files are INTEGRATED under `assets/audio/world/oga_100_cc0_sfx_2/`; original staging filenames retained. No batch failure manifest was found for this selected pack.
+
+The following existing source folders were checked directly, including source/license metadata. No batch failure manifest was found in B36 or B44; selected files and all texture dependencies were checked individually.
+
+- STAGED_PHYSICAL: `sourcechat_b36/models/quaternius_rpg_characters/` — selected Ranger is INTEGRATED in `assets/production/characters/ranger/`.
+- STAGED_PHYSICAL: `sourcechat_b44/models/quaternius_stylized_nature_megakit_standard/` — six selected models are INTEGRATED in `assets/production/nature/woodland/`.
+- STAGED_PHYSICAL: `materials/oga_seamless_textures/` — two selected photographic diffuse images are INTEGRATED in `assets/production/materials/ground/`.
+- STAGED_PHYSICAL: `sourcechat_b36/models/quaternius_ultimate_rpg_items/` — selected axe, dagger, wooden bow and arrow are INTEGRATED in `assets/production/weapons/woodland/`. Source OBJ/MTL files and CC0 license were checked directly; no batch failure manifest was present in this source folder.

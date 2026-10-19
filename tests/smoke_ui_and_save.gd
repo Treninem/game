@@ -51,7 +51,10 @@ func _sidebar_error(menu: Control, frame: Control) -> String:
     return ""
 
 func _remove_world_workload(scene: Node) -> void:
-    for path in ["Bootstrap", "World"]:
+    # Bootstrap is the scene root, so removing a child named Bootstrap leaves
+    # its startup/save callbacks running against a world that no longer exists.
+    scene.set_script(null)
+    for path in ["World"]:
         var node := scene.get_node_or_null(path)
         if node != null:
             scene.remove_child(node)

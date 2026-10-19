@@ -70,11 +70,11 @@ func _build_vitals() -> void:
     stack.add_theme_constant_override("separation", 5)
     margin.add_child(stack)
 
-    var hp := _vital_row(ICON_HEALTH, "HP")
+    var hp := _vital_row(ICON_HEALTH, "Здоровье", Color(0.78,0.36,0.32))
     stack.add_child(hp["root"])
     hp_bar = hp["bar"]
     hp_value = hp["value"]
-    var stamina := _vital_row(ICON_STAMINA, "Выносливость")
+    var stamina := _vital_row(ICON_STAMINA, "Выносливость", Color(0.58,0.73,0.42))
     stack.add_child(stamina["root"])
     stamina_bar = stamina["bar"]
     stamina_value = stamina["value"]
@@ -171,7 +171,7 @@ func _build_notice() -> void:
     notice.visible = false
     add_child(notice)
 
-func _vital_row(icon_texture: Texture2D, label_text: String) -> Dictionary:
+func _vital_row(icon_texture: Texture2D, label_text: String, tint: Color = Color(0.58,0.69,0.65)) -> Dictionary:
     var root := HBoxContainer.new()
     root.custom_minimum_size.y = 25.0
     root.add_theme_constant_override("separation", 7)
@@ -192,6 +192,14 @@ func _vital_row(icon_texture: Texture2D, label_text: String) -> Dictionary:
     bar.show_percentage = false
     bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     bar.custom_minimum_size = Vector2(94, 13)
+    var background := StyleBoxFlat.new()
+    background.bg_color = Color(0.05,0.07,0.06,0.9)
+    background.set_corner_radius_all(5)
+    var fill := StyleBoxFlat.new()
+    fill.bg_color = tint
+    fill.set_corner_radius_all(5)
+    bar.add_theme_stylebox_override("background", background)
+    bar.add_theme_stylebox_override("fill", fill)
     root.add_child(bar)
     var value := Label.new()
     value.custom_minimum_size.x = 42.0
@@ -254,8 +262,8 @@ func _show_notice(message: String) -> void:
 
 func _card_style(alpha: float) -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.012, 0.025, 0.042, alpha)
-    style.border_color = Color(0.16, 0.48, 0.68, 0.70)
+    style.bg_color = Color(0.025, 0.042, 0.034, alpha)
+    style.border_color = Color(0.63, 0.64, 0.48, 0.30)
     style.set_border_width_all(1)
     style.corner_radius_top_left = 8
     style.corner_radius_top_right = 8

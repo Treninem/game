@@ -61,3 +61,8 @@ Reference pages are not physical imports. Their example images/textures are not 
 8. cheap far-distance storm/fog/cloud representations and graphics-quality tiers;
 9. weather audio occlusion/attenuation under roofs and inside buildings;
 10. puddle growth, slush and meltwater state after rain/snow/thaw.
+
+## Woodland alpha-cutout wind extension — 2026-10-18
+`foliage_wind.gdshader` and `wind_cloth.gdshader` share `wind_motion.gdshaderinc`.
+The foliage shader keeps matte, two-sided opaque cutouts and ordinary depth writes;
+EnvironmentState continues to own wind direction and strength for both materials.

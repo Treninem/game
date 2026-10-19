@@ -39,6 +39,9 @@ func _materialize_chunk(chunk: Node3D) -> void:
                 continue
             var world_pos := origin + Vector2(local_x, local_z)
             var kind := WorldData.water_kind_at(world_pos)
+            # The prologue river has one continuous curved surface, never square overlays.
+            if kind == "river" and WorldGeography.in_start_region(world_pos):
+                continue
             if kind.is_empty():
                 continue
             var water_level := WorldData.water_level_at(world_pos)

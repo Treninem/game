@@ -80,7 +80,7 @@ func close_panel() -> void:
     current_section = ""
     visible = false
     get_tree().paused = false
-    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+    SettingsManager.capture_gameplay_mouse()
 
 func _build_shell() -> void:
     var shade := ColorRect.new()
@@ -248,7 +248,9 @@ func _show_inventory() -> void:
     title_label.text = "Инвентарь"
     var equipped := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
     var equipped_name := "Нет" if equipped.is_empty() else String(InventorySystem.item_info(equipped).get("name", equipped))
-    _info("ЭКИПИРОВАНО", "%s • бонус атаки +%.0f" % [equipped_name, InventorySystem.attack_bonus()])
+    _info("ЭКИПИРОВАНО", "%s   •   бонус атаки +%.0f" % [equipped_name, InventorySystem.attack_bonus()])
+    if equipped == "short_bow":
+        _text("Стрелы: %d   •   ЛКМ — выстрел   •   K — изготовить боеприпасы" % int(GameState.inventory.get("arrow", 0)))
     _info("СТРАХОВАНИЕ", "Зарядов на одну смерть: %d" % ProgressionSystem.inventory_insurance_charges())
     _button("Купить страховку инвентаря — %d монет" % ProgressionSystem.INSURANCE_PRICE, Callable(self, "_buy_insurance"))
     var rows := InventorySystem.inventory_rows()
@@ -300,9 +302,10 @@ func _inventory_card(parent: GridContainer, info: Dictionary) -> void:
     var item_id := String(info.get("id", ""))
     var equip_slot := String(info.get("equip_slot", ""))
     if not equip_slot.is_empty():
-        var label := "Экипировано" if InventorySystem.equipped_item(equip_slot) == item_id else "Экипировать"
-        var action := _button(label, Callable(self, "_equip").bind(item_id), stack)
-        action.disabled = label == "Экипировано"
+        if InventorySystem.equipped_item(equip_slot) == item_id:
+            _button("Снять", Callable(self, "_unequip").bind(equip_slot), stack)
+        else:
+            _button("Экипировать", Callable(self, "_equip").bind(item_id), stack)
     elif item_id in ["berries", "water_flask", "raw_meat", "cooked_meat"]:
         _button("Использовать", Callable(self, "_use_item").bind(item_id), stack)
 
@@ -310,6 +313,14 @@ func _show_map() -> void:
     title_label.text = "Карта мира"
     _text("Исследованные области открываются по мере путешествия. Тёмные территории и неизвестные точки не раскрываются заранее.")
     var map := WORLD_MAP_VIEW.new()
+    var controls := HBoxContainer.new()
+    controls.add_theme_constant_override("separation", 8)
+    content.add_child(controls)
+    _button("Рядом", map.set_local_view.bind(true), controls)
+    _button("Весь мир", map.set_local_view.bind(false), controls)
+    _button("+", map.change_zoom.bind(0.5), controls)
+    _button("−", map.change_zoom.bind(2.0), controls)
+    map.set_local_view(true)
     map.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     map.custom_minimum_size.y = maxf(430.0, frame.size.y - 280.0)
     content.add_child(map)
@@ -465,6 +476,10 @@ func _show_events() -> void:
 
 func _equip(item_id: String) -> void:
     InventorySystem.equip(item_id)
+    _rebuild_content()
+
+func _unequip(slot: String) -> void:
+    InventorySystem.unequip(slot)
     _rebuild_content()
 
 func _craft(recipe_id: String) -> void:

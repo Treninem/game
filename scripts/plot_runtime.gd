@@ -76,7 +76,7 @@ func _build_plot_root(plot: Dictionary) -> Node3D:
     var pos_data: Array = plot.get("position", [0.0, 0.0])
     var x := float(pos_data[0]) if pos_data.size() > 0 else 0.0
     var z := float(pos_data[1]) if pos_data.size() > 1 else 0.0
-    root.global_position = Vector3(x, WorldData.elevation_at(Vector2(x, z)) + 0.04, z)
+    root.position = to_local(Vector3(x, WorldData.elevation_at(Vector2(x, z)) + 0.04, z))
     add_child(root)
 
     var size := float(plot.get("size", ProgressionSystem.NORMAL_PLOT_SIZE))

@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7 unreleased world refresh review",
+  "implemented": [
+    "Existing CC0 B89 anatomical human mesh replaces previous stylized citizen geometry; Quaternius rig and ten clips retained",
+    "Connected-arm skin transfer, smoothed joint weights and independent 50-pose surface validation",
+    "Existing B44 broadleaf tree with original foliage texture in start forest and shared environment wind",
+    "Existing B47 authored chimneys and wider eaves on capital roofs",
+    "Civilian legacy routes now use work/meal/social/home schedule with obstacle steering; watchmen retain patrols",
+    "Map records actual rock batches and persistent felled stumps"
+  ],
+  "tests": [
+    {
+      "name": "citizen_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 39.45
+    },
+    {
+      "name": "visual_grounding",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.94
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.42
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.88
+    },
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.25
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.25
+    },
+    {
+      "name": "cartography",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 1.92
+    },
+    {
+      "name": "capital_gameplay",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.75
+    },
+    {
+      "name": "capital_gate_traversal",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 45.64
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.73
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 9.02
+    },
+    {
+      "name": "world_hydrology",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.66
+    },
+    {
+      "name": "bridge_traversal",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 30.33
+    },
+    {
+      "name": "capital_road",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.05
+    }
+  ],
+  "character_surface": [
+    {
+      "clip": "Axe_Chop",
+      "max_animated_edge_m": 0.12089
+    },
+    {
+      "clip": "Bow_Attack_Draw",
+      "max_animated_edge_m": 0.17114
+    },
+    {
+      "clip": "Bow_Attack_Shoot",
+      "max_animated_edge_m": 0.16164
+    },
+    {
+      "clip": "Death",
+      "max_animated_edge_m": 0.17506
+    },
+    {
+      "clip": "Idle",
+      "max_animated_edge_m": 0.06101
+    },
+    {
+      "clip": "Jump",
+      "max_animated_edge_m": 0.2026
+    },
+    {
+      "clip": "Punch",
+      "max_animated_edge_m": 0.14975
+    },
+    {
+      "clip": "Run",
+      "max_animated_edge_m": 0.22043
+    },
+    {
+      "clip": "Walk",
+      "max_animated_edge_m": 0.20386
+    },
+    {
+      "clip": "Working",
+      "max_animated_edge_m": 0.13977
+    }
+  ],
+  "journey": {
+    "distance_m": 16911.5896268496,
+    "engine_time_scale": 1.0,
+    "position": [
+      13499.9853515625,
+      0.0376806482672691,
+      -6996.02685546875
+    ],
+    "position_assignments": 0,
+    "reason": "Capital square reached on foot",
+    "saved_slot_1": true,
+    "simulated_seconds": 2272.83333333466,
+    "success": true,
+    "waypoints_completed": 16
+  },
+  "journey_method": "Opt-in headless test autopilot presses ordinary movement actions with --fixed-fps 60: 1/60-second simulation steps, Engine.time_scale 1, unchanged run speed, stamina and gravity. This unthrottled simulation can execute faster than wall time. Test supplies: ten berries and ten water flasks. No driver assignment to player position. Arrival save retained. This is not a full manual keyboard journey.",
+  "graphical": "Bounded gameplay-action smoke on GL Compatibility: four presets, equipment, melee, bow/ammo and ten spells.",
+  "native": "Loaded the real 16.91 km arrival save in official game UI. Inspected hero, capital facades, moving citizens, map and inventory. Mouse changed the view across the square. Map/inventory opened and Escape returned directly to play. Separately started an ordinary fresh game and inspected human, trees and river; pressed jump. This inspection found sparse forest, flat terrain, coarse near foliage, empty oversized streets, repetitive homes and dark evening silhouettes. No manual full keyboard journey or native equipped-weapon sequence is claimed.",
+  "test_sequence": "Fourteen scenarios passed; after visual review, bow torso/feet retargeting and render-independent gait selection were corrected. Four affected scenarios repeated. Route predates these visual-only changes; movement controller, gravity, world collision and run speed were unchanged afterward.",
+  "fixed_failures": [
+    "Visual pose review caught ankle flattening and waist twist missed by an edge-length check; retain native torso/legs and retarget aligned bow arms. Added planted-feet regression check; old mesh fails it.",
+    "Strict visual grounding caught frame-dependent walking-animation selection. Use resolved physics slide velocity; do not relax the test."
+  ],
+  "known_issues": [
+    "Art remains below Witcher 3 realism: simple skin/clothing materials, bald model, unfinished exact finger grip",
+    "Distant taiga retains previous pine meshes",
+    "Ordinary capital homes have solid collision shells and no full interiors",
+    "NPC routines are deterministic, not a complete reactive society or external AI",
+    "Full combo/parry/dodge, all tools, swimming and all master-prompt systems unfinished",
+    "ObjectDB shutdown warnings remain; complete performance/memory release acceptance has not passed"
+  ],
+  "git": {
+    "branch": "main",
+    "head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "new_commit": false,
+    "release_published": false
+  },
+  "artifact": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-19-world-refresh\\ImPuls-review.cmd",
+  "sha256": "befbc6f292aa0784779ac44057fff0aa132d43b919b4c4016fd22fac185f9108"
+}

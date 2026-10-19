@@ -19,6 +19,8 @@ func _pass(message: String) -> void:
         return
     finished = true
     print("BOOT_WORLD_SMOKE_PASS: ", message)
+    get_tree().current_scene.queue_free()
+    await get_tree().create_timer(0.1).timeout
     get_tree().quit(0)
 
 func _wait_for_scene_name(name: String, timeout_seconds: float) -> bool:
@@ -97,10 +99,43 @@ func _run() -> void:
                             _fail(14, "player is falling after world reveal; initial_y=%s current_y=%s velocity_y=%s" % [initial_y, player.global_position.y, player.velocity.y])
                             return
 
-                        _pass("boot -> menu -> new game -> visible terrain/environment -> stable grounded player")
+                        if not await _assert_pause_load_roundtrip(scene, player):
+                            return
+                        _pass("boot -> menu -> new game -> physical world -> save -> loading screen -> restored world")
                         return
         await get_tree().process_frame
     _fail(10, "world did not become playable within 35 seconds")
+
+func _assert_pause_load_roundtrip(world: Node, player: CharacterBody3D) -> bool:
+    if String(SaveManager.slot_info(SaveManager.current_slot).get("location", "")) != "Астэрн • пограничный лес":
+        _fail(17, "initial save metadata does not describe the canonical forest spawn")
+        return false
+    var pause_menu := world.get_node_or_null("UI/GameMenu") as Control
+    if pause_menu == null:
+        _fail(11, "pause save browser is missing")
+        return false
+    var saved_position := player.global_position
+    GameState.coins = 73
+    if not SaveManager.save_game(player):
+        _fail(12, "playable world could not be saved")
+        return false
+    GameState.coins = 0
+    pause_menu.call("open_menu", "saves")
+    pause_menu.call("_load_slot", SaveManager.current_slot)
+    if not await _wait_for_scene_name("WorldLoading", 8.0):
+        _fail(13, "pause-menu load bypassed the mandatory loading screen")
+        return false
+    if not await _wait_for_scene_name("Bootstrap", 35.0):
+        _fail(14, "saved world did not become ready within 35 seconds")
+        return false
+    var restored := get_tree().current_scene.get_node_or_null("World/Player") as CharacterBody3D
+    if restored == null or restored.global_position.distance_to(saved_position) > 0.75 or GameState.coins != 73:
+        _fail(15, "pause-menu load did not restore saved position and game state")
+        return false
+    if get_tree().paused:
+        _fail(16, "loaded world remained paused")
+        return false
+    return true
 
 func _visual_world_error(scene: Node, player: CharacterBody3D, streamer: Node) -> String:
     if not streamer.has_method("_world_to_chunk"):

@@ -1,13 +1,18 @@
 extends Node3D
 
 const STREAMED_RESOURCE := preload("res://scripts/streamed_resource.gd")
+const ENEMY := preload("res://scripts/enemy.gd")
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
+const NATURE := preload("res://scripts/production_nature.gd")
+const ROCK_SCENE := preload("res://assets/production/nature/kenney_nature_kit/Models/GLTF format/rock_largeA.glb")
+const GRASS_SCENE := preload("res://assets/production/nature/woodland/Grass_Wispy_Tall.glb")
+const FERN_SCENE := preload("res://assets/production/nature/woodland/Fern_1.glb")
 
 # The continent remains 64x64 km in WorldData, but only a small local window is
 # materialized around the player. This keeps traversal smooth and memory bounded.
 const CHUNK_SIZE := 192.0
-const GRID_RESOLUTION := 10
+const GRID_RESOLUTION := 24
 const VISUAL_RADIUS := 2
 const PHYSICS_RADIUS := 1
 const UNLOAD_RADIUS := 3
@@ -77,6 +82,7 @@ func _process(delta: float) -> void:
     if location_elapsed >= 1.0:
         location_elapsed = 0.0
         _update_wilderness_location()
+        preload("res://scripts/production_nature.gd").sync_wind()
 
     # Physics for the walking area is prioritized over scenery. Both are
     # deliberately budgeted so crossing a chunk boundary does not freeze a frame.
@@ -227,11 +233,11 @@ func _build_terrain_mesh(coord: Vector2i) -> ArrayMesh:
             var i2 := i0 + row
             var i3 := i2 + 1
             st.add_index(i0)
-            st.add_index(i2)
-            st.add_index(i1)
             st.add_index(i1)
             st.add_index(i2)
+            st.add_index(i1)
             st.add_index(i3)
+            st.add_index(i2)
     st.generate_normals()
     return st.commit()
 
@@ -274,13 +280,15 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         var lx := rng.randf_range(6.0, CHUNK_SIZE - 6.0)
         var lz := rng.randf_range(6.0, CHUNK_SIZE - 6.0)
         var world := origin + Vector2(lx, lz)
+        if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 1.0:
+            continue
         if GEOGRAPHY.in_start_region(world) and GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_BANK_WIDTH + 5.0:
             continue
         var h := WorldData.elevation_at(world)
         if h < WorldData.SEA_LEVEL + 0.5:
             continue
         var scale := rng.randf_range(0.80, 1.35)
-        transforms.append(Transform3D(Basis().scaled(Vector3(scale, scale, scale)), Vector3(lx, h, lz)))
+        transforms.append(Transform3D(Basis(Vector3.UP, rng.randf_range(-PI, PI)).scaled(Vector3.ONE * scale), Vector3(lx, h, lz)))
 
     if transforms.is_empty():
         return
@@ -288,6 +296,26 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         _spawn_tree_multimeshes(chunk, transforms, biome)
     else:
         _spawn_rock_multimesh(chunk, transforms)
+    if not GEOGRAPHY.in_start_region(center_world) and biome in ["forest", "taiga", "marsh", "plains"]:
+        var grass: Array[Transform3D] = []
+        var ferns: Array[Transform3D] = []
+        for index in range(48):
+            var local := Vector2(rng.randf_range(4, CHUNK_SIZE - 4), rng.randf_range(4, CHUNK_SIZE - 4))
+            var world := origin + local
+            if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH:
+                continue
+            var height := WorldData.elevation_at(world)
+            if not WorldData.water_kind_at(world).is_empty():
+                continue
+            var scale := rng.randf_range(0.7, 1.3)
+            var transform := Transform3D(Basis(Vector3.UP, rng.randf_range(-PI, PI)).scaled(Vector3.ONE * scale), Vector3(local.x, height, local.y))
+            grass.append(transform)
+            if index % 8 == 0 and biome != "plains":
+                ferns.append(transform)
+        if not grass.is_empty():
+            NATURE.add_model_batches(chunk, grass, GRASS_SCENE, 85.0)
+        if not ferns.is_empty():
+            NATURE.add_model_batches(chunk, ferns, FERN_SCENE, 85.0)
 
 func _add_gatherables(chunk: Node3D, coord: Vector2i, biome: String) -> void:
     if biome == "ocean":
@@ -306,6 +334,8 @@ func _add_gatherables(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         var world := origin + Vector2(lx, lz)
         if GEOGRAPHY.in_start_region(world) and GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_HALF_WIDTH + 4.0:
             continue
+        if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 2.0:
+            continue
         var height := WorldData.elevation_at(world)
         if height < WorldData.SEA_LEVEL + 0.4:
             continue
@@ -322,69 +352,18 @@ func _add_gatherables(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         resource.rotation.y = rng.randf_range(-PI, PI)
         chunk.add_child(resource)
 
-func _spawn_tree_multimeshes(chunk: Node3D, transforms: Array[Transform3D], biome: String) -> void:
-    var trunk_mesh := CylinderMesh.new()
-    trunk_mesh.top_radius = 0.20
-    trunk_mesh.bottom_radius = 0.32
-    trunk_mesh.height = 4.0
-    trunk_mesh.radial_segments = 6
-    trunk_mesh.material = trunk_material
-
-    var foliage_mesh := CylinderMesh.new()
-    foliage_mesh.top_radius = 0.0
-    foliage_mesh.bottom_radius = 1.55 if biome != "marsh" else 1.20
-    foliage_mesh.height = 4.5
-    foliage_mesh.radial_segments = 6
-    foliage_mesh.material = foliage_materials.get(biome, foliage_materials["forest"])
-
-    var trunks := MultiMesh.new()
-    trunks.transform_format = MultiMesh.TRANSFORM_3D
-    trunks.mesh = trunk_mesh
-    trunks.instance_count = transforms.size()
-    var crowns := MultiMesh.new()
-    crowns.transform_format = MultiMesh.TRANSFORM_3D
-    crowns.mesh = foliage_mesh
-    crowns.instance_count = transforms.size()
-
-    for i in range(transforms.size()):
-        var base := transforms[i]
-        var scale_y := base.basis.get_scale().y
-        var trunk_transform := base
-        trunk_transform.origin.y += 2.0 * scale_y
-        trunks.set_instance_transform(i, trunk_transform)
-        var crown_transform := base
-        crown_transform.origin.y += 5.1 * scale_y
-        crowns.set_instance_transform(i, crown_transform)
-
-    var trunk_node := MultiMeshInstance3D.new()
-    trunk_node.name = "TreeTrunks"
-    trunk_node.multimesh = trunks
-    trunk_node.visibility_range_end = 430.0
-    chunk.add_child(trunk_node)
-
-    var crown_node := MultiMeshInstance3D.new()
-    crown_node.name = "TreeCrowns"
-    crown_node.multimesh = crowns
-    crown_node.visibility_range_end = 430.0
-    chunk.add_child(crown_node)
+func _spawn_tree_multimeshes(chunk: Node3D, transforms: Array[Transform3D], _biome: String) -> void:
+    var center := Vector2(chunk.position.x, chunk.position.z) + Vector2.ONE * CHUNK_SIZE * 0.5
+    NATURE.add_batches(chunk, transforms, not GEOGRAPHY.in_start_region(center), _biome == "taiga")
 
 func _spawn_rock_multimesh(chunk: Node3D, transforms: Array[Transform3D]) -> void:
-    var mesh := BoxMesh.new()
-    mesh.size = Vector3(1.7, 1.2, 1.5)
-    mesh.material = rock_material
-    var multimesh := MultiMesh.new()
-    multimesh.transform_format = MultiMesh.TRANSFORM_3D
-    multimesh.mesh = mesh
-    multimesh.instance_count = transforms.size()
-    for i in range(transforms.size()):
-        var t := transforms[i]
-        t.origin.y += 0.6 * t.basis.get_scale().y
-        multimesh.set_instance_transform(i, t)
-    var node := MultiMeshInstance3D.new()
-    node.name = "Boulders"
-    node.multimesh = multimesh
-    node.visibility_range_end = 360.0
-    chunk.add_child(node)
+    chunk.add_to_group("map_rock_batch")
+    var positions: Array[Vector3] = []
+    for transform in transforms:
+        positions.append(transform.origin)
+    chunk.set_meta("map_rock_positions", positions)
+    NATURE.add_model_batches(chunk, transforms, ROCK_SCENE, 360.0, false, rock_material)
+    NATURE.add_model_collisions(chunk, transforms, ROCK_SCENE)
 
 func _add_landmark_if_needed(chunk: Node3D, coord: Vector2i) -> void:
     # POIs are logical/map anchors. Do not draw giant placeholder boxes in the
@@ -396,6 +375,19 @@ func _add_landmark_if_needed(chunk: Node3D, coord: Vector2i) -> void:
         if p.x < origin.x or p.x >= max_pos.x or p.y < origin.y or p.y >= max_pos.y:
             continue
         var kind := String(poi.get("kind", ""))
+        if kind == "danger":
+            for index in range(2):
+                var enemy_id := "encounter:%s:%d" % [String(poi.get("id", "danger")), index]
+                if bool(GameState.get_world_value("enemy:" + enemy_id, false)):
+                    continue
+                var enemy := ENEMY.new()
+                enemy.name = "Bandit_%d" % index
+                enemy.enemy_id = enemy_id
+                var position := p + Vector2(-4 if index == 0 else 4, 3)
+                var local := position - origin
+                enemy.position = Vector3(local.x, WorldData.elevation_at(position) + 0.08, local.y)
+                chunk.add_child(enemy)
+            continue
         if kind in ["river", "ford", "village", "fortified_town", "capital"]:
             continue
         # Natural landmarks are represented by terrain now; dedicated landmark
@@ -414,8 +406,12 @@ func _update_wilderness_location() -> void:
     if player == null:
         return
     var pos := Vector2(player.global_position.x, player.global_position.z)
+    if CAPITAL.inside_capital(pos):
+        var district := CAPITAL.district_at(pos)
+        GameState.set_location("Люменград • " + String(district.get("name", "Городские улицы")))
+        return
     if pos.distance_to(CAPITAL.CENTER) < CITY_NO_WILD_RADIUS:
-        GameState.set_location("Люменград • территория столицы")
+        GameState.set_location("Окраины Люменграда")
         return
     if GEOGRAPHY.in_start_region(pos):
         GameState.set_location("Астэрн • пограничный лес")
@@ -440,7 +436,33 @@ func _distance_chunks(a: Vector2i, b: Vector2i) -> int:
 
 func _prepare_materials() -> void:
     for biome in ["plains", "forest", "taiga", "tundra", "drylands", "marsh", "mountains", "ocean", "freshwater", "underwater", "tropical", "snow", "steppe"]:
-        terrain_materials[biome] = _material(WorldData.biome_color(biome), 0.94)
+        var material := _material(Color.WHITE, 0.96)
+        var noise := FastNoiseLite.new()
+        noise.seed = 470219
+        noise.frequency = 0.045
+        noise.fractal_octaves = 4
+        var texture := NoiseTexture2D.new()
+        texture.width = 256
+        texture.height = 256
+        texture.seamless = true
+        texture.noise = noise
+        var ramp := Gradient.new()
+        var color := WorldData.biome_color(biome)
+        ramp.colors = PackedColorArray([color.darkened(0.28), color.lightened(0.18)])
+        texture.color_ramp = ramp
+        material.albedo_texture = texture
+        material.uv1_triplanar = true
+        material.uv1_world_triplanar = true
+        material.uv1_scale = Vector3.ONE * 0.055
+        if biome in ["plains", "forest", "taiga", "marsh"]:
+            material.albedo_texture = preload("res://assets/production/materials/ground/grass_meadow.jpg")
+            material.albedo_color = Color(0.56, 0.62, 0.49)
+            material.uv1_scale = Vector3.ONE * 0.30
+            material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+        elif biome == "mountains":
+            material.albedo_texture = preload("res://assets/production/materials/ground/lichen_rock.jpg")
+            material.uv1_scale = Vector3.ONE * 0.25
+        terrain_materials[biome] = material
     trunk_material = _material(Color(0.24, 0.13, 0.065), 0.96)
     foliage_materials["forest"] = _material(Color(0.08, 0.28, 0.10), 0.96)
     foliage_materials["taiga"] = _material(Color(0.055, 0.20, 0.15), 0.98)

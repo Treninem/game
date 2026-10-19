@@ -16,12 +16,13 @@ func _ready() -> void:
     add_to_group("world_root")
     get_tree().paused = false
     if not bool(get_meta("loading_gate_active", false)):
-        Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+        SettingsManager.capture_gameplay_mouse()
     GameState.player_died.connect(_on_player_died)
 
     if SaveManager.consume_new_game_request():
         GameState.reset_new_game()
         _place_player_safely(RESPAWN_POSITION)
+        GameState.set_location("Астэрн • пограничный лес")
         SaveManager.save_game(player)
     elif SaveManager.consume_load_request():
         if SaveManager.load_game(player):

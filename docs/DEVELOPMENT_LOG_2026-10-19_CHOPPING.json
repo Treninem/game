@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7 working-tree chopping review",
+  "engine": "Godot 4.7.1 / GL Compatibility / Intel UHD 610",
+  "implemented": [
+    "Equipped axe with three delayed/revalidated strokes",
+    "Start-forest batch promotion preserves neighbouring trees",
+    "CC0 UAL2 TreeChopping_Loop retargeted as Axe_Chop",
+    "Controlled fall, authored stump/log, E collection, finite persistent loot",
+    "Finite merchant axe stock and saved-shop migration"
+  ],
+  "tested": [
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 16.5
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.84
+    },
+    {
+      "name": "living_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.31
+    },
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 6.55
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.52
+    },
+    {
+      "name": "camera_obstruction",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.56
+    },
+    {
+      "name": "citizen_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 9.84
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.08
+    },
+    {
+      "name": "save_recovery",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.53
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.7
+    },
+    {
+      "name": "visual_grounding",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.8
+    }
+  ],
+  "graphical": "chopping-graphical-final.log: real MultiMesh transforms and unchanged neighbours; wall-safe E pickup",
+  "native": "Three manual mouse strikes, felled tree, E collected six wood in a start-position test fixture; no player teleport",
+  "package": "package-chopping-final.log; external exported-game smoke uses only PCK resources",
+  "known_issues": [
+    "Stylized art; not Witcher 3 realism",
+    "Axe grip, blade contact and chopping sound need further work",
+    "Controlled visual fall, no rigid-body damage to surroundings",
+    "Outside-start batched forest is not fully harvestable",
+    "Map may retain previously discovered standing-tree footprints after cutting",
+    "Existing ObjectDB exit warnings and VFX duplicate UID warnings; no complete FPS/memory acceptance benchmark",
+    "Full manual forest-to-capital final-build run not performed this stage"
+  ],
+  "next": [
+    "Refine tool grip/contact and sounds",
+    "Update map footprints after felling",
+    "Extend harvesting beyond start-region batches",
+    "Measure sustained performance and continue NPC work/reactivity"
+  ],
+  "git": {
+    "branch": "main",
+    "head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "new_commit": false,
+    "published_release": false
+  },
+  "artifact": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-19-chopping\\ImPuls-review.cmd",
+  "sha256": "b49d63be546cfa56ed58637a8e4439ef4238a12b55f3fda46d40f0f5e4dee260",
+  "failed_intermediates": [
+    "GDScript batch transform type inference fixed",
+    "Blender NLA collection API fixed",
+    "Headless rendering cannot expose real MultiMesh transforms; graphical gate checks real transforms",
+    "Concurrent intermediate test invocation produced exit resource warning; serial final gameplay_actions passed without errors",
+    "Native E aiming usability fixed and verified again"
+  ]
+}

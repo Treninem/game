@@ -22,6 +22,7 @@ const SURFACE_RAY_BELOW_TERRAIN := 2.5
 @onready var interaction_ray: RayCast3D = $CameraPivot/Camera3D/InteractionRay
 
 var attack_elapsed := 0.0
+var cast_elapsed := 0.0
 var recovery_cooldown := 0.0
 var stuck_elapsed := 0.0
 var last_horizontal_motion := Vector2.ZERO
@@ -39,11 +40,14 @@ func _ready() -> void:
     safe_margin = 0.045
     up_direction = Vector3.UP
     motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
+    interaction_ray.add_exception(self)
+    interaction_ray.set_collision_mask_value(2, true)
     _apply_settings()
     SettingsManager.settings_changed.connect(_apply_settings)
+    MagicSystem.spell_cast.connect(_on_spell_cast)
     if not SaveManager.game_loaded.is_connected(_on_game_loaded):
         SaveManager.game_loaded.connect(_on_game_loaded)
-    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+    SettingsManager.capture_gameplay_mouse()
     # Never let gravity race ahead of streamed terrain. The guard releases only
     # after the physics server reports a real surface below the player's feet on
     # two consecutive physics frames.
@@ -52,20 +56,55 @@ func _ready() -> void:
 func _apply_settings() -> void:
     camera.fov = float(SettingsManager.get_value("gameplay", "camera_fov"))
 
+func _on_spell_cast(_spell_id: String) -> void:
+    cast_elapsed = 0.45
+
 func _on_game_loaded(_slot: int) -> void:
     var loaded_instanced := ProgressionSystem.is_in_dungeon() or String(GameState.get_world_value("current_realm", "main")) != "main"
     _set_instanced_world_mode(loaded_instanced)
     if not loaded_instanced:
         _recover_to_terrain_if_needed(true)
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
     if DialogueManager.is_open or get_tree().paused:
         return
-    if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+    if event is InputEventMouseButton and event.pressed and not SettingsManager.is_gameplay_mouse_captured():
+        # Restore capture after the window loses focus. This first click must
+        # never also attack or cast a spell.
+        SettingsManager.capture_gameplay_mouse()
+        get_viewport().set_input_as_handled()
+        return
+    if event is InputEventMouseMotion and SettingsManager.is_gameplay_mouse_captured():
+        if SettingsManager.ignore_recapture_motion():
+            get_viewport().set_input_as_handled()
+            return
+        if SettingsManager.uses_compatible_mouse() and event.position.distance_squared_to(get_viewport().get_visible_rect().get_center()) < 1.0:
+            # Windows reports the recenter warp as the opposite movement.
+            # Applying it would cancel every real camera turn immediately.
+            get_viewport().set_input_as_handled()
+            return
+        # Read camera motion before GUI hit testing; HUD panels can consume
+        # unhandled motion. Screen-relative motion stays stable at any UI scale.
+        var motion: Vector2 = event.screen_relative
+        if SettingsManager.uses_compatible_mouse():
+            # Absolute pointing devices can report positions with both relative
+            # fields empty. Read displacement from the recentered cursor instead.
+            var viewport_size := get_viewport().get_visible_rect().size
+            motion = (event.position - viewport_size * 0.5) * Vector2(DisplayServer.window_get_size()) / viewport_size
+        if motion.is_zero_approx():
+            motion = event.relative
+        if motion.is_zero_approx():
+            return
         var sensitivity := float(SettingsManager.get_value("gameplay", "mouse_sensitivity"))
-        rotate_y(-event.relative.x * sensitivity)
-        pivot.rotate_x(-event.relative.y * sensitivity)
+        rotate_y(-motion.x * sensitivity)
+        pivot.rotate_x(-motion.y * sensitivity)
         pivot.rotation.x = clamp(pivot.rotation.x, deg_to_rad(-60.0), deg_to_rad(45.0))
+        SettingsManager.recenter_gameplay_mouse()
+        get_viewport().set_input_as_handled()
+        return
+
+func _unhandled_input(event: InputEvent) -> void:
+    if DialogueManager.is_open or get_tree().paused:
         return
     if event.is_action_pressed("attack"):
         _try_attack()
@@ -73,7 +112,7 @@ func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("cast_magic"):
         var spell_id := MagicSystem.selected_spell_id()
         if MagicSystem.cast_selected(self, camera):
-            var cast_position := camera.global_position + (-camera.global_transform.basis.z) * 0.72
+            var cast_position: Vector3 = projectile_aim()["origin"]
             ThirdPartyVFX.spawn_spell_cast(spell_id, cast_position, get_tree().current_scene, 0.82)
         return
     if event.is_action_pressed("next_spell"):
@@ -102,6 +141,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
     attack_elapsed = maxf(0.0, attack_elapsed - delta)
+    cast_elapsed = maxf(0.0, cast_elapsed - delta)
     recovery_cooldown = maxf(0.0, recovery_cooldown - delta)
     if GameState.is_dead:
         velocity = Vector3.ZERO
@@ -282,27 +322,27 @@ func _physical_surface_exists_below(terrain_y: float) -> bool:
     return hit_position.y >= terrain_y - 1.0 and hit_position.y <= terrain_y + 1.5
 
 func _attempt_unstick(direction: Vector3, delta: float, target_speed: float) -> void:
-    # A streamed terrain collision can appear during the same frame in which the
-    # player reaches a chunk seam. Recover upward first, then retry a small legal
-    # horizontal step without ever phasing through a wall.
-    var lift := Vector3.UP * 0.22
-    if not test_move(global_transform, lift):
-        global_position += lift
-
+    if not is_on_floor():
+        return
+    # Raise the capsule only onto an actual low walking surface. Blind upward
+    # nudges at a wall made the character bounce above the ground indefinitely.
+    var ahead := global_position + direction.normalized() * 0.45
+    var query := PhysicsRayQueryParameters3D.create(ahead + Vector3.UP * 0.34, ahead + Vector3.DOWN * 0.10, 1, [get_rid()])
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    if hit.is_empty() or Vector3(hit.normal).dot(Vector3.UP) < cos(floor_max_angle):
+        return
+    var rise := Vector3(hit.position).y - global_position.y
+    if rise <= 0.02 or rise > 0.30:
+        return
+    var lift := Vector3.UP * (rise + 0.025)
+    if test_move(global_transform, lift):
+        return
     var retry := direction.normalized() * minf(0.28, target_speed * maxf(delta, 1.0 / 60.0) * 2.0)
-    if retry.length() > 0.001 and not test_move(global_transform, retry):
-        global_position += retry
+    if retry.length() > 0.001 and not test_move(global_transform.translated(lift), retry):
+        global_position += lift + retry
+        velocity.y = 0.0
         velocity.x = direction.x * target_speed
         velocity.z = direction.z * target_speed
-        return
-
-    var xz := Vector2(global_position.x, global_position.z)
-    if WorldData.inside_world(xz):
-        var terrain_y := WorldData.elevation_at(xz)
-        if global_position.y < terrain_y + 0.15:
-            global_position.y = terrain_y + GROUND_CLEARANCE
-            velocity.y = 0.0
-            _begin_ground_guard(false)
 
 func _recover_to_terrain_if_needed(force_check: bool) -> void:
     if instanced_world_mode:
@@ -353,13 +393,20 @@ func _enforce_world_bounds() -> void:
 func _try_attack() -> void:
     if GameState.is_dead or attack_elapsed > 0.0:
         return
+    if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "short_bow":
+        _try_shoot()
+        return
     if not GameState.consume_stamina(attack_stamina_cost):
         GameState.notify("Недостаточно выносливости.")
         return
     attack_elapsed = attack_cooldown
+    if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "starter_axe":
+        var avatar := get_node_or_null("Avatar")
+        if avatar != null and avatar.has_method("begin_axe_stroke"):
+            avatar.begin_axe_stroke()
 
     var swing_direction := -camera.global_transform.basis.z
-    var swing_position := camera.global_position + swing_direction * 1.35
+    var swing_position := global_position + Vector3.UP * 1.1 + swing_direction * 0.9
     VFXLibrary.spawn("melee_swing", swing_position, get_tree().current_scene, Vector3.UP, swing_direction, 1.0)
     ThirdPartyVFX.spawn_slash(swing_position, get_tree().current_scene, 0.75)
 
@@ -368,7 +415,11 @@ func _try_attack() -> void:
     var collider = interaction_ray.get_collider()
     var hit_position := interaction_ray.get_collision_point()
     var hit_normal := interaction_ray.get_collision_normal()
-    if collider != null and collider.has_method("take_damage"):
+    if not _reachable_hit(collider, hit_position, 3.0):
+        return
+    if collider != null and collider.has_method("receive_melee_hit"):
+        collider.receive_melee_hit(self)
+    elif collider != null and collider.has_method("take_damage"):
         VFXLibrary.spawn("hit_slash", hit_position, get_tree().current_scene, hit_normal, swing_direction, 1.0)
         ThirdPartyVFX.spawn_slash(hit_position, get_tree().current_scene, 0.55)
         ScreenVFX.shake(0.018, 0.08)
@@ -378,14 +429,76 @@ func _try_attack() -> void:
         WorldVFX.spawn_impact(surface, hit_position, hit_normal, swing_direction, 0.80)
         ScreenVFX.shake(0.010, 0.06)
 
+func _try_shoot() -> void:
+    if int(GameState.inventory.get("arrow", 0)) <= 0:
+        GameState.notify("Нет стрел. Их можно изготовить в меню крафта (K).")
+        return
+    if not GameState.consume_stamina(5.0):
+        GameState.notify("Недостаточно выносливости.")
+        return
+    GameState.remove_item("arrow", 1)
+    attack_elapsed = 0.7
+    var aim := projectile_aim(70.0)
+    var arrow := preload("res://scripts/weapon_projectile.gd").new()
+    get_tree().current_scene.add_child(arrow)
+    arrow.global_position = aim["origin"]
+    arrow.setup(self, aim["direction"])
+
+func projectile_aim(max_range: float = 60.0) -> Dictionary:
+    var direction := -camera.global_transform.basis.z
+    var origin := global_position + Vector3.UP * 1.35 + direction * 0.30
+    var aim := origin + direction * max_range
+    var query := PhysicsRayQueryParameters3D.create(camera.global_position, aim, 1, [get_rid()])
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    if not hit.is_empty():
+        aim = hit["position"]
+    # A wall between the camera and hero must not make the hero shoot backward.
+    if (aim - origin).dot(direction) <= 0.0:
+        aim = origin + direction * max_range
+    return {"origin": origin, "direction": (aim - origin).normalized()}
+
 func _try_interact() -> void:
     if GameState.is_dead:
+        return
+    if _try_collect_fallen_wood():
         return
     if not interaction_ray.is_colliding():
         GameState.notify("Рядом нет объекта для взаимодействия.")
         return
     var collider = interaction_ray.get_collider()
+    if not _reachable_hit(collider, interaction_ray.get_collision_point(), 3.0):
+        GameState.notify("Подойдите ближе: цель должна быть перед вами и без преграды.")
+        return
     if collider != null and collider.has_method("interact"):
         collider.interact(self)
     else:
         GameState.notify("С этим объектом пока нельзя взаимодействовать.")
+
+func _try_collect_fallen_wood() -> bool:
+    var nearest: Node3D = null
+    var nearest_distance := 2.3
+    for node in get_tree().get_nodes_in_group("map_resource"):
+        if node.get_script() != preload("res://scripts/streamed_resource.gd"):
+            continue
+        if node.resource_id != "wood" or not node.fallen or node.falling or node.uses <= 0:
+            continue
+        var point: Vector3 = node.global_position + Vector3.UP * 0.22
+        var distance := (global_position + Vector3.UP * 1.1).distance_to(point)
+        if distance < nearest_distance and _reachable_hit(node, point, 2.3):
+            nearest = node
+            nearest_distance = distance
+    if nearest != null:
+        nearest.interact(self)
+        return true
+    return false
+
+func _reachable_hit(collider: Object, point: Vector3, reach: float) -> bool:
+    var origin := global_position + Vector3.UP * 1.1
+    var direction := point - origin
+    if direction.length() > reach or direction.dot(-camera.global_basis.z) < -0.05:
+        return false
+    var end := point + direction.normalized() * 0.02
+    var query := PhysicsRayQueryParameters3D.create(origin, end, interaction_ray.collision_mask, [get_rid()])
+    query.collide_with_areas = interaction_ray.collide_with_areas
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    return not hit.is_empty() and hit.collider == collider

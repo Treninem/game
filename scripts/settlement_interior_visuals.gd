@@ -26,7 +26,14 @@ func _exit_tree() -> void:
 func _on_node_added(node: Node) -> void:
     if node == null:
         return
-    call_deferred("_decorate_candidate", node)
+    # Equipment, effects and streamed nodes may be freed in the same frame.
+    # A typed Node argument cannot even reach our validity check after free.
+    call_deferred("_decorate_candidate_ref", weakref(node))
+
+func _decorate_candidate_ref(reference: WeakRef) -> void:
+    var node := reference.get_ref() as Node
+    if is_instance_valid(node):
+        _decorate_candidate(node)
 
 func _decorate_existing() -> void:
     for building in get_tree().get_nodes_in_group("enterable_building"):
@@ -103,8 +110,40 @@ func _replace_proxy_visual(body: StaticBody3D, scene: PackedScene, model_name: S
     model.set_meta("source_pack", "quaternius_furniture_pack")
     model.set_meta("license", "CC0")
     model.set_meta("collision_proxy", body.name)
+    _restore_furniture_materials(model)
     real_model_instances += 1
     return true
+
+func _restore_furniture_materials(model: Node3D) -> void:
+    # These source FBX surfaces retain semantic names, but the importer gives
+    # every one the same untextured grey. Restore only those known blank slots;
+    # authored textures or deliberately coloured materials remain untouched.
+    for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
+        for index in range(mesh.mesh.get_surface_count()):
+            var source := mesh.get_active_material(index) as StandardMaterial3D
+            if source == null or source.albedo_texture != null:
+                continue
+            var color := source.albedo_color
+            if maxf(color.r, maxf(color.g, color.b)) - minf(color.r, minf(color.g, color.b)) > 0.01:
+                continue
+            var label := source.resource_name.to_lower()
+            var replacement := source.duplicate() as StandardMaterial3D
+            replacement.roughness = 0.94
+            if "wood" in label:
+                replacement.albedo_texture = preload("res://assets/production/medieval/building_shell/T_WoodTrim_BaseColor.png")
+                replacement.albedo_color = Color(0.45, 0.32, 0.20) if "dark" in label else Color(0.8, 0.66, 0.48)
+                replacement.uv1_triplanar = true
+                replacement.uv1_world_triplanar = true
+                replacement.uv1_scale = Vector3.ONE * 1.2
+            elif "sheets" in label:
+                replacement.albedo_color = Color(0.38, 0.27, 0.18)
+            elif "white" in label:
+                replacement.albedo_color = Color(0.72, 0.68, 0.56)
+            elif "darkbrown" in label:
+                replacement.albedo_color = Color(0.15, 0.085, 0.04)
+            else:
+                continue
+            mesh.set_surface_override_material(index, replacement)
 
 func _set_geometry_visible_recursive(root: Node, visible_value: bool) -> void:
     for child in root.get_children():

@@ -37,3 +37,17 @@ func _ready() -> void:
     fallback_material.roughness = 1.0
     fallback_visual.material_override = fallback_material
     add_child(fallback_visual)
+
+func _physics_process(_delta: float) -> void:
+    var player := get_tree().get_first_node_in_group("player") as CharacterBody3D
+    if player == null:
+        return
+    var query := PhysicsRayQueryParameters3D.create(player.global_position + Vector3.UP * 2.0, player.global_position + Vector3.DOWN * 4.0)
+    query.exclude = [get_rid(), player.get_rid()]
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    var collider := hit.get("collider") as Node
+    if collider != null and collider.name == "TerrainCollision":
+        collision_layer = 0
+        collision_mask = 0
+        $StoryStartSurfaceCollision.set_deferred("disabled", true)
+        set_physics_process(false)

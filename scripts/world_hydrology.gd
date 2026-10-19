@@ -137,17 +137,16 @@ static func water_depth_at(pos: Vector2, terrain_height: float) -> float:
 static func carve_height(pos: Vector2, terrain_height: float) -> float:
     var height := terrain_height
 
-    # Preserve the canonical opening river profile already locked by smoke tests.
+    # Keep the canonical river center and depth, with banks meeting the water edge.
     if GEOGRAPHY.in_start_region(pos):
         var river_distance := GEOGRAPHY.distance_to_start_river(pos)
         if river_distance < GEOGRAPHY.START_RIVER_BANK_WIDTH:
             var riverbed_y := GEOGRAPHY.START_RIVER_WATER_LEVEL - 1.55
-            var bank_blend := smoothstep(
-                GEOGRAPHY.START_RIVER_HALF_WIDTH,
-                GEOGRAPHY.START_RIVER_BANK_WIDTH,
-                river_distance
-            )
-            height = lerpf(riverbed_y, height, bank_blend)
+            var shore_y := GEOGRAPHY.START_RIVER_WATER_LEVEL + 0.08
+            if river_distance <= GEOGRAPHY.START_RIVER_HALF_WIDTH:
+                height = lerpf(riverbed_y, shore_y, smoothstep(GEOGRAPHY.START_RIVER_HALF_WIDTH * 0.55, GEOGRAPHY.START_RIVER_HALF_WIDTH, river_distance))
+            else:
+                height = lerpf(shore_y, height, smoothstep(GEOGRAPHY.START_RIVER_HALF_WIDTH, GEOGRAPHY.START_RIVER_BANK_WIDTH, river_distance))
 
             # Raise the existing Old Ford riverbed into a broad shallow shelf.
             # The blend extends onto both approaches so the player does not meet
