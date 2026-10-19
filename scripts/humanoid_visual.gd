@@ -1,5 +1,8 @@
 extends Node3D
 
+const GRIP := preload("res://scripts/weapon_grip_modifier.gd")
+const GRIP_POINTS := {"starter_axe": Vector3(-0.09865, -0.18, 0), "stone_knife": Vector3(0.0006, -0.12, 0), "short_bow": Vector3(-0.070708, 0, 0)}
+
 const APPEARANCE := preload("res://scripts/character_appearance.gd")
 const HAIR_SHADER := preload("res://assets/shaders/characters/hair_tint.gdshader")
 const HUMANS := {"male": preload("res://assets/production/characters/realistic/male.glb"), "female": preload("res://assets/production/characters/realistic/female.glb")}
@@ -34,6 +37,10 @@ var last_position := Vector3.ZERO
 var weapon_socket: BoneAttachment3D
 var held_weapon: Node3D
 var held_item := ""
+var grip_modifier: SkeletonModifier3D
+var bow_cords: Array[MeshInstance3D] = []
+var nocked_arrow: Node3D
+var last_draw_point := Vector3.ZERO
 
 func _ready() -> void:
     var profile: Variant = appearance_profile
@@ -54,6 +61,8 @@ func apply_appearance(value: Variant) -> void:
     weapon_socket = null
     held_weapon = null
     held_item = ""
+    bow_cords.clear()
+    nocked_arrow = null
     active_animation = ""
     current_profile = profile
     scale = Vector3.ONE * body_scale
@@ -79,6 +88,7 @@ func apply_appearance(value: Variant) -> void:
         _prepare_airborne_pose(model)
         _prepare_sitting_pose(model)
         _prepare_bow_poses(model)
+        _prepare_axe_pose(model)
     last_position = get_parent_node_3d().global_position
     if get_parent().name == "Player" or get_parent().has_meta("preview_animation"):
         var skeletons := model.find_children("*", "Skeleton3D", true, false)
@@ -87,7 +97,10 @@ func apply_appearance(value: Variant) -> void:
             weapon_socket.name = "WeaponSocket"
             weapon_socket.bone_name = "RightHand"
             skeletons[0].add_child(weapon_socket)
-            skeletons[0].connect("skeleton_updated", _update_bow_transform)
+            grip_modifier = GRIP.new()
+            grip_modifier.name = "WeaponGrip"
+            grip_modifier.set("visual", self)
+            skeletons[0].add_child(grip_modifier)
             if get_parent().name == "Player" and not InventorySystem.equipment_changed.is_connected(_refresh_weapon):
                 InventorySystem.equipment_changed.connect(_refresh_weapon)
             _refresh_weapon()
@@ -129,10 +142,13 @@ func _refresh_weapon() -> void:
     if weapon_socket == null:
         return
     held_item = String(get_parent().get_meta("preview_item", "")) if get_parent().has_meta("preview_animation") else InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
+    bow_cords.clear()
+    nocked_arrow = null
     if held_weapon != null:
         held_weapon.free()
         held_weapon = null
     if not WEAPONS.has(held_item):
+        (weapon_socket.get_parent() as Skeleton3D).advance(0.0)
         return
     weapon_socket.bone_name = "LeftHand" if held_item == "short_bow" else "RightHand"
     # Keep the asset's normalization transform intact. Compensate the human
@@ -141,16 +157,110 @@ func _refresh_weapon() -> void:
     held_weapon.name = "EquippedWeapon"
     held_weapon.set_meta("item_id", held_item)
     weapon_socket.add_child(held_weapon)
-    held_weapon.position = Vector3(0.0, 0.10, 0.0)
-    held_weapon.scale = Vector3.ONE / weapon_socket.global_basis.get_scale()
-    var model := (WEAPONS[held_item] as PackedScene).instantiate() as Node3D
-    held_weapon.add_child(model)
+    held_weapon.top_level = true
+    held_weapon.scale = Vector3.ONE
+    var weapon_model := (WEAPONS[held_item] as PackedScene).instantiate() as Node3D
+    held_weapon.add_child(weapon_model)
+    weapon_model.position -= GRIP_POINTS[held_item]
     if held_item == "short_bow":
-        held_weapon.top_level = true
-        held_weapon.scale = Vector3.ONE
-        _update_bow_transform()
-    else:
-        model.position.y += 0.18
+        _prepare_bow_cord(weapon_model)
+    var skeleton := weapon_socket.get_parent() as Skeleton3D
+    var initial_grip := skeleton.global_transform * GRIP.palm_frame(skeleton, "Left" if held_item == "short_bow" else "Right")
+    _place_weapon_at_grip(initial_grip)
+    grip_modifier.set("last_grip", initial_grip)
+    skeleton.advance(0.0)
+
+func _place_weapon_at_grip(grip: Transform3D, draw_point: Vector3 = Vector3.ZERO, drawing: bool = false) -> void:
+    if not is_instance_valid(held_weapon):
+        return
+    var frame := grip.basis.orthonormalized()
+    if held_item == "starter_axe":
+        frame = frame * Basis(Vector3.UP, PI)
+    if held_item == "short_bow":
+        var body := get_parent_node_3d()
+        var aim := body.global_basis.orthonormalized()
+        var pivot := body.get_node_or_null("CameraPivot") as Node3D
+        if pivot != null:
+            aim = aim * Basis(Vector3.RIGHT, pivot.rotation.x)
+        frame = aim * Basis(Vector3.UP, -PI * 0.5)
+    held_weapon.global_transform = Transform3D(frame, grip.origin)
+    if held_item == "short_bow" and bow_cords.size() == 2:
+        var top := held_weapon.to_global(Vector3(0.2055, 0.5157, 0))
+        var bottom := held_weapon.to_global(Vector3(0.2055, -0.5157, 0))
+        last_draw_point = draw_point if drawing else held_weapon.to_global(Vector3(0.2055, 0, 0))
+        _cord_between(bow_cords[0], top, last_draw_point)
+        _cord_between(bow_cords[1], last_draw_point, bottom)
+        if is_instance_valid(nocked_arrow):
+            nocked_arrow.visible = drawing
+            var actor := get_parent_node_3d()
+            var aim_basis := actor.global_basis.orthonormalized()
+            var pivot := actor.get_node_or_null("CameraPivot") as Node3D
+            if pivot != null:
+                aim_basis = aim_basis * Basis(Vector3.RIGHT, pivot.rotation.x)
+            var aim := -aim_basis.z
+            nocked_arrow.global_transform = Transform3D(Basis(Quaternion(Vector3.UP, aim)), last_draw_point + aim * 0.35)
+
+
+func _prepare_bow_cord(weapon_model: Node3D) -> void:
+    # This authored bow has its original straight cord in a thin isolated strip.
+    # Replace only that strip; keep the original wood, UVs and material surfaces.
+    for instance: MeshInstance3D in weapon_model.find_children("*", "MeshInstance3D", true, false):
+        var source := instance.mesh as ArrayMesh
+        if source == null:
+            continue
+        var cleaned := ArrayMesh.new()
+        for surface in range(source.get_surface_count()):
+            var arrays := source.surface_get_arrays(surface)
+            var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+            var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+            var kept := PackedInt32Array()
+            for i in range(0, indices.size(), 3):
+                var cord := true
+                for j in range(3):
+                    var point := vertices[indices[i + j]]
+                    cord = cord and point.x > 0.35 and absf(point.y) < 0.006 and absf(point.z) < 0.94
+                if not cord:
+                    kept.append_array(indices.slice(i, i + 3))
+            if kept.is_empty():
+                continue
+            arrays[Mesh.ARRAY_INDEX] = kept
+            var new_surface := cleaned.get_surface_count()
+            cleaned.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+            cleaned.surface_set_material(new_surface, source.surface_get_material(surface))
+        instance.mesh = cleaned
+    var material := StandardMaterial3D.new()
+    material.albedo_color = Color(0.73, 0.68, 0.56)
+    material.roughness = 0.85
+    for i in range(2):
+        var cord := MeshInstance3D.new()
+        cord.name = "BowCord%d" % i
+        var cylinder := CylinderMesh.new()
+        cylinder.top_radius = 0.0013
+        cylinder.bottom_radius = 0.0013
+        cylinder.height = 1.0
+        cylinder.radial_segments = 6
+        cord.mesh = cylinder
+        cord.material_override = material
+        cord.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+        held_weapon.add_child(cord)
+        bow_cords.append(cord)
+    nocked_arrow = Node3D.new()
+    nocked_arrow.add_child(preload("res://assets/production/weapons/woodland/Arrow.glb").instantiate())
+    nocked_arrow.name = "NockedArrow"
+    held_weapon.add_child(nocked_arrow)
+    nocked_arrow.top_level = true
+    nocked_arrow.visible = false
+
+func _cord_between(cord: MeshInstance3D, a: Vector3, b: Vector3) -> void:
+    var distance := a.distance_to(b)
+    if distance < 0.001:
+        cord.visible = false
+        return
+    cord.visible = true
+    cord.global_transform = Transform3D(Basis(Quaternion(Vector3.UP, (b - a).normalized())).scaled(Vector3(1, distance, 1)), (a + b) * 0.5)
+
+func arrow_release_point() -> Vector3:
+    return last_draw_point
 
 func _process(delta: float) -> void:
     if get_parent().name == "Player" and appearance_revision != GameState.state_revision:
@@ -183,7 +293,10 @@ func _process(delta: float) -> void:
         _play("Punch", 1.0)
     elif body.name == "Player" and float(body.get("attack_elapsed")) > 0.0:
         var stroke := "Axe_Chop" if held_item == "starter_axe" else "Punch"
-        _play("Bow_Attack_Shoot" if held_item == "short_bow" else stroke, 1.8 if held_item == "starter_axe" else 1.0)
+        if held_item == "short_bow":
+            _play("Bow_Attack_Draw" if float(body.get("pending_bow_elapsed")) > 0 else "Bow_Attack_Shoot", 1.8 if float(body.get("pending_bow_elapsed")) > 0 else 1.0)
+        else:
+            _play(stroke, 1.8 if held_item == "starter_axe" else 1.0)
     elif body.is_in_group("hostile") and float(body.get("attack_elapsed")) > float(body.get("attack_interval")) - 0.55:
         _play("Punch", 1.0)
     elif measured_speed > 5.7:
@@ -194,27 +307,17 @@ func _process(delta: float) -> void:
         _play("Working" if animation_player.has_animation("Working") else "PickUp", 0.8)
     else:
         _play("Idle", 1.0)
-    _update_bow_transform()
-
-func _update_bow_transform() -> void:
-    if held_item != "short_bow" or not is_instance_valid(held_weapon):
-        return
-    var body := get_parent_node_3d()
-    var aim := body.global_basis.orthonormalized()
-    var pivot := body.get_node_or_null("CameraPivot") as Node3D
-    if pivot != null:
-        aim = aim * Basis(Vector3.RIGHT, pivot.rotation.x)
-    # The authored bow is tall along Y and its arrow points along -X.
-    # Keep that plane aligned with the aim instead of inheriting wrist roll.
-    held_weapon.global_transform = Transform3D(aim * Basis(Vector3.UP, -PI * 0.5), weapon_socket.global_transform * Vector3(0, 0.10, 0))
 
 func _play(key: String, rate: float) -> void:
     if animation_player == null or not animation_player.has_animation(key):
         return
     animation_player.speed_scale = rate
     if active_animation != key or (key in ["Working", "PickUp"] and not animation_player.is_playing()):
+        var previous := active_animation
         active_animation = key
         animation_player.play(key, 0.18)
+        if key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch"] and is_instance_valid(grip_modifier):
+            animation_player.seek(fposmod(float(grip_modifier.get("gait_time")), animation_player.get_animation(key).length), true)
 
 func begin_axe_stroke() -> void:
     if animation_player != null and animation_player.has_animation("Axe_Chop"):
@@ -242,6 +345,10 @@ func _prepare_bow_poses(human: Node3D) -> void:
     _align_sitting_bone(skeleton, "LeftForeArm", "LeftHand", Vector3(-0.03, 0, -1))
     _align_sitting_bone(skeleton, "RightArm", "RightForeArm", Vector3(0.9, 0.2, 0.15))
     _align_sitting_bone(skeleton, "RightForeArm", "RightHand", Vector3(-0.65, 0.15, -0.75))
+    _orient_bow_hand(skeleton, "Left")
+    var bow_grip := to_local(skeleton.global_transform * GRIP.palm_frame(skeleton, "Left").origin)
+    _solve_right_arm(skeleton, bow_grip + Vector3(0.02, 0.015, 0.62))
+    _orient_bow_hand(skeleton, "Right")
     var drawn := {}
     for bone: int in original:
         drawn[bone] = skeleton.get_bone_pose_rotation(bone)
@@ -271,6 +378,88 @@ func _prepare_bow_poses(human: Node3D) -> void:
     for bone: int in original:
         skeleton.set_bone_pose_rotation(bone, original[bone])
     skeleton.force_update_all_bone_transforms()
+
+func _solve_right_arm(skeleton: Skeleton3D, target: Vector3) -> void:
+    var upper := skeleton.find_bone("RightArm")
+    var elbow := skeleton.find_bone("RightForeArm")
+    var wrist := skeleton.find_bone("RightHand")
+    var shoulder := skeleton.get_bone_global_pose(upper).origin
+    var joint := skeleton.get_bone_global_pose(elbow).origin
+    var hand := skeleton.get_bone_global_pose(wrist).origin
+    var destination := skeleton.global_transform.affine_inverse() * to_global(target)
+    var a := shoulder.distance_to(joint)
+    var b := joint.distance_to(hand)
+    var direction := (destination - shoulder).normalized()
+    var distance := clampf(shoulder.distance_to(destination), absf(a - b) + 0.001, a + b - 0.001)
+    var pole := skeleton.global_basis.inverse() * global_basis * Vector3(0.65, 0.10, 0.45)
+    var bend := (pole - direction * pole.dot(direction)).normalized()
+    var along := (a * a - b * b + distance * distance) / (2.0 * distance)
+    var knee := shoulder + direction * along + bend * sqrt(maxf(0, a * a - along * along))
+    var to_actor := global_basis.inverse() * skeleton.global_basis
+    _align_sitting_bone(skeleton, "RightArm", "RightForeArm", to_actor * (knee - shoulder))
+    joint = skeleton.get_bone_global_pose(elbow).origin
+    _align_sitting_bone(skeleton, "RightForeArm", "RightHand", to_actor * (destination - joint))
+
+func _orient_bow_hand(skeleton: Skeleton3D, side: String) -> void:
+    _orient_hand_axes(skeleton, side, Vector3.FORWARD, Vector3.UP)
+
+func _orient_hand_axes(skeleton: Skeleton3D, side: String, finger_axis: Vector3, handle_axis: Vector3) -> void:
+    var hand := skeleton.find_bone(side + "Hand")
+    var wrist := skeleton.get_bone_global_pose(hand).origin
+    var index := skeleton.get_bone_global_pose(skeleton.find_bone(side + "HandIndex1")).origin
+    var pinky := skeleton.get_bone_global_pose(skeleton.find_bone(side + "HandPinky1")).origin
+    var middle := skeleton.get_bone_global_pose(skeleton.find_bone(side + "HandMiddle1")).origin
+    var along := (middle - wrist).normalized()
+    var across := (index - pinky).normalized()
+    var current := Basis(across, along, across.cross(along)).orthonormalized()
+    var actor_frame := skeleton.global_basis.inverse() * global_basis
+    var desired := Basis(actor_frame * handle_axis, actor_frame * finger_axis, actor_frame * handle_axis.cross(finger_axis)).orthonormalized()
+    var pose := skeleton.get_bone_global_pose(hand)
+    var local := skeleton.get_bone_pose_rotation(hand)
+    var frame := pose.basis.orthonormalized() * Basis(local).inverse()
+    var rotation := desired * current.inverse()
+    skeleton.set_bone_pose_rotation(hand, ((frame.inverse() * rotation * frame).get_rotation_quaternion() * local).normalized())
+    skeleton.force_update_all_bone_transforms()
+
+func _prepare_axe_pose(human: Node3D) -> void:
+    var skeleton := human.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    var original := {}
+    for suffix: String in ["Arm", "ForeArm", "Hand"]:
+        var bone := skeleton.find_bone("Right" + suffix)
+        original[bone] = skeleton.get_bone_pose_rotation(bone)
+    var poses: Array[Dictionary] = [original]
+    for pose in [
+        [Vector3(0.2, 1.97, 0.06), Vector3(0, -1, 1).normalized(), Vector3(0, 1, 1).normalized()],
+        [Vector3(0.10, 1.30, -0.65), Vector3(0, -1, -1).normalized(), Vector3(0, 1, -1).normalized()],
+        [Vector3(0.05, 1.0, -0.35), Vector3(0, -1, 0.3).normalized(), Vector3(0, -0.3, -1).normalized()]
+    ]:
+        _solve_right_arm(skeleton, pose[0])
+        _orient_hand_axes(skeleton, "Right", pose[1], pose[2])
+        var sample := {}
+        for bone: int in original:
+            sample[bone] = skeleton.get_bone_pose_rotation(bone)
+        poses.append(sample)
+    poses.append(original)
+    var clip := animation_player.get_animation("Idle").duplicate() as Animation
+    clip.length = 0.99
+    clip.loop_mode = Animation.LOOP_NONE
+    var root := animation_player.get_node(animation_player.root_node)
+    for bone: int in original:
+        var path := NodePath(String(root.get_path_to(skeleton)) + ":" + skeleton.get_bone_name(bone))
+        var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
+        if track >= 0:
+            clip.remove_track(track)
+        track = clip.add_track(Animation.TYPE_ROTATION_3D)
+        clip.track_set_path(track, path)
+        for index in range(poses.size()):
+            # Player rate 1.8 places contact at 0.22 s, matching damage.
+            clip.rotation_track_insert_key(track, [0.0, 0.22, 0.396, 0.57, 0.99][index], poses[index][bone])
+    for bone: int in original:
+        skeleton.set_bone_pose_rotation(bone, original[bone])
+    skeleton.force_update_all_bone_transforms()
+    var library := animation_player.get_animation_library("")
+    library.remove_animation("Axe_Chop")
+    library.add_animation("Axe_Chop", clip)
 
 func _prepare_airborne_pose(model: Node3D) -> void:
     if animation_player.has_animation("Airborne"):

@@ -62,6 +62,12 @@ func _run() -> void:
     tree.global_position.z = origin.z - 1.5
     await _wait(0.1)
     _strike(player)
+    var windup_snapshot := GameState.snapshot()
+    GameState.load_snapshot(windup_snapshot)
+    await _wait(0.3)
+    if tree.cuts != 0:
+        failures.append("Loading during axe wind-up applies a stale tree hit")
+    _strike(player)
     if tree.cuts != 0:
         failures.append("Axe contact happens before the animation wind-up")
     await _wait(0.3)

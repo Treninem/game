@@ -11,6 +11,7 @@ extends CharacterBody3D
 @export var attack_cooldown := 0.55
 
 const GROUND_CLEARANCE := 0.08
+const AXE_MELEE_REACH := 1.4
 const SURFACE_READY_REQUIRED_FRAMES := 2
 const VOID_RECOVERY_DEPTH := 1.25
 const SAFE_RECOVERY_XZ_RADIUS := 96.0
@@ -22,6 +23,11 @@ const SURFACE_RAY_BELOW_TERRAIN := 2.5
 @onready var interaction_ray: RayCast3D = $CameraPivot/Camera3D/InteractionRay
 
 var attack_elapsed := 0.0
+var pending_bow_elapsed := 0.0
+var pending_bow_revision := -1
+var pending_axe_elapsed := 0.0
+var pending_axe_revision := -1
+var pending_axe_target: WeakRef
 var cast_elapsed := 0.0
 var recovery_cooldown := 0.0
 var stuck_elapsed := 0.0
@@ -140,6 +146,8 @@ func _unhandled_input(event: InputEvent) -> void:
             GameState.notify("Загружен слот %02d." % SaveManager.current_slot)
 
 func _physics_process(delta: float) -> void:
+    _update_bow_shot(delta)
+    _update_axe_hit(delta)
     attack_elapsed = maxf(0.0, attack_elapsed - delta)
     cast_elapsed = maxf(0.0, cast_elapsed - delta)
     recovery_cooldown = maxf(0.0, recovery_cooldown - delta)
@@ -410,8 +418,9 @@ func _try_attack() -> void:
 
     var swing_direction := -camera.global_transform.basis.z
     var swing_position := global_position + Vector3.UP * 1.1 + swing_direction * 0.9
-    VFXLibrary.spawn("melee_swing", swing_position, get_tree().current_scene, Vector3.UP, swing_direction, 1.0)
-    ThirdPartyVFX.spawn_slash(swing_position, get_tree().current_scene, 0.75)
+    if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) != "starter_axe":
+        VFXLibrary.spawn("melee_swing", swing_position, get_tree().current_scene, Vector3.UP, swing_direction, 1.0)
+        ThirdPartyVFX.spawn_slash(swing_position, get_tree().current_scene, 0.75)
 
     if not interaction_ray.is_colliding():
         return
@@ -423,14 +432,47 @@ func _try_attack() -> void:
     if collider != null and collider.has_method("receive_melee_hit"):
         collider.receive_melee_hit(self)
     elif collider != null and collider.has_method("take_damage"):
-        VFXLibrary.spawn("hit_slash", hit_position, get_tree().current_scene, hit_normal, swing_direction, 1.0)
-        ThirdPartyVFX.spawn_slash(hit_position, get_tree().current_scene, 0.55)
-        ScreenVFX.shake(0.018, 0.08)
-        collider.take_damage(attack_damage + InventorySystem.attack_bonus(), self)
+        if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "starter_axe":
+            pending_axe_elapsed = 0.22
+            pending_axe_revision = GameState.state_revision
+            pending_axe_target = weakref(collider)
+        else:
+            _apply_melee_damage(collider, hit_position, hit_normal, swing_direction)
     else:
         var surface := WorldVFX.surface_from_collider(collider, hit_position)
         WorldVFX.spawn_impact(surface, hit_position, hit_normal, swing_direction, 0.80)
         ScreenVFX.shake(0.010, 0.06)
+
+func _apply_melee_damage(collider: Object, point: Vector3, normal: Vector3, direction: Vector3) -> void:
+    if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "starter_axe":
+        WorldVFX.spawn_impact(WorldVFX.surface_from_collider(collider, point), point, normal, direction, 0.45)
+    else:
+        VFXLibrary.spawn("hit_slash", point, get_tree().current_scene, normal, direction, 1.0)
+        ThirdPartyVFX.spawn_slash(point, get_tree().current_scene, 0.55)
+    ScreenVFX.shake(0.018, 0.08)
+    collider.take_damage(attack_damage + InventorySystem.attack_bonus(), self)
+
+func _update_axe_hit(delta: float) -> void:
+    if pending_axe_elapsed <= 0.0:
+        return
+    if GameState.is_dead or pending_axe_revision != GameState.state_revision or ground_guard_active or cast_elapsed > 0 or InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) != "starter_axe":
+        pending_axe_elapsed = 0.0
+        attack_elapsed = 0.0
+        pending_axe_target = null
+        return
+    pending_axe_elapsed = maxf(0.0, pending_axe_elapsed - delta)
+    if pending_axe_elapsed > 0.0:
+        return
+    var target: Object = pending_axe_target.get_ref() if pending_axe_target != null else null
+    pending_axe_target = null
+    if not is_instance_valid(target):
+        return
+    interaction_ray.force_raycast_update()
+    if interaction_ray.get_collider() != target:
+        return
+    var point := interaction_ray.get_collision_point()
+    if _reachable_hit(target, point, AXE_MELEE_REACH):
+        _apply_melee_damage(target, point, interaction_ray.get_collision_normal(), -camera.global_basis.z)
 
 func _try_shoot() -> void:
     if int(GameState.inventory.get("arrow", 0)) <= 0:
@@ -439,13 +481,35 @@ func _try_shoot() -> void:
     if not GameState.consume_stamina(5.0):
         GameState.notify("Недостаточно выносливости.")
         return
-    GameState.remove_item("arrow", 1)
+    pending_bow_elapsed = 0.22
+    pending_bow_revision = GameState.state_revision
     attack_elapsed = 0.7
+
+func _update_bow_shot(delta: float) -> void:
+    if pending_bow_elapsed <= 0.0:
+        return
+    if GameState.is_dead or pending_bow_revision != GameState.state_revision or ground_guard_active or cast_elapsed > 0 or InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) != "short_bow":
+        pending_bow_elapsed = 0.0
+        attack_elapsed = 0.0
+        return
+    pending_bow_elapsed = maxf(0.0, pending_bow_elapsed - delta)
+    if pending_bow_elapsed > 0.0:
+        return
+    if not GameState.remove_item("arrow", 1):
+        attack_elapsed = 0.0
+        return
     var aim := projectile_aim(70.0)
     var arrow := preload("res://scripts/weapon_projectile.gd").new()
     get_tree().current_scene.add_child(arrow)
-    arrow.global_position = aim["origin"]
-    arrow.setup(self, aim["direction"])
+    var origin: Vector3 = aim["origin"]
+    var avatar := get_node_or_null("Avatar")
+    if avatar != null and avatar.has_method("arrow_release_point"):
+        var release: Vector3 = avatar.arrow_release_point()
+        if release.is_finite() and release.distance_to(global_position) < 2.5 and release.distance_to(global_position) > 0.2:
+            origin = release
+    var target: Vector3 = aim["origin"] + aim["direction"] * 70.0
+    arrow.global_position = origin
+    arrow.setup(self, (target - origin).normalized())
 
 func projectile_aim(max_range: float = 60.0) -> Dictionary:
     var direction := -camera.global_transform.basis.z

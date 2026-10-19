@@ -9,8 +9,11 @@ func setup(caster: CharacterBody3D, direction: Vector3) -> void:
     source = caster
     velocity = direction * 35.0
     add_to_group("weapon_projectile")
-    var visual := ARROW.instantiate() as Node3D
+    var visual := Node3D.new()
+    visual.name = "ArrowVisual"
     visual.rotation.x = -PI * 0.5
+    visual.position.z = -0.35
+    visual.add_child(ARROW.instantiate())
     add_child(visual)
     look_at(global_position + direction, Vector3.UP)
 

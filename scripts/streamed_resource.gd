@@ -40,8 +40,11 @@ func receive_melee_hit(player: Node3D) -> void:
     # Resolve contact during the work stroke, never at button-down. Re-check
     # range, line of sight and equipment after the wind-up.
     contact_pending = true
+    var contact_revision := GameState.state_revision
     await get_tree().create_timer(0.24, false).timeout
     contact_pending = false
+    if contact_revision != GameState.state_revision:
+        return
     if not is_instance_valid(player) or not is_inside_tree() or falling or fallen or uses <= 0 or GameState.is_dead:
         return
     if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) != "starter_axe":

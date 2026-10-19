@@ -68,8 +68,31 @@ func _run() -> void:
     var ray := player.get_node("CameraPivot/Camera3D/InteractionRay") as RayCast3D
     ray.force_raycast_update()
     player.call("_try_attack")
+    if target.received != 0.0 or player.pending_axe_elapsed <= 0:
+        failures.append("Axe damage occurs before its swing reaches contact")
+    for _frame in range(20):
+        await get_tree().physics_frame
     if target.received != player.attack_damage + 8.0:
-        failures.append("Real melee ray did not hit the target with equipped damage; collider=%s damage=%s" % [ray.get_collider(), target.received])
+        failures.append("Real melee ray did not hit the target with equipped damage after wind-up; collider=%s damage=%s" % [ray.get_collider(), target.received])
+    var before_axe_cancel := target.received
+    player.attack_elapsed = 0.0
+    player.call("_try_attack")
+    InventorySystem.unequip(InventorySystem.SLOT_WEAPON)
+    for _frame in range(20):
+        await get_tree().physics_frame
+    if target.received != before_axe_cancel or player.pending_axe_elapsed > 0:
+        failures.append("Unequipped axe still deals queued damage")
+    InventorySystem.equip("starter_axe")
+    var before_distant_axe := target.received
+    target.global_position = player.global_position + Vector3(0, 0, -2.5)
+    player.attack_elapsed = 0.0
+    ray.force_raycast_update()
+    player.call("_try_attack")
+    for _frame in range(20):
+        await get_tree().physics_frame
+    if target.received != before_distant_axe:
+        failures.append("Short axe hits a camera-visible target beyond physical arm/tool reach")
+    target.global_position = player.global_position + Vector3(0, 0, -1.3)
     var mana_before := GameState.mana
     MagicSystem.selected_index = 0
     if not MagicSystem.cast_selected(player, camera):
@@ -93,14 +116,42 @@ func _run() -> void:
     for _frame in range(3):
         await get_tree().physics_frame
     var before_arrow := target.received
+    Input.action_press("move_forward")
     player.call("_try_attack")
     player.call("_try_attack")
-    if int(GameState.inventory.get("arrow", 0)) != 1:
-        failures.append("Bow shot did not consume one arrow or ignored attack cooldown")
-    for _frame in range(45):
+    if int(GameState.inventory.get("arrow", 0)) != 2 or player.pending_bow_elapsed <= 0:
+        failures.append("Bow skips wind-up or consumes ammunition before release")
+    for _frame in range(5):
         await get_tree().physics_frame
+    var aiming_skeleton := avatar.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    aiming_skeleton.advance(1.0 / 60.0)
+    if not bool(avatar.get("grip_modifier").get("gait_applied")):
+        failures.append("Moving bow draw freezes its locomotion legs")
+    for _frame in range(40):
+        await get_tree().physics_frame
+    Input.action_release("move_forward")
+    if int(GameState.inventory.get("arrow", 0)) != 1:
+        failures.append("Released shot did not consume exactly one arrow")
     if absf(target.received - before_arrow - 20.0) > 0.01:
         failures.append("Physical arrow did not damage its ranged target exactly once")
+    var before_cancel := target.received
+    player.attack_elapsed = 0.0
+    player.call("_try_attack")
+    InventorySystem.unequip(InventorySystem.SLOT_WEAPON)
+    for _frame in range(30):
+        await get_tree().physics_frame
+    if int(GameState.inventory.get("arrow", 0)) != 1 or target.received != before_cancel or player.pending_bow_elapsed > 0:
+        failures.append("Unequipping during draw fires or consumes an arrow")
+    InventorySystem.equip("short_bow")
+    player.attack_elapsed = 0.0
+    player.call("_try_attack")
+    if not SaveManager.save_game(player, 10) or not SaveManager.load_game(player, 10):
+        failures.append("Could not verify save/load during bow draw")
+    for _frame in range(30):
+        await get_tree().physics_frame
+    if int(GameState.inventory.get("arrow", 0)) != 1 or target.received != before_cancel or player.pending_bow_elapsed > 0:
+        failures.append("Loading during draw fires a stale shot or loses ammunition")
+    SaveManager.delete_slot(10)
     GameState.remove_item("arrow", 1)
     player.attack_elapsed = 0.0
     var before_empty := GameState.stamina
