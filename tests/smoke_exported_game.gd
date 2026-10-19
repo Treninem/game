@@ -168,7 +168,15 @@ func _run() -> void:
     if weapon == null or String(weapon.get_meta("item_id", "")) != "short_bow":
         _fail("Packaged equipped bow model is missing")
         return
+    var arrows_before := int(state.get("inventory").get("arrow", 0))
     player.call("_try_attack")
+    if int(state.get("inventory").get("arrow", 0)) != arrows_before or float(player.get("pending_bow_elapsed")) <= 0.0:
+        _fail("Packaged bow skipped its draw or consumed ammo before release")
+        return
+    for _draw_frame in range(30):
+        await physics_frame
+        if float(player.get("pending_bow_elapsed")) <= 0.0:
+            break
     var inventory_data: Dictionary = state.get("inventory")
     if int(inventory_data.get("arrow", 0)) != 1 or get_nodes_in_group("weapon_projectile").is_empty():
         _fail("Packaged bow did not launch its authored arrow and consume ammo")

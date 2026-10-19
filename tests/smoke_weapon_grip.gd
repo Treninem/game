@@ -27,6 +27,9 @@ func _run() -> void:
             var b := skeleton.get_bone_global_pose(skeleton.find_bone(side + "HandIndex2")).origin
             var c := skeleton.get_bone_global_pose(skeleton.find_bone(side + "HandIndex3")).origin
             data.bend = rad_to_deg((b - a).angle_to(c - b))
+            var first_direction := (skeleton.global_basis * (b - a)).normalized()
+            var second_direction := (skeleton.global_basis * (c - b)).normalized()
+            data.fold_side = first_direction.cross(second_direction).dot(visual.grip_modifier.last_grip.basis.y) * (1.0 if side == "Right" else -1.0)
             var mesh := visual.held_weapon.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
             # Independent markers measured on the actual normalized source mesh.
             var marker := Vector3(0, 0, 0.30429) if visual.held_item == "starter_axe" else Vector3.ZERO
@@ -43,12 +46,15 @@ func _run() -> void:
             for clip: String in (["Idle", "Walk", "Axe_Chop"] if item == "starter_axe" else ["Idle", "Bow_Attack_Draw", "Bow_Attack_Shoot"]):
                 visual.animation_player.play(clip)
                 for time in [0.0, 0.12, 0.396, 0.6, 0.75]:
-                    visual.animation_player.seek(minf(time, visual.animation_player.current_animation_length), true)
+                    visual.animation_player.seek(minf(time, visual.animation_player.get_animation(clip).length), true)
+                    visual.animation_player.pause()
                     skeleton.advance(1.0 / 60.0)
                     await get_tree().process_frame
                     if data.is_empty():
                         failures.append("Grip modifier never processed the actual skeleton")
                         continue
+                    if float(data.fold_side) < 0.1:
+                        failures.append("Finger curls away from its palm")
                     if float(data.bend) < 30 or float(data.bend) > 120:
                         failures.append("Finger folds backwards or fails to close: %s/%s/%s %.2f" % [sex, item, clip, data.bend])
                     if item == "starter_axe" and clip == "Axe_Chop" and is_equal_approx(time, 0.396):

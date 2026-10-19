@@ -1,3 +1,8 @@
+## 0.10.7.3 — unreleased weapon grip review — 2026-10-19
+- Align axe/bow handles to measured palms, close native fingers, animate the bow cord and preserve arrow size. Retain walking legs and camera pitch during attacks.
+- Delay arrow release/ammo and axe impact until animation contact; cancel stale attacks and recheck short-tool reach.
+- Both bodies inspected in the actual game; 60 measured poses and three frozen-package checks pass. Exit cleanup warnings remain. Evidence: docs/DEVELOPMENT_LOG_2026-10-19_WEAPON_GRIP.json. No stable release.
+
 ## 0.10.7.2 — unreleased character review — 2026-10-19
 - Added actual combat equipment to editor previews, corrected behind-back bow arms and isolated generated poses per actor. Added explicit audio retirement and owned-fixture teardown for Linux Ogg shutdown diagnosis; strict gates retained. Follow-up evidence: docs/DEVELOPMENT_LOG_2026-10-19_COMBAT_PREVIEW.json.
 - Replaced the temporary body with separate authored MakeHuman male/female models, textured skin/eyes/hair and fitted clothing/boots. Preserved source licenses and reproducible build/validation tools.

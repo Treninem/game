@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7.3",
+  "delivery": "Unreleased review; no stable publication",
+  "runtime_commit": "b1624c6688a6982376edd8164668f604f5f8e3e9",
+  "changes": [
+    "Measured palm/handle alignment and anatomical finger curl for both bodies",
+    "Bow string follows drawing fingers; normalized nocked and flying arrows; camera pitch and moving legs retained",
+    "Axe blade forward at delayed contact; 1.4 m reach checked again at impact",
+    "Delayed bow ammo consumption; pending attacks canceled across unequip, load, death and casting",
+    "Hardware-free CI uses Dummy audio; strict errors/timeouts preserved"
+  ],
+  "local_checks": [
+    {
+      "name": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.86
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 21.12
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 16.7
+    },
+    {
+      "name": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.97
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.19
+    },
+    {
+      "name": "camera_obstruction",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 20.64
+    }
+  ],
+  "grip_samples": 60,
+  "frozen_package": {
+    "pack_sha256": "7c4234890866a52711f623db8725d96e9e48439dd17ac1eb7943db96ced77dc5",
+    "results": [
+      {
+        "case": "boot",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 30.06
+      },
+      {
+        "case": "actions",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 19.64
+      },
+      {
+        "case": "grip",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 5.5
+      }
+    ]
+  },
+  "native_gameplay": {
+    "arrow_damage_per_hit": 20,
+    "axe_damage_per_hit": 32,
+    "bodies": 2,
+    "equipment": "explicit inspection gear",
+    "fps_sample": 21.0,
+    "input": "ordinary Input actions",
+    "position_assignments": 0,
+    "save_load": true,
+    "status": "pass",
+    "target": "authored practice barrel with test damage receiver",
+    "version": "0.10.7.3",
+    "walked_m": 4.84904779726639
+  },
+  "native_inspection": "Actual GUI renderer; both bodies, axe/draw/release; explicit test gear/practice receiver; automated ordinary Input, not manual city traversal. Close-up poses also paused for inspection.",
+  "corrected_attempts": [
+    "Initial GDScript inference and empty stripped bow surface errors",
+    "Paused draw detection and arrow normalization",
+    "Overhead axe contact pose",
+    "Native fixture fixed-frame timing replaced by bounded pending-timer wait",
+    "Old exported smoke expected immediate release; now asserts no early ammo and bounded delayed release",
+    "Earlier export canceled to include final reach fix"
+  ],
+  "warnings": [
+    "Native world exit: 85 ObjectDB instances leaked; frozen boot exit: 77. No SCRIPT ERROR/ERROR in final runs.",
+    "21 FPS is a single weak-GPU sample, not a benchmark."
+  ],
+  "limits": [
+    "No full forest-to-city traversal repeated this turn",
+    "No new Blender deformation validation; 60 samples measure grip/animation landmarks",
+    "No swept blade volume, complete combos or finished wardrobe",
+    "Cleanup warnings and full performance certification remain open"
+  ],
+  "remote_gates_at_recording": "build-game, installer, build, movement, magic, VFX and UI successful; world-core in progress",
+  "evidence_root": "build/acceptance",
+  "review_launcher": "build/review-2026-10-19-weapon-grip/ImPuls-weapon-test.cmd"
+}
