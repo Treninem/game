@@ -1,8 +1,8 @@
 @tool
-extends VFXEmitterBB
+extends VFXCombatEmitterBB
 class_name VFXDarkBallBB
 
-var light : VFXOmniLightBB:
+var light : VFXCombatOmniLightBB:
 	get():
 		if light:
 			return light

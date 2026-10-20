@@ -1,5 +1,5 @@
 @tool
-extends VFXEmitterBB
+extends VFXCombatEmitterBB
 class_name VFXBattleShieldBB
 
 var audio_stream_player : AudioStreamPlayer3D:

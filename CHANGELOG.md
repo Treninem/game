@@ -1,3 +1,9 @@
+## Library editor compatibility — unreleased — 2026-10-20
+- Give combat VFX distinct global classes while preserving their controller implementations and node/resource paths.
+- Repair missing showcase mesh/shield references using existing CC0 files and bind the existing beam controller as a real Script.
+- Validate 26 scripts, 33 scene instantiations and visible source gameplay. Add strict World Core regression/pack path triggers; retain existing gates.
+- Record owner clarification: graphical inventory cells with unlimited capacity. UID fallback warnings and rejected visual quality remain open; no new standalone package or inventory UI is claimed. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_BINBUN_EDITOR.json.
+
 ## Soft healing effect — unreleased — 2026-10-20
 - Replace opaque emissive healing spheres with 32 soft textured alpha motes, lifetime fade and a gentle light; reuse existing CC0 Kenney texture.
 - Verify healing alpha/geometry/budget/cleanup, existing VFX lifetime/magic checks and rendered source/exported gameplay. Other primary effects unchanged.

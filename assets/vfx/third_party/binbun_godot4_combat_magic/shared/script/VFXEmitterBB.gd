@@ -1,7 +1,6 @@
 @tool
 extends Node3D
-class_name VFXEmitterBB
-
+class_name VFXCombatEmitterBB
 var materials : Array[ShaderMaterial]:
 	get():
 		if !materials.is_empty():
