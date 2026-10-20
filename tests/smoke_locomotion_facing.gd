@@ -67,11 +67,30 @@ func _run() -> void:
         visual.call("_update_locomotion_facing", player, actor_basis * Vector3.RIGHT * 5, 1.0 / 15.0)
     if absf(angle_difference(sixty_hz, visual.rotation.y)) > 0.0001:
         failures.append("Turning depends on render frame partition")
+    for sex: String in ["male", "female"]:
+        visual.call("apply_appearance", {"sex": sex})
+        var animator: AnimationPlayer = visual.get("animation_player")
+        for phase: float in [0.2, 0.63, 0.92]:
+            for transition in [["Walk", "Run"], ["Run", "Walk"]]:
+                visual.call("_play", transition[0], 1.0)
+                var source_clip := animator.get_animation(transition[0])
+                animator.seek(source_clip.length * phase, true)
+                visual.call("_play", transition[1], 1.0)
+                var destination := animator.get_animation(transition[1])
+                if absf(animator.current_animation_position / destination.length - phase) > 0.001:
+                    failures.append("Foot cycle restarted: %s %s phase=%s" % [sex, transition, phase])
+                visual.call("_play", transition[1], 1.2)
+                if absf(animator.current_animation_position / destination.length - phase) > 0.001:
+                    failures.append("Speed-only update restarted foot cycle")
+        visual.call("_play", "Idle", 1.0)
+        visual.call("_play", "Run", 1.0)
+        if not is_zero_approx(animator.current_animation_position):
+            failures.append("Idle transition inherited a stale gait phase")
     player.queue_free()
     await get_tree().process_frame
     GameState.load_snapshot(snapshot)
     for failure in failures:
         push_error(failure)
     if failures.is_empty():
-        print("LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60")
+        print("LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2")
     get_tree().quit(0 if failures.is_empty() else 1)

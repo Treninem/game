@@ -365,11 +365,20 @@ func _play(key: String, rate: float) -> void:
     animation_player.speed_scale = rate
     if active_animation != key or (key in ["Working", "PickUp"] and not animation_player.is_playing()):
         var previous := active_animation
+        var gait_phase := -1.0
+        if key in ["Walk", "Run"] and previous in ["Walk", "Run"]:
+            var previous_clip := animation_player.get_animation(previous)
+            if previous_clip.length > 0.0:
+                gait_phase = fposmod(animation_player.current_animation_position / previous_clip.length, 1.0)
         active_animation = key
         # A bow releases after 0.22 s. A long locomotion crossfade used most
         # of that preparation time and left the weapon below the aim line.
         animation_player.play(key, 0.06 if key in ["Bow_Attack_Draw", "Bow_Attack_Shoot", "Cast_Left", "Cast_Right"] else 0.18)
-        if key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"] and is_instance_valid(grip_modifier):
+        # Preserve the foot cycle across sprint changes: restarting at frame
+        # zero swaps the support leg and produces a visible kick/crossfade.
+        if gait_phase >= 0.0:
+            animation_player.seek(gait_phase * animation_player.get_animation(key).length, true)
+        elif key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"] and is_instance_valid(grip_modifier):
             animation_player.seek(fposmod(float(grip_modifier.get("gait_time")), animation_player.get_animation(key).length), true)
 
 func begin_axe_stroke() -> void:

@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Добавлено выявление старых дублирующихся назначений в загруженном профиле: раздел управления показывает клавишу и действия. Проверены отсутствие автоматической перезаписи, ручное исправление одного назначения, исчезновение предупреждения и повторная загрузка. Видимый интерфейс, инвентарь и адаптация прошли проверки.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LEGACY_BINDINGS.json",
+  "current_stage": "Исправлен сброс фазы ног при переходе ходьба–бег. Проверены 12 переходов на обеих моделях, видимая сцена движения 23,55 м и автоматизированный графический проход полного мира 24,30 м с прыжками, топором, луком, магией и сохранениями. Внешность, плечи, кисти и одежда остаются незавершёнными; ручной полный обход не выполнен.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HUMAN_GAIT.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -263,5 +263,12 @@
     "rejected_mutation": "none; config/InputMap/signals verified",
     "capture": "retry/cancel; rejected events consumed",
     "old_duplicate_profiles": "read-only grouped audit shown in controls; preserved until explicit rebind; resolved warning and persistence tested"
+  },
+  "human_gait_phase": {
+    "status": "12 phase transitions passed; graphical source game checked",
+    "full_visual_acceptance": false,
+    "new_models": false,
+    "manual_free_roam": false,
+    "reference_study": "incomplete; see HUMAN_VISUAL_REVIEW_2026-10-20.md"
   }
 }
