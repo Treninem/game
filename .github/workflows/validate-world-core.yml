@@ -258,6 +258,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_character_texture_filtering.tscn 90
       - name: Verify character height and physical low passages
         run: bash tools/run_godot_smoke.sh tests/smoke_character_dimensions.tscn 90
+      - name: Verify conflicting control assignments are rejected safely
+        run: bash tools/run_godot_smoke.sh tests/smoke_binding_conflicts.tscn 60
       - name: Verify unlimited inventory browsing and persistence
         run: bash tools/run_godot_smoke.sh tests/smoke_inventory_unlimited.tscn 90
       - name: Verify library class uniqueness and complete effect scenes

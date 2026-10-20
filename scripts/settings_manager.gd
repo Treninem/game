@@ -62,6 +62,7 @@ const DEFAULT_BINDINGS := {
 var config := ConfigFile.new()
 var mouse_capture_frame := -10
 var bindings: Dictionary = DEFAULT_BINDINGS.duplicate(true)
+var last_binding_conflict := ""
 
 func _ready() -> void:
     load_settings()
@@ -122,11 +123,12 @@ func set_camera_distance(value: float) -> void:
     settings_changed.emit()
 
 func rebind_action(action: String, event: InputEvent) -> bool:
+    last_binding_conflict = ""
     if not DEFAULT_BINDINGS.has(action):
         return false
     var encoded := {}
     if event is InputEventKey:
-        if not event.pressed:
+        if not event.pressed or event.echo:
             return false
         var key_event := event as InputEventKey
         var code := int(key_event.physical_keycode)
@@ -144,6 +146,13 @@ func rebind_action(action: String, event: InputEvent) -> bool:
         encoded = {"type": "mouse", "code": mouse_event.button_index}
     else:
         return false
+    for other: String in DEFAULT_BINDINGS:
+        if other == action:
+            continue
+        var assigned: Dictionary = bindings.get(other, DEFAULT_BINDINGS[other])
+        if assigned.get("type") == encoded.get("type") and int(assigned.get("code", 0)) == int(encoded.code):
+            last_binding_conflict = other
+            return false
     bindings[action] = encoded
     _apply_binding(action, encoded)
     save_settings()

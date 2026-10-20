@@ -62,11 +62,13 @@ func _input(event: InputEvent) -> void:
         awaiting_action = ""
         _show_section("controls")
         get_viewport().set_input_as_handled()
-    elif (event is InputEventKey and not event.echo) or event is InputEventMouseButton:
+    elif event is InputEventKey or event is InputEventMouseButton:
         if SettingsManager.rebind_action(awaiting_action, event):
             awaiting_action = ""
             _show_section("controls")
-            get_viewport().set_input_as_handled()
+        elif not SettingsManager.last_binding_conflict.is_empty() and is_instance_valid(rebinding_label):
+            rebinding_label.text = "Кнопка уже назначена: %s. Выберите другую. Esc — отмена." % String(ACTION_LABELS.get(SettingsManager.last_binding_conflict, SettingsManager.last_binding_conflict))
+        get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
     if not awaiting_action.is_empty():
