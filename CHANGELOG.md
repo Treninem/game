@@ -1,3 +1,8 @@
+## Hair detail — unreleased — 2026-10-20
+- Preserve original hair/brow strand contrast by replacing hard luminance clipping with smooth tonal compression; use mipmapped anisotropic sampling.
+- Add strict real-rendering highlight regression and inspect 24 matching views before/after plus the frozen world/save scenario.
+- Editor criterion coverage stays 32/55 (58.2%); overall visual quality remains unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_HAIR_DETAIL.json.
+
 ## Head size — unreleased — 2026-10-20
 - Add a separate saved head-size control with bounded legacy-safe defaults. Rebuild both authored bodies and seven fitted parts with a ninth synchronized morph.
 - Verify 100 geometry poses, creator/save, 180 weapon poses, height/collision and graphical exported review.

@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "fab9f1c20727f9d46de7940fd9638b019bebc1e4",
+  "spec_attachment": "24a3b475-72db-477e-a9ff-915e49b48418",
+  "spec_comparison": "Same complete normalized 2579-line specification",
+  "problem": "Hair tint multiplied strand luminance then hard-clamped it; distinct authored medium/high values collapsed into a flat fill. Shared shader also affects brows.",
+  "changes": [
+    "Smooth bounded tonal compression retains authored strand variation without adding texture samples.",
+    "Use mipmapped anisotropic sampling for existing hair atlases; original alpha cutout and matte roughness retained.",
+    "Add real lit rendering regression under the graphical CI backend; all existing gates retained."
+  ],
+  "baseline": {
+    "case": "hair_rendering",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Hair material flattens distinct mid/high strand values"
+    ],
+    "seconds": 3.09
+  },
+  "rendered_luminance_before": [
+    0.193473726511,
+    0.29928863048553,
+    0.42105728387833,
+    0.42973411083221,
+    0.42973411083221,
+    0.42973411083221,
+    0.42973411083221,
+    0.42973411083221
+  ],
+  "rendered_luminance_after": [
+    0.21251529455185,
+    0.2715702354908,
+    0.30684864521027,
+    0.32784080505371,
+    0.35555922985077,
+    0.37151294946671,
+    0.38858354091644,
+    0.40118196606636
+  ],
+  "source_checks": [
+    {
+      "case": "hair_rendering",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.66
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.38,
+      "marker": true
+    },
+    {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.75
+    }
+  ],
+  "visual_comparison": "24 same-driver views before/after: two bodies, two hair meshes, five colors, front and side. Frozen package repeats all 24. Blonde ponytail no longer has a nearly uniform pale cap; original strands are visible.",
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 45.81,
+    "sha256": "0852cf4822d09da9e0d8e75231c6271829478e23bc8b2d5a4ac74c7e6a49ebaf"
+  },
+  "frozen_world": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 61.09,
+    "marker": true
+  },
+  "frozen_hair": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 10.3,
+    "marker": true
+  },
+  "editor_acceptance": {
+    "accepted": 32,
+    "total": 55,
+    "percent": 58.2,
+    "visual_acceptance": false
+  },
+  "limitations": [
+    "No new hair geometry, skin detail or natural animation acceptance. Overall visual quality remains unfinished.",
+    "Existing alpha-cutout edges/hair silhouettes still require work; no full performance profiling claimed.",
+    "Graphical world scenario uses automated ordinary input, explicit test equipment/profile changes and save restoration; not a manual city tour.",
+    "79 ObjectDB exit warning remains unresolved. No stable publication; current-commit remote checks pending."
+  ]
+}

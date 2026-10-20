@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Добавлена настройка размера головы: девять синхронизированных форм на обеих моделях и связанных частях. Проверены крайние значения, существующие анимации, хват, рост, сохранения и экспортированный игровой сценарий. Качество моделей и естественность движений не принято.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HEAD_SIZE.json",
-  "review_launcher": "build/review-2026-10-20-head-size/ImPuls-editor.cmd",
+  "current_stage": "Исправлена потеря рисунка прядей в материале волос и бровей: жёсткое ограничение яркости заменено плавным преобразованием. Проверены обе модели, две причёски, пять цветов, кадры до/после и экспортированный игровой сценарий. Полная визуальная приёмка не пройдена.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HAIR_DETAIL.json",
+  "review_launcher": "build/review-2026-10-20-hair-detail/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -207,8 +207,8 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Новые локальные проверки редактора/хвата/рубки/движения/запуска и графического пакета пройдены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HEAD_SIZE.json",
-  "review_launcher_revision": "Head size review; frozen package SHA256 a38d3737e3f13224b558a64394c1df9e7bd6ab78e05c04f7339fa9df4174f165",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HAIR_DETAIL.json",
+  "review_launcher_revision": "Hair detail review; frozen package SHA256 0852cf4822d09da9e0d8e75231c6271829478e23bc8b2d5a4ac74c7e6a49ebaf",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",

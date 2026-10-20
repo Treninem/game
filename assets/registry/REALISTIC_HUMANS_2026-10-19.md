@@ -31,3 +31,6 @@ INTEGRATED in the review branch: existing CC0 head vertical/depth and nose horiz
 
 ## Head size — 2026-10-20
 INTEGRATED in review: ninth synchronized HeadSize shape on both bodies and seven fitted parts. Composed from the three existing CC0 authored head-axis targets at 0.6 strength each, exposed within -0.5..0.5. No new source pack/download. Build and animated geometry validation remain reproducible with the existing tools; full visual realism remains unaccepted.
+
+## Hair strand tone preservation — 2026-10-20
+INTEGRATED in review: existing shared hair/brow shader preserves authored medium/high strand contrast with smooth tonal compression and mipmapped anisotropic sampling. No source asset, model or license change. Lit-ramp baseline fails with the old shader and passes with the correction; both bodies, both hairstyles and all five colors receive before/after graphical views. Overall visual quality remains unaccepted.
