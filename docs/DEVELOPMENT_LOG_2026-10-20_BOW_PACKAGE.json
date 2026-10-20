@@ -85,5 +85,13 @@
     "Overall human appearance, wardrobe and natural animation quality remain unfinished",
     "Historical intermittent heal input and ObjectDB shutdown warning remain open; all failures must remain recorded",
     "No stable release publication; no overall completion percentage claim"
-  ]
+  ],
+  "ordinary_launcher_check": {
+    "process_id": 19384,
+    "pack": "build/review-2026-10-20-bow-clearance/ImPuls-bow-review.pck",
+    "scene": "res://scenes/character_creator.tscn",
+    "startup_log_errors": false,
+    "window_helper": "list_windows timed out twice; reset and final retry also timed out. No desktop-window inspection claimed. Earlier real Godot viewport screenshots and automated world checks remain the visual evidence.",
+    "remote_checks_at_dd7c1f65": "Pending; preceding 5eec941c passed world-core, movement and build/installer checks."
+  }
 }
