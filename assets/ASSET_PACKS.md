@@ -147,3 +147,6 @@ Every development session working on `Treninem/game` must read this file before 
 
 ## Forest understory review — 2026-10-20
 - INTEGRATED in the review: `assets/production/nature/woodland/Grass_Ground.glb`, a 155-triangle, 0.38 m derivative of the existing Quaternius CC0 `Grass_Wispy_Tall.glb`. Embedded texture retained; existing woodland license applies. No new source pack or download. Reproducer/checksums: `tools/prepare_ground_cover.py`, adjacent `Grass_Ground.source.json`. Existing temperate trees and shrub/fern assets supply the denser bounded forest. See `assets/registry/FOREST_UNDERSTORY_2026-10-20.md`.
+
+## Eye color selection — 2026-10-20 review
+- INTEGRATED in review: five existing MakeHuman CC0 eye atlases in `assets/production/characters/realistic/eyes/`; exact source hashes and license preserved there. Runtime choice and save compatibility verified on both bodies. No new download; STAGED_PHYSICAL on main is not claimed.

@@ -16,6 +16,10 @@ func _check(value: bool, message: String) -> bool:
     return false
 
 func _run() -> void:
+    var legacy := APPEARANCE.preset(0)
+    legacy.erase("eye_color")
+    if not _check(APPEARANCE.normalized(legacy).eye_color == 0 and APPEARANCE.normalized({"eye_color": 999}).eye_color == 4 and APPEARANCE.normalized({"eye_color": INF}).eye_color == 0, "Eye choice lacks legacy defaults or bounded input"):
+        return
     var bad := APPEARANCE.normalized({"name": "\n", "sex": "../bad", "Build": NAN, "hair": INF, "Nose": 9000, "skin": -99})
     if not _check(bad.sex == "male" and is_finite(bad.Build) and bad.Nose == 0.5 and bad.skin == 0 and not String(bad.name).is_empty(), "Malformed profile was not normalized"):
         return
@@ -86,6 +90,29 @@ func _run() -> void:
                 return
     if not _check(signatures.size() == 10, "Ten presets only duplicate the same anatomy"):
         return
+    for body_index in [0, 5]:
+        creator.call("select_preset", body_index)
+        creator.call("select_trait_category", "appearance")
+        var eye_choice := creator.find_child("eye_color", true, false) as OptionButton
+        if not _check(eye_choice != null and eye_choice.item_count == 5, "Eye choices are missing from the actual editor"):
+            return
+        var garment := creator.visual.find_child("Clothing", true, false) as MeshInstance3D
+        var garment_material := garment.get_active_material(0)
+        for color_index in range(5):
+            eye_choice.select(color_index)
+            eye_choice.item_selected.emit(color_index)
+            var eyes := creator.visual.find_child("Eyes", true, false) as MeshInstance3D
+            var material := eyes.get_active_material(0) as StandardMaterial3D
+            if not _check(material.albedo_texture == preload("res://scripts/humanoid_visual.gd").EYE_TEXTURES[color_index] and creator.profile.eye_color == color_index, "Eye selection did not reach the physical eye material"):
+                return
+            if not _check(garment.get_active_material(0) == garment_material, "Changing eyes recreated unrelated garment materials"):
+                return
+        var cache_before: int = preload("res://scripts/humanoid_visual.gd").palette_materials.size()
+        for repeat in range(30):
+            eye_choice.item_selected.emit(repeat % 5)
+        if not _check(preload("res://scripts/humanoid_visual.gd").palette_materials.size() == cache_before, "Repeated eye selection grows material cache"):
+            return
+    creator.call("select_trait_category", "face")
     var inventory_before := GameState.snapshot()
     var equipped_before := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
     for preset_index in [0, 5]:
@@ -141,6 +168,7 @@ func _run() -> void:
     creator.profile.name = "ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¾Ð±Ñ€Ð°Ð·Ð°"
     for key: String in ["FaceHeight", "FaceDepth", "NoseWidth", "NoseHeight"]:
         creator.profile[key] = 0.27
+    creator.profile.eye_color = 4
     var expected := APPEARANCE.normalized(creator.profile)
     if not _check(APPEARANCE.save_look(expected) == OK and APPEARANCE.load_look() == expected, "Saved look did not round-trip"):
         return

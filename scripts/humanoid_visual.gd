@@ -8,6 +8,7 @@ const GARMENT_NORMAL := preload("res://assets/production/characters/realistic/de
 const GARMENT_AO := preload("res://assets/production/characters/realistic/details/garment_ao.png")
 const SHOE_ALBEDO := preload("res://assets/production/characters/realistic/details/shoes_albedo.png")
 const HAIR_SHADER := preload("res://assets/shaders/characters/hair_tint.gdshader")
+const EYE_TEXTURES := [preload("res://assets/production/characters/realistic/eyes/brown_eye.png"), preload("res://assets/production/characters/realistic/eyes/blue_eye.png"), preload("res://assets/production/characters/realistic/eyes/green_eye.png"), preload("res://assets/production/characters/realistic/eyes/grey_eye.png"), preload("res://assets/production/characters/realistic/eyes/lightblue_eye.png")]
 const HUMANS := {"male": preload("res://assets/production/characters/realistic/male.glb"), "female": preload("res://assets/production/characters/realistic/female.glb")}
 const PALETTES := [null, preload("res://assets/production/characters/citizen/citizen_dark.png"), preload("res://assets/production/characters/citizen/citizen_light.png")]
 static var palette_materials: Dictionary = {}
@@ -122,7 +123,8 @@ func _style_model() -> void:
             var source := mesh.mesh.surface_get_material(surface) as StandardMaterial3D
             if source == null:
                 continue
-            var key := "%d:%d:%d:%d" % [source.get_instance_id(), current_profile.skin, current_profile.hair_color, current_profile.cloth]
+            var eye_index := int(current_profile.eye_color) if String(source.resource_name).begins_with("EyesHuman") else 0
+            var key := "%d:%d:%d:%d:%d" % [source.get_instance_id(), current_profile.skin, current_profile.hair_color, current_profile.cloth, eye_index]
             if not palette_materials.has(key):
                 if String(source.resource_name).begins_with("HairHuman") or String(source.resource_name).begins_with("BrowsHuman"):
                     var hair := ShaderMaterial.new()
@@ -156,6 +158,7 @@ func _style_model() -> void:
                     material.albedo_color = Color(0.72, 0.62, 0.50)
                     material.roughness = 0.73
                 elif label.begins_with("EyesHuman"):
+                    material.albedo_texture = EYE_TEXTURES[int(current_profile.eye_color)]
                     material.roughness = 0.22
                     material.metallic_specular = 0.65
                 palette_materials[key] = material

@@ -25,3 +25,6 @@ INTEGRATED in the review runtime: existing CC0 garment AO/normal and footwear di
 ## Facial controls — 2026-10-20
 
 INTEGRATED in the review branch: existing CC0 head vertical/depth and nose horizontal/vertical targets add FaceHeight, FaceDepth, NoseWidth and NoseHeight. All seven parts carry the synchronized keys. Clothing opening weights retain their authored boundary and a 3 mm shell separates cloth from skin; full animation/wardrobe realism is not claimed. Reproduce with tools/build_realistic_humans.py.
+
+## Eye color selection — 2026-10-20 review
+- INTEGRATED in review: five existing MakeHuman CC0 eye atlases in `assets/production/characters/realistic/eyes/`; exact source hashes and license preserved there. Runtime choice and save compatibility verified on both bodies. No new download; STAGED_PHYSICAL on main is not claimed.

@@ -1,6 +1,7 @@
 extends Node
 var failures: Array[String] = []
 var checked := 0
+var minimum_draw_alignment := 1.0
 func _ready() -> void:
     call_deferred("_run")
 func _run() -> void:
@@ -34,6 +35,10 @@ func _run() -> void:
             # Independent markers measured on the actual normalized source mesh.
             var marker := Vector3(0, 0, 0.30429) if visual.held_item == "starter_axe" else Vector3.ZERO
             data.gap = mesh.to_global(marker).distance_to(visual.grip_modifier.last_grip.origin)
+            var shoulder := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftArm")).origin)
+            var wrist := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftHand")).origin)
+            var aimed := -(actor.global_basis * Basis(Vector3.RIGHT, pivot.rotation.x)).z
+            data.arm_alignment = (wrist - shoulder).normalized().dot(aimed)
             data.cord_gap = 0.0
             if visual.held_item == "short_bow" and visual.animation_player.assigned_animation == "Bow_Attack_Draw":
                 var hand := skeleton.to_global((skeleton.get_bone_global_pose(skeleton.find_bone("RightHandIndex2")).origin + skeleton.get_bone_global_pose(skeleton.find_bone("RightHandMiddle2")).origin) * 0.5)
@@ -65,14 +70,12 @@ func _run() -> void:
                     if float(data.gap) > 0.005:
                         failures.append("Physical handle floats outside palm: %s/%s %.4f m" % [sex, item, data.gap])
                     if clip == "Bow_Attack_Draw":
-                        # The actual shot releases at 0.22 s * 1.8 playback.
-                        # Later paused preview poses are outside that window.
-                        if is_equal_approx(time, 0.396):
-                            var shoulder := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftArm")).origin)
-                            var wrist := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftHand")).origin)
-                            var aimed := -(actor.global_basis * Basis(Vector3.RIGHT, pivot.rotation.x)).z
-                            if (wrist - shoulder).normalized().dot(aimed) < 0.9:
-                                failures.append("Bow arm has not reached its aim line before the actual release time: sex=%s time=%s dot=%s" % [sex, time, (wrist - shoulder).normalized().dot(aimed)])
+                        # Cover release and late held poses, including the
+                        # female body's previously failing 0.75 s sample.
+                        if time >= 0.396:
+                            minimum_draw_alignment = minf(minimum_draw_alignment, float(data.arm_alignment))
+                            if float(data.arm_alignment) < 0.9:
+                                failures.append("Bow arm leaves the aim line during release/hold: sex=%s time=%s dot=%s" % [sex, time, data.arm_alignment])
                         var arrow_mesh := visual.nocked_arrow.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
                         var size := arrow_mesh.get_aabb().size
                         var shaft := arrow_mesh.global_basis * Vector3(0, 0, size.z)
@@ -107,6 +110,7 @@ func _run() -> void:
         failures.append("Visual grip inspection changes real game state")
     for message in failures:
         push_error(message)
+    print("BOW_HOLD_ALIGNMENT_MIN ", minimum_draw_alignment)
     if failures.is_empty():
         print("WEAPON_GRIP_OK poses=",checked," bodies=2 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged")
     get_tree().quit(0 if failures.is_empty() else 1)

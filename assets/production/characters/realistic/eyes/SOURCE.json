@@ -1,0 +1,32 @@
+{
+  "state": "INTEGRATED in review branch; main physical confirmation remains pending",
+  "source": "Existing selected MakeHuman system CC0 pack; no new download or image generation",
+  "license": "CC0-1.0; adjacent LICENSE.txt",
+  "assets": [
+    {
+      "source": "assets/staging/characters/makehuman_system_selected/eyes/materials/brown_eye.png",
+      "target": "assets/production/characters/realistic/eyes/brown_eye.png",
+      "sha256": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b"
+    },
+    {
+      "source": "assets/staging/characters/makehuman_system_selected/eyes/materials/blue_eye.png",
+      "target": "assets/production/characters/realistic/eyes/blue_eye.png",
+      "sha256": "572ddc93ab3e177100619ec7c00b2574540cfb382805afc2e450788117f6140c"
+    },
+    {
+      "source": "assets/staging/characters/makehuman_system_selected/eyes/materials/green_eye.png",
+      "target": "assets/production/characters/realistic/eyes/green_eye.png",
+      "sha256": "b9864ac4f4fa484b24e18f6aba030d70dbc8820cbbacfbe63a974c76772c2009"
+    },
+    {
+      "source": "assets/staging/characters/makehuman_system_selected/eyes/materials/grey_eye.png",
+      "target": "assets/production/characters/realistic/eyes/grey_eye.png",
+      "sha256": "ecb05613126036a3d017880fabbd570501c5f14032c186462d8f6e2d719f6c4f"
+    },
+    {
+      "source": "assets/staging/characters/makehuman_system_selected/eyes/materials/lightblue_eye.png",
+      "target": "assets/production/characters/realistic/eyes/lightblue_eye.png",
+      "sha256": "687c8f6d95a8550bcd4a34158f415d6bb376c0bb32e67d127bbb51e5fa469eef"
+    }
+  ]
+}

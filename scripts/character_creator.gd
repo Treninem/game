@@ -78,7 +78,7 @@ func _build() -> void:
     _text(identity, "Осмотрите лицо, одежду и движения перед началом путешествия.")
     _text(identity, "Настройки образа")
     _button(identity, "Лицо", func(): select_trait_category("face"))
-    _button(identity, "Волосы и одежда", func(): select_trait_category("appearance"))
+    _button(identity, "Внешность и одежда", func(): select_trait_category("appearance"))
     _button(identity, "Телосложение", func(): select_trait_category("body"))
     var advanced := CheckButton.new()
     advanced.name = "AdvancedAppearance"
@@ -169,14 +169,20 @@ func _refresh() -> void:
     for child in traits.get_children():
         traits.remove_child(child)
         child.queue_free()
-    _text(traits, {"face": "Лицо и голова", "appearance": "Волосы и одежда", "body": "Телосложение"}[trait_category])
-    var appearance_choices := [["hair", "Причёска", ["Короткая", "Хвост"]], ["hair_color", "Волосы", ["Каштановые", "Тёмные", "Светлые", "Рыжие", "Седые"]], ["skin", "Оттенок кожи", ["Светлый", "Смуглый", "Тёмный"]], ["cloth", "Одежда", ["Охра", "Зелёная", "Синяя", "Красная", "Льняная"]]]
+    _text(traits, {"face": "Лицо и голова", "appearance": "Внешность и одежда", "body": "Телосложение"}[trait_category])
+    var appearance_choices := [["hair", "Причёска", ["Короткая", "Хвост"]], ["hair_color", "Волосы", ["Каштановые", "Тёмные", "Светлые", "Рыжие", "Седые"]], ["eye_color", "Цвет глаз", ["Карие", "Голубые", "Зелёные", "Серые", "Светло-голубые"]], ["skin", "Оттенок кожи", ["Светлый", "Смуглый", "Тёмный"]], ["cloth", "Одежда", ["Охра", "Зелёная", "Синяя", "Красная", "Льняная"]]]
     for pair in appearance_choices:
         if trait_category != "appearance":
             continue
         _text(traits, pair[1])
         var key: String = pair[0]
-        var choice := _choice(traits, pair[2], func(index: int): profile[key] = index; _apply_preview())
+        var choice := _choice(traits, pair[2], func(index: int):
+            profile[key] = index
+            _apply_preview()
+            if key == "eye_color":
+                camera_height = 1.60
+                zoom = 0.65
+                _camera())
         choice.select(int(profile[key]))
         choice.name = key
     for pair in [["FaceWidth", "Ширина лица"], ["FaceHeight", "Высота лица"], ["FaceDepth", "Глубина головы"], ["Nose", "Выступ носа"], ["NoseWidth", "Ширина носа"], ["NoseHeight", "Высота носа"], ["Jaw", "Подбородок"], ["Build", "Телосложение"]]:
@@ -244,6 +250,7 @@ func randomize_profile() -> void:
     for key in APPEARANCE.SHAPES:
         profile[key] = randf_range(-0.4, 0.4)
     profile.hair = randi_range(0, 1)
+    profile.eye_color = randi_range(0, 4)
     _refresh()
 
 func select_preset(index: int) -> void:

@@ -9,7 +9,7 @@ const CLOTH := [Color(0.34, 0.26, 0.14), Color(0.16, 0.24, 0.17), Color(0.19, 0.
 static func preset(index: int) -> Dictionary:
     index = clampi(index, 0, 9)
     var variation := index % 5
-    return {"version": VERSION, "name": "Странница" if index >= 5 else "Странник", "sex": "female" if index >= 5 else "male", "preset": index, "hair": 1 if index >= 5 else 0, "hair_color": variation, "skin": variation % 3, "cloth": variation, "FaceWidth": [-0.25, 0.18, 0.38, -0.12, 0.05][variation], "Nose": [-0.20, 0.35, -0.05, 0.18, 0.42][variation], "Jaw": [-0.20, 0.35, 0.10, -0.35, 0.40][variation], "Build": [-0.20, 0.12, 0.40, -0.35, 0.05][variation], "FaceHeight": 0.0, "FaceDepth": 0.0, "NoseWidth": 0.0, "NoseHeight": 0.0}
+    return {"version": VERSION, "name": "Странница" if index >= 5 else "Странник", "sex": "female" if index >= 5 else "male", "preset": index, "hair": 1 if index >= 5 else 0, "hair_color": variation, "skin": variation % 3, "cloth": variation, "eye_color": 0, "FaceWidth": [-0.25, 0.18, 0.38, -0.12, 0.05][variation], "Nose": [-0.20, 0.35, -0.05, 0.18, 0.42][variation], "Jaw": [-0.20, 0.35, 0.10, -0.35, 0.40][variation], "Build": [-0.20, 0.12, 0.40, -0.35, 0.05][variation], "FaceHeight": 0.0, "FaceDepth": 0.0, "NoseWidth": 0.0, "NoseHeight": 0.0}
 
 static func normalized(value: Variant) -> Dictionary:
     if typeof(value) != TYPE_DICTIONARY:
@@ -19,10 +19,11 @@ static func normalized(value: Variant) -> Dictionary:
     result.name = text.strip_edges().replace("\n", " ").replace("\r", " ").left(32)
     if String(result.name).is_empty():
         result.name = "Странница" if result.sex == "female" else "Странник"
-    for key in ["preset", "hair", "hair_color", "skin", "cloth"]:
+    result["eye_color"] = 0
+    for key in ["preset", "hair", "hair_color", "skin", "cloth", "eye_color"]:
         var number = value.get(key, result[key])
         if typeof(number) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(number)):
-            result[key] = clampi(int(number), 0, {"preset": 9, "hair": 1, "hair_color": 4, "skin": 2, "cloth": 4}[key])
+            result[key] = clampi(int(number), 0, {"preset": 9, "hair": 1, "hair_color": 4, "skin": 2, "cloth": 4, "eye_color": 4}[key])
     for key in SHAPES:
         var number = value.get(key, result[key])
         if typeof(number) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(number)):

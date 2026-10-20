@@ -6,14 +6,14 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Ускорены подготовка позы и переходы анимации лука до выпуска стрелы; проверены обе модели, хват, фактический выстрел и сохранение. Позднее удержание позы и естественность движений остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_TIMING.json",
-  "review_launcher": "build/review-2026-10-20-bow-timing/ImPuls-editor.cmd",
+  "current_stage": "Добавлен выбор пяти исходных цветов глаз с сохранением. Исправлена диагностика поздней позы лука: измеряется итоговая поза после модификатора. Качество моделей и естественность движений остаются незавершёнными.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_EYE_COLORS.json",
+  "review_launcher": "build/review-2026-10-20-eye-colors/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
       "status": "Начальная версия проверена",
-      "scope": "Две основы MakeHuman, 10 пресетов, восемь синхронизированных форм, отдельные категории и два режима редактора. Имеющаяся одежда, анимации, сохранение и старая внешность проверяются отдельно; полный гардероб, лицо, возраст, волосы, коллизии разных пропорций и естественные движения не завершены.",
+      "scope": "Две основы MakeHuman, 10 пресетов, восемь синхронизированных форм, отдельные категории и два режима редактора. Имеющаяся одежда, анимации, сохранение и старая внешность проверяются отдельно; полный гардероб, лицо, возраст, волосы, коллизии разных пропорций и естественные движения не завершены. Выбор пяти цветов глаз проверен и сохраняется.",
       "previous_status": "Начальная версия проверена",
       "full_spec_acceptance": "Не подтверждена"
     },
@@ -207,15 +207,15 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Новые локальные проверки редактора/хвата/рубки/движения/запуска и графического пакета пройдены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_TIMING.json",
-  "review_launcher_revision": "Bow timing review; frozen package SHA256 66b6ba7636c0bfa23b9f1c9ee74ecdc1835c1ec8a16d7da175bcc4cffbe63b5a",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_EYE_COLORS.json",
+  "review_launcher_revision": "Eye color review; frozen package SHA256 a0ffbec08a8a450042461de7abe76542e88f22bc1abbbce36af2a5bd68261102",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",
   "visual_acceptance": "Не пройдена: модели, естественность анимаций, окружение и цельность визуального стиля не соответствуют запросу пользователя.",
   "character_acceptance": {
-    "percent": 52.7,
-    "accepted": 29,
+    "percent": 54.5,
+    "accepted": 30,
     "total": 55,
     "report": "docs/CHARACTER_ACCEPTANCE_2026-10-20.json",
     "visual_acceptance": false

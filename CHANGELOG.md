@@ -1,3 +1,8 @@
+## Eye color and final-pose validation — unreleased — 2026-10-20
+- Integrate five existing CC0 eye atlases with creator selection, bounded inputs, brown legacy default and save round-trip; preserve authored sclera and pupil.
+- Measure held-bow alignment inside the actual post-modifier callback and expand the assertion to late poses; the prior late-preview warning was a diagnostic false positive. No extra arm modifier is integrated.
+- Editor criterion coverage is 30/55 (54.5%); visual quality remains unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_EYE_COLORS.json.
+
 ## Bow preparation timing — unreleased — 2026-10-20
 - Settle the drawn arm pose and short bow crossfade before the existing 0.22 s release, retaining gameplay timing and ammo rules.
 - Add release-frame aim validation for both bodies; original grip checks and graphical exported-world shot/save checks pass. Late held-pose alignment and natural-motion quality remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_BOW_TIMING.json.
