@@ -19,9 +19,12 @@ func _run() -> void:
     var legacy := APPEARANCE.preset(0)
     legacy.erase("eye_color")
     legacy.erase("height_cm")
+    legacy.erase("HeadSize")
     if not _check(APPEARANCE.normalized(legacy).height_cm == 180.0 and APPEARANCE.normalized({"height_cm": -999}).height_cm == 160.0 and APPEARANCE.normalized({"height_cm": INF}).height_cm == 180.0, "Height lacks bounded input and legacy defaults"):
         return
     if not _check(APPEARANCE.normalized(legacy).eye_color == 0 and APPEARANCE.normalized({"eye_color": 999}).eye_color == 4 and APPEARANCE.normalized({"eye_color": INF}).eye_color == 0, "Eye choice lacks legacy defaults or bounded input"):
+        return
+    if not _check(APPEARANCE.normalized(legacy).HeadSize == 0.0 and APPEARANCE.normalized({"HeadSize": 999}).HeadSize == 0.5 and APPEARANCE.normalized({"HeadSize": NAN}).HeadSize == 0.0, "Head size lacks bounded legacy defaults"):
         return
     var bad := APPEARANCE.normalized({"name": "\n", "sex": "../bad", "Build": NAN, "hair": INF, "Nose": 9000, "skin": -99})
     if not _check(bad.sex == "male" and is_finite(bad.Build) and bad.Nose == 0.5 and bad.skin == 0 and not String(bad.name).is_empty(), "Malformed profile was not normalized"):
@@ -37,6 +40,16 @@ func _run() -> void:
     if not _check(advanced != null and creator.find_child("FaceHeight", true, false) == null, "Simple mode is missing or exposes advanced controls"):
         return
     advanced.button_pressed = true
+    var head_size := creator.find_child("HeadSize", true, false) as HSlider
+    if not _check(head_size != null, "Head size slider missing from the actual face category"):
+        return
+    creator.set("zoom", 0.85)
+    head_size.value = 0.35
+    if not _check(absf(creator.camera.position.z) > 0.9, "Larger head lacks close-up camera clearance"):
+        return
+    var head_mesh := creator.visual.find_child("HumanBody", true, false) as MeshInstance3D
+    if not _check(head_mesh != null and is_equal_approx(head_mesh.get_blend_shape_value(head_mesh.find_blend_shape_by_name("HeadSize")), 0.35), "Head size slider does not reach actual geometry"):
+        return
     var face_height := creator.find_child("FaceHeight", true, false) as HSlider
     if not _check(face_height != null, "Advanced mode did not reveal actual facial controls"):
         return
@@ -175,7 +188,7 @@ func _run() -> void:
     if not _check(preload("res://scripts/humanoid_visual.gd").palette_materials.size() == before, "Dragging morph sliders grows the shared material cache"):
         return
     creator.profile.name = "ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¾Ð±Ñ€Ð°Ð·Ð°"
-    for key: String in ["FaceHeight", "FaceDepth", "NoseWidth", "NoseHeight"]:
+    for key: String in ["HeadSize", "FaceHeight", "FaceDepth", "NoseWidth", "NoseHeight"]:
         creator.profile[key] = 0.27
     creator.profile.eye_color = 4
     creator.profile.height_cm = 193.0
@@ -198,5 +211,5 @@ func _run() -> void:
     GameState.load_snapshot({"world_state": {}})
     if not _check(APPEARANCE.normalized(GameState.get_world_value("player_appearance")) == APPEARANCE.preset(0), "Legacy save has no safe appearance default"):
         return
-    print("CHARACTER_CREATOR_OK presets=10 geometry=male+female clothes=separate morphs=8 clips=10 library=roundtrip save=roundtrip cache=bounded legacy=default")
+    print("CHARACTER_CREATOR_OK presets=10 geometry=male+female clothes=separate morphs=9 clips=10 library=roundtrip save=roundtrip cache=bounded legacy=default")
     get_tree().quit(0)

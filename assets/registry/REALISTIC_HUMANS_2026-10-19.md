@@ -28,3 +28,6 @@ INTEGRATED in the review branch: existing CC0 head vertical/depth and nose horiz
 
 ## Eye color selection — 2026-10-20 review
 - INTEGRATED in review: five existing MakeHuman CC0 eye atlases in `assets/production/characters/realistic/eyes/`; exact source hashes and license preserved there. Runtime choice and save compatibility verified on both bodies. No new download; STAGED_PHYSICAL on main is not claimed.
+
+## Head size — 2026-10-20
+INTEGRATED in review: ninth synchronized HeadSize shape on both bodies and seven fitted parts. Composed from the three existing CC0 authored head-axis targets at 0.6 strength each, exposed within -0.5..0.5. No new source pack/download. Build and animated geometry validation remain reproducible with the existing tools; full visual realism remains unaccepted.

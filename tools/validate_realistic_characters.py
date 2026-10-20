@@ -21,7 +21,7 @@ for sex in ['male','female']:
    for obj in meshes:
     assert obj.data.shape_keys is not None,(sex,obj.name,'missing shape keys')
     keys=obj.data.shape_keys.key_blocks
-    for name in ['FaceWidth','FaceHeight','FaceDepth','Nose','NoseWidth','NoseHeight','Jaw','Build']:
+    for name in ['HeadSize','FaceWidth','FaceHeight','FaceDepth','Nose','NoseWidth','NoseHeight','Jaw','Build']:
      assert name in keys,(sex,obj.name,'missing shape',name)
      keys[name].slider_min=-.5
      keys[name].value=(fraction-.5)

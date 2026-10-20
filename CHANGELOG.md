@@ -1,3 +1,8 @@
+## Head size — unreleased — 2026-10-20
+- Add a separate saved head-size control with bounded legacy-safe defaults. Rebuild both authored bodies and seven fitted parts with a ninth synchronized morph.
+- Verify 100 geometry poses, creator/save, 180 weapon poses, height/collision and graphical exported review.
+- Editor criterion coverage: 32/55 (58.2%); visual realism and natural animation remain unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_HEAD_SIZE.json.
+
 ## UI lifecycle — unreleased — 2026-10-20
 - Hide the magic HUD during paused overlays and restore it in gameplay; native inventory no longer has mana text over its title.
 - Fix deferred layout dispatch to freed panels during scene/window teardown; resolve instance IDs at dispatch.

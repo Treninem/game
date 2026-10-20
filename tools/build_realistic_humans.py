@@ -167,6 +167,12 @@ def create_variations(points):
         'NoseWidth':target('nose/nose-scale-horiz-incr.target.gz'),
         'NoseHeight':target('nose/nose-scale-vert-incr.target.gz'),
         'Jaw':target('chin/chin-width-incr.target.gz')}
+    # Use the authored head-axis fields on every fitted part, not a bone scale.
+    head_size={}
+    for axis in ['FaceWidth','FaceHeight','FaceDepth']:
+        for index,delta in changes[axis].items():
+            head_size[index]=head_size.get(index,Vector())+delta*.6
+    changes['HeadSize']=head_size
     result={name:morph(points,delta) for name,delta in changes.items()}
     build=[p.copy() for p in points]
     for i,p in enumerate(build):

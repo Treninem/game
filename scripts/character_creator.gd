@@ -201,7 +201,7 @@ func _refresh() -> void:
             height_caption.text = "Рост: %d см" % int(value)
             _apply_preview())
         traits.add_child(height_slider)
-    for pair in [["FaceWidth", "Ширина лица"], ["FaceHeight", "Высота лица"], ["FaceDepth", "Глубина головы"], ["Nose", "Выступ носа"], ["NoseWidth", "Ширина носа"], ["NoseHeight", "Высота носа"], ["Jaw", "Подбородок"], ["Build", "Телосложение"]]:
+    for pair in [["HeadSize", "Размер головы"], ["FaceWidth", "Ширина лица"], ["FaceHeight", "Высота лица"], ["FaceDepth", "Глубина головы"], ["Nose", "Выступ носа"], ["NoseWidth", "Ширина носа"], ["NoseHeight", "Высота носа"], ["Jaw", "Подбородок"], ["Build", "Телосложение"]]:
         var key: String = pair[0]
         if trait_category == "appearance" or (trait_category == "body") != (key == "Build"):
             continue
@@ -305,7 +305,8 @@ func start_journey() -> void:
 
 func _camera() -> void:
     var ratio := float(profile.height_cm) / APPEARANCE.DEFAULT_HEIGHT_CM
-    camera.position = Vector3(0, camera_height * ratio, -zoom)
+    var head_clearance := 1.0 + maxf(float(profile.HeadSize), 0.0) * 0.28 if zoom < 1.5 else 1.0
+    camera.position = Vector3(0, camera_height * ratio, -zoom * head_clearance)
     camera.look_at(Vector3(0, camera_height * ratio, 0))
 
 func _preview_input(event: InputEvent) -> void:
