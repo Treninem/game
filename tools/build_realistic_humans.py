@@ -98,7 +98,7 @@ def smooth_weights(weights, faces):
     boundary={v for edge,count in edge_uses.items() if count==1 for v in edge}
     anchored=boundary|{v for b in boundary for v in neighbours[b]}
     original=weights
-    for _ in range(12):
+    for _ in range(24):
         result=[]
         for i,values in enumerate(weights):
             if i in anchored:
@@ -120,9 +120,16 @@ def fit_garment(points, records, scales):
             ids=set(i for f,g in zip(FACES,GROUPS) if g=='joint-'+side+'-'+part for i in f)
             return sum((points[i] for i in ids),Vector())/len(ids)
         wrist=joint('hand');direction=(wrist-joint('elbow')).normalized()
-        for p in fitted_points:
-            distance=(p-wrist).length*BODY_SCALE;along=(p-wrist).dot(direction)*BODY_SCALE
-            if distance<.18 and along>-.015:p-=direction*((along+.015)/BODY_SCALE)
+        sleeve=[p for p in fitted_points if (p-wrist).length*BODY_SCALE<.18]
+        end=max((p-wrist).dot(direction)*BODY_SCALE for p in sleeve)
+        if end<=-.015:continue
+        # Compress the distal sleeve smoothly instead of flattening several
+        # authored vertex rings onto one plane (degenerate cuff triangles).
+        for p in sleeve:
+            along=(p-wrist).dot(direction)*BODY_SCALE
+            if along>-.15:
+                remapped=-.15+(along+.15)*(.15-.015)/(end+.15)
+                p+=direction*((remapped-along)/BODY_SCALE)
     return fitted_points
 
 def create_garment(points, variations, rig):
@@ -185,6 +192,17 @@ def create_body(points, variations, rig, sex):
     _,_,deleted=mapping(SYSTEM/'clothes/male_casualsuit01/male_casualsuit01.mhclo')
     _,_,shoe_mask=mapping(SYSTEM/'clothes/shoes03/shoes03.mhclo')
     deleted|=shoe_mask
+    # The sleeve was shortened to expose the hand. Keep the native skin ring
+    # under its cuff rather than retaining the longer source garment's mask.
+    for side in ['l','r']:
+        def joint(part):
+            ids=set(i for f,g in zip(FACES,GROUPS) if g=='joint-'+side+'-'+part for i in f)
+            return sum((points[i] for i in ids),Vector())/len(ids)
+        wrist=joint('hand');axis=(wrist-joint('elbow')).normalized()
+        for index in list(deleted):
+            offset=(points[index]-wrist)*BODY_SCALE
+            along=offset.dot(axis);radial=(offset-axis*along).length
+            if -.045<along<.025 and radial<.07:deleted.discard(index)
     skin=material('SkinHuman',image=SYSTEM/('skins/young_caucasian_'+sex+'/young_lightskinned_'+sex+'_diffuse.png'),roughness=.72)
     keep=[i for i,(face,group) in enumerate(zip(FACES,GROUPS)) if group=='body' and not any(v in deleted for v in face)]
     return mesh('HumanBody',points,[FACES[i] for i in keep],UV,[FACE_UV[i] for i in keep],W,rig,skin,variations)
@@ -269,6 +287,45 @@ def constrain_knees(rig):
         changed.extend([thigh,shin,foot])
     return changed
 
+def relaxed_fingers(rig):
+    """Native palm-space curl, independent of the donor finger lengths/rolls.
+
+    Only unarmed Idle/Walk/Run use this pose. Runtime weapon grips retain
+    their measured handle contact and reset these joints before gripping.
+    """
+    changed=[]
+    for side in ['Left','Right']:
+        for finger in ['Index','Middle','Ring','Pinky','Thumb']:
+            for joint in range(1,4):
+                bone=rig.pose.bones.get(side+'Hand'+finger+str(joint))
+                if bone:
+                    bone.matrix_basis=Matrix.Identity(4);changed.append(bone)
+        bpy.context.view_layer.update()
+        wrist=rig.pose.bones[side+'Hand'].head
+        index=rig.pose.bones[side+'HandIndex1'].head
+        pinky=rig.pose.bones[side+'HandPinky1'].head
+        middle=rig.pose.bones[side+'HandMiddle1'].head
+        ring=rig.pose.bones[side+'HandRing1'].head
+        along=((index+middle+ring+pinky)*.25-wrist).normalized()
+        normal=along.cross((index-pinky).normalized()).normalized()*(1 if side=='Left' else -1)
+        for finger,angles in [('Index',[13,19,9]),('Middle',[17,24,11]),('Ring',[22,29,14]),('Pinky',[27,33,17])]:
+            first=rig.pose.bones[side+'Hand'+finger+'1']
+            axis=(first.matrix.to_3x3()@Vector((0,1,0))).normalized().cross(normal).normalized()
+            for joint,angle in enumerate(angles,1):
+                bone=rig.pose.bones[side+'Hand'+finger+str(joint)]
+                local_axis=bone.matrix.to_quaternion().inverted()@axis
+                bone.rotation_mode='QUATERNION'
+                bone.rotation_quaternion=Quaternion(local_axis,math.radians(angle))
+                bpy.context.view_layer.update()
+        # Slight thumb opposition rather than a straight, spread paddle.
+        thumb=rig.pose.bones[side+'HandThumb1'];tip=rig.pose.bones[side+'HandThumb2']
+        direction=(tip.head-thumb.head).normalized()
+        toward=((index+middle)*.5-thumb.head).normalized()
+        rotation=direction.rotation_difference(toward).slerp(Quaternion(),.72)
+        thumb.matrix=Matrix.Translation(thumb.head)@(rotation@thumb.matrix.to_quaternion()).to_matrix().to_4x4()
+        bpy.context.view_layer.update()
+    return changed
+
 def retarget(rig):
     before=set(bpy.data.objects);before_actions=set(bpy.data.actions)
     bpy.ops.import_scene.gltf(filepath=str(ROOT/'assets/production/characters/citizen/citizen.glb'))
@@ -331,6 +388,8 @@ def retarget(rig):
                 if bone.name=='Hips':bone.keyframe_insert('location',frame=frame)
                 bpy.context.view_layer.update()
             for bone in constrain_knees(rig):bone.keyframe_insert('rotation_quaternion',frame=frame)
+            if name in ['Idle','Walk','Run']:
+                for bone in relaxed_fingers(rig):bone.keyframe_insert('rotation_quaternion',frame=frame)
             if name not in ['Jump','Death']:
                 soles=bpy.data.objects['Boots'].evaluated_get(bpy.context.evaluated_depsgraph_get());data=soles.to_mesh()
                 lowest=min((soles.matrix_world@v.co).z for v in data.vertices);soles.to_mesh_clear()

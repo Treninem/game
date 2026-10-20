@@ -96,7 +96,7 @@ func _run() -> void:
                 if material == null:
                     continue
                 if String(mesh.name) == "Clothing":
-                    if not _check(material.normal_enabled and material.normal_texture != null and material.albedo_texture != null and material.roughness >= 0.8, "Garment lost authored matte fold/detail maps"):
+                    if not _check(material.normal_enabled and material.normal_texture == preload("res://scripts/humanoid_visual.gd").GARMENT_NORMAL and material.ao_enabled and material.ao_texture == preload("res://scripts/humanoid_visual.gd").GARMENT_AO and material.albedo_texture == null and material.roughness >= 0.8, "Garment loses authored normal/occlusion maps, matte finish or paints occlusion into its base color"):
                         return
                 elif String(mesh.name) == "Boots":
                     if not _check(material.albedo_texture != null, "Boot leather is flat-colored again"):

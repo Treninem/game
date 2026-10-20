@@ -148,8 +148,10 @@ func _style_model() -> void:
                     # Reuse the garment's authored UV-aligned folds, not a tiled
                     # replacement. The source diffuse depicts denim, so retain
                     # the fantasy palette while using its neutral AO/normal.
+                    # AO belongs to occlusion, not base color: multiplying it
+                    # into both makes moving sleeves retain painted black pits.
                     material.albedo_color = APPEARANCE.CLOTH[int(current_profile.cloth)].lightened(0.18) if label.begins_with("ClothTunic") else Color(0.24, 0.21, 0.17)
-                    material.albedo_texture = GARMENT_AO
+                    material.albedo_texture = null
                     material.normal_enabled = true
                     material.normal_texture = GARMENT_NORMAL
                     material.normal_scale = 0.65

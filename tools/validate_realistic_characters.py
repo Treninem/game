@@ -14,6 +14,12 @@ for sex in ['male','female']:
  for action in actions:
   rig.animation_data.action=action
   if action.slots:rig.animation_data.action_slot=action.slots[0]
+  # Cuff refitting must preserve a real surface, not collapse its authored
+  # rings into zero-area triangles. Ignore unrelated tiny facial geometry.
+  cloth=next(o for o in meshes if o.name=='Clothing')
+  cloth.data.calc_loop_triangles()
+  degenerate=sum(1 for triangle in cloth.data.loop_triangles if triangle.area<1e-10)
+  assert degenerate==0,(sex,'degenerate garment triangles',degenerate)
   max_edge=0;detail=None
   for fraction in [0,.25,.5,.75,1]:
    # Check combined facial extremes on the actual animated skin, hair, eyes
@@ -49,5 +55,14 @@ for sex in ['male','female']:
      angle=math.degrees(math.atan2(u.cross(v).dot(right),u.dot(v)));minimum=min(minimum,angle)
      assert angle>=-1.0,(sex,action.name,'backward knee',side,sample,angle)
    print('ANATOMICAL_KNEES_OK',sex,action.name,'minimum_deg',minimum,flush=True)
+  if action.name in ['Idle','Walk','Run']:
+   for fraction in [0,.25,.5,.75,1]:
+    start,end=action.frame_range;bpy.context.scene.frame_set(round(start+(end-start)*fraction))
+    for side in ['Left','Right']:
+     for finger in ['Index','Middle','Ring','Pinky']:
+      a,b,c=[rig.pose.bones[side+'Hand'+finger+str(i)].head for i in [1,2,3]]
+      angle=math.degrees((b-a).angle(c-b))
+      assert 5.0<angle<50.0,(sex,action.name,'unnatural free finger',side,finger,fraction,angle)
+   print('NATIVE_RELAXED_HANDS_OK',sex,action.name,flush=True)
   results.append({'sex':sex,'clip':action.name,'maximum_edge_m':round(max_edge,5),**({'minimum_knee_angle_deg':round(minimum,5),'minimum_forward_lean_deg':round(minimum_lean,5)} if action.name in ['Walk','Run'] else {})})
 (r/'build/acceptance/realistic-character-surfaces.json').write_text(json.dumps(results,indent=2),encoding='utf-8');print('REALISTIC_SURFACES_OK',len(results),'clips,100 poses')

@@ -1,0 +1,220 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Human shoulders, wrists and garment shading",
+  "changes": [
+    "Rebuilt both existing native human GLBs; no new third-party assets",
+    "Relaxed free fingers baked into Idle/Walk/Run, with per-finger curl and mild thumb opposition; no added per-frame runtime solver",
+    "24-pass anchored garment weight diffusion reduces sampled shoulder edge stretch; collar/cuff borders retained",
+    "Smooth sleeve compression preserves cuff rings; restore native wrist skin behind shortened cuffs",
+    "Use solid fabric base color plus separate authored normal/AO; remove duplicate occlusion painted into albedo"
+  ],
+  "model_sha256": {
+    "male": "ff5091022a06d29607c65cf230fe4819edef3967a7bff075ae436a3e5b0a5212",
+    "female": "360b04caea6a8707f1885d5501d21d044a8fe32db36664f22f6ff447ddf90a91"
+  },
+  "checks": {
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.45
+    },
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.31
+    },
+    "character_creator": {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.76
+    },
+    "character_texture_filtering": {
+      "case": "character_texture_filtering",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.7
+    },
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 34.16,
+      "marker": true
+    }
+  },
+  "geometry": {
+    "exit_code": 0,
+    "seconds": 28.7,
+    "marker": true,
+    "traceback": false
+  },
+  "shoulder_and_hand_metrics": [
+    {
+      "variant": "before",
+      "sex": "male",
+      "clip": "Idle",
+      "shoulder_edge_ratio_p95": 1.3307032689811826,
+      "shoulder_edge_ratio_max": 6.61445334004653,
+      "finger_bend_min_deg": 6.559928829839102,
+      "finger_bend_max_deg": 14.832102414783067
+    },
+    {
+      "variant": "before",
+      "sex": "male",
+      "clip": "Walk",
+      "shoulder_edge_ratio_p95": 1.444075323845754,
+      "shoulder_edge_ratio_max": 8.283514242516661,
+      "finger_bend_min_deg": 6.55995871191672,
+      "finger_bend_max_deg": 82.33074508549686
+    },
+    {
+      "variant": "before",
+      "sex": "male",
+      "clip": "Run",
+      "shoulder_edge_ratio_p95": 1.565612401681915,
+      "shoulder_edge_ratio_max": 9.469952176566188,
+      "finger_bend_min_deg": 6.559898947761482,
+      "finger_bend_max_deg": 21.19401040020516
+    },
+    {
+      "variant": "before",
+      "sex": "female",
+      "clip": "Idle",
+      "shoulder_edge_ratio_p95": 1.2403487414912104,
+      "shoulder_edge_ratio_max": 3.373934061080288,
+      "finger_bend_min_deg": 7.216130716611614,
+      "finger_bend_max_deg": 16.38700180952564
+    },
+    {
+      "variant": "before",
+      "sex": "female",
+      "clip": "Walk",
+      "shoulder_edge_ratio_p95": 1.1939024155637552,
+      "shoulder_edge_ratio_max": 3.8439884641813413,
+      "finger_bend_min_deg": 7.2159403250885,
+      "finger_bend_max_deg": 82.33056067038927
+    },
+    {
+      "variant": "before",
+      "sex": "female",
+      "clip": "Run",
+      "shoulder_edge_ratio_p95": 1.2789255558796637,
+      "shoulder_edge_ratio_max": 4.035504858847354,
+      "finger_bend_min_deg": 7.215994112828214,
+      "finger_bend_max_deg": 21.193981371901184
+    },
+    {
+      "variant": "candidate",
+      "sex": "male",
+      "clip": "Idle",
+      "shoulder_edge_ratio_p95": 1.285529976943351,
+      "shoulder_edge_ratio_max": 6.217807775038073,
+      "finger_bend_min_deg": 29.793384197338586,
+      "finger_bend_max_deg": 41.32360753525011
+    },
+    {
+      "variant": "candidate",
+      "sex": "male",
+      "clip": "Walk",
+      "shoulder_edge_ratio_p95": 1.4109994048656496,
+      "shoulder_edge_ratio_max": 7.548029406910199,
+      "finger_bend_min_deg": 29.793377367149414,
+      "finger_bend_max_deg": 41.32319430880533
+    },
+    {
+      "variant": "candidate",
+      "sex": "male",
+      "clip": "Run",
+      "shoulder_edge_ratio_p95": 1.5045647426739739,
+      "shoulder_edge_ratio_max": 8.361196548000471,
+      "finger_bend_min_deg": 29.79370863132416,
+      "finger_bend_max_deg": 41.32314991257572
+    },
+    {
+      "variant": "candidate",
+      "sex": "female",
+      "clip": "Idle",
+      "shoulder_edge_ratio_p95": 1.2219928928473853,
+      "shoulder_edge_ratio_max": 3.3296580627912307,
+      "finger_bend_min_deg": 30.32280240519003,
+      "finger_bend_max_deg": 41.84394159150544
+    },
+    {
+      "variant": "candidate",
+      "sex": "female",
+      "clip": "Walk",
+      "shoulder_edge_ratio_p95": 1.1844599014131811,
+      "shoulder_edge_ratio_max": 3.6913759122574072,
+      "finger_bend_min_deg": 30.323147329743115,
+      "finger_bend_max_deg": 41.84381864810038
+    },
+    {
+      "variant": "candidate",
+      "sex": "female",
+      "clip": "Run",
+      "shoulder_edge_ratio_p95": 1.2628259040223804,
+      "shoulder_edge_ratio_max": 3.8661333035908894,
+      "finger_bend_min_deg": 30.322956084446353,
+      "finger_bend_max_deg": 41.8438596292354
+    }
+  ],
+  "coverage": [
+    "100 animated geometry/morph poses across 20 clips; seven parts and nine synchronized shapes retained",
+    "No zero-area clothing triangles",
+    "576 free-finger angle/direction samples across both bodies and 160/180/195 cm heights",
+    "180 prior weapon-contact poses retained, including bow string/arrow, pitched aim, paused equip and unequip",
+    "12 gait phase changes, creator/preset/save tests and actual texture mip/normal/AO-role checks",
+    "12 matching graphical inspection captures per variant; shoulder, hand, axe and bow views inspected",
+    "Full graphical source-world automated normal action pass; observer camera; no driver position assignments"
+  ],
+  "native_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 24.315785612911
+  },
+  "screenshots": [
+    "docs/review/2026-10-20-human-deformations/before-female-hand.png",
+    "docs/review/2026-10-20-human-deformations/before-female-Run.png",
+    "docs/review/2026-10-20-human-deformations/after-female-hand.png",
+    "docs/review/2026-10-20-human-deformations/after-female-Run.png"
+  ],
+  "rejected_attempts": [
+    "Four smoothing passes increased shoulder stretch and were rejected; final 24-pass metrics are lower than baseline in all six sampled combinations",
+    "First final-suite creator check required the old AO-as-albedo material role; replaced with stricter checks of exact normal/AO roles, matte surface and unpainted base color",
+    "First full-world pass reproduced historical missed heal InputEventAction: casts=0, mana=100, cooldown=0, menu closed; full pass failed and watchdog timed out. Saved in build/acceptance/human-refinement-native-first-failure.log. Subsequent run retains the same gameplay assertions with extra input observation only"
+  ],
+  "limits": [
+    "Full visual realism, wardrobe diversity, fine shoulder corrective deformation and natural motion acceptance remain incomplete",
+    "Existing body/garment family refined; no replacement high-fidelity asset pack or new costume selection",
+    "Full four-reference study remains incomplete; this is technical correction of observed defects, not visual reference acceptance",
+    "Automated visible game run; no claim of manual free-roam or a new city route",
+    "Historical intermittent native heal input issue remains open even if repeat passes; no claim it was fixed by model work",
+    "ObjectDB exit leak warning remains outside this fix",
+    "No new installer/export/stable release and no overall readiness percentage increase"
+  ]
+}

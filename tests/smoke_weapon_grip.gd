@@ -47,6 +47,27 @@ func _run() -> void:
                 var hand := skeleton.to_global((skeleton.get_bone_global_pose(skeleton.find_bone("RightHandIndex2")).origin + skeleton.get_bone_global_pose(skeleton.find_bone("RightHandMiddle2")).origin) * 0.5)
                 data.cord_gap = hand.distance_to(visual.last_draw_point)
         )
+        # A free hand should retain a mild native curl in locomotion, not the
+        # donor rig's straight/splayed fingers. Inspect actual bone geometry.
+        for clip: String in ["Idle", "Walk", "Run"]:
+            visual.animation_player.play(clip)
+            for fraction: float in [0.0, 0.25, 0.5, 0.75]:
+                visual.animation_player.seek(visual.animation_player.get_animation(clip).length * fraction, true)
+                visual.animation_player.pause()
+                skeleton.advance(1.0 / 60.0)
+                await get_tree().process_frame
+                for side: String in ["Left", "Right"]:
+                    for finger: String in ["Index", "Middle", "Ring", "Pinky"]:
+                        var a := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Hand" + finger + "1")).origin
+                        var b := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Hand" + finger + "2")).origin
+                        var c := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Hand" + finger + "3")).origin
+                        var angle := rad_to_deg((b - a).angle_to(c - b))
+                        if angle < 5.0 or angle > 50.0:
+                            failures.append("Unarmed finger is straight or over-curled: %s/%s/%s %.2f" % [sex, clip, finger, angle])
+                        var palm := preload("res://scripts/weapon_grip_modifier.gd").palm_frame(skeleton, side)
+                        var curl_side := (b - a).normalized().cross((c - b).normalized()).dot(palm.basis.y) * (1.0 if side == "Right" else -1.0)
+                        if curl_side < 0.05:
+                            failures.append("Unarmed finger bends away from palm: %s/%s/%s" % [sex, clip, finger])
         for item in ["starter_axe", "short_bow"]:
             actor.set_meta("preview_item", item)
             visual.call("_refresh_weapon")

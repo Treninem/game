@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлен сброс фазы ног при переходе ходьба–бег. Проверены 12 переходов на обеих моделях, видимая сцена движения 23,55 м и автоматизированный графический проход полного мира 24,30 м с прыжками, топором, луком, магией и сохранениями. Внешность, плечи, кисти и одежда остаются незавершёнными; ручной полный обход не выполнен.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HUMAN_GAIT.json",
+  "current_stage": "Пересобраны обе модели: расслабленные свободные пальцы, более плавные веса плеч, исправленные манжеты и кожа запястий. Убрано двойное затемнение ткани. Проверены геометрия, хват, редактор, материалы и графический игровой проход. Полная визуальная приёмка остаётся открытой; повторившийся пропуск лечения сохранён как нерешённое наблюдение.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HUMAN_DEFORMATIONS.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -270,5 +270,18 @@
     "new_models": false,
     "manual_free_roam": false,
     "reference_study": "incomplete; see HUMAN_VISUAL_REVIEW_2026-10-20.md"
+  },
+  "human_deformation_refinement": {
+    "model_sha256": {
+      "male": "ff5091022a06d29607c65cf230fe4819edef3967a7bff075ae436a3e5b0a5212",
+      "female": "360b04caea6a8707f1885d5501d21d044a8fe32db36664f22f6ff447ddf90a91"
+    },
+    "geometry_poses": 100,
+    "free_finger_samples": 576,
+    "weapon_poses": 180,
+    "shoulder_metric_cases_improved": 6,
+    "full_visual_acceptance": false,
+    "manual_free_roam": false,
+    "native_heal_input_intermittent_pending": true
   }
 }

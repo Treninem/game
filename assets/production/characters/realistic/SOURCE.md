@@ -8,3 +8,6 @@ INTEGRATED in the review branch: existing CC0 head vertical/depth and nose horiz
 
 ## Head size — 2026-10-20
 INTEGRATED in review: ninth synchronized HeadSize shape on both bodies and seven fitted parts. Composed from the three existing CC0 authored head-axis targets at 0.6 strength each, exposed within -0.5..0.5. No new source pack/download. Build and animated geometry validation remain reproducible with the existing tools; full visual realism remains unaccepted.
+
+## Shoulder, cuff and free-hand refinement — 2026-10-20
+INTEGRATED in the review runtime: both existing CC0 bodies now use palm-space relaxed finger curves in Idle/Walk/Run. Weapon gripping still uses the measured runtime constraint. Garment weights use 24 anchored topology diffusion passes; sampled default-body shoulder stretch decreases in all six body/clip combinations. Cuff fitting compresses the distal sleeve smoothly instead of flattening its rings, and native wrist skin is retained underneath. Runtime cloth keeps its authored normal and AO in their proper material roles rather than painting AO into base color. No new source pack, texture download, complete wardrobe or full visual acceptance. Reproduction: tools/build_realistic_humans.py; geometry validation and native tests remain mandatory. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_HUMAN_DEFORMATIONS.json.
