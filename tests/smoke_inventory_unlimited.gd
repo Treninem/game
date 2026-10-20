@@ -39,7 +39,8 @@ func _run() -> void:
     world.free()
     add_child(scene)
     var panels := scene.get_node("UI/GameplayPanels")
-    panels.open_panel("inventory")
+    await _key(KEY_I)
+    assert(panels.visible and get_tree().paused, "I does not open/pause inventory")
     for frame in range(4):
         await get_tree().process_frame
     assert(panels.find_child("InventoryItems", true, false).get_child_count() == 48)
@@ -113,6 +114,11 @@ func _run() -> void:
     assert(int(GameState.inventory.berries) == 0, "Keyboard consumption did not remove exactly the last berry")
     assert(panels.inventory_selected_id.is_empty())
     assert(get_viewport().gui_get_focus_owner() == panels.find_child("InventorySearch", true, false), "Last item does not return focus to search")
+    await _key(KEY_ESCAPE)
+    assert(not panels.visible and not get_tree().paused, "Escape in search does not close/resume inventory")
+    assert(not scene.get_node("UI/GameMenu").visible, "Escape closes inventory and also opens pause menu")
+    await _key(KEY_I)
+    assert(panels.visible and get_tree().paused)
     panels._inventory_search("no_such_item")
     for frame in range(3):
         await get_tree().process_frame
@@ -136,7 +142,7 @@ func _run() -> void:
         await RenderingServer.frame_post_draw
         get_viewport().get_texture().get_image().save_png("user://inventory-cells.png")
     panels._inventory_select(target_id)
-    panels.close_panel()
+    await _key(KEY_ESCAPE)
     for frame in range(3):
         await get_tree().process_frame
     assert(not get_tree().paused)
@@ -158,12 +164,14 @@ func _find_button(node: Node, text: String) -> Button:
 func _key(code: Key, ctrl: bool = false) -> void:
     var press := InputEventKey.new()
     press.keycode = code
+    press.physical_keycode = code
     press.ctrl_pressed = ctrl
     press.pressed = true
     Input.parse_input_event(press)
     await get_tree().process_frame
     var release := InputEventKey.new()
     release.keycode = code
+    release.physical_keycode = code
     release.ctrl_pressed = ctrl
     Input.parse_input_event(release)
     for frame in range(3):

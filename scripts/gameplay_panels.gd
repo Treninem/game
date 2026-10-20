@@ -30,12 +30,17 @@ func _ready() -> void:
     visible = false
 
 func _input(event: InputEvent) -> void:
-    if not visible or current_section != "inventory" or DialogueManager.is_open:
+    if not visible or DialogueManager.is_open or not event is InputEventKey or not event.pressed or event.echo:
         return
-    if event is InputEventKey and event.pressed and not event.echo and event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not event.shift_pressed and (event.keycode == KEY_F or event.physical_keycode == KEY_F):
-        var pause_menu := get_tree().get_first_node_in_group("game_menu") as Control
-        if pause_menu != null and pause_menu.visible:
-            return
+    var pause_menu := get_tree().get_first_node_in_group("game_menu") as Control
+    if pause_menu != null and pause_menu.visible:
+        return
+    # A focused text editor consumes Escape before _unhandled_input is reached.
+    if event.is_action_pressed("pause_menu") and (event.keycode == KEY_ESCAPE or event.physical_keycode == KEY_ESCAPE):
+        close_panel()
+        get_viewport().set_input_as_handled()
+        return
+    if current_section == "inventory" and event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not event.shift_pressed and (event.keycode == KEY_F or event.physical_keycode == KEY_F):
         var search := content.find_child("InventorySearch", true, false) as LineEdit
         if search != null:
             search.grab_focus()
