@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлена тянущая рука при стрельбе из лука: цель у правой щеки, разворот корпуса, локоть снаружи и промежуточная поза подъёма/возврата. Проверены 900 поз траектории, прежние 180 поз хвата, три ракурса обеих моделей и графический игровой проход. Полная визуальная приёмка остаётся открытой.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_CLEARANCE.json",
-  "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
+  "current_stage": "Обновлён проверочный пакет после исправления лука; прежний запуск направлен на новый пакет с сохранением своего профиля. Проверены 900 поз хвата/траектории, 36 кадров обеих моделей и непрерывная стрельба на ходу в реальном мире пакета. Полная визуальная приёмка людей и одежды остаётся открытой.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_PACKAGE.json",
+  "review_launcher": "build/review-2026-10-20-bow-clearance/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
