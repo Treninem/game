@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Воспроизведён и исправлен перехват правого клика дочерними элементами магического HUD. Проверены применение над полосой маны/названием, удар, пауза и безопасный возврат захвата мыши; обычный игровой прогон повторён. Связь с прежним единичным отказом InputEventAction не доказана, наблюдение сохраняется.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_MAGIC_INPUT.json",
+  "current_stage": "Исправлена воспроизведённая потеря клавиатурного фокуса после выбора ячейки инвентаря. Проверены стрелка, пробел, сохранение фокуса поиска и закрытие до отложенного callback; видимое окно и адаптация интерфейса прошли проверки. Полная приёмка управления только клавиатурой ещё не выполнена.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY_FOCUS.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -235,7 +235,8 @@
     "columns": "2–8 responsive",
     "item_icons": "pending",
     "drag_drop": "pending",
-    "stack_splitting": "pending"
+    "stack_splitting": "pending",
+    "selection_focus": "restored after selection; guarded against search, page/query change and close"
   },
   "storage_transfer": {
     "atomic_notification": true,

@@ -256,6 +256,20 @@ var inventory_selected_id := ""
 func _inventory_select(item_id: String) -> void:
     inventory_selected_id = item_id
     _rebuild_content()
+    _focus_inventory_cell.call_deferred(item_id, inventory_query, inventory_page_index)
+
+func _focus_inventory_cell(item_id: String, query: String, page: int) -> void:
+    if not visible or current_section != "inventory" or inventory_selected_id != item_id or inventory_query != query or inventory_page_index != page:
+        return
+    if get_viewport().gui_get_focus_owner() != null:
+        return
+    var grid := content.get_node_or_null("InventoryItems") as GridContainer
+    if grid == null:
+        return
+    for cell in grid.get_children():
+        if cell is Button and String(cell.get_meta("item_id", "")) == item_id:
+            cell.grab_focus()
+            return
 
 func _inventory_search(query: String) -> void:
     inventory_query = query

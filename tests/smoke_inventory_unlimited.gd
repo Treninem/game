@@ -59,6 +59,14 @@ func _run() -> void:
     for frame in range(3):
         await get_tree().process_frame
     assert(panels.inventory_selected_id == "short_bow")
+    var selected_cell := panels.find_child("InventoryItems", true, false).get_child(0) as Button
+    assert(get_viewport().gui_get_focus_owner() == selected_cell, "Selecting a cell loses keyboard focus")
+    panels._inventory_select("short_bow")
+    var draft_search := panels.find_child("InventorySearch", true, false) as LineEdit
+    draft_search.grab_focus()
+    for frame in range(3):
+        await get_tree().process_frame
+    assert(get_viewport().gui_get_focus_owner() == draft_search, "Deferred selection steals search focus")
     var action := _find_button(panels.find_child("InventoryDetails", true, false), "Экипировать")
     assert(action != null, "Selected cell has no equipment action")
     action.pressed.emit()
@@ -82,11 +90,24 @@ func _run() -> void:
         await get_tree().process_frame
     for cell in panels.find_child("InventoryItems", true, false).get_children():
         assert(cell is Button and cell.size.y >= 88 and cell.size.x >= 76)
+    var grid := panels.find_child("InventoryItems", true, false) as GridContainer
+    var target_id := String(grid.get_child(1).get_meta("item_id"))
+    grid.get_child(0).pressed.emit()
+    for frame in range(3):
+        await get_tree().process_frame
+    await _key(KEY_RIGHT)
+    assert(String(get_viewport().gui_get_focus_owner().get_meta("item_id", "")) == target_id, "Arrow key does not navigate cells")
+    await _key(KEY_SPACE)
+    assert(panels.inventory_selected_id == target_id, "Space does not select focused cell")
     if DisplayServer.get_name() != "headless":
         await RenderingServer.frame_post_draw
         get_viewport().get_texture().get_image().save_png("user://inventory-cells.png")
+    panels._inventory_select(target_id)
     panels.close_panel()
+    for frame in range(3):
+        await get_tree().process_frame
     assert(not get_tree().paused)
+    assert(not panels.visible and get_viewport().gui_get_focus_owner() == null, "Closed inventory restores hidden focus")
     print("INVENTORY_UNLIMITED_OK kinds=%d million_stacks=true json_roundtrip=true actual_UI=true" % expected.size())
     get_tree().quit(0)
 
@@ -100,3 +121,15 @@ func _find_button(node: Node, text: String) -> Button:
         if found != null:
             return found
     return null
+
+func _key(code: Key) -> void:
+    var press := InputEventKey.new()
+    press.keycode = code
+    press.pressed = true
+    Input.parse_input_event(press)
+    await get_tree().process_frame
+    var release := InputEventKey.new()
+    release.keycode = code
+    Input.parse_input_event(release)
+    for frame in range(3):
+        await get_tree().process_frame
