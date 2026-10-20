@@ -1,3 +1,8 @@
+## Locomotion facing — unreleased — 2026-10-20
+- Turn the player visual toward resolved travel for lateral/backward locomotion without rotating camera/input axes; retain attack/cast aim and furniture poses.
+- Reproduce three wrong-facing directions in rendered baseline; verify five directions, frame partitions, existing grip and movement gates, and visible source/exported world scenarios.
+- Current human models remain owner-rejected. Functional editor count stays 32/55 (58.2%); visual/game readiness is not represented by it. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_LOCOMOTION_FACING.json.
+
 ## Magic save state — unreleased — 2026-10-20
 - Persist selected spell and remaining cooldown seconds through existing game saves; reset cleanly for New Game/legacy profiles and bound malformed state.
 - Preserve pause semantics and prevent reload recovery bypass. Source magic runtime/save tests and exported input-driven healing/reload/blocked-cast check pass.

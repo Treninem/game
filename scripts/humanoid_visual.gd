@@ -294,6 +294,8 @@ func arrow_release_point() -> Vector3:
 func _process(delta: float) -> void:
     if get_parent().name == "Player" and appearance_revision != GameState.state_revision:
         appearance_revision = GameState.state_revision
+        rotation.y = 0.0
+        measured_speed = 0.0
         apply_appearance(GameState.get_world_value("player_appearance", {}))
     if get_parent().has_meta("preview_animation"):
         if animation_player != null and not animation_player.is_playing():
@@ -311,6 +313,7 @@ func _process(delta: float) -> void:
     # The last resolved slide velocity also stays zero when pushing into a wall.
     var physical_motion := body.get_real_velocity()
     var speed := Vector2(physical_motion.x, physical_motion.z).length()
+    _update_locomotion_facing(body, physical_motion, delta)
     measured_speed = lerpf(measured_speed, speed, minf(1.0, delta * 12.0))
     if String(body.get_meta("activity", "idle")) == "sit":
         _play("Sitting", 1.0)
@@ -336,6 +339,24 @@ func _process(delta: float) -> void:
         _play("Working" if animation_player.has_animation("Working") else "PickUp", 0.8)
     else:
         _play("Idle", 1.0)
+
+func _update_locomotion_facing(body: CharacterBody3D, motion: Vector3, delta: float) -> void:
+    if body.name != "Player":
+        return
+    # Camera/input yaw belongs to the physical actor. Turn only the visual so
+    # lateral/backward travel does not play a forward gait across the ground.
+    # Attacks must face the same direction as their actual ray/projectile.
+    if float(body.get("attack_elapsed")) > 0.0 or float(body.get("cast_elapsed")) > 0.0:
+        rotation.y = 0.0
+        return
+    if not body.is_on_floor() or String(body.get_meta("activity", "idle")) in ["sit", "sleep"]:
+        return
+    motion.y = 0.0
+    if motion.length_squared() < 0.0256:
+        return
+    var local_motion := body.global_basis.inverse() * motion
+    var target_yaw := atan2(-local_motion.x, -local_motion.z)
+    rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-14.0 * maxf(delta, 0.0)))
 
 func _play(key: String, rate: float) -> void:
     if animation_player == null or not animation_player.has_animation(key):

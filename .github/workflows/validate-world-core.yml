@@ -254,6 +254,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_character_texture_filtering.tscn 90
       - name: Verify character height and physical low passages
         run: bash tools/run_godot_smoke.sh tests/smoke_character_dimensions.tscn 90
+      - name: Verify locomotion facing and camera independence
+        run: bash tools/run_godot_smoke.sh tests/smoke_locomotion_facing.tscn 90
       - name: Verify measured weapon grip and draw cancellation
         run: bash tools/run_godot_smoke.sh tests/smoke_weapon_grip.tscn 90
       - name: Verify saved household furniture
