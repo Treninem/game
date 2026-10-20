@@ -35,18 +35,29 @@ const RECIPES := {
 func item_info(item_id: String) -> Dictionary:
     return ITEMS.get(item_id, {"name": item_id, "category": "Неизвестно", "description": "", "equip_slot": ""})
 
-func inventory_rows() -> Array:
+func inventory_rows(query: String = "") -> Array:
     var rows: Array = []
+    var needle := query.strip_edges().to_lower()
     for item_id in GameState.inventory:
         var amount := int(GameState.inventory.get(item_id, 0))
         if amount <= 0:
             continue
         var info := item_info(String(item_id)).duplicate(true)
+        if not needle.is_empty() and not (String(info.get("name", "")) + " " + String(item_id) + " " + String(info.get("category", ""))).to_lower().contains(needle):
+            continue
         info["id"] = String(item_id)
         info["amount"] = amount
         rows.append(info)
     rows.sort_custom(func(a: Dictionary, b: Dictionary): return String(a.get("name", "")) < String(b.get("name", "")))
     return rows
+
+# Pagination bounds the number of controls, never the stored inventory.
+func inventory_page(query: String = "", page: int = 0, page_size: int = 48) -> Dictionary:
+    var rows := inventory_rows(query)
+    var size := clampi(page_size, 1, 48)
+    var pages := maxi(1, ceili(float(rows.size()) / float(size)))
+    var current := clampi(page, 0, pages - 1)
+    return {"rows": rows.slice(current * size, mini((current + 1) * size, rows.size())), "total": rows.size(), "page": current, "pages": pages}
 
 func available_recipes() -> Array:
     var rows: Array = []

@@ -244,6 +244,18 @@ func _section_hint(section: String) -> String:
         "events": return "мировые события и мини-игры"
         _: return ""
 
+var inventory_query := ""
+var inventory_page_index := 0
+
+func _inventory_search(query: String) -> void:
+    inventory_query = query
+    inventory_page_index = 0
+    _rebuild_content()
+
+func _inventory_turn_page(delta: int) -> void:
+    inventory_page_index += delta
+    _rebuild_content()
+
 func _show_inventory() -> void:
     title_label.text = "Инвентарь"
     var equipped := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
@@ -253,11 +265,39 @@ func _show_inventory() -> void:
         _text("Стрелы: %d   •   ЛКМ — выстрел   •   K — изготовить боеприпасы" % int(GameState.inventory.get("arrow", 0)))
     _info("СТРАХОВАНИЕ", "Зарядов на одну смерть: %d" % ProgressionSystem.inventory_insurance_charges())
     _button("Купить страховку инвентаря — %d монет" % ProgressionSystem.INSURANCE_PRICE, Callable(self, "_buy_insurance"))
-    var rows := InventorySystem.inventory_rows()
+    _text("Карман Импульса • вместимость не ограничена")
+    var search_row := HBoxContainer.new()
+    content.add_child(search_row)
+    var search := LineEdit.new()
+    search.name = "InventorySearch"
+    search.placeholder_text = "Название или категория предмета"
+    search.text = inventory_query
+    search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    search.text_submitted.connect(_inventory_search)
+    search_row.add_child(search)
+    _button("Найти", func(): _inventory_search(search.text), search_row)
+    if not inventory_query.is_empty():
+        _button("Сбросить", _inventory_search.bind(""), search_row)
+    var result := InventorySystem.inventory_page(inventory_query, inventory_page_index)
+    inventory_page_index = int(result.page)
+    var rows: Array = result.rows
+    var pages := HBoxContainer.new()
+    content.add_child(pages)
+    var previous := _button("←", _inventory_turn_page.bind(-1), pages)
+    previous.name = "InventoryPrevious"
+    previous.disabled = inventory_page_index == 0
+    var status := Label.new()
+    status.text = "Страница %d / %d • видов предметов: %d" % [inventory_page_index + 1, int(result.pages), int(result.total)]
+    status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    pages.add_child(status)
+    var next := _button("→", _inventory_turn_page.bind(1), pages)
+    next.name = "InventoryNext"
+    next.disabled = inventory_page_index + 1 >= int(result.pages)
     if rows.is_empty():
-        _text("Инвентарь пуст.")
+        _text("Инвентарь пуст." if inventory_query.is_empty() else "Ничего не найдено. Измените запрос.")
         return
     var grid := GridContainer.new()
+    grid.name = "InventoryItems"
     grid.columns = 2 if frame.size.x >= 900.0 else 1
     grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     grid.add_theme_constant_override("h_separation", 10)

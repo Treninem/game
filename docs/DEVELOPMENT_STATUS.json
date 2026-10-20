@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлены конфликты глобальных классов библиотечных Binbun VFX и три неверные ссылки сцен. Проверены компиляция 26 скриптов, создание 33 сцен и игровой проход из исходников. Предупреждения UID и художественная приёмка остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BINBUN_EDITOR.json",
+  "current_stage": "Добавлены поиск и постраничный просмотр бесконечного инвентаря: одновременно до 48 карточек без лимита хранения. Проверены JSON-сохранение, переходы, поиск и экипировка в настоящем интерфейсе; компактная сетка ячеек ещё не реализована.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -224,5 +224,13 @@
   "editor_library_uid_warnings_pending": true,
   "inventory_requirement_clarification": "docs/INVENTORY_CAPACITY_CLARIFICATION_2026-10-20.txt: ячейки с бесконечной вместимостью; уточнение требований, не новая реализация интерфейса.",
   "review_launcher_scope": "Последний собранный пакет содержит этап лечения; текущие исправления библиотек проверены в исходниках и пока в этот пакет не входят.",
-  "editor_ui_responsiveness_pending": true
+  "editor_ui_responsiveness_pending": true,
+  "inventory_browsing": {
+    "storage_limit": null,
+    "display_page_size": 48,
+    "search": "name/id/category; case-insensitive",
+    "compact_cell_grid": "pending",
+    "source_verified": true,
+    "exported_package": "not rebuilt"
+  }
 }
