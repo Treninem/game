@@ -16,6 +16,18 @@ for sex in ['male','female']:
   if action.slots:rig.animation_data.action_slot=action.slots[0]
   max_edge=0;detail=None
   for fraction in [0,.25,.5,.75,1]:
+   # Check combined facial extremes on the actual animated skin, hair, eyes
+   # and fitted clothes, not merely the presence of slider names in the UI.
+   for obj in meshes:
+    assert obj.data.shape_keys is not None,(sex,obj.name,'missing shape keys')
+    keys=obj.data.shape_keys.key_blocks
+    for name in ['FaceWidth','FaceHeight','FaceDepth','Nose','NoseWidth','NoseHeight','Jaw','Build']:
+     assert name in keys,(sex,obj.name,'missing shape',name)
+     keys[name].slider_min=-.5
+     keys[name].value=(fraction-.5)
+     if obj.name=='HumanBody' and fraction==0:
+      displacement=max((v.co-b.co).length for v,b in zip(keys[name].data,keys['Basis'].data))
+      assert .00001<displacement<.5,(sex,name,'empty or excessive shape',displacement)
    start,end=action.frame_range;bpy.context.scene.frame_set(round(start+(end-start)*fraction))
    for obj in meshes:
     evaluated=obj.evaluated_get(bpy.context.evaluated_depsgraph_get());mesh=evaluated.to_mesh();points=[obj.matrix_world@v.co for v in mesh.vertices]

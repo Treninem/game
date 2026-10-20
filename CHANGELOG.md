@@ -1,3 +1,8 @@
+## Character editor controls — unreleased — 2026-10-20
+- Add four existing CC0 facial targets to both bodies and all fitted parts; preserve old appearance profiles.
+- Add trait categories, simple/advanced controls, individual reset and face framing. Validate combined morphs in 100 poses and the actual graphical world; realism and full wardrobe remain unfinished.
+- Publish criterion-based character acceptance separately from overall game readiness. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_FACE_CONTROLS.json.
+
 ## Forest understory — unreleased — 2026-10-20
 - Add independently seeded groves, layered shrubs/ferns and patchy low grass from the existing CC0 grass mesh (155 triangles). Keep legacy near-tree roots/cut IDs; spatially bound cover and distant forest batches. Refine canopy shading and mute grass/fern pigment.
 - Keep distant trees out of inhabited clearings. Nature, chopping, movement, camera obstruction, boot and clearing checks pass; the final package passes boot/nature/shore/clearing and native graphical walk/chopping checks. Isolate desktop mouse motion only in the fixed-aim chopping fixture; normal gameplay camera is independently verified. Existing branch-card silhouettes and cleanup warnings remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_UNDERSTORY.json.

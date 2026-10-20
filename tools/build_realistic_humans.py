@@ -88,11 +88,21 @@ def fitted_weights(records):
 
 def smooth_weights(weights, faces):
     neighbours=[set() for _ in weights]
+    edge_uses={}
     for face in faces:
-        for a,b in zip(face,face[1:]+face[:1]):neighbours[a].add(b);neighbours[b].add(a)
+        for a,b in zip(face,face[1:]+face[:1]):
+            neighbours[a].add(b);neighbours[b].add(a)
+            edge=tuple(sorted((a,b)));edge_uses[edge]=edge_uses.get(edge,0)+1
+    # The authored body mask meets the neckline, cuffs and hems exactly.
+    # Diffusing weights over these openings makes skin poke through the collar.
+    boundary={v for edge,count in edge_uses.items() if count==1 for v in edge}
+    anchored=boundary|{v for b in boundary for v in neighbours[b]}
+    original=weights
     for _ in range(12):
         result=[]
         for i,values in enumerate(weights):
+            if i in anchored:
+                result.append(original[i]);continue
             mixed={bone:value*.5 for bone,value in values.items()}
             for j in neighbours[i]:
                 for bone,value in weights[j].items():mixed[bone]=mixed.get(bone,0)+value*.5/max(1,len(neighbours[i]))
@@ -137,10 +147,26 @@ def create_garment(points, variations, rig):
         unseen-=piece
         index=0 if max(coord(fitted_points[v]).z for f in piece for v in faces[f])>1.2 else 1
         for i in piece:garment.data.polygons[i].material_index=index
+    garment_clearance(garment)
     return garment
 
+def garment_clearance(garment):
+    # Preserve the authored folds while separating coincident cloth/skin by
+    # three millimetres. Apply the same shell to every synchronized morph.
+    normals=[v.normal.copy() for v in garment.data.vertices]
+    for shape in garment.data.shape_keys.key_blocks:
+        for vertex,normal in zip(shape.data,normals):vertex.co+=normal*.003
+    garment.data.update()
+
 def create_variations(points):
-    changes={'FaceWidth':target('head/head-scale-horiz-incr.target.gz'),'Nose':target('nose/nose-scale-depth-incr.target.gz'),'Jaw':target('chin/chin-width-incr.target.gz')}
+    changes={
+        'FaceWidth':target('head/head-scale-horiz-incr.target.gz'),
+        'FaceHeight':target('head/head-scale-vert-incr.target.gz'),
+        'FaceDepth':target('head/head-scale-depth-incr.target.gz'),
+        'Nose':target('nose/nose-scale-depth-incr.target.gz'),
+        'NoseWidth':target('nose/nose-scale-horiz-incr.target.gz'),
+        'NoseHeight':target('nose/nose-scale-vert-incr.target.gz'),
+        'Jaw':target('chin/chin-width-incr.target.gz')}
     result={name:morph(points,delta) for name,delta in changes.items()}
     build=[p.copy() for p in points]
     for i,p in enumerate(build):

@@ -26,6 +26,33 @@ func _run() -> void:
     var start_button := creator.find_child("StartJourney", true, false) as Button
     if not _check(start_button != null and start_button.get_global_rect().end.y <= get_viewport().get_visible_rect().end.y, "Start button is clipped below the window"):
         return
+    var advanced := creator.find_child("AdvancedAppearance", true, false) as CheckButton
+    if not _check(advanced != null and creator.find_child("FaceHeight", true, false) == null, "Simple mode is missing or exposes advanced controls"):
+        return
+    advanced.button_pressed = true
+    var face_height := creator.find_child("FaceHeight", true, false) as HSlider
+    if not _check(face_height != null, "Advanced mode did not reveal actual facial controls"):
+        return
+    face_height.value = 0.3
+    var reset_line := face_height.get_parent().get_child(face_height.get_index() - 1)
+    (reset_line.get_child(1) as Button).pressed.emit()
+    if not _check(is_zero_approx(float(creator.profile.FaceHeight)), "Individual shape reset did not change the real profile"):
+        return
+    face_height.value = 0.3
+    face_height.drag_started.emit()
+    if not _check(is_equal_approx(creator.zoom, 0.85), "Facial editing does not frame the face"):
+        return
+    creator.call("select_trait_category", "appearance")
+    if not _check(creator.find_child("hair", true, false) != null and creator.find_child("FaceHeight", true, false) == null, "Appearance category mixes unrelated controls"):
+        return
+    creator.call("select_trait_category", "body")
+    if not _check(creator.find_child("Build", true, false) != null, "Body category has no functioning body control"):
+        return
+    creator.call("select_trait_category", "face")
+    advanced.button_pressed = false
+    advanced.button_pressed = true
+    if not _check(is_equal_approx(float((creator.find_child("FaceHeight", true, false) as HSlider).value), 0.3), "Category or mode change discarded a selected shape"):
+        return
     var signatures := {}
     for i in range(10):
         creator.profile = APPEARANCE.preset(i)
@@ -48,8 +75,10 @@ func _run() -> void:
                 elif String(mesh.name) == "Boots":
                     if not _check(material.albedo_texture != null, "Boot leather is flat-colored again"):
                         return
-            if not _check(mesh.find_blend_shape_by_name("FaceWidth") >= 0, "Character part has no face/shape morph contract: " + String(mesh.name)):
-                return
+            for shape: String in APPEARANCE.SHAPES:
+                var shape_index := mesh.find_blend_shape_by_name(shape)
+                if not _check(shape_index >= 0, "Missing synchronized morph: " + String(mesh.name) + "/" + shape):
+                    return
         if not _check(parts.has("HumanBody") and parts.has("Clothing") and parts.has("Boots") and parts.has("Eyes") and parts.has("Brows"), "Missing physical human/garment parts"):
             return
         for clip in ["Idle", "Walk", "Run", "Jump", "Punch", "Working", "Death", "Axe_Chop", "Bow_Attack_Shoot", "Bow_Attack_Draw", "Sitting"]:
@@ -110,6 +139,8 @@ func _run() -> void:
     if not _check(preload("res://scripts/humanoid_visual.gd").palette_materials.size() == before, "Dragging morph sliders grows the shared material cache"):
         return
     creator.profile.name = "ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¾Ð±Ñ€Ð°Ð·Ð°"
+    for key: String in ["FaceHeight", "FaceDepth", "NoseWidth", "NoseHeight"]:
+        creator.profile[key] = 0.27
     var expected := APPEARANCE.normalized(creator.profile)
     if not _check(APPEARANCE.save_look(expected) == OK and APPEARANCE.load_look() == expected, "Saved look did not round-trip"):
         return
@@ -129,5 +160,5 @@ func _run() -> void:
     GameState.load_snapshot({"world_state": {}})
     if not _check(APPEARANCE.normalized(GameState.get_world_value("player_appearance")) == APPEARANCE.preset(0), "Legacy save has no safe appearance default"):
         return
-    print("CHARACTER_CREATOR_OK presets=10 geometry=male+female clothes=separate morphs=4 clips=10 library=roundtrip save=roundtrip cache=bounded legacy=default")
+    print("CHARACTER_CREATOR_OK presets=10 geometry=male+female clothes=separate morphs=8 clips=10 library=roundtrip save=roundtrip cache=bounded legacy=default")
     get_tree().quit(0)

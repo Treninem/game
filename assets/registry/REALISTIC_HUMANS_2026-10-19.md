@@ -6,7 +6,7 @@ Sources: official MakeHuman Community MPFB core graphics and MakeHuman system gr
 
 Native MakeHuman body weights and bone definitions are retained. Existing ten Quaternius-derived clips are reused from the previous citizen asset, retargeted with separate normalized bind and actor frames; Idle uses a relaxed native stance. Forward knee constraints preserve ankle contact. Garment weights are smoothed on connected topology; authored UV islands separate shirt and trousers. Author clothing/footwear masks remove hidden body faces. Cuffs end at the wrist. Hair tint uses a project shader with the CC0 strand textures.
 
-There are separate skin, eyes, brows, two hair meshes, clothing and footwear; four synchronized morph targets, and ten presets, five per sex. The editor is reached from New Game and stores the selected appearance through the existing game-save world state. Old saves get a bounded default. Material caches depend on color choices, not every slider position.
+There are separate skin, eyes, brows, two hair meshes, clothing and footwear; eight synchronized morph targets, and ten presets, five per sex. The editor is reached from New Game and stores the selected appearance through the existing game-save world state. Old saves get a bounded default. Material caches depend on color choices, not every slider position.
 
 Reproduce with `tools/build_realistic_humans.py`; validate with `tools/validate_realistic_characters.py` and `tests/smoke_character_creator.tscn`. Full gameplay, native rendering and performance results belong to the character development journal. Body height is normalized near 1.8 m; morph ranges are bounded. Initial garments are generic long-sleeved shirts, trousers and plain shoes; full armor, garment swapping, age presets and advanced facial controls remain unfinished.
 
@@ -21,3 +21,7 @@ INTEGRATED in the review runtime: existing CC0 garment AO/normal and footwear di
 ## Character surfaces follow-up — 2026-10-19
 
 INTEGRATED in the review runtime: existing CC0 garment AO/normal and footwear diffuse in `realistic/details`, anisotropic materials and editor MSAA. No new body geometry. Evidence: `docs/DEVELOPMENT_LOG_2026-10-19_CHARACTER_SURFACES.json`.
+
+## Facial controls — 2026-10-20
+
+INTEGRATED in the review branch: existing CC0 head vertical/depth and nose horizontal/vertical targets add FaceHeight, FaceDepth, NoseWidth and NoseHeight. All seven parts carry the synchronized keys. Clothing opening weights retain their authored boundary and a 3 mm shell separates cloth from skin; full animation/wardrobe realism is not claimed. Reproduce with tools/build_realistic_humans.py.

@@ -17,6 +17,8 @@ var traits: VBoxContainer
 var rebuilding := false
 var zoom := 3.1
 var camera_height := 1.0
+var trait_category := "face"
+var advanced_mode := false
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
@@ -74,7 +76,15 @@ func _build() -> void:
             select_preset(index + (5 if profile.sex == "female" else 0)))
     preset_edit.name = "PresetSelection"
     _text(identity, "Осмотрите лицо, одежду и движения перед началом путешествия.")
-    _button(identity, "Лицо", func(): camera_height = 1.60; zoom = 0.85; _camera())
+    _text(identity, "Настройки образа")
+    _button(identity, "Лицо", func(): select_trait_category("face"))
+    _button(identity, "Волосы и одежда", func(): select_trait_category("appearance"))
+    _button(identity, "Телосложение", func(): select_trait_category("body"))
+    var advanced := CheckButton.new()
+    advanced.name = "AdvancedAppearance"
+    advanced.text = "Подробно"
+    advanced.toggled.connect(func(enabled: bool): advanced_mode = enabled; _refresh())
+    identity.add_child(advanced)
     _button(identity, "В полный рост", func(): camera_height = 1.0; zoom = 3.1; _camera())
     _text(identity, "Движение для осмотра")
     var movement := _choice(identity, ["Покой", "Ходьба", "Бег", "Безоружный удар", "Топор", "Лук: натяжение", "Лук: выстрел"], select_preview_motion)
@@ -159,16 +169,32 @@ func _refresh() -> void:
     for child in traits.get_children():
         traits.remove_child(child)
         child.queue_free()
-    _text(traits, "Внешность и одежда")
-    for pair in [["hair", "Причёска", ["Короткая", "Хвост"]], ["hair_color", "Волосы", ["Каштановые", "Тёмные", "Светлые", "Рыжие", "Седые"]], ["skin", "Оттенок кожи", ["Светлый", "Смуглый", "Тёмный"]], ["cloth", "Одежда", ["Охра", "Зелёная", "Синяя", "Красная", "Льняная"]]]:
+    _text(traits, {"face": "Лицо и голова", "appearance": "Волосы и одежда", "body": "Телосложение"}[trait_category])
+    var appearance_choices := [["hair", "Причёска", ["Короткая", "Хвост"]], ["hair_color", "Волосы", ["Каштановые", "Тёмные", "Светлые", "Рыжие", "Седые"]], ["skin", "Оттенок кожи", ["Светлый", "Смуглый", "Тёмный"]], ["cloth", "Одежда", ["Охра", "Зелёная", "Синяя", "Красная", "Льняная"]]]
+    for pair in appearance_choices:
+        if trait_category != "appearance":
+            continue
         _text(traits, pair[1])
         var key: String = pair[0]
         var choice := _choice(traits, pair[2], func(index: int): profile[key] = index; _apply_preview())
         choice.select(int(profile[key]))
         choice.name = key
-    for pair in [["FaceWidth", "Ширина лица"], ["Nose", "Форма носа"], ["Jaw", "Подбородок"], ["Build", "Телосложение"]]:
-        _text(traits, pair[1])
+    for pair in [["FaceWidth", "Ширина лица"], ["FaceHeight", "Высота лица"], ["FaceDepth", "Глубина головы"], ["Nose", "Выступ носа"], ["NoseWidth", "Ширина носа"], ["NoseHeight", "Высота носа"], ["Jaw", "Подбородок"], ["Build", "Телосложение"]]:
         var key: String = pair[0]
+        if trait_category == "appearance" or (trait_category == "body") != (key == "Build"):
+            continue
+        if not advanced_mode and key in ["FaceHeight", "FaceDepth", "NoseWidth", "NoseHeight"]:
+            continue
+        var line := HBoxContainer.new()
+        traits.add_child(line)
+        var caption := Label.new()
+        caption.text = pair[1]
+        caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        line.add_child(caption)
+        var reset := Button.new()
+        reset.text = "Сброс"
+        reset.tooltip_text = "Вернуть исходную форму"
+        line.add_child(reset)
         var slider := HSlider.new()
         slider.name = key
         slider.min_value = -0.5
@@ -177,9 +203,21 @@ func _refresh() -> void:
         slider.value = float(profile[key])
         slider.custom_minimum_size.y = 28
         slider.value_changed.connect(func(value: float): profile[key] = value; _apply_preview())
+        reset.pressed.connect(func(): slider.value = 0.0)
+        if key != "Build":
+            slider.drag_started.connect(func(): camera_height = 1.60; zoom = 0.85; _camera())
         traits.add_child(slider)
     rebuilding = false
     _apply_preview()
+
+func select_trait_category(category: String) -> void:
+    if category not in ["face", "appearance", "body"]:
+        return
+    trait_category = category
+    camera_height = 1.60 if category == "face" else 1.0
+    zoom = 0.85 if category == "face" else 3.1
+    _camera()
+    _refresh()
 
 func select_preview_motion(index: int) -> void:
     index = clampi(index, 0, 6)

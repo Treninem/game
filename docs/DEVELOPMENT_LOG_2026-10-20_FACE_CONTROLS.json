@@ -1,0 +1,254 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "changes": [
+    "Четыре дополнительные исходные формы головы/носа: всего восемь синхронизированных форм на семи частях обеих моделей.",
+    "Категории, простой/подробный режим, индивидуальный сброс и приближение лица.",
+    "Граница привязки воротника сохранена; добавлен зазор ткани 3 мм."
+  ],
+  "checks": [
+    {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.59
+    },
+    {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.61
+    },
+    {
+      "case": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 16.3
+    },
+    {
+      "case": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 20.7
+    },
+    {
+      "case": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 27.11
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 33.58,
+      "marker": true
+    }
+  ],
+  "native": {
+    "captures": [
+      "user://face-0-extreme--0.5.png",
+      "user://face-0-extreme-0.5.png",
+      "user://face-0-motion-1.png",
+      "user://face-0-motion-2.png",
+      "user://face-0-motion-4.png",
+      "user://face-0-motion-5.png",
+      "user://face-5-extreme--0.5.png",
+      "user://face-5-extreme-0.5.png",
+      "user://face-5-motion-1.png",
+      "user://face-5-motion-2.png",
+      "user://face-5-motion-4.png",
+      "user://face-5-motion-5.png",
+      "user://face-walk.png",
+      "user://face-run.png",
+      "user://face-starter_axe.png",
+      "user://face-short_bow.png"
+    ],
+    "game_save_roundtrip": true,
+    "look_roundtrip": true,
+    "morphs": 8,
+    "player_position_assignments": 0,
+    "walked_m": 18.7138813715428
+  },
+  "geometry": "20 clips / 100 poses; combined morph extremes; finite surfaces, bounded edges, forward knees",
+  "asset_sha256": {
+    "male": "cb63754eb96b3050db4486a7e45983cad949121b356224496cdc1baf89560ec2",
+    "female": "f6a5cd15404f71d17fe3afdab833cb391cd98385a02dded361df60bb785d9514"
+  },
+  "acceptance": {
+    "editor": 52.7,
+    "accepted": 29,
+    "total": 55,
+    "visual_pass": false
+  },
+  "found": [
+    "Первый осмотровый драйвер снимал мир до завершения загрузки; эти игровые кадры отклонены. Новый драйвер ждёт Bootstrap и снятия loading_gate_active.",
+    "Найдено пересечение кожи и воротника; сохранены промежуточные варианты для сравнения.",
+    "Одна фиксация весов края не убрала пересечение воротника. Дополнительный зазор 3 мм устранил видимый дефект на повторно осмотренных крайних формах; глобальная гарантия отсутствия пересечений не заявляется.",
+    "Для окончательного графического сценария явно добавлены три тестовые стрелы и проверено натяжение с расходом одной стрелы. Предыдущие графические проходы не засчитываются как проверка выстрела.",
+    "Первый экспорт с системной временной папкой дал ошибки safe-save; повтор с изолированными TEMP/TMP завершился без ошибок."
+  ],
+  "limitations": [
+    "Модели, волосы, одежда и естественность движений всё ещё не достигли запрошенного качества.",
+    "Нет полной приёмки коллизий всех будущих пропорций, брони, возраста, бороды и большинства параметров лица.",
+    "Это автоматизированная графическая проверка, не ручное прохождение мира; тестовое оружие явно добавлено для QA.",
+    "Предупреждения ObjectDB при завершении остаются. Стабильный выпуск не опубликован."
+  ],
+  "git_parent": "b1ed956ce286f14fb785bbef67bb37bcaf1469a1",
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 79.73,
+    "sha256": "ae1bab5437e9449ce36505bd70bebf3dafca1766d43f6ddf0bd98b22339c770e"
+  },
+  "frozen_native": {
+    "result": {
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 49.52,
+      "marker": true
+    },
+    "details": {
+      "bow_arrow_consumed": true,
+      "captures": [
+        "user://face-0-extreme--0.5.png",
+        "user://face-0-extreme-0.5.png",
+        "user://face-0-motion-1.png",
+        "user://face-0-motion-2.png",
+        "user://face-0-motion-4.png",
+        "user://face-0-motion-5.png",
+        "user://face-5-extreme--0.5.png",
+        "user://face-5-extreme-0.5.png",
+        "user://face-5-motion-1.png",
+        "user://face-5-motion-2.png",
+        "user://face-5-motion-4.png",
+        "user://face-5-motion-5.png",
+        "user://face-walk.png",
+        "user://face-run.png",
+        "user://face-starter_axe.png",
+        "user://face-short_bow.png",
+        "user://face-bow-released.png"
+      ],
+      "game_save_roundtrip": true,
+      "look_roundtrip": true,
+      "morphs": 8,
+      "player_position_assignments": 0,
+      "walked_m": 18.7125359773636
+    }
+  },
+  "review_launcher": "build/review-2026-10-20-face-controls/ImPuls-editor.cmd",
+  "cleanup_warnings": [
+    "WARNING: 79 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+  ],
+  "geometry_results": [
+    {
+      "sex": "male",
+      "clip": "Axe_Chop",
+      "maximum_edge_m": 0.09149
+    },
+    {
+      "sex": "male",
+      "clip": "Bow_Attack_Draw",
+      "maximum_edge_m": 0.16066
+    },
+    {
+      "sex": "male",
+      "clip": "Bow_Attack_Shoot",
+      "maximum_edge_m": 0.15647
+    },
+    {
+      "sex": "male",
+      "clip": "Death",
+      "maximum_edge_m": 0.1144
+    },
+    {
+      "sex": "male",
+      "clip": "Idle",
+      "maximum_edge_m": 0.08809
+    },
+    {
+      "sex": "male",
+      "clip": "Jump",
+      "maximum_edge_m": 0.09304
+    },
+    {
+      "sex": "male",
+      "clip": "Punch",
+      "maximum_edge_m": 0.09786
+    },
+    {
+      "sex": "male",
+      "clip": "Run",
+      "maximum_edge_m": 0.09052,
+      "minimum_knee_angle_deg": 6.10356,
+      "minimum_forward_lean_deg": 12.41188
+    },
+    {
+      "sex": "male",
+      "clip": "Walk",
+      "maximum_edge_m": 0.08995,
+      "minimum_knee_angle_deg": 15.39011,
+      "minimum_forward_lean_deg": 0.60036
+    },
+    {
+      "sex": "male",
+      "clip": "Working",
+      "maximum_edge_m": 0.097
+    },
+    {
+      "sex": "female",
+      "clip": "Axe_Chop",
+      "maximum_edge_m": 0.11913
+    },
+    {
+      "sex": "female",
+      "clip": "Bow_Attack_Draw",
+      "maximum_edge_m": 0.1338
+    },
+    {
+      "sex": "female",
+      "clip": "Bow_Attack_Shoot",
+      "maximum_edge_m": 0.1295
+    },
+    {
+      "sex": "female",
+      "clip": "Death",
+      "maximum_edge_m": 0.11521
+    },
+    {
+      "sex": "female",
+      "clip": "Idle",
+      "maximum_edge_m": 0.11413
+    },
+    {
+      "sex": "female",
+      "clip": "Jump",
+      "maximum_edge_m": 0.11822
+    },
+    {
+      "sex": "female",
+      "clip": "Punch",
+      "maximum_edge_m": 0.12034
+    },
+    {
+      "sex": "female",
+      "clip": "Run",
+      "maximum_edge_m": 0.11892,
+      "minimum_knee_angle_deg": 6.10243,
+      "minimum_forward_lean_deg": 13.28724
+    },
+    {
+      "sex": "female",
+      "clip": "Walk",
+      "maximum_edge_m": 0.11761,
+      "minimum_knee_angle_deg": 15.41775,
+      "minimum_forward_lean_deg": 1.72778
+    },
+    {
+      "sex": "female",
+      "clip": "Working",
+      "maximum_edge_m": 0.10705
+    }
+  ],
+  "remote_gates": "Pending for the new review commit; no stable publication"
+}
