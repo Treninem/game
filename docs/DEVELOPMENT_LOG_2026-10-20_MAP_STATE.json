@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "ca70331fef853a1ea5c3e4a16ca1ff29b5353108",
+  "spec_attachment": "36058e94-e098-43f2-8027-3473d88d99e9",
+  "spec_comparison": "Same complete normalized 2579-line specification",
+  "initial_observation": "The dark upper-left mini-map region is expected unexplored fog, not a missing terrain chunk. Existing exploration semantics are preserved.",
+  "problem": "World snapshot/reset revision was absent from terrain cache keys and map tracker state. Same-cell reload could reuse previous terrain and living markers, and skip revealing the current area after reset/load.",
+  "changes": [
+    "Key each local terrain cache by existing GameState.state_revision in addition to center/radius/invalidation.",
+    "Synchronize map tracking on revision changes: reset last-cell tracking, clear derived living markers and request timely feature refresh. Queries also synchronize while normal processing is paused.",
+    "Do not change saved exploration/features schema or reveal unvisited distant regions. Preserve remembered buildings and felled-tree markers.",
+    "Add strict graphical load/reset regression to Validate World Core; retain all previous release gates."
+  ],
+  "baseline": {
+    "case": "map_state_transition",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Terrain cache leaks the previous save's explored area",
+      "ERROR: Previous save's living actor survives the map transition",
+      "ERROR: Loading at the same player cell does not reveal current surroundings",
+      "ERROR: New Game at the same cell leaves its map unexplored"
+    ],
+    "seconds": 8.34
+  },
+  "source_checks": [
+    {
+      "case": "map_state_transition",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.91
+    },
+    {
+      "case": "cartography",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.86
+    },
+    {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 22.62
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 80.22,
+      "marker": true
+    }
+  ],
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 55.31,
+    "sha256": "5e8a7ca3c00feb0e2adf4a7e18462c1a684bfa82dafc5a1e3410f32848b2a959"
+  },
+  "frozen_map_probe": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 4.11,
+    "marker": true
+  },
+  "frozen_world": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 54.8,
+    "marker": true
+  },
+  "actual_cached_pixel_luminance": {
+    "explored": 0.28579294681549,
+    "hidden_after_load": 0.02970509976149
+  },
+  "editor_acceptance": {
+    "accepted": 32,
+    "total": 55,
+    "percent": 58.2,
+    "visual_acceptance": false
+  },
+  "limitations": [
+    "No change to fog design, map resolution or overall model/animation realism acceptance.",
+    "The map fixture uses explicit test coordinates; the separate actual-world run uses automated ordinary movement, test gear/profile switches and save restoration. No manual city/world tour claimed.",
+    "Overall game completion remains unknown. 79 ObjectDB exit warning unresolved; no stable publication, new-commit remote CI pending."
+  ]
+}

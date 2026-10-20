@@ -4,6 +4,7 @@ var texture: ImageTexture
 var tile_center := Vector2(INF, INF)
 var tile_radius := 0.0
 var dirty := true
+var state_revision := -1
 
 func invalidate() -> void:
     dirty = true
@@ -14,7 +15,8 @@ static func project(rect: Rect2, center: Vector2, radius: float, world: Vector2)
 func draw_terrain(control: Control, rect: Rect2, center: Vector2, radius: float) -> void:
     var stride := radius / 8.0
     var snapped := (center / stride).floor() * stride
-    if texture == null or dirty or tile_radius != radius or snapped != tile_center:
+    if texture == null or dirty or tile_radius != radius or snapped != tile_center or state_revision != GameState.state_revision:
+        state_revision = GameState.state_revision
         tile_center = snapped
         tile_radius = radius
         dirty = false

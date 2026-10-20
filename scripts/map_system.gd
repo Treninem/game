@@ -10,12 +10,22 @@ const FEATURES_KEY := "map_features_v1"
 var player: Node3D
 var last_cell := Vector2i(999999, 999999)
 var feature_elapsed := 0.0
+var state_revision := -1
 var dynamic_features: Array[Dictionary] = []
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_PAUSABLE
 
+func _sync_state_revision() -> void:
+    if state_revision == GameState.state_revision:
+        return
+    state_revision = GameState.state_revision
+    last_cell = Vector2i(999999, 999999)
+    dynamic_features.clear()
+    feature_elapsed = 0.75
+
 func _process(delta: float) -> void:
+    _sync_state_revision()
     if not is_instance_valid(player) or not player.is_inside_tree():
         player = get_tree().get_first_node_in_group("player") as Node3D
         if not is_instance_valid(player) or not player.is_inside_tree():
@@ -32,6 +42,7 @@ func _process(delta: float) -> void:
         refresh_features()
 
 func refresh_features() -> void:
+    _sync_state_revision()
     var saved: Dictionary = GameState.get_world_value(FEATURES_KEY, {})
     for group in ["map_tree", "map_building", "enterable_building", "map_fixture"]:
         for node: Node3D in get_tree().get_nodes_in_group(group):
@@ -74,6 +85,7 @@ func _remember_feature(saved: Dictionary, position: Vector2, kind: String, footp
     saved[cell][key] = {"pos": [position.x, position.y], "kind": kind, "size": [footprint.x, footprint.y], "yaw": yaw}
 
 func features_near(center: Vector2, radius: float) -> Array[Dictionary]:
+    _sync_state_revision()
     var result: Array[Dictionary] = []
     var saved: Dictionary = GameState.get_world_value(FEATURES_KEY, {})
     var minimum := world_to_cell(center - Vector2.ONE * radius)

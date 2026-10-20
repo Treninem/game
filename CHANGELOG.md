@@ -1,3 +1,8 @@
+## Map state transitions — unreleased — 2026-10-20
+- Invalidate local terrain caches on world-state revision and synchronize map exploration/live-marker tracking after reset/load, including same-cell reload.
+- Preserve fog, saved buildings and felled-tree state; add graphical transition regression and retain existing cartography/UI gates.
+- Source and exported map/world/save checks pass. Editor coverage stays 32/55 (58.2%); overall visual quality unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_MAP_STATE.json.
+
 ## Character texture filtering — unreleased — 2026-10-20
 - Generate physical mip levels for eight standalone clothing, footwear and eye textures; preserve original pixels and material settings.
 - Check actual mip chains on all 16 distinct textures used by both visual models, including the exported package; repeat creator/save/world scenario.
