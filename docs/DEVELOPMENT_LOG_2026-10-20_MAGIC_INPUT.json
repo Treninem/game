@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Passive magic HUD input fix",
+  "spec_attachment": "6003bc6c-d045-4dd1-8b72-94b4de0703b3; full text compared to canonical master, trailing Markdown spaces only",
+  "reproduced": "Real right-click on clear viewport casts heal; same click over mana bar does not (cast delta 0), while alive, unpaused and prepared with sufficient mana/no cooldown. Root HUD IGNORE did not propagate to child controls.",
+  "fix": "Make all passive HUD descendant Controls ignore mouse events and keyboard focus. No changes to spell costs, cooldowns, player input ordering, menu interaction or visual assets.",
+  "validation": {
+    "targeted_visible_input": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 46.94
+    },
+    "visible_source_gameplay": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 78.42,
+      "marker": true
+    },
+    "coverage": [
+      "Actual stage player/controller extracted into isolated graphical input fixture; physics disabled in this fixture only",
+      "Three mouse positions: clear area, actual mana bar, actual spell label",
+      "Cast InputEventAction dispatch",
+      "Casting blocked during actual pause menu",
+      "First mouse-recapture click does not cast; second click does",
+      "Left mouse attack over mana bar reaches player",
+      "Full native movement/jump/axe/bow/magic/save/UI route repeated separately"
+    ]
+  },
+  "evidence": {
+    "baseline": "build/acceptance/magic-input/before_retry.log",
+    "final": "build/acceptance/magic-input/final.log"
+  },
+  "test_budget": "Initial new fixture 25-second watchdog expired before completing all points. Set bounded 60-second fixture watchdog; baseline still reproduced explicit HUD assertion failure before production fix. CI outer limit 90 seconds. No functional assertion removed.",
+  "limits": [
+    "The earlier intermittent native InputEventAction heal-count failure has not been proven to share this cause; that observation remains pending",
+    "Input fixture is automated graphical acceptance, not a manual full-world tour",
+    "No new exported package or stable release",
+    "Earlier editor count 32/55 (58.2%) unchanged; no overall game percentage assigned"
+  ]
+}

@@ -240,6 +240,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y xvfb libgl1-mesa-dri
       - name: Verify third-person camera obstruction and persistent zoom
         run: bash tools/run_godot_smoke.sh tests/smoke_camera_obstruction.tscn 120
+      - name: Verify combat clicks through passive HUD
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_magic_input.tscn 90
       - name: Verify captured mouse and gameplay camera
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_camera_input.tscn 180
       - name: Verify rendered hair strand highlight detail

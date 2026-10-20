@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Добавлен ввод точного количества для сундука, подтверждение и повторная проверка остатка. Исправлены повторные нажатия устаревших строк и недоступные варианты укладки в полный сундук. Проверены видимый интерфейс, торговые диалоги и повторный игровой прогон; единичный отказ применения лечения в первом прогоне остаётся открытым наблюдением.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_STORAGE_QUANTITY.json",
+  "current_stage": "Воспроизведён и исправлен перехват правого клика дочерними элементами магического HUD. Проверены применение над полосой маны/названием, удар, пауза и безопасный возврат захвата мыши; обычный игровой прогон повторён. Связь с прежним единичным отказом InputEventAction не доказана, наблюдение сохраняется.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_MAGIC_INPUT.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -249,5 +249,10 @@
     "stale_dialogue_callbacks": "revision-guarded",
     "full_chest_deposit_options": "hidden"
   },
-  "native_heal_input_intermittent_pending": true
+  "native_heal_input_intermittent_pending": true,
+  "magic_hud_mouse_input": {
+    "status": "fixed and graphical regression tested",
+    "passive_children": "mouse IGNORE, focus NONE",
+    "original_action_event_failure": "still unconfirmed; not declared resolved"
+  }
 }
