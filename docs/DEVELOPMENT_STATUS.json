@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Добавлены поиск и постраничный просмотр бесконечного инвентаря: одновременно до 48 карточек без лимита хранения. Проверены JSON-сохранение, переходы, поиск и экипировка в настоящем интерфейсе; компактная сетка ячеек ещё не реализована.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY.json",
+  "current_stage": "Реализованы выбираемые ячейки бесконечного инвентаря с адаптивными столбцами, количеством и действиями выбранного предмета. Исправлено пересоздание панелей. Проверены окно игры, поиск, экипировка/снятие, сохранения и четыре разрешения с двумя масштабами. Значки, перетаскивание и разделение стопок остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY_CELLS.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -229,8 +229,12 @@
     "storage_limit": null,
     "display_page_size": 48,
     "search": "name/id/category; case-insensitive",
-    "compact_cell_grid": "pending",
+    "compact_cell_grid": "implemented, selectable text cells",
     "source_verified": true,
-    "exported_package": "not rebuilt"
+    "exported_package": "not rebuilt",
+    "columns": "2–8 responsive",
+    "item_icons": "pending",
+    "drag_drop": "pending",
+    "stack_splitting": "pending"
   }
 }

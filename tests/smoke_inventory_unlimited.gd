@@ -53,12 +53,50 @@ func _run() -> void:
         await get_tree().process_frame
     assert(panels.inventory_page_index == 0)
     assert(panels.find_child("InventoryItems", true, false).get_child_count() == 1)
-    panels._equip("short_bow")
+    var bow_cell := panels.find_child("InventoryItems", true, false).get_child(0) as Button
+    assert(bow_cell.get_meta("item_id") == "short_bow")
+    bow_cell.pressed.emit()
+    for frame in range(3):
+        await get_tree().process_frame
+    assert(panels.inventory_selected_id == "short_bow")
+    var action := _find_button(panels.find_child("InventoryDetails", true, false), "Экипировать")
+    assert(action != null, "Selected cell has no equipment action")
+    action.pressed.emit()
     for frame in range(3):
         await get_tree().process_frame
     assert(InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "short_bow")
     assert(GameState.inventory == expected, "Browsing/equipping changes quantities")
+    action = _find_button(panels.find_child("InventoryDetails", true, false), "Снять")
+    assert(action != null)
+    action.pressed.emit()
+    for frame in range(3):
+        await get_tree().process_frame
+    assert(InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON).is_empty())
+    panels._inventory_search("no_such_item")
+    for frame in range(3):
+        await get_tree().process_frame
+    assert(panels.inventory_selected_id.is_empty())
+    assert(panels.find_child("InventoryDetails", true, false) == null, "Empty filter leaves stale actions")
+    panels._inventory_search("")
+    for frame in range(3):
+        await get_tree().process_frame
+    for cell in panels.find_child("InventoryItems", true, false).get_children():
+        assert(cell is Button and cell.size.y >= 88 and cell.size.x >= 76)
+    if DisplayServer.get_name() != "headless":
+        await RenderingServer.frame_post_draw
+        get_viewport().get_texture().get_image().save_png("user://inventory-cells.png")
     panels.close_panel()
     assert(not get_tree().paused)
     print("INVENTORY_UNLIMITED_OK kinds=%d million_stacks=true json_roundtrip=true actual_UI=true" % expected.size())
     get_tree().quit(0)
+
+func _find_button(node: Node, text: String) -> Button:
+    if node == null:
+        return null
+    if node is Button and node.text == text:
+        return node as Button
+    for child in node.get_children():
+        var found := _find_button(child, text)
+        if found != null:
+            return found
+    return null

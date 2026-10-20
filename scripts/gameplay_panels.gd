@@ -197,6 +197,10 @@ func _build_shell() -> void:
 func _apply_responsive_layout() -> void:
     if visible and not current_section.is_empty():
         _refresh_tabs()
+        if current_section == "inventory":
+            var grid := content.get_node_or_null("InventoryItems") as GridContainer
+            if grid != null:
+                grid.columns = clampi(int((frame.size.x - 70.0) / 104.0), 2, 8)
 
 func _switch_section(section: String) -> void:
     if current_section == section:
@@ -206,6 +210,7 @@ func _switch_section(section: String) -> void:
 
 func _rebuild_content() -> void:
     for child in content.get_children():
+        content.remove_child(child)
         child.queue_free()
     _refresh_tabs()
     context_label.text = "%s   •   %s" % [GameState.current_location, _section_hint(current_section)]
@@ -246,6 +251,11 @@ func _section_hint(section: String) -> String:
 
 var inventory_query := ""
 var inventory_page_index := 0
+var inventory_selected_id := ""
+
+func _inventory_select(item_id: String) -> void:
+    inventory_selected_id = item_id
+    _rebuild_content()
 
 func _inventory_search(query: String) -> void:
     inventory_query = query
@@ -260,11 +270,9 @@ func _show_inventory() -> void:
     title_label.text = "Инвентарь"
     var equipped := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
     var equipped_name := "Нет" if equipped.is_empty() else String(InventorySystem.item_info(equipped).get("name", equipped))
-    _info("ЭКИПИРОВАНО", "%s   •   бонус атаки +%.0f" % [equipped_name, InventorySystem.attack_bonus()])
+    _text("Экипировано: %s   •   бонус атаки +%.0f" % [equipped_name, InventorySystem.attack_bonus()])
     if equipped == "short_bow":
         _text("Стрелы: %d   •   ЛКМ — выстрел   •   K — изготовить боеприпасы" % int(GameState.inventory.get("arrow", 0)))
-    _info("СТРАХОВАНИЕ", "Зарядов на одну смерть: %d" % ProgressionSystem.inventory_insurance_charges())
-    _button("Купить страховку инвентаря — %d монет" % ProgressionSystem.INSURANCE_PRICE, Callable(self, "_buy_insurance"))
     _text("Карман Импульса • вместимость не ограничена")
     var search_row := HBoxContainer.new()
     content.add_child(search_row)
@@ -294,17 +302,51 @@ func _show_inventory() -> void:
     next.name = "InventoryNext"
     next.disabled = inventory_page_index + 1 >= int(result.pages)
     if rows.is_empty():
+        inventory_selected_id = ""
         _text("Инвентарь пуст." if inventory_query.is_empty() else "Ничего не найдено. Измените запрос.")
+        _inventory_insurance()
         return
+    var selected: Dictionary = {}
+    for info in rows:
+        if String(info.id) == inventory_selected_id:
+            selected = info
+            break
+    if selected.is_empty():
+        selected = rows[0]
+        inventory_selected_id = String(selected.id)
+    var details := GridContainer.new()
+    details.name = "InventoryDetails"
+    details.columns = 1
+    content.add_child(details)
+    _inventory_card(details, selected)
     var grid := GridContainer.new()
     grid.name = "InventoryItems"
-    grid.columns = 2 if frame.size.x >= 900.0 else 1
+    grid.columns = clampi(int((frame.size.x - 70.0) / 104.0), 2, 8)
     grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     grid.add_theme_constant_override("h_separation", 10)
     grid.add_theme_constant_override("v_separation", 10)
     content.add_child(grid)
     for info in rows:
-        _inventory_card(grid, info)
+        var item_id := String(info.id)
+        var cell := Button.new()
+        cell.set_meta("item_id", item_id)
+        cell.custom_minimum_size = Vector2(76, 88)
+        cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        cell.toggle_mode = true
+        cell.button_pressed = item_id == inventory_selected_id
+        cell.text = "%s\n×%d" % [String(info.get("name", item_id)), int(info.amount)]
+        cell.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+        cell.add_theme_font_size_override("font_size", 12)
+        cell.add_theme_stylebox_override("normal", _row_style())
+        cell.add_theme_stylebox_override("pressed", _button_style(Color(0.045, 0.16, 0.22, 0.98), Color(0.20, 0.72, 0.94, 0.98)))
+        cell.tooltip_text = "%s\n%s\n%s" % [String(info.get("name", item_id)), String(info.get("category", "")), String(info.get("description", ""))]
+        cell.pressed.connect(_inventory_select.bind(item_id))
+        grid.add_child(cell)
+    _inventory_insurance()
+
+func _inventory_insurance() -> void:
+    _text("Страхование • зарядов на одну смерть: %d" % ProgressionSystem.inventory_insurance_charges())
+    _button("Купить страховку инвентаря — %d монет" % ProgressionSystem.INSURANCE_PRICE, Callable(self, "_buy_insurance"))
 
 func _inventory_card(parent: GridContainer, info: Dictionary) -> void:
     var card := PanelContainer.new()
@@ -326,6 +368,7 @@ func _inventory_card(parent: GridContainer, info: Dictionary) -> void:
     var name := Label.new()
     name.text = String(info.get("name", ""))
     name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     name.add_theme_font_size_override("font_size", 17)
     top.add_child(name)
     var amount := Label.new()
