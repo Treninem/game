@@ -86,6 +86,7 @@ func _run() -> void:
         visual.call("_play", "Run", 1.0)
         if not is_zero_approx(animator.current_animation_position):
             failures.append("Idle transition inherited a stale gait phase")
+    await _check_airborne_actions(player, visual)
     player.queue_free()
     await get_tree().process_frame
     GameState.load_snapshot(snapshot)
@@ -94,3 +95,60 @@ func _run() -> void:
     if failures.is_empty():
         print("LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2")
     get_tree().quit(0 if failures.is_empty() else 1)
+
+func _check_airborne_actions(player: CharacterBody3D, visual: Node3D) -> void:
+    player.velocity = Vector3(2, 5, 0)
+    player.move_and_slide()
+    if player.is_on_floor():
+        failures.append("Airborne fixture stayed grounded")
+        return
+    for sex: String in ["male", "female"]:
+        GameState.set_world_value("player_appearance", {"sex": sex})
+        visual.call("_process", 0.016)
+        for entry in [["short_bow", "Bow_Attack_Draw", 0.1, 0.0], ["short_bow", "Bow_Attack_Shoot", 0.0, 0.0], ["starter_axe", "Axe_Chop", 0.0, 0.0], ["", "Punch", 0.0, 0.0], ["", "Cast_Left", 0.0, 0.2], ["short_bow", "Cast_Right", 0.0, 0.2]]:
+            InventorySystem.unequip("weapon")
+            if entry[0] != "":
+                GameState.add_item(entry[0], 1)
+                InventorySystem.equip(entry[0])
+            player.set("attack_elapsed", 0.3 if float(entry[3]) == 0.0 else 0.0)
+            player.set("pending_bow_elapsed", entry[2])
+            player.set("cast_elapsed", entry[3])
+            visual.call("_process", 0.016)
+            var animator: AnimationPlayer = visual.get("animation_player")
+            if animator.assigned_animation != entry[1]:
+                failures.append("Airborne action lost its arm pose: %s %s got %s" % [sex, entry[1], animator.assigned_animation])
+            animator.seek(0.2, true)
+            var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+            var modifier: Node = visual.get("grip_modifier")
+            var previous_phase: float = modifier.get("gait_time")
+            modifier.call("_moving_legs", skeleton, 0.24)
+            if not is_equal_approx(previous_phase, float(modifier.get("gait_time"))):
+                failures.append("Ground stride clock advanced while airborne")
+            var airborne := animator.get_animation("Airborne")
+            for name: String in ["LeftUpLeg", "RightUpLeg", "LeftLeg", "RightLeg", "LeftFoot", "RightFoot"]:
+                for track in range(airborne.get_track_count()):
+                    var path := airborne.track_get_path(track)
+                    if path.get_subname_count() > 0 and String(path.get_subname(0)) == name and airborne.track_get_type(track) == Animation.TYPE_ROTATION_3D:
+                        var expected := airborne.rotation_track_interpolate(track, airborne.length)
+                        if skeleton.get_bone_pose_rotation(skeleton.find_bone(name)).angle_to(expected) > 0.001:
+                            failures.append("Airborne action uses grounded leg pose: %s %s %s" % [sex, entry[1], name])
+    player.set("attack_elapsed", 0.0)
+    player.set("pending_bow_elapsed", 0.0)
+    player.set("cast_elapsed", 0.0)
+    visual.call("_process", 0.016)
+    if (visual.get("animation_player") as AnimationPlayer).assigned_animation != "Airborne":
+        failures.append("Airborne idle lost its jump pose")
+    InventorySystem.unequip("weapon")
+    for frame in range(5):
+        await get_tree().physics_frame
+        player.velocity = Vector3.DOWN * 5
+        player.move_and_slide()
+    if not player.is_on_floor():
+        failures.append("Landing fixture did not reacquire floor")
+    visual.call("_process", 0.016)
+    var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    var modifier: Node = visual.get("grip_modifier")
+    modifier.call("_moving_legs", skeleton, 0.016)
+    if not is_zero_approx(float(modifier.get("airborne_time"))):
+        failures.append("Airborne leg time did not reset on landing")
+    print("AIRBORNE_ACTIONS_CHECKED bodies=2 actions=6 legs=6 idle=retained landing=reset gait=frozen")

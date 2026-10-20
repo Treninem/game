@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Обновлён проверочный пакет после исправления лука; прежний запуск направлен на новый пакет с сохранением своего профиля. Проверены 900 поз хвата/траектории, 36 кадров обеих моделей и непрерывная стрельба на ходу в реальном мире пакета. Полная визуальная приёмка людей и одежды остаётся открытой.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_PACKAGE.json",
-  "review_launcher": "build/review-2026-10-20-bow-clearance/ImPuls-editor.cmd",
+  "current_stage": "Исправлена потеря боевой позы рук в прыжке: действия сохраняются над поясом, ноги используют отдельную позу полёта и возвращаются после приземления. В прежнем пакете воспроизведён уход рук за спину; исправление проверено в открытом исходном проекте обычным прыжком и выстрелом. Геометрия плеч и одежды в этом изменении не обновлялась.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_AIRBORNE_ACTIONS.json",
+  "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -300,5 +300,6 @@
     "views": 3,
     "holding_arm_checks_retained": true,
     "exact_skinned_collision_acceptance": false
-  }
+  },
+  "review_delivery_mode": "Imported Godot source project build/stability; current change not yet locally re-exported"
 }

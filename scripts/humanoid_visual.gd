@@ -322,8 +322,6 @@ func _process(delta: float) -> void:
         _play("Sitting", 1.0)
     elif String(body.get_meta("activity", "idle")) == "sleep":
         _play("Idle", 0.35)
-    elif not body.is_on_floor():
-        _play("Airborne", 1.0)
     elif body.name == "Player" and float(body.get("cast_elapsed")) > 0.0:
         _play("Cast_Right" if held_item == "short_bow" else "Cast_Left", 1.0)
     elif body.name == "Player" and float(body.get("attack_elapsed")) > 0.0:
@@ -332,6 +330,8 @@ func _process(delta: float) -> void:
             _play("Bow_Attack_Draw" if float(body.get("pending_bow_elapsed")) > 0 else "Bow_Attack_Shoot", 1.8 if float(body.get("pending_bow_elapsed")) > 0 else 1.0)
         else:
             _play(stroke, 1.8 if held_item == "starter_axe" else 1.0)
+    elif not body.is_on_floor():
+        _play("Airborne", 1.0)
     elif body.is_in_group("hostile") and float(body.get("attack_elapsed")) > float(body.get("attack_interval")) - 0.55:
         _play("Punch", 1.0)
     elif measured_speed > 5.7:

@@ -37,10 +37,12 @@ func _action(action: String) -> void:
     event.action = action
     event.pressed = true
     Input.parse_input_event(event)
+    Input.flush_buffered_events()
     await physics_frame
     event = InputEventAction.new()
     event.action = action
     Input.parse_input_event(event)
+    Input.flush_buffered_events()
     await process_frame
     await RenderingServer.frame_post_draw
 
@@ -95,12 +97,20 @@ func _run() -> void:
         await _frames(4)
         if item == "short_bow":
             Input.action_press("move_forward")
+            await _action("jump")
         await _action("attack")
         await _frames(8)
         assert(float(player.get("attack_elapsed")) > 0.0)
         if item == "short_bow":
             assert(float(player.get("pending_bow_elapsed")) > 0.0)
         await _capture(item)
+        if item == "short_bow":
+            var actual: String = player.get_node("Avatar").get("animation_player").assigned_animation
+            print("AIRBORNE_WORLD_POSE ", actual, " grounded=", player.is_on_floor())
+            if actual != "Bow_Attack_Draw" or player.is_on_floor():
+                push_error("AIRBORNE_WORLD lost bow draw during jump")
+                quit(1)
+                return
         await _frames(45)
         if item == "short_bow":
             assert(int(state.get("inventory").get("arrow", 0)) == 2)

@@ -4,6 +4,7 @@ var visual: Node3D
 var last_grip := Transform3D.IDENTITY
 var closed_fingers := 0
 var gait_time := 0.0
+var airborne_time := 0.0
 var gait_applied := false
 var gait_tracks: Dictionary = {}
 
@@ -54,15 +55,19 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
     var actor := visual.get_parent() as CharacterBody3D
     if actor == null:
         return
+    var airborne := not actor.is_on_floor() and not actor.has_meta("preview_animation")
+    airborne_time = minf(airborne_time + maxf(delta, 0.0), 0.22) if airborne else 0.0
     var current: String = visual.animation_player.assigned_animation
     if current in ["Walk", "Run"]:
         gait_time = visual.animation_player.current_animation_position
         return
     var motion := actor.get_real_velocity()
     var speed := Vector2(motion.x, motion.z).length()
-    if speed < 0.16 or current not in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"]:
+    if (not airborne and speed < 0.16) or current not in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"]:
         return
-    var gait := "Run" if speed > 5.7 else "Walk"
+    # Keep the action above the waist while using the real airborne leg pose.
+    # Preview actors have no physics floor and must retain their authored pose.
+    var gait := "Airborne" if airborne else ("Run" if speed > 5.7 else "Walk")
     var clip: Animation = visual.animation_player.get_animation(gait)
     if not gait_tracks.has(gait):
         var tracks := []
@@ -75,14 +80,16 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
                 continue
             tracks.append([track, skeleton.find_bone(bone_name), clip.track_get_type(track)])
         gait_tracks[gait] = tracks
-    gait_time = fposmod(gait_time + delta * clampf(speed / ((7.5 if gait == "Run" else 3.8) * visual.scale.x), 0.65, 1.5), clip.length)
+    if not airborne:
+        gait_time = fposmod(gait_time + delta * clampf(speed / ((7.5 if gait == "Run" else 3.8) * visual.scale.x), 0.65, 1.5), clip.length)
+    var sample_time := airborne_time if airborne else gait_time
     for entry: Array in gait_tracks[gait]:
         if entry[1] < 0:
             continue
         if entry[2] == Animation.TYPE_ROTATION_3D:
-            skeleton.set_bone_pose_rotation(entry[1], clip.rotation_track_interpolate(entry[0], gait_time))
+            skeleton.set_bone_pose_rotation(entry[1], clip.rotation_track_interpolate(entry[0], sample_time))
         elif entry[2] == Animation.TYPE_POSITION_3D:
-            skeleton.set_bone_pose_position(entry[1], clip.position_track_interpolate(entry[0], gait_time))
+            skeleton.set_bone_pose_position(entry[1], clip.position_track_interpolate(entry[0], sample_time))
     gait_applied = true
 
 static func palm_frame(skeleton: Skeleton3D, side: String) -> Transform3D:
