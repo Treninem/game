@@ -43,10 +43,12 @@ func _run() -> void:
     for frame in range(4):
         await get_tree().process_frame
     assert(panels.find_child("InventoryItems", true, false).get_child_count() == 48)
-    panels.find_child("InventoryNext", true, false).pressed.emit()
+    panels.find_child("InventoryNext", true, false).grab_focus()
+    await _key(KEY_SPACE)
     for frame in range(3):
         await get_tree().process_frame
     assert(panels.inventory_page_index == 1)
+    assert(get_viewport().gui_get_focus_owner() == panels.find_child("InventoryItems", true, false).get_child(0), "Page change loses inventory focus")
     var search := panels.find_child("InventorySearch", true, false) as LineEdit
     search.text_submitted.emit("ПОХОДНЫЙ ЛУК")
     for frame in range(3):
@@ -69,17 +71,35 @@ func _run() -> void:
     assert(get_viewport().gui_get_focus_owner() == draft_search, "Deferred selection steals search focus")
     var action := _find_button(panels.find_child("InventoryDetails", true, false), "Экипировать")
     assert(action != null, "Selected cell has no equipment action")
-    action.pressed.emit()
+    action.grab_focus()
+    await _key(KEY_SPACE)
     for frame in range(3):
         await get_tree().process_frame
     assert(InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "short_bow")
+    assert(get_viewport().gui_get_focus_owner() == panels.find_child("InventoryItems", true, false).get_child(0), "Equip loses cell focus")
     assert(GameState.inventory == expected, "Browsing/equipping changes quantities")
     action = _find_button(panels.find_child("InventoryDetails", true, false), "Снять")
     assert(action != null)
-    action.pressed.emit()
+    action.grab_focus()
+    await _key(KEY_SPACE)
     for frame in range(3):
         await get_tree().process_frame
     assert(InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON).is_empty())
+    assert(get_viewport().gui_get_focus_owner() == panels.find_child("InventoryItems", true, false).get_child(0), "Unequip loses cell focus")
+    GameState.add_item("berries", 1)
+    var berries_before := int(GameState.inventory.berries)
+    if berries_before > 1:
+        assert(GameState.remove_item("berries", berries_before - 1))
+    panels._inventory_search("Лесные ягоды")
+    for frame in range(3):
+        await get_tree().process_frame
+    action = _find_button(panels.find_child("InventoryDetails", true, false), "Использовать")
+    assert(action != null)
+    action.grab_focus()
+    await _key(KEY_SPACE)
+    assert(int(GameState.inventory.berries) == 0, "Keyboard consumption did not remove exactly the last berry")
+    assert(panels.inventory_selected_id.is_empty())
+    assert(get_viewport().gui_get_focus_owner() == panels.find_child("InventorySearch", true, false), "Last item does not return focus to search")
     panels._inventory_search("no_such_item")
     for frame in range(3):
         await get_tree().process_frame

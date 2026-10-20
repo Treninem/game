@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлена воспроизведённая потеря клавиатурного фокуса после выбора ячейки инвентаря. Проверены стрелка, пробел, сохранение фокуса поиска и закрытие до отложенного callback; видимое окно и адаптация интерфейса прошли проверки. Полная приёмка управления только клавиатурой ещё не выполнена.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY_FOCUS.json",
+  "current_stage": "Исправлена потеря фокуса при смене страницы и действиях инвентаря. Страница, экипировка/снятие и использование последнего предмета проверены реальными клавишами; при пустом результате фокус возвращается в поиск. Видимое окно и адаптация прошли проверки; полная приёмка работы только клавиатурой остаётся открытой.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY_ACTION_FOCUS.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -236,7 +236,7 @@
     "item_icons": "pending",
     "drag_drop": "pending",
     "stack_splitting": "pending",
-    "selection_focus": "restored after selection; guarded against search, page/query change and close"
+    "selection_focus": "restored after selection/search/page/equip/unequip/use; empty results return to search; stale/close guards retained"
   },
   "storage_transfer": {
     "atomic_notification": true,

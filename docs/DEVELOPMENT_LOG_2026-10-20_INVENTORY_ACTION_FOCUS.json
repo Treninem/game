@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Inventory action and page keyboard focus",
+  "spec_attachment": "c82c05fe-f0d1-4d34-abff-3f6d49d01b0b; full canonical master comparison differs only in Markdown trailing spaces",
+  "reproduced": "Existing selection focus fix did not cover page changes; extended smoke failed Page change loses inventory focus before fix.",
+  "fix": [
+    "Share guarded inventory rebuild/focus restoration across selection, search, page change, equip, unequip and consumable use",
+    "When no grid/results remain, restore focus to search instead of a removed item",
+    "Preserve existing guards against stealing a focused control, stale selection/query/page and closed panels"
+  ],
+  "checks": {
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.7
+    },
+    "ui_responsive": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 11.8
+    },
+    "visible_inventory": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 16.09,
+      "mode": "visible automated UI; not manual playthrough"
+    }
+  },
+  "coverage": [
+    "Page-next button activated with actual Space key; focus returns to first displayed cell",
+    "Equip/unequip buttons activated with Space; bow ownership stays unchanged and selected cell regains focus",
+    "Last berry consumed through actual Use button/Space; quantity becomes zero, no stale item actions, search regains focus",
+    "Prior arrow/Space cell selection, user-focused search and close-before-callback tests retained",
+    "Large inventory JSON preservation and every-positive-item-once page tests retained",
+    "Visible isolated UI and four resolutions at two scales passed"
+  ],
+  "limits": [
+    "Complete keyboard-only workflow and accessibility acceptance remain pending",
+    "No full gameplay route rerun this turn; focused UI regression only",
+    "No new export or stable release; old review launcher lacks current inventory changes",
+    "Independent stacks, icons and drag/drop remain pending",
+    "Historical intermittent native heal action observation remains open",
+    "Earlier 32/55 editor functional count unchanged; no overall-game completion percentage assigned"
+  ]
+}

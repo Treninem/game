@@ -255,8 +255,11 @@ var inventory_selected_id := ""
 
 func _inventory_select(item_id: String) -> void:
     inventory_selected_id = item_id
+    _rebuild_inventory()
+
+func _rebuild_inventory() -> void:
     _rebuild_content()
-    _focus_inventory_cell.call_deferred(item_id, inventory_query, inventory_page_index)
+    _focus_inventory_cell.call_deferred(inventory_selected_id, inventory_query, inventory_page_index)
 
 func _focus_inventory_cell(item_id: String, query: String, page: int) -> void:
     if not visible or current_section != "inventory" or inventory_selected_id != item_id or inventory_query != query or inventory_page_index != page:
@@ -265,6 +268,9 @@ func _focus_inventory_cell(item_id: String, query: String, page: int) -> void:
         return
     var grid := content.get_node_or_null("InventoryItems") as GridContainer
     if grid == null:
+        var search := content.find_child("InventorySearch", true, false) as LineEdit
+        if search != null:
+            search.grab_focus()
         return
     for cell in grid.get_children():
         if cell is Button and String(cell.get_meta("item_id", "")) == item_id:
@@ -274,11 +280,11 @@ func _focus_inventory_cell(item_id: String, query: String, page: int) -> void:
 func _inventory_search(query: String) -> void:
     inventory_query = query
     inventory_page_index = 0
-    _rebuild_content()
+    _rebuild_inventory()
 
 func _inventory_turn_page(delta: int) -> void:
     inventory_page_index += delta
-    _rebuild_content()
+    _rebuild_inventory()
 
 func _show_inventory() -> void:
     title_label.text = "Инвентарь"
@@ -573,11 +579,11 @@ func _show_events() -> void:
 
 func _equip(item_id: String) -> void:
     InventorySystem.equip(item_id)
-    _rebuild_content()
+    _rebuild_inventory()
 
 func _unequip(slot: String) -> void:
     InventorySystem.unequip(slot)
-    _rebuild_content()
+    _rebuild_inventory()
 
 func _craft(recipe_id: String) -> void:
     InventorySystem.craft(recipe_id)
@@ -592,7 +598,7 @@ func _use_item(item_id: String) -> void:
             GameState.notify("Вы съели жареное мясо.")
     else:
         GameState.use_consumable(item_id)
-    _rebuild_content()
+    _rebuild_inventory()
 
 func _buy_insurance() -> void:
     if not ProgressionSystem.buy_inventory_insurance():
