@@ -146,9 +146,54 @@ func _magic_poison(root: Node3D, s: float) -> void:
     _shockwave(root, COLORS.poison, 1.8 * s, 0.48)
 
 func _magic_heal(root: Node3D, s: float) -> void:
-    _flash(root, COLORS.heal, 1.3 * s, 3.8 * s, 0.30)
-    _burst(root, 24, COLORS.heal, 0.055 * s, 1.5, 2.2 * s, Vector3(0, 2.4, 0), 1.15, Vector3.UP, 28.0)
-    _burst(root, 10, COLORS.holy, 0.035 * s, 1.1, 1.5 * s, Vector3(0, 1.8, 0), 0.90, Vector3.UP, 20.0)
+    var light := OmniLight3D.new()
+    light.light_color = Color(0.65, 0.83, 0.69)
+    light.light_energy = 0.45 * s
+    light.omni_range = 2.0 * s
+    light.shadow_enabled = false
+    root.add_child(light)
+    root.create_tween().tween_property(light, "light_energy", 0.0, 0.45)
+    _expire(light, 0.5)
+    _healing_motes(root, 24, Color(0.62, 0.84, 0.70, 0.65), 0.045 * s, 1.2, 0.45 * s)
+    _healing_motes(root, 8, Color(0.91, 0.83, 0.60, 0.5), 0.028 * s, 0.9, 0.28 * s)
+
+func _healing_motes(root: Node3D, count: int, tint: Color, size: float, lifetime: float, speed: float) -> void:
+    var particles := GPUParticles3D.new()
+    particles.amount = count
+    particles.lifetime = lifetime
+    particles.one_shot = true
+    particles.explosiveness = 0.9
+    particles.randomness = 0.6
+    particles.local_coords = false
+    particles.visibility_aabb = AABB(Vector3(-2, -2, -2), Vector3(4, 4, 4))
+    var process := ParticleProcessMaterial.new()
+    process.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+    process.emission_sphere_radius = 0.35
+    process.direction = Vector3.UP
+    process.spread = 40.0
+    process.initial_velocity_min = speed * 0.4
+    process.initial_velocity_max = speed
+    process.gravity = Vector3(0, 0.18, 0)
+    process.color = tint
+    var gradient := Gradient.new()
+    gradient.offsets = PackedFloat32Array([0.0, 0.12, 0.55, 1.0])
+    gradient.colors = PackedColorArray([Color(1, 1, 1, 0), Color.WHITE, Color(1, 1, 1, 0.6), Color(1, 1, 1, 0)])
+    var ramp := GradientTexture1D.new()
+    ramp.gradient = gradient
+    process.color_ramp = ramp
+    particles.process_material = process
+    var material := StandardMaterial3D.new()
+    material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+    material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+    material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+    material.vertex_color_use_as_albedo = true
+    material.albedo_texture = preload("res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png")
+    var quad := QuadMesh.new()
+    quad.size = Vector2.ONE * maxf(size * 2.0, 0.01)
+    quad.material = material
+    particles.draw_pass_1 = quad
+    root.add_child(particles)
+    particles.emitting = true
 
 func _magic_holy(root: Node3D, s: float) -> void:
     _flash(root, COLORS.holy, 3.3 * s, 5.0 * s, 0.24)

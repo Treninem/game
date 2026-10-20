@@ -254,6 +254,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_character_texture_filtering.tscn 90
       - name: Verify character height and physical low passages
         run: bash tools/run_godot_smoke.sh tests/smoke_character_dimensions.tscn 90
+      - name: Verify soft bounded healing VFX and alpha fade
+        run: bash tools/run_godot_smoke.sh tests/smoke_heal_vfx.tscn 60
       - name: Verify independent free-hand casting poses
         run: bash tools/run_godot_smoke.sh tests/smoke_cast_pose.tscn 90
       - name: Verify locomotion facing and camera independence

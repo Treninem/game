@@ -1,3 +1,8 @@
+## Soft healing effect — unreleased — 2026-10-20
+- Replace opaque emissive healing spheres with 32 soft textured alpha motes, lifetime fade and a gentle light; reuse existing CC0 Kenney texture.
+- Verify healing alpha/geometry/budget/cleanup, existing VFX lifetime/magic checks and rendered source/exported gameplay. Other primary effects unchanged.
+- Desktop editor also exposes unresolved parse errors in three unused Binbun library scripts; record explicitly. Models/world remain owner-rejected; editor functional count stays 32/55 (58.2%). Evidence: docs/DEVELOPMENT_LOG_2026-10-20_HEAL_VFX.json.
+
 ## Free-hand spell gesture — unreleased — 2026-10-20
 - Replace Punch during casting with separate left/right free-hand reaches; retain occupied-arm pose and lower-body gait even while unarmed.
 - Verify both bodies/hands, existing grip/magic checks, rendered healing while walking and save/load in source and exported review.

@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Убрана подмена магии ударом кулаком: отдельный жест свободной рукой, сохранение позы руки с оружием и движения ног при колдовстве. Исходная игра и проверочный пакет проверены. Существующие модели людей и окружение остаются забракованными владельцем.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_CAST_POSE.json",
-  "review_launcher": "build/review-2026-10-20-cast-pose/ImPuls-editor.cmd",
+  "current_stage": "Исправлен основной эффект лечения: вместо ярких твёрдых сфер — мягкие прозрачные частицы с плавным исчезновением и небольшим светом. Проверены исходная игра и пакет. Модели/окружение остаются забракованными; в редакторе обнаружены отдельные ошибки разбора библиотечных Binbun VFX, пока не исправлены.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HEAL_VFX.json",
+  "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -219,5 +219,10 @@
     "total": 55,
     "report": "docs/CHARACTER_ACCEPTANCE_2026-10-20.json",
     "visual_acceptance": false
-  }
+  },
+  "editor_library_parse_errors_pending": [
+    "assets/vfx/third_party/binbun_godot4_core/shared/script/VFXControllerBB.gd",
+    "assets/vfx/third_party/binbun_godot4_core/shared/script/VFXEmitterBB.gd",
+    "assets/vfx/third_party/binbun_godot4_core/shared/script/VFXOmniLightBB.gd"
+  ]
 }
