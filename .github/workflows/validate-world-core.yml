@@ -229,6 +229,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_save_recovery.tscn 60
       - name: Verify loading readiness conversions
         run: bash tools/run_godot_smoke.sh tests/test_world_loading_readiness.tscn 60
+      - name: Verify rapid UI teardown and streamed-node bursts
+        run: bash tools/run_godot_smoke.sh tests/smoke_ui_lifecycle.tscn 60
       - name: Verify menus across resolutions and UI scales
         run: bash tools/run_godot_smoke.sh tests/smoke_ui_responsive.tscn 180
       - name: Install virtual display for camera validation

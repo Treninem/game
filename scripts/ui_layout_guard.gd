@@ -12,6 +12,7 @@ const SCALE_EPSILON := 0.001
 
 var watched: Dictionary = {}
 var _reflow_queued := false
+var _discovery_queued := false
 var _last_viewport_size := Vector2.ZERO
 var _last_ui_scale := -1.0
 var _geometry_lock: Dictionary = {}
@@ -23,7 +24,7 @@ func _ready() -> void:
     if viewport != null:
         viewport.size_changed.connect(_queue_reflow)
     SettingsManager.settings_changed.connect(_queue_reflow)
-    call_deferred("_discover")
+    _queue_discovery()
 
 func _process(_delta: float) -> void:
     var viewport := get_viewport()
@@ -47,9 +48,16 @@ func _process(_delta: float) -> void:
         watched.erase(instance_id)
 
 func _on_node_added(_node: Node) -> void:
+    _queue_discovery()
+
+func _queue_discovery() -> void:
+    if _discovery_queued:
+        return
+    _discovery_queued = true
     call_deferred("_discover")
 
 func _discover() -> void:
+    _discovery_queued = false
     for group_name in WATCH_GROUPS:
         for candidate in get_tree().get_nodes_in_group(group_name):
             var control := candidate as Control
@@ -59,7 +67,7 @@ func _discover() -> void:
             _disable_legacy_outer_layout(control)
             control.resized.connect(_queue_reflow)
             control.visibility_changed.connect(_queue_reflow)
-            call_deferred("_fit_control", control)
+            call_deferred("_fit_control_id", control.get_instance_id())
     _queue_reflow()
 
 func _disable_legacy_outer_layout(control: Control) -> void:
@@ -92,6 +100,12 @@ func _reflow_all() -> void:
         _fit_control(control)
     for instance_id in stale:
         watched.erase(instance_id)
+
+func _fit_control_id(instance_id: int) -> void:
+    # Scene changes may free a panel before the deferred call is dispatched.
+    var control := instance_from_id(instance_id) as Control
+    if is_instance_valid(control) and control.is_inside_tree():
+        _fit_control(control)
 
 func _fit_control(control: Control) -> void:
     if control == null or not is_instance_valid(control):

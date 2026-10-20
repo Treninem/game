@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Добавлен сохраняемый рост 160–195 см: модель, капсула от стоп и высота камеры согласованы. Проверены низкий проход, ходьба/прыжки обоих крайних ростов и хват оружия. Качество моделей и естественность движений остаются незавершёнными.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_CHARACTER_HEIGHT.json",
-  "review_launcher": "build/review-2026-10-20-height/ImPuls-editor.cmd",
+  "current_stage": "Исправлена ошибка отложенной подгонки уже закрытого окна; объединены повторные запросы при загрузке узлов мира. Проверены быстрые закрытия, адаптивность и повторное открытие инвентаря/карты. Предупреждение о 79 объектах при выходе остаётся открытым; качество моделей и движений не принято. Убрано перекрытие инвентаря панелью маны; видимость до/во время/после паузы проверена.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_UI_LIFECYCLE.json",
+  "review_launcher": "build/review-2026-10-20-ui-lifecycle/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -207,8 +207,8 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Новые локальные проверки редактора/хвата/рубки/движения/запуска и графического пакета пройдены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_CHARACTER_HEIGHT.json",
-  "review_launcher_revision": "Height review; frozen package SHA256 12d941a25b2f8f24ff3d89dcf76e7631b792068d8e362d6e721b1b430c9e0366",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_UI_LIFECYCLE.json",
+  "review_launcher_revision": "UI lifecycle review; frozen package SHA256 e284c2c21a557543db9e2726e968acae0b87e50bf8b584e0ff276e4340527bf8",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",

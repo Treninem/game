@@ -1,3 +1,10 @@
+## UI lifecycle — unreleased — 2026-10-20
+- Hide the magic HUD during paused overlays and restore it in gameplay; native inventory no longer has mana text over its title.
+- Fix deferred layout dispatch to freed panels during scene/window teardown; resolve instance IDs at dispatch.
+- Coalesce layout discovery during streamed-node bursts. Add strict 12-cycle/500-node lifecycle regression; retain 96 responsive UI checks.
+- Exported graphical inventory/map reopen check passes. The 79 ObjectDB cleanup warnings remain unresolved; no memory-leak fix claimed.
+- Editor criterion coverage remains 31/55 (56.4%); visual quality unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_UI_LIFECYCLE.json.
+
 ## Character height — unreleased — 2026-10-20
 - Add saved 160–195 cm height, bounded legacy defaults and full-body creator framing.
 - Scale existing bodies, foot-anchored unique capsules, camera pivot and gait timing; preserve weapon/arrow dimensions.

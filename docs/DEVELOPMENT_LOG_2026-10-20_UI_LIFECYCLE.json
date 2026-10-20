@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "cedea6162cc1f4d606c49f640a7ff81e70b57e15",
+  "spec_attachment": "61a3ee3f-c1ac-4b96-b5c7-214fd4f4075a",
+  "spec_comparison": "Same complete 2579-line specification after trailing-space normalization",
+  "problem": "Deferred UI layout received a freed Control when a panel closed before dispatch. Streaming also scheduled redundant group scans per node.",
+  "changes": [
+    "Resolve stable instance ID at dispatch and skip absent/detached controls.",
+    "Coalesce deferred layout discovery while retaining all existing menu bounds, settings and resize behavior.",
+    "Add strict bounded lifecycle CI regression; all previous gates preserved.",
+    "Rendered inventory exposed magic HUD overlap; process HUD while paused to hide it during paused overlays and restore it afterward."
+  ],
+  "baseline": {
+    "case": "ui_lifecycle",
+    "exit_code": 0,
+    "errors": [
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object.",
+      "ERROR: Error calling deferred method: 'Node(ui_layout_guard.gd)::_fit_control': Cannot convert argument 1 from Object to Object."
+    ],
+    "seconds": 3.83
+  },
+  "source_checks": [
+    {
+      "case": "ui_lifecycle",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.17
+    },
+    {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 30.16
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 41.36,
+      "marker": true
+    }
+  ],
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 149.28,
+    "sha256": "e284c2c21a557543db9e2726e968acae0b87e50bf8b584e0ff276e4340527bf8"
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 41.25,
+    "marker": true
+  },
+  "graphical_ui": "Actual inventory/map opened and closed 12 times in final exported game; paused magic HUD asserted hidden, gameplay resumes. Final screenshot inspected.",
+  "cleanup_investigation": {
+    "baseline_warning_count": 79,
+    "after_explicit_world_to_menu_teardown": 79,
+    "resolved": false,
+    "finding": "Verbose log lists RefCounted instances with zero references. Editor-only smoke has no warning; full-world scenario still does. Root cause remains unproven."
+  },
+  "editor_acceptance": {
+    "accepted": 31,
+    "total": 55,
+    "percent": 56.4,
+    "visual_acceptance": false
+  },
+  "limitations": [
+    "No new realistic model or animation-quality acceptance in this stability fix.",
+    "Automated bounded graphical scenario; no manual full-city traversal claimed.",
+    "Overall game completion unknown. No stable publication; current-commit remote CI pending."
+  ],
+  "premature_frame_probe": {
+    "exit_code": 4294967295,
+    "errors": [
+      "SCRIPT ERROR: Assertion failed."
+    ],
+    "seconds": 177.67,
+    "marker": false
+  },
+  "diagnostic_correction": "The first HUD visibility probe resumed on process_frame before the CanvasLayer process update. Final assertion samples RenderingServer.frame_post_draw and is retained, not weakened."
+}
