@@ -18,6 +18,9 @@ func _check(value: bool, message: String) -> bool:
 func _run() -> void:
     var legacy := APPEARANCE.preset(0)
     legacy.erase("eye_color")
+    legacy.erase("height_cm")
+    if not _check(APPEARANCE.normalized(legacy).height_cm == 180.0 and APPEARANCE.normalized({"height_cm": -999}).height_cm == 160.0 and APPEARANCE.normalized({"height_cm": INF}).height_cm == 180.0, "Height lacks bounded input and legacy defaults"):
+        return
     if not _check(APPEARANCE.normalized(legacy).eye_color == 0 and APPEARANCE.normalized({"eye_color": 999}).eye_color == 4 and APPEARANCE.normalized({"eye_color": INF}).eye_color == 0, "Eye choice lacks legacy defaults or bounded input"):
         return
     var bad := APPEARANCE.normalized({"name": "\n", "sex": "../bad", "Build": NAN, "hair": INF, "Nose": 9000, "skin": -99})
@@ -51,6 +54,12 @@ func _run() -> void:
         return
     creator.call("select_trait_category", "body")
     if not _check(creator.find_child("Build", true, false) != null, "Body category has no functioning body control"):
+        return
+    var height_slider := creator.find_child("height_cm", true, false) as HSlider
+    if not _check(height_slider != null, "Body category has no physical height control"):
+        return
+    height_slider.value = 195.0
+    if not _check(is_equal_approx(creator.visual.scale.y, 195.0 / 180.0), "Height slider does not resize the actual avatar"):
         return
     creator.call("select_trait_category", "face")
     advanced.button_pressed = false
@@ -169,6 +178,7 @@ func _run() -> void:
     for key: String in ["FaceHeight", "FaceDepth", "NoseWidth", "NoseHeight"]:
         creator.profile[key] = 0.27
     creator.profile.eye_color = 4
+    creator.profile.height_cm = 193.0
     var expected := APPEARANCE.normalized(creator.profile)
     if not _check(APPEARANCE.save_look(expected) == OK and APPEARANCE.load_look() == expected, "Saved look did not round-trip"):
         return

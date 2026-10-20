@@ -38,6 +38,34 @@ var ground_guard_active := false
 var instanced_world_mode := false
 var surface_ready_frames := 0
 var footstep_distance_accum := 0.0
+var appearance_height_cm := 180.0
+var character_dimensions_initialized := false
+var character_base_radius := 0.45
+var character_base_pivot_height := 1.35
+
+func apply_character_dimensions(height_cm: float) -> void:
+    var appearance := preload("res://scripts/character_appearance.gd")
+    var bounded := clampf(height_cm, appearance.MIN_HEIGHT_CM, appearance.MAX_HEIGHT_CM) if is_finite(height_cm) else appearance.DEFAULT_HEIGHT_CM
+    if character_dimensions_initialized and is_equal_approx(appearance_height_cm, bounded):
+        return
+    var collider := get_node_or_null("CollisionShape3D") as CollisionShape3D
+    var camera_pivot := get_node_or_null("CameraPivot") as Node3D
+    if collider == null or camera_pivot == null or not collider.shape is CapsuleShape3D:
+        return
+    var capsule := collider.shape as CapsuleShape3D
+    if not character_dimensions_initialized:
+        capsule = capsule.duplicate() as CapsuleShape3D
+        collider.shape = capsule
+        character_base_radius = capsule.radius
+        character_base_pivot_height = camera_pivot.position.y
+    var ratio := bounded / appearance.DEFAULT_HEIGHT_CM
+    capsule.height = bounded / 100.0
+    capsule.radius = character_base_radius * ratio
+    # Resize from the feet, keeping the physical root on its saved surface.
+    collider.position.y = bounded / 200.0
+    camera_pivot.position.y = character_base_pivot_height * ratio
+    appearance_height_cm = bounded
+    character_dimensions_initialized = true
 
 func _ready() -> void:
     add_to_group("player")

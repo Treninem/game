@@ -15,7 +15,7 @@ var preset_edit: OptionButton
 var status: Label
 var traits: VBoxContainer
 var rebuilding := false
-var zoom := 3.1
+var zoom := 3.4
 var camera_height := 1.0
 var trait_category := "face"
 var advanced_mode := false
@@ -85,7 +85,7 @@ func _build() -> void:
     advanced.text = "Подробно"
     advanced.toggled.connect(func(enabled: bool): advanced_mode = enabled; _refresh())
     identity.add_child(advanced)
-    _button(identity, "В полный рост", func(): camera_height = 1.0; zoom = 3.1; _camera())
+    _button(identity, "В полный рост", func(): camera_height = 1.0; zoom = 3.4; _camera())
     _text(identity, "Движение для осмотра")
     var movement := _choice(identity, ["Покой", "Ходьба", "Бег", "Безоружный удар", "Топор", "Лук: натяжение", "Лук: выстрел"], select_preview_motion)
     movement.name = "PreviewMotion"
@@ -185,6 +185,22 @@ func _refresh() -> void:
                 _camera())
         choice.select(int(profile[key]))
         choice.name = key
+    if trait_category == "body":
+        var height_caption := Label.new()
+        height_caption.text = "Рост: %d см" % int(profile.height_cm)
+        traits.add_child(height_caption)
+        var height_slider := HSlider.new()
+        height_slider.name = "height_cm"
+        height_slider.min_value = APPEARANCE.MIN_HEIGHT_CM
+        height_slider.max_value = APPEARANCE.MAX_HEIGHT_CM
+        height_slider.step = 1.0
+        height_slider.value = float(profile.height_cm)
+        height_slider.custom_minimum_size.y = 28
+        height_slider.value_changed.connect(func(value: float):
+            profile.height_cm = value
+            height_caption.text = "Рост: %d см" % int(value)
+            _apply_preview())
+        traits.add_child(height_slider)
     for pair in [["FaceWidth", "Ширина лица"], ["FaceHeight", "Высота лица"], ["FaceDepth", "Глубина головы"], ["Nose", "Выступ носа"], ["NoseWidth", "Ширина носа"], ["NoseHeight", "Высота носа"], ["Jaw", "Подбородок"], ["Build", "Телосложение"]]:
         var key: String = pair[0]
         if trait_category == "appearance" or (trait_category == "body") != (key == "Build"):
@@ -221,7 +237,7 @@ func select_trait_category(category: String) -> void:
         return
     trait_category = category
     camera_height = 1.60 if category == "face" else 1.0
-    zoom = 0.85 if category == "face" else 3.1
+    zoom = 0.85 if category == "face" else 3.4
     _camera()
     _refresh()
 
@@ -241,6 +257,7 @@ func select_preview_motion(index: int) -> void:
 func _apply_preview() -> void:
     if is_instance_valid(visual) and visual.has_method("apply_appearance"):
         visual.call("apply_appearance", profile)
+        _camera()
 
 func randomize_profile() -> void:
     var entered_name := name_edit.text.strip_edges()
@@ -251,6 +268,7 @@ func randomize_profile() -> void:
         profile[key] = randf_range(-0.4, 0.4)
     profile.hair = randi_range(0, 1)
     profile.eye_color = randi_range(0, 4)
+    profile.height_cm = randi_range(int(APPEARANCE.MIN_HEIGHT_CM), int(APPEARANCE.MAX_HEIGHT_CM))
     _refresh()
 
 func select_preset(index: int) -> void:
@@ -286,8 +304,9 @@ func start_journey() -> void:
         status.text = "Не удалось начать путешествие. Код: %d" % error
 
 func _camera() -> void:
-    camera.position = Vector3(0, camera_height, -zoom)
-    camera.look_at(Vector3(0, camera_height, 0))
+    var ratio := float(profile.height_cm) / APPEARANCE.DEFAULT_HEIGHT_CM
+    camera.position = Vector3(0, camera_height * ratio, -zoom)
+    camera.look_at(Vector3(0, camera_height * ratio, 0))
 
 func _preview_input(event: InputEvent) -> void:
     if event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:

@@ -1,3 +1,9 @@
+## Character height — unreleased — 2026-10-20
+- Add saved 160–195 cm height, bounded legacy defaults and full-body creator framing.
+- Scale existing bodies, foot-anchored unique capsules, camera pivot and gait timing; preserve weapon/arrow dimensions.
+- Check physical low passages, movement, camera obstruction, 180 weapon poses and graphical walk/jump/save in source and exported package.
+- Editor criterion coverage: 31/55 (56.4%); visual quality remains unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_CHARACTER_HEIGHT.json.
+
 ## Eye color and final-pose validation — unreleased — 2026-10-20
 - Integrate five existing CC0 eye atlases with creator selection, bounded inputs, brown legacy default and save round-trip; preserve authored sclera and pupil.
 - Measure held-bow alignment inside the actual post-modifier callback and expand the assertion to late poses; the prior late-preview warning was a diagnostic false positive. No extra arm modifier is integrated.

@@ -6,7 +6,9 @@ func _ready() -> void:
     call_deferred("_run")
 func _run() -> void:
     var inventory_before := GameState.snapshot()
-    for sex in [0, 5]:
+    for variant in range(6):
+        var sex := 0 if variant < 3 else 5
+        var height_cm: float = [160.0, 180.0, 195.0][variant % 3]
         var actor := CharacterBody3D.new()
         actor.set_meta("preview_animation", "Idle")
         actor.rotation.y = 0.65
@@ -16,6 +18,7 @@ func _run() -> void:
         actor.add_child(pivot)
         var visual := preload("res://scripts/humanoid_visual.gd").new()
         visual.appearance_profile = preload("res://scripts/character_appearance.gd").preset(sex)
+        visual.appearance_profile.height_cm = height_cm
         actor.add_child(visual)
         visual.set_process(false)
         var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
@@ -112,5 +115,5 @@ func _run() -> void:
         push_error(message)
     print("BOW_HOLD_ALIGNMENT_MIN ", minimum_draw_alignment)
     if failures.is_empty():
-        print("WEAPON_GRIP_OK poses=",checked," bodies=2 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged")
+        print("WEAPON_GRIP_OK poses=",checked," bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged")
     get_tree().quit(0 if failures.is_empty() else 1)

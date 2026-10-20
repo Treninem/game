@@ -56,6 +56,10 @@ func _ready() -> void:
 
 func apply_appearance(value: Variant) -> void:
     var profile := APPEARANCE.normalized(value)
+    scale = Vector3.ONE * body_scale * (float(profile.height_cm) / APPEARANCE.DEFAULT_HEIGHT_CM)
+    var actor := get_parent_node_3d()
+    if actor.name == "Player" and actor.has_method("apply_character_dimensions"):
+        actor.call("apply_character_dimensions", float(profile.height_cm))
     if is_instance_valid(model) and profile.sex == current_profile.get("sex", ""):
         current_profile = profile
         _style_model()
@@ -69,7 +73,6 @@ func apply_appearance(value: Variant) -> void:
     nocked_arrow = null
     active_animation = ""
     current_profile = profile
-    scale = Vector3.ONE * body_scale
     model = (HUMANS[profile.sex] as PackedScene).instantiate() as Node3D
     model.name = "HumanModel"
     model.rotation.y = PI
@@ -326,9 +329,9 @@ func _process(delta: float) -> void:
     elif body.is_in_group("hostile") and float(body.get("attack_elapsed")) > float(body.get("attack_interval")) - 0.55:
         _play("Punch", 1.0)
     elif measured_speed > 5.7:
-        _play("Run", clampf(measured_speed / 7.5, 0.75, 1.35))
+        _play("Run", clampf(measured_speed / (7.5 * scale.x), 0.75, 1.35))
     elif measured_speed > 0.16:
-        _play("Walk", clampf(measured_speed / 3.8, 0.65, 1.5))
+        _play("Walk", clampf(measured_speed / (3.8 * scale.x), 0.65, 1.5))
     elif String(body.get_meta("activity", "idle")) == "work":
         _play("Working" if animation_player.has_animation("Working") else "PickUp", 0.8)
     else:

@@ -72,7 +72,7 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
                 continue
             tracks.append([track, skeleton.find_bone(bone_name), clip.track_get_type(track)])
         gait_tracks[gait] = tracks
-    gait_time = fposmod(gait_time + delta * clampf(speed / (7.5 if gait == "Run" else 3.8), 0.65, 1.5), clip.length)
+    gait_time = fposmod(gait_time + delta * clampf(speed / ((7.5 if gait == "Run" else 3.8) * visual.scale.x), 0.65, 1.5), clip.length)
     for entry: Array in gait_tracks[gait]:
         if entry[1] < 0:
             continue
