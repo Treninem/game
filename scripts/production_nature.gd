@@ -10,7 +10,8 @@ static var render_meshes: Dictionary = {}
 static var trunk_radii: Dictionary = {}
 static var collision_parts: Dictionary = {}
 
-static func prepare(node: Node) -> void:
+static func prepare(node: Node, canopy: bool = false) -> void:
+    canopy = canopy or "TemperateTree" in node.scene_file_path
     if node is MeshInstance3D:
         var visual := node as MeshInstance3D
         for index in range(visual.mesh.get_surface_count()):
@@ -44,16 +45,26 @@ static func prepare(node: Node) -> void:
                 material.set_shader_parameter("wind_strength", 0.045)
                 material.set_shader_parameter("wave_frequency", 2.0)
                 if "Grass" in base.resource_name:
-                    material.set_shader_parameter("vegetation_tint", Color(0.48, 0.60, 0.36))
+                    material.set_shader_parameter("vegetation_tint", Color(0.32, 0.45, 0.25))
+                    material.set_shader_parameter("foliage_desaturate",0.9)
+                    material.set_shader_parameter("variation_strength",0.45)
                     material.set_shader_parameter("height_anchor", true)
+                elif "Temperate" in base.resource_name:
+                    material.set_shader_parameter("vegetation_tint", Color(0.74,0.84,0.62) if canopy else Color(0.67,0.78,0.50))
+                    if canopy:
+                        var bounds := visual.mesh.get_aabb()
+                        material.set_shader_parameter("canopy_normal_blend",0.75)
+                        material.set_shader_parameter("canopy_center",bounds.position+bounds.size*Vector3(0.5,0.65,0.5))
+                        material.set_shader_parameter("canopy_radius",bounds.size*Vector3(0.5,0.65,0.5))
                 elif "Pine" in base.resource_name:
                     material.set_shader_parameter("vegetation_tint", Color(0.72, 0.79, 0.62))
                 elif base.resource_name == "Leaves":
-                    material.set_shader_parameter("vegetation_tint", Color(0.52, 0.65, 0.37))
+                    material.set_shader_parameter("vegetation_tint", Color(0.38, 0.48, 0.28))
+                    material.set_shader_parameter("foliage_desaturate",0.4)
                 wind_materials[key] = material
             visual.set_surface_override_material(index, wind_materials[key])
     for child in node.get_children():
-        prepare(child)
+        prepare(child, canopy)
 
 static func sync_wind() -> void:
     for material: ShaderMaterial in wind_materials.values():
@@ -93,7 +104,22 @@ static func add_model_batches(parent: Node3D, transforms: Array[Transform3D], sc
     if material_override != null:
         apply_material(source, material_override)
     prepare(source)
-    _batch_meshes(source, Transform3D.IDENTITY, parent, transforms, visibility_end, distant)
+    # A whole 96/192 m cell must not hide nearby grass or expose an entire
+    # distant grove at once. Keep chopping's near-tree indices unsplit.
+    var cell_size := 64.0 if distant else 32.0
+    if distant or (visibility_end < 100.0 and transforms.size() > 64):
+        var buckets := {}
+        for transform in transforms:
+            var coord := Vector2i(floori(transform.origin.x/cell_size),floori(transform.origin.z/cell_size))
+            if not buckets.has(coord):
+                buckets[coord] = []
+            buckets[coord].append(transform)
+        for bucket: Array in buckets.values():
+            var local_transforms: Array[Transform3D] = []
+            local_transforms.assign(bucket)
+            _batch_meshes(source, Transform3D.IDENTITY, parent, local_transforms, visibility_end, distant)
+    else:
+        _batch_meshes(source, Transform3D.IDENTITY, parent, transforms, visibility_end, distant)
     source.free()
 
 static func apply_material(node: Node, material: Material) -> void:

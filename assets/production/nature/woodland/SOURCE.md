@@ -35,3 +35,7 @@ Source: https://opengameart.org/content/tree-leaves-pack-1
 The production mask has a 256 px import size cap and mipmaps; the shader samples
 one silhouette from the existing atlas. The separate leaf license is preserved.
 Leaves appear in autumn or strong gusts, rather than permanent summer confetti.
+
+## Low ground-cover derivative — 2026-10-20
+
+INTEGRATED in the review: `Grass_Ground.glb` derives only from the existing CC0 `Grass_Wispy_Tall.glb`. `tools/prepare_ground_cover.py` bakes the source transforms, applies a 0.25 decimation ratio and grounds the result at 0.38 m height with a wider footprint. Original embedded Grass texture and the existing LICENSE.txt apply. The final mesh has 233 vertices and 155 triangles; exact source/output checksums are in `Grass_Ground.source.json`. No new bitmap or downloaded source pack.

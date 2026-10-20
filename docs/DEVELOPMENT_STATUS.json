@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Устранена ступенчатая кромка стартовой реки: пересечённые водой треугольники уточняются по реальному рельефу, физика использует ту же сетку. Проверены точность контура, стыки, движение, физическая опора и мост. Готовый пакет прошёл проверки и графический проход к берегу и вдоль воды. Растительность, дальний мир, детализация людей и предупреждения при закрытии остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_SHORELINE.json",
-  "review_launcher": "build/review-2026-10-20-shoreline/ImPuls-world.cmd",
+  "current_stage": "Добавлены рощи, подлесок и низкая трава пятнами, доработаны освещение крон и цвет растительности. Ближний и дальний лес разбиты на ограниченные группы; поселения и брод сохраняют просветы. Проверены рубка, движение, обычная игровая камера, загрузка и готовый пакет с проходом к берегу. Старые силуэты крон, общая детализация и предупреждения при закрытии остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_UNDERSTORY.json",
+  "review_launcher": "build/review-2026-10-20-understory/ImPuls-world.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -158,5 +158,5 @@
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Version/import/dependency failures corrected. Separate candidate import, magic and movement pass. Remote gates pending; stable release blocked.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_FOREST_CORRECTION.json",
-  "review_launcher_revision": "Shoreline review; frozen package SHA256 57055902484b338440d232f722bd169b4fc86d84010493982448624c5ace6942"
+  "review_launcher_revision": "Forest understory review; frozen package SHA256 655d40b4d4eec52b3dd6820facb9e1f30a7591f809f09a38259e721e7d0ba57d"
 }

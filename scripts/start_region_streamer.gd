@@ -7,6 +7,10 @@ const TREE_OAK: PackedScene = preload("res://assets/production/nature/temperate/
 const TREE_BROAD: PackedScene = preload("res://assets/production/nature/temperate/TemperateTree_Broad.glb")
 const TREE_PALETTE := [TREE_OAK, TREE_BROAD]
 const TREE_TRUNK_CLEARANCE := 5.5
+const EXTRA_TREE_CANDIDATES := 24
+const GROUND_COVER_GRID := 40
+const MAX_DETAIL_OBJECTS := 164 + EXTRA_TREE_CANDIDATES + 8 + 24 + GROUND_COVER_GRID * GROUND_COVER_GRID
+const GROUND_GRASS: PackedScene = preload("res://assets/production/nature/woodland/Grass_Ground.glb")
 const BUSH_DETAILED: PackedScene = preload("res://assets/production/nature/temperate/TemperateBush.glb")
 const GRASS_LARGE: PackedScene = preload("res://assets/production/nature/woodland/Grass_Wispy_Tall.glb")
 const ROCK_LARGE: PackedScene = preload(NATURE_ROOT + "rock_largeA.glb")
@@ -290,7 +294,69 @@ func _populate_detail_cell(cell: Node3D, coord: Vector2i) -> Dictionary:
         if mushroom_world != Vector2.INF and _spawn_visual(cell, MUSHROOMS, mushroom_world, rng.randf_range(0.75, 1.10), rng.randf_range(-PI, PI), "Mushroom", 0, 190.0):
             details += 1
 
-    return {"trees":trees, "details":details}
+    # A separate stream appends vegetation without relocating the legacy trees,
+    # changing their persistent IDs or consuming their decoration RNG sequence.
+    var extra_rng := RandomNumberGenerator.new()
+    extra_rng.seed = absi(hash("understory:%d:%d:%d" % [coord.x,coord.y,NATURE_SEED]))
+    var extra_trees := 0
+    if biome in ["forest","taiga","marsh","plains"]:
+        for i in range(EXTRA_TREE_CANDIDATES):
+            var world := _sample_cell_position(extra_rng,coord,10.0,4.0)
+            if world == Vector2.INF:
+                continue
+            var crowded := false
+            var grove_distance := INF
+            for root_pos in accepted_roots:
+                var distance := root_pos.distance_squared_to(world)
+                grove_distance = minf(grove_distance,distance)
+                if distance < TREE_TRUNK_CLEARANCE * TREE_TRUNK_CLEARANCE:
+                    crowded = true
+                    break
+            if crowded or (not accepted_roots.is_empty() and grove_distance > 22.0*22.0):
+                continue
+            var scene := TREE_BROAD if i % 3 != 0 else TREE_OAK
+            if _spawn_physical_tree(cell,scene,world,extra_rng.randf_range(0.85,1.25),extra_rng.randf_range(-PI,PI),64+i):
+                accepted_roots.append(world)
+                extra_trees += 1
+                details += 1
+        for i in range(8):
+            var world := _sample_cell_position(extra_rng,coord,2.0,1.0,2.0)
+            if world != Vector2.INF and _spawn_visual(cell,BUSH_DETAILED,world,extra_rng.randf_range(0.45,0.85),extra_rng.randf_range(-PI,PI),"UnderBush",i,85.0):
+                details += 1
+        for i in range(24):
+            var world := _sample_cell_position(extra_rng,coord,1.0,0.0,2.0)
+            if world != Vector2.INF and _spawn_visual(cell,FERN,world,extra_rng.randf_range(0.45,0.95),extra_rng.randf_range(-PI,PI),"UnderFern",i,85.0):
+                details += 1
+    var cover_noise := FastNoiseLite.new()
+    cover_noise.seed = NATURE_SEED
+    cover_noise.frequency = 0.045
+    cover_noise.fractal_octaves = 2
+    var ground_cover := 0
+    if biome in ["forest","taiga","marsh","plains"]:
+        var origin := _detail_cell_origin(coord)
+        var step := DETAIL_CELL_SIZE/float(GROUND_COVER_GRID)
+        for z in range(GROUND_COVER_GRID):
+            for x in range(GROUND_COVER_GRID):
+                var world := origin+Vector2(x+extra_rng.randf_range(0.15,0.85),z+extra_rng.randf_range(0.15,0.85))*step
+                if not GEOGRAPHY.in_start_region(world) or _inside_exclusion_zone(world):
+                    continue
+                if world.distance_squared_to(GEOGRAPHY.START_SPAWN)<2.25 or GEOGRAPHY.distance_to_start_river(world)<GEOGRAPHY.START_RIVER_HALF_WIDTH+0.7:
+                    continue
+                if GEOGRAPHY.distance_to_primary_road(world)<GEOGRAPHY.PRIMARY_ROAD_HALF_WIDTH+1.5:
+                    continue
+                var patch := cover_noise.get_noise_2d(world.x,world.y)
+                if patch < -0.22:
+                    continue
+                var height := WorldData.elevation_at(world)
+                if height < WorldData.water_level_at(world)+0.05:
+                    continue
+                var tuft_scale := extra_rng.randf_range(0.45,1.05)*(1.0+patch*0.65)
+                _record_visual(cell,GROUND_GRASS,world,tuft_scale,extra_rng.randf_range(-PI,PI),55.0,height)
+                ground_cover += 1
+                details += 1
+    cell.set_meta("ground_cover_count",ground_cover)
+    cell.set_meta("extra_tree_count",extra_trees)
+    return {"trees":trees+extra_trees, "details":details}
 
 func _sample_cell_position(rng: RandomNumberGenerator, coord: Vector2i, river_clearance: float, road_clearance: float, spawn_clearance: float = 6.0) -> Vector2:
     var origin := _detail_cell_origin(coord)
@@ -385,13 +451,14 @@ func _spawn_visual(parent: Node3D, scene: PackedScene, world: Vector2, scale_val
     _record_visual(parent, scene, world, scale_value, yaw, visibility_end)
     return true
 
-func _record_visual(parent: Node3D, scene: PackedScene, world: Vector2, scale_value: float, yaw: float, visibility_end: float) -> void:
+func _record_visual(parent: Node3D, scene: PackedScene, world: Vector2, scale_value: float, yaw: float, visibility_end: float, known_height: float = INF) -> void:
     var batches: Dictionary = parent.get_meta("visual_batches")
     var key := scene.resource_path
     if not batches.has(key):
         batches[key] = {"scene": scene, "transforms": [], "visibility_end": visibility_end}
     var basis := Basis(Vector3.UP, yaw).scaled(Vector3.ONE * scale_value)
-    var origin := Vector3(world.x, WorldData.elevation_at(world), world.y)
+    var height := known_height if is_finite(known_height) else WorldData.elevation_at(world)
+    var origin := Vector3(world.x, height, world.y)
     batches[key]["transforms"].append(Transform3D(basis, origin))
 
 func _materialize_visual_batches(cell: Node3D) -> void:

@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased forest-understory review",
+  "parent": "350e53dbed0e4f3ec3d7ae7dcdd704eb3334a786",
+  "changes": [
+    "Append independently seeded near groves, lower bushes and ferns without consuming the legacy tree-placement RNG or moving saved-cut roots",
+    "Add patchy low grass from the existing CC0 Grass_Wispy_Tall: normalized 0.38 m, 233 vertices, 155 triangles; retain original embedded texture/license",
+    "Prepare rounded canopy normals and interior shading for existing temperate trees; mute yellow grass/fern pigment and vary ground-cover brightness",
+    "Spatially bucket dense cover in 32 m groups and distant trees in 64 m groups; preserve unsplit near-tree batch indices for chopping",
+    "Increase far-forest candidate counts; apply cached village/town/ford/capital clearings to the far layer",
+    "Reuse computed ground height instead of evaluating every accepted tuft twice"
+  ],
+  "population_probe": {
+    "loaded_cells": 25,
+    "patchy_ground_clumps": 24154,
+    "additional_near_trees": 353,
+    "ground_batches": 188,
+    "fixed_cell_limit": 25,
+    "ground_grid_candidates_per_cell": 1600,
+    "detail_object_limit_per_cell": 1820,
+    "independent_test_ceiling": 1850,
+    "ground_mesh_triangle_ceiling": 180
+  },
+  "source_checks": [
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.52
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 21.38
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.48
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 27.91
+    },
+    {
+      "name": "camera_obstruction",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.95
+    }
+  ],
+  "final_source_checks": [
+    {
+      "name": "nature_clearings",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.92
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.83
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 24.52
+    }
+  ],
+  "frozen_checks": {
+    "pack_sha256": "655d40b4d4eec52b3dd6820facb9e1f30a7591f809f09a38259e721e7d0ba57d",
+    "results": [
+      {
+        "case": "boot",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 17.34
+      },
+      {
+        "case": "nature",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 11.67
+      },
+      {
+        "case": "shore",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 3.64
+      },
+      {
+        "case": "clearings",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 3.09
+      }
+    ]
+  },
+  "native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 52.81,
+    "marker": true
+  },
+  "native_markers": [
+    "SHORE_BANK_WALK_OK max_step=0.09820409864187 grounded=true",
+    "WORLD_SURFACE_NATIVE_OK walked=65.227690692991 player_position_assignments=0 cameras=inspection quality=high"
+  ],
+  "fps_samples": [
+    {
+      "preset": 2,
+      "frames": 120,
+      "fps": 23.1762556171035
+    },
+    {
+      "preset": 0,
+      "frames": 120,
+      "fps": 47.2925600526839
+    }
+  ],
+  "fps_scope": "120 rendered process frames per preset at the same view, 1280x720 window, Intel UHD 610, GL Compatibility; limited samples, not a broad benchmark",
+  "graphical_chopping": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 18.56,
+    "marker": true
+  },
+  "graphical_camera": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 47.25,
+    "marker": true
+  },
+  "camera_marker": [
+    "CAMERA_INPUT_SMOKE_OK mouse=confined_or_captured yaw=responsive pitch=responsive scales=3 modes=2 warp=no_drift"
+  ],
+  "found_and_corrected": [
+    "Rejected the initial yellow, uniform grass appearance after actual native inspection; adjusted pigment, tuft size and noise patches",
+    "Clearing regression reproduced 184 tree intrusions around the village; fixed result has 416 surrounding trees and zero intrusions",
+    "Initial graphical chopping fixture was rotated by desktop mouse motion (yaw 0 to 0.95, pitch 0 to -0.8675). A diagnostic run with fixture-owned aim passed all original assertions. The fixed-aim test now disables only its player input callback; physics, hit/range/cancel/save assertions remain unchanged. The normal gameplay camera/input is independently tested with processing enabled."
+  ],
+  "cleanup_warnings": [
+    "WARNING: 92 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+  ],
+  "asset": {
+    "source": "assets/production/nature/woodland/Grass_Wispy_Tall.glb",
+    "source_sha256": "0f42962d269fb17883ece6b57160769bfceeafb96d49f18f27b14f5d160fbb7d",
+    "license": "CC0; existing woodland/LICENSE.txt",
+    "height_m": 0.38,
+    "decimate_ratio": 0.25,
+    "horizontal_spread": 1.8,
+    "vertices": 233,
+    "reproducer": "tools/prepare_ground_cover.py",
+    "output_sha256": "b09627066ebd20a8b7f5cc75e7de79035bf23762ddd0a57dceda1f141f59b8a1"
+  },
+  "review_launcher": "build/review-2026-10-20-understory/ImPuls-world.cmd",
+  "evidence": "build/acceptance/understory-frozen-native/appdata/Godot/app_userdata/ImPuls",
+  "limitations": [
+    "Tree silhouettes still use existing legacy branch cards; detailed replacement tree art remains open",
+    "The graphic route uses automated ordinary input, not a manual full-world tour; no driver player-position assignments. The separate chopping fixture intentionally stages player/target positions",
+    "Additional forest density has bounded local loading and culling, but wide-area frame-time and memory profiling remain open",
+    "High quality remains below 30 FPS in the measured UHD 610 view; the low preset is faster in the recorded samples",
+    "ObjectDB cleanup warnings remain; no stable release publication",
+    "New-commit remote gates are pending after push"
+  ]
+}

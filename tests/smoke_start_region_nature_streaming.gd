@@ -48,6 +48,15 @@ func _run_test() -> void:
         if bark_count == 0:
             _fail(2, "no actual bark surface validated")
             return
+    var ground := START_REGION_STREAMER.GROUND_GRASS.instantiate()
+    var grass_triangles := 0
+    for mesh: MeshInstance3D in ground.find_children("*","MeshInstance3D",true,false):
+        for surface in range(mesh.mesh.get_surface_count()):
+            grass_triangles += mesh.mesh.surface_get_arrays(surface)[Mesh.ARRAY_INDEX].size()/3
+    ground.free()
+    if grass_triangles <= 0 or grass_triangles > 180:
+        _fail(2,"dense ground cover lost its low-triangle production mesh")
+        return
     var player := CharacterBody3D.new()
     player.name = "NatureStreamingTestPlayer"
     player.add_to_group("player")
@@ -71,12 +80,22 @@ func _run_test() -> void:
         _fail(4, "production nature did not materialize around the start spawn")
         return
 
+    if START_REGION_STREAMER.MAX_DETAIL_OBJECTS > 1850 or START_REGION_STREAMER.GROUND_COVER_GRID > 40:
+        _fail(4,"ground cover budget exceeds the fixed production ceiling")
+        return
+    var ground_cover := 0
+    var extra_trees := 0
+    var ground_batches := 0
     var roots: Array[Vector2] = []
     for cell: Node in streamer.get("loaded_detail_cells").values():
-        if int(cell.get_meta("detail_count", 0)) > 164:
+        ground_cover += int(cell.get_meta("ground_cover_count",0))
+        extra_trees += int(cell.get_meta("extra_tree_count",0))
+        if int(cell.get_meta("detail_count", 0)) > START_REGION_STREAMER.MAX_DETAIL_OBJECTS:
             _fail(4, "understory exceeded the fixed per-cell detail budget")
             return
         for child in cell.get_children():
+            if child is MultiMeshInstance3D and "Grass_Ground" in String(child.get_meta("tree_source","")):
+                ground_batches += 1
             if child.is_in_group("map_tree"):
                 var point: Vector3 = child.global_position
                 var xz := Vector2(point.x,point.z)
@@ -85,6 +104,10 @@ func _run_test() -> void:
                         _fail(4, "near physical tree trunks intersect the minimum clearance")
                         return
                 roots.append(xz)
+    if ground_cover < 5000 or extra_trees < 30 or ground_batches <= first_cells:
+        _fail(4,"understory density or local spatial batches did not materialize")
+        return
+    print("UNDERSTORY_METRICS cells=",first_cells," ground_clumps=",ground_cover," extra_trees=",extra_trees," ground_batches=",ground_batches)
     player.position = Vector3(1000.0, 3.0, 800.0)
     await _wait_frames(38)
     var moved_center: Vector2i = streamer.call("detail_center_cell")

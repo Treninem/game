@@ -33,6 +33,8 @@ var foliage_materials: Dictionary = {}
 var rock_material: StandardMaterial3D
 var water_material: StandardMaterial3D
 var location_elapsed := 0.0
+var nature_clearings: Array[Dictionary] = []
+var nature_clearings_ready := false
 
 func _ready() -> void:
     process_priority = 50
@@ -333,6 +335,23 @@ func _add_water(chunk: Node3D) -> void:
     water.visibility_range_end = CHUNK_SIZE * float(VISUAL_RADIUS + 2)
     chunk.add_child(water)
 
+func _inside_nature_clearing(world: Vector2) -> bool:
+    if not nature_clearings_ready:
+        nature_clearings_ready = true
+        for poi: Dictionary in GEOGRAPHY.poi_catalog():
+            var radius := 0.0
+            match String(poi.get("kind","")):
+                "village": radius = 185.0
+                "ford": radius = 48.0
+                "fortified_town": radius = 260.0
+                "capital": radius = CITY_NO_WILD_RADIUS
+            if radius > 0.0:
+                nature_clearings.append({"pos":poi["pos"],"radius_squared":radius*radius})
+    for clearing: Dictionary in nature_clearings:
+        if world.distance_squared_to(clearing["pos"]) < float(clearing["radius_squared"]):
+            return true
+    return false
+
 func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
     if biome == "ocean":
         return
@@ -343,14 +362,14 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
 
     var tree_count := 8
     match biome:
-        "forest": tree_count = 30
-        "taiga": tree_count = 24
-        "marsh": tree_count = 15
-        "plains": tree_count = 10
+        "forest": tree_count = 72
+        "taiga": tree_count = 56
+        "marsh": tree_count = 32
+        "plains": tree_count = 24
         "tundra": tree_count = 4
         "drylands": tree_count = 3
         "mountains": tree_count = 3
-        "tropical": tree_count = 28
+        "tropical": tree_count = 64
         "snow": tree_count = 2
         "underwater": tree_count = 0
 
@@ -361,6 +380,8 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         var lx := rng.randf_range(6.0, CHUNK_SIZE - 6.0)
         var lz := rng.randf_range(6.0, CHUNK_SIZE - 6.0)
         var world := origin + Vector2(lx, lz)
+        if _inside_nature_clearing(world):
+            continue
         if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 1.0:
             continue
         if GEOGRAPHY.in_start_region(world) and GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_BANK_WIDTH + 5.0:
@@ -383,6 +404,8 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         for index in range(48):
             var local := Vector2(rng.randf_range(4, CHUNK_SIZE - 4), rng.randf_range(4, CHUNK_SIZE - 4))
             var world := origin + local
+            if _inside_nature_clearing(world):
+                continue
             if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH:
                 continue
             var height := WorldData.elevation_at(world)

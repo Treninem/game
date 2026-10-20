@@ -144,3 +144,6 @@ Every development session working on `Treninem/game` must read this file before 
 
 ## Character family review — 2026-10-19
 - INTEGRATED in the 0.10.7.2 review candidate: MakeHuman native male/female bodies, separate face/hair/garments and a playable creator. Source selections: `assets/staging/characters/makehuman_mpfb_core/` and `makehuman_system_selected/`; target: `assets/production/characters/realistic/`. Official core/system graphics are CC0; no tool code embedded. Main physical confirmation and final production readiness are pending. See `assets/registry/REALISTIC_HUMANS_2026-10-19.md`.
+
+## Forest understory review — 2026-10-20
+- INTEGRATED in the review: `assets/production/nature/woodland/Grass_Ground.glb`, a 155-triangle, 0.38 m derivative of the existing Quaternius CC0 `Grass_Wispy_Tall.glb`. Embedded texture retained; existing woodland license applies. No new source pack or download. Reproducer/checksums: `tools/prepare_ground_cover.py`, adjacent `Grass_Ground.source.json`. Existing temperate trees and shrub/fern assets supply the denser bounded forest. See `assets/registry/FOREST_UNDERSTORY_2026-10-20.md`.

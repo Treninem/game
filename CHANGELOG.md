@@ -1,3 +1,7 @@
+## Forest understory — unreleased — 2026-10-20
+- Add independently seeded groves, layered shrubs/ferns and patchy low grass from the existing CC0 grass mesh (155 triangles). Keep legacy near-tree roots/cut IDs; spatially bound cover and distant forest batches. Refine canopy shading and mute grass/fern pigment.
+- Keep distant trees out of inhabited clearings. Nature, chopping, movement, camera obstruction, boot and clearing checks pass; the final package passes boot/nature/shore/clearing and native graphical walk/chopping checks. Isolate desktop mouse motion only in the fixed-aim chopping fixture; normal gameplay camera is independently verified. Existing branch-card silhouettes and cleanup warnings remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_UNDERSTORY.json.
+
 ## Conforming river bank — unreleased — 2026-10-20
 - Split crossed opening-river terrain triangles at the actual height-field water contour; share edge vertices and retain matching rendered/physical terrain. Keep the 4 m grid elsewhere and a fast path for ordinary dry/submerged cells.
 - Accuracy/seam/budget, terrain, hydrology, movement, grounding and bridge checks pass. Frozen boot/nature/shore checks and a grounded native river-bank walk pass; screenshots show a smoother outline. Vegetation, distant terrain and cleanup warnings remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_SHORELINE.json.

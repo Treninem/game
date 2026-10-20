@@ -38,6 +38,10 @@ func _run() -> void:
     floor_body.add_child(collision)
     add_child(floor_body)
     add_child(player)
+    # This fixed-aim fixture drives attacks and rotation directly. Desktop mouse
+    # motion must not rotate its staged target; the normal camera/input path is
+    # covered separately by smoke_camera_input with input processing enabled.
+    player.set_process_input(false)
     var audio := preload("res://scripts/world_audio.gd").new()
     add_child(audio)
     player.global_position = origin + Vector3.UP * 0.08

@@ -32,3 +32,6 @@ is limited to arid biomes or actual strong dust storms.
 
 ## Water ripple extension
 `ice_surface.gdshader` uses world-space advected noise gradients for liquid ripples, with pixel-footprint filtering for the fine layer. Liquid highlights are softer than ice. Existing freeze/crack/frost/thaw uniforms remain; the rendering probe does not establish automatic weather integration. The river level and physical hydrology remain owned by the world systems.
+
+## Canopy and understory controls
+`foliage_wind.gdshader` retains the shared wind, opaque cutout and black-key paths. Optional canopy center/radius and normal blending round the existing temperate branch-card lighting; the default blend is zero. Optional pigment desaturation and stable instance brightness variation mute stylized grass colors. Prepared grass keeps height anchoring. Dense ground cover uses 32 m spatial groups; distant trees use 64 m groups. Near choppable tree batches stay unsplit to retain their indices.
