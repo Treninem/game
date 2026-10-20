@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлена потеря рисунка прядей в материале волос и бровей: жёсткое ограничение яркости заменено плавным преобразованием. Проверены обе модели, две причёски, пять цветов, кадры до/после и экспортированный игровой сценарий. Полная визуальная приёмка не пройдена.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HAIR_DETAIL.json",
-  "review_launcher": "build/review-2026-10-20-hair-detail/ImPuls-editor.cmd",
+  "current_stage": "Исправлена подготовка восьми текстур одежды, обуви и глаз: созданы реальные mip-уровни. Проверены все 16 текстур материалов обеих моделей, включая экспортированный пакет и игровой сценарий. Качество геометрии и естественность движений остаются незавершёнными.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_CHARACTER_MIPMAPS.json",
+  "review_launcher": "build/review-2026-10-20-character-mipmaps/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -207,8 +207,8 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Новые локальные проверки редактора/хвата/рубки/движения/запуска и графического пакета пройдены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HAIR_DETAIL.json",
-  "review_launcher_revision": "Hair detail review; frozen package SHA256 0852cf4822d09da9e0d8e75231c6271829478e23bc8b2d5a4ac74c7e6a49ebaf",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_CHARACTER_MIPMAPS.json",
+  "review_launcher_revision": "Character mipmap review; frozen package SHA256 728741476dc0518db322ecca30b91d882d0b670d81246f60f8e40c34a003528b",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",

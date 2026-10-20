@@ -1,3 +1,8 @@
+## Character texture filtering — unreleased — 2026-10-20
+- Generate physical mip levels for eight standalone clothing, footwear and eye textures; preserve original pixels and material settings.
+- Check actual mip chains on all 16 distinct textures used by both visual models, including the exported package; repeat creator/save/world scenario.
+- Editor coverage remains 32/55 (58.2%); overall visual realism and natural animation remain unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_CHARACTER_MIPMAPS.json.
+
 ## Hair detail — unreleased — 2026-10-20
 - Preserve original hair/brow strand contrast by replacing hard luminance clipping with smooth tonal compression; use mipmapped anisotropic sampling.
 - Add strict real-rendering highlight regression and inspect 24 matching views before/after plus the frozen world/save scenario.

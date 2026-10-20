@@ -34,3 +34,6 @@ INTEGRATED in review: ninth synchronized HeadSize shape on both bodies and seven
 
 ## Hair strand tone preservation — 2026-10-20
 INTEGRATED in review: existing shared hair/brow shader preserves authored medium/high strand contrast with smooth tonal compression and mipmapped anisotropic sampling. No source asset, model or license change. Lit-ramp baseline fails with the old shader and passes with the correction; both bodies, both hairstyles and all five colors receive before/after graphical views. Overall visual quality remains unaccepted.
+
+## Standalone texture mip chains — 2026-10-20
+INTEGRATED in review: explicit import sidecars generate physical mip chains for the three detail maps and five eye atlases. Original PNG pixels and rights are unchanged. Dynamic material filter settings alone did not create these levels. Both actual body materials and the exported package are probed; all 16 unique character textures retain mip chains. No global visual/performance acceptance is claimed.

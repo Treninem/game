@@ -1,0 +1,50 @@
+extends Node
+
+const VISUAL := preload("res://scripts/humanoid_visual.gd")
+var failures: Array[String] = []
+var checked: Dictionary = {}
+
+func _ready() -> void:
+    call_deferred("_run")
+
+func _check_texture(texture: Texture2D, label: String) -> void:
+    if texture == null:
+        failures.append("Missing texture: " + label)
+        return
+    if checked.has(texture.get_instance_id()):
+        return
+    checked[texture.get_instance_id()] = true
+    var image := texture.get_image()
+    if image == null or not image.has_mipmaps():
+        failures.append("Actual character texture lacks mip levels: " + label)
+
+func _run() -> void:
+    _check_texture(VISUAL.GARMENT_NORMAL, "garment normal")
+    _check_texture(VISUAL.GARMENT_AO, "garment AO")
+    _check_texture(VISUAL.SHOE_ALBEDO, "shoe albedo")
+    for texture: Texture2D in VISUAL.EYE_TEXTURES:
+        _check_texture(texture, texture.resource_path)
+    if failures.is_empty():
+        for preset in [0, 5]:
+            var actor := CharacterBody3D.new()
+            actor.set_meta("preview_animation", "Idle")
+            add_child(actor)
+            var visual := VISUAL.new()
+            visual.appearance_profile = preload("res://scripts/character_appearance.gd").preset(preset)
+            actor.add_child(visual)
+            for mesh: MeshInstance3D in visual.model.find_children("*", "MeshInstance3D", true, false):
+                for surface in range(mesh.mesh.get_surface_count()):
+                    var material := mesh.get_active_material(surface)
+                    if material is StandardMaterial3D:
+                        _check_texture(material.albedo_texture, String(mesh.name))
+                        if material.normal_enabled:
+                            _check_texture(material.normal_texture, "actual garment normal")
+                    elif material is ShaderMaterial:
+                        _check_texture(material.get_shader_parameter("hair_texture"), String(mesh.name))
+            actor.queue_free()
+            await get_tree().process_frame
+    for failure in failures:
+        push_error(failure)
+    if failures.is_empty():
+        print("CHARACTER_TEXTURE_FILTERING_OK bodies=2 textures=", checked.size(), " mip_levels=physical")
+    get_tree().quit(0 if failures.is_empty() else 1)
