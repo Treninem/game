@@ -2,16 +2,17 @@ extends Control
 
 const WORLD_MAP_VIEW = preload("res://scripts/world_map_view.gd")
 const SECTIONS := [
-    ["inventory", "[I] Инвентарь"],
-    ["map", "[M] Карта"],
-    ["crafting", "[K] Крафт"],
-    ["journal", "[J] Журнал"],
+    ["inventory", "Инвентарь"],
+    ["map", "Карта"],
+    ["crafting", "Крафт"],
+    ["journal", "Журнал"],
     ["character", "Медальон"],
     ["dungeons", "Подземелья"],
     ["guild", "Гильдия"],
     ["plots", "Участки / VIP"],
     ["events", "Ивенты"]
 ]
+const PANEL_ACTIONS := {"inventory": "open_inventory", "map": "open_map", "crafting": "open_crafting", "journal": "open_journal"}
 
 var frame: PanelContainer
 var content: VBoxContainer
@@ -26,6 +27,7 @@ func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     mouse_force_pass_scroll_events = false
     _build_shell()
+    SettingsManager.bindings_changed.connect(_refresh_tabs)
     call_deferred("_apply_responsive_layout")
     visible = false
 
@@ -36,7 +38,7 @@ func _input(event: InputEvent) -> void:
     if pause_menu != null and pause_menu.visible:
         return
     # A focused text editor consumes Escape before _unhandled_input is reached.
-    if event.is_action_pressed("pause_menu") and (event.keycode == KEY_ESCAPE or event.physical_keycode == KEY_ESCAPE):
+    if event.keycode == KEY_ESCAPE or event.physical_keycode == KEY_ESCAPE:
         close_panel()
         get_viewport().set_input_as_handled()
         return
@@ -170,6 +172,7 @@ func _build_shell() -> void:
         var section := String(entry[0])
         var tab := Button.new()
         tab.text = String(entry[1])
+        tab.set_meta("panel_title", String(entry[1]))
         tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
         tab.custom_minimum_size.y = 38
         tab.focus_mode = Control.FOCUS_ALL
@@ -204,7 +207,7 @@ func _build_shell() -> void:
     footer.custom_minimum_size.y = 26
     root.add_child(footer)
     var footer_left := Label.new()
-    footer_left.text = "Колесо мыши — прокрутка • I / M / K / J — быстрые панели • остальные системы — вкладки"
+    footer_left.text = "Колесо мыши — прокрутка • Клавиши панелей указаны на вкладках"
     footer_left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     footer_left.add_theme_font_size_override("font_size", 11)
     footer_left.modulate = Color(0.42, 0.54, 0.64)
@@ -250,6 +253,8 @@ func _rebuild_content() -> void:
 func _refresh_tabs() -> void:
     for section in tab_buttons:
         var button: Button = tab_buttons[section]
+        var caption := String(button.get_meta("panel_title", button.text))
+        button.text = "[%s] %s" % [SettingsManager.binding_text(PANEL_ACTIONS[section]), caption] if PANEL_ACTIONS.has(section) else caption
         var selected := String(section) == current_section
         var bg := Color(0.045, 0.16, 0.22, 0.98) if selected else Color(0.025, 0.04, 0.055, 0.94)
         var border := Color(0.20, 0.72, 0.94, 0.98) if selected else Color(0.08, 0.20, 0.28, 0.78)

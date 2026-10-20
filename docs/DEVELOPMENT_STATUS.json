@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Настоящими клавишами воспроизведён и исправлен отказ закрытия инвентаря Esc из поля поиска. Esc обрабатывается до GUI с сохранением приоритета диалогов/верхнего меню. Проверены I, повторное открытие, Esc из поиска/ячейки, снятие паузы и отсутствие двойного открытия меню; видимое окно и адаптация прошли проверки.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY_ESCAPE.json",
+  "current_stage": "Исправлен отказ Esc после переназначения паузы. Escape остаётся отменой игровой панели, подписи вкладок обновляются по текущим назначениям. Проверены F10/F8, отключение старой I и ввод буквы P в поиске при назначенной на P паузе; видимое окно и адаптация прошли проверки. Конфликты назначений и полный аудит всех подсказок остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_INVENTORY_REBIND.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -237,7 +237,8 @@
     "drag_drop": "pending",
     "stack_splitting": "pending",
     "selection_focus": "restored after selection/search/page/equip/unequip/use; empty results return to search; stale/close guards retained",
-    "keyboard_entry": "real I/Escape default bindings tested; early mapped Escape closes search/cell without also opening pause menu; Ctrl+F and Enter retained"
+    "keyboard_entry": "real I/Escape default bindings tested; early mapped Escape closes search/cell without also opening pause menu; Ctrl+F and Enter retained",
+    "keyboard_rebind": "F10 inventory, F8 pause, P text-edit priority tested; Escape remains independent UI cancel; tab captions live"
   },
   "storage_transfer": {
     "atomic_notification": true,

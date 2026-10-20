@@ -6,6 +6,9 @@ func _ready() -> void:
     call_deferred("_run")
 
 func _run() -> void:
+    SettingsManager.bindings = SettingsManager.DEFAULT_BINDINGS.duplicate(true)
+    SettingsManager._apply_bindings()
+    SettingsManager.save_settings()
     GameState.reset_new_game()
     for index in range(137):
         GameState.add_item("qa_supply_%03d" % index, 1000000)
@@ -119,6 +122,32 @@ func _run() -> void:
     assert(not scene.get_node("UI/GameMenu").visible, "Escape closes inventory and also opens pause menu")
     await _key(KEY_I)
     assert(panels.visible and get_tree().paused)
+    var saved_bindings := SettingsManager.bindings.duplicate(true)
+    _bind("open_inventory", KEY_F10)
+    assert(panels.tab_buttons.inventory.text.begins_with("[%s]" % SettingsManager.binding_text("open_inventory")), "Binding change does not refresh visible caption")
+    _bind("pause_menu", KEY_F8)
+    await _key(KEY_ESCAPE)
+    assert(not panels.visible and not get_tree().paused, "Rebinding pause disables Escape close")
+    await _key(KEY_I)
+    assert(not panels.visible, "Old inventory binding still opens panel")
+    await _key(KEY_F10)
+    assert(panels.visible and get_tree().paused, "New inventory binding does not open panel")
+    assert(panels.tab_buttons.inventory.text.begins_with("[%s]" % SettingsManager.binding_text("open_inventory")), "Inventory caption shows stale binding")
+    await _key(KEY_F, true)
+    await _key(KEY_F8)
+    assert(not panels.visible and not get_tree().paused, "New pause binding does not close panel")
+    _bind("pause_menu", KEY_P)
+    await _key(KEY_F10)
+    await _key(KEY_F, true)
+    await _key(KEY_P, false, 112)
+    assert(panels.visible and panels.find_child("InventorySearch", true, false).text == "p", "Typing pause-bound letter closes search")
+    await _key(KEY_ESCAPE)
+    assert(not panels.visible and not get_tree().paused)
+    SettingsManager.bindings = saved_bindings
+    SettingsManager._apply_bindings()
+    SettingsManager.save_settings()
+    await _key(KEY_I)
+    assert(panels.visible and get_tree().paused)
     panels._inventory_search("no_such_item")
     for frame in range(3):
         await get_tree().process_frame
@@ -161,11 +190,12 @@ func _find_button(node: Node, text: String) -> Button:
             return found
     return null
 
-func _key(code: Key, ctrl: bool = false) -> void:
+func _key(code: Key, ctrl: bool = false, unicode: int = 0) -> void:
     var press := InputEventKey.new()
     press.keycode = code
     press.physical_keycode = code
     press.ctrl_pressed = ctrl
+    press.unicode = unicode
     press.pressed = true
     Input.parse_input_event(press)
     await get_tree().process_frame
@@ -176,3 +206,10 @@ func _key(code: Key, ctrl: bool = false) -> void:
     Input.parse_input_event(release)
     for frame in range(3):
         await get_tree().process_frame
+
+func _bind(action: String, code: Key) -> void:
+    var event := InputEventKey.new()
+    event.physical_keycode = code
+    event.keycode = code
+    event.pressed = true
+    assert(SettingsManager.rebind_action(action, event))
