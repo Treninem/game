@@ -117,6 +117,18 @@ func remove_item(item_id: String, amount: int = 1) -> bool:
     inventory_changed.emit()
     return true
 
+# Commit both sides before notifying observers (including save callbacks).
+func commit_inventory_exchange(item_id: String, delta: int, world_key: String, world_value: Dictionary) -> bool:
+    if item_id.is_empty() or item_id == "building_kit" or delta == 0 or world_key.is_empty():
+        return false
+    var current := int(inventory.get(item_id, 0))
+    if current < 0 or (delta < 0 and current < -delta) or (delta > 0 and current > 9223372036854775807 - delta):
+        return false
+    inventory[item_id] = current + delta
+    world_state[world_key] = world_value.duplicate(true)
+    inventory_changed.emit()
+    return true
+
 func has_items(requirements: Dictionary) -> bool:
     for item_id in requirements:
         if int(inventory.get(item_id, 0)) < int(requirements[item_id]):

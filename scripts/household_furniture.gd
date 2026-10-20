@@ -9,6 +9,7 @@ var revision := -1
 var storage_ui_open := false
 var chest_animation: AnimationPlayer
 var lid_target := false
+var transfer_in_progress := false
 
 func _ready() -> void:
     kind = "bed" if String(name).begins_with("Bed") else "bench" if String(name).begins_with("Bench") else "chest" if String(name).ends_with("Chest") else "table"
@@ -84,7 +85,7 @@ func free_capacity() -> int:
     return maxi(0, 200 - used)
 
 func transfer(actor: Node3D, item: String, deposit: bool, amount: int = 1) -> bool:
-    if kind != "chest" or not _reachable(actor) or not allows("player") or amount < 1 or amount > 100000 or not occupant.is_empty() or not InventorySystem.ITEMS.has(item):
+    if transfer_in_progress or kind != "chest" or not _reachable(actor) or not allows("player") or amount < 1 or amount > 100000 or not occupant.is_empty() or not InventorySystem.ITEMS.has(item):
         return false
     var items := contents()
     if deposit:
@@ -93,18 +94,19 @@ func transfer(actor: Node3D, item: String, deposit: bool, amount: int = 1) -> bo
             if InventorySystem.equipped_item(slot) == item:
                 GameState.notify("Сначала снимите этот предмет.")
                 return false
-        if free_capacity() < amount or not GameState.remove_item(item, amount):
+        if free_capacity() < amount:
             return false
         items[item] = int(items.get(item, 0)) + amount
     else:
         if int(items.get(item, 0)) < amount:
             return false
         items[item] = int(items[item]) - amount
-        GameState.add_item(item, amount)
     var saved := state()
     saved.items = items
-    GameState.set_world_value(furniture_id, saved)
-    return true
+    transfer_in_progress = true
+    var committed := GameState.commit_inventory_exchange(item, -amount if deposit else amount, furniture_id, saved)
+    transfer_in_progress = false
+    return committed
 
 func _reachable(actor: Node3D) -> bool:
     if actor == null or not actor.is_inside_tree() or not actor.is_in_group("player") or GameState.is_dead:
@@ -150,6 +152,9 @@ func open_storage(actor: Node3D) -> void:
                 var batch := mini(count, free_capacity()) if deposit else count
                 if batch > 1:
                     choices.append({"text": "%s: %s ×%d" % ["Положить стопку" if deposit else "Взять стопку", label, batch], "action": "furniture_transfer", "furniture": get_instance_id(), "item": item, "deposit": deposit, "amount": batch})
+                    var half := count / 2
+                    if half > 1 and half < batch:
+                        choices.append({"text": "%s половину: %s ×%d" % ["Положить" if deposit else "Взять", label, half], "action": "furniture_transfer", "furniture": get_instance_id(), "item": item, "deposit": deposit, "amount": half})
     choices.append({"text": "Закрыть сундук", "action": "close"})
     DialogueManager.open_dialogue("Домашний сундук", "Свободно %d из 200 мест. Можно переносить предметы стопкой. Содержимое и права доступа сохраняются." % free_capacity(), choices)
 
