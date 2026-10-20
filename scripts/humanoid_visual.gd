@@ -449,13 +449,29 @@ func _prepare_bow_poses(human: Node3D) -> void:
     # Aim in actor space: left arm toward the target, right elbow outward.
     # Source bow clips use a different shoulder frame; copying their absolute
     # rotations onto this rig folds the hands behind the actor's back.
-    _align_sitting_bone(skeleton, "LeftArm", "LeftForeArm", Vector3(-0.10, 0.10, -1))
-    _align_sitting_bone(skeleton, "LeftForeArm", "LeftHand", Vector3(-0.03, 0, -1))
-    _align_sitting_bone(skeleton, "RightArm", "RightForeArm", Vector3(0.9, 0.2, 0.15))
-    _align_sitting_bone(skeleton, "RightForeArm", "RightHand", Vector3(-0.65, 0.15, -0.75))
+    for name: String in ["Spine1", "Spine2", "Head"]:
+        var bone := skeleton.find_bone(name)
+        original[bone] = skeleton.get_bone_pose_rotation(bone)
+    # An archer stands side-on. Keeping both shoulders square to the aim line
+    # forces a short forearm either through the chest or above the face.
+    _rotate_actor_bone(skeleton, "Spine1", Vector3.UP, -0.55)
+    _rotate_actor_bone(skeleton, "Spine2", Vector3.UP, -0.55)
+    _rotate_actor_bone(skeleton, "Head", Vector3.UP, 1.10)
+    _align_sitting_bone(skeleton, "LeftArm", "LeftForeArm", Vector3(0.35, 0.10, -1))
+    _align_sitting_bone(skeleton, "LeftForeArm", "LeftHand", Vector3(0.35, 0, -1))
+    # Raise outside the right side of the chest before drawing toward the face.
+    # Directly blending from the hanging arm can sweep through the torso.
+    _align_sitting_bone(skeleton, "RightArm", "RightForeArm", Vector3(0.85, -0.10, -0.4))
+    _align_sitting_bone(skeleton, "RightForeArm", "RightHand", Vector3(0, 0.55, -0.85))
     _orient_bow_hand(skeleton, "Left")
-    var bow_grip := to_local(skeleton.global_transform * GRIP.palm_frame(skeleton, "Left").origin)
-    _solve_right_arm(skeleton, bow_grip + Vector3(0.02, 0.015, 0.62))
+    _orient_bow_hand(skeleton, "Right")
+    var raised := {}
+    for bone: int in original:
+        raised[bone] = skeleton.get_bone_pose_rotation(bone)
+    var neck := to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Neck")).origin))
+    # Anchor at the right cheek, not behind the left-side bow grip. The old
+    # offset pulled the right wrist across the chest and its elbow behind it.
+    _solve_right_arm(skeleton, Vector3(0.10, neck.y + 0.025, neck.z - 0.10), Vector3(1, -0.25, 0.3))
     _orient_bow_hand(skeleton, "Right")
     var drawn := {}
     for bone: int in original:
@@ -474,11 +490,13 @@ func _prepare_bow_poses(human: Node3D) -> void:
             clip.track_set_path(track, path)
             if key == "Bow_Attack_Draw":
                 clip.rotation_track_insert_key(track, 0.0, original[bone])
+                clip.rotation_track_insert_key(track, 0.10, raised[bone])
                 clip.rotation_track_insert_key(track, 0.24, drawn[bone])
                 clip.rotation_track_insert_key(track, 0.8, drawn[bone])
             else:
                 clip.rotation_track_insert_key(track, 0.0, drawn[bone])
                 clip.rotation_track_insert_key(track, 0.12, drawn[bone])
+                clip.rotation_track_insert_key(track, 0.28, raised[bone])
                 clip.rotation_track_insert_key(track, 0.5, original[bone])
         var library := animation_player.get_animation_library("")
         library.remove_animation(key)
@@ -487,7 +505,17 @@ func _prepare_bow_poses(human: Node3D) -> void:
         skeleton.set_bone_pose_rotation(bone, original[bone])
     skeleton.force_update_all_bone_transforms()
 
-func _solve_right_arm(skeleton: Skeleton3D, target: Vector3) -> void:
+func _rotate_actor_bone(skeleton: Skeleton3D, name: String, axis: Vector3, angle: float) -> void:
+    var bone := skeleton.find_bone(name)
+    var pose := skeleton.get_bone_global_pose(bone)
+    var local := skeleton.get_bone_pose_rotation(bone)
+    var frame := pose.basis.orthonormalized() * Basis(local).inverse()
+    var skeleton_axis := (skeleton.global_basis.inverse() * global_basis * axis).normalized()
+    var rotation := frame.inverse() * Basis(skeleton_axis, angle) * frame
+    skeleton.set_bone_pose_rotation(bone, (rotation.get_rotation_quaternion() * local).normalized())
+    skeleton.force_update_all_bone_transforms()
+
+func _solve_right_arm(skeleton: Skeleton3D, target: Vector3, pole_direction := Vector3(0.65, 0.10, 0.45)) -> void:
     var upper := skeleton.find_bone("RightArm")
     var elbow := skeleton.find_bone("RightForeArm")
     var wrist := skeleton.find_bone("RightHand")
@@ -499,7 +527,7 @@ func _solve_right_arm(skeleton: Skeleton3D, target: Vector3) -> void:
     var b := joint.distance_to(hand)
     var direction := (destination - shoulder).normalized()
     var distance := clampf(shoulder.distance_to(destination), absf(a - b) + 0.001, a + b - 0.001)
-    var pole := skeleton.global_basis.inverse() * global_basis * Vector3(0.65, 0.10, 0.45)
+    var pole := skeleton.global_basis.inverse() * global_basis * pole_direction
     var bend := (pole - direction * pole.dot(direction)).normalized()
     var along := (a * a - b * b + distance * distance) / (2.0 * distance)
     var knee := shoulder + direction * along + bend * sqrt(maxf(0, a * a - along * along))

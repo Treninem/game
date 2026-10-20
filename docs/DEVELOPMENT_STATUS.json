@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Пересобраны обе модели: расслабленные свободные пальцы, более плавные веса плеч, исправленные манжеты и кожа запястий. Убрано двойное затемнение ткани. Проверены геометрия, хват, редактор, материалы и графический игровой проход. Полная визуальная приёмка остаётся открытой; повторившийся пропуск лечения сохранён как нерешённое наблюдение.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_HUMAN_DEFORMATIONS.json",
+  "current_stage": "Исправлена тянущая рука при стрельбе из лука: цель у правой щеки, разворот корпуса, локоть снаружи и промежуточная поза подъёма/возврата. Проверены 900 поз траектории, прежние 180 поз хвата, три ракурса обеих моделей и графический игровой проход. Полная визуальная приёмка остаётся открытой.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_CLEARANCE.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -283,5 +283,22 @@
     "full_visual_acceptance": false,
     "manual_free_roam": false,
     "native_heal_input_intermittent_pending": true
+  },
+  "bow_body_clearance": {
+    "trajectory_samples": 900,
+    "bodies": 2,
+    "heights_cm": [
+      160,
+      180,
+      195
+    ],
+    "pitch_radians": [
+      -0.55,
+      0,
+      0.55
+    ],
+    "views": 3,
+    "holding_arm_checks_retained": true,
+    "exact_skinned_collision_acceptance": false
   }
 }

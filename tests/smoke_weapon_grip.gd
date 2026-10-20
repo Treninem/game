@@ -2,6 +2,7 @@ extends Node
 var failures: Array[String] = []
 var checked := 0
 var minimum_draw_alignment := 1.0
+var bow_sweep_checked := 0
 func _ready() -> void:
     call_deferred("_run")
 func _run() -> void:
@@ -97,6 +98,18 @@ func _run() -> void:
                         # Cover release and late held poses, including the
                         # female body's previously failing 0.75 s sample.
                         if time >= 0.396:
+                            var right_shoulder := actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("RightArm")).origin))
+                            var right_elbow := actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("RightForeArm")).origin))
+                            var right_wrist := actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("RightHand")).origin))
+                            var ratio := height_cm / 180.0
+                            if variant == 0 and is_equal_approx(time, 0.396):
+                                print("BOW_RIGHT_ARM_DIAGNOSTIC shoulder=", right_shoulder, " elbow=", right_elbow, " wrist=", right_wrist)
+                            if right_wrist.x < 0.04 * ratio or right_wrist.z > 0.03 * ratio:
+                                failures.append("Drawing wrist crosses torso center or goes behind body: %s" % right_wrist)
+                            if right_elbow.x < right_shoulder.x + 0.06 * ratio:
+                                failures.append("Drawing elbow folds into the torso")
+                            if right_elbow.y > right_shoulder.y + 0.14 * ratio:
+                                failures.append("Drawing elbow rises above the natural shoulder line")
                             minimum_draw_alignment = minf(minimum_draw_alignment, float(data.arm_alignment))
                             if float(data.arm_alignment) < 0.9:
                                 failures.append("Bow arm leaves the aim line during release/hold: sex=%s time=%s dot=%s" % [sex, time, data.arm_alignment])
@@ -117,6 +130,11 @@ func _run() -> void:
             await get_tree().process_frame
             if is_instance_valid(visual.held_weapon) or visual.grip_modifier.closed_fingers != 0:
                 failures.append("Removing equipment retains its mesh or closed-hand constraint")
+        actor.set_meta("preview_item", "short_bow")
+        visual.call("_refresh_weapon")
+        await _check_bow_sweep(actor, visual, skeleton, height_cm)
+        actor.set_meta("preview_item", "")
+        visual.call("_refresh_weapon")
         get_tree().paused = true
         actor.set_meta("preview_item", "starter_axe")
         visual.call("_refresh_weapon")
@@ -135,6 +153,44 @@ func _run() -> void:
     for message in failures:
         push_error(message)
     print("BOW_HOLD_ALIGNMENT_MIN ", minimum_draw_alignment)
+    print("BOW_BODY_SWEEP_CHECKED ", bow_sweep_checked)
     if failures.is_empty():
         print("WEAPON_GRIP_OK poses=",checked," bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged")
     get_tree().quit(0 if failures.is_empty() else 1)
+
+func _check_bow_sweep(actor: CharacterBody3D, visual: Node3D, skeleton: Skeleton3D, height_cm: float) -> void:
+    var ratio := height_cm / 180.0
+    var pivot := actor.get_node("CameraPivot") as Node3D
+    for pitch: float in [-0.55, 0.0, 0.55]:
+        pivot.rotation.x = pitch
+        for clip: String in ["Bow_Attack_Draw", "Bow_Attack_Shoot"]:
+            for sample in range(25):
+                var animator: AnimationPlayer = visual.get("animation_player")
+                animator.play(clip, 0)
+                animator.seek(animator.get_animation(clip).length * sample / 24.0, true)
+                animator.pause()
+                skeleton.advance(0)
+                await get_tree().process_frame
+                var points := {}
+                for bone: String in ["LeftArm", "RightArm", "RightForeArm", "RightHand", "Spine1", "Spine2", "Neck"]:
+                    points[bone] = actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone(bone)).origin))
+                # A conservative central torso volume, derived from the live
+                # skeleton. This catches an arm crossing the chest/back; exact
+                # cloth-surface clearance still requires graphical inspection.
+                var center: Vector3 = points.Spine2
+                var side: Vector3 = points.RightArm - points.LeftArm
+                side.y = 0
+                var radius_x := side.length() * 0.36
+                side = side.normalized()
+                var forward := Vector3(side.z, 0, -side.x)
+                var radius_z := 0.09 * ratio
+                for segment in [["RightArm", "RightForeArm"], ["RightForeArm", "RightHand"]]:
+                    for step in range(3 if segment[0] == "RightArm" else 1, 13):
+                        var point: Vector3 = (points[segment[0]] as Vector3).lerp(points[segment[1]], step / 12.0)
+                        if point.y <= points.Spine1.y or point.y >= points.Neck.y - 0.045 * ratio:
+                            continue
+                        var radial := pow((point - center).dot(side) / radius_x, 2) + pow((point - center).dot(forward) / radius_z, 2)
+                        if radial < 1.0:
+                            failures.append("Bow arm crosses central torso: height=%s pitch=%s %s sample=%d segment=%s point=%s" % [height_cm, pitch, clip, sample, segment, point])
+                            break
+                bow_sweep_checked += 1
