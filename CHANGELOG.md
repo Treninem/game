@@ -1,3 +1,8 @@
+## Magic save state — unreleased — 2026-10-20
+- Persist selected spell and remaining cooldown seconds through existing game saves; reset cleanly for New Game/legacy profiles and bound malformed state.
+- Preserve pause semantics and prevent reload recovery bypass. Source magic runtime/save tests and exported input-driven healing/reload/blocked-cast check pass.
+- Editor coverage remains 32/55 (58.2%); overall visual realism remains unaccepted. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_MAGIC_STATE.json.
+
 ## Map state transitions — unreleased — 2026-10-20
 - Invalidate local terrain caches on world-state revision and synchronize map exploration/live-marker tracking after reset/load, including same-cell reload.
 - Preserve fog, saved buildings and felled-tree state; add graphical transition regression and retain existing cartography/UI gates.

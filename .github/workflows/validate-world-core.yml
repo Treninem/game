@@ -246,6 +246,8 @@ jobs:
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_map_state_transition.tscn 90
       - name: Verify chopping removes real rendered forest instances
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_chopping.tscn 90
+      - name: Verify saved spell selection and remaining cooldowns
+        run: bash tools/run_godot_smoke.sh tests/smoke_magic_state.tscn 90
       - name: Verify playable character creator and saved appearance
         run: bash tools/run_godot_smoke.sh tests/smoke_character_creator.tscn 120
       - name: Verify physical mip levels on character materials

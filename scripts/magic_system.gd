@@ -73,21 +73,53 @@ const SPELLS := {
     }
 }
 
+const STATE_KEY := "magic_runtime_v1"
+
+var state_revision := -1
 var selected_index := 0
 var cooldowns: Dictionary = {}
 
 func _ready() -> void:
     set_process(true)
 
+func _persist_runtime() -> void:
+    GameState.set_world_value(STATE_KEY, {"selected_spell": String(SPELL_ORDER[posmod(selected_index, SPELL_ORDER.size())]), "cooldowns": cooldowns.duplicate()})
+
+func _sync_state_revision() -> void:
+    if state_revision == GameState.state_revision:
+        return
+    state_revision = GameState.state_revision
+    selected_index = 0
+    cooldowns.clear()
+    var saved = GameState.get_world_value(STATE_KEY, {})
+    if typeof(saved) == TYPE_DICTIONARY:
+        var selected = saved.get("selected_spell", "fireball")
+        if typeof(selected) == TYPE_STRING and selected in SPELL_ORDER:
+            selected_index = SPELL_ORDER.find(selected)
+        var saved_cooldowns = saved.get("cooldowns", {})
+        if typeof(saved_cooldowns) == TYPE_DICTIONARY:
+            for spell_id: String in SPELL_ORDER:
+                var value = saved_cooldowns.get(spell_id, 0.0)
+                if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)):
+                    var remaining := clampf(float(value), 0.0, float(SPELLS[spell_id].cooldown))
+                    if remaining > 0.0:
+                        cooldowns[spell_id] = remaining
+    _persist_runtime()
+
 func _process(delta: float) -> void:
+    _sync_state_revision()
+    if cooldowns.is_empty():
+        return
     for spell_id in cooldowns.keys():
         var left := maxf(0.0, float(cooldowns[spell_id]) - delta)
         if left <= 0.0:
             cooldowns.erase(spell_id)
         else:
             cooldowns[spell_id] = left
+    _persist_runtime()
 
 func selected_spell_id() -> String:
+    _sync_state_revision()
     if SPELL_ORDER.is_empty():
         return ""
     selected_index = posmod(selected_index, SPELL_ORDER.size())
@@ -98,15 +130,19 @@ func selected_spell_label() -> String:
     return String(SPELLS.get(spell_id, {}).get("label", spell_id))
 
 func select_next() -> void:
+    _sync_state_revision()
     if SPELL_ORDER.is_empty():
         return
     selected_index = (selected_index + 1) % SPELL_ORDER.size()
+    _persist_runtime()
     _announce_selection()
 
 func select_previous() -> void:
+    _sync_state_revision()
     if SPELL_ORDER.is_empty():
         return
     selected_index = posmod(selected_index - 1, SPELL_ORDER.size())
+    _persist_runtime()
     _announce_selection()
 
 func _announce_selection() -> void:
@@ -116,6 +152,7 @@ func _announce_selection() -> void:
     GameState.notify("Магия: %s • ПКМ — применить • Q — следующая" % label)
 
 func cooldown_left(spell_id: String) -> float:
+    _sync_state_revision()
     return maxf(0.0, float(cooldowns.get(spell_id, 0.0)))
 
 func cast_selected(caster: CharacterBody3D, camera: Camera3D) -> bool:
@@ -151,6 +188,7 @@ func cast_selected(caster: CharacterBody3D, camera: Camera3D) -> bool:
         return false
 
     cooldowns[spell_id] = float(data.get("cooldown", 0.5))
+    _persist_runtime()
     spell_cast.emit(spell_id)
     return true
 
