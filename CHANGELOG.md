@@ -1,3 +1,8 @@
+## Free-hand spell gesture — unreleased — 2026-10-20
+- Replace Punch during casting with separate left/right free-hand reaches; retain occupied-arm pose and lower-body gait even while unarmed.
+- Verify both bodies/hands, existing grip/magic checks, rendered healing while walking and save/load in source and exported review.
+- Current models remain owner-rejected; no completed natural-animation or realism claim. Editor functional count stays 32/55 (58.2%). Evidence: docs/DEVELOPMENT_LOG_2026-10-20_CAST_POSE.json.
+
 ## Locomotion facing — unreleased — 2026-10-20
 - Turn the player visual toward resolved travel for lateral/backward locomotion without rotating camera/input axes; retain attack/cast aim and furniture poses.
 - Reproduce three wrong-facing directions in rendered baseline; verify five directions, frame partitions, existing grip and movement gates, and visible source/exported world scenarios.

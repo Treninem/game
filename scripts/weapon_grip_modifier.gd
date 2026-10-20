@@ -8,12 +8,15 @@ var gait_applied := false
 var gait_tracks: Dictionary = {}
 
 func _process_modification_with_delta(_delta: float) -> void:
-    if not is_instance_valid(visual) or not is_instance_valid(visual.held_weapon):
+    if not is_instance_valid(visual):
         closed_fingers = 0
         gait_applied = false
         return
     var skeleton := get_skeleton()
     _moving_legs(skeleton, _delta)
+    if not is_instance_valid(visual.held_weapon):
+        closed_fingers = 0
+        return
     var side := "Left" if visual.held_item == "short_bow" else "Right"
     if visual.held_item == "short_bow":
         var actor := visual.get_parent_node_3d()
@@ -57,7 +60,7 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
         return
     var motion := actor.get_real_velocity()
     var speed := Vector2(motion.x, motion.z).length()
-    if speed < 0.16 or current not in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch"]:
+    if speed < 0.16 or current not in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"]:
         return
     var gait := "Run" if speed > 5.7 else "Walk"
     var clip: Animation = visual.animation_player.get_animation(gait)

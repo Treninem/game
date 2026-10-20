@@ -96,6 +96,7 @@ func apply_appearance(value: Variant) -> void:
         _prepare_sitting_pose(model)
         _prepare_bow_poses(model)
         _prepare_axe_pose(model)
+        _prepare_cast_poses(model)
     last_position = get_parent_node_3d().global_position
     if get_parent().name == "Player" or get_parent().has_meta("preview_animation"):
         var skeletons := model.find_children("*", "Skeleton3D", true, false)
@@ -322,7 +323,7 @@ func _process(delta: float) -> void:
     elif not body.is_on_floor():
         _play("Airborne", 1.0)
     elif body.name == "Player" and float(body.get("cast_elapsed")) > 0.0:
-        _play("Punch", 1.0)
+        _play("Cast_Right" if held_item == "short_bow" else "Cast_Left", 1.0)
     elif body.name == "Player" and float(body.get("attack_elapsed")) > 0.0:
         var stroke := "Axe_Chop" if held_item == "starter_axe" else "Punch"
         if held_item == "short_bow":
@@ -367,8 +368,8 @@ func _play(key: String, rate: float) -> void:
         active_animation = key
         # A bow releases after 0.22 s. A long locomotion crossfade used most
         # of that preparation time and left the weapon below the aim line.
-        animation_player.play(key, 0.06 if key in ["Bow_Attack_Draw", "Bow_Attack_Shoot"] else 0.18)
-        if key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch"] and is_instance_valid(grip_modifier):
+        animation_player.play(key, 0.06 if key in ["Bow_Attack_Draw", "Bow_Attack_Shoot", "Cast_Left", "Cast_Right"] else 0.18)
+        if key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"] and is_instance_valid(grip_modifier):
             animation_player.seek(fposmod(float(grip_modifier.get("gait_time")), animation_player.get_animation(key).length), true)
 
 func begin_axe_stroke() -> void:
@@ -381,6 +382,50 @@ func begin_axe_stroke() -> void:
 func play_death() -> void:
     _play("Death", 1.0)
     set_process(false)
+
+func _prepare_cast_poses(human: Node3D) -> void:
+    var skeleton := human.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    var root := animation_player.get_node(animation_player.root_node)
+    for side: String in ["Left", "Right"]:
+        var clip := animation_player.get_animation("Idle").duplicate() as Animation
+        clip.length = 0.45
+        clip.loop_mode = Animation.LOOP_NONE
+        var original := {}
+        for suffix: String in ["Arm", "ForeArm", "Hand"]:
+            var bone := skeleton.find_bone(side + suffix)
+            original[bone] = skeleton.get_bone_pose_rotation(bone)
+        # Reach with the free arm; the weapon arm keeps its existing grip.
+        _align_sitting_bone(skeleton, side + "Arm", side + "ForeArm", Vector3(-0.25 if side == "Left" else 0.25, -0.12, -1))
+        _align_sitting_bone(skeleton, side + "ForeArm", side + "Hand", Vector3(0, 0.18, -1))
+        for bone: int in original:
+            var path := NodePath(String(root.get_path_to(skeleton)) + ":" + skeleton.get_bone_name(bone))
+            var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
+            if track >= 0:
+                clip.remove_track(track)
+            track = clip.add_track(Animation.TYPE_ROTATION_3D)
+            clip.track_set_path(track, path)
+            clip.rotation_track_insert_key(track, 0.0, original[bone])
+            clip.rotation_track_insert_key(track, 0.12, skeleton.get_bone_pose_rotation(bone))
+            clip.rotation_track_insert_key(track, 0.26, skeleton.get_bone_pose_rotation(bone))
+            clip.rotation_track_insert_key(track, 0.45, original[bone])
+        for bone: int in original:
+            skeleton.set_bone_pose_rotation(bone, original[bone])
+        skeleton.force_update_all_bone_transforms()
+        # A shortened Idle copy changes interpolation at its old loop boundary.
+        # Keep the occupied arm at the same relaxed pose throughout the gesture.
+        var other := "Right" if side == "Left" else "Left"
+        for suffix: String in ["Arm", "ForeArm", "Hand"]:
+            var bone := skeleton.find_bone(other + suffix)
+            var path := NodePath(String(root.get_path_to(skeleton)) + ":" + skeleton.get_bone_name(bone))
+            var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
+            if track >= 0:
+                clip.remove_track(track)
+            track = clip.add_track(Animation.TYPE_ROTATION_3D)
+            clip.track_set_path(track, path)
+            var relaxed := skeleton.get_bone_pose_rotation(bone)
+            clip.rotation_track_insert_key(track, 0.0, relaxed)
+            clip.rotation_track_insert_key(track, 0.45, relaxed)
+        animation_player.get_animation_library("").add_animation("Cast_" + side, clip)
 
 func _prepare_bow_poses(human: Node3D) -> void:
     var skeleton := human.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D

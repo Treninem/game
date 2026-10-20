@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлено направление тела при ходе назад и вбок: визуальная модель поворачивается по фактическому движению независимо от камеры, при атаке и магии совпадает с прицелом. Проверены исходная игра и проверочный пакет. Существующие модели людей забракованы владельцем; художественная приёмка не пройдена.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LOCOMOTION_FACING.json",
-  "review_launcher": "build/review-2026-10-20-locomotion-facing/ImPuls-editor.cmd",
+  "current_stage": "Убрана подмена магии ударом кулаком: отдельный жест свободной рукой, сохранение позы руки с оружием и движения ног при колдовстве. Исходная игра и проверочный пакет проверены. Существующие модели людей и окружение остаются забракованными владельцем.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_CAST_POSE.json",
+  "review_launcher": "build/review-2026-10-20-cast-pose/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
