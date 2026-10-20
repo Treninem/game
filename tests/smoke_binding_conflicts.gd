@@ -58,6 +58,27 @@ func _run() -> void:
     assert(not get_tree().paused)
     SettingsManager.load_settings()
     assert(int(SettingsManager.bindings.open_inventory.code) == KEY_F10, "Accepted binding lost through settings reload")
+    SettingsManager.bindings.open_inventory = SettingsManager.DEFAULT_BINDINGS.quick_load.duplicate(true)
+    SettingsManager.save_settings()
+    var legacy := FileAccess.get_file_as_bytes(SettingsManager.SETTINGS_PATH)
+    SettingsManager.load_settings()
+    var conflicts := SettingsManager.binding_conflicts()
+    assert(conflicts.size() == 1 and conflicts[0].has("open_inventory") and conflicts[0].has("quick_load"))
+    assert(FileAccess.get_file_as_bytes(SettingsManager.SETTINGS_PATH) == legacy, "Conflict audit rewrites old settings")
+    menu.open_menu("controls")
+    assert(_warnings(menu).size() == 1, "Old conflict is not visible in controls")
+    if DisplayServer.get_name() != "headless":
+        for frame in range(4):
+            await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        get_viewport().get_texture().get_image().save_png("user://legacy-binding-conflict.png")
+    menu._begin_rebind("open_inventory")
+    await _key(KEY_F10)
+    assert(SettingsManager.binding_conflicts().is_empty() and _warnings(menu).is_empty(), "Resolved conflict warning remains")
+    assert(int(SettingsManager.bindings.quick_load.code) == KEY_F9, "Resolving conflict changes another action")
+    menu.close_menu()
+    SettingsManager.load_settings()
+    assert(SettingsManager.binding_conflicts().is_empty() and int(SettingsManager.bindings.open_inventory.code) == KEY_F10, "Resolved legacy conflict returns after reload")
     print("BINDING_CONFLICTS_OK keyboard=true mouse=true unchanged_rejection=true capture_retry=true cancel=true persisted=true")
     get_tree().quit(0)
 
@@ -67,6 +88,9 @@ func _event(code: Key) -> InputEventKey:
     event.keycode = code
     event.pressed = true
     return event
+
+func _warnings(menu: Control) -> Array:
+    return menu.content.find_children("*", "Label", true, false).filter(func(label: Label): return bool(label.get_meta("binding_conflict", false)))
 
 func _events(action: String) -> Array:
     return InputMap.action_get_events(action).map(func(event: InputEvent): return event.as_text())

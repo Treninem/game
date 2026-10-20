@@ -159,6 +159,20 @@ func rebind_action(action: String, event: InputEvent) -> bool:
     bindings_changed.emit()
     return true
 
+func binding_conflicts() -> Array:
+    var groups := {}
+    for action: String in DEFAULT_BINDINGS:
+        var assigned: Dictionary = bindings.get(action, DEFAULT_BINDINGS[action])
+        var key := "%s:%d" % [String(assigned.get("type", "key")), int(assigned.get("code", 0))]
+        if not groups.has(key):
+            groups[key] = []
+        groups[key].append(action)
+    var result: Array = []
+    for actions: Array in groups.values():
+        if actions.size() > 1:
+            result.append(actions.duplicate())
+    return result
+
 func binding_text(action: String) -> String:
     var binding = bindings.get(action, DEFAULT_BINDINGS.get(action, {}))
     if binding.get("type", "key") == "mouse":

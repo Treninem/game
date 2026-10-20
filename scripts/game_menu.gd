@@ -351,6 +351,12 @@ func _show_settings() -> void:
 func _show_controls() -> void:
     title_label.text = "Управление"
     rebinding_label = _body("Нажмите на назначение, затем нажмите новую клавишу или кнопку мыши. Esc — отмена.")
+    for conflict: Array in SettingsManager.binding_conflicts():
+        var labels: Array[String] = []
+        for action: String in conflict:
+            labels.append(String(ACTION_LABELS.get(action, action)))
+        var warning := _body("Конфликт [%s]: %s. Назначьте одному из действий свободную кнопку." % [SettingsManager.binding_text(String(conflict[0])), ", ".join(labels)])
+        warning.set_meta("binding_conflict", true)
     for action in ACTION_LABELS:
         var card := PanelContainer.new()
         card.add_theme_stylebox_override("panel", _row_style())

@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Добавлена защита от новых конфликтующих назначений клавиатуры/мыши: отказ не меняет InputMap и настройки, меню показывает занятое действие и ждёт повторный выбор или Esc. Проверены отклонённый пробел, сохранение/загрузка назначения, видимое окно, инвентарь и адаптация. Старые дубли настроек автоматически не исправляются.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BINDING_CONFLICTS.json",
+  "current_stage": "Добавлено выявление старых дублирующихся назначений в загруженном профиле: раздел управления показывает клавишу и действия. Проверены отсутствие автоматической перезаписи, ручное исправление одного назначения, исчезновение предупреждения и повторная загрузка. Видимый интерфейс, инвентарь и адаптация прошли проверки.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LEGACY_BINDINGS.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -262,6 +262,6 @@
     "new_assignments": "reject duplicate encoded type/code across supported actions",
     "rejected_mutation": "none; config/InputMap/signals verified",
     "capture": "retry/cancel; rejected events consumed",
-    "old_duplicate_profiles": "not automatically repaired"
+    "old_duplicate_profiles": "read-only grouped audit shown in controls; preserved until explicit rebind; resolved warning and persistence tested"
   }
 }

@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Existing saved binding conflicts",
+  "spec_attachment": "2d9dc50a-1f17-436a-a728-4c9dc06ef8a4; full canonical comparison differs only in Markdown trailing spaces",
+  "changes": [
+    "Read-only grouped audit of currently loaded supported keyboard/mouse type+code assignments",
+    "Controls section lists duplicate key/button and affected action names with instruction to choose a free button",
+    "Existing valid duplicated profile remains unchanged until explicit user rebind; no automatic reassignment",
+    "Successful explicit rebind rebuilds controls and removes resolved warning"
+  ],
+  "validation": {
+    "binding_conflicts": {
+      "case": "binding_conflicts",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.89
+    },
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 24.83
+    },
+    "ui_responsive": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 23.7
+    },
+    "visible_binding_UI": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 6.48
+    }
+  },
+  "coverage": [
+    "Inject old valid F9 inventory/quick_load duplicate into isolated settings file and reload",
+    "Audit reports both actions in one group; loading/auditing leaves file bytes unchanged",
+    "Actual controls UI shows warning; rendered 1280x720 image inspected",
+    "Manually rebind inventory to free F10 through captured key; warning disappears and quick_load stays F9",
+    "Reload after manual fix retains F10 and no conflict",
+    "Prior rejection/no-mutation/capture/cancel tests, inventory and responsive checks retained"
+  ],
+  "image": "build/acceptance/binding-visible/appdata/Godot/app_userdata/ImPuls/legacy-binding-conflict.png",
+  "limits": [
+    "Audit informs rather than automatically repairing user assignments",
+    "Valid duplicate profile tested; malformed settings, modifier/layout aliases, gamepad and mod actions remain outside this acceptance",
+    "No new full-world route, export or stable release",
+    "Historical intermittent native heal action observation remains open",
+    "Earlier 32/55 editor functional count unchanged; no overall percentage assigned"
+  ]
+}
