@@ -43,6 +43,7 @@ func _run() -> void:
     for frame in range(4):
         await get_tree().process_frame
     assert(panels.find_child("InventoryItems", true, false).get_child_count() == 48)
+    assert(get_viewport().gui_get_focus_owner() == panels.find_child("InventoryItems", true, false).get_child(0), "Opening inventory does not focus its first cell")
     panels.find_child("InventoryNext", true, false).grab_focus()
     await _key(KEY_SPACE)
     for frame in range(3):
@@ -50,7 +51,19 @@ func _run() -> void:
     assert(panels.inventory_page_index == 1)
     assert(get_viewport().gui_get_focus_owner() == panels.find_child("InventoryItems", true, false).get_child(0), "Page change loses inventory focus")
     var search := panels.find_child("InventorySearch", true, false) as LineEdit
-    search.text_submitted.emit("ПОХОДНЫЙ ЛУК")
+    var upper_menu := scene.get_node("UI/GameMenu") as Control
+    upper_menu.visible = true
+    var upper_editor := LineEdit.new()
+    upper_menu.add_child(upper_editor)
+    upper_editor.grab_focus()
+    await _key(KEY_F, true)
+    assert(get_viewport().gui_get_focus_owner() == upper_editor, "Inventory search steals focus from upper menu")
+    upper_menu.visible = false
+    upper_editor.free()
+    await _key(KEY_F, true)
+    assert(get_viewport().gui_get_focus_owner() == search, "Ctrl+F does not focus inventory search")
+    search.text = "ПОХОДНЫЙ ЛУК"
+    await _key(KEY_ENTER)
     for frame in range(3):
         await get_tree().process_frame
     assert(panels.inventory_page_index == 0)
@@ -142,14 +155,16 @@ func _find_button(node: Node, text: String) -> Button:
             return found
     return null
 
-func _key(code: Key) -> void:
+func _key(code: Key, ctrl: bool = false) -> void:
     var press := InputEventKey.new()
     press.keycode = code
+    press.ctrl_pressed = ctrl
     press.pressed = true
     Input.parse_input_event(press)
     await get_tree().process_frame
     var release := InputEventKey.new()
     release.keycode = code
+    release.ctrl_pressed = ctrl
     Input.parse_input_event(release)
     for frame in range(3):
         await get_tree().process_frame

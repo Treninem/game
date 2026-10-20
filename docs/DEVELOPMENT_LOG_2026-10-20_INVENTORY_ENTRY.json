@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Inventory entry and search keyboard access",
+  "spec_attachment": "a0e3e17d-35a3-492b-8260-f0667a94796e; full canonical master comparison differs only in trailing Markdown spaces",
+  "changes": [
+    "Open inventory using guarded rebuild so first available cell (or empty-result search) gains focus",
+    "Ctrl+F focuses search and selects its text while inventory is active",
+    "Do not intercept shortcut while dialogue or pause menu is open",
+    "Search hint names the shortcut; Enter search uses existing submitted-query path"
+  ],
+  "checks": {
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.28
+    },
+    "ui_responsive": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 10.78
+    },
+    "visible_inventory": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 8.06,
+      "mode": "visible automated UI; not manual playthrough"
+    }
+  },
+  "coverage": [
+    "Initial first-cell focus",
+    "Actual Ctrl+F and Enter keys for bow search",
+    "Upper-menu editor retains focus when Ctrl+F is pressed",
+    "Prior Space-driven page/equip/unequip/use, arrow selection, empty-result fallback, close-before-callback, inventory preservation and responsive tests retained"
+  ],
+  "limits": [
+    "Tests open the normal panel API; opening via the I binding was not newly retested here",
+    "No full gameplay route rerun; visible isolated UI and responsive tests only",
+    "Complete keyboard-only/accessibility acceptance remains pending",
+    "Independent player stacks, icons and drag/drop remain pending",
+    "Historical intermittent native heal action observation remains open",
+    "No new exported package or stable release; earlier 32/55 editor functional count unchanged"
+  ]
+}

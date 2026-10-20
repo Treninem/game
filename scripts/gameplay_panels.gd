@@ -29,6 +29,19 @@ func _ready() -> void:
     call_deferred("_apply_responsive_layout")
     visible = false
 
+func _input(event: InputEvent) -> void:
+    if not visible or current_section != "inventory" or DialogueManager.is_open:
+        return
+    if event is InputEventKey and event.pressed and not event.echo and event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not event.shift_pressed and (event.keycode == KEY_F or event.physical_keycode == KEY_F):
+        var pause_menu := get_tree().get_first_node_in_group("game_menu") as Control
+        if pause_menu != null and pause_menu.visible:
+            return
+        var search := content.find_child("InventorySearch", true, false) as LineEdit
+        if search != null:
+            search.grab_focus()
+            search.select_all()
+            get_viewport().set_input_as_handled()
+
 func _unhandled_input(event: InputEvent) -> void:
     if DialogueManager.is_open:
         return
@@ -74,7 +87,10 @@ func open_panel(section: String) -> void:
     get_tree().paused = true
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
     _apply_responsive_layout()
-    _rebuild_content()
+    if section == "inventory":
+        _rebuild_inventory()
+    else:
+        _rebuild_content()
 
 func close_panel() -> void:
     current_section = ""
@@ -298,7 +314,7 @@ func _show_inventory() -> void:
     content.add_child(search_row)
     var search := LineEdit.new()
     search.name = "InventorySearch"
-    search.placeholder_text = "Название или категория предмета"
+    search.placeholder_text = "Название или категория предмета • Ctrl+F"
     search.text = inventory_query
     search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     search.text_submitted.connect(_inventory_search)
