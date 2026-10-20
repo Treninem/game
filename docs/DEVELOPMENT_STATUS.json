@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Редактор: восемь форм, отдельные категории, простой/подробный режимы, сброс формы. Проверены новые параметры, анимации и сохранения; визуальная цель ещё не достигнута.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_FACE_CONTROLS.json",
-  "review_launcher": "build/review-2026-10-20-face-controls/ImPuls-editor.cmd",
+  "current_stage": "Ускорены подготовка позы и переходы анимации лука до выпуска стрелы; проверены обе модели, хват, фактический выстрел и сохранение. Позднее удержание позы и естественность движений остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_TIMING.json",
+  "review_launcher": "build/review-2026-10-20-bow-timing/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -207,8 +207,8 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "Новые локальные проверки редактора/хвата/рубки/движения/запуска и графического пакета пройдены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_FACE_CONTROLS.json",
-  "review_launcher_revision": "Character control review; frozen package SHA256 ae1bab5437e9449ce36505bd70bebf3dafca1766d43f6ddf0bd98b22339c770e",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_BOW_TIMING.json",
+  "review_launcher_revision": "Bow timing review; frozen package SHA256 66b6ba7636c0bfa23b9f1c9ee74ecdc1835c1ec8a16d7da175bcc4cffbe63b5a",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",

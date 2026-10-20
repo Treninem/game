@@ -65,6 +65,14 @@ func _run() -> void:
                     if float(data.gap) > 0.005:
                         failures.append("Physical handle floats outside palm: %s/%s %.4f m" % [sex, item, data.gap])
                     if clip == "Bow_Attack_Draw":
+                        # The actual shot releases at 0.22 s * 1.8 playback.
+                        # Later paused preview poses are outside that window.
+                        if is_equal_approx(time, 0.396):
+                            var shoulder := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftArm")).origin)
+                            var wrist := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftHand")).origin)
+                            var aimed := -(actor.global_basis * Basis(Vector3.RIGHT, pivot.rotation.x)).z
+                            if (wrist - shoulder).normalized().dot(aimed) < 0.9:
+                                failures.append("Bow arm has not reached its aim line before the actual release time: sex=%s time=%s dot=%s" % [sex, time, (wrist - shoulder).normalized().dot(aimed)])
                         var arrow_mesh := visual.nocked_arrow.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
                         var size := arrow_mesh.get_aabb().size
                         var shaft := arrow_mesh.global_basis * Vector3(0, 0, size.z)

@@ -338,7 +338,9 @@ func _play(key: String, rate: float) -> void:
     if active_animation != key or (key in ["Working", "PickUp"] and not animation_player.is_playing()):
         var previous := active_animation
         active_animation = key
-        animation_player.play(key, 0.18)
+        # A bow releases after 0.22 s. A long locomotion crossfade used most
+        # of that preparation time and left the weapon below the aim line.
+        animation_player.play(key, 0.06 if key in ["Bow_Attack_Draw", "Bow_Attack_Shoot"] else 0.18)
         if key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch"] and is_instance_valid(grip_modifier):
             animation_player.seek(fposmod(float(grip_modifier.get("gait_time")), animation_player.get_animation(key).length), true)
 
@@ -389,7 +391,7 @@ func _prepare_bow_poses(human: Node3D) -> void:
             clip.track_set_path(track, path)
             if key == "Bow_Attack_Draw":
                 clip.rotation_track_insert_key(track, 0.0, original[bone])
-                clip.rotation_track_insert_key(track, 0.4, drawn[bone])
+                clip.rotation_track_insert_key(track, 0.24, drawn[bone])
                 clip.rotation_track_insert_key(track, 0.8, drawn[bone])
             else:
                 clip.rotation_track_insert_key(track, 0.0, drawn[bone])

@@ -1,3 +1,7 @@
+## Bow preparation timing — unreleased — 2026-10-20
+- Settle the drawn arm pose and short bow crossfade before the existing 0.22 s release, retaining gameplay timing and ammo rules.
+- Add release-frame aim validation for both bodies; original grip checks and graphical exported-world shot/save checks pass. Late held-pose alignment and natural-motion quality remain open. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_BOW_TIMING.json.
+
 ## Character editor controls — unreleased — 2026-10-20
 - Add four existing CC0 facial targets to both bodies and all fitted parts; preserve old appearance profiles.
 - Add trait categories, simple/advanced controls, individual reset and face framing. Validate combined morphs in 100 poses and the actual graphical world; realism and full wardrobe remain unfinished.
