@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Устранён подтверждённый риск повторного переноса и неконсистентного сохранения при уведомлении инвентаря. Обе стороны обмена обновляются до уведомления. В меню сундука добавлен перенос половины стопки. Проверены повторный вызов, JSON-сохранение в обработчиках, права и вместимость; игровой прогон повторён.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_STORAGE_ATOMIC.json",
+  "current_stage": "Добавлен ввод точного количества для сундука, подтверждение и повторная проверка остатка. Исправлены повторные нажатия устаревших строк и недоступные варианты укладки в полный сундук. Проверены видимый интерфейс, торговые диалоги и повторный игровой прогон; единичный отказ применения лечения в первом прогоне остаётся открытым наблюдением.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_STORAGE_QUANTITY.json",
   "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd",
   "systems": [
     {
@@ -244,6 +244,10 @@
     "player_storage_limit": null,
     "chest_capacity": 200,
     "independent_inventory_stacks": "pending",
-    "exported_package": "not rebuilt"
-  }
+    "exported_package": "not rebuilt",
+    "exact_quantity": "implemented; bounded integer field + confirm, pending edit text included",
+    "stale_dialogue_callbacks": "revision-guarded",
+    "full_chest_deposit_options": "hidden"
+  },
+  "native_heal_input_intermittent_pending": true
 }

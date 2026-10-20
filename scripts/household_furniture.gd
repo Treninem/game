@@ -147,10 +147,11 @@ func open_storage(actor: Node3D) -> void:
         var label := String(InventorySystem.item_info(item).get("name", item))
         for deposit: bool in [false, true]:
             var count := int(GameState.inventory.get(item, 0)) if deposit else int(items.get(item, 0))
-            if count > 0:
+            var batch := mini(count, free_capacity()) if deposit else count
+            if batch > 0:
                 choices.append({"text": "%s: %s ×1 (есть %d)" % ["Положить" if deposit else "Взять", label, count], "action": "furniture_transfer", "furniture": get_instance_id(), "item": item, "deposit": deposit})
-                var batch := mini(count, free_capacity()) if deposit else count
                 if batch > 1:
+                    choices.append({"text": "%s количество: %s" % ["Положить" if deposit else "Взять", label], "action": "furniture_transfer", "furniture": get_instance_id(), "item": item, "deposit": deposit, "quantity_max": batch})
                     choices.append({"text": "%s: %s ×%d" % ["Положить стопку" if deposit else "Взять стопку", label, batch], "action": "furniture_transfer", "furniture": get_instance_id(), "item": item, "deposit": deposit, "amount": batch})
                     var half := count / 2
                     if half > 1 and half < batch:

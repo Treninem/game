@@ -71,7 +71,57 @@ func _run() -> void:
     assert(half_index >= 0, "Storage UI has no half deposit")
     DialogueManager.choose(half_index)
     assert(int(chest.contents().stone) == stone_before / 2 and int(GameState.inventory.stone) == stone_before - stone_before / 2)
-    DialogueManager.close_dialogue()
+    var ui := preload("res://scripts/dialogue_ui.gd").new()
+    add_child(ui)
+    chest.open_storage(actor)
+    var custom := _quantity_choice("wood", false)
+    assert(custom >= 0, "Missing quantity withdrawal option")
+    var editor := ui.find_child("StorageQuantity_%d" % custom, true, false) as SpinBox
+    var confirm := ui.find_child("StorageConfirm_%d" % custom, true, false) as Button
+    assert(editor != null and confirm != null)
+    editor.get_line_edit().text = "7"
+    confirm.pressed.emit()
+    assert(int(chest.contents().wood) == 43 and int(GameState.inventory.wood) == total - 43, "Typed quantity is ignored")
+    confirm.pressed.emit()
+    assert(int(chest.contents().wood) == 43 and int(GameState.inventory.wood) == total - 43, "Replaced UI row repeats its transfer")
+    for invalid in ["-1", "0", "9999", "1.5", "abc"]:
+        custom = _quantity_choice("wood", false)
+        editor = ui.find_child("StorageQuantity_%d" % custom, true, false) as SpinBox
+        confirm = ui.find_child("StorageConfirm_%d" % custom, true, false) as Button
+        editor.get_line_edit().text = invalid
+        confirm.pressed.emit()
+        assert(int(chest.contents().wood) == 43 and int(GameState.inventory.wood) == total - 43, "Invalid quantity changed resources")
+    custom = _quantity_choice("wood", true)
+    editor = ui.find_child("StorageQuantity_%d" % custom, true, false) as SpinBox
+    confirm = ui.find_child("StorageConfirm_%d" % custom, true, false) as Button
+    editor.get_line_edit().text = "8"
+    confirm.pressed.emit()
+    assert(int(chest.contents().wood) == 51 and int(GameState.inventory.wood) == total - 51)
+    custom = _quantity_choice("wood", false)
+    editor = ui.find_child("StorageQuantity_%d" % custom, true, false) as SpinBox
+    confirm = ui.find_child("StorageConfirm_%d" % custom, true, false) as Button
+    editor.get_line_edit().text = "51"
+    assert(chest.transfer(actor, "wood", false, 50))
+    confirm.pressed.emit()
+    assert(int(chest.contents().wood) == 1 and int(GameState.inventory.wood) == total - 1, "Stale quantity duplicates stock")
+    assert(chest.transfer(actor, "wood", true, chest.free_capacity()))
+    chest.open_storage(actor)
+    for option in DialogueManager.options:
+        assert(not option.get("deposit", false), "Full chest offers an impossible deposit")
+    if DisplayServer.get_name() != "headless":
+        for frame in range(4):
+            await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        get_viewport().get_texture().get_image().save_png("user://storage-quantity.png")
+    var old_close := ui.options_box.get_child(ui.options_box.get_child_count() - 1) as Button
+    old_close.pressed.emit()
+    assert(not DialogueManager.is_open and not get_tree().paused)
+    DialogueManager.open_dialogue("Проверка", "Обычная реплика", [{"text": "Закрыть", "action": "close"}])
+    old_close.pressed.emit()
+    assert(DialogueManager.is_open, "Stale close button closes a newer dialogue")
+    var current_close := ui.options_box.get_child(0) as Button
+    current_close.pressed.emit()
+    assert(not DialogueManager.is_open and not get_tree().paused)
     actor.global_position = private_chest.approach_point()
     private_chest.open_storage(actor)
     assert(not DialogueManager.is_open and not private_chest.transfer(actor, "wood", true), "Private chest is writable by stranger")
@@ -87,5 +137,12 @@ func _choice(item: String, deposit: bool, amount: int) -> int:
     for index in range(DialogueManager.options.size()):
         var option: Dictionary = DialogueManager.options[index]
         if option.get("item") == item and option.get("deposit", false) == deposit and int(option.get("amount", 1)) == amount:
+            return index
+    return -1
+
+func _quantity_choice(item: String, deposit: bool) -> int:
+    for index in range(DialogueManager.options.size()):
+        var option: Dictionary = DialogueManager.options[index]
+        if option.get("item") == item and option.get("deposit", false) == deposit and option.has("quantity_max"):
             return index
     return -1

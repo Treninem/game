@@ -94,16 +94,44 @@ func _show_dialogue(speaker: String, text: String, options: Array) -> void:
         child.queue_free()
     if options.is_empty():
         options = [{"text": "Закрыть", "action": "close"}]
+    var revision := DialogueManager.dialogue_revision
     for i in range(options.size()):
         var option = options[i]
         var button := Button.new()
         button.text = String(option.get("text", "Продолжить")) if typeof(option) == TYPE_DICTIONARY else "Продолжить"
         button.custom_minimum_size.y = 38
         button.clip_text = true
-        button.pressed.connect(Callable(DialogueManager, "choose").bind(i))
-        options_box.add_child(button)
+        if option is Dictionary and option.get("action") == "furniture_transfer" and int(option.get("quantity_max", 0)) > 0:
+            var row := HBoxContainer.new()
+            var quantity := SpinBox.new()
+            quantity.name = "StorageQuantity_%d" % i
+            quantity.min_value = 1
+            quantity.max_value = int(option.quantity_max)
+            quantity.step = 1
+            quantity.value = 1
+            quantity.custom_minimum_size.x = 100
+            quantity.tooltip_text = "Количество: 1–%d" % int(option.quantity_max)
+            row.add_child(quantity)
+            button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+            button.name = "StorageConfirm_%d" % i
+            button.pressed.connect(_choose_quantity.bind(i, quantity, revision))
+            row.add_child(button)
+            options_box.add_child(row)
+        else:
+            button.pressed.connect(Callable(DialogueManager, "choose").bind(i, -1, revision))
+            options_box.add_child(button)
     content_scroll.scroll_vertical = 0
     _fit_dialogue()
+
+func _choose_quantity(index: int, quantity: SpinBox, revision: int) -> void:
+    if revision != DialogueManager.dialogue_revision:
+        return
+    # Read pending editor text as well as arrow-button changes.
+    var typed := quantity.get_line_edit().text.strip_edges()
+    if not typed.is_valid_int() or int(typed) < 1 or int(typed) > int(quantity.max_value):
+        GameState.notify("Укажите целое количество от 1 до %d." % int(quantity.max_value))
+        return
+    DialogueManager.choose(index, int(typed), revision)
 
 func _hide_dialogue() -> void:
     visible = false
