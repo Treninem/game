@@ -4,6 +4,7 @@ var visual: Node3D
 var last_grip := Transform3D.IDENTITY
 var closed_fingers := 0
 var gait_time := 0.0
+var gait_name := ""
 var airborne_time := 0.0
 var gait_applied := false
 var gait_tracks: Dictionary = {}
@@ -17,7 +18,19 @@ func _process_modification_with_delta(_delta: float) -> void:
     _moving_legs(skeleton, _delta)
     if not is_instance_valid(visual.held_weapon):
         closed_fingers = 0
+        if visual.held_item.is_empty() and visual.animation_player.assigned_animation == "Punch":
+            for side: String in ["Left", "Right"]:
+                # The donor punch has open hands. Close in each palm's frame,
+                # and let the animation restore the free hand after the action.
+                for finger: String in ["Index", "Middle", "Ring", "Pinky", "Thumb"]:
+                    for joint in range(1, 4):
+                        var bone := skeleton.find_bone(side + "Hand" + finger + str(joint))
+                        if bone >= 0:
+                            skeleton.set_bone_pose_rotation(bone, Quaternion.IDENTITY)
+                _close_hand(skeleton, side, palm_frame(skeleton, side))
         return
+    if visual.held_item == "starter_axe" and visual.animation_player.assigned_animation == "Axe_Chop":
+        visual.call("constrain_axe_elbow", skeleton)
     var side := "Left" if visual.held_item == "short_bow" else "Right"
     if visual.held_item == "short_bow":
         var actor := visual.get_parent_node_3d()
@@ -59,6 +72,7 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
     airborne_time = minf(airborne_time + maxf(delta, 0.0), 0.22) if airborne else 0.0
     var current: String = visual.animation_player.assigned_animation
     if current in ["Walk", "Run"]:
+        gait_name = current
         gait_time = visual.animation_player.current_animation_position
         return
     var motion := actor.get_real_velocity()
@@ -67,7 +81,7 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
         return
     # Keep the action above the waist while using the real airborne leg pose.
     # Preview actors have no physics floor and must retain their authored pose.
-    var gait := "Airborne" if airborne else ("Run" if speed > 5.7 else "Walk")
+    var gait: String = "Airborne" if airborne else visual.call("gait_for_speed", speed)
     var clip: Animation = visual.animation_player.get_animation(gait)
     if not gait_tracks.has(gait):
         var tracks := []
@@ -81,7 +95,11 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
             tracks.append([track, skeleton.find_bone(bone_name), clip.track_get_type(track)])
         gait_tracks[gait] = tracks
     if not airborne:
-        gait_time = fposmod(gait_time + delta * clampf(speed / ((7.5 if gait == "Run" else 3.8) * visual.scale.x), 0.65, 1.5), clip.length)
+        var phase := gait_phase()
+        if gait_name != gait:
+            gait_time = phase * clip.length
+        gait_name = gait
+        gait_time = fposmod(gait_time + delta * float(visual.call("gait_rate", gait, speed)), clip.length)
     var sample_time := airborne_time if airborne else gait_time
     for entry: Array in gait_tracks[gait]:
         if entry[1] < 0:
@@ -91,6 +109,12 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
         elif entry[2] == Animation.TYPE_POSITION_3D:
             skeleton.set_bone_pose_position(entry[1], clip.position_track_interpolate(entry[0], sample_time))
     gait_applied = true
+
+func gait_phase() -> float:
+    if gait_name.is_empty() or not is_instance_valid(visual):
+        return 0.0
+    var clip: Animation = visual.animation_player.get_animation(gait_name)
+    return fposmod(gait_time / clip.length, 1.0) if clip != null and clip.length > 0.0 else 0.0
 
 static func palm_frame(skeleton: Skeleton3D, side: String) -> Transform3D:
     var wrist := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Hand")).origin

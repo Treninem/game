@@ -329,19 +329,34 @@ func _process(delta: float) -> void:
         if held_item == "short_bow":
             _play("Bow_Attack_Draw" if float(body.get("pending_bow_elapsed")) > 0 else "Bow_Attack_Shoot", 1.8 if float(body.get("pending_bow_elapsed")) > 0 else 1.0)
         else:
-            _play(stroke, 1.8 if held_item == "starter_axe" else 1.0)
+            # Complete the jab and recovery within the real attack window.
+            # At rate 1 the 1.04 s source punch was cut off after 0.55 s.
+            var rate := 1.8 if held_item == "starter_axe" else animation_player.get_animation(stroke).length / maxf(0.1, float(body.get("attack_cooldown")))
+            _play(stroke, rate)
     elif not body.is_on_floor():
         _play("Airborne", 1.0)
     elif body.is_in_group("hostile") and float(body.get("attack_elapsed")) > float(body.get("attack_interval")) - 0.55:
         _play("Punch", 1.0)
-    elif measured_speed > 5.7:
-        _play("Run", clampf(measured_speed / (7.5 * scale.x), 0.75, 1.35))
     elif measured_speed > 0.16:
-        _play("Walk", clampf(measured_speed / (3.8 * scale.x), 0.65, 1.5))
+        var gait := gait_for_speed(measured_speed)
+        _play(gait, gait_rate(gait, measured_speed))
     elif String(body.get_meta("activity", "idle")) == "work":
         _play("Working" if animation_player.has_animation("Working") else "PickUp", 0.8)
     else:
         _play("Idle", 1.0)
+
+# Reference stance speeds measured on the actual in-place human clips.
+# This matches the stride to motion; it is not full terrain foot locking.
+func _gait_reference_speed(gait: String) -> float:
+    if String(current_profile.get("sex", "male")) == "female":
+        return 5.46 if gait == "Run" else 1.77
+    return 5.93 if gait == "Run" else 1.82
+
+func gait_for_speed(speed: float) -> String:
+    return "Run" if speed > _gait_reference_speed("Walk") * scale.x * 1.5 else "Walk"
+
+func gait_rate(gait: String, speed: float) -> float:
+    return clampf(speed / (_gait_reference_speed(gait) * scale.x), 0.05, 2.0)
 
 func _update_locomotion_facing(body: CharacterBody3D, motion: Vector3, delta: float) -> void:
     if body.name != "Player":
@@ -375,13 +390,13 @@ func _play(key: String, rate: float) -> void:
         active_animation = key
         # A bow releases after 0.22 s. A long locomotion crossfade used most
         # of that preparation time and left the weapon below the aim line.
-        animation_player.play(key, 0.06 if key in ["Bow_Attack_Draw", "Bow_Attack_Shoot", "Cast_Left", "Cast_Right"] else 0.18)
+        animation_player.play(key, 0.06 if key in ["Bow_Attack_Draw", "Bow_Attack_Shoot", "Cast_Left", "Cast_Right", "Punch"] else 0.18)
         # Preserve the foot cycle across sprint changes: restarting at frame
         # zero swaps the support leg and produces a visible kick/crossfade.
         if gait_phase >= 0.0:
             animation_player.seek(gait_phase * animation_player.get_animation(key).length, true)
         elif key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"] and is_instance_valid(grip_modifier):
-            animation_player.seek(fposmod(float(grip_modifier.get("gait_time")), animation_player.get_animation(key).length), true)
+            animation_player.seek(float(grip_modifier.call("gait_phase")) * animation_player.get_animation(key).length, true)
 
 func begin_axe_stroke() -> void:
     if animation_player != null and animation_player.has_animation("Axe_Chop"):
@@ -515,7 +530,7 @@ func _rotate_actor_bone(skeleton: Skeleton3D, name: String, axis: Vector3, angle
     skeleton.set_bone_pose_rotation(bone, (rotation.get_rotation_quaternion() * local).normalized())
     skeleton.force_update_all_bone_transforms()
 
-func _solve_right_arm(skeleton: Skeleton3D, target: Vector3, pole_direction := Vector3(0.65, 0.10, 0.45)) -> void:
+func _solve_right_arm(skeleton: Skeleton3D, target: Vector3, pole_direction := Vector3(0.65, 0.10, 0.45), minimum_bend_degrees := 0.0) -> void:
     var upper := skeleton.find_bone("RightArm")
     var elbow := skeleton.find_bone("RightForeArm")
     var wrist := skeleton.find_bone("RightHand")
@@ -526,7 +541,12 @@ func _solve_right_arm(skeleton: Skeleton3D, target: Vector3, pole_direction := V
     var a := shoulder.distance_to(joint)
     var b := joint.distance_to(hand)
     var direction := (destination - shoulder).normalized()
-    var distance := clampf(shoulder.distance_to(destination), absf(a - b) + 0.001, a + b - 0.001)
+    var maximum_reach := a + b - 0.001
+    if minimum_bend_degrees > 0.0:
+        maximum_reach = sqrt(a * a + b * b + 2.0 * a * b * cos(deg_to_rad(minimum_bend_degrees)))
+    var distance := clampf(shoulder.distance_to(destination), absf(a - b) + 0.001, maximum_reach)
+    if minimum_bend_degrees > 0.0:
+        destination = shoulder + direction * distance
     var pole := skeleton.global_basis.inverse() * global_basis * pole_direction
     var bend := (pole - direction * pole.dot(direction)).normalized()
     var along := (a * a - b * b + distance * distance) / (2.0 * distance)
@@ -563,13 +583,24 @@ func _prepare_axe_pose(human: Node3D) -> void:
     for suffix: String in ["Arm", "ForeArm", "Hand"]:
         var bone := skeleton.find_bone("Right" + suffix)
         original[bone] = skeleton.get_bone_pose_rotation(bone)
+    for name: String in ["Spine1", "Spine2"]:
+        var bone := skeleton.find_bone(name)
+        original[bone] = skeleton.get_bone_pose_rotation(bone)
+    var shoulder := to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("RightArm")).origin))
     var poses: Array[Dictionary] = [original]
     for pose in [
-        [Vector3(0.2, 1.97, 0.06), Vector3(0, -1, 1).normalized(), Vector3(0, 1, 1).normalized()],
-        [Vector3(0.10, 1.30, -0.65), Vector3(0, -1, -1).normalized(), Vector3(0, 1, -1).normalized()],
-        [Vector3(0.05, 1.0, -0.35), Vector3(0, -1, 0.3).normalized(), Vector3(0, -0.3, -1).normalized()]
+        [shoulder + Vector3(0.08, 0.24, 0.10), Vector3(0, -1, 1).normalized(), Vector3(0, 1, 1).normalized(), 0.22, 0.05],
+        [Vector3(0.10, 1.30, -0.65), Vector3(0, -1, -1).normalized(), Vector3(0, 1, -1).normalized(), -0.12, -0.18],
+        [Vector3(0.05, 1.0, -0.35), Vector3(0, -1, 0.3).normalized(), Vector3(0, -0.3, -1).normalized(), -0.18, -0.08]
     ]:
-        _solve_right_arm(skeleton, pose[0])
+        # Reset the torso before each authored key; rotations must not accumulate.
+        for name: String in ["Spine1", "Spine2"]:
+            skeleton.set_bone_pose_rotation(skeleton.find_bone(name), original[skeleton.find_bone(name)])
+        skeleton.force_update_all_bone_transforms()
+        for name: String in ["Spine1", "Spine2"]:
+            _rotate_actor_bone(skeleton, name, Vector3.UP, float(pose[3]) * 0.5)
+            _rotate_actor_bone(skeleton, name, Vector3.RIGHT, float(pose[4]) * 0.5)
+        _solve_right_arm(skeleton, pose[0], Vector3(0.35, -0.80, 0.20), 35.0)
         _orient_hand_axes(skeleton, "Right", pose[1], pose[2])
         var sample := {}
         for bone: int in original:
@@ -596,6 +627,25 @@ func _prepare_axe_pose(human: Node3D) -> void:
     var library := animation_player.get_animation_library("")
     library.remove_animation("Axe_Chop")
     library.add_animation("Axe_Chop", clip)
+
+func constrain_axe_elbow(skeleton: Skeleton3D) -> void:
+    var time := animation_player.current_animation_position
+    var window := clampf(minf(time / 0.12, (0.99 - time) / 0.24), 0.0, 1.0)
+    var minimum := 35.0 * smoothstep(0.0, 1.0, window)
+    var shoulder := skeleton.get_bone_global_pose(skeleton.find_bone("RightArm")).origin
+    var elbow := skeleton.get_bone_global_pose(skeleton.find_bone("RightForeArm")).origin
+    var hand := skeleton.find_bone("RightHand")
+    var wrist := skeleton.get_bone_global_pose(hand).origin
+    if rad_to_deg((elbow - shoulder).angle_to(wrist - elbow)) + 0.1 >= minimum:
+        return
+    # Quaternion interpolation can straighten a valid pair of IK key poses.
+    # Project only those intermediate poses back into the elbow's bend limit.
+    var orientation := skeleton.get_bone_global_pose(hand).basis.orthonormalized()
+    _solve_right_arm(skeleton, to_local(skeleton.to_global(wrist)), Vector3(0.35, -0.80, 0.20), minimum)
+    var local := skeleton.get_bone_pose_rotation(hand)
+    var frame := skeleton.get_bone_global_pose(hand).basis.orthonormalized() * Basis(local).inverse()
+    skeleton.set_bone_pose_rotation(hand, (frame.inverse() * orientation).get_rotation_quaternion())
+    skeleton.force_update_all_bone_transforms()
 
 func _prepare_airborne_pose(model: Node3D) -> void:
     if animation_player.has_animation("Airborne"):

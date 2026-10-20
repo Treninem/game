@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлена потеря боевой позы рук в прыжке: действия сохраняются над поясом, ноги используют отдельную позу полёта и возвращаются после приземления. В прежнем пакете воспроизведён уход рук за спину; исправление проверено в открытом исходном проекте обычным прыжком и выстрелом. Геометрия плеч и одежды в этом изменении не обновлялась.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_AIRBORNE_ACTIONS.json",
+  "current_stage": "Исправлены темп шага по фактической скорости, сохранение фазы ног при боевых переходах, достижимость замаха топором и выпрямление локтя между ключами. Кулачный удар укладывается в окно атаки, обе кисти сжимаются. Проверены фазы и действия обеих моделей в графическом проекте; прыжок и постановка стоп ещё требуют доработки.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LIMB_MOTION.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -206,9 +206,9 @@
     "Проверять совместно картинку, игровой цикл, сохранение и производительность; 30 FPS на низких подтвердить длительным проходом, а не одним видом."
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "Новые локальные проверки редактора/хвата/рубки/движения/запуска и графического пакета пройдены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_MAGIC_STATE.json",
-  "review_launcher_revision": "Magic state review; frozen package SHA256 4183f604a26baa1139a59b5d644f81b384d58052581d09d96c1691d5319e0a4d",
+  "ci_followup_status": "Локальные проверки движения, хвата и действий пройдены; графические фазы и физические действия проверены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LIMB_MOTION.json",
+  "review_launcher_revision": "Limb motion source review; current changes not locally re-exported",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",
@@ -223,7 +223,7 @@
   "editor_library_parse_errors_pending": [],
   "editor_library_uid_warnings_pending": true,
   "inventory_requirement_clarification": "docs/INVENTORY_CAPACITY_CLARIFICATION_2026-10-20.txt: ячейки с бесконечной вместимостью; уточнение требований, не новая реализация интерфейса.",
-  "review_launcher_scope": "Последний собранный пакет содержит этап лечения; текущие исправления библиотек проверены в исходниках и пока в этот пакет не входят.",
+  "review_launcher_scope": "Актуальный исходный проект build/stability с отдельным профилем. Прежние PCK не содержат текущие правки; новый установщик не собран.",
   "editor_ui_responsiveness_pending": true,
   "inventory_browsing": {
     "storage_limit": null,
@@ -301,5 +301,52 @@
     "holding_arm_checks_retained": true,
     "exact_skinned_collision_acceptance": false
   },
-  "review_delivery_mode": "Imported Godot source project build/stability; current change not yet locally re-exported"
+  "review_delivery_mode": "Imported Godot source project build/stability; current change not yet locally re-exported",
+  "limb_motion": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-20_LIMB_MOTION.json",
+    "local_checks": {
+      "weapon_grip": {
+        "exit_code": 0,
+        "seconds": 38.31,
+        "errors": [],
+        "marker": true
+      },
+      "locomotion_facing": {
+        "exit_code": 0,
+        "seconds": 51.98,
+        "errors": [],
+        "marker": true
+      },
+      "gameplay_actions": {
+        "exit_code": 0,
+        "seconds": 66.34,
+        "errors": [],
+        "marker": true
+      },
+      "static_phases": {
+        "exit_code": 0,
+        "seconds": 17.01,
+        "errors": [],
+        "marker": true
+      },
+      "physical_actions": {
+        "exit_code": 0,
+        "seconds": 69.62,
+        "errors": [],
+        "marker": true
+      },
+      "source_world": {
+        "exit_code": 0,
+        "seconds": 139.84,
+        "errors": [],
+        "marker": true
+      }
+    },
+    "final_pose_signal": "modification_processed",
+    "full_visual_acceptance": false,
+    "manual_free_roam": false,
+    "jump_phase_animation_pending": true,
+    "terrain_foot_ik_pending": true,
+    "npc_punch_fist_modifier_pending": true
+  }
 }

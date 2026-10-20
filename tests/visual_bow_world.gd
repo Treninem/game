@@ -9,6 +9,8 @@ class CastInputProbe extends Node:
             print("CAST_INPUT_STAGE unhandled paused=", get_tree().paused)
 
 var bow_blend_samples := 0
+var watched_modifier: Node
+var last_bow_process_frame := -1
 var walked := 0.0
 var captures: Array[String] = []
 var player: CharacterBody3D
@@ -38,6 +40,8 @@ func _action(action: String) -> void:
     event.pressed = true
     Input.parse_input_event(event)
     Input.flush_buffered_events()
+    if action == "attack" and root.get_node("InventorySystem").call("equipped_item", "weapon") == "short_bow":
+        assert(float(player.get("pending_bow_elapsed")) > 0.0)
     await physics_frame
     event = InputEventAction.new()
     event.action = action
@@ -99,7 +103,7 @@ func _run() -> void:
             Input.action_press("move_forward")
             await _action("jump")
         await _action("attack")
-        await _frames(8)
+        await _frames(2)
         assert(float(player.get("attack_elapsed")) > 0.0)
         if item == "short_bow":
             assert(float(player.get("pending_bow_elapsed")) > 0.0)
@@ -111,11 +115,22 @@ func _run() -> void:
                 push_error("AIRBORNE_WORLD lost bow draw during jump")
                 quit(1)
                 return
-        await _frames(45)
+        await _frames(51)
         if item == "short_bow":
             assert(int(state.get("inventory").get("arrow", 0)) == 2)
             Input.action_release("move_forward")
             await _capture("bow-released")
+            # Preserve the minimum coverage using distinct rendered poses,
+            # rather than counting repeated physics observations of one frame.
+            for extra in range(5):
+                if bow_blend_samples >= 20:
+                    break
+                if int(state.get("inventory").get("arrow", 0)) == 0:
+                    state.call("add_item", "arrow", 1)
+                var arrows_before := int(state.get("inventory").get("arrow", 0))
+                await _action("attack")
+                await _frames(53)
+                assert(int(state.get("inventory").get("arrow", 0)) == arrows_before - 1)
         inventory.call("unequip", "weapon")
     var save := root.get_node("SaveManager")
     assert(save.call("save_game", player, 9))
@@ -207,10 +222,23 @@ func _run() -> void:
 
 func _check_live_bow_arm() -> void:
     var visual := player.get_node("Avatar")
+    var modifier: Node = visual.get("grip_modifier")
+    if is_instance_valid(watched_modifier) and watched_modifier == modifier:
+        return
+    watched_modifier = modifier
+    var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    modifier.modification_processed.connect(func(): _inspect_live_bow_arm(visual, skeleton))
+
+func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
+    if not is_instance_valid(visual) or not is_instance_valid(skeleton):
+        return
     var animator: AnimationPlayer = visual.get("animation_player")
     if animator.assigned_animation not in ["Bow_Attack_Draw", "Bow_Attack_Shoot"]:
         return
-    var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    var frame := Engine.get_process_frames()
+    if frame == last_bow_process_frame:
+        return
+    last_bow_process_frame = frame
     var points := {}
     for bone: String in ["LeftArm", "RightArm", "RightForeArm", "RightHand", "Spine1", "Spine2", "Neck"]:
         points[bone] = player.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone(bone)).origin))

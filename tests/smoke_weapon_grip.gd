@@ -3,6 +3,7 @@ var failures: Array[String] = []
 var checked := 0
 var minimum_draw_alignment := 1.0
 var bow_sweep_checked := 0
+var axe_sweep_checked := 0
 func _ready() -> void:
     call_deferred("_run")
 func _run() -> void:
@@ -26,6 +27,15 @@ func _run() -> void:
         var data := {}
         visual.grip_modifier.modification_processed.connect(func():
             if not is_instance_valid(visual.held_weapon):
+                var fists := []
+                for side: String in ["Left", "Right"]:
+                    var palm := preload("res://scripts/weapon_grip_modifier.gd").palm_frame(skeleton, side)
+                    for finger: String in ["Index", "Middle", "Ring", "Pinky"]:
+                        var a := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Hand" + finger + "1")).origin
+                        var b := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Hand" + finger + "2")).origin
+                        var c := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Hand" + finger + "3")).origin
+                        fists.append([rad_to_deg((b - a).angle_to(c - b)), (b - a).normalized().cross((c - b).normalized()).dot(palm.basis.y) * (1.0 if side == "Right" else -1.0)])
+                data.fists = fists
                 return
             var side := "Left" if visual.held_item == "short_bow" else "Right"
             var a := skeleton.get_bone_global_pose(skeleton.find_bone(side + "HandIndex1")).origin
@@ -35,6 +45,12 @@ func _run() -> void:
             var first_direction := (skeleton.global_basis * (b - a)).normalized()
             var second_direction := (skeleton.global_basis * (c - b)).normalized()
             data.fold_side = first_direction.cross(second_direction).dot(visual.grip_modifier.last_grip.basis.y) * (1.0 if side == "Right" else -1.0)
+            # Final modifier poses exist only during this signal (Godot API).
+            var points := {}
+            for bone: String in ["LeftArm", "RightArm", "RightForeArm", "RightHand", "Spine1", "Spine2", "Neck"]:
+                points[bone] = actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone(bone)).origin))
+            data.pose_points = points
+            data.arm_bend = rad_to_deg(((points.RightForeArm as Vector3) - (points.RightArm as Vector3)).angle_to((points.RightHand as Vector3) - (points.RightForeArm as Vector3)))
             var mesh := visual.held_weapon.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
             # Independent markers measured on the actual normalized source mesh.
             var marker := Vector3(0, 0, 0.30429) if visual.held_item == "starter_axe" else Vector3.ZERO
@@ -48,6 +64,19 @@ func _run() -> void:
                 var hand := skeleton.to_global((skeleton.get_bone_global_pose(skeleton.find_bone("RightHandIndex2")).origin + skeleton.get_bone_global_pose(skeleton.find_bone("RightHandMiddle2")).origin) * 0.5)
                 data.cord_gap = hand.distance_to(visual.last_draw_point)
         )
+        for fraction: float in [0.0, 0.2, 0.4, 0.6, 0.8]:
+            data.erase("fists")
+            visual.animation_player.play("Punch", 0.0)
+            visual.animation_player.seek(visual.animation_player.get_animation("Punch").length * fraction, true)
+            visual.animation_player.pause()
+            skeleton.advance(0.0)
+            await get_tree().process_frame
+            var fists: Array = data.get("fists", [])
+            if fists.size() != 8 or visual.grip_modifier.closed_fingers != 10:
+                failures.append("Missing final punch fist pose")
+            for finger: Array in fists:
+                if float(finger[0]) < 30.0 or float(finger[0]) > 120.0 or float(finger[1]) < 0.1:
+                    failures.append("Punch hand is open or bends away from its palm")
         # A free hand should retain a mild native curl in locomotion, not the
         # donor rig's straight/splayed fingers. Inspect actual bone geometry.
         for clip: String in ["Idle", "Walk", "Run"]:
@@ -87,6 +116,10 @@ func _run() -> void:
                         failures.append("Finger curls away from its palm")
                     if float(data.bend) < 30 or float(data.bend) > 120:
                         failures.append("Finger folds backwards or fails to close: %s/%s/%s %.2f" % [sex, item, clip, data.bend])
+                    if clip == "Axe_Chop" and time >= 0.12 and time <= 0.75:
+                        var bend: float = data.get("arm_bend", -1.0)
+                        if bend < 25.0 or bend > 140.0:
+                            failures.append("Axe contact locks or folds elbow: body=%s height=%s bend=%s" % [sex, height_cm, bend])
                     if item == "starter_axe" and clip == "Axe_Chop" and is_equal_approx(time, 0.396):
                         var axe_mesh := visual.held_weapon.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
                         var edge := actor.to_local(axe_mesh.to_global(Vector3(0.5, 0, -0.6)))
@@ -132,7 +165,10 @@ func _run() -> void:
                 failures.append("Removing equipment retains its mesh or closed-hand constraint")
         actor.set_meta("preview_item", "short_bow")
         visual.call("_refresh_weapon")
-        await _check_bow_sweep(actor, visual, skeleton, height_cm)
+        await _check_bow_sweep(actor, visual, skeleton, height_cm, data)
+        actor.set_meta("preview_item", "starter_axe")
+        visual.call("_refresh_weapon")
+        await _check_axe_sweep(visual, skeleton, data)
         actor.set_meta("preview_item", "")
         visual.call("_refresh_weapon")
         get_tree().paused = true
@@ -154,11 +190,13 @@ func _run() -> void:
         push_error(message)
     print("BOW_HOLD_ALIGNMENT_MIN ", minimum_draw_alignment)
     print("BOW_BODY_SWEEP_CHECKED ", bow_sweep_checked)
+    print("AXE_SWEEP_CHECKED ", axe_sweep_checked)
+    print("PUNCH_FINGERS_CHECKED 240 final_modifier=true free_hand_recovery=checked")
     if failures.is_empty():
         print("WEAPON_GRIP_OK poses=",checked," bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged")
     get_tree().quit(0 if failures.is_empty() else 1)
 
-func _check_bow_sweep(actor: CharacterBody3D, visual: Node3D, skeleton: Skeleton3D, height_cm: float) -> void:
+func _check_bow_sweep(actor: CharacterBody3D, visual: Node3D, skeleton: Skeleton3D, height_cm: float, data: Dictionary) -> void:
     var ratio := height_cm / 180.0
     var pivot := actor.get_node("CameraPivot") as Node3D
     for pitch: float in [-0.55, 0.0, 0.55]:
@@ -166,14 +204,16 @@ func _check_bow_sweep(actor: CharacterBody3D, visual: Node3D, skeleton: Skeleton
         for clip: String in ["Bow_Attack_Draw", "Bow_Attack_Shoot"]:
             for sample in range(25):
                 var animator: AnimationPlayer = visual.get("animation_player")
+                data.erase("pose_points")
                 animator.play(clip, 0)
                 animator.seek(animator.get_animation(clip).length * sample / 24.0, true)
                 animator.pause()
                 skeleton.advance(0)
                 await get_tree().process_frame
-                var points := {}
-                for bone: String in ["LeftArm", "RightArm", "RightForeArm", "RightHand", "Spine1", "Spine2", "Neck"]:
-                    points[bone] = actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone(bone)).origin))
+                var points: Dictionary = data.get("pose_points", {})
+                if points.is_empty():
+                    failures.append("Missing final bow modifier pose")
+                    continue
                 # A conservative central torso volume, derived from the live
                 # skeleton. This catches an arm crossing the chest/back; exact
                 # cloth-surface clearance still requires graphical inspection.
@@ -194,3 +234,20 @@ func _check_bow_sweep(actor: CharacterBody3D, visual: Node3D, skeleton: Skeleton
                             failures.append("Bow arm crosses central torso: height=%s pitch=%s %s sample=%d segment=%s point=%s" % [height_cm, pitch, clip, sample, segment, point])
                             break
                 bow_sweep_checked += 1
+
+func _check_axe_sweep(visual: Node3D, skeleton: Skeleton3D, data: Dictionary) -> void:
+    var animator: AnimationPlayer = visual.get("animation_player")
+    for sample in range(25):
+        var time := 0.99 * sample / 24.0
+        data.erase("arm_bend")
+        animator.play("Axe_Chop", 0.0)
+        animator.seek(time, true)
+        animator.pause()
+        skeleton.advance(0.0)
+        await get_tree().process_frame
+        var bend: float = data.get("arm_bend", -1.0)
+        if bend < 0.0:
+            failures.append("Missing final axe modifier pose")
+        elif time >= 0.12 and time <= 0.75 and (bend < 25.0 or bend > 140.0):
+            failures.append("Axe interpolated elbow locks or folds: time=%s bend=%s" % [time, bend])
+        axe_sweep_checked += 1

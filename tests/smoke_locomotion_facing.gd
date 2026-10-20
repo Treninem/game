@@ -86,6 +86,7 @@ func _run() -> void:
         visual.call("_play", "Run", 1.0)
         if not is_zero_approx(animator.current_animation_position):
             failures.append("Idle transition inherited a stale gait phase")
+    await _check_stride_speed(player, visual)
     await _check_airborne_actions(player, visual)
     player.queue_free()
     await get_tree().process_frame
@@ -104,6 +105,7 @@ func _check_airborne_actions(player: CharacterBody3D, visual: Node3D) -> void:
         return
     for sex: String in ["male", "female"]:
         GameState.set_world_value("player_appearance", {"sex": sex})
+        visual.call("apply_appearance", {"sex": sex})
         visual.call("_process", 0.016)
         for entry in [["short_bow", "Bow_Attack_Draw", 0.1, 0.0], ["short_bow", "Bow_Attack_Shoot", 0.0, 0.0], ["starter_axe", "Axe_Chop", 0.0, 0.0], ["", "Punch", 0.0, 0.0], ["", "Cast_Left", 0.0, 0.2], ["short_bow", "Cast_Right", 0.0, 0.2]]:
             InventorySystem.unequip("weapon")
@@ -117,6 +119,8 @@ func _check_airborne_actions(player: CharacterBody3D, visual: Node3D) -> void:
             var animator: AnimationPlayer = visual.get("animation_player")
             if animator.assigned_animation != entry[1]:
                 failures.append("Airborne action lost its arm pose: %s %s got %s" % [sex, entry[1], animator.assigned_animation])
+            if entry[1] == "Punch" and absf(animator.get_animation("Punch").length / animator.speed_scale - float(player.get("attack_cooldown"))) > 0.001:
+                failures.append("Punch recovery is cut off by the attack window")
             animator.seek(0.2, true)
             var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
             var modifier: Node = visual.get("grip_modifier")
@@ -152,3 +156,80 @@ func _check_airborne_actions(player: CharacterBody3D, visual: Node3D) -> void:
     if not is_zero_approx(float(modifier.get("airborne_time"))):
         failures.append("Airborne leg time did not reset on landing")
     print("AIRBORNE_ACTIONS_CHECKED bodies=2 actions=6 legs=6 idle=retained landing=reset gait=frozen")
+
+func _check_stride_speed(player: CharacterBody3D, visual: Node3D) -> void:
+    for sex: String in ["male", "female"]:
+        var profile := {"sex": sex, "height_cm": 180.0}
+        GameState.set_world_value("player_appearance", profile)
+        visual.call("apply_appearance", profile)
+        visual.set("appearance_revision", GameState.state_revision)
+        visual.rotation.y = 0.0
+        var animator: AnimationPlayer = visual.get("animation_player")
+        var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+        var supports := {}
+        # Ankle peak speed includes heel roll. Measure the median forefoot
+        # backward speed only while both interval endpoints are near its low
+        # contact height. All physical speed assertions remain at 15 percent.
+        for gait: String in ["Walk", "Run"]:
+            animator.play(gait, 0.0)
+            var clip := animator.get_animation(gait)
+            var poses: Array[Dictionary] = []
+            var lows := {"Left": INF, "Right": INF}
+            for sample in range(13):
+                animator.seek(clip.length * sample / 12.0, true)
+                animator.pause()
+                skeleton.force_update_all_bone_transforms()
+                await get_tree().process_frame
+                var points := {}
+                for side: String in ["Left", "Right"]:
+                    var point := player.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone(side + "ToeBase")).origin))
+                    points[side] = point
+                    lows[side] = minf(float(lows[side]), point.y)
+                poses.append(points)
+            var samples: Array[float] = []
+            for sample in range(1, poses.size()):
+                for side: String in ["Left", "Right"]:
+                    var before: Vector3 = poses[sample - 1][side]
+                    var after: Vector3 = poses[sample][side]
+                    var speed := (after.z - before.z) / (clip.length / 12.0)
+                    if maxf(before.y, after.y) <= float(lows[side]) + 0.02 and speed > 0.0:
+                        samples.append(speed)
+            if samples.size() < 3:
+                failures.append("Insufficient actual forefoot contact samples: " + gait)
+                supports[gait] = 0.0
+            else:
+                samples.sort()
+                var middle := samples.size() / 2
+                supports[gait] = samples[middle] if samples.size() % 2 == 1 else (samples[middle - 1] + samples[middle]) * 0.5
+        for height: float in [160.0, 180.0, 195.0]:
+            var ratio := height / 180.0
+            visual.scale = Vector3.ONE * ratio
+            for nominal: float in [0.3, 1.4, 2.4, 5.0, 8.0]:
+                var speed := nominal * ratio
+                await get_tree().physics_frame
+                player.velocity = player.global_basis * Vector3(0, -1, -speed)
+                player.move_and_slide()
+                visual.set("measured_speed", speed)
+                visual.call("_process", 0.016)
+                var expected := "Walk" if nominal < 3.0 else "Run"
+                if animator.assigned_animation != expected:
+                    failures.append("Stride type mismatches physical speed: %s height=%s speed=%s got=%s" % [sex, height, speed, animator.assigned_animation])
+                if not supports.has(animator.assigned_animation):
+                    failures.append("Stride did not use a grounded gait")
+                    continue
+                var support: float = float(supports[animator.assigned_animation]) * ratio * animator.speed_scale
+                if absf(support - speed) / speed > 0.15:
+                    failures.append("Stride support speed mismatch: %s height=%s physical=%s support_median=%s" % [sex, height, speed, support])
+        var modifier: Node = visual.get("grip_modifier")
+        modifier.set("gait_name", "Walk")
+        modifier.set("gait_time", animator.get_animation("Walk").length * 0.37)
+        animator.play("Punch", 0.0)
+        visual.set("active_animation", "Punch")
+        modifier.call("_moving_legs", skeleton, 0.0)
+        if absf(float(modifier.call("gait_phase")) - 0.37) > 0.001:
+            failures.append("Combat gait change restarted foot phase")
+        visual.call("_play", "Walk", 1.0)
+        if absf(animator.current_animation_position / animator.get_animation("Walk").length - 0.37) > 0.001:
+            failures.append("Combat exit restarted foot phase")
+        print("STRIDE_PROFILE_CHECKED ", sex, " forefoot_supports=", supports)
+    print("STRIDE_SPEED_CHECKED bodies=2 visual_heights=3 speeds=5 physical_motion=true combat_phase=retained")
