@@ -1,0 +1,9 @@
+{
+  "case": "square_home_life",
+  "exit_code": 1,
+  "seconds": 186.49,
+  "errors": [
+    "ERROR: Resident did not return through the real doorway: \u041c\u0430\u0440\u0442\u0430 (-1.414063, 0.180942, -3.097168) \u0418\u0434\u0451\u0442 \u043a \u043a\u0440\u043e\u0432\u0430\u0442\u0438"
+  ],
+  "marker": false
+}

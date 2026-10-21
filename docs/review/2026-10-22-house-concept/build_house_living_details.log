@@ -1,0 +1,21 @@
+00:05.500  reports          | WARNING Путь "C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend" не может быть сделан относительным для Material "Dots Stroke"
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:35:40)
+00:05.500  reports          | WARNING Путь "C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend" не может быть сделан относительным для Material "Material"
+Предупреждение: Нет мешей для объединения
+Информация: Сохранено как "HouseLivingDetails.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+00:14:39 | INFO: Starting glTF 2.0 export
+00:14:39 | INFO: Extracting primitive: Arch voussoir
+00:14:39 | INFO: Primitives created: 4
+00:14:39 | INFO: Extracting primitive: Куб
+00:14:39 | INFO: Primitives created: 2
+00:14:39 | INFO: Extracting primitive: Куб.002
+00:14:39 | INFO: Primitives created: 2
+00:14:39 | INFO: Extracting primitive: Bound textile
+00:14:39 | INFO: Primitives created: 2
+00:14:39 | INFO: Finished glTF 2.0 export in 0.29821252822875977 s
+
+HOUSE_LIVING_DETAILS_BUILT
+
+Blender quit

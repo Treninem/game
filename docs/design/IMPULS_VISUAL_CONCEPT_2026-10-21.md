@@ -46,3 +46,11 @@ Current first implementation: `tools/build_interior_window.py` and
 `tools/build_house_timberwork.py`, integrated by `scripts/enterable_building.gd`.
 The larger architecture kit, room plans, hearths, clutter, people, animals and
 regional landscape still require substantial work and owner acceptance.
+
+## Owner clarifications, 21–22 October 2026
+
+The owner rejected the sparse rooms again: use the supplied house board as the visual acceptance target, with complete functional zones rather than counting isolated props. Ordinary homes need at least two living/private rooms and a kitchen; plans, furnishings and beds must vary with building type, wealth and household composition. Some homes house one adult, others several adults or parents with children. Children must have guardians and age-appropriate appearance, routines and schooling. Adults need real occupations and outputs (shop, smithy, guild and adventuring among them), not only profession text.
+
+NPCs must choose their path from the environment rather than follow a prescribed sequence of room points. The current bounded interior A* implementation computes routes from physical walls, furniture and doors; existing needs/routines still choose goals. This is local game AI, not a connected language model.
+
+Current review adds four physical spaces, working internal doors, a fourth window for the rear bedroom, dining seats, storage/cooking objects and Blender-authored textiles/hearth. Two bounded size-dependent layouts and one/two place settings are checked. Children/schools/family graphs, diverse occupation-specific plans and jobs, cooking/fuel mechanics and full artistic acceptance are still open. Other city townhouse plans have not been replaced by this package.

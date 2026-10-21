@@ -18,7 +18,7 @@
         "Стопы держат рельеф, ступени и склоны без зависания; камера и управление удобны",
         "Изменения внешности и экипировки переживают сохранение/загрузку"
       ],
-      "current": "Обе существующие основы получили новый стандартный костюм с собственными normal/AO и исправлением связного подола; пройдены material/morph/creator/save, 360 поз опоры и ограниченные игровые действия. Лицо/волосы, сменяемая броня, полная фиксация стоп, повороты/старт/стоп и художественное принятие персонажа остаются открытыми."
+      "current": "Обе существующие основы получили новый стандартный костюм с собственными normal/AO и исправлением связного подола; пройдены material/morph/creator/save, 360 поз опоры и ограниченные игровые действия. Лицо/волосы, сменяемая броня, полная фиксация стоп, повороты/старт/стоп и художественное принятие персонажа остаются открытыми. Нативный осмотр дома 22 октября показывает прорыв плеча/ткани на текущем костюме; это открытый дефект, гардероб не принят."
     },
     {
       "group": "Природа и рельеф",
@@ -38,7 +38,7 @@
         "Рабочие кровати, скамьи, сундуки, торговые и ремесленные места",
         "Домашняя жизнь сохраняется и восстанавливается при стриминге"
       ],
-      "current": "В проверочной версии общие материалы штукатурки и фотографических досок подключены к стенам/полу/потолку; устранён неподходящий атлас пола столичного дома. Проверены четыре пресета, физические сохранения/прыжки, мебель и столичная сцена. Геометрия, окна, детали, свет и полная художественная приёмка открыты."
+      "current": "В проверочной версии дом разделён на две жилые/приватные комнаты, общую столовую/проход и кухню с тремя внутренними дверями и дополнительным окном спальни. Подключены Blender-текстиль/очаг и выбранная бытовая мебель/утварь; рабочие скамьи перенесены к столу с сохранением ID. Локальные проходы, отдых/диск/прыжки, бытовой цикл/стриминг и поиск пути проверены. Пакет ещё не равен художественному качеству концепции; полное разнообразие домов и семей открыто. Пройдено 99.68 м от ранее заработанного столичного сохранения обычным автоматизированным движением без перестановки персонажа; проверены настоящий вход, три зоны, диск и игровые кадры. Это не ручной полный обход мира."
     },
     {
       "group": "Животные и экология",
@@ -54,9 +54,11 @@
       "acceptance": [
         "Работа, отдых, дом, торговля, поездки и реакции на действия героя",
         "Конечные запасы, валюта, сделки и производство без дублирования",
-        "Быстрый местный контекстный диалог, память и сохранение"
+        "Быстрый местный контекстный диалог, память и сохранение",
+        "Дети живут с родителями/опекунами и физически посещают занятия; возраст соответствует модели и поведению",
+        "Разные профессии выполняют реальные действия с конечными ресурсами и результатом; путь вычисляется по среде"
       ],
-      "current": "Расписание/поездки/оплата/запасы проверены ограниченным сценарием; полноценная жизнь всех поселений не принята."
+      "current": "В ограниченном сценарии два взрослых физически выходят из комнат и дома к разным дневным рабочим местам. В настоящей площади подтверждены оплата сырья, конечный рецепт стрел, остановка без материалов и сохранение запасов. Внутренний A* вычисляет путь по коллизиям и состоянию дверей. Полная популяция/возрасты/дети/учёба, кузнецы, гильдии и авантюристы с реальными рабочими циклами остаются открытыми."
     },
     {
       "group": "Интерфейс и игровой цикл",
@@ -81,5 +83,17 @@
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
   "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_ACTIVATION.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
-  "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone."
+  "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
+  "last_updated": "2026-10-22",
+  "owner_household_requirements": {
+    "source": "Direct owner messages, 21–22 October 2026",
+    "visual_target": "Owner-supplied house concept; current sparse rooms rejected",
+    "housing": "Vary plans, furnishing and beds by household size, wealth and occupation; ordinary homes >=2 living/private rooms plus kitchen",
+    "families": "Adults, children and ages must be logically linked; children have guardians and schooling, not child-only households",
+    "jobs": "Adults physically attend work and perform finite productive/trade/guild/adventure actions",
+    "navigation": "Autonomous computed paths from actual environment, not prescribed room routes",
+    "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
+    "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
+  },
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json"
 }

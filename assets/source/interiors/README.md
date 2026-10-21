@@ -20,3 +20,7 @@ these meshes. Blender may warn about unused default brush material paths when
 saving; they are not exported model dependencies.
 
 Visual target and remaining scope: `docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md`.
+
+HouseholdProps.blend contains 19 normalized CC0 Quaternius derivatives, rebuilt by tools/build_household_props.py. Detailed selections and license: assets/production/interiors/architecture/HouseholdProps.SOURCE.md and HouseholdProps.LICENSE.txt.
+
+HousePartition.blend and HouseLivingDetails.blend contain project-authored physical partition panels, arched hearth, pleated curtains, rounded bedding and woven rugs, built by the matching tools/build_house_partition.py and tools/build_house_living_details.py. Their geometry-only GLBs use shared reviewed materials in Godot. These are initial concept-led review assets; full visual acceptance remains open.

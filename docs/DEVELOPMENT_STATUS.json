@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-22",
   "project_version_label": "0.10.7.3",
   "engine_verified": "Godot 4.7.1.stable.official.a13da4feb",
   "renderer": "GL Compatibility",
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "По концептам владельца начат Blender-комплект жилого дома: окна, деревянный каркас с коллизиями и локальное дневное/тёплое освещение подключены в Godot. Проверены персонаж, отдых/сохранение/прыжки, проходы, качество света и бытовые действия жителей. Полная планировка, печь, наполнение комнат, люди, окружение и художественное принятие остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_ACTIVATION.json",
+  "current_stage": "По концепции владельца разделён и обставлен ограниченный комплект домов: приватные/жилые комнаты, столовая и кухня, внутренние двери, дополнительное окно, Blender-текстиль/очаг, хранение и бытовая утварь. Девять локальных проверок, графические проходы, настоящая столица и обычные игровые действия пройдены. Внешний вид ещё не соответствует качеству концепции; семьи/дети/школа, полные профессии, разнообразие всех домов и гардероб остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -382,15 +382,15 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "a7462ff85553de3fc42c9107246b115ab5e3db20",
-  "last_verified_runtime_ci": "8/8 success; latest scene-activation/instant-quality follow-up requires its own exact-SHA CI",
+  "last_verified_runtime_commit": "3134d040d5e10b98ccde7d54df4998a3d7d0760f",
+  "last_verified_runtime_ci": "Preceding exact SHA: 8/8 SUCCESS. New house-concept package: locally verified; own exact-SHA CI pending push.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
     "exit_object_leaks": 83,
     "artistic_acceptance": false,
     "lifecycle_diagnostic": "docs/DEVELOPMENT_LOG_2026-10-21_LOADER_LIFECYCLE.json",
     "exit_leak_fixed": false,
-    "current_exit_probe": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_ACTIVATION.json"
+    "current_exit_probe": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json"
   },
   "interior_surfaces": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_SURFACES.json",
@@ -406,6 +406,9 @@
     "whole_concept_implemented": false,
     "full_artistic_acceptance": false,
     "activation_regression_journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_ACTIVATION.json",
-    "instant_quality_signal_checked": true
+    "instant_quality_signal_checked": true,
+    "furnishing_and_layout_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json",
+    "room_navigation": "Local geometry A*, door/locked-leaf states and occupied-person detours; outdoor approach waypoints remain outside this package",
+    "family_population": "Children, guardians/ages and schooling remain unimplemented"
   }
 }

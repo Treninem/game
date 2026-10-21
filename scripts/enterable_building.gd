@@ -120,6 +120,11 @@ func _build_structure() -> void:
     _build_interior_furnishings()
     _build_timberwork()
     _build_room_lantern()
+    if footprint.x >= 8.5 and footprint.y >= 7.5:
+        var rooms = load("res://scripts/house_room_layout.gd").new()
+        rooms.name = "HouseRooms"
+        add_child(rooms)
+        rooms.build(self)
 
 func _interior_scene(path: String) -> PackedScene:
     # Instantiate decoration on activation, outside the background stage dependency
@@ -201,16 +206,20 @@ func _build_back_wall(shell: Node3D) -> void:
     _build_windowed_horizontal_wall(shell, "BackWall", back_z)
 
 func _build_windowed_horizontal_wall(shell: Node3D, prefix: String, z: float) -> void:
-    var side_width := maxf(0.5, (footprint.x - window_width) * 0.5)
-    var sill_top := window_sill_height
-    var window_top := window_sill_height + window_height
-    var top_height := maxf(0.3, wall_height - window_top)
-
-    _add_static_box(shell, prefix + "Left", Vector3(side_width, wall_height - floor_thickness, wall_thickness), Vector3(-(window_width + side_width) * 0.5, floor_thickness + (wall_height - floor_thickness) * 0.5, z), _wall_material())
-    _add_static_box(shell, prefix + "Right", Vector3(side_width, wall_height - floor_thickness, wall_thickness), Vector3((window_width + side_width) * 0.5, floor_thickness + (wall_height - floor_thickness) * 0.5, z), _wall_material())
-    _add_static_box(shell, prefix + "SillWall", Vector3(window_width, sill_top - floor_thickness, wall_thickness), Vector3(0.0, floor_thickness + (sill_top - floor_thickness) * 0.5, z), _wall_material())
-    _add_static_box(shell, prefix + "Top", Vector3(window_width, top_height, wall_thickness), Vector3(0.0, window_top + top_height * 0.5, z), _wall_material())
-    _add_window_frame(Vector3(0.0, window_sill_height + window_height * 0.5, z), Vector3(window_width, window_height, wall_thickness), false, prefix + "Window")
+    var centers: Array[float] = [0.0]
+    if footprint.x >= 8.5 and footprint.y >= 7.5:
+        centers.push_front(-interior_size.x * 0.5 + 1.45)
+    var cursor := -footprint.x * 0.5
+    var top := window_sill_height + window_height
+    for index in range(centers.size()):
+        var x := centers[index]
+        var start := x - window_width * 0.5
+        _add_static_box(shell, prefix + "Pier" + str(index), Vector3(start - cursor, wall_height - floor_thickness, wall_thickness), Vector3((cursor + start) * 0.5, (wall_height + floor_thickness) * 0.5, z), _wall_material())
+        _add_static_box(shell, prefix + "Sill" + str(index), Vector3(window_width, window_sill_height - floor_thickness, wall_thickness), Vector3(x, (floor_thickness + window_sill_height) * 0.5, z), _wall_material())
+        _add_static_box(shell, prefix + "Header" + str(index), Vector3(window_width, wall_height - top, wall_thickness), Vector3(x, (wall_height + top) * 0.5, z), _wall_material())
+        _add_window_frame(Vector3(x, window_sill_height + window_height * 0.5, z), Vector3(window_width, window_height, wall_thickness), false, prefix + "Window" + str(index))
+        cursor = x + window_width * 0.5
+    _add_static_box(shell, prefix + "EndPier", Vector3(footprint.x * 0.5 - cursor, wall_height - floor_thickness, wall_thickness), Vector3((cursor + footprint.x * 0.5) * 0.5, (wall_height + floor_thickness) * 0.5, z), _wall_material())
 
 func _build_side_wall_with_window(shell: Node3D, prefix: String, side_sign: float) -> void:
     var x := side_sign * (footprint.x * 0.5 - wall_thickness * 0.5)
@@ -285,13 +294,15 @@ func _build_interior_furnishings() -> void:
     if footprint.y >= 9.5:
         _add_furniture_box(furniture, "GuestChest", Vector3(1.35, 0.68, 0.72), Vector3(-inner_half_x + 0.9, floor_y + 0.34, 1.9), timber_material)
 
-    var bench_x := inner_half_x - 1.05
-    var bench_z := inner_half_z - 1.15
+    var bench_x := table_x
+    var bench_z := 0.75
     var bench := _add_furniture_box(furniture, "Bench", Vector3(1.8, 0.22, 0.48), Vector3(bench_x, floor_y + 0.53, bench_z), timber_material)
+    bench.set_meta("approach_offset", Vector3(-1.45, 0, 0))
     _add_visual_box(bench, "BenchLegA", Vector3(0.18, 0.52, 0.38), Vector3(-0.58, -0.26, 0.0), timber_material)
     _add_visual_box(bench, "BenchLegB", Vector3(0.18, 0.52, 0.38), Vector3(0.58, -0.26, 0.0), timber_material)
     if footprint.y >= 9.5:
-        _add_furniture_box(furniture, "BenchSecond", Vector3(1.8, 0.22, 0.48), Vector3(-bench_x, floor_y + 0.53, bench_z), timber_material)
+        var dining_second := _add_furniture_box(furniture, "BenchSecond", Vector3(1.8, 0.22, 0.48), Vector3(bench_x, floor_y + 0.53, -1.65), timber_material)
+        dining_second.rotation.y = PI
 
 
 func _add_furniture_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, material: Material) -> StaticBody3D:

@@ -15,9 +15,9 @@
     "Shadow-free local daylight; daytime curve; disabled on Low and beyond 20 metres"
   ],
   "remaining": [
-    "Occupation-specific layouts, hearths, textiles and household clutter",
-    "Whole-region artistic acceptance",
-    "Broader light/performance budget measurement"
+    "Occupation/wealth/household-specific plans across all settlements",
+    "Cooking and hearth fuel/state interaction",
+    "Whole-region artistic acceptance and broader measured lighting/performance budget"
   ],
   "room_timberwork": {
     "status": "INTEGRATED",
@@ -36,5 +36,8 @@
     "behavior": "One local warm point light; brighter at night; beyond 20m culled; shadow only for occupied room and preset > 0; capital retains its existing lantern without duplication",
     "quality": "Settings signal updates lights and shadow budget immediately"
   },
-  "activation": "Packed scenes loaded on house activation, retained per house; avoids three additional exit leftovers observed with preload. Existing exact parent still reports 83."
+  "activation": "Packed scenes loaded on house activation, retained per house; avoids three additional exit leftovers observed with preload. Existing exact parent still reports 83.",
+  "last_updated": "2026-10-22",
+  "room_layout_followup": "assets/registry/HOUSEHOLD_DRESSING_2026-10-21.json",
+  "bedroom_window": "Fourth real rear opening added for the enclosed rear bedroom in qualifying >=8.5x7.5m houses; other shells retain three windows."
 }

@@ -220,12 +220,35 @@ func spawn_explosion_aftermath(
     else:
         spawn_environment_effect("debris", world_position, 0.75 * s)
 
+func make_hearth_loop(host: Node3D, strength: float) -> AnimatedSprite3D:
+    var sprite := AnimatedSprite3D.new()
+    var frames := SpriteFrames.new()
+    frames.set_animation_loop("default", true)
+    frames.set_animation_speed("default", 18.0)
+    var pixels := 1.0
+    for path: String in _fire_frames():
+        var texture := load(path) as Texture2D
+        frames.add_frame("default", texture)
+        pixels = float(texture.get_width())
+    sprite.sprite_frames = frames
+    sprite.pixel_size = 0.95 * clampf(strength, 0.25, 3.0) / pixels
+    sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+    sprite.shaded = false
+    sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+    sprite.position.y = 0.35
+    host.add_child(sprite)
+    sprite.play()
+    return sprite
+
 func spawn_environment_effect(kind: String, world_position: Vector3, strength: float = 1.0) -> Node3D:
     var host := get_tree().current_scene
     if host == null:
         return null
     var s := clampf(strength, 0.25, 3.0)
     match kind.to_lower():
+        "hearth_fire":
+            # Small domestic fire reuses shared art without a combat particle burst.
+            return _spawn_flipbook(_fire_frames(), world_position + Vector3.UP * 0.35, 0.95 * s, Color(1.0, 0.75, 0.45, 0.94), 0.055)
         "fire", "flame":
             VFXLibrary.spawn("magic_fire", world_position, host, Vector3.UP, Vector3.ZERO, 0.65 * s)
             return _spawn_flipbook(_fire_frames(), world_position + Vector3.UP * 0.35, 0.95 * s, Color(1.0, 0.62, 0.28, 0.94), 0.055)

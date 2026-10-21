@@ -59,6 +59,8 @@ func release(id: String) -> void:
     GameState.set_world_value(furniture_id, saved)
 
 func approach_point() -> Vector3:
+    if has_meta("approach_offset"):
+        return global_position + global_basis * Vector3(get_meta("approach_offset"))
     # The left bench is approached from its open side. Its cross-room path is
     # separated from the right bench so simultaneous wake/return paths do not
     # meet head-on at the same point in the aisle.

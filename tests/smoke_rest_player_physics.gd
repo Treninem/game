@@ -103,5 +103,14 @@ func _run() -> void:
                 await _capture(label + "-land")
                 checked += 1
                 print("REST_PHYSICS_CASE ", label, " ascent=", peak-grounded.y, " landing_error=", absf(player.global_position.y-grounded.y))
-    print("REST_PHYSICS_OK cases=", checked, " native_jump=true disk_rest_and_wake=true physical_ascent_and_landing=true")
+    # Old furniture IDs remain valid after moving benches to the dining table.
+    # An old resting position across a new partition must wake safely in place.
+    for record: Array in [["Bench", Vector3(4.67, 0.5, 2.52)], ["BenchSecond", Vector3(-3.22, 0.5, 3.57)]]:
+        var bench := home.get_node("InteriorFurniture/" + String(record[0])) as HouseholdFurniture
+        player.global_position = home.to_global(record[1])
+        player.velocity = Vector3.ZERO
+        GameState.set_world_value("player:rest_furniture", bench.furniture_id)
+        await _frames(45)
+        assert(not visual.top_level and player.is_on_floor() and String(GameState.get_world_value("player:rest_furniture", "")).is_empty(), "Legacy bench save failed to wake safely after the room-layout change")
+    print("REST_PHYSICS_OK cases=", checked, " legacy_bench_positions=2 native_jump=true disk_rest_and_wake=true physical_ascent_and_landing=true")
     get_tree().quit(0)

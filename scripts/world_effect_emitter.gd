@@ -5,7 +5,7 @@ class_name WorldEffectEmitter
 # campfires, fireplaces, forges, chimneys, vents, steam leaks, grinding sparks,
 # dust leaks, waterfalls and other authored world props.
 
-@export_enum("fire", "smoke", "steam", "dust", "sparks", "splash", "debris") var effect_kind := "smoke"
+@export_enum("fire", "hearth_fire", "smoke", "steam", "dust", "sparks", "splash", "debris") var effect_kind := "smoke"
 @export_range(0.1, 3.0, 0.05) var strength := 1.0
 @export_range(0.04, 10.0, 0.01) var interval_seconds := 0.55
 @export_range(2.0, 120.0, 1.0) var activation_distance := 34.0
@@ -15,14 +15,26 @@ class_name WorldEffectEmitter
 
 var elapsed := 0.0
 var next_interval := 0.55
+var hearth_loop: AnimatedSprite3D
 
 func _ready() -> void:
+    if effect_kind == "hearth_fire":
+        hearth_loop = WorldVFX.make_hearth_loop(self, strength)
     next_interval = _resolve_interval()
     set_process(true)
     if start_with_effect and enabled:
         call_deferred("emit_once")
 
 func _process(delta: float) -> void:
+    if is_instance_valid(hearth_loop):
+        var observer := get_tree().get_first_node_in_group("player") as Node3D
+        var active := enabled and not get_tree().paused and observer != null and global_position.distance_squared_to(observer.global_position) <= activation_distance * activation_distance
+        hearth_loop.visible = active
+        if active and not hearth_loop.is_playing():
+            hearth_loop.play()
+        elif not active:
+            hearth_loop.pause()
+        return
     if not enabled or get_tree().paused:
         return
     var player := get_tree().get_first_node_in_group("player") as Node3D
@@ -40,6 +52,8 @@ func _process(delta: float) -> void:
     emit_once()
 
 func emit_once(multiplier: float = 1.0) -> void:
+    if is_instance_valid(hearth_loop):
+        return
     if not enabled:
         return
     WorldVFX.spawn_environment_effect(effect_kind, global_position, clampf(strength * multiplier, 0.1, 4.0))
@@ -54,7 +68,7 @@ func set_effect_enabled(value: bool) -> void:
     elapsed = 0.0
 
 func configure(kind: String, effect_strength: float = 1.0, interval: float = 0.55) -> void:
-    var supported := ["fire", "smoke", "steam", "dust", "sparks", "splash", "debris"]
+    var supported := ["fire", "hearth_fire", "smoke", "steam", "dust", "sparks", "splash", "debris"]
     effect_kind = kind.to_lower() if kind.to_lower() in supported else "smoke"
     strength = clampf(effect_strength, 0.1, 3.0)
     interval_seconds = clampf(interval, 0.04, 10.0)

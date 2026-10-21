@@ -1,0 +1,21 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOME_PROGRESS frame=0 trader=(-16.00195, 0.000156, -8.501465) artisan=(-23.00195, -0.0, -10.30127)
+HOME_PROGRESS frame=600 trader=(-28.79395, 0.000847, -13.34619) artisan=(-35.51367, -0.0, -17.59375)
+HOME_PROGRESS frame=1200 trader=(-41.20703, 0.000838, -20.06689) artisan=(-44.37012, 0.054495, -26.70654)
+HOME_PROGRESS frame=1800 trader=(-42.2959, 0.054577, -29.08105) artisan=(-41.33789, 0.054495, -32.84424)
+HOME_PROGRESS frame=2400 trader=(-42.14844, 0.055942, -30.86133) artisan=(-42.1084, 0.054495, -31.54102)
+HOME_PROGRESS frame=3000 trader=(-42.13477, 0.055942, -30.86084) artisan=(-42.1084, 0.054495, -31.54102)
+HOME_PROGRESS frame=3600 trader=(-42.11035, 0.055942, -30.86035) artisan=(-42.1084, 0.054495, -31.54102)
+HOME_PROGRESS frame=4200 trader=(-40.21484, 0.055942, -32.66748) artisan=(-48.13965, 0.054495, -30.34619)
+HOME_PROGRESS frame=4800 trader=(-42.11133, 0.055942, -29.30225) artisan=(-48.13965, 0.054495, -30.34619)
+WORK_PROGRESS frame=0 trader=(-46.41211, 0.055942, -33.09717) artisan=(-48.1377, 0.054495, -30.34619)
+WORK_PROGRESS frame=600 trader=(-43.81348, -0.000113, -21.57861) artisan=(-44.99512, 0.054495, -28.51172)
+WORK_PROGRESS frame=1200 trader=(-37.36816, -0.000113, -8.687988) artisan=(-40.6416, 0.000235, -15.17529)
+WORK_PROGRESS frame=1800 trader=(-25.38574, -0.000113, -4.230957) artisan=(-32.75781, 0.000924, -4.332031)
+WORK_PROGRESS frame=2400 trader=(-16.07422, -0.000113, -7.918457) artisan=(-23.06445, 0.000924, -9.239746)
+ERROR: Resident did not return through the real doorway: Марта (-1.414063, 0.180942, -3.097168) Идёт к кровати
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_square_home_life.gd:211)
+       [1] _frames (res://tests/smoke_square_home_life.gd:16)

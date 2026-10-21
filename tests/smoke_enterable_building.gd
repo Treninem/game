@@ -26,8 +26,8 @@ func _run_test() -> void:
     for _i in range(5):
         await get_tree().physics_frame
 
-    if building.room_count != 1:
-        _fail(2, "building does not expose exactly one real starter room")
+    if building.room_count != 4 or not building.has_node("HouseRooms") or building.get_node("HouseRooms").room_doors.size() != 3:
+        _fail(2, "building lacks private rooms, common hall, separate kitchen and three physical doors")
         return
     if building.door_count != 1 or building.front_door == null:
         _fail(3, "building is missing its physical interactive front door")

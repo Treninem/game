@@ -148,6 +148,7 @@ func _follow_routine(delta: float) -> void:
     plan = _home_route(plan)
     plan = _work_approach(plan)
     plan = _household_plan(plan)
+    plan = _route_home_rooms(plan)
     var target: Vector3 = get_parent_node_3d().to_global(plan.target)
     var flat := target - global_position
     flat.y = 0
@@ -190,7 +191,7 @@ func _follow_routine(delta: float) -> void:
                     rotation.y = lerp_angle(rotation.y, atan2(-toward.x, -toward.z), delta * 3.0)
                     break
     else:
-        var direction := _routine_direction(flat.normalized(), delta)
+        var direction := _routine_direction(flat.normalized(), delta, 0.5 if plan.get("indoor_path", false) else 1.8)
         velocity.x = move_toward(velocity.x, direction.x * move_speed, delta * 5.5)
         velocity.z = move_toward(velocity.z, direction.z * move_speed, delta * 5.5)
         rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), minf(1.0, delta * 7.0))
@@ -335,23 +336,23 @@ func _context_line() -> String:
         line += "Осторожнее с оружием у прилавка. "
     return line
 
-func _routine_direction(desired: Vector3, delta: float) -> Vector3:
+func _routine_direction(desired: Vector3, delta: float, lookahead: float = 1.8) -> Vector3:
     avoid_elapsed = maxf(0.0, avoid_elapsed - delta)
-    if avoid_elapsed > 0 and _routine_way_clear(avoid_heading):
+    if lookahead > 1.0 and avoid_elapsed > 0 and _routine_way_clear(avoid_heading, lookahead):
         return avoid_heading
-    if _routine_way_clear(desired):
+    if _routine_way_clear(desired, lookahead):
         return desired
     for angle in [0.65, -0.65, 1.05, -1.05, 1.55, -1.55]:
         var candidate := desired.rotated(Vector3.UP, angle)
-        if _routine_way_clear(candidate):
+        if _routine_way_clear(candidate, lookahead):
             avoid_heading = candidate
             avoid_elapsed = 1.1
             return candidate
     return Vector3.ZERO
 
-func _routine_way_clear(direction: Vector3) -> bool:
+func _routine_way_clear(direction: Vector3, lookahead: float = 1.8) -> bool:
     var origin := global_position + Vector3.UP * 0.8
-    var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * 1.8, 1, [get_rid()])
+    var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * lookahead, 1, [get_rid()])
     return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 func _end_conversation() -> void:
@@ -531,7 +532,16 @@ func _household_plan(plan: Dictionary) -> Dictionary:
             used_furniture = storage_body
             var storage_local := home.to_local(global_position)
             var exit_point := Vector3(2.4, storage_local.y, -1.2) if role == "trader" else Vector3(2.2, storage_local.y, -2.92)
-            if Vector2(storage_local.x - exit_point.x, storage_local.z - exit_point.z).length() > 0.25:
+            var clearing := Vector2(storage_local.x - exit_point.x, storage_local.z - exit_point.z).length() > 0.25
+            if home.has_node("HouseRooms"):
+                # Keep the reservation only while physically clearing storage.
+                # The next need supplies the goal; geometry supplies its path.
+                var approach := home.to_local(storage_body.approach_point())
+                clearing = Vector2(storage_local.x - approach.x, storage_local.z - approach.z).length() < 1.25
+                var seat := home.get_node_or_null("InteriorFurniture/" + ("Bench" if role == "trader" or not home.has_node("InteriorFurniture/BenchSecond") else "BenchSecond")) as HouseholdFurniture
+                if seat != null:
+                    exit_point = home.to_local(seat.approach_point())
+            if clearing:
                 plan.target = get_parent_node_3d().to_local(home.to_global(exit_point))
                 plan.arrival_radius = 0.20
                 plan.activity = "Освобождает место у сундука"
@@ -568,7 +578,7 @@ func _household_plan(plan: Dictionary) -> Dictionary:
     # Side-wall furniture is reached via the clear central aisle rather than
     # steering straight through the dining table from chest to bench/bed.
     var aligning_lane := false
-    if absf(local.z - destination.z) > 0.85:
+    if not home.has_node("HouseRooms") and absf(local.z - destination.z) > 0.85:
         # Clear both the resident and stationary hero capsules before moving
         # along the aisle. A broad lateral arrival radius left residents wedged
         # against the hero despite the authored lane itself being clear.
@@ -584,6 +594,25 @@ func _household_plan(plan: Dictionary) -> Dictionary:
     plan.walking = "Идёт к кровати" if furniture.kind == "bed" else "Идёт к скамье" if furniture.kind == "bench" else "Идёт к сундуку"
     if not plan.has("furniture"):
         plan.activity = "Проходит между мебелью"
+    return plan
+
+func _route_home_rooms(plan: Dictionary) -> Dictionary:
+    if not has_meta("home_building"):
+        return plan
+    var home := get_parent().get_node_or_null(String(get_meta("home_building"))) as EnterableBuilding
+    if home == null or not home.has_node("HouseRooms"):
+        return plan
+    var local := home.to_local(global_position)
+    var destination := home.to_local(get_parent_node_3d().to_global(plan.target))
+    var half := home.interior_size * 0.5
+    if absf(local.x) > half.x or absf(local.z) > half.z or absf(destination.x) > half.x or absf(destination.z) > half.z:
+        return plan
+    var point: Vector3 = home.get_node("HouseRooms").waypoint(local, destination, self)
+    plan.indoor_path = true
+    if point.distance_to(destination) > 0.02:
+        plan.erase("furniture")
+        plan.target = get_parent_node_3d().to_local(home.to_global(point))
+        plan.arrival_radius = 0.08
     return plan
 
 func _use_household(furniture: HouseholdFurniture, delta: float) -> void:

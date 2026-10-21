@@ -4,6 +4,7 @@ var errors: Array[String] = []
 var home: EnterableBuilding
 var residents: Array[SettlementNPC] = []
 var advance_clock := false
+var decorator: SettlementInteriorVisuals
 
 func _physics_process(delta: float) -> void:
     if advance_clock:
@@ -25,6 +26,7 @@ func build_home() -> void:
     home.configure(Vector3(12, 3.2, 10))
     home.set_meta("household_owners", ["household:test:0", "household:test:1"])
     add_child(home)
+    decorator.decorate_building(home)
 
 func build_residents() -> void:
     residents.clear()
@@ -35,7 +37,7 @@ func build_residents() -> void:
         npc.autonomous = true
         npc.set_meta("citizen_id", "household:test:%d" % index)
         npc.set_meta("home_building", "SquareHome")
-        npc.set_meta("routine_places", {"home": Vector3(0, 0, 1), "work": Vector3(-1 if index == 0 else 1, 0, 1)})
+        npc.set_meta("routine_places", {"home": Vector3(0, 0, 1), "work": Vector3(-3 if index == 0 else 3, 0, 9)})
         npc.position = Vector3(-1 if index == 0 else 1, 0.22, 1)
         add_child(npc)
         residents.append(npc)
@@ -44,6 +46,16 @@ func _run() -> void:
     GameState.reset_new_game()
     # A bounded physical interior fixture; this does not claim a world journey.
     position = Vector3(CapitalData.CENTER.x, 0, CapitalData.CENTER.y)
+    decorator = SettlementInteriorVisuals.new()
+    add_child(decorator)
+    var outside := StaticBody3D.new()
+    var ground := CollisionShape3D.new()
+    var ground_shape := BoxShape3D.new()
+    ground_shape.size = Vector3(30, 0.2, 30)
+    ground.shape = ground_shape
+    ground.position.y = -0.1
+    outside.add_child(ground)
+    add_child(outside)
     build_home()
     build_residents()
     GameState.world_minutes = 21 * 60
@@ -53,6 +65,7 @@ func _run() -> void:
         if GameState.get_world_value("household:household:test:0", {}).get("stored", false) and GameState.get_world_value("household:household:test:1", {}).get("stored", false):
             break
     var chest := home.get_node("InteriorFurniture/StorageChest") as HouseholdFurniture
+    print("HOUSEHOLD_STORAGE ", residents.map(func(n): return [n.position, n.activity]))
     if int(chest.contents().get("berries", 0)) != 2:
         errors.append("Residents did not physically visit and store their finite personal belongings: %s %s" % [chest.contents(), residents.map(func(n): return [n.position, n.activity])])
     var clearing_snapshot := JSON.parse_string(JSON.stringify(GameState.snapshot())) as Dictionary
@@ -66,6 +79,7 @@ func _run() -> void:
         if residents.all(func(n): return n.get_meta("activity") == "sit"):
             break
     var seated := false
+    print("HOUSEHOLD_SEATING ", residents.map(func(n): return [n.position, n.activity]))
     for npc in residents:
         if npc.get_meta("activity") == "sit" and npc.visual.top_level:
             seated = true
@@ -87,6 +101,7 @@ func _run() -> void:
         elif absf(npc.visual.global_basis.y.dot(Vector3.UP)) > 0.1:
             errors.append("Sleeping resident remains upright")
     advance_clock = false
+    print("HOUSEHOLD_SLEEP ", residents.map(func(n): return [n.position, n.activity]))
     var saved := JSON.parse_string(JSON.stringify(GameState.snapshot())) as Dictionary
     var occupied := chest.contents()
     for npc in residents:
@@ -123,6 +138,13 @@ func _run() -> void:
     for furniture in get_tree().get_nodes_in_group("household_furniture"):
         if not furniture.occupant.is_empty():
             errors.append("Waking leaves a stale furniture reservation: " + furniture.furniture_id)
+    for frame in range(900):
+        await frames(1)
+        if residents.all(func(n): return n.position.distance_to(n.routine_plan(GameState.world_minutes).target) < 0.8):
+            break
+    if not residents.all(func(n): return n.routine_phase == "work" and n.position.z > home.footprint.y * 0.5 + 1 and n.position.distance_to(n.routine_plan(GameState.world_minutes).target) < 0.8):
+        errors.append("Adults did not physically leave their rooms and home to reach separate daytime workplaces: %s" % [residents.map(func(n): return [n.position, n.activity])])
+    print("HOUSEHOLD_DAY_WORK ", residents.map(func(n): return [n.position, n.routine_phase]))
     GameState.world_minutes = 21 * 60
     await frames(420)
     if chest.contents() != occupied:

@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-22",
+  "parent_commit": "3134d040d5e10b98ccde7d54df4998a3d7d0760f",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "review_branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; no stable release or owner artistic acceptance",
+  "owner_direction": "Supplied house concept; sparse rooms rejected. Variable household plans, guardians/children/school, genuine productive jobs and autonomous path choice are required. These broad requirements are not declared complete by this package.",
+  "changes": [
+    "Four physical spaces in qualifying EnterableBuilding homes: two private/living rooms, common dining/hall, kitchen; three stable saved internal doors; rear bedroom gains a fourth real window",
+    "Two bounded size-dependent plans and one/two place settings; beds, chest IDs and contents retained. Benches moved to the dining table, with safe side approaches and legacy-save wake handling",
+    "Nineteen existing reviewed CC0 objects normalized in Blender, plus project-authored partition, rounded bedding, curtains, rugs and arched hearth; editable blend sources, reproducible builders and material metadata retained",
+    "Shared photographic wood/stone and original metal/props/cloth maps; 512px cloth mips; a kitchen work surface, supported plates/mugs/cutlery, cupboards, shelving, finite existing chests, personal bags and provisions",
+    "Cached local A* from actual collision geometry and capsule clearance, oriented/locked door handling and temporary stationary-people obstacles. Household storage clearance now proceeds toward the next need instead of an authored departure point",
+    "Domestic fire uses a bounded native sprite loop through shared VFX, not combat particles; light and effect distance limits remain active"
+  ],
+  "local_checks": {
+    "house_navigation": {
+      "case": "house_navigation",
+      "exit_code": 0,
+      "seconds": 5.52,
+      "errors": [],
+      "marker": true
+    },
+    "enterable_building": {
+      "case": "enterable_building",
+      "exit_code": 0,
+      "seconds": 4.38,
+      "errors": [],
+      "marker": true
+    },
+    "settlement_interior_assets": {
+      "case": "settlement_interior_assets",
+      "exit_code": 0,
+      "seconds": 3.81,
+      "errors": [],
+      "marker": true
+    },
+    "household_quality": {
+      "case": "household_quality",
+      "exit_code": 0,
+      "seconds": 8.02,
+      "errors": [],
+      "marker": true
+    },
+    "rest_player_physics": {
+      "case": "rest_player_physics",
+      "exit_code": 0,
+      "seconds": 42.56,
+      "errors": [],
+      "marker": true
+    },
+    "household_furniture": {
+      "case": "household_furniture",
+      "exit_code": 0,
+      "seconds": 77.05,
+      "errors": [],
+      "marker": true
+    },
+    "capital_square": {
+      "case": "capital_square",
+      "exit_code": 0,
+      "seconds": 57.58,
+      "errors": [],
+      "marker": true
+    },
+    "household_aisle": {
+      "case": "household_aisle",
+      "exit_code": 0,
+      "seconds": 9.39,
+      "errors": [],
+      "marker": true
+    },
+    "square_home_life": {
+      "case": "square_home_life",
+      "exit_code": 0,
+      "seconds": 148.31,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "rendered_room": {
+    "result": {
+      "exit_code": 0,
+      "seconds": 127.94,
+      "errors": [],
+      "marker": true
+    },
+    "scope": "Real game player controller and meshes, four quality presets, actual walk through private rooms/kitchen, saved doors, real support/contact, day/night and distance checks; fixed-room observer, not a world tour",
+    "samples": [
+      {
+        "preset": 0,
+        "frames": 120,
+        "ms_per_frame": 16.673575,
+        "reported_video_bytes": 503049173.0,
+        "draw_calls": 134.0
+      },
+      {
+        "preset": 3,
+        "frames": 120,
+        "ms_per_frame": 35.5098916666667,
+        "reported_video_bytes": 528927701.0,
+        "draw_calls": 790.0
+      }
+    ],
+    "sample_limits": "1280x720, Intel UHD 610, Godot 4.7.1 GL Compatibility, short room sample including presentation; not steady-world FPS, process RSS or all-world performance"
+  },
+  "native_capital_home": {
+    "result": {
+      "exit_code": 0,
+      "seconds": 188.86,
+      "errors": [],
+      "marker": true
+    },
+    "walked_m": 99.683621003991,
+    "player_position_assignments": 0,
+    "starting_state": "Copy of the existing legitimately earned capital-arrival save; original checkpoint/profile unchanged",
+    "scope": "Automated ordinary movement to the actual streamed capital home, reach-checked front-door interaction, walking in three room zones, actual city environment, slot-4 disk save, Medium graphics. Only inspection clock/survival held at 09:00; observer camera moves freely. Not manual gameplay or a repeated forest-to-capital journey",
+    "driver": "tests/visual_house_concept_world.gd"
+  },
+  "ordinary_world": {
+    "result": {
+      "exit_code": 0,
+      "seconds": 57.72,
+      "errors": [],
+      "marker": true
+    },
+    "gameplay": {
+      "bow_arrow_consumed": true,
+      "captures": [
+        "user://head-size-walk.png",
+        "user://head-size-run.png",
+        "user://head-size-tall-jump.png",
+        "user://head-size-starter_axe.png",
+        "user://head-size-short_bow.png",
+        "user://head-size-bow-released.png",
+        "user://head-size-short-walk.png",
+        "user://head-size-short-jump.png",
+        "user://head-size-cast-free-hand.png",
+        "user://head-size-magic-after-load.png",
+        "user://head-size-inventory-lifecycle.png"
+      ],
+      "game_save_roundtrip": true,
+      "jump_both_heights": true,
+      "look_roundtrip": true,
+      "morphs": 9,
+      "physical_heights_cm": [
+        160,
+        195
+      ],
+      "player_position_assignments": 0,
+      "walked_m": 27.2718690689653
+    },
+    "exit_object_leaks": 83,
+    "limits": "Existing 83 shutdown ObjectDB leftovers remain open; this package does not fix or conceal them"
+  },
+  "diagnostics": [
+    "Initial fixed-room reflection enum mistake was corrected and rerun; failed run is not counted as a pass",
+    "Direct room routing was replaced by geometry A*; oriented door/capsule corner clearance and locking-during-motion required fixes",
+    "First domestic fire incorrectly reused combat bursts; before-combat-fire.png shows the failure. Shared ambient loop now replaces it",
+    "Old and new bedding initially overlapped and an atlas border appeared on the mattress; original bedding surfaces are replaced and cloth UVs cropped to the linen swatch",
+    "Actual capital evening return first failed because a seated neighbour occupied an aisle and storage clearance waited for an authored point. before-crowd-fix.log/json are preserved; final square_home_life passes with the normal bound"
+  ],
+  "remaining": [
+    "Overall visual quality still falls short of the supplied concept; full artistic acceptance is false",
+    "Only bounded size-dependent layouts, not full wealth/occupation/family-specific housing across all city townhouse types",
+    "Cupboards, kitchen props and hearth currently decorate the room; cooking, fuel management and NPC meal preparation are not implemented",
+    "Children, age-appropriate models, guardians/family graph and schooling are not implemented",
+    "Existing trader/fletcher production/trading is verified, not full guild/adventurer/smith professions",
+    "Older outdoor workplace approach waypoints are outside this interior A* package",
+    "Native frames still show shoulder/garment breakthrough on the current human outfit; body/clothing artistic acceptance remains open"
+  ],
+  "evidence": "docs/review/2026-10-22-house-concept/",
+  "ci_at_commit": {
+    "preceding_exact_sha": "3134d040d5e10b98ccde7d54df4998a3d7d0760f",
+    "preceding_results": "8/8 SUCCESS, queried live; snapshot archived",
+    "this_package": "Pending push and exact-SHA checks; release gates unchanged"
+  }
+}
