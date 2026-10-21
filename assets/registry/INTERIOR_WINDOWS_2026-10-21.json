@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-21",
+  "status": "INTEGRATED",
+  "asset": "assets/production/interiors/architecture/TimberWindow.glb",
+  "authoring": "Project-authored in Blender 5.2, tools/build_interior_window.py",
+  "triangles": 866,
+  "meshes": 2,
+  "bytes": 62416,
+  "sha256": "204a1e458e62cb8734cc13bba798849c472905b6ff48b5bb13af9dd3d14e3e85",
+  "reuse": "Existing CC0 photographic plank texture; existing rounded city-pack wall/window modules do not fit these rectangular physical openings. No third-party download.",
+  "runtime": "scripts/enterable_building.gd",
+  "features": [
+    "Bevelled jambs/rails, cross mullions, protruding sill and apron",
+    "Single two-sided glass plane; transparent, no pane shadow",
+    "Shadow-free local daylight; daytime curve; disabled on Low and beyond 20 metres"
+  ],
+  "remaining": [
+    "Occupation-specific layouts, hearths, textiles and household clutter",
+    "Whole-region artistic acceptance",
+    "Broader light/performance budget measurement"
+  ],
+  "room_timberwork": {
+    "status": "INTEGRATED",
+    "asset": "assets/production/interiors/architecture/RoomTimberwork.glb",
+    "authoring": "Project-authored in Blender 5.2, tools/build_house_timberwork.py",
+    "triangles": 1620,
+    "bytes": 114640,
+    "sha256": "342c93a23f02e0a1c1585ddd49728ad02454cbd2216dd4956a116abf01113cf5",
+    "collision": "Mesh triangle collision on exposed timber, not a whole-room box",
+    "editable_source": "assets/source/interiors/RoomTimberwork.blend"
+  },
+  "owner_concepts": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
+  "editable_source": "assets/source/interiors/TimberWindow.blend",
+  "warm_lighting": {
+    "source": "Existing INTEGRATED CC0 Lantern_Wall.gltf from capital_square",
+    "behavior": "One local warm point light; brighter at night; beyond 20m culled; shadow only for occupied room and preset > 0; capital retains its existing lantern without duplication"
+  }
+}

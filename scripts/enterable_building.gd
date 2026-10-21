@@ -34,6 +34,9 @@ var glass_material: StandardMaterial3D
 var bedding_material: StandardMaterial3D
 var cloth_material: StandardMaterial3D
 var iron_material: StandardMaterial3D
+var window_lights: Array[SpotLight3D] = []
+var room_lantern: OmniLight3D
+var light_elapsed := 0.0
 
 func configure(size: Vector3, variant: int = 0, label: String = "Дом") -> void:
     footprint = Vector2(maxf(5.0, size.x), maxf(5.0, size.z))
@@ -47,6 +50,34 @@ func _ready() -> void:
     SettingsManager.settings_changed.connect(_apply_surface_quality)
     _apply_surface_quality()
     _build_structure()
+    _update_window_light()
+
+func _process(delta: float) -> void:
+    light_elapsed += delta
+    if light_elapsed < 0.5:
+        return
+    light_elapsed = 0.0
+    _update_window_light()
+
+func _update_window_light() -> void:
+    # Cheap approximation of daylight bounced into the room; no shadow maps,
+    # no extra lights on Low, and no illumination of distant streamed houses.
+    var hour := fmod(GameState.world_minutes / 60.0, 24.0)
+    var daylight := maxf(0.0, sin((hour - 6.0) * PI / 12.0))
+    var player := get_tree().get_first_node_in_group("player") as Node3D
+    var nearby := player == null or global_position.distance_squared_to(player.global_position) < 400.0
+    var enabled := int(SettingsManager.get_value("graphics", "quality_preset")) > 0 and nearby and daylight > 0.01
+    for light: SpotLight3D in window_lights:
+        light.visible = enabled
+        light.light_energy = daylight * 0.65
+    if is_instance_valid(room_lantern):
+        var inside := player == null
+        if player != null:
+            var local_player := to_local(player.global_position)
+            inside = absf(local_player.x) < interior_size.x * 0.5 and absf(local_player.z) < interior_size.z * 0.5 and local_player.y > 0.0 and local_player.y < wall_height
+        room_lantern.visible = nearby
+        room_lantern.light_energy = lerpf(2.0, 0.8, daylight)
+        room_lantern.shadow_enabled = inside and int(SettingsManager.get_value("graphics", "quality_preset")) > 0
 
 func _build_structure() -> void:
     room_count = 1
@@ -86,6 +117,46 @@ func _build_structure() -> void:
     _build_roof_visual()
     _build_front_door()
     _build_interior_furnishings()
+    _build_timberwork()
+    _build_room_lantern()
+
+func _build_room_lantern() -> void:
+    if bool(get_meta("external_interior_lantern", false)):
+        return
+    var lantern := preload("res://assets/production/medieval/capital_square/Lantern_Wall.gltf").instantiate() as Node3D
+    lantern.name = "RoomWallLantern"
+    add_child(lantern)
+    var bounds := AABB()
+    var measured := false
+    for child in lantern.find_children("*", "MeshInstance3D", true, false):
+        var mesh := child as MeshInstance3D
+        var local_bounds: AABB = (lantern.global_transform.affine_inverse() * mesh.global_transform) * mesh.get_aabb()
+        bounds = bounds.merge(local_bounds) if measured else local_bounds
+        measured = true
+    var factor := 0.42 / maxf(bounds.size.y, 0.001)
+    lantern.scale = Vector3.ONE * factor
+    lantern.position = Vector3(1.8, 2.25, -footprint.y * 0.5 + 0.45) - Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z) * factor
+    room_lantern = OmniLight3D.new()
+    room_lantern.name = "RoomLanternLight"
+    room_lantern.position = Vector3(1.8, 2.4, -footprint.y * 0.5 + 0.8)
+    room_lantern.light_color = Color(1.0, 0.73, 0.44)
+    room_lantern.omni_range = 7.5
+    add_child(room_lantern)
+
+func _build_timberwork() -> void:
+    var frame := preload("res://assets/production/interiors/architecture/RoomTimberwork.glb").instantiate() as Node3D
+    frame.name = "RoomTimberwork"
+    frame.scale = Vector3(footprint.x / 12.0, wall_height / 3.2, footprint.y / 10.0)
+    add_child(frame)
+    var grain := preload("res://scripts/interior_surface_materials.gd").wood(Color(0.53, 0.42, 0.30))
+    grain.uv1_triplanar = false
+    grain.uv1_world_triplanar = false
+    grain.uv1_scale = Vector3.ONE
+    for child in frame.find_children("*", "MeshInstance3D", true, false):
+        var mesh := child as MeshInstance3D
+        mesh.material_override = grain
+        # Actual exposed beam faces block the controller; never a whole-room box.
+        mesh.create_trimesh_collision()
 
 func _build_front_wall(shell: Node3D) -> void:
     var front_z := footprint.y * 0.5 - wall_thickness * 0.5
@@ -246,20 +317,33 @@ func _add_window_frame(center: Vector3, opening_size: Vector3, side_wall: bool, 
     root.position = center
     add_child(root)
 
-    var frame_depth := wall_thickness + 0.05
-    var frame_width := 0.09
+    var assembly := preload("res://assets/production/interiors/architecture/TimberWindow.glb").instantiate() as Node3D
+    root.add_child(assembly)
+    root.scale = Vector3(opening_size.x / 1.35, opening_size.y / 1.15, wall_thickness / 0.28)
     if side_wall:
-        _add_visual_box(root, "FrameTop", Vector3(frame_depth, frame_width, opening_size.x), Vector3.ZERO + Vector3(0, opening_size.y * 0.5, 0), timber_material)
-        _add_visual_box(root, "FrameBottom", Vector3(frame_depth, frame_width, opening_size.x), Vector3.ZERO + Vector3(0, -opening_size.y * 0.5, 0), timber_material)
-        _add_visual_box(root, "FrameA", Vector3(frame_depth, opening_size.y, frame_width), Vector3(0, 0, -opening_size.x * 0.5), timber_material)
-        _add_visual_box(root, "FrameB", Vector3(frame_depth, opening_size.y, frame_width), Vector3(0, 0, opening_size.x * 0.5), timber_material)
-        _add_visual_box(root, "Glass", Vector3(0.035, opening_size.y - frame_width * 2.0, opening_size.x - frame_width * 2.0), Vector3.ZERO, glass_material)
-    else:
-        _add_visual_box(root, "FrameTop", Vector3(opening_size.x, frame_width, frame_depth), Vector3(0, opening_size.y * 0.5, 0), timber_material)
-        _add_visual_box(root, "FrameBottom", Vector3(opening_size.x, frame_width, frame_depth), Vector3(0, -opening_size.y * 0.5, 0), timber_material)
-        _add_visual_box(root, "FrameA", Vector3(frame_width, opening_size.y, frame_depth), Vector3(-opening_size.x * 0.5, 0, 0), timber_material)
-        _add_visual_box(root, "FrameB", Vector3(frame_width, opening_size.y, frame_depth), Vector3(opening_size.x * 0.5, 0, 0), timber_material)
-        _add_visual_box(root, "Glass", Vector3(opening_size.x - frame_width * 2.0, opening_size.y - frame_width * 2.0, 0.035), Vector3.ZERO, glass_material)
+        root.rotation.y = PI * 0.5 if center.x < 0.0 else -PI * 0.5
+    var grain := preload("res://scripts/interior_surface_materials.gd").wood(Color(0.65, 0.55, 0.42))
+    grain.uv1_triplanar = false
+    grain.uv1_world_triplanar = false
+    grain.uv1_scale = Vector3.ONE
+    for child in assembly.find_children("*", "MeshInstance3D", true, false):
+        var mesh := child as MeshInstance3D
+        if mesh.name == "Glass":
+            mesh.material_override = glass_material
+            mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+        else:
+            mesh.material_override = grain
+    var daylight := SpotLight3D.new()
+    daylight.name = "WindowDaylight"
+    daylight.position.z = wall_thickness * 0.5 + 0.04
+    daylight.rotation.y = PI
+    daylight.light_color = Color(0.83, 0.90, 1.0)
+    daylight.spot_range = 4.5
+    daylight.spot_angle = 67.0
+    daylight.spot_attenuation = 0.6
+    daylight.shadow_enabled = false
+    root.add_child(daylight)
+    window_lights.append(daylight)
     window_count += 1
 
 func _build_roof_visual() -> void:
@@ -327,8 +411,9 @@ func _prepare_materials() -> void:
     floor_material = surfaces.wood(Color(0.82, 0.77, 0.68))
     ceiling_material = surfaces.wood(Color(0.72, 0.67, 0.58))
     timber_material = _material(Color(0.18, 0.085, 0.035), 0.95)
-    glass_material = _material(Color(0.58, 0.76, 0.82, 0.28), 0.16)
+    glass_material = _material(Color(0.72, 0.83, 0.86, 0.12), 0.16)
     glass_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+    glass_material.cull_mode = BaseMaterial3D.CULL_DISABLED
     bedding_material = _material(Color(0.54, 0.47, 0.36), 0.98)
     cloth_material = _material(Color(0.72, 0.68, 0.57), 0.99)
     iron_material = _material(Color(0.12, 0.13, 0.14), 0.73)

@@ -18,6 +18,7 @@ func _ready() -> void:
     home.add_to_group("map_building")
     home.set_meta("map_footprint", Vector2(12, 10))
     home.set_meta("household_owners", [SHOP_ID, "capital:square:fletcher"])
+    home.set_meta("external_interior_lantern", true)
     add_child(home)
     home.front_door.persistence_key = "door:capital:square:home"
     home.front_door.set_open(bool(GameState.get_world_value(home.front_door.persistence_key, false)), true)
