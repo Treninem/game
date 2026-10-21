@@ -1,0 +1,297 @@
+[
+  {
+    "case": "physical_actions",
+    "file": "gait-female-axe-0.png",
+    "sha256": "a1157ad1bc3c0446799138de83223f0fc39f8d437252b6dbdf984ee1552e6717"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-axe-1.png",
+    "sha256": "4268cbaa93c3cfbdce09e6f22df51a1f70c5bdfb81825766930bc200d09b08f7"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-axe-2.png",
+    "sha256": "7e66a971debf7d25d775e3487e8b26162d7139ec8d842e327df0fdeb57873bf1"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-axe-3.png",
+    "sha256": "c638e1d36964ce0da177aa09dafea39ffb3fd992b946690f52aa185e3617cc84"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-jump-0.png",
+    "sha256": "c3de37d68196b47ebd2d6587a13123e39fd21725ef48e0febf149cf913913631"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-jump-1.png",
+    "sha256": "dfa93137fe32884c9e39300cb78dd74b550bb359fbd27841ff7c057ef7356b2d"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-jump-2.png",
+    "sha256": "6c6ce3e1b1fd017176e0d3275a3db1e129405f031dbb843892506a482f41cf43"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-jump-3.png",
+    "sha256": "3ec1e5b2305ba33906d9cad4a1b7a0c4b3f6e4e7212285af8215dbd4720bd3b9"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-normal-move-0.png",
+    "sha256": "52f74a5ba6d660bd9f6eef3496b273a85ae598c3257fcb8f06be7e8c6c31f7b5"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-normal-move-1.png",
+    "sha256": "cc47cb53e661c002d71b259098cc2079b0d66601a5ba98b24f802589a7506670"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-normal-move-2.png",
+    "sha256": "cb8d6290fca2809e246a836e0c63cd633ad817bcd5408bb9585f54dfe443d833"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-normal-move-3.png",
+    "sha256": "4a8d7411394c51e7630bca5a7c170474dd07cf29bf0b14293bb49b2dee589976"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-punch-0.png",
+    "sha256": "8ac0bbe281fb51d06652e94abce9b21e5b43f2957c36401b0c4b8216b21295c9"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-punch-1.png",
+    "sha256": "548746c87fc3237a6a32c662a3acb043126cae3ed6879cc0af6beba262f06845"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-punch-2.png",
+    "sha256": "06a08af3ed5108eb494bcd59b2a2a830cd3c53a1cccd3e1a15afacf3cdf73b66"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-punch-3.png",
+    "sha256": "d6b43ce6284996efb6f2e3b9c33352192e54c18e956acdfcd86d27beecc753d1"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-run-0.png",
+    "sha256": "e4b5f474312de093a84a6af5f3fed947b3c5bd9dbf57baed13186a65ea3bd70c"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-run-1.png",
+    "sha256": "e8af7ade7dcddbb4400308aa68a75681d623da41ee4efc531946a2db29b4c63e"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-run-2.png",
+    "sha256": "e2923f50bd3b6a51a515cbb5531432f909d1c69b19b2b57251928518666c0770"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-run-3.png",
+    "sha256": "bef3a01ca6692a414f9e5fc5bcffca24830ecc1b2ab6d0732cb7e558830c4c3f"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-slow-walk-0.png",
+    "sha256": "09e29bb6f394fda6bd3dc4bb92ba350011c0bbce971c8315e8e9b89b4ad25e3c"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-slow-walk-1.png",
+    "sha256": "fca23f5b0a8b2b385584bfd49e4bac18381bee29d7a8d1df6eb65b45f4740e39"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-slow-walk-2.png",
+    "sha256": "2e2d8366fec27e192453441e28561bb6f7863b2fa022a3144603344b479dc829"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-female-slow-walk-3.png",
+    "sha256": "d08050a058365522e0a9520bf45ed43cd291b620d2794046a69c707e210222f9"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-axe-0.png",
+    "sha256": "979697246b857425759e22413449e961299b507e4d06513587563e0aad660ad3"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-axe-1.png",
+    "sha256": "7556c6e86100b1bc98d9f7144e86bfaea8f84ec64f4eb5115ff8b126ffff1e0c"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-axe-2.png",
+    "sha256": "2f246c001a84502648c6f18d94ec06640d3f71073ced55697cb682a85da67b30"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-axe-3.png",
+    "sha256": "e2635f7c0bbf403659ff78c31deee3e70de2b60ad02205d769d0fd6c1dbaf4fb"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-jump-0.png",
+    "sha256": "13b5afe296bb49bd3e7bfbb670fe1117c8c80be16670186db4d41aa480a1e933"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-jump-1.png",
+    "sha256": "ad1ff9c5f2d4d696e6bac88ce4612d7ba6e150844c2268b374dc2120f92d6ab0"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-jump-2.png",
+    "sha256": "eef471b40506bb3b53fbfc694c20066c512b5f25f6ea5c1615d686d54bc327c4"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-jump-3.png",
+    "sha256": "10c3719dd40040d6f8f150d378a283902b071e44ac346dec4c9a32ec5a5c8510"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-normal-move-0.png",
+    "sha256": "7c114490c82811c3c4900ee5dba5ea2bc90eb02eaa6adc6a49ebf4f544ce9168"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-normal-move-1.png",
+    "sha256": "d175e185a20a7d30e2cb431c3c0cf9f7bc5dbffd22b9b88d0700fd15b61e2579"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-normal-move-2.png",
+    "sha256": "deff2de6782b24896ac759899da9d3fcafab23f8c1184a07c164d7b0069a6986"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-normal-move-3.png",
+    "sha256": "91a427a054482ae8578e08a1cd94534afd61f26ecaba5dbd37f68c4482f58b5b"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-punch-0.png",
+    "sha256": "1c9283455cae3f37dadbdf44b8e336606aae6caf2b169ca121428df4d44b9e08"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-punch-1.png",
+    "sha256": "ceb9f738c2c421de35b42b7b165d75e359b3d252b517f466f1cb42b3f7ff9665"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-punch-2.png",
+    "sha256": "bafa3c0f9e3de032b08e01e3a2950cc3458fed5108c96c853b8ef963a8acdc13"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-punch-3.png",
+    "sha256": "1b5f4b971c403afa46d250661b2cd0af7526c63c2f4138aa0468613f236ab0c5"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-run-0.png",
+    "sha256": "7f13e13c5a150ea9f8b16b759bee8c8745210d5d25b901df3a2296df368a4cb9"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-run-1.png",
+    "sha256": "8758d03aea0efae948e679e73d16c18cbb5fa4b47bd84e6417173d7bc8eee4b0"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-run-2.png",
+    "sha256": "7213f9b24e68181ef306ba6c3eddec7e1399b2cfdb4da2c0a864d8c9a006d624"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-run-3.png",
+    "sha256": "158e3e6445ffbe3e9dc1aaaf7721d72998bd1a2b9b2a1531ea78cfda1c76e858"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-slow-walk-0.png",
+    "sha256": "6f8bc1415a59b70b87b2f01dc20482b3009f81cce5dd1a724f37ee786b16ced0"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-slow-walk-1.png",
+    "sha256": "f9f50493970bbebd8f66c9f9120533e196ef3d61ebae76188fb78995a7d8a1db"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-slow-walk-2.png",
+    "sha256": "0114c49a82270c9e41c7918a9104ae19cf9ad818f0491e539012dd6d6c85383d"
+  },
+  {
+    "case": "physical_actions",
+    "file": "gait-male-slow-walk-3.png",
+    "sha256": "833ca7c2fa1a91179b1f37379856593960d930b1e2927267c9693d5fc4265052"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-bow-released.png",
+    "sha256": "9ec0e76c4ca0283cb99e1851efb741aceefc2057799b297a1737feab9a5950d7"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-cast-free-hand.png",
+    "sha256": "9e0ded75bf4b7be428c84dfa801be8a011fb940c4b44dca33c09c46fb368ce95"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-inventory-lifecycle.png",
+    "sha256": "3f91399294233f2adb71a892fe9219f97802c5361b3b721945b6f57d9147c29b"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-magic-after-load.png",
+    "sha256": "d549a5bf8f442e7e78cbb466c4e8fef6d3ad63488f2aa5e5362e62d5bf9b2fbb"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-run.png",
+    "sha256": "5fffb6926862ae24510281a9746c948d0bc25577b97c3603cfe9157f97745b7c"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-short-jump.png",
+    "sha256": "7edca4446208d6f68c0d5cacd34acbc76bc32801ce537e4786765867b226e38c"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-short-walk.png",
+    "sha256": "92a9c08605dda0a2577638c24b19aa351899d7c7369bda705847e43efcdca49f"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-short_bow.png",
+    "sha256": "cfe588141a3fecbb5a75c6c67cff38dc05ef0ee19bfd6bb3f63a6383f5837ea0"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-starter_axe.png",
+    "sha256": "1a6efeff04dcd6ae9f482cfa4896821a016cde901316c236afab43f4731145cc"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-tall-jump.png",
+    "sha256": "68c8df7ab735d36af783a35e4441c3de271cec73d282ddd5353b5d1932f5e0b7"
+  },
+  {
+    "case": "source_world",
+    "file": "head-size-walk.png",
+    "sha256": "9b208e169871409cfceb3762691f36167b725bda69809cd2ba0ab8063521253b"
+  }
+]

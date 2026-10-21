@@ -7,7 +7,7 @@
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
   "current_stage": "Новый комплект туника/брюки/сапоги подключён к обеим существующим моделям в проверочной версии. Исправлен подол, подготовлены собственные UV-согласованные normal/AO и физические mip-уровни. Пройдены 10 локальных регрессий, 48 графических кадров действий и ограниченный игровой цикл с сохранением/интерфейсом. Лица/волосы, полный гардероб, полный визуальный уровень и длительная производительность не приняты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-21_VIKING_INTEGRATION.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -375,5 +375,12 @@
     "lying_alignment_accepted": false,
     "lying_axis_and_face_direction_fixed": true,
     "remaining": "Dedicated sleeping and enter/exit animations; full artistic acceptance pending"
+  },
+  "last_verified_runtime_commit": "e31efac8b30b799a2ba5a5d3942190534377fa8f",
+  "last_verified_runtime_ci": "8/8 passed",
+  "world_regression": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
+    "exit_object_leaks": 79,
+    "artistic_acceptance": false
   }
 }
