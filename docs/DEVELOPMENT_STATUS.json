@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Активна комплексная программа: персонаж целиком и связанный стартовый регион. Выполнен механический аудит 15 сценариев; исправлена регрессия проверки обычной/медленной ходьбы и добавлены физические фазы прыжка всего тела с сохранением боевых рук. Художественная приёмка, опора подошв, приземление, модели, природа, здания и животные не объявляются завершёнными.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-21_COMPREHENSIVE_BATCH.json",
+  "current_stage": "Комплексный пакет персонажа: опора видимых подошв на физическую поверхность, учёт наклона и достижимости ног, мягкое проседание при приземлении и возврат фазы шага. Проверены 336 статических поз, первый кадр шести профилей, реальные прыжки, 48 кадров действий, 16 видов на склонах/ступени и цикл в игровом мире. Модели, одежда, полная фиксация стоп и художественная приёмка остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-21_SUPPORT_LANDING.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -206,8 +206,8 @@
     "Проверять совместно картинку, игровой цикл, сохранение и производительность; 30 FPS на низких подтвердить длительным проходом, а не одним видом."
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "Предыдущий World Core упал на устаревшем ожидании Walk при 5 м/с; локально воспроизведено и исправлено с отдельной проверкой медленной ходьбы. Новый удалённый CI ожидается; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-21_COMPREHENSIVE_BATCH.json",
+  "ci_followup_status": "Родительский 3977b369 прошёл World Core, движение, UI, magic/VFX и build/export/installer. Новый пакет опоры/приземления прошёл локальные проверки; его точный удалённый CI ожидается после push. Стабильный выпуск не опубликован.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-21_SUPPORT_LANDING.json",
   "review_launcher_revision": "Limb motion source review; current changes not locally re-exported",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -355,6 +355,15 @@
     "physical_velocity_driven": true,
     "bodies_checked": 2,
     "landing_animation_pending": true,
-    "terrain_foot_ik_pending": true
+    "terrain_foot_ik_pending": true,
+    "impact_compression_implemented": true
+  },
+  "human_surface_support": {
+    "poses": 336,
+    "first_frame_profiles": 6,
+    "height_normal_ik": true,
+    "full_xz_plant_locking": false,
+    "npc_integration": false,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_SUPPORT_LANDING.json"
   }
 }

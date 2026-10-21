@@ -1,6 +1,7 @@
 extends SkeletonModifier3D
 
 var visual: Node3D
+var support := preload("res://scripts/humanoid_grounding.gd").new()
 var last_grip := Transform3D.IDENTITY
 var closed_fingers := 0
 var gait_time := 0.0
@@ -16,6 +17,7 @@ func _process_modification_with_delta(_delta: float) -> void:
         return
     var skeleton := get_skeleton()
     _moving_legs(skeleton, _delta)
+    support.apply(visual, skeleton, _delta)
     if not is_instance_valid(visual.held_weapon):
         closed_fingers = 0
         if visual.held_item.is_empty() and visual.animation_player.assigned_animation == "Punch":

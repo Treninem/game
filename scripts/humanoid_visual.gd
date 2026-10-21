@@ -403,7 +403,7 @@ func _play(key: String, rate: float) -> void:
         # zero swaps the support leg and produces a visible kick/crossfade.
         if gait_phase >= 0.0:
             animation_player.seek(gait_phase * animation_player.get_animation(key).length, true)
-        elif key in ["Walk", "Run"] and previous in ["Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"] and is_instance_valid(grip_modifier):
+        elif key in ["Walk", "Run"] and previous in ["Airborne", "Axe_Chop", "Bow_Attack_Draw", "Bow_Attack_Shoot", "Punch", "Cast_Left", "Cast_Right"] and is_instance_valid(grip_modifier):
             animation_player.seek(float(grip_modifier.call("gait_phase")) * animation_player.get_animation(key).length, true)
 
 func begin_axe_stroke() -> void:

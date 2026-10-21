@@ -38,6 +38,8 @@ var ground_guard_active := false
 var instanced_world_mode := false
 var surface_ready_frames := 0
 var footstep_distance_accum := 0.0
+var landing_elapsed := 0.0
+var landing_strength := 0.0
 var appearance_height_cm := 180.0
 var character_dimensions_initialized := false
 var character_base_radius := 0.45
@@ -153,6 +155,7 @@ func _unhandled_input(event: InputEvent) -> void:
         MagicSystem.select_next()
         return
     if event.is_action_pressed("jump") and is_on_floor() and GameState.consume_stamina(8.0):
+        landing_elapsed = 0.0
         velocity.y = jump_velocity
     elif event.is_action_pressed("interact"):
         _try_interact()
@@ -174,12 +177,14 @@ func _unhandled_input(event: InputEvent) -> void:
             GameState.notify("Загружен слот %02d." % SaveManager.current_slot)
 
 func _physics_process(delta: float) -> void:
+    landing_elapsed = maxf(0.0, landing_elapsed - delta)
     _update_bow_shot(delta)
     _update_axe_hit(delta)
     attack_elapsed = maxf(0.0, attack_elapsed - delta)
     cast_elapsed = maxf(0.0, cast_elapsed - delta)
     recovery_cooldown = maxf(0.0, recovery_cooldown - delta)
     if GameState.is_dead:
+        landing_elapsed = 0.0
         _furniture_rest_step(0)
         velocity = Vector3.ZERO
         last_horizontal_motion = Vector2.ZERO
@@ -191,6 +196,7 @@ func _physics_process(delta: float) -> void:
         return
 
     if _furniture_rest_step(delta):
+        landing_elapsed = 0.0
         return
     var grounded_before := is_on_floor()
     if not grounded_before:
@@ -229,6 +235,8 @@ func _physics_process(delta: float) -> void:
         has_safe_position = true
 
     if not grounded_before and grounded_after and fall_speed_before_move > 3.4:
+        landing_elapsed = 0.24
+        landing_strength = clampf(fall_speed_before_move / 7.0, 0.35, 1.0)
         footstep_distance_accum = 0.0
         WorldVFX.spawn_landing(global_position, fall_speed_before_move, "", -global_transform.basis.z)
         _play_footstep_audio(clampf(fall_speed_before_move / 5.5, 0.75, 1.35))
@@ -270,6 +278,8 @@ func prepare_for_streamed_surface(force_snap_to_terrain: bool = false) -> void:
     _begin_ground_guard(force_snap_to_terrain)
 
 func _set_instanced_world_mode(active: bool) -> void:
+    landing_elapsed = 0.0
+    landing_strength = 0.0
     instanced_world_mode = active
     ground_guard_active = false
     surface_ready_frames = 0
@@ -299,6 +309,7 @@ func _recover_instanced_fall_if_needed() -> bool:
     return true
 
 func _begin_ground_guard(force_snap_to_terrain: bool) -> void:
+    landing_elapsed = 0.0
     if instanced_world_mode:
         ground_guard_active = false
         surface_ready_frames = 0

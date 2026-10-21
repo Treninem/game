@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 15.31,
+  "errors": [],
+  "markers": [
+    "STEP_GROUNDING_OK stairs=22cm wall=no_air_climb maximum_y=5.6276798248291"
+  ]
+}

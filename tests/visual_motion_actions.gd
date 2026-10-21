@@ -6,6 +6,8 @@ var travelled := 0.0
 var observations := []
 var final_pose := {}
 var observed_modifier: Node
+var skin_probe := preload("res://tests/humanoid_skin_probe.gd").new()
+var capture_skin := false
 
 func _initialize() -> void:
     call_deferred("_run")
@@ -20,7 +22,12 @@ func _frames(count: int) -> void:
         camera.look_at(player.global_position + Vector3.UP * 1.0)
 
 func _capture(label: String) -> void:
+    capture_skin = true
+    await process_frame
     await RenderingServer.frame_post_draw
+    assert(final_pose.has("sole_gap"), "Missing final skinned boot snapshot")
+    if bool(final_pose.get("grounded", false)):
+        assert(float(final_pose.sole_gap) >= -0.015 and float(final_pose.sole_gap) <= 0.020, "Rendered grounded sole floats or penetrates")
     observations.append({"label":label,"clip":player.get_node("Avatar").get("animation_player").assigned_animation,"rate":player.get_node("Avatar").get("animation_player").speed_scale,"grounded":player.is_on_floor(),"velocity":str(player.velocity),"final_pose":final_pose.duplicate(true)})
     root.get_texture().get_image().save_png("user://gait-" + label + ".png")
 
@@ -150,6 +157,17 @@ func _watch_final_pose() -> void:
     final_pose.clear()
     var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
     modifier.modification_processed.connect(func():
+        final_pose.grounded = player.is_on_floor()
+        final_pose.hips_y = skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Hips")).origin).y
+        final_pose.landing_compression = modifier.get("support").get("landing_compression")
+        if capture_skin:
+            capture_skin = false
+            var points := skin_probe.points(visual, skeleton)
+            var low := INF
+            for side: String in ["Left", "Right"]:
+                for point: Vector3 in points[side]:
+                    low = minf(low, point.y)
+            final_pose.sole_gap = low
         for side: String in ["Left", "Right"]:
             var hip := skeleton.get_bone_global_pose(skeleton.find_bone(side + "UpLeg")).origin
             var knee := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Leg")).origin
