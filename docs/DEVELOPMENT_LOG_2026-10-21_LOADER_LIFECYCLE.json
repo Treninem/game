@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-21",
+  "tested_parent": "006e59a70646e5d1f99539ee21bae03d90e0af6e",
+  "parent_ci": "8/8 pass",
+  "runtime_changes": false,
+  "findings": [
+    {
+      "exit_code": 0,
+      "seconds": 27.0,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 0,
+      "case": "unload-probe"
+    },
+    {
+      "exit_code": 0,
+      "seconds": 5.16,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 0,
+      "case": "menu-exit-probe"
+    },
+    {
+      "exit_code": 0,
+      "seconds": 6.33,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 0,
+      "case": "creator-exit-probe"
+    },
+    {
+      "exit_code": 0,
+      "seconds": 15.26,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 97,
+      "case": "thread-true-probe"
+    },
+    {
+      "exit_code": 0,
+      "seconds": 11.72,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 64,
+      "case": "thread-false-probe"
+    }
+  ],
+  "conclusion": "Threaded loading alone reproduces exit-only zero-reference RefCounted leftovers. Gameplay systems are not required to reproduce it. Disabling subthreads reduces but does not eliminate it on this machine. Exact internal root cause is not proven.",
+  "upstream_related_issue": "https://github.com/godotengine/godot/issues/120661",
+  "upstream_relation": "Similar confirmed Godot 4.7 LoadToken regression; inference, not proof of identical cause for all local objects.",
+  "rejected_experiment": "Interior deferred WeakRef replaced by ID: still 79 leftovers. Fully reverted in root and mirror.",
+  "preserved": [
+    "Asynchronous loading and responsive UI",
+    "Existing runtime, saves and required gates"
+  ],
+  "remaining": [
+    "Find a verified engine fix or safe nonblocking workaround",
+    "Character/world artistic quality and animation work remain active"
+  ],
+  "release": false
+}

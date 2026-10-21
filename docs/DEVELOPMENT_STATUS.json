@@ -381,6 +381,8 @@
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
     "exit_object_leaks": 79,
-    "artistic_acceptance": false
+    "artistic_acceptance": false,
+    "lifecycle_diagnostic": "docs/DEVELOPMENT_LOG_2026-10-21_LOADER_LIFECYCLE.json",
+    "exit_leak_fixed": false
   }
 }
