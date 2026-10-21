@@ -44,6 +44,8 @@ func configure(size: Vector3, variant: int = 0, label: String = "Дом") -> voi
 func _ready() -> void:
     add_to_group("enterable_building")
     _prepare_materials()
+    SettingsManager.settings_changed.connect(_apply_surface_quality)
+    _apply_surface_quality()
     _build_structure()
 
 func _build_structure() -> void:
@@ -315,14 +317,15 @@ func _wall_material() -> StandardMaterial3D:
     return wall_materials[wall_variant % wall_materials.size()]
 
 func _prepare_materials() -> void:
+    var surfaces := preload("res://scripts/interior_surface_materials.gd")
     wall_materials = [
-        _material(Color(0.53, 0.45, 0.34), 0.94),
-        _material(Color(0.66, 0.60, 0.48), 0.92),
-        _material(Color(0.42, 0.34, 0.27), 0.97),
-        _material(Color(0.72, 0.68, 0.58), 0.93)
+        surfaces.plaster(Color(0.53, 0.45, 0.34)),
+        surfaces.plaster(Color(0.66, 0.60, 0.48)),
+        surfaces.plaster(Color(0.42, 0.34, 0.27)),
+        surfaces.plaster(Color(0.72, 0.68, 0.58))
     ]
-    floor_material = _material(Color(0.24, 0.14, 0.075), 0.96)
-    ceiling_material = _material(Color(0.43, 0.36, 0.27), 0.97)
+    floor_material = surfaces.wood(Color(0.82, 0.77, 0.68))
+    ceiling_material = surfaces.wood(Color(0.72, 0.67, 0.58))
     timber_material = _material(Color(0.18, 0.085, 0.035), 0.95)
     glass_material = _material(Color(0.58, 0.76, 0.82, 0.28), 0.16)
     glass_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -335,3 +338,12 @@ func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
     material.albedo_color = color
     material.roughness = roughness_value
     return material
+
+func _apply_surface_quality() -> void:
+    var detailed := int(SettingsManager.get_value("graphics", "quality_preset")) >= 2
+    var surfaces := preload("res://scripts/interior_surface_materials.gd")
+    for material: StandardMaterial3D in wall_materials:
+        material.normal_enabled = detailed
+        material.ao_enabled = detailed
+        material.roughness_texture = surfaces.PLASTER_ORM if detailed else null
+        material.roughness = 1.0 if detailed else 0.94

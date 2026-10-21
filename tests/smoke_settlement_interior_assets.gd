@@ -44,6 +44,30 @@ func _run_test() -> void:
         _fail(5, "building was not marked as upgraded with real furniture")
         return
 
+    var original_quality := int(SettingsManager.get_value("graphics", "quality_preset"))
+    SettingsManager.set_quality_preset(2)
+    var surfaces := preload("res://scripts/interior_surface_materials.gd")
+    for material: StandardMaterial3D in building.wall_materials:
+        if material.albedo_texture != surfaces.PLASTER or material.normal_texture != surfaces.PLASTER_NORMAL or not material.normal_enabled or material.roughness_texture != surfaces.PLASTER_ORM or material.roughness_texture_channel != BaseMaterial3D.TEXTURE_CHANNEL_GREEN:
+            _fail(22, "wall does not use the complete shared plaster surface")
+            return
+        if not material.uv1_world_triplanar or not material.uv1_triplanar:
+            _fail(23, "wall texture scale depends on individual wall box dimensions")
+            return
+    if building.floor_material.albedo_texture != surfaces.WOOD or building.ceiling_material.albedo_texture != surfaces.WOOD:
+        _fail(24, "floor or ceiling still uses flat color/trim atlas")
+        return
+    for texture: Texture2D in [surfaces.PLASTER, surfaces.PLASTER_NORMAL, surfaces.PLASTER_ORM, surfaces.WOOD]:
+        if not texture.get_image().has_mipmaps():
+            _fail(25, "interior surface has no physical mip levels: " + texture.resource_path)
+            return
+    for quality in range(4):
+        SettingsManager.set_quality_preset(quality)
+        for material: StandardMaterial3D in building.wall_materials:
+            if material.normal_enabled != (quality >= 2) or material.ao_enabled != (quality >= 2) or (material.roughness_texture != null) != (quality >= 2) or material.albedo_texture != surfaces.PLASTER:
+                _fail(26, "live interior quality switch fails at preset " + str(quality))
+                return
+    SettingsManager.set_quality_preset(original_quality)
     var furniture := building.get_node_or_null("InteriorFurniture") as Node3D
     if furniture == null:
         _fail(6, "building lost its physical furniture root")

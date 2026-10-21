@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-21",
+  "parent": "7c6b560b10810d50242e1ac3630d2cb1e9425a6d",
+  "parent_ci": "8/8 exact SHA passed",
+  "changes": [
+    "Shared world-scaled plaster diffuse/normal/ORM and photographic plank diffuse on real house walls/floor/ceiling",
+    "Removed capital home trim-atlas floor override",
+    "Physical texture mipmaps and live quality presets 0/1 vs 2/3",
+    "Existing source file selected from physical main staging; no new downloads or generated art"
+  ],
+  "asset_registry": "assets/registry/INTERIOR_SURFACES_2026-10-21.json",
+  "validation": {
+    "gameplay_actions": {
+      "exit_code": 0,
+      "seconds": 22.19,
+      "errors": [],
+      "marker": true
+    },
+    "interior-capital-final-household_pose": {
+      "exit_code": 0,
+      "seconds": 26.81,
+      "errors": [],
+      "marker": true
+    },
+    "interior-low-bench-household_pose": {
+      "exit_code": 0,
+      "seconds": 40.94,
+      "errors": [],
+      "marker": true
+    },
+    "interior-surfaces-final-household_furniture": {
+      "exit_code": 0,
+      "seconds": 79.28,
+      "errors": [],
+      "marker": true
+    },
+    "interior-surfaces-final-household_pose": {
+      "exit_code": 0,
+      "seconds": 6.36,
+      "errors": [],
+      "marker": true
+    },
+    "interior-surfaces-final-physics-household_pose": {
+      "exit_code": 0,
+      "seconds": 41.36,
+      "errors": [],
+      "marker": true
+    },
+    "interior-surfaces-quality-final-household_pose": {
+      "exit_code": 0,
+      "seconds": 5.0,
+      "errors": [],
+      "marker": true
+    },
+    "interior-surfaces-render-household_pose": {
+      "exit_code": 0,
+      "seconds": 97.51,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "benchmark": {
+    "baseline": {
+      "adapter": "Intel(R) UHD Graphics 610",
+      "frames": 120,
+      "seconds": 1.425486,
+      "static_bytes": 57097542.0,
+      "video_bytes": 446889397.0
+    },
+    "candidate": {
+      "adapter": "Intel(R) UHD Graphics 610",
+      "frames": 120,
+      "seconds": 1.91988,
+      "static_bytes": 57080644.0,
+      "video_bytes": 451835050.0
+    },
+    "low_preset": {
+      "adapter": "Intel(R) UHD Graphics 610",
+      "frames": 120,
+      "seconds": 1.114906,
+      "static_bytes": 57183922.0,
+      "video_bytes": 440719042.0
+    }
+  },
+  "benchmark_limits": "One fixed interior, 30 warmup and 120 uncapped rendered frames per mode, Intel UHD 610. Single local samples, not long gameplay FPS. Low preset also changes global rendering settings; its delta is not isolated to material maps. Reported video bytes are Godot monitor values, not process RAM.",
+  "validation_order": "Household/capital and full rendered rest matrix before final quality hook; preset/material, 12-case physical disk-save and gameplay checks after hook. High/default material appearance is unchanged by hook.",
+  "rendered_frames": 36,
+  "manual_play": false,
+  "visual_review": "Before/after same fixture/profile/camera inspected. Grain and plaster visible; basic geometry, flat window presentation and sparse room dressing remain below target.",
+  "existing_import_warning": "Pre-existing duplicate UID warnings in third-party electric/core VFX shared scene_empty.tscn. No import SCRIPT ERROR/ERROR.",
+  "remaining": [
+    "Full character animation/art acceptance",
+    "Interior geometry/window/detail/lighting improvement",
+    "Controlled long-world weak-PC performance",
+    "Known threaded loader exit leftovers"
+  ],
+  "release": false
+}

@@ -21,16 +21,7 @@ func _ready() -> void:
     add_child(home)
     home.front_door.persistence_key = "door:capital:square:home"
     home.front_door.set_open(bool(GameState.get_world_value(home.front_door.persistence_key, false)), true)
-    home.floor_material.albedo_texture = preload("res://assets/production/medieval/building_shell/T_WoodTrim_BaseColor.png")
-    home.floor_material.albedo_color = Color(0.65, 0.52, 0.38)
-    home.floor_material.uv1_triplanar = true
-    home.floor_material.uv1_world_triplanar = true
-    home.floor_material.uv1_scale = Vector3.ONE * 0.6
-    for material: StandardMaterial3D in home.wall_materials:
-        material.albedo_texture = preload("res://assets/production/medieval/quaternius_city_core/T_Plaster_BaseColor.png")
-        material.uv1_triplanar = true
-        material.uv1_world_triplanar = true
-        material.uv1_scale = Vector3.ONE * 0.35
+    # Use the same measured-scale interior surfaces as other enterable homes.
     # A real wall lantern lights the occupied room, including the beds. The
     # exterior stall lights cannot reach it through the physical house walls.
     var indoor_lantern := _prop("Lantern_Wall", Vector3.ZERO, 0.42, 0, false)

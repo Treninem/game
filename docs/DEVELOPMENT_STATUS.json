@@ -390,5 +390,11 @@
     "artistic_acceptance": false,
     "lifecycle_diagnostic": "docs/DEVELOPMENT_LOG_2026-10-21_LOADER_LIFECYCLE.json",
     "exit_leak_fixed": false
+  },
+  "interior_surfaces": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_SURFACES.json",
+    "plaster_and_plank_textures_integrated": true,
+    "live_quality_presets": 4,
+    "full_artistic_acceptance": false
   }
 }
