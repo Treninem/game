@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-21",
+  "scope": "Player skinned-sole support at physical platform edges",
+  "parent": "fe1eb9418a7f30a888ede183003181e1998ab1a0",
+  "failure": "Six poses floated 2.27 to 5.46 cm because the lowest foot had no floor ray hit; naive fallback additionally exposed partial-foot edge penetration.",
+  "change": "Use valid support foot and bounded extra rays through four skinned sole extrema only when primary ray misses. Preserve collision mask, actor exclusion, floor normal rejection and independent thresholds.",
+  "evidence": {
+    "before": {
+      "exit_code": 1,
+      "seconds": 65.91,
+      "errors": [
+        "ERROR: Skinned sole misses physical surface: male/160.0/ledge_right/Walk/0.75 gap=0.02272",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ledge_right/Walk/0.75 gap=0.02552",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ledge_right/Walk/0.75 gap=0.02763",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ledge_right/Walk/0.75 gap=0.04488",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ledge_right/Walk/0.75 gap=0.05046",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ledge_right/Walk/0.75 gap=0.05464"
+      ],
+      "marker": false
+    },
+    "locomotion": {
+      "exit_code": 0,
+      "seconds": 51.95,
+      "errors": [],
+      "marker": true
+    },
+    "graphics": {
+      "exit_code": 0,
+      "seconds": 15.55,
+      "errors": [],
+      "marker": true
+    },
+    "actions": {
+      "exit_code": 0,
+      "seconds": 21.53,
+      "errors": [],
+      "marker": true
+    },
+    "world": {
+      "exit_code": 0,
+      "seconds": 46.22,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "limits": [
+    "Isolated edge fixtures are not a full world traversal.",
+    "Models and garments remain owner-rejected; no new art acceptance.",
+    "Full X/Z foot planting, turns and natural start/stop remain open.",
+    "World/ObjectDB exit leaks remain.",
+    "No stable release."
+  ],
+  "source_sha256": {
+    "scripts/humanoid_grounding.gd": "23fd8f051a23f9339b216a74562d3faa3fc274416259936e47b2e6fd894fe6a7",
+    "tests/humanoid_edge_cases.gd": "3ea0ebebaa8122fa3761ad7c32566a730bd21d06fef08c9ea1870909251f8edc",
+    "tests/smoke_locomotion_facing.gd": "080a312ab624334d4ed0b4086e62815ad11fcead5ebb1a5b917bd63795e5231f"
+  }
+}

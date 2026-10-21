@@ -92,6 +92,7 @@ func _run() -> void:
     player.queue_free()
     await get_tree().process_frame
     failures.append_array(await preload("res://tests/humanoid_support_cases.gd").new().run(self))
+    failures.append_array(await preload("res://tests/humanoid_edge_cases.gd").new().run(self))
     failures.append_array(await preload("res://tests/humanoid_landing_cases.gd").new().run(self))
     GameState.load_snapshot(snapshot)
     for failure in failures:

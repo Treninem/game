@@ -39,7 +39,21 @@ func apply(visual: Node3D, skeleton: Skeleton3D, delta: float) -> void:
         var hit := actor.get_world_3d().direct_space_state.intersect_ray(query)
         if not hit.is_empty() and Vector3(hit.normal).dot(Vector3.UP) >= cos(actor.floor_max_angle):
             hits[side] = hit
+        else:
+            # The lowest vertex can be outside a ledge while the heel or toe
+            # still rests on it. Probe actual skinned sole extrema, bounded
+            # to four extra rays and only when the primary ray misses.
+            for direction: Vector3 in [Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
+                var edge := _lowest(skeleton, side, Vector3.UP + direction * 0.5)
+                var edge_query := PhysicsRayQueryParameters3D.create(edge + Vector3.UP * 0.35, edge + Vector3.DOWN * 0.55, actor.collision_mask, [actor.get_rid()])
+                var edge_hit := actor.get_world_3d().direct_space_state.intersect_ray(edge_query)
+                if not edge_hit.is_empty() and Vector3(edge_hit.normal).dot(Vector3.UP) >= cos(actor.floor_max_angle):
+                    hits[side] = edge_hit
+                    break
     var support := "Left" if (lows.Left as Vector3).y <= (lows.Right as Vector3).y else "Right"
+    # A swinging foot over an edge cannot invalidate the other foot's support.
+    if not hits.has(support) and not hits.is_empty():
+        support = "Right" if support == "Left" else "Left"
     if not hits.has(support):
         root_offset = 0.0
         had_support = false
