@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-21",
+  "status": "PARTIAL_REFERENCE_AUDIT",
+  "complete_reference_requirement": false,
+  "method": "Actual browser playback and selected rendered video frames. No game installation, no copied assets, no claim of continuous full-video review or measured gait timing.",
+  "observations": [
+    {
+      "game": "Enshrouded",
+      "source": "https://www.youtube.com/watch?v=EuViyK4qLQg",
+      "viewed": "Selected frames in preceding integration session: 0:52 bow aim, 1:44 landscape, 2:57 skills menu; brief playback.",
+      "element": "Clothing, bow posture, camp, terrain, menu",
+      "details": "Hood and layered leather shoulder mantle; bracers; drawing hand near face and elbow outside torso. Palisade, steps and canvas canopy form a coherent camp. Skills menu uses radial nodes over a muted background.",
+      "decision": "Create one layered original travelling outfit with readable garment construction; evaluate draw elbow and shoulder silhouette from front/side/rear. Keep menu hierarchy compact.",
+      "not_verified": [
+        "Continuous gait timing",
+        "Inventory/equipment flow",
+        "Building flow",
+        "Weather transitions"
+      ]
+    },
+    {
+      "game": "Skyrim Special Edition",
+      "source": "https://www.youtube.com/watch?v=LSPuJ9ggVcA",
+      "source_page": "https://elderscrolls.bethesda.net/en-EU/news/1dcGD5lk0Ss06Q4Eeaa2Mk/skyrim-special-edition-gameplay-trailer-2",
+      "viewed": "Official Bethesda trailer played briefly; actual frames at 0:37 and 0:51 inspected.",
+      "element": "Landscape composition, armour layers and bow grip",
+      "details": "Lake shoreline meets rocky ground and conifers of several sizes; mountains are a distant layer. Bow close-up shows separate engraved bracer, exposed hand, shoulder armour and torso straps; background actor has a distinct armour silhouette.",
+      "decision": "Separate skin, cloth and leather/metal material response; use cuffs/bracers and garment layers that follow the rig. Preserve foreground/midground/distant terrain structure.",
+      "not_verified": [
+        "Normal locomotion timing",
+        "Inventory/map/equipment interaction",
+        "Dialogue flow",
+        "Construction",
+        "Weather changes"
+      ]
+    },
+    {
+      "game": "Kenshi",
+      "source": "https://www.youtube.com/watch?v=bxD5rxWlz9A",
+      "source_page": "https://lofigames.com/press/",
+      "viewed": "Official developer press page, screenshot thumbnails and selected launch trailer playback; paused actual frame 0:44.",
+      "element": "Visible physical consequence and group silhouettes",
+      "details": "A carried body hangs across another character; equipped characters form a group on sparse rough ground. Press gallery includes crafting, farms, carrying wounded and settlement screenshots, but only thumbnails were visible.",
+      "decision": "NPC tasks must be expressed by actual object/pose use and persistent consequences. Carry/work actions require separate authored poses; do not infer robust AI from a trailer frame.",
+      "not_verified": [
+        "Autonomous economy",
+        "Faction simulation internals",
+        "Complete work schedules",
+        "Production UI",
+        "Continuous navigation"
+      ]
+    },
+    {
+      "game": "Skyrim with Mantella",
+      "source": "https://www.youtube.com/watch?v=FLmbd48r2Wo",
+      "source_page": "https://github.com/art-from-the-machine/Mantella",
+      "viewed": "Trailer linked by official repository, brief playback and actual frame 1:05 inspected.",
+      "element": "Conversation presentation in an inhabited interior",
+      "details": "Hooded NPC faces player near a timber doorway, with hall furniture/fire behind; response is presented as bottom subtitles rather than floating activity text over the head.",
+      "decision": "Keep local contextual dialogue in the world, preserve NPC identity and action memory; no mandatory paid API and no voice implementation in this phase.",
+      "not_verified": [
+        "Response latency",
+        "Persistent long-term memory behaviour",
+        "Free-form trade transactions",
+        "All dialogue UI states"
+      ]
+    }
+  ],
+  "current_impuls_art_findings": [
+    "Existing two MakeHuman body meshes are integrated in the review branch, but owner acceptance is explicitly false.",
+    "Current live garment source is male_casualsuit01 for both bodies: a modern-style shirt/trouser suit. Changing its tint cannot produce a complete fantasy wardrobe.",
+    "Physically present selected MakeHuman clothes directories are male_casualsuit01, shoes01 and shoes03; this selected pack contains no ready layered medieval outfit.",
+    "Existing rendered edge views show plain torso, weak garment separation and sparse hair silhouette. These are appearance defects, independently of passing sole support tests.",
+    "No model, texture, runtime material or animation was replaced during this reference audit."
+  ],
+  "next_connected_art_batch": {
+    "target": "One coherent original clothed human family, both bodies, with properly fitted tunic/layers, belt and footwear, followed by the existing movement/combat/editor/save scenarios.",
+    "requirements": [
+      "Inspect any additional existing clothing packs before choosing or generating geometry.",
+      "Keep all nine synchronized shape keys and skin weights; do not replace hands with rigid props.",
+      "Evaluate shoulders, cuffs, waist and knees across idle/walk/run/jump/bow/axe/cast, all sides.",
+      "Compare actual game lighting and close-up views, and record failed candidates."
+    ],
+    "acceptance": "Not yet implemented or accepted."
+  },
+  "open_reference_work": "Several representative frames per category and continuous movement sequences remain required; the four games being opened is not completion of the full reference specification."
+}
