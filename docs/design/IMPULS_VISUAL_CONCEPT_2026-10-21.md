@@ -58,3 +58,6 @@ Current review adds four physical spaces, working internal doors, a fourth windo
 ## Settlement and landscape clarification, 22 October 2026
 
 The owner explicitly requires coherent streets, squares, yards, gardens/flowerbeds, village fields/meadows/vegetable gardens, estates, barns and domestic livestock. Landscape must include mountains, valleys, rivers and lakes as a connected geography. Paths use stone paving, gravel and compacted earth according to purpose. The current road package joins existing houses to clear streets and fixes contact with physical ground; it does not establish completed settlement layout, farms, animals or concept-quality mountains. Existing anchors and user save identities remain protected.
+
+## Connected cottage yards review, 22 October 2026
+The next bounded kit adds worked framing/stone feet/window boxes and 15 connected household plots with physical fence openings, saved gates, finite berry harvest and selected roofed storage. Blender source and actual gameplay evidence are retained. Missing source pigment export and one obstructed observer view were corrected after rendered inspection. This preserves current houses and saves; it does not establish dense settlement planning, farms/livestock, accepted people or the supplied broad landscape. See `docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json`.

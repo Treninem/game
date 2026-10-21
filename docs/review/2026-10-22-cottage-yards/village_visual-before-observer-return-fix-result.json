@@ -1,0 +1,10 @@
+{
+  "case": "village_visual",
+  "exit_code": 1,
+  "seconds": 2.97,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Cannot return value of type \"null\" because the function return type is \"bool\".",
+    "ERROR: Failed to load script \"res://tests/visual_cottage_yards.gd\" with error \"Parse error\"."
+  ],
+  "marker": false
+}

@@ -183,6 +183,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements.tscn 300
       - name: Verify roads meet physical terrain and village entrances
         run: bash tools/run_godot_smoke.sh tests/smoke_terrain_paths.tscn 90
+      - name: Verify connected cottage yards harvest storage and saved lifecycle
+        run: bash tools/run_godot_smoke.sh tests/smoke_cottage_yards.tscn 180
       - name: Verify physical settlement markets water and warehouses
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_public_works.tscn 300
       - name: Verify physical civic hall and council interior

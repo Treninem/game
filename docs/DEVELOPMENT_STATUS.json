@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Комплект комнат/обстановки дома b6f555c2 прошёл все восемь CI. Следующий пакет: прилегающие к физическому рельефу покрытия, площадь/проезды двух деревень и подходы к 15 входам; удалён дублирующий слой старых плит. Лесной проход, реальные игровые кадры, дверь и диск проверены. Полный мир по концепции, сельские участки/сады/хозяйства, горные массивы, население/семьи и качество людей остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json",
+  "current_stage": "Пакет дорог e0ed5f71 прошёл все восемь CI. Новый связанный пакет: Blender-детали фасадов, 15 участков у двух деревень, физические калитки/навесы, ягоды и сундуки с сохранением; проверены обычное движение, интерфейс и игровые кадры. Полная застройка по концепции, фермы/животные, горы/реки, семьи и качество людей остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -382,15 +382,15 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "b6f555c253ba279283286e3493c27496cd31c395",
-  "last_verified_runtime_ci": "House-concept exact SHA b6f555c2: 8/8 SUCCESS. New terrain-path package locally verified; own exact-SHA CI pending push at journal creation.",
+  "last_verified_runtime_commit": "e0ed5f712c24ebdfe11909aa616767adab58607d",
+  "last_verified_runtime_ci": "Parent e0ed5f71 exact SHA: 8/8 SUCCESS verified and archived. Own exact-SHA CI pending push at journal creation. No stable release.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
-    "exit_object_leaks": 83,
+    "exit_object_leaks": 100,
     "artistic_acceptance": false,
     "lifecycle_diagnostic": "docs/DEVELOPMENT_LOG_2026-10-21_LOADER_LIFECYCLE.json",
     "exit_leak_fixed": false,
-    "current_exit_probe": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json"
+    "current_exit_probe": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json"
   },
   "interior_surfaces": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_SURFACES.json",
@@ -418,5 +418,12 @@
     "forest_journey_m": 2065.82170474902,
     "artistic_acceptance": false,
     "landscape_complete": false
+  },
+  "cottage_yards": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
+    "plots": 15,
+    "graphical_walk_m": 292.521000537323,
+    "artistic_acceptance": false,
+    "full_agriculture": false
   }
 }

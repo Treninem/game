@@ -1,0 +1,14 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WORLD_SETTLEMENTS_STAGE create settlement streamer
+WORLD_SETTLEMENTS_STAGE validate settlement catalog
+WORLD_SETTLEMENTS_STAGE materialize three settlements
+WORLD_SETTLEMENTS_STAGE settle physics
+WORLD_SETTLEMENTS_STAGE validate building counts
+WORLD_SETTLEMENTS_STAGE validate enterable interiors
+WORLD_SETTLEMENTS_STAGE validate village fences and wells
+WORLD_SETTLEMENTS_STAGE validate fortified town gate
+WORLD_SETTLEMENTS_STAGE validate materialization counters
+WORLD_SETTLEMENTS_STAGE validate streamed population
+WORLD_SETTLEMENTS_STAGE complete
+WORLD_SETTLEMENTS_SMOKE_OK settlements=3 enterable_buildings=30 physical_furniture=156 npcs=20 walls=5 gates=3

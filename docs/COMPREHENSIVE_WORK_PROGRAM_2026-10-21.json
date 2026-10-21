@@ -38,7 +38,7 @@
         "Рабочие кровати, скамьи, сундуки, торговые и ремесленные места",
         "Домашняя жизнь сохраняется и восстанавливается при стриминге"
       ],
-      "current": "В проверочной версии дом разделён на две жилые/приватные комнаты, общую столовую/проход и кухню с тремя внутренними дверями и дополнительным окном спальни. Подключены Blender-текстиль/очаг и выбранная бытовая мебель/утварь; рабочие скамьи перенесены к столу с сохранением ID. Локальные проходы, отдых/диск/прыжки, бытовой цикл/стриминг и поиск пути проверены. Пакет ещё не равен художественному качеству концепции; полное разнообразие домов и семей открыто. Пройдено 99.68 м от ранее заработанного столичного сохранения обычным автоматизированным движением без перестановки персонажа; проверены настоящий вход, три зоны, диск и игровые кадры. Это не ручной полный обход мира. Пакет дорожек 22 октября: два деревенских уличных каркаса и 15 подходов к реальным входам; мощение/гравий/грунт прилегают к земле. Дома не переносились; хозяйственные участки и плотная разнообразная застройка ещё не завершены."
+      "current": "В проверочной версии дом разделён на две жилые/приватные комнаты, общую столовую/проход и кухню с тремя внутренними дверями и дополнительным окном спальни. Подключены Blender-текстиль/очаг и выбранная бытовая мебель/утварь; рабочие скамьи перенесены к столу с сохранением ID. Локальные проходы, отдых/диск/прыжки, бытовой цикл/стриминг и поиск пути проверены. Пакет ещё не равен художественному качеству концепции; полное разнообразие домов и семей открыто. Пройдено 99.68 м от ранее заработанного столичного сохранения обычным автоматизированным движением без перестановки персонажа; проверены настоящий вход, три зоны, диск и игровые кадры. Это не ручной полный обход мира. Пакет дорожек 22 октября: два деревенских уличных каркаса и 15 подходов к реальным входам; мощение/гравий/грунт прилегают к земле. Дома не переносились; хозяйственные участки и плотная разнообразная застройка ещё не завершены. Следующий пакет: 15 физических хозяйственных участков с проходами от улиц, калитками, ягодными кустами и выбранными навесами/сундуками. Фасады получили Blender-каркас/цоколь/оконные ящики. Реальное автоматизированное движение, UI, сбор, диск и восстановление проверены; полноценные хозяйства/животные и художественная приёмка открыты."
     },
     {
       "group": "Животные и экология",
@@ -77,11 +77,11 @@
         "Журнал, проверочные кадры и узкие коммиты синхронизируются",
         "Нет стабильного выпуска при красных или отсутствующих обязательных проверках"
       ],
-      "current": "Домашний пакет b6f555c2: все восемь exact-SHA CI SUCCESS. Следующий пакет дорог локально проверен, CI после отправки перепроверяется отдельно. Последняя обычная графическая регрессия мира сохраняет известные 83 ObjectDB объекта при выходе; исправление не заявлено. Стабильный релиз не публикуется."
+      "current": "Домашний пакет b6f555c2: все восемь exact-SHA CI SUCCESS. Следующий пакет дорог локально проверен, CI после отправки перепроверяется отдельно. Последняя обычная графическая регрессия мира сохраняет известные 83 ObjectDB объекта при выходе; исправление не заявлено. Стабильный релиз не публикуется. Новый графический осмотр дворов: 100 ObjectDB остатков при выходе; это открытая проблема."
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
   "last_updated": "2026-10-22",
@@ -95,13 +95,13 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
     "landscape": "Mountains, valleys, rivers and lakes form a coherent world matching the supplied concept; preserve established anchors",
     "paths": "Stone paving, gravel fill, compacted soil and trails according to function; physical contact, connected entrances, readable map",
-    "implemented_scope": "Terrain-conforming road/market/gate surfaces; both established villages: clear gate-to-square streets and 15 actual entrance paths; legacy duplicate cart overlay removed",
-    "open_scope": "Dense varied blocks and parcels; green/farm/animal content and economy; far terrain/mountain/river expansion and village path map layer"
+    "implemented_scope": "Terrain-conforming road/market/gate surfaces; both established villages: clear gate-to-square streets and 15 actual entrance paths; legacy duplicate cart overlay removed; 15 connected fenced household plots, persistent finite berries and selected roofed storage, measured Blender exterior details",
+    "open_scope": "Dense varied blocks/estates, crop fields/barns/domestic livestock and actual resident agriculture, full naturalistic art; far terrain/mountains/river expansion and village-path map layer"
   }
 }

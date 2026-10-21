@@ -4,6 +4,8 @@ class_name WorldSettlements
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PATHS := preload("res://scripts/terrain_paths.gd")
 const VILLAGE_PATHS := preload("res://scripts/settlement_paths.gd")
+const COTTAGE_EXTERIOR := preload("res://scripts/cottage_exterior.gd")
+const HOUSE_YARDS := preload("res://scripts/village_house_yards.gd")
 const ENTERABLE_BUILDING_PATH := "res://scripts/enterable_building.gd"
 const SETTLEMENT_NPC_PATH := "res://scripts/settlement_npc.gd"
 
@@ -121,9 +123,9 @@ func _update_location(player_pos: Vector2) -> void:
 func _materialize_settlement(spec: Dictionary) -> Node3D:
     var id := String(spec.get("id", ""))
     if loaded.has(id):
-        var existing: Node3D = loaded.get(id)
-        if is_instance_valid(existing):
-            return existing
+        var existing: Variant = loaded.get(id)
+        if is_instance_valid(existing) and existing is Node3D:
+            return existing as Node3D
         loaded.erase(id)
 
     var center: Vector2 = spec.get("center", Vector2.ZERO)
@@ -171,6 +173,7 @@ func _build_village(root: Node3D, center: Vector2, id: String) -> void:
     _add_well(root, center, Vector2(-8.0, 3.0))
     _add_crate_stack(root, center, Vector2(12.0, 8.0))
     VILLAGE_PATHS.build_village(root)
+    HOUSE_YARDS.build(root)
     _populate_village(root, center, id)
 
 func _build_village_fence(root: Node3D, center: Vector2) -> void:
@@ -329,6 +332,7 @@ func _add_enterable_building(root: Node3D, center: Vector2, local_pos: Vector2, 
     building.position = _local_position_on_terrain(root, center, local_pos, 0.02)
     building.rotation.y = local_yaw
     root.add_child(building)
+    COTTAGE_EXTERIOR.build(building)
     materialized_buildings += 1
     return building
 

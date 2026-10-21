@@ -1,0 +1,16 @@
+01:56.531  io.obj           | WARNING Cannot load image file: 'D:\Desktop\GitHub\game\assets\staging\sourcechat_b47\models\quaternius_medieval_village_megakit_standard\OBJ\C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_BaseColor.png'
+01:56.547  io.obj           | WARNING Cannot load image file: 'C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_BaseColor.png'
+01:56.547  io.obj           | WARNING Cannot load image file: 'C:/Users/Usuario/Desktop/Work/Blender/ FreeModels/ Unfinished/Medieval Village/Textures/T WoodTrim BaseColor.png'
+01:57.765  io.obj           | WARNING Cannot load image file: 'D:\Desktop\GitHub\game\assets\staging\sourcechat_b47\models\quaternius_medieval_village_megakit_standard\OBJ\T_WoodTrim_BaseColor.png'
+01:57.953  io.obj           | WARNING Cannot load image file: 'D:\Desktop\GitHub\game\assets\staging\sourcechat_b47\models\quaternius_medieval_village_megakit_standard\OBJ\C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Roughness.png'
+01:57.953  io.obj           | WARNING Cannot load image file: 'C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Roughness.png'
+01:57.953  io.obj           | WARNING Cannot load image file: 'C:/Users/Usuario/Desktop/Work/Blender/ FreeModels/ Unfinished/Medieval Village/Textures/T WoodTrim Roughness.png'
+01:57.969  io.obj           | WARNING Cannot load image file: 'D:\Desktop\GitHub\game\assets\staging\sourcechat_b47\models\quaternius_medieval_village_megakit_standard\OBJ\T_WoodTrim_Roughness.png'
+01:57.969  io.obj           | WARNING Cannot load image file: 'D:\Desktop\GitHub\game\assets\staging\sourcechat_b47\models\quaternius_medieval_village_megakit_standard\OBJ\C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Normal.png'
+01:57.969  io.obj           | WARNING Cannot load image file: 'C:/Users/Usuario/Desktop/Work/Blender/_FreeModels/_Unfinished/Medieval Village/Textures/T_WoodTrim_Normal.png'
+01:57.969  io.obj           | WARNING Cannot load image file: 'C:/Users/Usuario/Desktop/Work/Blender/ FreeModels/ Unfinished/Medieval Village/Textures/T WoodTrim Normal.png'
+01:57.984  io.obj           | WARNING Cannot load image file: 'D:\Desktop\GitHub\game\assets\staging\sourcechat_b47\models\quaternius_medieval_village_megakit_standard\OBJ\T_WoodTrim_Normal.png'
+01:59.375  reports          | WARNING Путь "C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend" не может быть сделан относительным для Material "Dots Stroke"
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:35:40)
+OBJ import of 'Prop_WoodenFence_Single.obj' took 1765.82 ms
+01:59.375  reports          | WARNING Путь "C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend" не может быть сделан относительным для Material "Material"

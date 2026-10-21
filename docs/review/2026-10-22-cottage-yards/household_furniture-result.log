@@ -1,0 +1,7 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOUSEHOLD_STORAGE [[(2.912109, 0.180943, 0.712402), "Сидит дома"], [(4.942383, 0.18094, -2.827637), "Убирает вещи в сундук"]]
+HOUSEHOLD_SEATING [[(2.912109, 0.180352, 0.712402), "Сидит дома"], [(2.898438, 0.180352, -1.6875), "Сидит дома"]]
+HOUSEHOLD_SLEEP [[(-2.996094, 0.180352, -3.325195), "Спит дома"], [(-3.131836, 0.180352, -0.36377), "Спит дома"]]
+HOUSEHOLD_DAY_WORK [[(-2.551758, 0.000837, 8.580566), "work"], [(2.435547, 0.00084, 8.451172), "work"]]
+HOUSEHOLD_FURNITURE_OK chest=finite_actual_transfers bench=occupied beds=two_supported_poses streaming=restored save=JSON_round_trip wake=reservations_released

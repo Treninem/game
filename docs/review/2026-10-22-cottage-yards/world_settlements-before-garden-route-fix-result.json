@@ -1,0 +1,22 @@
+{
+  "case": "world_settlements",
+  "exit_code": 0,
+  "seconds": 21.51,
+  "errors": [
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_00",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_01",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_02",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_03",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_04",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_05",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_06",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_00",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_01",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_02",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_03",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_04",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_05",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_06",
+    "SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_07"
+  ]
+}

@@ -158,3 +158,6 @@ Every development session working on `Treninem/game` must read this file before 
 
 ### Terrain path selection — 22 October 2026
 Existing CC0 musdasch ground set: unmodified 512px dirt1/gravel1 selected as road_soil/road_gravel under assets/production/materials/ground/, with licenses, mipmaps and anisotropic filtering. Reuses photographic stone_paving.jpg. INTEGRATED in the review through shared terrain_paths.gd; no download. Exact scope/evidence: assets/registry/TERRAIN_PATHS_2026-10-22.json and docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json. This is not completed farms/animals/mountain content.
+
+### Cottage exteriors and connected yards — 22 October 2026
+INTEGRATED in review: project-authored Blender worked timber/stone, planter, flowers and open timber store with selected existing B47 CC0 WoodenFence_Single geometry. Editable source and reproducer retained; actual game references CottageYardKit.glb. Existing photo wood/stone, temperate bush, woodland grass and animated B46 chest reused. No download or full concept/farm/livestock acceptance. See assets/registry/COTTAGE_YARDS_2026-10-22.json.
