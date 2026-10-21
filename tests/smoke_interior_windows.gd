@@ -52,20 +52,18 @@ func _run() -> void:
     for preset: int in [0, 1, 2, 3]:
         print("INTERIOR_WINDOWS_PRESET ", preset)
         SettingsManager.set_quality_preset(preset)
-        await get_tree().process_frame
-        await get_tree().process_frame
-        home._update_window_light()
         for light: SpotLight3D in home.window_lights:
             assert(light.visible == (preset > 0))
             assert(not light.shadow_enabled)
             assert(light.global_basis.z.dot((home.global_position - light.global_position).normalized()) < -0.8, "Window light must face into its own room")
         assert(home.room_lantern.visible and home.room_lantern.shadow_enabled == (preset > 0))
+        await get_tree().process_frame
+        await get_tree().process_frame
     for i in range(30):
         await get_tree().physics_frame
     assert(player.is_on_floor(), "Character lacks physical room support")
     for preset: int in [0, 3]:
         SettingsManager.set_quality_preset(preset)
-        home._update_window_light()
         for i in range(30):
             await get_tree().process_frame
         var started := Time.get_ticks_usec()

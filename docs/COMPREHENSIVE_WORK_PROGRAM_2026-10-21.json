@@ -79,7 +79,7 @@
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_WINDOWS.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_ACTIVATION.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone."
 }

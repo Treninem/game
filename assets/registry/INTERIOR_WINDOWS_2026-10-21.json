@@ -33,6 +33,8 @@
   "editable_source": "assets/source/interiors/TimberWindow.blend",
   "warm_lighting": {
     "source": "Existing INTEGRATED CC0 Lantern_Wall.gltf from capital_square",
-    "behavior": "One local warm point light; brighter at night; beyond 20m culled; shadow only for occupied room and preset > 0; capital retains its existing lantern without duplication"
-  }
+    "behavior": "One local warm point light; brighter at night; beyond 20m culled; shadow only for occupied room and preset > 0; capital retains its existing lantern without duplication",
+    "quality": "Settings signal updates lights and shadow budget immediately"
+  },
+  "activation": "Packed scenes loaded on house activation, retained per house; avoids three additional exit leftovers observed with preload. Existing exact parent still reports 83."
 }

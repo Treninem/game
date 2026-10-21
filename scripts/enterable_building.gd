@@ -36,6 +36,7 @@ var cloth_material: StandardMaterial3D
 var iron_material: StandardMaterial3D
 var window_lights: Array[SpotLight3D] = []
 var room_lantern: OmniLight3D
+var interior_scenes: Dictionary = {}
 var light_elapsed := 0.0
 
 func configure(size: Vector3, variant: int = 0, label: String = "Дом") -> void:
@@ -120,10 +121,17 @@ func _build_structure() -> void:
     _build_timberwork()
     _build_room_lantern()
 
+func _interior_scene(path: String) -> PackedScene:
+    # Instantiate decoration on activation, outside the background stage dependency
+    # graph. Retain the scene for this house so its three windows reuse one load.
+    if not interior_scenes.has(path):
+        interior_scenes[path] = load(path) as PackedScene
+    return interior_scenes[path] as PackedScene
+
 func _build_room_lantern() -> void:
     if bool(get_meta("external_interior_lantern", false)):
         return
-    var lantern := preload("res://assets/production/medieval/capital_square/Lantern_Wall.gltf").instantiate() as Node3D
+    var lantern := _interior_scene("res://assets/production/medieval/capital_square/Lantern_Wall.gltf").instantiate() as Node3D
     lantern.name = "RoomWallLantern"
     add_child(lantern)
     var bounds := AABB()
@@ -144,7 +152,7 @@ func _build_room_lantern() -> void:
     add_child(room_lantern)
 
 func _build_timberwork() -> void:
-    var frame := preload("res://assets/production/interiors/architecture/RoomTimberwork.glb").instantiate() as Node3D
+    var frame := _interior_scene("res://assets/production/interiors/architecture/RoomTimberwork.glb").instantiate() as Node3D
     frame.name = "RoomTimberwork"
     frame.scale = Vector3(footprint.x / 12.0, wall_height / 3.2, footprint.y / 10.0)
     add_child(frame)
@@ -317,7 +325,7 @@ func _add_window_frame(center: Vector3, opening_size: Vector3, side_wall: bool, 
     root.position = center
     add_child(root)
 
-    var assembly := preload("res://assets/production/interiors/architecture/TimberWindow.glb").instantiate() as Node3D
+    var assembly := _interior_scene("res://assets/production/interiors/architecture/TimberWindow.glb").instantiate() as Node3D
     root.add_child(assembly)
     root.scale = Vector3(opening_size.x / 1.35, opening_size.y / 1.15, wall_thickness / 0.28)
     if side_wall:
@@ -432,3 +440,4 @@ func _apply_surface_quality() -> void:
         material.ao_enabled = detailed
         material.roughness_texture = surfaces.PLASTER_ORM if detailed else null
         material.roughness = 1.0 if detailed else 0.94
+    _update_window_light()

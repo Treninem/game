@@ -1,0 +1,50 @@
+[
+  {
+    "name": "build-installer",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222315/job/119437042951"
+  },
+  {
+    "name": "world-core",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222314/job/119434411668"
+  },
+  {
+    "name": "build-game",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222315/job/119434411348"
+  },
+  {
+    "name": "build",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222371/job/119434411268"
+  },
+  {
+    "name": "movement-smoke",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222359/job/119434411101"
+  },
+  {
+    "name": "diagnose-ui",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222350/job/119434410930"
+  },
+  {
+    "name": "validate-magic",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222330/job/119434410763"
+  },
+  {
+    "name": "validate-world-vfx",
+    "sha": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+    "conclusion": "success",
+    "url": "https://github.com/Treninem/game/actions/runs/39661222327/job/119434410293"
+  }
+]
