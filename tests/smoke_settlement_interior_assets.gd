@@ -86,6 +86,12 @@ func _run_test() -> void:
             _fail(12, "%s production model has no visible imported mesh" % proxy_name)
             return
 
+    var bed_model := furniture.get_node("Bed/RealBedModel") as Node3D
+    var bed_bounds := decorator._combined_mesh_bounds(bed_model)
+    var bed_size := bed_bounds.size * bed_model.scale
+    if bed_size.z < 2.0 or bed_size.z <= bed_size.x or bed_size.x > 1.72 + 0.001:
+        _fail(21, "bed length does not follow the gameplay sleeping axis: " + str(bed_size))
+        return
     var chest := furniture.get_node("StorageChest") as HouseholdFurniture
     var players := chest.get_node("RealChestModel").find_children("*", "AnimationPlayer", true, false)
     if players.is_empty() or not players[0].has_animation("Chest_Open") or not players[0].has_animation("Chest_Close"):

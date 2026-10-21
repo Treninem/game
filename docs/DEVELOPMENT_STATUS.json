@@ -370,8 +370,10 @@
   "last_asset_candidate_journal": "docs/DEVELOPMENT_LOG_2026-10-21_VIKING_CANDIDATE.json",
   "wardrobe_candidate": "Кандидат подключён к проверочной версии после material/morph/action/save проверок. Полный гардероб, смена брони и художественная приёмка остаются открытыми.",
   "rest_transitions": {
-    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_TRANSITIONS.json",
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_BED_ALIGNMENT.json",
     "scale_and_weapon_regressions_fixed": true,
-    "lying_alignment_accepted": false
+    "lying_alignment_accepted": false,
+    "lying_axis_and_face_direction_fixed": true,
+    "remaining": "Dedicated sleeping and enter/exit animations; full artistic acceptance pending"
   }
 }

@@ -55,6 +55,12 @@ func run(parent: Node3D) -> Array[String]:
                         failures.append("Rest fixture did not process final skeleton: " + label)
                     if visual.scale.distance_to(expected) > 0.0001:
                         failures.append("Rest changes body scale: " + label)
+                    if furniture.kind == "bed":
+                        var face_up := (visual.global_basis * Vector3.FORWARD).normalized()
+                        var head := furniture.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Head")).origin))
+                        var hips := furniture.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Hips")).origin))
+                        if face_up.dot(Vector3.UP) < 0.99 or head.z < hips.z + 0.3 * expected.y:
+                            failures.append("Sleeper is not supine with head toward the pillow: " + label)
                     if furniture.kind == "bench":
                         var hip := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Hips")).origin)
                         if absf(hip.y - (bench.global_position.y + float(bench.get_meta("rest_support_y", 0.11)) + 0.09 * expected.y)) > 0.025:

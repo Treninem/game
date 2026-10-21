@@ -90,6 +90,14 @@ func _replace_proxy_visual(body: StaticBody3D, scene: PackedScene, model_name: S
     if model == null:
         return false
 
+    # The source bed is authored lengthwise on X; gameplay beds use Z.
+    # Rotate inside a neutral root so bounds, mattress support and collision
+    # are measured in the same furniture frame before uniform normalization.
+    if model_name == "RealBedModel":
+        var oriented := Node3D.new()
+        model.rotation.y = PI * 0.5
+        oriented.add_child(model)
+        model = oriented
     _set_geometry_visible_recursive(body, false)
     model.name = model_name
     body.add_child(model)
