@@ -160,19 +160,21 @@ func open_storage(actor: Node3D) -> void:
     DialogueManager.open_dialogue("Домашний сундук", "Свободно %d из 200 мест. Можно переносить предметы стопкой. Содержимое и права доступа сохраняются." % free_capacity(), choices)
 
 func apply_rest_pose(actor: CharacterBody3D, visual: Node3D) -> void:
+    var rest_scale := visual.global_basis.get_scale()
     visual.top_level = true
-    visual.global_basis = global_basis.orthonormalized() * (Basis(Vector3.RIGHT, -PI * 0.5) if kind == "bed" else Basis.IDENTITY)
+    visual.global_basis = global_basis.orthonormalized() * (Basis(Vector3.RIGHT, -PI * 0.5) if kind == "bed" else Basis.IDENTITY) * Basis.from_scale(rest_scale)
     # The visual alone is supported by furniture; the physical actor remains
     # on the clear approach floor, so waking never embeds a capsule in wood.
     var support := float(get_meta("rest_support_y", 0.34 if kind == "bed" else 0.11))
     var hip: Variant = visual.get("standing_hip_height")
     var hip_height := float(hip) if hip is float and is_finite(hip) and hip > 0.3 else 0.95
-    visual.global_position = global_position + global_basis * (Vector3(0, support + 0.10, 0.83) if kind == "bed" else Vector3(0, support + 0.09 - hip_height, 0))
+    visual.global_position = global_position + global_basis * (Vector3(0, support + 0.10 * rest_scale.z, 0.83 * rest_scale.y) if kind == "bed" else Vector3(0, support + (0.09 - hip_height) * rest_scale.y, 0))
     actor.set_meta("activity", "sleep" if kind == "bed" else "sit")
 
 static func clear_pose(actor: Node3D, visual: Node3D) -> void:
+    var local_scale := visual.global_basis.get_scale() / actor.global_basis.get_scale() if visual.top_level else visual.scale
     visual.top_level = false
-    visual.transform = Transform3D.IDENTITY
+    visual.transform = Transform3D(Basis.from_scale(local_scale), Vector3.ZERO)
     actor.set_meta("activity", "idle")
 
 func _process(_delta: float) -> void:

@@ -57,7 +57,7 @@ func _ready() -> void:
 func apply_appearance(value: Variant) -> void:
     var profile := APPEARANCE.normalized(value)
     scale = Vector3.ONE * body_scale * (float(profile.height_cm) / APPEARANCE.DEFAULT_HEIGHT_CM)
-    var actor := get_parent_node_3d()
+    var actor := (get_parent() as Node3D)
     if actor.name == "Player" and actor.has_method("apply_character_dimensions"):
         actor.call("apply_character_dimensions", float(profile.height_cm))
     if is_instance_valid(model) and profile.sex == current_profile.get("sex", ""):
@@ -97,7 +97,7 @@ func apply_appearance(value: Variant) -> void:
         _prepare_bow_poses(model)
         _prepare_axe_pose(model)
         _prepare_cast_poses(model)
-    last_position = get_parent_node_3d().global_position
+    last_position = (get_parent() as Node3D).global_position
     if get_parent().name == "Player" or get_parent().has_meta("preview_animation"):
         var skeletons := model.find_children("*", "Skeleton3D", true, false)
         if not skeletons.is_empty():
@@ -220,7 +220,7 @@ func _place_weapon_at_grip(grip: Transform3D, draw_point: Vector3 = Vector3.ZERO
     if held_item == "starter_axe":
         frame = frame * Basis(Vector3.UP, PI)
     if held_item == "short_bow":
-        var body := get_parent_node_3d()
+        var body := (get_parent() as Node3D)
         var aim := body.global_basis.orthonormalized()
         var pivot := body.get_node_or_null("CameraPivot") as Node3D
         if pivot != null:
@@ -235,7 +235,7 @@ func _place_weapon_at_grip(grip: Transform3D, draw_point: Vector3 = Vector3.ZERO
         _cord_between(bow_cords[1], last_draw_point, bottom)
         if is_instance_valid(nocked_arrow):
             nocked_arrow.visible = drawing
-            var actor := get_parent_node_3d()
+            var actor := (get_parent() as Node3D)
             var aim_basis := actor.global_basis.orthonormalized()
             var pivot := actor.get_node_or_null("CameraPivot") as Node3D
             if pivot != null:

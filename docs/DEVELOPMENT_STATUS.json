@@ -368,5 +368,10 @@
   },
   "last_visual_audit": "docs/HUMAN_REFERENCE_AUDIT_2026-10-21.json",
   "last_asset_candidate_journal": "docs/DEVELOPMENT_LOG_2026-10-21_VIKING_CANDIDATE.json",
-  "wardrobe_candidate": "Кандидат подключён к проверочной версии после material/morph/action/save проверок. Полный гардероб, смена брони и художественная приёмка остаются открытыми."
+  "wardrobe_candidate": "Кандидат подключён к проверочной версии после material/morph/action/save проверок. Полный гардероб, смена брони и художественная приёмка остаются открытыми.",
+  "rest_transitions": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_TRANSITIONS.json",
+    "scale_and_weapon_regressions_fixed": true,
+    "lying_alignment_accepted": false
+  }
 }

@@ -16,8 +16,19 @@ func _process_modification_with_delta(_delta: float) -> void:
         gait_applied = false
         return
     var skeleton := get_skeleton()
+    var actor := (visual.get_parent() as Node3D)
+    if not is_instance_valid(actor) or not actor.is_inside_tree():
+        closed_fingers = 0
+        gait_applied = false
+        return
     _moving_legs(skeleton, _delta)
     support.apply(visual, skeleton, _delta)
+    var resting := String(actor.get_meta("activity", "idle")) in ["sit", "sleep"]
+    if is_instance_valid(visual.held_weapon):
+        visual.held_weapon.visible = not resting
+    if resting:
+        closed_fingers = 0
+        return
     if not is_instance_valid(visual.held_weapon):
         closed_fingers = 0
         if visual.held_item.is_empty() and visual.animation_player.assigned_animation == "Punch":
@@ -35,7 +46,6 @@ func _process_modification_with_delta(_delta: float) -> void:
         visual.call("constrain_axe_elbow", skeleton)
     var side := "Left" if visual.held_item == "short_bow" else "Right"
     if visual.held_item == "short_bow":
-        var actor := visual.get_parent_node_3d()
         var pivot := actor.get_node_or_null("CameraPivot") as Node3D
         if pivot != null:
             var axis := (skeleton.global_basis.inverse() * actor.global_basis.x).normalized()

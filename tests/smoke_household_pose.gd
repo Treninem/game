@@ -33,5 +33,11 @@ func _run() -> void:
         var foot := visual.to_local(skeleton.global_transform * skeleton.get_bone_global_pose(skeleton.find_bone(side + "Foot")).origin)
         assert(knee.y < hip.y - 0.2 and knee.z < hip.z, "Airborne thigh must bend forward and down in actor space")
         assert(foot.y < knee.y - 0.2 and foot.z > knee.z, "Airborne shin must bend back and down without reversing the knee")
+    var rest_failures: Array[String] = await preload("res://tests/humanoid_rest_cases.gd").new().run(self)
+    for failure: String in rest_failures:
+        push_error(failure)
+    if not rest_failures.is_empty():
+        get_tree().quit(1)
+        return
     print("HOUSEHOLD_POSE_OK knees=forward shins=down")
     get_tree().quit(0)
