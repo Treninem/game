@@ -8,7 +8,7 @@
   "page": "https://static.makehumancommunity.org/assets/assetpacks/suits02.html",
   "download": "https://files2.makehumancommunity.org/asset_packs/suits02/suits02_cc0.zip",
   "selection": "Only Viking tunic/pants/boots: authored OBJ, fitted MHCLO, material, texture and thumbnail. No duplicate archive or executable code retained under assets.",
-  "state": "APPROVED",
+  "state": "INTEGRATED",
   "physical_location": "Local review checkout; not confirmed on canonical main. Do not label STAGED_PHYSICAL on main.",
-  "integration": "Candidate generator tools/build_viking_humans.py; no live runtime reference yet."
+  "integration": "Review runtime now references the selected tunic/pants/boots through male.glb/female.glb, with per-body UV-matched normal/AO maps. Main physical staging and full visual acceptance remain unconfirmed."
 }

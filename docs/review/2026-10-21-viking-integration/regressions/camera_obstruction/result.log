@@ -1,0 +1,3 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CAMERA_OBSTRUCTION_OK walls=solid thin_wall=safe overlapping_origin=safe recovery=smooth zoom=persisted reach=bounded melee=no_back_hits no_wall_reach=true

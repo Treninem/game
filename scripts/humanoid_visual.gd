@@ -144,6 +144,17 @@ func _style_model() -> void:
                 if label.begins_with("SkinHuman"):
                     material.albedo_color = APPEARANCE.SKINS[int(current_profile.skin)]
                     material.roughness = 0.64
+                elif label.begins_with("Viking"):
+                    var stem := "res://assets/production/characters/realistic/wardrobe/%s-%s" % [current_profile.sex, label.to_lower()]
+                    material.normal_enabled = true
+                    material.normal_texture = load(stem + "-normal.png")
+                    material.normal_scale = 0.65
+                    material.ao_enabled = true
+                    material.ao_texture = load(stem + "-ao.png")
+                    material.ao_light_affect = 0.2
+                    material.roughness = 0.9 if label == "VikingTunic" else 0.86
+                    if label == "VikingTunic":
+                        material.albedo_color = APPEARANCE.CLOTH[int(current_profile.cloth)].lightened(0.65)
                 elif label.begins_with("ClothTunic") or label.begins_with("ClothTrousers"):
                     # Reuse the garment's authored UV-aligned folds, not a tiled
                     # replacement. The source diffuse depicts denim, so retain

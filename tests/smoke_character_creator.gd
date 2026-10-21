@@ -95,7 +95,12 @@ func _run() -> void:
                 var material := mesh.get_active_material(surface) as StandardMaterial3D
                 if material == null:
                     continue
-                if String(mesh.name) == "Clothing":
+                if String(material.resource_name).begins_with("Viking"):
+                    var authored := mesh.mesh.surface_get_material(surface) as StandardMaterial3D
+                    var errors: Array[String] = preload("res://tests/humanoid_wardrobe_material_probe.gd").new().check(material, String(creator.profile.sex), String(material.resource_name), authored.albedo_texture)
+                    if not _check(errors.is_empty(), "New wardrobe material contract: " + str(errors)):
+                        return
+                elif String(mesh.name) == "Clothing":
                     if not _check(material.normal_enabled and material.normal_texture == preload("res://scripts/humanoid_visual.gd").GARMENT_NORMAL and material.ao_enabled and material.ao_texture == preload("res://scripts/humanoid_visual.gd").GARMENT_AO and material.albedo_texture == null and material.roughness >= 0.8, "Garment loses authored normal/occlusion maps, matte finish or paints occlusion into its base color"):
                         return
                 elif String(mesh.name) == "Boots":

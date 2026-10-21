@@ -10,5 +10,5 @@
   "selection": "Only Viking tunic/pants/boots: authored OBJ, fitted MHCLO, material, texture and thumbnail. No duplicate archive or executable code retained under assets.",
   "state": "APPROVED",
   "physical_location": "Local review checkout; not confirmed on canonical main. Do not label STAGED_PHYSICAL on main.",
-  "integration": "Candidate generator tools/build_viking_humans.py; no live runtime reference yet."
+  "integration": "Selected garments are INTEGRATED in the review human family; production paths assets/production/characters/realistic/{male,female}.glb and wardrobe/. Physical confirmation on main remains pending."
 }
