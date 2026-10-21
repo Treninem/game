@@ -335,6 +335,7 @@ func _process(delta: float) -> void:
             _play(stroke, rate)
     elif not body.is_on_floor():
         _play("Airborne", 1.0)
+        animation_player.seek(airborne_sample_time(body), true)
     elif body.is_in_group("hostile") and float(body.get("attack_elapsed")) > float(body.get("attack_interval")) - 0.55:
         _play("Punch", 1.0)
     elif measured_speed > 0.16:
@@ -347,6 +348,13 @@ func _process(delta: float) -> void:
 
 # Reference stance speeds measured on the actual in-place human clips.
 # This matches the stride to motion; it is not full terrain foot locking.
+func airborne_sample_time(body: CharacterBody3D) -> float:
+    # A render clock cannot tell rising, apex and descent apart. Drive the
+    # airborne pose from physical vertical velocity, including a ledge fall.
+    var launch: Variant = body.get("jump_velocity")
+    var speed := maxf(1.0, float(launch) if launch != null else 5.5)
+    return clampf((speed - body.velocity.y) / (2.0 * speed), 0.0, 1.0) * animation_player.get_animation("Airborne").length
+
 func _gait_reference_speed(gait: String) -> float:
     if String(current_profile.get("sex", "male")) == "female":
         return 5.46 if gait == "Run" else 1.77
@@ -655,7 +663,7 @@ func _prepare_airborne_pose(model: Node3D) -> void:
         return
     var skeleton := skeletons[0] as Skeleton3D
     var clip := animation_player.get_animation("Idle").duplicate() as Animation
-    clip.length = 0.22
+    clip.length = 0.8
     clip.loop_mode = Animation.LOOP_NONE
     var root := animation_player.get_node(animation_player.root_node)
     var skeleton_path := String(root.get_path_to(skeleton))
@@ -665,11 +673,28 @@ func _prepare_airborne_pose(model: Node3D) -> void:
             var bone := skeleton.find_bone(side + suffix)
             if bone >= 0:
                 original[bone] = skeleton.get_bone_pose_rotation(bone)
-        _align_sitting_bone(skeleton, side + "UpLeg", side + "Leg", Vector3(0, -1, -0.35))
-        _align_sitting_bone(skeleton, side + "Leg", side + "Foot", Vector3(0, -1, 0.2))
-        _align_sitting_bone(skeleton, side + "Foot", side + "ToeBase", Vector3(0, -0.15, -1))
-        _align_sitting_bone(skeleton, side + "Arm", side + "ForeArm", Vector3(0.12 if side == "Left" else -0.12, -1, 0.1))
-        _align_sitting_bone(skeleton, side + "ForeArm", side + "Hand", Vector3(0, -1, -0.2))
+    for name: String in ["Spine1", "Spine2"]:
+        var bone := skeleton.find_bone(name)
+        original[bone] = skeleton.get_bone_pose_rotation(bone)
+    var poses: Array[Dictionary] = []
+    # Rising: gather the legs. Apex: tuck. Descent: extend for contact.
+    # The clip is sampled by velocity; it does not loop while falling.
+    for phase in [[-0.45, 0.7, -0.4, -0.25, -0.08], [-0.9, 1.1, -0.35, -0.45, -0.12], [-0.18, 0.12, -0.2, -0.65, -0.04]]:
+        for bone: int in original:
+            skeleton.set_bone_pose_rotation(bone, original[bone])
+        skeleton.force_update_all_bone_transforms()
+        for name: String in ["Spine1", "Spine2"]:
+            _rotate_actor_bone(skeleton, name, Vector3.RIGHT, float(phase[4]) * 0.5)
+        for side: String in ["Left", "Right"]:
+            _align_sitting_bone(skeleton, side + "UpLeg", side + "Leg", Vector3(0, -1, phase[0]))
+            _align_sitting_bone(skeleton, side + "Leg", side + "Foot", Vector3(0, -1, phase[1]))
+            _align_sitting_bone(skeleton, side + "Foot", side + "ToeBase", Vector3(0, 0, -1))
+            _align_sitting_bone(skeleton, side + "Arm", side + "ForeArm", Vector3(-0.3 if side == "Left" else 0.3, -0.75, phase[2]))
+            _align_sitting_bone(skeleton, side + "ForeArm", side + "Hand", Vector3(0, phase[3], -1))
+        var pose := {}
+        for bone: int in original:
+            pose[bone] = skeleton.get_bone_pose_rotation(bone)
+        poses.append(pose)
     for bone: int in original:
         var path := NodePath(skeleton_path + ":" + skeleton.get_bone_name(bone))
         var track := clip.find_track(path, Animation.TYPE_ROTATION_3D)
@@ -677,9 +702,8 @@ func _prepare_airborne_pose(model: Node3D) -> void:
             clip.remove_track(track)
         track = clip.add_track(Animation.TYPE_ROTATION_3D)
         clip.track_set_path(track, path)
-        clip.rotation_track_insert_key(track, 0.0, original[bone])
-        clip.rotation_track_insert_key(track, 0.16, skeleton.get_bone_pose_rotation(bone))
-    for bone: int in original:
+        for phase in range(3):
+            clip.rotation_track_insert_key(track, phase * 0.4, poses[phase][bone])
         skeleton.set_bone_pose_rotation(bone, original[bone])
     skeleton.force_update_all_bone_transforms()
     animation_player.get_animation_library("").add_animation("Airborne", clip)

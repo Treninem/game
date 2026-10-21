@@ -4,12 +4,15 @@ var player: CharacterBody3D
 var camera: Camera3D
 var travelled := 0.0
 var observations := []
+var final_pose := {}
+var observed_modifier: Node
 
 func _initialize() -> void:
     call_deferred("_run")
 
 func _frames(count: int) -> void:
     for frame in range(count):
+        _watch_final_pose()
         var before := player.global_position
         await physics_frame
         travelled += before.distance_to(player.global_position)
@@ -17,8 +20,8 @@ func _frames(count: int) -> void:
         camera.look_at(player.global_position + Vector3.UP * 1.0)
 
 func _capture(label: String) -> void:
-    observations.append({"label":label,"clip":player.get_node("Avatar").get("animation_player").assigned_animation,"rate":player.get_node("Avatar").get("animation_player").speed_scale,"grounded":player.is_on_floor(),"velocity":str(player.velocity)})
     await RenderingServer.frame_post_draw
+    observations.append({"label":label,"clip":player.get_node("Avatar").get("animation_player").assigned_animation,"rate":player.get_node("Avatar").get("animation_player").speed_scale,"grounded":player.is_on_floor(),"velocity":str(player.velocity),"final_pose":final_pose.duplicate(true)})
     root.get_texture().get_image().save_png("user://gait-" + label + ".png")
 
 func _run() -> void:
@@ -92,6 +95,11 @@ func _run() -> void:
         for phase in range(4):
             await _frames(10)
             await _capture(sex + "-jump-" + str(phase))
+        for side: String in ["Left", "Right"]:
+            var apex: Dictionary = observations[observations.size() - 3].final_pose
+            var descent: Dictionary = observations[observations.size() - 2].final_pose
+            assert(float(apex.get(side, 0.0)) > 55.0, "Rendered jump stayed in locomotion at apex")
+            assert(float(apex[side]) > float(descent.get(side, 180.0)) + 10.0, "Rendered jump does not extend on descent")
         Input.action_release("move_forward")
         await _frames(30)
         assert(player.is_on_floor())
@@ -132,3 +140,19 @@ func _event(action: String) -> void:
     event.action = action
     Input.parse_input_event(event)
     Input.flush_buffered_events()
+
+func _watch_final_pose() -> void:
+    var visual := player.get_node("Avatar")
+    var modifier: Node = visual.get("grip_modifier")
+    if is_instance_valid(observed_modifier) and observed_modifier == modifier:
+        return
+    observed_modifier = modifier
+    final_pose.clear()
+    var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+    modifier.modification_processed.connect(func():
+        for side: String in ["Left", "Right"]:
+            var hip := skeleton.get_bone_global_pose(skeleton.find_bone(side + "UpLeg")).origin
+            var knee := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Leg")).origin
+            var ankle := skeleton.get_bone_global_pose(skeleton.find_bone(side + "Foot")).origin
+            final_pose[side] = rad_to_deg((knee - hip).angle_to(ankle - knee))
+    )

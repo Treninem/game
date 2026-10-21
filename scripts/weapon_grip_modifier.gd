@@ -100,7 +100,7 @@ func _moving_legs(skeleton: Skeleton3D, delta: float) -> void:
             gait_time = phase * clip.length
         gait_name = gait
         gait_time = fposmod(gait_time + delta * float(visual.call("gait_rate", gait, speed)), clip.length)
-    var sample_time := airborne_time if airborne else gait_time
+    var sample_time: float = visual.call("airborne_sample_time", actor) if airborne else gait_time
     for entry: Array in gait_tracks[gait]:
         if entry[1] < 0:
             continue

@@ -88,6 +88,7 @@ func _run() -> void:
             failures.append("Idle transition inherited a stale gait phase")
     await _check_stride_speed(player, visual)
     await _check_airborne_actions(player, visual)
+    await _check_jump_phases(player, visual)
     player.queue_free()
     await get_tree().process_frame
     GameState.load_snapshot(snapshot)
@@ -133,7 +134,8 @@ func _check_airborne_actions(player: CharacterBody3D, visual: Node3D) -> void:
                 for track in range(airborne.get_track_count()):
                     var path := airborne.track_get_path(track)
                     if path.get_subname_count() > 0 and String(path.get_subname(0)) == name and airborne.track_get_type(track) == Animation.TYPE_ROTATION_3D:
-                        var expected := airborne.rotation_track_interpolate(track, airborne.length)
+                        var time := clampf((5.5 - player.velocity.y) / 11.0, 0.0, 1.0) * airborne.length
+                        var expected := airborne.rotation_track_interpolate(track, time)
                         if skeleton.get_bone_pose_rotation(skeleton.find_bone(name)).angle_to(expected) > 0.001:
                             failures.append("Airborne action uses grounded leg pose: %s %s %s" % [sex, entry[1], name])
     player.set("attack_elapsed", 0.0)
@@ -233,3 +235,36 @@ func _check_stride_speed(player: CharacterBody3D, visual: Node3D) -> void:
             failures.append("Combat exit restarted foot phase")
         print("STRIDE_PROFILE_CHECKED ", sex, " forefoot_supports=", supports)
     print("STRIDE_SPEED_CHECKED bodies=2 visual_heights=3 speeds=5 physical_motion=true combat_phase=retained")
+
+func _check_jump_phases(player: CharacterBody3D, visual: Node3D) -> void:
+    player.set("attack_elapsed", 0.0)
+    player.set("cast_elapsed", 0.0)
+    for sex: String in ["male", "female"]:
+        GameState.set_world_value("player_appearance", {"sex": sex})
+        visual.call("apply_appearance", {"sex": sex})
+        visual.set("appearance_revision", GameState.state_revision)
+        player.velocity = Vector3.UP * 5.5
+        player.move_and_slide()
+        var bends := []
+        for vertical: float in [5.5, 0.0, -5.5]:
+            player.velocity.y = vertical
+            visual.call("_process", 0.016)
+            var animator: AnimationPlayer = visual.get("animation_player")
+            var expected := (5.5 - vertical) / 11.0 * animator.get_animation("Airborne").length
+            if absf(animator.current_animation_position - expected) > 0.001:
+                failures.append("Jump phase does not follow physical vertical velocity")
+            # Isolate clip geometry from the live 0.18-second entry blend.
+            # Normal input/blending is exercised by the graphical action test.
+            animator.play("Airborne", 0.0)
+            animator.seek(expected, true)
+            animator.advance(0.0)
+            var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+            skeleton.force_update_all_bone_transforms()
+            var hip := skeleton.get_bone_global_pose(skeleton.find_bone("RightUpLeg")).origin
+            var knee := skeleton.get_bone_global_pose(skeleton.find_bone("RightLeg")).origin
+            var ankle := skeleton.get_bone_global_pose(skeleton.find_bone("RightFoot")).origin
+            bends.append(rad_to_deg((knee - hip).angle_to(ankle - knee)))
+        if float(bends[1]) < float(bends[0]) + 15.0 or float(bends[1]) < 60.0 or float(bends[2]) > 35.0:
+            failures.append("Jump does not tuck at apex and extend on descent: " + str(bends))
+        print("JUMP_PHASE_PROFILE ", sex, " knee_bends=", bends)
+    print("JUMP_PHASES_CHECKED bodies=2 physical_velocity=rise,apex,fall combat_legs=matched")

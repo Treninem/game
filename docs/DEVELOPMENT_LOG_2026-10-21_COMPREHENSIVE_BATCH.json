@@ -1,0 +1,358 @@
+{
+  "date": "2026-10-21",
+  "parent": "8885cfa2f8329f9b23b8a3a5e4bab4198734f0d2",
+  "program": "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json",
+  "request": "Work in comprehensive connected batches across the whole character, world, buildings, nature and animals; keep fixing and checking rather than isolated limb patches.",
+  "changes": [
+    "Replace the held airborne pose with rising/apex/descent keys for knees, feet, arms and torso. Select pose from physical vertical velocity instead of elapsed rendering time.",
+    "Use the same physical jump phase for combat leg overlays while retaining attack/cast upper-body pose and frozen grounded gait phase.",
+    "Repair the outdated visual-grounding expectation from the prior stride change: independently require Run and physical motion at normal 5 m/s, plus Walk and physical motion at fixture 1.8 m/s; retain floor, jump, river and shoreline checks.",
+    "Record an active comprehensive programme with acceptance criteria and unresolved gaps for all requested families."
+  ],
+  "baseline_audit": [
+    {
+      "case": "camera_obstruction",
+      "exit_code": 0,
+      "seconds": 13.92,
+      "errors": [],
+      "markers": [
+        "CAMERA_OBSTRUCTION_OK walls=solid thin_wall=safe overlapping_origin=safe recovery=smooth zoom=persisted reach=bounded melee=no_back_hits no_wall_reach=true"
+      ]
+    },
+    {
+      "case": "character_dimensions",
+      "exit_code": 0,
+      "seconds": 7.8,
+      "errors": [],
+      "markers": [
+        "CHARACTER_DIMENSIONS_OK heights=160,195,180 grounded_root=stable low_roof=physical camera=scaled shared_shape=isolated"
+      ]
+    },
+    {
+      "case": "chopping",
+      "exit_code": 0,
+      "seconds": 14.41,
+      "errors": [],
+      "markers": [
+        "CHOPPING_OK physical_axe=true windup=true reach_rechecked=true cut_reload=true fall_animated=true save_during_fall=true finite_loot=true authored_stump=true axe_shop=true forest_batch=promoted neighbour=unchanged"
+      ]
+    },
+    {
+      "case": "citizen_life",
+      "exit_code": 0,
+      "seconds": 37.8,
+      "errors": [],
+      "markers": [
+        "CITIZEN_LIFE_OK schedules=day_night travel=outbound_return conversations=local trade=paid stock=persistent legacy_civilians=schedules obstacle=walked_around"
+      ]
+    },
+    {
+      "case": "enterable_building",
+      "exit_code": 0,
+      "seconds": 6.8,
+      "errors": [],
+      "markers": []
+    },
+    {
+      "case": "household_pose",
+      "exit_code": 0,
+      "seconds": 3.3,
+      "errors": [],
+      "markers": [
+        "HOUSEHOLD_POSE_OK knees=forward shins=down"
+      ]
+    },
+    {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "seconds": 8.34,
+      "errors": [],
+      "markers": [
+        "LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2"
+      ]
+    },
+    {
+      "case": "nature_clearings",
+      "exit_code": 0,
+      "seconds": 3.8,
+      "errors": [],
+      "markers": [
+        "NATURE_CLEARINGS_SMOKE_OK"
+      ]
+    },
+    {
+      "case": "river_shoreline",
+      "exit_code": 0,
+      "seconds": 4.17,
+      "errors": [],
+      "markers": [
+        "RIVER_SHORELINE_SMOKE_OK"
+      ]
+    },
+    {
+      "case": "step_grounding",
+      "exit_code": 0,
+      "seconds": 14.86,
+      "errors": [],
+      "markers": [
+        "STEP_GROUNDING_OK stairs=22cm wall=no_air_climb maximum_y=5.6276798248291"
+      ]
+    },
+    {
+      "case": "vfx_lifetime",
+      "exit_code": 0,
+      "seconds": 5.8,
+      "errors": [],
+      "markers": [
+        "VFX_LIFETIME_OK owner_freed_early=safe child_timers=safe natural_expiry=bounded"
+      ]
+    },
+    {
+      "case": "visual_grounding",
+      "exit_code": 1,
+      "seconds": 33.89,
+      "errors": [
+        "ERROR: Human does not enter its walking animation when moving"
+      ],
+      "markers": []
+    },
+    {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "seconds": 12.33,
+      "errors": [],
+      "markers": [
+        "WEAPON_GRIP_OK poses=180 bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged"
+      ]
+    },
+    {
+      "case": "world_audio",
+      "exit_code": 0,
+      "seconds": 2.74,
+      "errors": [],
+      "markers": [
+        "WORLD_AUDIO_SMOKE_OK river=spatial footsteps=surface_aware production_audio=promoted player_hook=active"
+      ]
+    },
+    {
+      "case": "world_lighting",
+      "exit_code": 0,
+      "seconds": 2.42,
+      "errors": [],
+      "markers": [
+        "WORLD_LIGHTING_SMOKE_OK"
+      ]
+    }
+  ],
+  "final_checks": {
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "seconds": 8.92,
+      "errors": [],
+      "markers": [
+        "LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2"
+      ]
+    },
+    "visual_grounding": {
+      "case": "visual_grounding",
+      "exit_code": 0,
+      "seconds": 18.94,
+      "errors": [],
+      "markers": [
+        "VISUAL_GROUNDING_SMOKE_OK human=skinned animations=responsive feet=grounded spawn_support=retired water=curved shore=joined"
+      ]
+    },
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "seconds": 12.42,
+      "errors": [],
+      "markers": [
+        "WEAPON_GRIP_OK poses=180 bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged"
+      ]
+    },
+    "gameplay_actions": {
+      "case": "gameplay_actions",
+      "exit_code": 0,
+      "seconds": 20.25,
+      "errors": [],
+      "markers": [
+        "GAMEPLAY_ACTIONS_SMOKE_OK quality=4 persisted=true equip=visible unequip=retained melee=hit projectile=hit bow=hit ammo=consumed spells=10"
+      ]
+    }
+  },
+  "graphical_checks": {
+    "physical_actions": {
+      "exit_code": 0,
+      "seconds": 21.77,
+      "errors": [],
+      "marker": true
+    },
+    "source_world": {
+      "exit_code": 0,
+      "seconds": 38.34,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "native_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.1841978700832
+  },
+  "jump_knee_degrees": {
+    "rise": 59.22,
+    "apex": 89.71,
+    "descent": 17.05,
+    "profiles": [
+      "male",
+      "female"
+    ]
+  },
+  "ci_failure_reproduced": {
+    "run": "https://github.com/Treninem/game/actions/runs/39460403772",
+    "error": "Human does not enter its walking animation when moving",
+    "local_exit": 1,
+    "reason": "Legacy test demanded Walk at speed 5 after runtime intentionally switched this speed to physically matched jogging. Corrected by stronger independent slow and normal movement cases; no runtime speed/collision change."
+  },
+  "fixture_correction": "Initial pure jump-geometry fixture sampled an unfinished crossfade with zero elapsed animation time, reading the old pose. It now checks physical phase selection first and evaluates clip geometry with zero crossfade; actual input/blends are separately observed graphically. Knee thresholds were retained.",
+  "source_sha256": {
+    "scripts/humanoid_visual.gd": "dcce9633db8f03c08aaf00034306a3ac39ca6dd8b38e9a446d464ab67a0e1567",
+    "scripts/weapon_grip_modifier.gd": "45d922c610179a723155ba35e43ace45d5ec3fd854193f5352d8753da0f9440d",
+    "tests/smoke_locomotion_facing.gd": "068690b58384a6a449717214bed5bf14acb4e088a535c0864cdf6bb97fa201d6",
+    "tests/smoke_visual_grounding.gd": "2ba335bab1b82a64eb32bc11559fff5b11371ad68b63eee417963208e8791a41",
+    "tests/visual_motion_actions.gd": "061b76d23b329af67169073c97e96b4ff159173caa4e10b148a33b9ee5707b9c"
+  },
+  "screenshots": [
+    "docs/review/2026-10-21-comprehensive-batch/female-jump-0.png",
+    "docs/review/2026-10-21-comprehensive-batch/female-jump-1.png",
+    "docs/review/2026-10-21-comprehensive-batch/female-jump-2.png",
+    "docs/review/2026-10-21-comprehensive-batch/male-jump-0.png",
+    "docs/review/2026-10-21-comprehensive-batch/male-jump-1.png",
+    "docs/review/2026-10-21-comprehensive-batch/male-jump-2.png"
+  ],
+  "limits": [
+    "15 baseline smoke cases are scoped mechanical checks, not full artistic acceptance of the character/world.",
+    "New airborne poses are procedural corrections to existing rigs, not new mocap or new human meshes. No distinct takeoff anticipation or impact/landing compression animation yet.",
+    "Terrain foot IK and exact sole locking remain open; capsule grounding is not proof of visible foot contact.",
+    "No new fauna, building or nature models integrated in this batch; fauna staging is not behaviour integration.",
+    "Current graphical runs use ordinary automated action input and observer cameras, not manual full-world travel or a new city tour.",
+    "Existing ObjectDB exit leak warnings remain; no measured FPS or overall readiness percentage.",
+    "Previous CI failure was real and not ignored. New remote gates must be verified; no stable release or new installer claimed."
+  ],
+  "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
+  "delivery": "Current source project build/stability; no new local PCK/export.",
+  "rendered_jump_observations": [
+    {
+      "clip": "Airborne",
+      "final_pose": {
+        "Left": 77.1213666357173,
+        "Right": 77.1222477301202
+      },
+      "grounded": false,
+      "label": "male-jump-0",
+      "rate": 1.0,
+      "velocity": "(0.0, 2.5, -5.0)"
+    },
+    {
+      "clip": "Airborne",
+      "final_pose": {
+        "Left": 79.4775360125616,
+        "Right": 79.4775223521832
+      },
+      "grounded": false,
+      "label": "male-jump-1",
+      "rate": 1.0,
+      "velocity": "(0.0, -0.5, -5.0)"
+    },
+    {
+      "clip": "Airborne",
+      "final_pose": {
+        "Left": 39.9774114007865,
+        "Right": 39.9774284762594
+      },
+      "grounded": false,
+      "label": "male-jump-2",
+      "rate": 1.0,
+      "velocity": "(0.0, -3.5, -5.0)"
+    },
+    {
+      "clip": "Run",
+      "final_pose": {
+        "Left": 17.0467485644774,
+        "Right": 17.0467468569301
+      },
+      "grounded": true,
+      "label": "male-jump-3",
+      "rate": 0.843168020248413,
+      "velocity": "(0.0, 0.0, -5.0)"
+    },
+    {
+      "clip": "Airborne",
+      "final_pose": {
+        "Left": 75.1232289449759,
+        "Right": 78.4693249589868
+      },
+      "grounded": false,
+      "label": "female-jump-0",
+      "rate": 1.0,
+      "velocity": "(0.0, 2.5, -5.0)"
+    },
+    {
+      "clip": "Airborne",
+      "final_pose": {
+        "Left": 80.0363615998845,
+        "Right": 80.0363479395062
+      },
+      "grounded": false,
+      "label": "female-jump-1",
+      "rate": 1.0,
+      "velocity": "(0.0, -0.5, -5.0)"
+    },
+    {
+      "clip": "Airborne",
+      "final_pose": {
+        "Left": 40.4379198301016,
+        "Right": 40.4378276225478
+      },
+      "grounded": false,
+      "label": "female-jump-2",
+      "rate": 1.0,
+      "velocity": "(0.0, -3.5, -5.0)"
+    },
+    {
+      "clip": "Run",
+      "final_pose": {
+        "Left": 17.0467912531597,
+        "Right": 17.0467485644774
+      },
+      "grounded": true,
+      "label": "female-jump-3",
+      "rate": 0.915755271911621,
+      "velocity": "(0.0, 0.0, -5.0)"
+    }
+  ],
+  "frozen_blend_regression": "Graphical inspection rejected an intermediate candidate: speed_scale=0 froze the crossfade in the outgoing Run pose even though pure clip geometry passed. Restored a running blend clock while seeking physical phase; added final SkeletonModifier measurements and independent apex/descent assertions for both legs and both bodies in the normal-input graphical fixture. Repeated graphics and smoke checks passed. Intermediate images are preserved locally under frozen-blend-graphics."
+}

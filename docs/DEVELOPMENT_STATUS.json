@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-20",
+  "date": "2026-10-21",
   "project_version_label": "0.10.7.3",
   "engine_verified": "Godot 4.7.1.stable.official.a13da4feb",
   "renderer": "GL Compatibility",
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлены темп шага по фактической скорости, сохранение фазы ног при боевых переходах, достижимость замаха топором и выпрямление локтя между ключами. Кулачный удар укладывается в окно атаки, обе кисти сжимаются. Проверены фазы и действия обеих моделей в графическом проекте; прыжок и постановка стоп ещё требуют доработки.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LIMB_MOTION.json",
+  "current_stage": "Активна комплексная программа: персонаж целиком и связанный стартовый регион. Выполнен механический аудит 15 сценариев; исправлена регрессия проверки обычной/медленной ходьбы и добавлены физические фазы прыжка всего тела с сохранением боевых рук. Художественная приёмка, опора подошв, приземление, модели, природа, здания и животные не объявляются завершёнными.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-21_COMPREHENSIVE_BATCH.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -206,8 +206,8 @@
     "Проверять совместно картинку, игровой цикл, сохранение и производительность; 30 FPS на низких подтвердить длительным проходом, а не одним видом."
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "Локальные проверки движения, хвата и действий пройдены; графические фазы и физические действия проверены. Удалённые проверки нового коммита ожидаются; стабильный выпуск заблокирован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-20_LIMB_MOTION.json",
+  "ci_followup_status": "Предыдущий World Core упал на устаревшем ожидании Walk при 5 м/с; локально воспроизведено и исправлено с отдельной проверкой медленной ходьбы. Новый удалённый CI ожидается; стабильный выпуск заблокирован.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-21_COMPREHENSIVE_BATCH.json",
   "review_launcher_revision": "Limb motion source review; current changes not locally re-exported",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -348,5 +348,13 @@
     "jump_phase_animation_pending": true,
     "terrain_foot_ik_pending": true,
     "npc_punch_fist_modifier_pending": true
+  },
+  "comprehensive_program": "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json",
+  "comprehensive_goal_status": "active",
+  "jump_phases": {
+    "physical_velocity_driven": true,
+    "bodies_checked": 2,
+    "landing_animation_pending": true,
+    "terrain_foot_ik_pending": true
   }
 }

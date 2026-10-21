@@ -37,8 +37,18 @@ func _run() -> void:
         await get_tree().physics_frame
     Input.action_release("move_forward")
     _check_ground_gap(player)
-    if String(avatar.get("active_animation")) != "Walk":
-        errors.append("Human does not enter its walking animation when moving")
+    if String(avatar.get("active_animation")) != "Run" or player.get_real_velocity().length() < 4.0:
+        errors.append("Normal five-metre movement does not use its physically matched jog")
+    var normal_speed: float = player.get("walk_speed")
+    player.set("walk_speed", 1.8)
+    Input.action_press("move_forward")
+    for _i in range(45):
+        await get_tree().physics_frame
+    Input.action_release("move_forward")
+    _check_ground_gap(player)
+    if String(avatar.get("active_animation")) != "Walk" or player.get_real_velocity().length() < 1.5:
+        errors.append("Slow physical movement does not use walking")
+    player.set("walk_speed", normal_speed)
     for _i in range(20):
         await get_tree().physics_frame
     var jump := InputEventKey.new()
