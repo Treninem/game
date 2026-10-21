@@ -1,0 +1,96 @@
+{
+  "source": "https://files2.makehumancommunity.org/asset_packs/suits02/suits02_cc0.zip",
+  "license_source": "https://static.makehumancommunity.org/assets/assetpacks/suits02.html",
+  "archive_sha256": "437f4d7ab92b698c1fb1047e7d62b22c11f195b2473e936118661dc8e6b7eb7a",
+  "files": [
+    {
+      "path": "clothes/rehmanpolanski_viking_pants/rehmanpolanski_viking_pants.mhclo",
+      "bytes": 89582,
+      "sha256": "6de1ebef869d93437ed3d4908484850bd385741fbdadadea767b53cbb5e4312a",
+      "download_sha256": "2afe050edefda93d4e47a58b31e6e65a14ac09e0d466d9debcacbe376f956c0f",
+      "download_bytes": 89583
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_pants/pantsviking.obj",
+      "bytes": 101591,
+      "sha256": "fb6dc1e95a0b207ac9b5829f9b1f58b556e0f9cdb6827646ee7345a0ce4c5a86",
+      "download_sha256": "44644ac6aeec9cb56fbfd77225eaa8b02613b2587cd809fe6f3755bef7e2d709",
+      "download_bytes": 101590
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_pants/pantsviking.mhmat",
+      "bytes": 472,
+      "sha256": "a4e8f761f524b7a3f6d0aaa37ece5a88282e05c424071c018473bbc81922d7ee"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_pants/PantsViking.png",
+      "bytes": 1467996,
+      "sha256": "15b5d55a6f6b8f6d42bda782aa2db93cb7d17c88e6a13fb1a52cbcbf6d4b34e6"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_pants/rehmanpolanski_viking_pants.thumb",
+      "bytes": 36833,
+      "sha256": "6704d38d19a3fd3358dd40837f96430cdee6c8fece3b9e23cf9bbdfe7e09b848"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_tunic/tunicviking.mhmat",
+      "bytes": 471,
+      "sha256": "8b69e430954fe0df4ea832bdb60f3786244118e4ac2e539a782e32a38c51f3dd"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_tunic/rehmanpolanski_viking_tunic.thumb",
+      "bytes": 79715,
+      "sha256": "5146814cfe8e6555567a9833f439ce9e146a5b3f2d9d821e7895566a93de33f5"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_tunic/tunicviking.obj",
+      "bytes": 276971,
+      "sha256": "13ecbc37edbfd01f0e9ec723af3d2e3a6197181993476f766410c273eff8ce1a",
+      "download_sha256": "78c593d23151c4f9cd63481bd7f5101cae920623404bbf5f3daa01a5f2ea050b",
+      "download_bytes": 276970
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_tunic/TUNIC_Viking.png",
+      "bytes": 3634390,
+      "sha256": "9fcb9e17fad6ec1a36e3a0e0562cac3ca0ea72208da617875eed9bf294d9f870"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_tunic/rehmanpolanski_viking_tunic.mhclo",
+      "bytes": 226810,
+      "sha256": "05243af4444f71b7b5878219758a4b7f9d941a527f1337454550ccb3437e246d",
+      "download_sha256": "349b5b7b2abc44a7bd0b52ca99bd352e7d3b316cd4be5d539bbd9587462e801c",
+      "download_bytes": 226811
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_boots/BootsViking.png",
+      "bytes": 1020827,
+      "sha256": "114622c571ff7249bbd25223f6563d174894c426afb6ab92d35551b712bf1413"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_boots/rehmanpolanski_viking_boots.mhclo",
+      "bytes": 217466,
+      "sha256": "ff251c01c777ed6d2a7d4fb7c299729da8260cd7e37690ba0d83a5fb88d07ffe",
+      "download_sha256": "d864ac895a662031026615b5e042fb2160e63f432029576fa6faaf2ad692eb92",
+      "download_bytes": 217467
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_boots/bootsviking.mhmat",
+      "bytes": 466,
+      "sha256": "48c23f652484411447b1c04a9c64f421331c5b02ce3697e023f9fc140bb3ca39"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_boots/rehmanpolanski_viking_boots.thumb",
+      "bytes": 60276,
+      "sha256": "8f8222d6c41f3aee8f0c7a9af01227e71857f9b7688ba00a0b69756f13e854b3"
+    },
+    {
+      "path": "clothes/rehmanpolanski_viking_boots/bootsviking.obj",
+      "bytes": 274559,
+      "sha256": "33e4e38b5c9ad6043065dd64c396f320bcb587155c37d632f0168055241ef139",
+      "download_sha256": "9cc5a9cc4160ff2230144490244117eaddc4596152556304ca59d1129e4c196b",
+      "download_bytes": 274558
+    }
+  ],
+  "failures": [],
+  "normalization": "Text line endings LF and one terminal newline. Download hashes retained when bytes changed. PNG/thumbnail pixels unchanged."
+}

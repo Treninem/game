@@ -150,3 +150,5 @@ Every development session working on `Treninem/game` must read this file before 
 
 ## Eye color selection — 2026-10-20 review
 - INTEGRATED in review: five existing MakeHuman CC0 eye atlases in `assets/production/characters/realistic/eyes/`; exact source hashes and license preserved there. Runtime choice and save compatibility verified on both bodies. No new download; STAGED_PHYSICAL on main is not claimed.
+
+- APPROVED: Rehman Polanski Viking tunic/pants/boots, selected from official MakeHuman suits02 CC0 pack; local physical files and hashes under `assets/staging/characters/makehuman_viking_selected/`. Not confirmed on main, not INTEGRATED. Candidate builder: `tools/build_viking_humans.py`. See `assets/registry/VIKING_HUMAN_WARDROBE_2026-10-21.json`.

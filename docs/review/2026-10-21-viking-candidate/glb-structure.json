@@ -1,0 +1,28 @@
+[
+  {
+    "sex": "male",
+    "sha256": "f1b7d1e44e4d45a5a6b7aa9c563096fd022035e2d60e7a83470dd233c3c34a4a",
+    "bytes": 22072664,
+    "meshes": 7,
+    "animations": 10,
+    "morphs_per_mesh": 9,
+    "wardrobe_materials": [
+      "VikingTunic",
+      "VikingPants",
+      "VikingBoots"
+    ]
+  },
+  {
+    "sex": "female",
+    "sha256": "82c382df4a39f540912b37be80ddf3a6eb76344a5d2565bf0294346319d70579",
+    "bytes": 22762756,
+    "meshes": 7,
+    "animations": 10,
+    "morphs_per_mesh": 9,
+    "wardrobe_materials": [
+      "VikingTunic",
+      "VikingPants",
+      "VikingBoots"
+    ]
+  }
+]
