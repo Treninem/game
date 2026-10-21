@@ -42,6 +42,10 @@ func run(parent: Node3D) -> Array[String]:
                         if int(GameState.inventory.get(item, 0)) == 0:
                             GameState.add_item(item, 1)
                         InventorySystem.equip(item)
+                    furniture.claim("player")
+                    GameState.set_world_value("player:rest_furniture", furniture.furniture_id)
+                    actor.set_meta("rest_furniture", furniture.furniture_id)
+                    visual.set("appearance_revision", GameState.state_revision)
                     var inventory := GameState.inventory.duplicate(true)
                     var original_position := actor.global_position
                     var before_count: int = processed.count
@@ -70,7 +74,25 @@ func run(parent: Node3D) -> Array[String]:
                         failures.append("Rest keeps weapon active in the hand: " + label)
                     if inventory != GameState.inventory or InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) != item:
                         failures.append("Rest changes equipment ownership: " + label)
+                    actor.set("attack_elapsed", 0.0)
+                    GameState.stamina = GameState.max_stamina
+                    if item.is_empty():
+                        GameState.mana = 0.0
+                        var event := InputEventAction.new()
+                        event.action = "cast_magic"
+                        event.pressed = true
+                        actor.call("_unhandled_input", event)
+                    else:
+                        actor.call("_try_attack")
+                    if visual.top_level or not furniture.occupant.is_empty() or String(GameState.get_world_value("player:rest_furniture", "")) != "" or String(actor.get_meta("rest_furniture", "")) != "":
+                        failures.append("Action starts before releasing furniture and rest pose: " + label)
+                    # Cleanup also permits the old-code negative control to finish.
+                    furniture.release("player")
+                    GameState.set_world_value("player:rest_furniture", "")
                     HouseholdFurniture.clear_pose(actor, visual)
+                    actor.set("attack_elapsed", 0.0)
+                    actor.set("pending_bow_elapsed", 0.0)
+                    actor.set("pending_axe_elapsed", 0.0)
                     visual.call("_process", 1.0 / 60.0)
                     skeleton.advance(1.0 / 60.0)
                     await parent.get_tree().process_frame

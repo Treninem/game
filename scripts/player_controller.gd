@@ -146,6 +146,7 @@ func _unhandled_input(event: InputEvent) -> void:
         _try_attack()
         return
     if event.is_action_pressed("cast_magic"):
+        _leave_furniture_rest()
         var spell_id := MagicSystem.selected_spell_id()
         if MagicSystem.cast_selected(self, camera):
             var cast_position: Vector3 = projectile_aim()["origin"]
@@ -155,6 +156,7 @@ func _unhandled_input(event: InputEvent) -> void:
         MagicSystem.select_next()
         return
     if event.is_action_pressed("jump") and is_on_floor() and GameState.consume_stamina(8.0):
+        _leave_furniture_rest()
         landing_elapsed = 0.0
         velocity.y = jump_velocity
     elif event.is_action_pressed("interact"):
@@ -443,6 +445,7 @@ func _enforce_world_bounds() -> void:
 func _try_attack() -> void:
     if GameState.is_dead or attack_elapsed > 0.0:
         return
+    _leave_furniture_rest()
     if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "short_bow":
         _try_shoot()
         return
@@ -624,15 +627,25 @@ func _furniture_rest_step(delta: float) -> bool:
             break
     var moving := Input.get_vector("move_left", "move_right", "move_forward", "move_back").length() > 0 or Input.is_action_pressed("jump") or attack_elapsed > 0 or cast_elapsed > 0
     if id.is_empty() or furniture == null or moving or not furniture._reachable(self) or not furniture.claim("player"):
-        for candidate in get_tree().get_nodes_in_group("household_furniture"):
-            candidate.release("player")
-        if not id.is_empty():
-            GameState.set_world_value("player:rest_furniture", "")
-        if model.top_level:
-            HouseholdFurniture.clear_pose(self, model)
+        _leave_furniture_rest()
         return false
     furniture.apply_rest_pose(self, model)
     velocity = Vector3(0, -0.15, 0)
     move_and_slide()
     GameState.restore_stamina(delta * 8)
     return true
+
+func _leave_furniture_rest() -> void:
+    var model := get_node_or_null("Avatar") as Node3D
+    var saved: Variant = GameState.get_world_value("player:rest_furniture", "")
+    if (not saved is String or String(saved).is_empty()) and (model == null or not model.top_level) and String(get_meta("rest_furniture", "")).is_empty():
+        return
+    # Input actions must release the supported visual before they start, rather
+    # than waiting for the following physics tick to notice an attack/cast timer.
+    for furniture in get_tree().get_nodes_in_group("household_furniture"):
+        furniture.release("player")
+    if saved is String and not String(saved).is_empty():
+        GameState.set_world_value("player:rest_furniture", "")
+    set_meta("rest_furniture", "")
+    if model != null and model.top_level:
+        HouseholdFurniture.clear_pose(self, model)
