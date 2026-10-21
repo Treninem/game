@@ -54,3 +54,7 @@ The owner rejected the sparse rooms again: use the supplied house board as the v
 NPCs must choose their path from the environment rather than follow a prescribed sequence of room points. The current bounded interior A* implementation computes routes from physical walls, furniture and doors; existing needs/routines still choose goals. This is local game AI, not a connected language model.
 
 Current review adds four physical spaces, working internal doors, a fourth window for the rear bedroom, dining seats, storage/cooking objects and Blender-authored textiles/hearth. Two bounded size-dependent layouts and one/two place settings are checked. Children/schools/family graphs, diverse occupation-specific plans and jobs, cooking/fuel mechanics and full artistic acceptance are still open. Other city townhouse plans have not been replaced by this package.
+
+## Settlement and landscape clarification, 22 October 2026
+
+The owner explicitly requires coherent streets, squares, yards, gardens/flowerbeds, village fields/meadows/vegetable gardens, estates, barns and domestic livestock. Landscape must include mountains, valleys, rivers and lakes as a connected geography. Paths use stone paving, gravel and compacted earth according to purpose. The current road package joins existing houses to clear streets and fixes contact with physical ground; it does not establish completed settlement layout, farms, animals or concept-quality mountains. Existing anchors and user save identities remain protected.

@@ -155,3 +155,6 @@ Every development session working on `Treninem/game` must read this file before 
 
 ## Household concept kit — 2026-10-22 review
 - INTEGRATED in review: 19 selected existing B46 CC0 Fantasy Props MegaKit Standard objects, normalized in Blender into `assets/production/interiors/architecture/HouseholdProps.glb`; editable `.blend`, source license and 512px cloth derivatives retained. Original source files were verified on main 0015b68c; no download. Shared photographed plank/stone and original metal/props maps reused. Project-authored Blender partitions, bedding, curtains, rugs and arched hearth are integrated alongside the selected objects. See `assets/registry/HOUSEHOLD_DRESSING_2026-10-21.json`. Overall concept acceptance remains open.
+
+### Terrain path selection — 22 October 2026
+Existing CC0 musdasch ground set: unmodified 512px dirt1/gravel1 selected as road_soil/road_gravel under assets/production/materials/ground/, with licenses, mipmaps and anisotropic filtering. Reuses photographic stone_paving.jpg. INTEGRATED in the review through shared terrain_paths.gd; no download. Exact scope/evidence: assets/registry/TERRAIN_PATHS_2026-10-22.json and docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json. This is not completed farms/animals/mountain content.

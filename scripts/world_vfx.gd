@@ -26,6 +26,21 @@ func surface_at(world_position: Vector3) -> String:
     if CapitalData.inside_capital(xz):
         return "stone"
 
+    if absf(world_position.y-elevation)<0.65:
+        var surface := ""
+        var top := -INF
+        for path: Node3D in get_tree().get_nodes_in_group("terrain_path_surface"):
+            if path.is_queued_for_deletion(): continue
+            var lift := float(path.get_meta("path_lift",0.0))
+            if lift<=top: continue
+            for polygon: PackedVector2Array in path.get_meta("path_polygons",[]):
+                if Geometry2D.is_point_in_polygon(xz,polygon):
+                    surface = String(path.get_meta("surface_type","dirt"))
+                    top = lift
+                    break
+        if not surface.is_empty(): return surface
+        if WorldGeography.is_on_primary_road(xz): return "dirt"
+
     match biome:
         "mountains": return "stone"
         "marsh": return "mud"

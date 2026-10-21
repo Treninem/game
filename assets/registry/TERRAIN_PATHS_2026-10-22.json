@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-22",
+  "status": "INTEGRATED",
+  "review_only": true,
+  "source": "assets/staging/materials/oga_ground_texture_set/",
+  "source_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "author": "musdasch",
+  "license": "CC0 1.0 Universal",
+  "selected": {
+    "road_gravel.png": {
+      "sha256": "9cd7a3b9a4673572c028e01ab970bc8bfac0d1e4d9c11d1d3b4047ddc86b0e99",
+      "pixels": "512x512",
+      "source_unmodified": true,
+      "mipmaps": true
+    },
+    "road_soil.png": {
+      "sha256": "8dfd3da78cbcb4679cc820d9842dc82d9ef084268da31cec0eabc2a0b57e2815",
+      "pixels": "512x512",
+      "source_unmodified": true,
+      "mipmaps": true
+    }
+  },
+  "integration": [
+    "scripts/terrain_paths.gd",
+    "scripts/world_roads.gd",
+    "scripts/world_settlements.gd",
+    "scripts/settlement_road_gate_overlay.gd",
+    "scripts/settlement_public_works.gd",
+    "scripts/start_civilization_signs.gd"
+  ],
+  "remaining": "Diffuse-only materials; hard edges and art acceptance open. No new farm/animal production assets in this package."
+}

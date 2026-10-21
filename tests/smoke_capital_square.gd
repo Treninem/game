@@ -50,9 +50,9 @@ func _run() -> void:
         errors.append("Rendered paving does not meet the walking surface")
     if ((plaza.mesh as BoxMesh).material as StandardMaterial3D).albedo_texture == null:
         errors.append("Capital paving lost the selected photographic texture")
-    for road: MultiMeshInstance3D in world.find_children("RoadSurface", "MultiMeshInstance3D", true, false):
-        for index in range(road.multimesh.instance_count):
-            var point := road.to_global(road.multimesh.get_instance_transform(index).origin)
+    for road: MeshInstance3D in world.find_children("RoadSurface", "MeshInstance3D", true, false):
+        for vertex: Vector3 in road.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]:
+            var point := road.to_global(vertex)
             if Vector2(point.x, point.z).distance_to(CapitalData.CENTER) < 80:
                 errors.append("World dirt overlay still paints over the capital paving")
     MapSystem.refresh_features()

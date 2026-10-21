@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "По концепции владельца разделён и обставлен ограниченный комплект домов: приватные/жилые комнаты, столовая и кухня, внутренние двери, дополнительное окно, Blender-текстиль/очаг, хранение и бытовая утварь. Девять локальных проверок, графические проходы, настоящая столица и обычные игровые действия пройдены. Внешний вид ещё не соответствует качеству концепции; семьи/дети/школа, полные профессии, разнообразие всех домов и гардероб остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json",
+  "current_stage": "Комплект комнат/обстановки дома b6f555c2 прошёл все восемь CI. Следующий пакет: прилегающие к физическому рельефу покрытия, площадь/проезды двух деревень и подходы к 15 входам; удалён дублирующий слой старых плит. Лесной проход, реальные игровые кадры, дверь и диск проверены. Полный мир по концепции, сельские участки/сады/хозяйства, горные массивы, население/семьи и качество людей остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -382,8 +382,8 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "3134d040d5e10b98ccde7d54df4998a3d7d0760f",
-  "last_verified_runtime_ci": "Preceding exact SHA: 8/8 SUCCESS. New house-concept package: locally verified; own exact-SHA CI pending push.",
+  "last_verified_runtime_commit": "b6f555c253ba279283286e3493c27496cd31c395",
+  "last_verified_runtime_ci": "House-concept exact SHA b6f555c2: 8/8 SUCCESS. New terrain-path package locally verified; own exact-SHA CI pending push at journal creation.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
     "exit_object_leaks": 83,
@@ -410,5 +410,13 @@
     "furnishing_and_layout_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json",
     "room_navigation": "Local geometry A*, door/locked-leaf states and occupied-person detours; outdoor approach waypoints remain outside this package",
     "family_population": "Children, guardians/ages and schooling remain unimplemented"
+  },
+  "terrain_paths": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json",
+    "connected_home_entrances": 15,
+    "graphical_walk_m": 173.302463488653,
+    "forest_journey_m": 2065.82170474902,
+    "artistic_acceptance": false,
+    "landscape_complete": false
   }
 }

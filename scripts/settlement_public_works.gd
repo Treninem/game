@@ -1,5 +1,6 @@
 class_name SettlementPublicWorks
 extends Node3D
+const PATHS := preload("res://scripts/terrain_paths.gd")
 
 const ENTERABLE_WAREHOUSE := preload("res://scripts/enterable_warehouse.gd")
 const STALL_SCENE: PackedScene = preload("res://assets/production/medieval/quaternius_market/Stall_Empty.gltf")
@@ -160,17 +161,11 @@ func _build_town_public_works(settlement: Node3D, public_works: Node3D) -> void:
     _add_warehouse(settlement, public_works, "DryGoodsWarehouse", Vector2(61.0, 43.0), -PI * 0.5, "dry_goods", 3)
 
 func _add_market_square(settlement: Node3D, market: Node3D) -> void:
-    var surface := MeshInstance3D.new()
-    surface.name = "MarketSquareSurface"
-    var mesh := BoxMesh.new()
-    mesh.size = Vector3(MARKET_SIZE.x, 0.05, MARKET_SIZE.y)
-    mesh.material = market_ground_material
-    surface.mesh = mesh
-    surface.position = _terrain_local_position(settlement, MARKET_CENTER, 0.055)
-    surface.set_meta("physical_support", "streamed_world_terrain")
+    var polygons: Array[PackedVector2Array] = [PATHS.rectangle(settlement,MARKET_CENTER,MARKET_SIZE)]
+    var surface := PATHS.add(market,"MarketSquareSurface",polygons,"paving",0.045)
+    if surface == null: return
     surface.set_meta("cart_clear_width", MARKET_CART_CLEAR_WIDTH)
     surface.visibility_range_end = 620.0
-    market.add_child(surface)
 
 func _add_market_stall(settlement: Node3D, parent: Node3D, local_pos: Vector2, yaw: float, cart_variant: bool, node_name: String) -> StaticBody3D:
     var stall := StaticBody3D.new()

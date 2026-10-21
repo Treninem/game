@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-22",
+  "parent_commit": "b6f555c253ba279283286e3493c27496cd31c395",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; full concept/artistic acceptance remains false",
+  "owner_direction": "Settlements need coherent streets/squares/plots, gardens/flowerbeds, village fields/meadows/vegetable gardens/estates/barns/livestock; landscape needs mountains/rivers/lakes as on the supplied concept. Paths need paving, gravel and dirt appropriate to use.",
+  "changes": [
+    "Shared terrain_paths.gd clips actual road footprints against the same 4m physical terrain triangles; one merged road mesh per streamed world chunk; no heightfield/save schema change",
+    "World-aligned stone paving, selected existing 512px CC0 gravel/soil diffuse maps, generated mipmaps and anisotropic filtering; no unsupported scanned PBR claim",
+    "Both established villages have a paved square, computed clear carriageways between real road gates and square, and dirt access to all 15 actual front doors; paths avoid home footprints and existing well/stall obstacles",
+    "Settlement paths determine street design only; no prescribed NPC routes were added. Home transforms/door/chest identities and inventory contents retained",
+    "Road gate approaches, town main/cross streets and market surfaces now meet the physical terrain; the giant town-wide brown cover was removed to retain real meadow ground between streets",
+    "Actual graphical review found the separate old cart-track overlay floating through the village. It now ends where the forest spur joins the canonical road; its track bed and wheel ruts conform to terrain",
+    "World road overlay yields ownership inside the three settlements and capital, avoiding a duplicate straight strip across their streets/buildings; existing primary road catalog/geographic anchors retained",
+    "Shared semantic surface lookup recognizes the actual path footprint and top layer: intact paving uses stone feedback; loose roads use dirt feedback; existing snow/water priority retained",
+    "Bounded geometry/access regression added to Validate World Core; existing mandatory checks were not weakened"
+  ],
+  "local_checks": {
+    "terrain_paths": {
+      "case": "terrain_paths",
+      "exit_code": 0,
+      "seconds": 10.91,
+      "errors": []
+    },
+    "world_settlements": {
+      "case": "world_settlements",
+      "exit_code": 0,
+      "seconds": 6.52,
+      "errors": []
+    },
+    "settlement_road_gate_overlay": {
+      "case": "settlement_road_gate_overlay",
+      "exit_code": 0,
+      "seconds": 6.56,
+      "errors": []
+    },
+    "settlement_public_works": {
+      "case": "settlement_public_works",
+      "exit_code": 0,
+      "seconds": 6.14,
+      "errors": []
+    },
+    "terrain_geometry": {
+      "case": "terrain_geometry",
+      "exit_code": 0,
+      "seconds": 5.22,
+      "errors": []
+    },
+    "world_hydrology": {
+      "case": "world_hydrology",
+      "exit_code": 0,
+      "seconds": 2.41,
+      "errors": []
+    },
+    "capital_road": {
+      "case": "capital_road",
+      "exit_code": 0,
+      "seconds": 2.5,
+      "errors": []
+    },
+    "bridge_traversal": {
+      "case": "bridge_traversal",
+      "exit_code": 0,
+      "seconds": 37.23,
+      "errors": []
+    },
+    "capital_square": {
+      "case": "capital_square",
+      "exit_code": 0,
+      "seconds": 53.48,
+      "errors": []
+    },
+    "player_movement": {
+      "case": "player_movement",
+      "exit_code": 0,
+      "seconds": 22.09,
+      "errors": []
+    },
+    "import": {
+      "case": "import",
+      "exit_code": 0,
+      "seconds": 25.94,
+      "errors": []
+    },
+    "village_journey": {
+      "case": "village_journey",
+      "exit_code": 0,
+      "seconds": 229.39,
+      "errors": [],
+      "marker": true
+    },
+    "village_visual": {
+      "case": "village_visual",
+      "exit_code": 0,
+      "seconds": 75.8,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "geometry": {
+    "physical_ray_samples": 539,
+    "max_lift_m": 0.02504444122314,
+    "target_lift_m": 0.025,
+    "tolerance_m": 0.006,
+    "adjacent_chunk_seam": true,
+    "connected_actual_front_doors": 15,
+    "village_path_build_ms": [
+      365.499,
+      278.049
+    ]
+  },
+  "ordinary_journey": {
+    "distance_m": 2065.82170474902,
+    "engine_time_scale": 1.0,
+    "physics_step": 0.0166666666666667,
+    "position_assignments": 0,
+    "reason": "Village approach reached on foot",
+    "save_slot": 4,
+    "simulated_seconds": 277.350000000076,
+    "success": true
+  },
+  "graphical_world": {
+    "walked_m": 173.302463488653,
+    "driver_position_assignments": 0,
+    "checkpoint": "Copy of the new forest-to-village approach save, isolated profile",
+    "quality": "Medium",
+    "renderer": "GL Compatibility Intel UHD610",
+    "viewport": "1280x720",
+    "manual_play": false,
+    "door": "Real player interaction ray and reach guard; front door opened",
+    "save_slot": 5,
+    "inspection_clock": "09:00; survival clock held only by the graphical inspection driver"
+  },
+  "short_stationary_sample": {
+    "frames": 120,
+    "mean_frame_ms": 35.9492833333333,
+    "reported_video_memory_bytes": 543860121,
+    "draw_calls": 1373,
+    "scope": "One fixed village camera after walking; not long-session/world FPS or total process RAM"
+  },
+  "correction_history": [
+    "First rotated house approach rounded into the conservative clearance grid; fixed real approach offset without disabling collision checks",
+    "Graphical SceneTree driver preloaded autoload-dependent scripts before autoload registration; switched only the driver to runtime lookup; failed log retained",
+    "First successful graphical pass exposed an independent legacy cart overlay; before image/log retained and final physical/graphical checks repeated",
+    "A strict added road-ownership assertion caught small triangles crossing the village boundary. Replaced centre-point masking with exact polygon subtraction; failure retained and unchanged assertion passes"
+  ],
+  "save_safety": "All test profiles isolated. Existing user profiles untouched. Buildings were not moved; no save format migration or inventory/currency reset.",
+  "ci": "Parent b6f555c2 exact SHA 8/8 SUCCESS. This terrain-path package has local evidence; its own exact-SHA CI is pending push at journal creation.",
+  "remaining": [
+    "The world is still visually far below the supplied concept; diffuse-only road surfaces, hard path edges and sparse village greenery remain visible",
+    "This package connects existing homes; dense varied blocks, gardens/flowerbeds, agricultural plots/estates/barns and living livestock are not implemented by it",
+    "Existing river, Lake Vael and wetland physics regressions pass; new large mountain massifs, believable valleys, river network expansion and distant relief remain open",
+    "All outdoor NPC autonomous navigation, family/children/school/profession simulation and human clothing/shoulder quality remain open as previously recorded",
+    "Village road construction has a measurable streaming-frame cost; this short sample does not establish acceptable long-session performance",
+    "Local map still uses primary road catalog; generated village access paths are not yet a saved cartographic layer"
+  ],
+  "next_related_stage": "Coherent settlement parcels/greenery/farm and yard uses tied to real street access, terrain and inhabitants; evaluate physically staged suitable barn/crop/animal assets. Separately validate far terrain/mountain changes and old-save grounding before changing continental heights."
+}

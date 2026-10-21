@@ -1,0 +1,10 @@
+{
+  "case": "terrain_paths",
+  "exit_code": 1,
+  "seconds": 67.28,
+  "errors": [
+    "SCRIPT ERROR: Assertion failed: World road duplicates the village street layer",
+    "ERROR: Terrain paths watchdog",
+    "ERROR: 1 resources still in use at exit (run with --verbose for details)."
+  ]
+}

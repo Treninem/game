@@ -2,6 +2,7 @@ class_name SettlementRoadGateOverlay
 extends Node3D
 
 const GATE_NETWORK := preload("res://scripts/settlement_gate_network.gd")
+const PATHS := preload("res://scripts/terrain_paths.gd")
 
 const VILLAGE_HALF_SIZE := Vector2(78.0, 68.0)
 const TOWN_HALF_SIZE := Vector2(150.0, 115.0)
@@ -157,7 +158,9 @@ func _build_road_approach(root: Node3D, network: Node3D, center: Vector2, gate: 
     var outer := boundary + direction * ROAD_OUTSIDE_LENGTH
     var total_length := outer.length()
     var width := 9.0 if kind == "fortified_town" else 7.0
-    var patches := maxi(1, int(ceil(total_length / ROAD_PATCH_SPACING)))
+    var begin_distance := maxf(0.0,boundary.length()-2.0) if kind == "village" else 0.0
+    var spacing := 2.5 if kind == "village" else ROAD_PATCH_SPACING
+    var patches := maxi(1, int(ceil((total_length-begin_distance) / spacing)))
     var approach := Node3D.new()
     approach.name = "RoadApproach_%02d" % index
     approach.set_meta("extends_outside_perimeter", true)
@@ -166,19 +169,15 @@ func _build_road_approach(root: Node3D, network: Node3D, center: Vector2, gate: 
     approach.set_meta("outer_endpoint", outer)
     network.add_child(approach)
 
-    var angle := atan2(direction.x, direction.y)
-    for patch_index in range(patches + 1):
-        var distance := minf(total_length, float(patch_index) * ROAD_PATCH_SPACING)
-        var local_pos := direction * distance
-        var mesh_node := MeshInstance3D.new()
-        mesh_node.name = "RoadPatch_%02d" % patch_index
-        var mesh := BoxMesh.new()
-        mesh.size = Vector3(width, 0.05, ROAD_PATCH_SPACING + 0.7)
-        mesh.material = path_material
-        mesh_node.mesh = mesh
-        mesh_node.position = _local_on_terrain(root, center, local_pos, 0.07)
-        mesh_node.rotation.y = angle
-        approach.add_child(mesh_node)
+    for patch_index in range(patches):
+        var distance := begin_distance+float(patch_index)*spacing
+        var end_distance := minf(total_length, distance+spacing)
+        # The village street network owns the inside: its carriageway bends
+        # around real homes rather than painting a straight strip through them.
+        var a := root.to_global(Vector3(direction.x*distance,0,direction.y*distance))
+        var b := root.to_global(Vector3(direction.x*end_distance,0,direction.y*end_distance))
+        var polygons: Array[PackedVector2Array] = [PATHS.strip(Vector2(a.x,a.z),Vector2(b.x,b.z),width)]
+        PATHS.add(approach,"RoadPatch_%02d" % patch_index,polygons,"gravel",0.035)
 
 func _remove_legacy_perimeter(root: Node3D, kind: String) -> void:
     var prefixes: Array[String] = []
@@ -221,7 +220,7 @@ func _local_on_terrain(root: Node3D, center: Vector2, local_pos: Vector2, lift: 
 func _prepare_materials() -> void:
     stone_material = _material(Color(0.36, 0.37, 0.35, 1.0), 0.97)
     timber_material = _material(Color(0.22, 0.115, 0.05, 1.0), 0.96)
-    path_material = _material(Color(0.27, 0.205, 0.13, 1.0), 0.995)
+    path_material = PATHS.material("gravel")
 
 func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
     var material := StandardMaterial3D.new()

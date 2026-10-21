@@ -1,0 +1,12 @@
+ImPuls terrain road surface selection - 2026-10-22
+Status: INTEGRATED on the review branch, not yet merged into main.
+Existing physical source: assets/staging/materials/oga_ground_texture_set/ground/
+Source: https://opengameart.org/content/ground-texture-set
+Author: musdasch. License: CC0 1.0 Universal; ROAD_LICENSE.txt retained.
+Verified directly on main 0015b68c491271ea9e02c48881b1f496e1efea5b.
+No selected-pack failure manifest is present. No download or generated bitmap.
+Unmodified 512x512 diffuse images: gravel1.png -> road_gravel.png; dirt1.png -> road_soil.png.
+Generated mipmaps and anisotropic filtering. These are diffuse textures, not a scanned PBR set.
+Existing photographic stone_paving.jpg is reused for village/market paving.
+Live integration: scripts/terrain_paths.gd, world_roads.gd, world_settlements.gd, settlement_road_gate_overlay.gd, settlement_public_works.gd.
+Physical support remains the existing terrain; overlay polygons are clipped to its exact 4m triangles, 2.5-4.5cm above it. No heightfield or save format changes.

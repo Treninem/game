@@ -1,0 +1,85 @@
+{
+  "headRefOid": "b6f555c253ba279283286e3493c27496cd31c395",
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:41:34Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357930/job/119500932948",
+      "name": "build-game",
+      "startedAt": "2026-10-21T21:38:02Z",
+      "status": "COMPLETED",
+      "workflowName": "Build ImPuls Release Candidate"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:43:19Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357829/job/119500926320",
+      "name": "build",
+      "startedAt": "2026-10-21T21:38:01Z",
+      "status": "COMPLETED",
+      "workflowName": "Build Windows Installer"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:39:49Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357782/job/119500926266",
+      "name": "diagnose-ui",
+      "startedAt": "2026-10-21T21:38:02Z",
+      "status": "COMPLETED",
+      "workflowName": "Diagnose UI Smoke"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:41:13Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357772/job/119500925664",
+      "name": "validate-magic",
+      "startedAt": "2026-10-21T21:38:01Z",
+      "status": "COMPLETED",
+      "workflowName": "Validate Magic Runtime"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:40:57Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357787/job/119500926366",
+      "name": "movement-smoke",
+      "startedAt": "2026-10-21T21:38:01Z",
+      "status": "COMPLETED",
+      "workflowName": "Validate Player Movement"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:52:51Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357807/job/119500927086",
+      "name": "world-core",
+      "startedAt": "2026-10-21T21:38:01Z",
+      "status": "COMPLETED",
+      "workflowName": "Validate World Core"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:41:14Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357809/job/119500925957",
+      "name": "validate-world-vfx",
+      "startedAt": "2026-10-21T21:38:02Z",
+      "status": "COMPLETED",
+      "workflowName": "Validate World VFX"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T21:44:11Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39680357930/job/119502547114",
+      "name": "build-installer",
+      "startedAt": "2026-10-21T21:41:36Z",
+      "status": "COMPLETED",
+      "workflowName": "Build ImPuls Release Candidate"
+    }
+  ]
+}
