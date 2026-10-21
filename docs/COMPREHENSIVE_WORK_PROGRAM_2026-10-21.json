@@ -79,5 +79,5 @@
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-21_REST_ACTION_ORDER.json"
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
 }

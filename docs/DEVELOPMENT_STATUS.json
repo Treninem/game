@@ -376,9 +376,13 @@
     "lying_axis_and_face_direction_fixed": true,
     "remaining": "Dedicated sleeping and enter/exit animations; full artistic acceptance pending",
     "action_release_before_execution": true,
-    "action_order_journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_ACTION_ORDER.json"
+    "action_order_journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_ACTION_ORDER.json",
+    "physical_jump_and_disk_roundtrip": {
+      "cases": 12,
+      "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
+    }
   },
-  "last_verified_runtime_commit": "e31efac8b30b799a2ba5a5d3942190534377fa8f",
+  "last_verified_runtime_commit": "494bf0575d312413f728b0d0d6a7c764b04858cb",
   "last_verified_runtime_ci": "8/8 passed",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
