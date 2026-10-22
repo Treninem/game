@@ -45,6 +45,8 @@ var grip_modifier: SkeletonModifier3D
 var bow_cords: Array[MeshInstance3D] = []
 var nocked_arrow: Node3D
 var last_draw_point := Vector3.ZERO
+var draw_point_in_actor := Vector3.ZERO
+var has_draw_point := false
 
 func _ready() -> void:
     var profile: Variant = appearance_profile
@@ -69,6 +71,7 @@ func apply_appearance(value: Variant) -> void:
     weapon_socket = null
     held_weapon = null
     held_item = ""
+    has_draw_point = false
     bow_cords.clear()
     nocked_arrow = null
     active_animation = ""
@@ -194,6 +197,7 @@ func _refresh_weapon() -> void:
         return
     held_item = String(get_parent().get_meta("preview_item", "")) if get_parent().has_meta("preview_animation") else InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
     bow_cords.clear()
+    has_draw_point = false
     nocked_arrow = null
     if held_weapon != null:
         held_weapon.free()
@@ -239,6 +243,11 @@ func _place_weapon_at_grip(grip: Transform3D, draw_point: Vector3 = Vector3.ZERO
         var top := held_weapon.to_global(Vector3(0.2055, 0.5157, 0))
         var bottom := held_weapon.to_global(Vector3(0.2055, -0.5157, 0))
         last_draw_point = draw_point if drawing else held_weapon.to_global(Vector3(0.2055, 0, 0))
+        # Several physical ticks can occur before the next rendered rig pose.
+        # Keep the last corrected hand point attached to the moving actor,
+        # rather than firing from its previous world-space position mid-jump.
+        draw_point_in_actor = (get_parent() as Node3D).to_local(last_draw_point)
+        has_draw_point = true
         _cord_between(bow_cords[0], top, last_draw_point)
         _cord_between(bow_cords[1], last_draw_point, bottom)
         if is_instance_valid(nocked_arrow):
@@ -311,7 +320,9 @@ func _cord_between(cord: MeshInstance3D, a: Vector3, b: Vector3) -> void:
     cord.global_transform = Transform3D(Basis(Quaternion(Vector3.UP, (b - a).normalized())).scaled(Vector3(1, distance, 1)), (a + b) * 0.5)
 
 func arrow_release_point() -> Vector3:
-    return last_draw_point
+    if not has_draw_point or held_item != "short_bow":
+        return Vector3.INF
+    return (get_parent() as Node3D).to_global(draw_point_in_actor)
 
 func _process(delta: float) -> void:
     if get_parent().name == "Player" and appearance_revision != GameState.state_revision:

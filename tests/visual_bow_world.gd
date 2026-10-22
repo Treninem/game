@@ -15,12 +15,17 @@ var walked := 0.0
 var captures: Array[String] = []
 var player: CharacterBody3D
 var observer: Camera3D
+var request_airborne_draw := false
+var airborne_draw_frame: Dictionary = {}
 
 func _initialize() -> void:
     call_deferred("_run")
 
 func _capture(label: String) -> void:
     await RenderingServer.frame_post_draw
+    _capture_rendered(label)
+
+func _capture_rendered(label: String) -> void:
     var path := "user://head-size-" + label + ".png"
     root.get_texture().get_image().save_png(path)
     captures.append(path)
@@ -102,19 +107,23 @@ func _run() -> void:
         if item == "short_bow":
             Input.action_press("move_forward")
             await _action("jump")
+            request_airborne_draw = true
+            airborne_draw_frame.clear()
         await _action("attack")
         await _frames(2)
         assert(float(player.get("attack_elapsed")) > 0.0)
         if item == "short_bow":
-            assert(float(player.get("pending_bow_elapsed")) > 0.0)
-        await _capture(item)
-        if item == "short_bow":
-            var actual: String = player.get_node("Avatar").get("animation_player").assigned_animation
-            print("AIRBORNE_WORLD_POSE ", actual, " grounded=", player.is_on_floor())
-            if actual != "Bow_Attack_Draw" or player.is_on_floor():
+            # Check the exact rendered draw frame. Waiting for another draw
+            # call can legitimately cross the 0.22 s release on a slow GPU.
+            assert(not airborne_draw_frame.is_empty(), "No airborne bow draw frame was rendered")
+            assert(float(airborne_draw_frame.pending) > 0.0)
+            print("AIRBORNE_WORLD_POSE ", JSON.stringify(airborne_draw_frame))
+            if airborne_draw_frame.pose != "Bow_Attack_Draw" or airborne_draw_frame.grounded:
                 push_error("AIRBORNE_WORLD lost bow draw during jump")
                 quit(1)
                 return
+        else:
+            await _capture(item)
         await _frames(51)
         if item == "short_bow":
             assert(int(state.get("inventory").get("arrow", 0)) == 2)
@@ -269,3 +278,11 @@ func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
             assert(radial >= 1.0, "Live bow blend enters central torso: " + str(segment) + " point=" + str(point))
     bow_blend_samples += 1
     print("LIVE_BOW_BLEND_SAMPLE ", bow_blend_samples)
+    if request_airborne_draw and animator.assigned_animation == "Bow_Attack_Draw" and not player.is_on_floor():
+        request_airborne_draw = false
+        var observed := {"pose":String(animator.assigned_animation), "grounded":player.is_on_floor(), "pending":float(player.get("pending_bow_elapsed")), "frame":frame}
+        RenderingServer.frame_post_draw.connect(func():
+            assert(Engine.get_process_frames() == int(observed.frame), "Draw image and skeleton observation differ by a frame")
+            _capture_rendered("short_bow")
+            airborne_draw_frame = observed
+        , CONNECT_ONE_SHOT)

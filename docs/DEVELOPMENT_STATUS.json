@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-22",
+  "date": "2026-10-23",
   "project_version_label": "0.10.7.3",
   "engine_verified": "Godot 4.7.1.stable.official.a13da4feb",
   "renderer": "GL Compatibility",
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Связанный пакет баланса корпуса, головы и плеч при старте/торможении/повороте/приземлении и контакта обуви с поверхностью. 30 движущихся GPU-поз, физический пол/звук/пыль и нативные позы проверены. Полный мир и большая локальная проверка рук не завершились в срок; обязательный прежний CI сохранён. Модели и мир художественно не приняты, холодный запуск открыт.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
+  "current_stage": "Пакет баланса/контакта дополнен исправлением выпуска стрелы между физическими и отрисованными кадрами. Контроль прежней версии воспроизвёл смещение снаряда; новый тест трёх перемещений/поворотов прошёл с нулевой ошибкой. Исправлена привязка снимка натяжения к фактическому GPU-кадру. 18ab50ee получил 7/8 CI; полный повтор нового exact-SHA обязателен. Художественная приёмка и холодный запуск открыты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_BOW_RELEASE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -207,7 +207,7 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_BOW_RELEASE.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -501,5 +501,13 @@
     "local_arm_scan": "timeout; not a full pass",
     "local_world_gameplay": "timeout before successful gameplay capture; not accepted",
     "candidate_ci": "Pending exact-SHA verification after push; previous 3558a4df all eight SUCCESS."
+  },
+  "latest_bow_release_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_BOW_RELEASE.json",
+    "review_folder": "docs/review/2026-10-23-bow-release",
+    "local_unit": "three transformed releases PASS; old parent reproduced displacement",
+    "ci": "18ab50ee World Core failed on temporal frame observation; followup exact-SHA pending",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
   }
 }
