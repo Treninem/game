@@ -162,7 +162,7 @@ func _build_town_public_works(settlement: Node3D, public_works: Node3D) -> void:
 
 func _add_market_square(settlement: Node3D, market: Node3D) -> void:
     var polygons: Array[PackedVector2Array] = [PATHS.rectangle(settlement,MARKET_CENTER,MARKET_SIZE)]
-    var surface := PATHS.add(market,"MarketSquareSurface",polygons,"paving",0.045)
+    var surface := PATHS.add(market,"MarketSquareSurface",polygons,"paving",0.012)
     if surface == null: return
     surface.set_meta("cart_clear_width", MARKET_CART_CLEAR_WIDTH)
     surface.visibility_range_end = 620.0

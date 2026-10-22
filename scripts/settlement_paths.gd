@@ -29,7 +29,7 @@ static func build_village(root: Node3D) -> void:
         street_paths.append(path)
         _append_path(root, streets, path, 5.5)
         for point in path: network.append(point)
-    var lanes := PATHS.add(root,"VillageLanes",streets,"gravel",0.035)
+    var lanes := PATHS.add(root,"VillageLanes",streets,"gravel",0.008)
     if lanes != null: lanes.set_meta("local_paths",street_paths)
 
     var foot_grid := _grid(root,houses,1.15, wet_cells)
@@ -57,7 +57,7 @@ static func build_village(root: Node3D) -> void:
         path.insert(0,Vector2(threshold.x,threshold.z))
         var polygons: Array[PackedVector2Array] = []
         _append_path(root,polygons,path,1.8)
-        var visual := PATHS.add(root,"HomeAccess_"+house.name,polygons,"soil",0.045)
+        var visual := PATHS.add(root,"HomeAccess_"+house.name,polygons,"soil",0.010)
         if visual != null:
             visual.set_meta("home_path",str(house.get_path()))
             visual.set_meta("local_path",path)

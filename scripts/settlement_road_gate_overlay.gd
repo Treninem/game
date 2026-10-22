@@ -177,7 +177,7 @@ func _build_road_approach(root: Node3D, network: Node3D, center: Vector2, gate: 
         var a := root.to_global(Vector3(direction.x*distance,0,direction.y*distance))
         var b := root.to_global(Vector3(direction.x*end_distance,0,direction.y*end_distance))
         var polygons: Array[PackedVector2Array] = [PATHS.strip(Vector2(a.x,a.z),Vector2(b.x,b.z),width)]
-        PATHS.add(approach,"RoadPatch_%02d" % patch_index,polygons,"gravel",0.035)
+        PATHS.add(approach,"RoadPatch_%02d" % patch_index,polygons,"gravel",0.008)
 
 func _remove_legacy_perimeter(root: Node3D, kind: String) -> void:
     var prefixes: Array[String] = []

@@ -9,4 +9,6 @@ Unmodified 512x512 diffuse images: gravel1.png -> road_gravel.png; dirt1.png -> 
 Generated mipmaps and anisotropic filtering. These are diffuse textures, not a scanned PBR set.
 Existing photographic stone_paving.jpg is reused for village/market paving.
 Live integration: scripts/terrain_paths.gd, world_roads.gd, world_settlements.gd, settlement_road_gate_overlay.gd, settlement_public_works.gd.
-Physical support remains the existing terrain; overlay polygons are clipped to its exact 4m triangles, 2.5-4.5cm above it. No heightfield or save format changes.
+Physical support remains the existing terrain; overlay polygons are clipped to its exact 4m triangles, 6-12mm above it (bounded by the shared support clearance). No heightfield or save format changes.
+
+Gravel world texture frequency is now 3.0 (previous .65); no source image pixels changed. Road support/close gameplay evidence: docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json. Graded embankments and shoulders remain open.

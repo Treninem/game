@@ -69,7 +69,7 @@ static func _furnish(village: Node3D,home: Node3D,yard: Node3D,offset: Vector2,s
     marker.add_to_group("map_fixture")
     yard.add_child(marker)
     var polygons: Array[PackedVector2Array] = [PATHS.rectangle(home,offset,size)]
-    PATHS.add(yard,"CultivatedGround",polygons,"soil",0.028)
+    PATHS.add(yard,"CultivatedGround",polygons,"soil",0.006)
     var fences: Array[Transform3D] = []
     var half := size*0.5
     for segment in [
@@ -213,4 +213,4 @@ static func _connect(village: Node3D,plot: Dictionary,houses: Array[Node3D],plot
     var inside := village.to_local(inside_world)
     var entrance := PackedVector2Array([destination,Vector2(inside.x,inside.z)])
     PLANNER._append_path(village,footprints,entrance,1.5)
-    PATHS.add(yard,"GardenAccess",footprints,"soil",0.045)
+    PATHS.add(yard,"GardenAccess",footprints,"soil",0.010)

@@ -4,7 +4,8 @@ extends RefCounted
 # Sampling only the centre of a long box leaves its corners floating on hills.
 # These are thin visual overlays; the existing terrain owns physical support.
 const GRID := 4.0
-const LIFT := 0.025
+const LIFT := 0.006
+const MAX_LIFT := 0.012
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 static var materials: Dictionary = {}
@@ -27,6 +28,7 @@ static func material(kind: String) -> StandardMaterial3D:
         "gravel":
             result.albedo_texture = load("res://assets/production/materials/ground/road_gravel.png")
             result.albedo_color = Color(0.76, 0.70, 0.58)
+            result.uv1_scale = Vector3.ONE * 3.0
         _:
             result.albedo_texture = load("res://assets/production/materials/ground/road_soil.png")
             result.albedo_color = Color(0.91, 0.83, 0.68)
@@ -46,6 +48,9 @@ static func rectangle(parent: Node3D, center: Vector2, size: Vector2) -> PackedV
 
 static func build(polygons: Array[PackedVector2Array], transform: Transform3D,
         bounds: Rect2 = Rect2(), exclude_capital: bool = false, lift: float = LIFT) -> ArrayMesh:
+    # The terrain owns support. Centimetres of visual separation bury boots;
+    # reserve only a small depth-fighting clearance, including stacked layers.
+    assert(lift>=LIFT and lift<=MAX_LIFT,"Path overlay exceeds its physical support clearance")
     var tool := SurfaceTool.new()
     tool.begin(Mesh.PRIMITIVE_TRIANGLES)
     var inverse := transform.affine_inverse()
@@ -113,6 +118,7 @@ static func add(parent: Node3D, label: String, polygons: Array[PackedVector2Arra
     result.set_meta("physical_support", "streamed_world_terrain")
     result.set_meta("path_polygons",polygons)
     result.set_meta("path_lift",lift)
+    result.set_meta("path_kind",kind)
     result.set_meta("surface_type","stone" if kind=="paving" else "dirt")
     result.add_to_group("terrain_path_surface")
     parent.add_child(result)

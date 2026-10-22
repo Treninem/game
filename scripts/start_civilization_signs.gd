@@ -50,9 +50,9 @@ func _build_old_cart_track() -> void:
             left.append(PATHS.strip(start-side,finish-side,0.28))
             right.append(PATHS.strip(start+side,finish+side,0.28))
             road_segment_count += 1
-    PATHS.add(road_root,"TrackBed",footprints,"soil",0.03)
-    var left_visual := PATHS.add(road_root,"WheelRutLeft",left,"soil",0.04)
-    var right_visual := PATHS.add(road_root,"WheelRutRight",right,"soil",0.04)
+    PATHS.add(road_root,"TrackBed",footprints,"soil",0.007)
+    var left_visual := PATHS.add(road_root,"WheelRutLeft",left,"soil",0.009)
+    var right_visual := PATHS.add(road_root,"WheelRutRight",right,"soil",0.009)
     var rut := PATHS.material("soil").duplicate() as StandardMaterial3D
     rut.albedo_color = Color(0.55,0.49,0.38)
     if left_visual!=null: left_visual.material_override = rut

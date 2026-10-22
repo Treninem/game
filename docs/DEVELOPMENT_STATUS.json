@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Пакеты дорожек и дворов прошли все восемь CI на точных SHA. Новый пакет всего стандартного костюма обеих основ: подогнанный внутренний слой, маска закрытого тела и отдельный материал; исходный дефект 408/756 ракурсов, итог 0/756. Реальный мир, обычные действия, сохранение и интерфейс проверены. Художественная приёмка людей и мира остаётся открытой.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json",
+  "current_stage": "Дорожные покрытия приведены к зазору 6–12 мм над физическим рельефом; уменьшен чрезмерный размер гравия. 539+156 физических замеров, 15 подходов и графический проход 173.30 м с дверью/диском проверены. Подошвы обеих ног после естественной остановки примерно на 4 мм ниже видимой дороги. Внешность людей/мира и дефекты слоёв одежды остаются открытыми; неудачные варианты одежды не включены в этот пакет.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -206,9 +206,9 @@
     "Проверять совместно картинку, игровой цикл, сохранение и производительность; 30 FPS на низких подтвердить длительным проходом, а не одним видом."
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "534684ad: восемь exact-SHA CI SUCCESS. Новый пакет костюма локально проверен; собственный exact-SHA CI проверяется после push. Стабильного выпуска нет.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json",
-  "review_launcher_revision": "Current build/stability source project contains tested fitted-outfit GLBs; previous exported PCK/installer is not updated.",
+  "ci_followup_status": "8282e769: восемь exact-SHA CI SUCCESS перепроверены. Пакет опоры дорожек локально проверен; собственный exact-SHA CI проверяется после push. Стабильного выпуска нет.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+  "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",
@@ -419,7 +419,14 @@
     "graphical_walk_m": 173.302463488653,
     "forest_journey_m": 2065.82170474902,
     "artistic_acceptance": false,
-    "landscape_complete": false
+    "landscape_complete": false,
+    "support_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+    "overlay_clearance_m": [
+      0.006,
+      0.012
+    ],
+    "last_graphical_walk_m": 173.302463488653,
+    "raised_embankments_and_shoulders_complete": false
   },
   "cottage_yards": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
@@ -433,6 +440,8 @@
     "render_views": 756,
     "failed_views": 0,
     "full_artistic_acceptance": false,
-    "undressing_and_full_wardrobe_complete": false
+    "undressing_and_full_wardrobe_complete": false,
+    "visible_cloth_layers_accepted": false,
+    "remaining_visible_defects": "Gray lining and lower-coat punctures remain; covered-skin oracle alone is insufficient. Shell-free/GPU prototypes failed the expanded layer probe and are not integrated."
   }
 }

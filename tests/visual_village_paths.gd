@@ -69,6 +69,12 @@ func _run() -> void:
     camera.global_position = village.to_global(Vector3(8,3.3,14))
     camera.look_at(player.global_position+Vector3.UP)
     await _capture("square-character")
+    await _check_road_soles()
+    camera.global_position=player.global_position+Vector3(1.8,0.65,2.2)
+    camera.look_at(player.global_position+Vector3.UP*0.25)
+    await _capture("street-boots")
+    camera.global_position=village.to_global(Vector3(8,3.3,14))
+    camera.look_at(player.global_position+Vector3.UP)
     var sample_start := Time.get_ticks_usec()
     for frame in range(120):await process_frame
     print("VILLAGE_FRAME_SAMPLE frames=120 mean_ms=",float(Time.get_ticks_usec()-sample_start)/120000.0,
@@ -103,3 +109,49 @@ func _run() -> void:
     assert(root.get_node("SaveManager").call("save_game",player,5))
     print("VILLAGE_PATHS_VISUAL_OK walked_m=",distance," player_position_assignments=0 earned_checkpoint=true door=reach_checked save_slot=5 quality=Medium")
     quit(0)
+
+func _check_road_soles() -> void:
+    var visual := player.get_node("Avatar") as Node3D
+    var animator: AnimationPlayer=visual.get("animation_player")
+    for frame in range(60):
+        if animator.current_animation=="Idle" and player.velocity.length()<.01:break
+        await physics_frame
+    assert(animator.current_animation=="Idle","Walking did not settle naturally into Idle")
+    var skeleton := visual.find_children("*","Skeleton3D",true,false)[0] as Skeleton3D
+    var probe := preload("res://tests/humanoid_skin_probe.gd").new()
+    var data := {"capture":true}
+    visual.get("grip_modifier").modification_processed.connect(func():
+        if data.capture:
+            data.capture=false
+            data.points=probe.points(visual,skeleton))
+    for frame in range(3):
+        await process_frame
+        await RenderingServer.frame_post_draw
+        if data.has("points"):break
+    assert(data.has("points"),"Missing final rendered boot snapshot")
+    var rows := []
+    for side: String in ["Left","Right"]:
+        var minimum := INF
+        var checked := 0
+        for point: Vector3 in data.points[side]:
+            var query := PhysicsRayQueryParameters3D.create(point+Vector3.UP*.5,point-Vector3.UP*1.0,1)
+            query.exclude=[player.get_rid()]
+            var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+            assert(not hit.is_empty(),"Rendered boot has no physical support under the street")
+            var lift := 0.0
+            for path: Node3D in get_nodes_in_group("terrain_path_surface"):
+                if path.is_queued_for_deletion():continue
+                for polygon: PackedVector2Array in path.get_meta("path_polygons",[]):
+                    if Geometry2D.is_point_in_polygon(Vector2(point.x,point.z),polygon):
+                        lift=maxf(lift,float(path.get_meta("path_lift")))
+                        break
+            minimum=minf(minimum,point.y-Vector3(hit.position).y-lift)
+            checked+=1
+        print("ROAD_SOLE_DIAGNOSTIC side=",side," gap=",minimum," vertices=",checked," clip=",animator.current_animation," floor=",player.is_on_floor())
+        if minimum<-.0125 or minimum>.025:
+            root.get_texture().get_image().save_png("user://village-path-support-failed.png")
+        assert(checked>100 and minimum>=-.0125 and minimum<=.025,"Visible sole sinks/floats relative to actual road: %s %s m" % [side,minimum])
+        rows.append({"side":side,"native_skinned_vertices":checked,"gap_to_visible_road_m":minimum})
+    var file := FileAccess.open("user://village-path-support.json",FileAccess.WRITE)
+    file.store_string(JSON.stringify(rows))
+    print("VILLAGE_ROAD_SOLES_OK ",JSON.stringify(rows))

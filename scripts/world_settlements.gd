@@ -148,7 +148,7 @@ func _materialize_settlement(spec: Dictionary) -> Node3D:
 func _build_village(root: Node3D, center: Vector2, id: String) -> void:
     var yaw := _road_facing_yaw(center)
     root.rotation.y = yaw
-    _add_surface(root, "VillageSquare", Vector2(32.0, 24.0), Vector2.ZERO, 0.025, PATHS.material("paving"),"paving")
+    _add_surface(root, "VillageSquare", Vector2(32.0, 24.0), Vector2.ZERO, 0.006, PATHS.material("paving"),"paving")
 
     var layouts: Array[Dictionary] = [
         {"p":Vector2(-42,-34), "s":Vector3(10.0,3.35,8.5), "r":0.35},
@@ -197,8 +197,8 @@ func _build_fortified_town(root: Node3D, center: Vector2) -> void:
     root.rotation.y = yaw
     # Keep real meadow ground in unused plots; do not paint the entire town as
     # one giant brown rectangle. Streets and the public market own their paving.
-    _add_surface(root, "TownMainRoad", Vector2(10.0, TOWN_HALF_SIZE.y * 2.05), Vector2.ZERO, 0.075, path_material)
-    _add_surface(root, "TownCrossRoad", Vector2(TOWN_HALF_SIZE.x * 1.75, 8.0), Vector2(0, -4), 0.073, path_material)
+    _add_surface(root, "TownMainRoad", Vector2(10.0, TOWN_HALF_SIZE.y * 2.05), Vector2.ZERO, 0.008, path_material)
+    _add_surface(root, "TownCrossRoad", Vector2(TOWN_HALF_SIZE.x * 1.75, 8.0), Vector2(0, -4), 0.009, path_material)
     _build_town_walls(root, center)
 
     var buildings: Array[Dictionary] = [
@@ -375,7 +375,7 @@ func _add_crate_stack(root: Node3D, center: Vector2, local_pos: Vector2) -> void
 
 func _add_surface(root: Node3D, node_name: String, size: Vector2, local_pos: Vector2, lift: float, material: Material, kind: String = "gravel") -> void:
     var polygons: Array[PackedVector2Array] = [PATHS.rectangle(root,local_pos,size)]
-    var visual := PATHS.add(root,node_name,polygons,kind,minf(lift,0.035))
+    var visual := PATHS.add(root,node_name,polygons,kind,clampf(lift,PATHS.LIFT,PATHS.MAX_LIFT))
     if visual != null: visual.material_override = material
 
 func _add_static_box_local(root: Node3D, center: Vector2, node_name: String, size: Vector3, local_pos: Vector2, height_center: float, material: Material) -> StaticBody3D:

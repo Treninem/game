@@ -26,7 +26,15 @@
     "scripts/world_settlements.gd",
     "scripts/settlement_road_gate_overlay.gd",
     "scripts/settlement_public_works.gd",
-    "scripts/start_civilization_signs.gd"
+    "scripts/start_civilization_signs.gd",
+    "scripts/settlement_paths.gd",
+    "scripts/village_house_yards.gd"
   ],
-  "remaining": "Diffuse-only materials; hard edges and art acceptance open. No new farm/animal production assets in this package."
+  "remaining": "Diffuse-only maps, hard path borders, shoulders/drainage/graded embankments and full art acceptance open. No new farm/animal production assets in this package.",
+  "support_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+  "physical_overlay_clearance_m": [
+    0.006,
+    0.012
+  ],
+  "gravel_world_texture_frequency": 3.0
 }

@@ -1,0 +1,18 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+UI_SMOKE_CHECKPOINT: start
+UI_SMOKE_CHECKPOINT: ui-scale-baseline-restored
+UI_SMOKE_CHECKPOINT: stage-ui-instantiated
+UI_SMOKE_CHECKPOINT: stage-ui-warmup-complete
+UI_SMOKE_CHECKPOINT: opening-pause-main
+UI_SMOKE_CHECKPOINT: pause-main-settled
+UI_SMOKE_CHECKPOINT: opening-inventory
+UI_SMOKE_CHECKPOINT: inventory-settled
+UI_SMOKE_CHECKPOINT: setting-ui-scale-150
+UI_SMOKE_CHECKPOINT: ui-scale-150-settled
+UI_SMOKE_CHECKPOINT: opening-updates-150
+UI_SMOKE_CHECKPOINT: updates-150-settled
+UI_SMOKE_CHECKPOINT: opening-map-150
+UI_SMOKE_CHECKPOINT: map-150-settled
+UI_SMOKE_CHECKPOINT: passed
+UI smoke passed: rendered bounds stay centered, 150% UI scaling adapts safely, and 10 save slots are stable
