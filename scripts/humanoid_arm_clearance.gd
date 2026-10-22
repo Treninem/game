@@ -170,7 +170,9 @@ func _capsule_exit(p: Vector3,direction: Vector3,a: Vector3,b: Vector3,radius: f
 func apply(visual: Node3D,skeleton: Skeleton3D) -> void:
     var started:=Time.get_ticks_usec();last_changed_arms=0;last_max_shift_m=0.
     var clip:String=visual.get("animation_player").assigned_animation
-    if clip in ["Bow_Attack_Draw","Bow_Attack_Shoot","Sleeping","Death"]:last_usec=Time.get_ticks_usec()-started;return
+    # Bow preparation blends from the uncorrected source Idle. Keep checking
+    # that transition too; the grip pass derives bow and string from final hands.
+    if clip in ["Sleeping","Death"]:last_usec=Time.get_ticks_usec()-started;return
     if mesh_ref==null or not is_instance_valid(mesh_ref.get_ref()):
         if not _setup(visual,skeleton):return
     var cloth:=mesh_ref.get_ref() as MeshInstance3D

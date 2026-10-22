@@ -252,8 +252,12 @@ jobs:
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_hair_rendering.tscn 60
       - name: Verify arm sleeves clear torso and trousers across supported poses
         run: bash tools/run_godot_smoke.sh tests/smoke_arm_clearance.gd 300
+      - name: Verify arm clearance through actual runtime crossfades
+        run: bash tools/run_godot_smoke.sh tests/smoke_arm_blends.gd 210
       - name: Verify actual GPU arm vertices and native color poses
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_arm_clearance.gd 180
+      - name: Verify first rendered bow frame uses final corrected hands
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_bow_transition.gd 90
       - name: Verify fitted outfit coverage in final rendered poses
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_wardrobe_coverage.gd 300
       - name: Verify map cache across load and new game

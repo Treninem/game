@@ -7,10 +7,11 @@
   "pr": "https://github.com/Treninem/game/pull/12",
   "delivery": "Unreleased review; full character/world art and stable-release acceptance false",
   "changes": [
-    "Both complete two-bone arm chains avoid measured tunic/hip and segmented trouser/leg envelopes. Preserve global palm rotation, bone lengths, legs/hips and subsequent finger/weapon placement. Maximum skeleton-space wrist movement 10 cm. Applies to standing, locomotion, jumping, melee, free-hand casting, seated and legacy ground-work poses; authored bow draw/shoot, sleeping and death excluded. Ordinary citizens now receive a separate arm-only SkeletonModifier. Previously they did not get the player/preview grip pass; existing citizen gait, legs, furniture poses and equipment behavior are preserved.",
+    "Both complete two-bone arm chains avoid measured tunic/hip and segmented trouser/leg envelopes. Preserve global palm rotation, bone lengths, legs/hips and subsequent finger/weapon placement. Maximum skeleton-space wrist movement 10 cm. Applies to standing, locomotion, jumping, melee, free-hand casting, seated and legacy ground-work poses; Bow draw/shoot now also check the real early crossfade; final hands still drive bow/string placement. Sleeping and death retain authored arms. Ordinary citizens now receive a separate arm-only SkeletonModifier. Previously they did not get the player/preview grip pass; existing citizen gait, legs, furniture poses and equipment behavior are preserved.",
     "Garment profile is derived once from actual shared mesh/skin at three Build extrema and interpolated conservatively. Two shared profiles in the 960-pose test, bounded 16-entry cache; no per-frame mesh scans, material copies, new shader or physics backend.",
     "Independent bidirectional proper triangle intersection gate, positive/negative canaries, eight Build values including presets. Generalized the existing CPU skin probe with optional part/material arguments; old two-argument covered-body use unchanged. Retained all 960 player/preview cases and added 384 ordinary-citizen cases with no preview metadata or player gait modifier.",
-    "Native GPU oracle preserves packed source buffers and source SkinReference, uses one frame for XYZ, demands exact 192-code RGB calibration and compares final vertices. 34 native corrected player/citizen poses and 62 before/after/color views. Required CI geometry and graphical gates added while retaining every parent gate."
+    "Native GPU oracle preserves packed source buffers and source SkinReference, uses one frame for XYZ, demands exact 192-code RGB calibration and compares final vertices. 34 native corrected player/citizen poses and 62 before/after/color views. Required CI geometry and graphical gates added while retaining every parent gate.",
+    "Fixed the blanket bow-clip exclusion: it allowed the still-blended source Idle hands through clothing in the first draw frames. Retained the real runtime crossfade duration; no snap/shorter animation hides the defect. New independent 504-frame gate calls actual _play; new native four-sample first-frame before/after GPU/color gate added, preserving all earlier checks."
   ],
   "metrics": {
     "after_pairs": 0,
@@ -55,11 +56,11 @@
     "max_bone_length_error_m": 1.19209289550781e-07,
     "max_global_wrist_angle_error_rad": 0.0009765625,
     "max_wrist_shift_m": 0.0999999418854713,
-    "mean_helper_usec": 184.43526785714286,
-    "max_helper_usec": 3357,
+    "mean_helper_usec": 171.10044642857142,
+    "max_helper_usec": 20569,
     "cold_shared_profile_usec": [
-      102241,
-      86531
+      82629,
+      73859
     ],
     "shared_profiles": 2,
     "gpu_native_poses": 34,
@@ -67,25 +68,30 @@
     "max_gpu_cpu_error_m": 1.67934172168316e-06,
     "scope": "Proper forearm sleeve crossings with trousers and non-arm tunic torso >0.5mm; not whole garment contact, visible defect counts or artistic acceptance",
     "player_preview_poses": 960,
-    "ordinary_citizen_poses": 384
+    "ordinary_citizen_poses": 384,
+    "runtime_crossfade_samples": 504,
+    "failed_runtime_crossfade_samples": 0,
+    "first_draw_gpu_samples": 4,
+    "first_draw_color_frames": 4,
+    "first_draw_gpu_max_error_m": 1.56740895818075e-06
   },
   "local_checks": {
     "import": {
       "case": "import",
       "exit_code": 0,
-      "seconds": 42.0,
+      "seconds": 32.77,
       "errors": []
     },
     "arms": {
       "case": "arms",
       "exit_code": 0,
-      "seconds": 185.12,
+      "seconds": 141.05,
       "errors": []
     },
     "frames": {
       "case": "frames",
       "exit_code": 0,
-      "seconds": 17.11,
+      "seconds": 13.94,
       "errors": []
     },
     "coverage": {
@@ -97,13 +103,13 @@
     "weapon_grip": {
       "case": "weapon_grip",
       "exit_code": 0,
-      "seconds": 16.89,
+      "seconds": 14.3,
       "errors": []
     },
     "cast_pose": {
       "case": "cast_pose",
       "exit_code": 0,
-      "seconds": 5.16,
+      "seconds": 4.62,
       "errors": []
     },
     "household_pose": {
@@ -151,7 +157,7 @@
     "world": {
       "case": "world",
       "exit_code": 0,
-      "seconds": 180.16,
+      "seconds": 53.53,
       "errors": []
     },
     "workshop": {
@@ -181,7 +187,7 @@
     "locomotion_facing": {
       "case": "locomotion_facing",
       "exit_code": 0,
-      "seconds": 65.8,
+      "seconds": 52.08,
       "errors": []
     },
     "household_aisle": {
@@ -207,21 +213,33 @@
       "exit_code": 0,
       "seconds": 75.66,
       "errors": []
+    },
+    "blends": {
+      "case": "blends",
+      "exit_code": 0,
+      "seconds": 32.26,
+      "errors": []
+    },
+    "bow_transition_view": {
+      "case": "bow_transition_view",
+      "exit_code": 0,
+      "seconds": 15.39,
+      "errors": []
     }
   },
   "evidence": "docs/review/2026-10-22-arm-clearance",
   "runtime": {
     "input": "Automated normal actions; not manual play",
     "player_position_assignments": 0,
-    "forest_walk_m": 28.6910329116508,
+    "forest_walk_m": 28.2695438424125,
     "workshop_walk_m": 40.2875630338676,
     "two_body_motion_walk_m": 27.2236036113463,
     "capital_entry": "Previously earned unedited arrival, not a fresh whole journey",
     "creator": "Two physical heights 160/195 cm; nine forms; saved appearance",
-    "actions": "equip/bow/axe/magic/jump; 22 live bow blends; 12 inventory/map cycles; disk roundtrips",
+    "actions": "equip/bow/axe/magic/jump; 29 live bow blends; 12 inventory/map cycles; disk roundtrips",
     "workshop": "Finite paid trade, physical approach, five displayed arrows, saved recipe resume and finite stock; clock/survival fixture 09:00",
     "medium_120_frame_samples": {
-      "forest_mean_ms": 31.5767583333333,
+      "forest_mean_ms": 41.91635,
       "workshop_mean_ms": 39.9318333333333
     },
     "sample_limits": "Not sustained FPS; video resource counters are not dedicated VRAM allocation"
@@ -235,6 +253,11 @@
     {
       "case": "airborne_actions harness invocation",
       "result": "Nonexistent scene typo; not runtime regression or a passed test; real existing motion/landing fixtures passed"
+    },
+    {
+      "case": "Idle -> Bow_Attack_Draw at actual 0.06-second runtime blend",
+      "before": "3 crossing frames among 168 Build+0.5 prototype samples; a prior 0.18-second diagnostic was a test-model mismatch, corrected before attributing the runtime bug",
+      "after": "504 accepted frames on both bodies / three Build / six actual runtime transitions; zero crossings; four first-frame native GPU/color samples passed"
     }
   ],
   "research_rejected": {
@@ -251,7 +274,7 @@
     "Repeated clean-profile camera boot timing bound failure; reliable cold-start performance remains open"
   ],
   "next": "Reliable cold-start resource/chunk performance on the weak PC, coherent garment/prop contact and transitions, then character/world art together. Preserve full readiness, quality settings, geometry/morphs/saves and inspect native frames.",
-  "ci": "Parent b7dc8a68: all eight exact-SHA CI SUCCESS, including actual 960-pose and 22-pose GPU gates. This citizen follow-up is verified at its own exact SHA after push; no stable release.",
-  "followup_parent_commit": "b7dc8a685eb80e4cc507a62c9547d0871ec9df5f",
-  "validation_phases": "b7dc8a68 first phase: 19 successful local stages. Follow-up retains unaffected player receipts and repeats import, expanded geometry/GPU, household poses, working poses, four citizen/household/capital regressions and the native workshop; final exact-head CI repeats mandatory gates."
+  "ci": "Parent b61aa32e: all eight exact-SHA CI SUCCESS. Final bow-transition fix is checked at its own exact SHA after push; no stable release.",
+  "followup_parent_commit": "b61aa32e204f862d3d1397bec0d6dab5ee89de0d",
+  "validation_phases": "b7dc8a68 first phase: 19 successful local stages. Follow-up retains unaffected player receipts and repeats import, expanded geometry/GPU, household poses, working poses, four citizen/household/capital regressions and the native workshop; final exact-head CI repeats mandatory gates. Third phase repeats full 1344-pose geometry, GPU pose views, grips, casting, locomotion/sole/landing and native world actions after the bow fix; adds 504 runtime transition frames and first-frame native GPU/color."
 }

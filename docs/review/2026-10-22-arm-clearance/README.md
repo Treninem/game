@@ -14,7 +14,7 @@ presets), 15 clips and four phases. It independently intersects actual final
 skinned sleeve triangles with trousers and the tunic torso, counting proper
 crossings deeper than 0.5 mm. 42438 pairs before, zero after; these are geometric
 pairs, not visible bugs. Bone lengths, global palm rotation and supported legs
-are checked separately. Bow draw/shoot, sleeping and death retain authored arms.
+are checked separately. Sleeping and death retain authored arms. Bow preparation now also checks the actual crossfade; valid settled bow poses retain their authored placement.
 This does not certify the whole tunic/waist/hem, elbow volume, every continuous
 blend or a full wardrobe.
 
@@ -25,13 +25,13 @@ The existing independent 810-view covered-skin gate still passes. World Core
 gains required geometry and graphical GPU checks without removing old gates.
 
 `head-size-*` and `workshop-standing-production.png` are actual game frames.
-Normal automated inputs walked 28.69 m in the forest, 40.29 m from the previously
+Normal automated inputs walked 28.27 m in the forest, 40.29 m from the previously
 earned capital arrival, and 27.22 m in the separate two-body action fixture.
 No driver position writes, no fresh full forest-to-capital run. Tested creator,
 two heights, nine forms, equip, bow, axe, magic, repeated menus and disk saves.
 The workshop fixture holds the clock/survival for inspection; finite paid
 trading and saved production still execute. Medium 120-frame means: forest
-31.58 ms, workshop 39.93 ms. These are bounded samples, not sustained FPS.
+41.92 ms, workshop 39.93 ms. These are bounded samples, not sustained FPS.
 
 An initial unchanged camera boot timed out at its existing 35-second limit;
 the exact same warmed-profile test then passed both mouse modes, three UI scales,
@@ -57,3 +57,19 @@ Real home routes, stationary-player clearance, saved/streamed citizens, finite
 workshop production and the native workshop frame were repeated after this wiring.
 The other retained local player checks precede the citizen-only wiring; the final
 exact-head World Core repeats its complete mandatory gates.
+
+An extra transition probe reproduced three crossing frames during the real
+0.06-second Idle-to-bow blend at Build +0.5 before the fix. The garment pass had
+skipped the entire assigned bow clip, including blended source Idle. It now
+also checks bow poses; final palms still drive weapon and string placement.
+The permanent gate calls the actual runtime `_play` method, then samples 504
+frames: two bodies, three Build values, six transitions at 60 Hz. Zero failed
+frames. Existing positive/negative geometry controls and nonempty actual-mesh
+assertions remain mandatory. This is six bounded transitions, not all blends.
+
+`arm-before-*-BowTransition.png` / `arm-after-*-BowTransition.png` show the first
+1/60-second bow preparation frame. The native test compares four actual GPU
+samples (before/after on both bodies) against the final snapshot and retains
+four unedited color frames. Geometry and first-frame GPU checks are required
+in World Core. The native world bow/action/UI/disk run was repeated after the
+fix; 29 live bow samples passed. These checks do not accept the bow mesh's art.

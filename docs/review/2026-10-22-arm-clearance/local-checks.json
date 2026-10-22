@@ -2,19 +2,19 @@
   "import": {
     "case": "import",
     "exit_code": 0,
-    "seconds": 42.0,
+    "seconds": 32.77,
     "errors": []
   },
   "arms": {
     "case": "arms",
     "exit_code": 0,
-    "seconds": 185.12,
+    "seconds": 141.05,
     "errors": []
   },
   "frames": {
     "case": "frames",
     "exit_code": 0,
-    "seconds": 17.11,
+    "seconds": 13.94,
     "errors": []
   },
   "coverage": {
@@ -26,13 +26,13 @@
   "weapon_grip": {
     "case": "weapon_grip",
     "exit_code": 0,
-    "seconds": 16.89,
+    "seconds": 14.3,
     "errors": []
   },
   "cast_pose": {
     "case": "cast_pose",
     "exit_code": 0,
-    "seconds": 5.16,
+    "seconds": 4.62,
     "errors": []
   },
   "household_pose": {
@@ -80,7 +80,7 @@
   "world": {
     "case": "world",
     "exit_code": 0,
-    "seconds": 180.16,
+    "seconds": 53.53,
     "errors": []
   },
   "workshop": {
@@ -110,7 +110,7 @@
   "locomotion_facing": {
     "case": "locomotion_facing",
     "exit_code": 0,
-    "seconds": 65.8,
+    "seconds": 52.08,
     "errors": []
   },
   "household_aisle": {
@@ -135,6 +135,18 @@
     "case": "capital_square",
     "exit_code": 0,
     "seconds": 75.66,
+    "errors": []
+  },
+  "blends": {
+    "case": "blends",
+    "exit_code": 0,
+    "seconds": 32.26,
+    "errors": []
+  },
+  "bow_transition_view": {
+    "case": "bow_transition_view",
+    "exit_code": 0,
+    "seconds": 15.39,
     "errors": []
   }
 }

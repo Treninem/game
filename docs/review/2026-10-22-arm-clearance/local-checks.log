@@ -12,12 +12,10 @@ Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
 [0m
 WARNING: UID duplicate detected between res://assets/vfx/third_party/binbun_godot4_electric/shared/scene_empty.tscn and res://assets/vfx/third_party/binbun_godot4_core/shared/scene_empty.tscn.
    at: _process_file_system (editor/file_system/editor_file_system.cpp:1405)
-[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (5 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (3 steps)[39m[0m
 [   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  16% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  33% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  25% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
 [  50% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  66% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
 [92m[ DONE ][39m [1mupdate_scripts_classes[22m
 [0m
 [   0% ] [90m[1mloading_editor_layout[22m | Started Загрузка редактора (5 steps)[39m[0m
@@ -67,7 +65,7 @@ ARM_CONTACT_BODY mode=female_citizen build=0.05 cumulative_before_pairs=38761 af
 ARM_CONTACT_BODY mode=female_citizen build=0.12 cumulative_before_pairs=40566 after_pairs=0 failed_poses=0
 ARM_CONTACT_BODY mode=female_citizen build=0.4 cumulative_before_pairs=42438 after_pairs=0 failed_poses=0
 ARM_CONTACT_RECORDED poses=1344 before_pairs=42438 after_pairs=0 failed_poses=0 regressions=0
-ARM_CLEARANCE_OK poses=1344 shared_profiles=2 cold_usec=[102241, 86531]
+ARM_CLEARANCE_OK poses=1344 shared_profiles=2 cold_usec=[82629, 73859]
 
 
 CASE frames
@@ -214,17 +212,24 @@ LIVE_BOW_BLEND_SAMPLE 19
 LIVE_BOW_BLEND_SAMPLE 20
 LIVE_BOW_BLEND_SAMPLE 21
 LIVE_BOW_BLEND_SAMPLE 22
+LIVE_BOW_BLEND_SAMPLE 23
+LIVE_BOW_BLEND_SAMPLE 24
+LIVE_BOW_BLEND_SAMPLE 25
+LIVE_BOW_BLEND_SAMPLE 26
+LIVE_BOW_BLEND_SAMPLE 27
+LIVE_BOW_BLEND_SAMPLE 28
+LIVE_BOW_BLEND_SAMPLE 29
 CAST_BEFORE input_disabled=false player_unhandled=true focus=true
 CAST_INPUT_STAGE input paused=false handled=false
 CAST_INPUT_STAGE unhandled paused=false
-MAGIC_INPUT_DIAGNOSTIC {"casts":1,"cooldown":3.84025666666667,"dialogue":false,"focus":"<Object#null>","mana":70.7987166666667,"paused":false,"selected":"heal"}
+MAGIC_INPUT_DIAGNOSTIC {"casts":1,"cooldown":3.84421333333333,"dialogue":false,"focus":"<Object#null>","mana":70.7789333333333,"paused":false,"selected":"heal"}
 CAST_INPUT_STAGE input paused=false handled=false
 CAST_INPUT_STAGE unhandled paused=false
 MAGIC_NATIVE_SAVE_OK action=cast_magic selected=heal cooldown=restored blocked_cast=no_mana_cost
 UI_NATIVE_REOPEN_OK cycles=12 inventory+map gameplay_resumed=true
-LIVE_BOW_BLEND_OK samples=22
-OUTFIT_WORLD_FRAME_SAMPLE frames=120 mean_ms=31.5767583333333 video_bytes=490580310 draw_calls=1098
-FACE_CONTROLS_NATIVE_OK {"bow_arrow_consumed":true,"captures":["user://head-size-walk.png","user://head-size-run.png","user://head-size-tall-jump.png","user://head-size-starter_axe.png","user://head-size-short_bow.png","user://head-size-bow-released.png","user://head-size-short-walk.png","user://head-size-short-jump.png","user://head-size-cast-free-hand.png","user://head-size-magic-after-load.png","user://head-size-inventory-lifecycle.png","user://head-size-outfit-quality-0.png","user://head-size-outfit-quality-1.png","user://head-size-outfit-quality-2.png","user://head-size-outfit-quality-3.png"],"game_save_roundtrip":true,"jump_both_heights":true,"look_roundtrip":true,"morphs":9,"physical_heights_cm":[160,195],"player_position_assignments":0,"walked_m":28.6910329116508}
+LIVE_BOW_BLEND_OK samples=29
+OUTFIT_WORLD_FRAME_SAMPLE frames=120 mean_ms=41.91635 video_bytes=484186374 draw_calls=1095
+FACE_CONTROLS_NATIVE_OK {"bow_arrow_consumed":true,"captures":["user://head-size-walk.png","user://head-size-run.png","user://head-size-tall-jump.png","user://head-size-starter_axe.png","user://head-size-short_bow.png","user://head-size-bow-released.png","user://head-size-short-walk.png","user://head-size-short-jump.png","user://head-size-cast-free-hand.png","user://head-size-magic-after-load.png","user://head-size-inventory-lifecycle.png","user://head-size-outfit-quality-0.png","user://head-size-outfit-quality-1.png","user://head-size-outfit-quality-2.png","user://head-size-outfit-quality-3.png"],"game_save_roundtrip":true,"jump_both_heights":true,"look_roundtrip":true,"morphs":9,"physical_heights_cm":[160,195],"player_position_assignments":0,"walked_m":28.2695438424125}
 WARNING: 82 ObjectDB instances were leaked at exit (run with `--verbose` for details).
    at: cleanup (core/object/object.cpp:2536)
 
@@ -270,10 +275,10 @@ AIRBORNE_ACTIONS_CHECKED bodies=2 actions=6 legs=6 idle=retained landing=reset g
 JUMP_PHASE_PROFILE male knee_bends=[59.219768670194, 89.7135033895528, 17.0467451493828]
 JUMP_PHASE_PROFILE female knee_bends=[59.2197755003832, 89.713551200877, 17.0467502720247]
 JUMP_PHASES_CHECKED bodies=2 physical_velocity=rise,apex,fall combat_legs=matched
-HUMANOID_SUPPORT_CHECKED poses=336 bodies=2 heights=3 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=0.0 max_gap=0.00400030883448 modifier_p95_usec=1502
-HUMANOID_EDGE_CHECKED poses=24 bodies=2 heights=3 ledge_sides=2 actions=1 phases=2 all_boot_vertices=true min_gap=0.0 max_gap=0.00400007981807 modifier_p95_usec=2729
-HUMANOID_LANDING_PROFILE male compression=0.08420550793395 peak_sole_gap=0.00399999320507 neutral_hip=1.02775835990906 peak_hip=0.94523131847382
-HUMANOID_LANDING_PROFILE female compression=0.07476235494661 peak_sole_gap=0.00157657079399 neutral_hip=0.9957594871521 peak_hip=0.9084507226944
+HUMANOID_SUPPORT_CHECKED poses=336 bodies=2 heights=3 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=0.0 max_gap=0.00400030883448 modifier_p95_usec=1485
+HUMANOID_EDGE_CHECKED poses=24 bodies=2 heights=3 ledge_sides=2 actions=1 phases=2 all_boot_vertices=true min_gap=0.0 max_gap=0.0040001058951 modifier_p95_usec=2757
+HUMANOID_LANDING_PROFILE male compression=0.08420550793395 peak_sole_gap=0.00399999320507 neutral_hip=1.02771985530853 peak_hip=0.94523131847382
+HUMANOID_LANDING_PROFILE female compression=0.07476235494661 peak_sole_gap=0.00199010595679 neutral_hip=0.99571007490158 peak_hip=0.9085009098053
 HUMANOID_LANDING_CHECKED bodies=2 input=jump impact=physical soles=skinned recovery=idle gait_phase=retained transient_reset=true
 LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2
 
@@ -312,3 +317,61 @@ CASE capital_square
 Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
 
 CAPITAL_SQUARE_OK props=authored grounded=true route=walked paving=textured workshop=canonical_recipe supplied=paid stock=finite reload=persistent lamps=evening
+
+
+CASE blends
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ARM_BLEND_PHASE sex=male transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_CONTACT_RECORDED poses=504 failed=0
+ARM_BLEND_CONTACT_OK poses=504 bodies=2 builds=3 transitions=6 runtime_play=true
+
+
+CASE bow_transition_view
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+BOW_TRANSITION_GPU_OK samples=4 frames=4

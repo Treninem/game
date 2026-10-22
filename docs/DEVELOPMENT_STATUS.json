@@ -6,7 +6,7 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты.",
+  "current_stage": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты. Исправлены первые кадры подготовки лука: прежнее исключение пропускало исходный Idle сквозь одежду. 504 кадра шести настоящих переходов и четыре нативных GPU/цветовых образца прошли; выстрел, хват, тетива и диск повторно проверены.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_ARM_CLEARANCE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
@@ -384,8 +384,8 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "b7dc8a685eb80e4cc507a62c9547d0871ec9df5f",
-  "last_verified_runtime_ci": "b7dc8a68: восемь exact-SHA CI SUCCESS. Связанный пакет имеет 23 успешных локальных этапа в двух фазах; холодный запуск на UHD610 нестабилен. Дополнение жителей проверяется собственным exact-SHA CI после push. Стабильного выпуска нет.",
+  "last_verified_runtime_commit": "b61aa32e204f862d3d1397bec0d6dab5ee89de0d",
+  "last_verified_runtime_ci": "b61aa32e: восемь exact-SHA CI SUCCESS. Связанный пакет имеет 25 успешных локальных этапов в трёх фазах; холодный запуск на UHD610 нестабилен. Финальный переход лука проверяется собственным exact-SHA CI после push. Стабильного выпуска нет.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
     "exit_object_leaks": 82,
@@ -455,6 +455,10 @@
     "native_color_frames": 62,
     "remote_ci": "Exact new SHA verification follows push",
     "ordinary_citizen_poses": 384,
-    "cold_boot_timing_accepted": false
+    "cold_boot_timing_accepted": false,
+    "runtime_crossfade_samples": 504,
+    "failed_runtime_crossfade_samples": 0,
+    "first_draw_gpu_samples": 4,
+    "first_draw_color_frames": 4
   }
 }
