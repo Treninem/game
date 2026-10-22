@@ -382,7 +382,7 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         var world := origin + Vector2(lx, lz)
         if _inside_nature_clearing(world):
             continue
-        if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 1.0:
+        if GEOGRAPHY.distance_to_primary_road(world, GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 1.0) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 1.0:
             continue
         if GEOGRAPHY.in_start_region(world) and GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_BANK_WIDTH + 5.0:
             continue
@@ -406,7 +406,7 @@ func _add_vegetation(chunk: Node3D, coord: Vector2i, biome: String) -> void:
             var world := origin + local
             if _inside_nature_clearing(world):
                 continue
-            if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH:
+            if GEOGRAPHY.distance_to_primary_road(world, GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH:
                 continue
             var height := WorldData.elevation_at(world)
             if not WorldData.water_kind_at(world).is_empty():
@@ -438,7 +438,7 @@ func _add_gatherables(chunk: Node3D, coord: Vector2i, biome: String) -> void:
         var world := origin + Vector2(lx, lz)
         if GEOGRAPHY.in_start_region(world) and GEOGRAPHY.distance_to_start_river(world) < GEOGRAPHY.START_RIVER_HALF_WIDTH + 4.0:
             continue
-        if GEOGRAPHY.distance_to_primary_road(world) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 2.0:
+        if GEOGRAPHY.distance_to_primary_road(world, GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 2.0) < GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH + 2.0:
             continue
         var height := WorldData.elevation_at(world)
         if height < WorldData.SEA_LEVEL + 0.4:

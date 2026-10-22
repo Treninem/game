@@ -1,0 +1,121 @@
+{
+  "camera_clean_high_1": {
+    "case": "camera_clean_high_1",
+    "exit_code": 1,
+    "seconds": 30.84,
+    "errors": [
+      "ERROR: Boot/world smoke: new game bypassed the character creator"
+    ]
+  },
+  "camera_clean_high_2": {
+    "case": "camera_clean_high_2",
+    "exit_code": 1,
+    "seconds": 24.47,
+    "errors": [
+      "ERROR: Boot/world smoke: new game bypassed the character creator"
+    ]
+  },
+  "camera_low_diagnostic": {
+    "case": "camera_low_diagnostic",
+    "exit_code": 1,
+    "seconds": 28.11,
+    "errors": [
+      "ERROR: Boot/world smoke: new game bypassed the character creator"
+    ]
+  },
+  "camera_warm_high": {
+    "case": "camera_warm_high",
+    "exit_code": 1,
+    "seconds": 51.74,
+    "errors": [
+      "ERROR: Boot/world smoke: world did not become playable within 35 seconds"
+    ]
+  },
+  "canonical_regions": {
+    "case": "canonical_regions",
+    "exit_code": 0,
+    "seconds": 11.83,
+    "errors": []
+  },
+  "compare": {
+    "case": "compare",
+    "exit_code": 0,
+    "seconds": 74.67,
+    "errors": []
+  },
+  "geography": {
+    "case": "geography",
+    "exit_code": 1,
+    "seconds": 12.8,
+    "errors": [
+      "ERROR: Cannot open file 'res://tests/smoke_geography.tscn'.",
+      "ERROR: Failed loading resource: res://tests/smoke_geography.tscn."
+    ]
+  },
+  "nature_clearings": {
+    "case": "nature_clearings",
+    "exit_code": 0,
+    "seconds": 21.39,
+    "errors": []
+  },
+  "player_movement": {
+    "case": "player_movement",
+    "exit_code": 0,
+    "seconds": 66.05,
+    "errors": []
+  },
+  "river_shoreline": {
+    "case": "river_shoreline",
+    "exit_code": 0,
+    "seconds": 20.83,
+    "errors": []
+  },
+  "roads": {
+    "case": "roads",
+    "exit_code": 0,
+    "seconds": 12.66,
+    "errors": []
+  },
+  "save_recovery": {
+    "case": "save_recovery",
+    "exit_code": 0,
+    "seconds": 9.53,
+    "errors": []
+  },
+  "terrain_geometry": {
+    "case": "terrain_geometry",
+    "exit_code": 0,
+    "seconds": 15.05,
+    "errors": []
+  },
+  "terrain_paths": {
+    "case": "terrain_paths",
+    "exit_code": 0,
+    "seconds": 28.73,
+    "errors": []
+  },
+  "terrain_surface": {
+    "case": "terrain_surface",
+    "exit_code": 0,
+    "seconds": 13.91,
+    "errors": []
+  },
+  "world": {
+    "case": "world",
+    "exit_code": 0,
+    "seconds": 148.92,
+    "errors": []
+  },
+  "world_crossings": {
+    "case": "world_crossings",
+    "exit_code": 0,
+    "seconds": 8.34,
+    "errors": []
+  },
+  "world_hydrology": {
+    "case": "world_hydrology",
+    "exit_code": 0,
+    "seconds": 8.94,
+    "errors": []
+  }
+}

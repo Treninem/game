@@ -159,6 +159,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
       - name: Verify canonical regions and climate
         run: bash tools/run_godot_smoke.sh tests/smoke_canonical_regions.tscn 90
+      - name: Verify exact and bounded road distances against independent geometry
+        run: bash tools/run_godot_smoke.sh tests/smoke_road_distance.gd 90
       - name: Verify terrain seam normals and matching physical triangles
         run: bash tools/run_godot_smoke.sh tests/smoke_terrain_geometry.tscn 90
       - name: Verify conforming river shore and shared physical edges

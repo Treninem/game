@@ -77,11 +77,11 @@
         "Журнал, проверочные кадры и узкие коммиты синхронизируются",
         "Нет стабильного выпуска при красных или отсутствующих обязательных проверках"
       ],
-      "current": "b61aa32e: восемь exact-SHA CI SUCCESS. Связанный пакет имеет 25 успешных локальных этапов в трёх фазах; холодный запуск на UHD610 нестабилен. Финальный переход лука проверяется собственным exact-SHA CI после push. Стабильного выпуска нет. Все прежние gates сохранены."
+      "current": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет. Проверены 101113 неизменных высот, 5948 биомов/воды/температуры, 3240 независимых дорожных проб и обычный нативный ввод; полная приёмка открыта."
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_ARM_CLEARANCE.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
   "last_updated": "2026-10-22",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_ARM_CLEARANCE.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
@@ -103,5 +103,21 @@
     "paths": "Stone paving, gravel fill, compacted soil and forest tracks according to function; connected entrances, physical contact and readable map. Owner explicitly reiterated paving/fill on 22 October.",
     "implemented_scope": "Terrain-conforming road/market/gate surfaces; both established villages: clear gate-to-square streets and 15 actual entrance paths; legacy duplicate cart overlay removed; 15 connected fenced household plots, persistent finite berries and selected roofed storage, measured Blender exterior details Покрытия ограничены зазором 6–12 мм; масштаб гравия уменьшен; физическая опора и 173.30 м обычного автоматизированного движения с дверью/диском повторно проверены.",
     "open_scope": "Dense varied blocks/estates, crop fields/barns/domestic livestock and actual resident agriculture, full naturalistic art; far terrain/mountains/river expansion and village-path map layer Raised graded embankments, shoulders/drainage and soft natural path borders remain open."
+  },
+  "latest_startup_performance_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+    "height_points": 101113,
+    "changed_heights": 0,
+    "biome_water_temperature_points": 5948,
+    "road_oracle_points": 3240,
+    "median_elevation_ms": {
+      "old": 6771.3975,
+      "new": 5275.477
+    },
+    "native_walk_m": 28.5022018309683,
+    "cold_start_accepted": false,
+    "fps_gain_confirmed": false,
+    "full_art_accepted": false,
+    "remote_ci": "Exact new SHA verification follows push"
   }
 }

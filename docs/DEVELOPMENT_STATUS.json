@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты. Исправлены первые кадры подготовки лука: прежнее исключение пропускало исходный Idle сквозь одежду. 504 кадра шести настоящих переходов и четыре нативных GPU/цветовых образца прошли; выстрел, хват, тетива и диск повторно проверены.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_ARM_CLEARANCE.json",
+  "current_stage": "Ускорены связанные выборки рельефа, дорожных обочин, биомов и растительности без изменения геометрии: 101113 высот совпали точно; медиана CPU-выборки 6,77 -> 5,28 с. Пройдено 28,50 м автоматизированным вводом, действия/четыре качества/UI/диск проверены. Холодный редактор и мир на UHD610 по-прежнему не укладываются в обязательные сроки. Полная художественная приёмка и стабильный выпуск открыты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -206,8 +206,8 @@
     "Проверять совместно картинку, игровой цикл, сохранение и производительность; 30 FPS на низких подтвердить длительным проходом, а не одним видом."
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "8282e769: восемь exact-SHA CI SUCCESS перепроверены. Пакет опоры дорожек локально проверен; собственный exact-SHA CI проверяется после push. Стабильного выпуска нет.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+  "ci_followup_status": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -384,8 +384,8 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "b61aa32e204f862d3d1397bec0d6dab5ee89de0d",
-  "last_verified_runtime_ci": "b61aa32e: восемь exact-SHA CI SUCCESS. Связанный пакет имеет 25 успешных локальных этапов в трёх фазах; холодный запуск на UHD610 нестабилен. Финальный переход лука проверяется собственным exact-SHA CI после push. Стабильного выпуска нет.",
+  "last_verified_runtime_commit": "b8d03d105d5aa1a4f457dd62b234379b6edd17b5",
+  "last_verified_runtime_ci": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
     "exit_object_leaks": 82,
@@ -453,12 +453,29 @@
     "covered_skin_views": 810,
     "native_gpu_poses": 34,
     "native_color_frames": 62,
-    "remote_ci": "Exact new SHA verification follows push",
+    "remote_ci": "b8d03d10: все восемь exact-SHA CI SUCCESS; локальная и CI геометрия/переходы/GPU подтверждены.",
     "ordinary_citizen_poses": 384,
     "cold_boot_timing_accepted": false,
     "runtime_crossfade_samples": 504,
     "failed_runtime_crossfade_samples": 0,
     "first_draw_gpu_samples": 4,
     "first_draw_color_frames": 4
-  }
+  },
+  "latest_startup_performance_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+    "height_points": 101113,
+    "changed_heights": 0,
+    "biome_water_temperature_points": 5948,
+    "road_oracle_points": 3240,
+    "median_elevation_ms": {
+      "old": 6771.3975,
+      "new": 5275.477
+    },
+    "native_walk_m": 28.5022018309683,
+    "cold_start_accepted": false,
+    "fps_gain_confirmed": false,
+    "full_art_accepted": false,
+    "remote_ci": "Exact new SHA verification follows push"
+  },
+  "latest_tested_source_mirror": "build/startup-performance; existing build/stability review launcher remains on b8d03d10, user applications were not closed or replaced."
 }

@@ -1,0 +1,38 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PROFILE dependency=res://scripts/bootstrap.gd ms=311.617
+PROFILE dependency=res://scripts/player_controller.gd ms=2541.247
+PROFILE dependency=res://scripts/game_menu.gd ms=425.731
+PROFILE dependency=res://scripts/hud_runtime.gd ms=424.289
+PROFILE dependency=res://scripts/dialogue_ui.gd ms=144.232
+PROFILE dependency=res://scripts/city_streamer_fast.gd ms=8221.036
+PROFILE dependency=res://scripts/humanoid_visual.gd ms=0.027
+PROFILE dependency=res://scripts/world_streamer.gd ms=1683.795
+PROFILE dependency=res://scripts/gameplay_panels.gd ms=1411.526
+PROFILE dependency=res://scripts/capital_perimeter.gd ms=205.073
+PROFILE dependency=res://scripts/world_environment_controller.gd ms=103.84
+PROFILE dependency=res://scripts/runtime_stability_guard.gd ms=203.779
+PROFILE dependency=res://scripts/start_spawn_surface.gd ms=101.96
+PROFILE dependency=res://scripts/start_region_streamer.gd ms=1127.07
+PROFILE dependency=res://scripts/start_civilization_signs.gd ms=152.767
+PROFILE dependency=res://scripts/world_settlements.gd ms=698.162
+PROFILE dependency=res://scripts/settlement_road_gate_overlay.gd ms=83.704
+PROFILE dependency=res://scripts/settlement_interior_visuals.gd ms=709.726
+PROFILE dependency=res://scripts/settlement_public_works.gd ms=391.33
+PROFILE dependency=res://scripts/settlement_civic_spaces.gd ms=58.237
+PROFILE dependency=res://scripts/world_audio.gd ms=602.609
+PROFILE dependency=res://scripts/third_person_camera.gd ms=47.74
+PROFILE dependency=res://scripts/dungeon_runtime.gd ms=298.804
+PROFILE dependency=res://scripts/dungeon_portal.gd ms=111.428
+PROFILE dependency=res://scripts/dungeon_manager_npc.gd ms=102.56
+PROFILE dependency=res://scripts/vip_flight_controller.gd ms=119.057
+PROFILE dependency=res://scripts/combat_state_controller.gd ms=68.285
+PROFILE dependency=res://scripts/capital_night_siege.gd ms=137.416
+PROFILE dependency=res://scripts/plot_runtime.gd ms=178.225
+PROFILE dependency=res://scripts/realm_runtime.gd ms=225.079
+PROFILE dependency=res://scripts/realm_portal.gd ms=0.04
+PROFILE dependency=res://scripts/minigame_runtime.gd ms=174.2
+PROFILE resource_ms=22482.758
+PROFILE instantiate_ms=12.663
+PROFILE terrain=[{"coord":"(0, 0)","ms":339.122,"vertices":2647},{"coord":"(-2, -2)","ms":123.674,"vertices":2401},{"coord":"(2, 2)","ms":254.297,"vertices":2401}]
+PROFILE elevations_ms=3606.168 checksum=305197.279504986

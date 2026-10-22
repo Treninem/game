@@ -1,0 +1,6 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PROFILE resource_ms=55216.012
+PROFILE instantiate_ms=14.874
+PROFILE terrain=[{"coord":"(0, 0)","ms":372.228,"vertices":2647},{"coord":"(-2, -2)","ms":179.845,"vertices":2401},{"coord":"(2, 2)","ms":130.886,"vertices":2401}]
+PROFILE elevations_ms=5779.763 checksum=305197.279504986
