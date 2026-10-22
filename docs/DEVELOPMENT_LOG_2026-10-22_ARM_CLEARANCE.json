@@ -1,0 +1,228 @@
+{
+  "date": "2026-10-22",
+  "version": "0.10.7.3",
+  "branch": "codex/household-persistence-2026-10-19",
+  "parent_commit": "8df014f0938a1d14ff15bef84e66c68f06371fdb",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; full character/world art and stable-release acceptance false",
+  "changes": [
+    "Both complete two-bone arm chains avoid measured tunic/hip and segmented trouser/leg envelopes. Preserve global palm rotation, bone lengths, legs/hips and subsequent finger/weapon placement. Maximum skeleton-space wrist movement 10 cm. Applies to standing, locomotion, jumping, melee, free-hand casting, seated and legacy ground-work poses; authored bow draw/shoot, sleeping and death excluded.",
+    "Garment profile is derived once from actual shared mesh/skin at three Build extrema and interpolated conservatively. Two shared profiles in the 960-pose test, bounded 16-entry cache; no per-frame mesh scans, material copies, new shader or physics backend.",
+    "Independent bidirectional proper triangle intersection gate, positive/negative canaries, eight Build values including presets. Generalized the existing CPU skin probe with optional part/material arguments; old two-argument covered-body use unchanged.",
+    "Native GPU oracle preserves packed source buffers and source SkinReference, uses one frame for XYZ, demands exact 192-code RGB calibration and compares final vertices. 22 native corrected poses and 38 before/after/color views. Required CI geometry and graphical gates added while retaining every parent gate."
+  ],
+  "metrics": {
+    "after_pairs": 0,
+    "before_pairs": 27588,
+    "failed_poses": 0,
+    "regressions": 0,
+    "poses": 960,
+    "bodies": 2,
+    "build_values": [
+      0,
+      -0.5,
+      0.5,
+      -0.35,
+      -0.2,
+      0.05,
+      0.12,
+      0.4
+    ],
+    "clips": [
+      "Airborne",
+      "Axe_Chop",
+      "Bow_Attack_Draw",
+      "Bow_Attack_Shoot",
+      "Cast_Left",
+      "Cast_Right",
+      "Death",
+      "Idle",
+      "Jump",
+      "Punch",
+      "Run",
+      "Sitting",
+      "Walk",
+      "WorkStanding",
+      "Working"
+    ],
+    "phases": [
+      0.15,
+      0.4,
+      0.5,
+      0.7
+    ],
+    "max_bone_length_error_m": 1.19209289550781e-07,
+    "max_global_wrist_angle_error_rad": 0.0009765625,
+    "max_wrist_shift_m": 0.0999999418854713,
+    "mean_helper_usec": 122.68541666666667,
+    "max_helper_usec": 3363,
+    "cold_shared_profile_usec": [
+      74903,
+      83955
+    ],
+    "shared_profiles": 2,
+    "gpu_native_poses": 22,
+    "native_color_frames": 38,
+    "max_gpu_cpu_error_m": 1.67934172168316e-06,
+    "scope": "Proper forearm sleeve crossings with trousers and non-arm tunic torso >0.5mm; not whole garment contact, visible defect counts or artistic acceptance"
+  },
+  "local_checks": {
+    "import": {
+      "case": "import",
+      "exit_code": 0,
+      "seconds": 76.94,
+      "errors": []
+    },
+    "arms": {
+      "case": "arms",
+      "exit_code": 0,
+      "seconds": 101.41,
+      "errors": []
+    },
+    "frames": {
+      "case": "frames",
+      "exit_code": 0,
+      "seconds": 19.44,
+      "errors": []
+    },
+    "coverage": {
+      "case": "coverage",
+      "exit_code": 0,
+      "seconds": 41.89,
+      "errors": []
+    },
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "seconds": 16.89,
+      "errors": []
+    },
+    "cast_pose": {
+      "case": "cast_pose",
+      "exit_code": 0,
+      "seconds": 5.16,
+      "errors": []
+    },
+    "household_pose": {
+      "case": "household_pose",
+      "exit_code": 0,
+      "seconds": 38.84,
+      "errors": []
+    },
+    "working_pose": {
+      "case": "working_pose",
+      "exit_code": 0,
+      "seconds": 18.25,
+      "errors": []
+    },
+    "character_creator": {
+      "case": "character_creator",
+      "exit_code": 0,
+      "seconds": 18.69,
+      "errors": []
+    },
+    "character_dimensions": {
+      "case": "character_dimensions",
+      "exit_code": 0,
+      "seconds": 29.52,
+      "errors": []
+    },
+    "character_texture_filtering": {
+      "case": "character_texture_filtering",
+      "exit_code": 0,
+      "seconds": 6.77,
+      "errors": []
+    },
+    "player_movement": {
+      "case": "player_movement",
+      "exit_code": 0,
+      "seconds": 20.97,
+      "errors": []
+    },
+    "camera_input": {
+      "case": "camera_input",
+      "exit_code": 0,
+      "seconds": 48.64,
+      "errors": []
+    },
+    "world": {
+      "case": "world",
+      "exit_code": 0,
+      "seconds": 180.16,
+      "errors": []
+    },
+    "workshop": {
+      "case": "workshop",
+      "exit_code": 0,
+      "seconds": 139.48,
+      "errors": []
+    },
+    "motion": {
+      "case": "motion",
+      "exit_code": 0,
+      "seconds": 68.95,
+      "errors": []
+    },
+    "visual_grounding": {
+      "case": "visual_grounding",
+      "exit_code": 0,
+      "seconds": 22.31,
+      "errors": []
+    },
+    "step_grounding": {
+      "case": "step_grounding",
+      "exit_code": 0,
+      "seconds": 16.25,
+      "errors": []
+    },
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "seconds": 65.8,
+      "errors": []
+    }
+  },
+  "evidence": "docs/review/2026-10-22-arm-clearance",
+  "runtime": {
+    "input": "Automated normal actions; not manual play",
+    "player_position_assignments": 0,
+    "forest_walk_m": 28.6910329116508,
+    "workshop_walk_m": 40.2875630338676,
+    "two_body_motion_walk_m": 27.2236036113463,
+    "capital_entry": "Previously earned unedited arrival, not a fresh whole journey",
+    "creator": "Two physical heights 160/195 cm; nine forms; saved appearance",
+    "actions": "equip/bow/axe/magic/jump; 22 live bow blends; 12 inventory/map cycles; disk roundtrips",
+    "workshop": "Finite paid trade, physical approach, five displayed arrows, saved recipe resume and finite stock; clock/survival fixture 09:00",
+    "medium_120_frame_samples": {
+      "forest_mean_ms": 31.5767583333333,
+      "workshop_mean_ms": 37.6710666666667
+    },
+    "sample_limits": "Not sustained FPS; video resource counters are not dedicated VRAM allocation"
+  },
+  "failures_retained": [
+    {
+      "case": "camera_input first attempt",
+      "result": "Existing 35-second boot bound failed; unchanged repeat passed; timing cause unisolated; no limit changed"
+    },
+    {
+      "case": "airborne_actions harness invocation",
+      "result": "Nonexistent scene typo; not runtime regression or a passed test; real existing motion/landing fixtures passed"
+    }
+  ],
+  "research_rejected": {
+    "blender_outfits": "Multiple constructed/tailored/short/correlated/HipFold trials retained forearm/garment crossings; not promoted",
+    "gpu_cloth": "Measured trousers matched GPU positions, but projection produced spikes/incorrect folds and rigid belt deformation; not promoted",
+    "normal_oracle": "Separate custom shader normal approximation remains unaccepted; accepted runtime adds no cloth shader"
+  },
+  "preserved": "Accepted GLB/.blend/material assets, save schema/inventory, controls, shared checkout/index and unrelated edits",
+  "open": [
+    "Whole face/hair/clothing artistry and full wardrobe remain unaccepted",
+    "Waist/hem cloth contact and full continuous transition coverage",
+    "World/settlement/nature/animal artistry and complete living-region scope",
+    "Native ObjectDB exit leftovers: forest82 camera84 workshop100",
+    "Intermittent initial camera boot timing failure not isolated"
+  ],
+  "next": "Coherent supported garment/prop contact and transitions, then character/world art together; inspect actual native frames, preserve geometry/morphs/saves and weak-PC limits",
+  "ci": "Parent 8df014f: eight exact-SHA SUCCESS; this commit exact-SHA checks are verified after push, no stable release"
+}

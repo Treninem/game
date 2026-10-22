@@ -2,6 +2,7 @@ extends SkeletonModifier3D
 
 var visual: Node3D
 var support := preload("res://scripts/humanoid_grounding.gd").new()
+var clearance = preload("res://scripts/humanoid_arm_clearance.gd").new()
 var last_grip := Transform3D.IDENTITY
 var closed_fingers := 0
 var gait_time := 0.0
@@ -27,9 +28,11 @@ func _process_modification_with_delta(_delta: float) -> void:
     if is_instance_valid(visual.held_weapon):
         visual.held_weapon.visible = not resting
     if resting:
+        clearance.apply(visual, skeleton)
         closed_fingers = 0
         return
     if not is_instance_valid(visual.held_weapon):
+        clearance.apply(visual, skeleton)
         closed_fingers = 0
         if visual.held_item.is_empty() and visual.animation_player.assigned_animation == "Punch":
             for side: String in ["Left", "Right"]:
@@ -51,6 +54,7 @@ func _process_modification_with_delta(_delta: float) -> void:
             var axis := (skeleton.global_basis.inverse() * actor.global_basis.x).normalized()
             for arm_side: String in ["Left", "Right"]:
                 _rotate(skeleton, skeleton.find_bone(arm_side + "Arm"), Basis(axis, pivot.rotation.x))
+    clearance.apply(visual, skeleton)
     for finger: String in ["Index", "Middle", "Ring", "Pinky", "Thumb"]:
         for joint in range(1, 4):
             var bone := skeleton.find_bone(side + "Hand" + finger + str(joint))

@@ -15,8 +15,8 @@ var last_points := PackedVector3Array()
 var cached_morphs := []
 var morphed := PackedVector3Array()
 
-func cache(visual: Node3D,skeleton: Skeleton3D) -> void:
-    body = visual.find_child("HumanBody",true,false) as MeshInstance3D
+func cache(visual: Node3D,skeleton: Skeleton3D,part_name: String="HumanBody",material_label: String="") -> void:
+    body = visual.find_child(part_name,true,false) as MeshInstance3D
     for slot in range(body.skin.get_bind_count()):
         var bone := body.skin.get_bind_bone(slot)
         if not body.skin.get_bind_name(slot).is_empty():
@@ -31,6 +31,7 @@ func cache(visual: Node3D,skeleton: Skeleton3D) -> void:
     # 18cm neck region from the clothed anatomical oracle, as well as wrists.
     var neck := skeleton.get_bone_global_rest(skeleton.find_bone("Neck")).origin
     for surface in range(body.mesh.get_surface_count()):
+        if not material_label.is_empty() and String(body.mesh.surface_get_material(surface).resource_name)!=material_label:continue
         var arrays := body.mesh.surface_get_arrays(surface)
         var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
         var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]

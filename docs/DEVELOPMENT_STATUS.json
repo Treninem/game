@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Проверяется связанный пакет одежды обеих основ и работы у настоящего верстака: лишняя оболочка удалена при сохранении внешней геометрии/девяти форм/десяти клипов; WorkStanding с опорой, ладонями и взглядом, точная рабочая дистанция и отображаемые заготовки. 810 ракурсов тела и 198 рабочих поз, реальный автоматизированный проход 40.29 м с оплатой/производством/диском проверены. Художественная приёмка и пересечения слоёв ткани остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json",
+  "current_stage": "Связанный пакет рук и одежды обеих основ: 960 поз, восемь Build, 15 клипов; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и опоры ног. 22 позы на GPU/38 кадров, 810 ракурсов закрытой кожи и реальные автоматизированные действия/диск проверены. Полная внешность и ткань, мир и художественная приёмка открыты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_ARM_CLEARANCE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -384,8 +384,8 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "534684ad2356985e8ad1289fb53cc920124cf609",
-  "last_verified_runtime_ci": "534684ad: восемь exact-SHA CI SUCCESS. Новый пакет костюма локально проверен; собственный exact-SHA CI проверяется после push. Стабильного выпуска нет.",
+  "last_verified_runtime_commit": "8df014f0938a1d14ff15bef84e66c68f06371fdb",
+  "last_verified_runtime_ci": "8df014f: восемь exact-SHA CI SUCCESS. Новый пакет имеет 19 локальных успешных этапов; свой exact-SHA CI проверяется после push. Стабильного выпуска нет.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
     "exit_object_leaks": 82,
@@ -442,14 +442,17 @@
     "full_artistic_acceptance": false,
     "undressing_and_full_wardrobe_complete": false,
     "visible_cloth_layers_accepted": false,
-    "remaining_visible_defects": "Gray lining and lower-coat punctures remain; covered-skin oracle alone is insufficient. Shell-free/GPU prototypes failed the expanded layer probe and are not integrated."
+    "remaining_visible_defects": "Лишняя оболочка снята предыдущим 8df014f. Этот пакет устранил проверенные пересечения предплечий с одеждой; контакт туники/пояса/подола остаётся открытым. Забракованные модели/проекционные шейдеры не включены."
   },
   "latest_character_package": {
-    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json",
-    "review_folder": "docs/review/2026-10-22-work-wardrobe",
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_ARM_CLEARANCE.json",
+    "review_folder": "docs/review/2026-10-22-arm-clearance",
     "full_art_acceptance": false,
+    "arm_geometry_poses": 960,
+    "failed_arm_poses": 0,
     "covered_skin_views": 810,
-    "standing_work_poses": 198,
+    "native_gpu_poses": 22,
+    "native_color_frames": 38,
     "remote_ci": "Exact new SHA verification follows push"
   }
 }
