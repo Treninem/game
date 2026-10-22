@@ -58,8 +58,9 @@ if [[ ${statuses[1]} -ne 0 ]]; then
 fi
 
 # Godot can exit zero after parse/runtime errors if the test later calls quit(0).
-# Such a run does not prove that the scene or its dependencies are healthy.
-if grep -Eq '(^|[[:space:]])(SCRIPT ERROR:|ERROR:|::error)' "$output_log"; then
+# Verbose stdout and stderr may interleave (for example, RefERROR: ...).
+# Do not require whitespace before the error marker.
+if grep -Eq '(SCRIPT ERROR:|ERROR:|::error)' "$output_log"; then
   echo "::error title=Godot runtime error::$SCENE emitted errors despite exiting zero"
   exit 1
 fi

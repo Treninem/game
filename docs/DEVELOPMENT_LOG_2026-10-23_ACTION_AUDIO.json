@@ -227,5 +227,13 @@
     "Local cold full-world startup and large arm scan remain unaccepted under severe memory pressure; no user application closed.",
     "The previous full world ran in Linux llvmpipe; its timing is not Windows integrated-GPU FPS.",
     "No stable installer/release published."
-  ]
+  ],
+  "smoke_wrapper_followup": {
+    "problem": "Godot stdout/stderr can interleave into RefERROR:, bypassing the old whitespace-boundary matcher even when the engine exits zero.",
+    "fix": "Match every ERROR:, SCRIPT ERROR: and GitHub error annotation occurrence. Preserve engine exit and timeout handling.",
+    "validation": "Six real wrapper invocations with a bounded fake engine: clean 0; ordinary/interleaved/script/annotation errors 1; engine exit 7 preserved. Required Python wrapper gate added before editor parse.",
+    "evidence": "docs/review/2026-10-23-action-audio/strict-smoke-wrapper.log",
+    "parent": "6b82894d9386551b10849bebc54d7aa194fe76bf",
+    "ci": "All eight exact-head jobs repeated after this followup; no previous green reused as current."
+  }
 }
