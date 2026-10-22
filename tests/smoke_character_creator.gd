@@ -95,7 +95,7 @@ func _run() -> void:
                 var material := mesh.get_active_material(surface) as StandardMaterial3D
                 if material == null:
                     continue
-                if String(material.resource_name).begins_with("Viking"):
+                if String(material.resource_name).begins_with("Viking") or material.resource_name=="OutfitLining":
                     var authored := mesh.mesh.surface_get_material(surface) as StandardMaterial3D
                     var errors: Array[String] = preload("res://tests/humanoid_wardrobe_material_probe.gd").new().check(material, String(creator.profile.sex), String(material.resource_name), authored.albedo_texture)
                     if not _check(errors.is_empty(), "New wardrobe material contract: " + str(errors)):

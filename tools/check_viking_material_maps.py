@@ -4,8 +4,9 @@ import struct,json,hashlib,os
 import numpy as np
 from PIL import Image
 r=Path(__file__).resolve().parents[1];folder=Path(os.environ.get('IMPULS_WARDROBE_MAPS',str(r/'build/asset_work/viking-materials')));rows=[]
+characters=Path(os.environ.get('IMPULS_CHARACTER_OUTPUT',str(r/'build/asset_work/viking-humans')))
 for sex in ['male','female']:
- raw=(r/'build/asset_work/viking-humans'/(sex+'.glb')).read_bytes();length=struct.unpack_from('<I',raw,12)[0];j=json.loads(raw[20:20+length]);binary=20+length+8
+ raw=(characters/(sex+'.glb')).read_bytes();length=struct.unpack_from('<I',raw,12)[0];j=json.loads(raw[20:20+length]);binary=20+length+8
  def accessor(index):
   a=j['accessors'][index];v=j['bufferViews'][a['bufferView']];count={'SCALAR':1,'VEC2':2,'VEC3':3,'VEC4':4}[a['type']];dtype={5126:'<f4',5125:'<u4',5123:'<u2',5121:'u1'}[a['componentType']];dt=np.dtype(dtype);offset=binary+v.get('byteOffset',0)+a.get('byteOffset',0);stride=v.get('byteStride',count*dt.itemsize)
   return np.ndarray((a['count'],count),dtype=dtype,buffer=raw,offset=offset,strides=(stride,dt.itemsize)).copy()
@@ -27,4 +28,4 @@ for sex in ['male','female']:
      stats={'mean':float(values[:,0].mean()),'p10':float(np.quantile(values[:,0],.1)),'p90':float(np.quantile(values[:,0],.9))};assert .1<stats['mean']<=1,(sex,label,'empty or fully occluded map',stats)
     maps[kind]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),**stats}
    rows.append({'sex':sex,'material':label,'sampled_triangles':len(centres),'maps':maps})
-out=folder/'uv-probe.json';out.write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8');print(json.dumps(rows,indent=2))
+out=Path(os.environ.get('IMPULS_WARDROBE_REPORT',str(folder/'uv-probe.json')));out.write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8');print(json.dumps(rows,indent=2))

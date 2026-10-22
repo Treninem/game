@@ -161,3 +161,6 @@ Existing CC0 musdasch ground set: unmodified 512px dirt1/gravel1 selected as roa
 
 ### Cottage exteriors and connected yards — 22 October 2026
 INTEGRATED in review: project-authored Blender worked timber/stone, planter, flowers and open timber store with selected existing B47 CC0 WoodenFence_Single geometry. Editable source and reproducer retained; actual game references CottageYardKit.glb. Existing photo wood/stone, temperate bush, woodland grass and animated B46 chest reused. No download or full concept/farm/livestock acceptance. See assets/registry/COTTAGE_YARDS_2026-10-22.json.
+
+## Fitted human outfit — 2026-10-22 review
+- INTEGRATED in review: native fitted inner garment and covered-body mask for both existing realistic human GLBs. Existing selected MakeHuman/Rehman Polanski CC0 sources and tunic cloth pixels reused; no new pack or bitmap. Editable sources: `assets/source/characters/fitted_outfit/`; producer: `tools/build_viking_humans.py`. Seven skinned parts, nine morphs and ten original clips preserved. Fixed-costume scope; full wardrobe and art acceptance remain open. See `assets/registry/FITTED_HUMAN_OUTFIT_2026-10-22.json`. Main physical staging is not newly claimed.

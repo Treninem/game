@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Пакет дорог e0ed5f71 прошёл все восемь CI. Новый связанный пакет: Blender-детали фасадов, 15 участков у двух деревень, физические калитки/навесы, ягоды и сундуки с сохранением; проверены обычное движение, интерфейс и игровые кадры. Полная застройка по концепции, фермы/животные, горы/реки, семьи и качество людей остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
+  "current_stage": "Пакеты дорожек и дворов прошли все восемь CI на точных SHA. Новый пакет всего стандартного костюма обеих основ: подогнанный внутренний слой, маска закрытого тела и отдельный материал; исходный дефект 408/756 ракурсов, итог 0/756. Реальный мир, обычные действия, сохранение и интерфейс проверены. Художественная приёмка людей и мира остаётся открытой.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -206,9 +206,9 @@
     "Проверять совместно картинку, игровой цикл, сохранение и производительность; 30 FPS на низких подтвердить длительным проходом, а не одним видом."
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "Родительский 3977b369 прошёл World Core, движение, UI, magic/VFX и build/export/installer. Новый пакет опоры/приземления прошёл локальные проверки; его точный удалённый CI ожидается после push. Стабильный выпуск не опубликован.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-21_SUPPORT_LANDING.json",
-  "review_launcher_revision": "Limb motion source review; current changes not locally re-exported",
+  "ci_followup_status": "534684ad: восемь exact-SHA CI SUCCESS. Новый пакет костюма локально проверен; собственный exact-SHA CI проверяется после push. Стабильного выпуска нет.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json",
+  "review_launcher_revision": "Current build/stability source project contains tested fitted-outfit GLBs; previous exported PCK/installer is not updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",
@@ -218,7 +218,9 @@
     "accepted": 32,
     "total": 55,
     "report": "docs/CHARACTER_ACCEPTANCE_2026-10-20.json",
-    "visual_acceptance": false
+    "visual_acceptance": false,
+    "audit_date": "2026-10-20",
+    "scope": "Historical bounded acceptance ledger; 58.2 is not overall game readiness or visual acceptance. No new percentage audit in this package."
   },
   "editor_library_parse_errors_pending": [],
   "editor_library_uid_warnings_pending": true,
@@ -382,15 +384,15 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "e0ed5f712c24ebdfe11909aa616767adab58607d",
-  "last_verified_runtime_ci": "Parent e0ed5f71 exact SHA: 8/8 SUCCESS verified and archived. Own exact-SHA CI pending push at journal creation. No stable release.",
+  "last_verified_runtime_commit": "534684ad2356985e8ad1289fb53cc920124cf609",
+  "last_verified_runtime_ci": "534684ad: восемь exact-SHA CI SUCCESS. Новый пакет костюма локально проверен; собственный exact-SHA CI проверяется после push. Стабильного выпуска нет.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
-    "exit_object_leaks": 100,
+    "exit_object_leaks": 82,
     "artistic_acceptance": false,
     "lifecycle_diagnostic": "docs/DEVELOPMENT_LOG_2026-10-21_LOADER_LIFECYCLE.json",
     "exit_leak_fixed": false,
-    "current_exit_probe": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json"
+    "current_exit_probe": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json"
   },
   "interior_surfaces": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_SURFACES.json",
@@ -425,5 +427,12 @@
     "graphical_walk_m": 292.521000537323,
     "artistic_acceptance": false,
     "full_agriculture": false
+  },
+  "outfit_fit": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json",
+    "render_views": 756,
+    "failed_views": 0,
+    "full_artistic_acceptance": false,
+    "undressing_and_full_wardrobe_complete": false
   }
 }

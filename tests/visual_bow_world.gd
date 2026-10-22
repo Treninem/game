@@ -214,6 +214,17 @@ func _run() -> void:
     print("UI_NATIVE_REOPEN_OK cycles=12 inventory+map gameplay_resumed=true")
     assert(bow_blend_samples >= 20)
     print("LIVE_BOW_BLEND_OK samples=", bow_blend_samples)
+    for preset in [0,1,2,3]:
+        root.get_node("SettingsManager").call("set_quality_preset",preset)
+        for frame in range(30):await process_frame
+        await _capture("outfit-quality-%d" % preset)
+        if preset==1:
+            var sample_start := Time.get_ticks_usec()
+            for frame in range(120):await process_frame
+            print("OUTFIT_WORLD_FRAME_SAMPLE frames=120 mean_ms=",float(Time.get_ticks_usec()-sample_start)/120000.0,
+                " video_bytes=",RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED),
+                " draw_calls=",RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME))
+    root.get_node("SettingsManager").call("set_quality_preset",0)
     print("FACE_CONTROLS_NATIVE_OK ", JSON.stringify({"walked_m": walked, "player_position_assignments": 0, "captures": captures, "look_roundtrip": true, "game_save_roundtrip": true, "bow_arrow_consumed": true, "morphs": 9, "physical_heights_cm": [160,195], "jump_both_heights": true}))
     change_scene_to_file("res://scenes/main_menu.tscn")
     for frame in range(12):

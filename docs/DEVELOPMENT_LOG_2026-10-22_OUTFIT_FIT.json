@@ -1,0 +1,342 @@
+{
+  "date": "2026-10-22",
+  "parent_commit": "534684ad2356985e8ad1289fb53cc920124cf609",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; no stable publication; full character/concept acceptance false",
+  "problem": "Existing Viking source tunic has no delete_verts body mask. Shoulder, sleeve, armpit and waist skin became visible through the fitted outer outfit under final runtime deformation.",
+  "changes": [
+    "Both native human bodies receive a real fitted inner cloth layer using native anatomical topology, weights and all nine morphs; exact source-face correspondence masks only its covered interior, retaining two boundary rings and exposed anatomy.",
+    "Lining is joined into the existing Clothing mesh; seven skinned parts and ten original animation clips remain. No hidden bones, substitute geometric characters or runtime enlarged garment.",
+    "The existing unprinted tunic cloth strip supplies the lining diffuse. Separate matte roughness .95 material deliberately has no unrelated outer normal/AO atlas; all original texture pixels are unchanged.",
+    "Independent renderer gate checks 756 final modifier poses/views with visible-skin zero tolerance and a renderer positive control. Original GLBs meaningfully fail the identical gate. Existing legacy/Viking material contracts remain mandatory.",
+    "Four actual world quality captures and a bounded timing sample extend the existing gameplay/save/UI driver. All prior workflow steps remain; new rendered coverage gate is added."
+  ],
+  "rendered_coverage": {
+    "baseline": {
+      "views": 756,
+      "failed_views": 408
+    },
+    "candidate": {
+      "views": 756,
+      "failed_views": 0
+    },
+    "bodies": 2,
+    "build_profiles": [
+      0,
+      -0.5,
+      0.5
+    ],
+    "runtime_clips": 14,
+    "phases": [
+      0.15,
+      0.4,
+      0.7
+    ],
+    "camera_angles": 3,
+    "covered_skin_pixel_tolerance": 0,
+    "scope": "252 posed states, 756 diagnostic views; not every continuous transition or every possible morph combination"
+  },
+  "preservation": [
+    {
+      "sex": "male",
+      "unchanged_other_parts": 5,
+      "original_clothing_triangles_preserved": true,
+      "unchanged_clips": 10,
+      "morphs": 9,
+      "exposed_skin_vertices_retained": 7984,
+      "body_triangles_before": 26756,
+      "body_triangles_after": 15604,
+      "all_retained_body_positions_uv_and_morphs_native": true,
+      "all_authored_images_unchanged": true
+    },
+    {
+      "sex": "female",
+      "unchanged_other_parts": 5,
+      "original_clothing_triangles_preserved": true,
+      "unchanged_clips": 10,
+      "morphs": 9,
+      "exposed_skin_vertices_retained": 7984,
+      "body_triangles_before": 26756,
+      "body_triangles_after": 15740,
+      "all_retained_body_positions_uv_and_morphs_native": true,
+      "all_authored_images_unchanged": true
+    }
+  ],
+  "model_fitting": [
+    {
+      "sex": "male",
+      "lining": {
+        "lining_faces": 5780,
+        "lining_vertices": 5840,
+        "clearance_m": 0.006,
+        "new_textures": 0,
+        "morphs": 9,
+        "native_skin_weights": true
+      },
+      "coverage": {
+        "before_faces": 13378,
+        "removed_covered_faces": 5576,
+        "after_faces": 7802,
+        "vertices_unchanged": 13380,
+        "shape_coordinates_unchanged": true,
+        "build_profiles": [
+          0,
+          -0.5,
+          0.5
+        ],
+        "open_boundary_rings_preserved": 2,
+        "native_lining_face_correspondences": 5574
+      }
+    },
+    {
+      "sex": "female",
+      "lining": {
+        "lining_faces": 5682,
+        "lining_vertices": 5734,
+        "clearance_m": 0.006,
+        "new_textures": 0,
+        "morphs": 9,
+        "native_skin_weights": true
+      },
+      "coverage": {
+        "before_faces": 13378,
+        "removed_covered_faces": 5508,
+        "after_faces": 7870,
+        "vertices_unchanged": 13380,
+        "shape_coordinates_unchanged": true,
+        "build_profiles": [
+          0,
+          -0.5,
+          0.5
+        ],
+        "open_boundary_rings_preserved": 2,
+        "native_lining_face_correspondences": 5498
+      }
+    }
+  ],
+  "model_files": {
+    "male": {
+      "sha256": "539686d7c45a617358cabc4af9c278255be1eeb538dcbf35b9e77d7e7dd1538e",
+      "bytes": 22112772
+    },
+    "female": {
+      "sha256": "3d4be573315c6b615bc916e4a89edcfeeb60df04bf8801d4cf892d43b53d8fe0",
+      "bytes": 22797760
+    }
+  },
+  "local_checks": {
+    "import": {
+      "case": "import",
+      "exit_code": 0,
+      "seconds": 32.91,
+      "errors": []
+    },
+    "character_creator": {
+      "case": "character_creator",
+      "exit_code": 0,
+      "seconds": 5.83,
+      "errors": []
+    },
+    "character_dimensions": {
+      "case": "character_dimensions",
+      "exit_code": 0,
+      "seconds": 12.66,
+      "errors": []
+    },
+    "character_texture_filtering": {
+      "case": "character_texture_filtering",
+      "exit_code": 0,
+      "seconds": 4.94,
+      "errors": []
+    },
+    "surfaces": {
+      "case": "surfaces",
+      "exit_code": 0,
+      "seconds": 9.98,
+      "errors": []
+    },
+    "coverage": {
+      "case": "coverage",
+      "exit_code": 0,
+      "seconds": 36.88,
+      "errors": []
+    },
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "seconds": 14.45,
+      "errors": []
+    },
+    "gameplay_actions": {
+      "case": "gameplay_actions",
+      "exit_code": 0,
+      "seconds": 33.94,
+      "errors": []
+    },
+    "player_movement": {
+      "case": "player_movement",
+      "exit_code": 0,
+      "seconds": 21.78,
+      "errors": []
+    },
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "seconds": 49.52,
+      "errors": []
+    },
+    "step_grounding": {
+      "case": "step_grounding",
+      "exit_code": 0,
+      "seconds": 17.76,
+      "errors": []
+    },
+    "visual_grounding": {
+      "case": "visual_grounding",
+      "exit_code": 0,
+      "seconds": 20.39,
+      "errors": []
+    },
+    "household_pose": {
+      "case": "household_pose",
+      "exit_code": 0,
+      "seconds": 12.67,
+      "errors": []
+    },
+    "camera_input": {
+      "case": "camera_input",
+      "exit_code": 0,
+      "seconds": 61.91,
+      "errors": []
+    },
+    "ui_and_save": {
+      "case": "ui_and_save",
+      "exit_code": 0,
+      "seconds": 15.16,
+      "errors": []
+    },
+    "motion": {
+      "case": "motion",
+      "exit_code": 0,
+      "seconds": 48.2,
+      "errors": []
+    },
+    "world": {
+      "case": "world",
+      "exit_code": 0,
+      "seconds": 111.86,
+      "errors": []
+    },
+    "geometry": {
+      "exit_code": 0,
+      "seconds": 46.2,
+      "marker": true
+    }
+  },
+  "graphical_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png",
+      "user://head-size-outfit-quality-0.png",
+      "user://head-size-outfit-quality-1.png",
+      "user://head-size-outfit-quality-2.png",
+      "user://head-size-outfit-quality-3.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.5039829201996
+  },
+  "short_stationary_sample": {
+    "frames": 120,
+    "mean_frame_ms": 42.996775,
+    "video_bytes": 490534818,
+    "draw_calls": 1097,
+    "scope": "Short stationary Medium sample on Intel UHD 610; not long-session FPS or worst-case coverage"
+  },
+  "motion_fixture": {
+    "walked_m": 27.1986748417839,
+    "bodies": 2,
+    "normal_input": true,
+    "scope": "Controlled physical fixture; separate from the actual forest-world gameplay driver"
+  },
+  "iteration_evidence": [
+    "A geometric distance-only mask missed the concave armpit. Same-frame CPU/GPU final-bone comparison and source-face diagnosis found the residual; exact native face correspondence corrected it.",
+    "Colored close-ups exposed wrong outer AO/normal reuse on the new lining. A dedicated diffuse-only material corrected this; its explicit role contract is checked without relaxing existing outer garment tests.",
+    "Initial lining material fixture incorrectly expected legacy AO; corrected only the new material classification. Failed log retained.",
+    "Initial builder attempted Blender thumbnail cache writes. Later factory saves disable previews and never save user preferences."
+  ],
+  "art_inspection": "Final close-up hand/bow, ordinary-input axe and actual forest-world quality/bow frames inspected. Clothing coverage is improved; face/hair detail, angular cloth silhouette, boot/trouser transitions, weapons, environment art and natural motion remain visibly rough.",
+  "performance_change": "No new bitmap. One extra material draw per visible Clothing. Net source triangles +408 male / +348 female. No claim of performance improvement or sustained FPS.",
+  "known_exit_cleanup": {
+    "world_objectdb_leftovers": 82,
+    "fixed": false,
+    "scope": "Different scenario from previous yard driver (100); lower count is not evidence of a fix."
+  },
+  "asset_state": "INTEGRATED in review after promotion. Existing selected CC0 sources physically present in review; STAGED_PHYSICAL on canonical main is not claimed.",
+  "source_reproduction": "Full updated builder completed in factory Blender for both bodies. Exact accepted GLBs remain the original editable-source refit using the same helper; final editable copies saved with repository-relative source images, no thumbnail/user preference write. Numerical rebuild difference is reported separately.",
+  "save_scope": "No schema, inventory, furniture IDs, world transforms, controls or save migration change. Creator profile, actual disk slot8, cooldown and UI checks passed in isolated profiles; user profiles untouched.",
+  "remaining": [
+    "Full artistic acceptance and realistic people, faces/hair and varied outfits/armor; actual undressing requires native unmasked body or per-outfit coverage, not this fixed-costume GLB.",
+    "Start/stop/turn transitions, all mixed actions and naturalness across all proportion combinations; no animation reauthoring is claimed by this outfit revision.",
+    "Concept-quality landscape, mountains/connected rivers/lakes, varied dense neighborhoods, farms/livestock, logical families/ages/children/school/professions remain in the comprehensive program.",
+    "Long-session weak-PC performance, ObjectDB exit cleanup and complete release gates; no stable release."
+  ],
+  "ci": {
+    "parent_exact_sha": "534684ad2356985e8ad1289fb53cc920124cf609",
+    "parent_all_eight_success": true,
+    "own_exact_sha": "Pending push when this journal is written; inspect GitHub checks for the new SHA."
+  },
+  "full_source_reproduction": {
+    "completed": true,
+    "result": [
+      {
+        "sex": "male",
+        "bytes_identical": false,
+        "refit_sha256": "539686d7c45a617358cabc4af9c278255be1eeb538dcbf35b9e77d7e7dd1538e",
+        "rebuilt_sha256": "23451e97196be91c1ba4d72094a5867897240e9b07c3905481676fa50e24f847",
+        "different_accessors_over_1e_minus_6": [],
+        "authored_images_identical": true,
+        "accepted_production": "Retained original-source refit candidate; regenerated model not substituted"
+      },
+      {
+        "sex": "female",
+        "bytes_identical": false,
+        "refit_sha256": "3d4be573315c6b615bc916e4a89edcfeeb60df04bf8801d4cf892d43b53d8fe0",
+        "rebuilt_sha256": "7b984d96cc00ec3d732242f720d96ab35635a39c76f9044cf12fcfc88bee9f06",
+        "different_accessors_over_1e_minus_6": [
+          {
+            "accessor": 53,
+            "role": "Clothing/0/WEIGHTS_0",
+            "max_absolute_difference": 3.4649274311959743e-06
+          }
+        ],
+        "authored_images_identical": true,
+        "accepted_production": "Retained original-source refit candidate; regenerated model not substituted"
+      }
+    ],
+    "limitation": "Full generation is not byte-identical to original-source refit. Male accessors agree within 1e-6; female outer tunic weight maximum difference 3.4649274311959743e-6. Production keeps independently preserved/tested original weights. Do not claim bit-reproducible builder or substitute regeneration without new checks."
+  },
+  "editable_source_hashes": {
+    "male": "75188548ab175f6d723b9c1b0c652c76d23eb03baabd1a629a9d72a8fd6be86a",
+    "female": "0df56bfc6ce4d445adbca4da73eed3bb74f658a04f21bf2f5ae9174982a64941"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-22",
+  "state": "INTEGRATED",
+  "scope": "Review branch, fixed default outfit, both native human bodies; canonical main and full artistic acceptance unconfirmed",
+  "sources": [
+    "assets/staging/characters/makehuman_mpfb_core",
+    "assets/staging/characters/makehuman_system_selected",
+    "assets/staging/characters/makehuman_viking_selected"
+  ],
+  "licenses": "Existing retained MakeHuman/selected Rehman Polanski CC0 source licenses; no new third-party download or bitmap",
+  "production": "assets/production/characters/realistic/{male,female}.glb",
+  "editable": "assets/source/characters/fitted_outfit/{male,female}.blend",
+  "reproducer": "tools/build_viking_humans.py + tools/garment_body_coverage.py",
+  "journal": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json",
+  "models": {
+    "male": {
+      "sha256": "539686d7c45a617358cabc4af9c278255be1eeb538dcbf35b9e77d7e7dd1538e",
+      "bytes": 22112772
+    },
+    "female": {
+      "sha256": "3d4be573315c6b615bc916e4a89edcfeeb60df04bf8801d4cf892d43b53d8fe0",
+      "bytes": 22797760
+    }
+  },
+  "new_material": "OutfitLining: original unprinted cloth diffuse, roughness .95, no mismatched normal/AO",
+  "full_wardrobe_accepted": false
+}

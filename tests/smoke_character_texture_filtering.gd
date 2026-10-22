@@ -41,6 +41,10 @@ func _run() -> void:
                             failures.append_array(preload("res://tests/humanoid_wardrobe_material_probe.gd").new().check(material, String(visual.current_profile.sex), String(material.resource_name), authored.albedo_texture))
                             _check_texture(material.albedo_texture, "wardrobe diffuse")
                             _check_texture(material.ao_texture, "wardrobe AO")
+                        elif material.resource_name=="OutfitLining":
+                            var authored := mesh.mesh.surface_get_material(surface) as StandardMaterial3D
+                            failures.append_array(preload("res://tests/humanoid_wardrobe_material_probe.gd").new().check(material,String(visual.current_profile.sex),String(material.resource_name),authored.albedo_texture))
+                            _check_texture(material.albedo_texture,"lining cloth diffuse")
                         elif String(mesh.name) == "Clothing":
                             if material.albedo_texture != null or not material.ao_enabled or material.ao_texture != VISUAL.GARMENT_AO:
                                 failures.append("Garment AO is painted into base color or loses actual occlusion")

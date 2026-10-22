@@ -1,0 +1,26 @@
+[
+  {
+    "sex": "male",
+    "unchanged_other_parts": 5,
+    "original_clothing_triangles_preserved": true,
+    "unchanged_clips": 10,
+    "morphs": 9,
+    "exposed_skin_vertices_retained": 7984,
+    "body_triangles_before": 26756,
+    "body_triangles_after": 15604,
+    "all_retained_body_positions_uv_and_morphs_native": true,
+    "all_authored_images_unchanged": true
+  },
+  {
+    "sex": "female",
+    "unchanged_other_parts": 5,
+    "original_clothing_triangles_preserved": true,
+    "unchanged_clips": 10,
+    "morphs": 9,
+    "exposed_skin_vertices_retained": 7984,
+    "body_triangles_before": 26756,
+    "body_triangles_after": 15740,
+    "all_retained_body_positions_uv_and_morphs_native": true,
+    "all_authored_images_unchanged": true
+  }
+]

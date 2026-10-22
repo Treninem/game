@@ -55,6 +55,7 @@ def garment(points,variations,rig):
     obj.data.materials.append(materials[1])
     for polygon,index in zip(obj.data.polygons,face_materials):polygon.material_index=index
     h.garment_clearance(obj)
+    print('OUTFIT_LINING',coverage.add_fitted_lining(bpy.data.objects['HumanBody'],obj),flush=True)
     return obj
 
 def body(points,variations,rig,sex):
@@ -66,8 +67,8 @@ def body(points,variations,rig,sex):
     return h.mesh('HumanBody',points,[h.FACES[i] for i in keep],h.UV,[h.FACE_UV[i] for i in keep],h.W,rig,skin,variations)
 
 h.create_garment=garment;h.create_body=body
-# Reuse the complete existing rig/retarget/export routine. Only its footwear
-# source block changes; the patch is checked rather than silently matching.
+# Reuse the existing rig/retarget/export routine with checked hooks for selected
+# footwear, covered-body fitting and thumbnail-free source saves.
 original=(ROOT/'tools/build_realistic_humans.py').read_text(encoding='utf-8')
 start=original.index('def build_all():');end=original.index('\nif __name__',start)
 routine=original[start:end]
@@ -79,6 +80,14 @@ new="""boots=VIKING_SOURCE/'rehmanpolanski_viking_boots'
         _,uv,faces,fuv,_=read_obj(boots/'bootsviking.obj')"""
 assert routine.count(old)==1
 routine=routine.replace(old,new).replace("material('LeatherBoots',(.085,.048,.026,1),roughness=.86)","material('VikingBoots',image=boots/'BootsViking.png',roughness=.86)")
+coverage_spec=importlib.util.spec_from_file_location('garment_body_coverage',ROOT/'tools/garment_body_coverage.py')
+coverage=importlib.util.module_from_spec(coverage_spec);coverage_spec.loader.exec_module(coverage)
+h.__dict__['remove_covered_skin']=coverage.remove_covered_skin
+assert routine.count('        clips=retarget(rig)')==1
+routine=routine.replace('        clips=retarget(rig)', "        print('OUTFIT_COVERAGE',sex,remove_covered_skin(bpy.data.objects['HumanBody'],[garment,bpy.data.objects['Boots']]),flush=True)\n        clips=retarget(rig)")
+# Factory preferences are local to this helper; never write user thumbnails.
+assert routine.count("        bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(sex+'.blend')))")==1
+routine=routine.replace("        bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(sex+'.blend')))", "        bpy.context.preferences.filepaths.file_preview_type='NONE'\n        bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(sex+'.blend')))")
 h.__dict__['VIKING_SOURCE']=SOURCE
 exec(compile(routine,str(__file__),'exec'),h.__dict__)
 if __name__=='__main__':h.build_all()
