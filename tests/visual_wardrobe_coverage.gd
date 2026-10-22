@@ -82,12 +82,12 @@ func _run() -> void:
             var animator: AnimationPlayer=visual.get("animation_player")
             var probe := preload("res://tests/humanoid_clothed_skin_probe.gd").new()
             probe.cache(visual,skeleton)
-            var snapshot := {"requested":false,"points":PackedVector3Array(),"active":false,"full":false}
+            var snapshot := {"requested":false,"points":PackedVector3Array(),"frame":-1,"active":false,"full":false}
             var modifier: Node=visual.get("grip_modifier")
             modifier.modification_processed.connect(func():
                 if bool(snapshot.requested):
                     snapshot.points=probe.snapshot(skeleton)
-                    snapshot.requested=false
+                    snapshot.frame=Engine.get_process_frames()
                 # Rebuild the diagnostic mesh in the very same final modifier
                 # callback that supplies the GPU pose, on EVERY diagnostic frame.
                 if bool(snapshot.active):
@@ -99,13 +99,17 @@ func _run() -> void:
                 actor.set_meta("preview_item","short_bow" if clip in ["Bow_Attack_Draw","Bow_Attack_Shoot","Cast_Right"] else ("starter_axe" if clip in ["Axe_Chop","Cast_Left"] else ""))
                 visual.call("_refresh_weapon")
                 for phase: float in [.15,.4,.7]:
+                    # Observe every modifier evaluation until this render has
+                    # completed, including synchronous seek evaluations.
+                    snapshot.requested=true
+                    snapshot.frame=-1
                     animator.play(clip,0)
                     animator.seek(animator.get_animation(clip).length*phase,true)
                     animator.pause()
-                    snapshot.requested=true
                     skeleton.advance(0)
-                    await process_frame
-                    assert(not bool(snapshot.requested),"Missing final rendered modifier snapshot")
+                    await RenderingServer.frame_post_draw
+                    assert(int(snapshot.frame)==Engine.get_process_frames(),"Missing same-frame final rendered modifier snapshot")
+                    snapshot.requested=false
                     var points: PackedVector3Array=snapshot.points
                     assert(points.size()>1000 and probe.complete.size()>3000)
                     var label := "%s-build%s-%s-%.2f" % [sex,build,clip,phase]

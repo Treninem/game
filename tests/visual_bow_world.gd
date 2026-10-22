@@ -41,8 +41,9 @@ func _frames(count: int) -> void:
         _check_live_bow_arm()
 
 func _follow_player() -> void:
-    observer.global_position = player.global_position + player.global_basis * Vector3(1.4, 1.6, -3.0)
+    observer.global_position = player.global_position + player.global_basis * Vector3(2.1, 1.8, -4.7)
     observer.look_at(player.global_position + Vector3.UP * 1.15)
+    observer.force_update_transform()
 
 func _action(action: String) -> void:
     var event := InputEventAction.new()
@@ -290,12 +291,21 @@ func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
             assert(radial >= 1.0, "Live bow blend enters central torso: " + str(segment) + " point=" + str(point))
     bow_blend_samples += 1
     print("LIVE_BOW_BLEND_SAMPLE ", bow_blend_samples)
-    if request_airborne_draw and animator.assigned_animation == "Bow_Attack_Draw" and not player.is_on_floor():
+    # The first Draw-labelled frame can correctly still be the initial
+    # preparation pose. Require actual raised-hand geometry and clip progress,
+    # while the physical draw is still pending, for the tension review image.
+    if request_airborne_draw and animator.assigned_animation == "Bow_Attack_Draw" and not player.is_on_floor() and animator.current_animation_position >= 0.20 and points.RightHand.y >= points.Neck.y - 0.25 * ratio:
         _follow_player()
-        assert(observer.is_position_in_frustum(player.global_position))
-        assert(observer.is_position_in_frustum(player.global_position + Vector3.UP * float(visual.get("current_profile").height_cm) / 100.0))
+        assert(root.get_camera_3d() == observer)
+        var head := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Head")).origin) + Vector3.UP * 0.32 * ratio
+        var foot := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftToeBase")).origin) - Vector3.UP * 0.08 * ratio
+        var head_pixel := observer.unproject_position(head)
+        var foot_pixel := observer.unproject_position(foot)
+        var frame_rect := root.get_visible_rect().grow(-24)
+        assert(observer.is_position_in_frustum(head) and frame_rect.has_point(head_pixel), "Draw head cropped")
+        assert(observer.is_position_in_frustum(foot) and frame_rect.has_point(foot_pixel), "Draw feet cropped")
         request_airborne_draw = false
-        var observed := {"pose":String(animator.assigned_animation), "grounded":player.is_on_floor(), "pending":float(player.get("pending_bow_elapsed")), "frame":frame}
+        var observed := {"pose":String(animator.assigned_animation), "animation_time":animator.current_animation_position,"wrist_below_neck_m":points.Neck.y-points.RightHand.y,"head_pixel":str(head_pixel),"foot_pixel":str(foot_pixel),"grounded":player.is_on_floor(), "pending":float(player.get("pending_bow_elapsed")), "frame":frame}
         RenderingServer.frame_post_draw.connect(func():
             assert(Engine.get_process_frames() == int(observed.frame), "Draw image and skeleton observation differ by a frame")
             _capture_rendered("short_bow")
