@@ -94,6 +94,9 @@ func _apply_settings() -> void:
 
 func _on_spell_cast(_spell_id: String) -> void:
     cast_elapsed = 0.45
+    var avatar := get_node_or_null("Avatar")
+    if avatar != null and avatar.has_method("begin_cast_pose"):
+        avatar.call("begin_cast_pose", InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "short_bow")
 
 func _on_game_loaded(_slot: int) -> void:
     var loaded_instanced := ProgressionSystem.is_in_dungeon() or String(GameState.get_world_value("current_realm", "main")) != "main"
@@ -470,10 +473,12 @@ func _try_attack() -> void:
         GameState.notify("Недостаточно выносливости.")
         return
     attack_elapsed = attack_cooldown
+    var avatar := get_node_or_null("Avatar")
     if InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) == "starter_axe":
-        var avatar := get_node_or_null("Avatar")
         if avatar != null and avatar.has_method("begin_axe_stroke"):
             avatar.begin_axe_stroke()
+    elif avatar != null and avatar.has_method("begin_punch_stroke"):
+        avatar.call("begin_punch_stroke", attack_cooldown)
 
     var swing_direction := -camera.global_transform.basis.z
     var swing_position := global_position + Vector3.UP * 1.1 + swing_direction * 0.9
@@ -543,6 +548,9 @@ func _try_shoot() -> void:
     pending_bow_elapsed = 0.22
     pending_bow_revision = GameState.state_revision
     attack_elapsed = 0.7
+    var avatar := get_node_or_null("Avatar")
+    if avatar != null and avatar.has_method("begin_bow_draw"):
+        avatar.call("begin_bow_draw")
 
 func _update_bow_shot(delta: float) -> void:
     if pending_bow_elapsed <= 0.0:
@@ -569,6 +577,8 @@ func _update_bow_shot(delta: float) -> void:
     var target: Vector3 = aim["origin"] + aim["direction"] * 70.0
     arrow.global_position = origin
     arrow.setup(self, (target - origin).normalized())
+    if avatar != null and avatar.has_method("begin_bow_release"):
+        avatar.call("begin_bow_release")
 
 func projectile_aim(max_range: float = 60.0) -> Dictionary:
     var direction := -camera.global_transform.basis.z

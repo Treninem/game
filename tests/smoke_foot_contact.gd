@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AUDIO_RETIREMENT = preload("res://tests/audio_retirement_probe.gd")
+
 func _initialize() -> void:call_deferred("_run")
 
 func _run() -> void:
@@ -79,8 +81,15 @@ func _run() -> void:
         assert(dust.base_alpha <= 0.24)
     await create_timer(0.6).timeout
     assert(get_node_count_in_group("foot_contact_dust") == 0, "Contact effects did not expire")
+    var retired: Array[WeakRef] = []
+    for voice in audio.get_children():
+        if voice is AudioStreamPlayer3D:
+            retired.append(AUDIO_RETIREMENT.playback_reference(voice))
     audio.call("shutdown")
-    print("FOOT_CONTACT_OK materials=9 physical_floor=true audio=matched camera_independent=true freshwater=true alpha=preserved budget=36 expiry=bounded")
+    var river: AudioStreamPlayer3D = audio.call("river_emitter")
+    assert(not river.playing and river.stream == null)
     world.queue_free()
-    await process_frame
+    var released: bool = await AUDIO_RETIREMENT.wait_retired(self, retired)
+    assert(released, "Retired physical audio retained a decoder")
+    print("FOOT_CONTACT_OK materials=9 physical_floor=true audio=matched camera_independent=true freshwater=true alpha=preserved budget=36 expiry=bounded mixer=retired")
     quit()

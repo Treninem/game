@@ -81,7 +81,7 @@
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_BOW_RELEASE.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
   "last_updated": "2026-10-23",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_BOW_RELEASE.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
@@ -149,6 +149,14 @@
     "review_folder": "docs/review/2026-10-23-bow-release",
     "local_unit": "three transformed releases PASS; old parent reproduced displacement",
     "ci": "18ab50ee World Core failed on temporal frame observation; followup exact-SHA pending",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
+  },
+  "latest_action_audio_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
+    "review_folder": "docs/review/2026-10-23-action-audio",
+    "local_checks": "5 PASS, strict audio cleanup and 30 live GPU poses",
+    "ci": "9f4e: 7/8, audio teardown failure; new exact-SHA pending",
     "full_artistic_acceptance": false,
     "stable_release_published": false
   }

@@ -1,0 +1,231 @@
+{
+  "date": "2026-10-23",
+  "packet": "Synchronous whole-character action starts and deterministic audio lifetime",
+  "parent": "9f4e2541c28be6a9bda31b9a8d32d5be4d8f45d9",
+  "goal_status": "active",
+  "changes": [
+    "Validated controller actions begin their authored animation at the input event; mixer evaluation is queued with seek(0,false), preserving modifier evaluation on the rendered frame. Covers bow Draw/Shoot, axe, punch and independent left/right casting. Cooldowns, mana, damage and the 0.22s draw duration are unchanged.",
+    "Native world QA camera follows the actor on the exact captured Draw frame and asserts both head and feet are in the frustum. No player teleport or actor freeze was added.",
+    "MenuMusic shutdown stops playback and clears its stream; natural tree exit uses the same idempotent shutdown.",
+    "Audio tests observe actual weak playback/stream retirement using a monotonic one-second deadline and two process boundaries. This replaces a SceneTreeTimer wait which can consume the current frame prior delta. Dummy audio has an asynchronous mixer, so stopping the node alone does not prove retirement.",
+    "Existing world, audio, clothing, arm, save and UI gates remain strict; a new three-cycle music lifetime gate is added."
+  ],
+  "previous_ci": {
+    "head": "9f4e2541c28be6a9bda31b9a8d32d5be4d8f45d9",
+    "checks": [
+      {
+        "name": "world-core",
+        "status": "COMPLETED",
+        "conclusion": "FAILURE",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543649/job/120092679540"
+      },
+      {
+        "name": "build-game",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543591/job/120092679153"
+      },
+      {
+        "name": "build",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543525/job/120092678903"
+      },
+      {
+        "name": "diagnose-ui",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543798/job/120092679400"
+      },
+      {
+        "name": "validate-magic",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543535/job/120092679529"
+      },
+      {
+        "name": "movement-smoke",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543513/job/120092678991"
+      },
+      {
+        "name": "validate-world-vfx",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543774/job/120092679348"
+      },
+      {
+        "name": "build-installer",
+        "status": "COMPLETED",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39855543591/job/120094964320"
+      }
+    ],
+    "functional_world_walked_m": 28.4920518361,
+    "player_position_assignments": 0,
+    "world_functional_scenario_passed": true,
+    "clean_teardown": false,
+    "failure": "Menu MP3 and foot-contact river Ogg references survived process teardown. All functional foot assertions passed but the strict gate correctly failed. The world audio error was interleaved with verbose output; local scans now match any ERROR: occurrence."
+  },
+  "local_final_checks": [
+    {
+      "case": "menu_music_lifetime_monotonic",
+      "exit_code": 0,
+      "seconds": 57.88,
+      "errors": [],
+      "sources": {
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+        "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+        "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+        "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+        "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+        "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+        "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+        "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+        "scripts/humanoid_visual.gd": "f5e7cd548a38b8b101355154499f00f9dbd9da0547e71ba35acfb0d85333213d",
+        "tests/visual_bow_world.gd": "791e37f078407ae6d089716432227a90974244d5a89f9247d1d8ae1b0325e098",
+        "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+        "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+        "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+        "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f"
+      }
+    },
+    {
+      "case": "foot_contact_monotonic",
+      "exit_code": 0,
+      "seconds": 124.14,
+      "errors": [],
+      "sources": {
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+        "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+        "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+        "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+        "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+        "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+        "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+        "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+        "scripts/humanoid_visual.gd": "f5e7cd548a38b8b101355154499f00f9dbd9da0547e71ba35acfb0d85333213d",
+        "tests/visual_bow_world.gd": "791e37f078407ae6d089716432227a90974244d5a89f9247d1d8ae1b0325e098",
+        "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+        "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+        "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+        "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f"
+      }
+    },
+    {
+      "case": "projectile_release_synchronous",
+      "exit_code": 0,
+      "seconds": 105.75,
+      "errors": [],
+      "sources": {
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+        "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+        "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+        "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+        "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+        "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+        "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+        "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+        "scripts/humanoid_visual.gd": "f5e7cd548a38b8b101355154499f00f9dbd9da0547e71ba35acfb0d85333213d",
+        "tests/visual_bow_world.gd": "791e37f078407ae6d089716432227a90974244d5a89f9247d1d8ae1b0325e098",
+        "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+        "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+        "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+        "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f"
+      }
+    },
+    {
+      "case": "response_headless_synchronous",
+      "exit_code": 0,
+      "seconds": 130.52,
+      "errors": [],
+      "sources": {
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+        "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+        "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+        "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+        "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+        "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+        "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+        "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+        "scripts/humanoid_visual.gd": "f5e7cd548a38b8b101355154499f00f9dbd9da0547e71ba35acfb0d85333213d",
+        "tests/visual_bow_world.gd": "791e37f078407ae6d089716432227a90974244d5a89f9247d1d8ae1b0325e098",
+        "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+        "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+        "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+        "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f"
+      }
+    },
+    {
+      "case": "response_native_synchronous",
+      "exit_code": 0,
+      "seconds": 228.62,
+      "errors": [],
+      "sources": {
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+        "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+        "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+        "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+        "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+        "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+        "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+        "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+        "scripts/humanoid_visual.gd": "f5e7cd548a38b8b101355154499f00f9dbd9da0547e71ba35acfb0d85333213d",
+        "tests/visual_bow_world.gd": "791e37f078407ae6d089716432227a90974244d5a89f9247d1d8ae1b0325e098",
+        "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+        "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+        "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+        "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f"
+      }
+    }
+  ],
+  "diagnostic": "Dummy 44100Hz buffer4096: queued player gone at 1ms, actual decoder/stream references gone by 203ms; monotonic three-cycle regression passed. Raw rejected attempts remain under build.",
+  "engine_sources": [
+    "https://raw.githubusercontent.com/godotengine/godot/4.7.1-stable/servers/audio/audio_driver_dummy.h",
+    "https://raw.githubusercontent.com/godotengine/godot/4.7.1-stable/servers/audio/audio_server.cpp"
+  ],
+  "source_sha256": {
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+    "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+    "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+    "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+    "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+    "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+    "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+    "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+    "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+    "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+    "scripts/humanoid_visual.gd": "f5e7cd548a38b8b101355154499f00f9dbd9da0547e71ba35acfb0d85333213d",
+    "tests/visual_bow_world.gd": "791e37f078407ae6d089716432227a90974244d5a89f9247d1d8ae1b0325e098",
+    "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+    "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+    "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+    "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f"
+  },
+  "evidence": "docs/review/2026-10-23-action-audio",
+  "ci": "Full exact-head CI pending after push; last completely green predecessor remains 3558a4df. No gate downgraded.",
+  "limits": [
+    "Automated input/native rendering, not a manual whole-world playthrough.",
+    "Human meshes, Blender files and textures unchanged; artistic acceptance is false.",
+    "Local cold full-world startup and large arm scan remain unaccepted under severe memory pressure; no user application closed.",
+    "The previous full world ran in Linux llvmpipe; its timing is not Windows integrated-GPU FPS.",
+    "No stable installer/release published."
+  ]
+}

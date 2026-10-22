@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AUDIO_RETIREMENT = preload("res://tests/audio_retirement_probe.gd")
+
 class CastInputProbe extends Node:
     func _input(event: InputEvent) -> void:
         if event.is_action_pressed("cast_magic"):
@@ -35,9 +37,12 @@ func _frames(count: int) -> void:
         var before := player.global_position
         await physics_frame
         walked += Vector2(player.global_position.x - before.x, player.global_position.z - before.z).length()
-        observer.global_position = player.global_position + player.global_basis * Vector3(1.4, 1.6, -3.0)
-        observer.look_at(player.global_position + Vector3.UP * 1.15)
+        _follow_player()
         _check_live_bow_arm()
+
+func _follow_player() -> void:
+    observer.global_position = player.global_position + player.global_basis * Vector3(1.4, 1.6, -3.0)
+    observer.look_at(player.global_position + Vector3.UP * 1.15)
 
 func _action(action: String) -> void:
     var event := InputEventAction.new()
@@ -238,6 +243,13 @@ func _run() -> void:
     change_scene_to_file("res://scenes/main_menu.tscn")
     for frame in range(12):
         await process_frame
+    var menu_music: AudioStreamPlayer = current_scene.get_node("MenuMusic")
+    var retired: Array[WeakRef] = [AUDIO_RETIREMENT.stream_reference(menu_music), AUDIO_RETIREMENT.playback_reference(menu_music)]
+    menu_music.call("shutdown")
+    assert(not menu_music.playing and menu_music.stream == null)
+    var released: bool = await AUDIO_RETIREMENT.wait_retired(self, retired)
+    assert(released, "Menu audio retained a decoder at world-probe exit")
+    print("MENU_AUDIO_SHUTDOWN_OK stream=cleared mixer=drained")
     quit(0)
 
 func _check_live_bow_arm() -> void:
@@ -279,6 +291,9 @@ func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
     bow_blend_samples += 1
     print("LIVE_BOW_BLEND_SAMPLE ", bow_blend_samples)
     if request_airborne_draw and animator.assigned_animation == "Bow_Attack_Draw" and not player.is_on_floor():
+        _follow_player()
+        assert(observer.is_position_in_frustum(player.global_position))
+        assert(observer.is_position_in_frustum(player.global_position + Vector3.UP * float(visual.get("current_profile").height_cm) / 100.0))
         request_airborne_draw = false
         var observed := {"pose":String(animator.assigned_animation), "grounded":player.is_on_floor(), "pending":float(player.get("pending_bow_elapsed")), "frame":frame}
         RenderingServer.frame_post_draw.connect(func():

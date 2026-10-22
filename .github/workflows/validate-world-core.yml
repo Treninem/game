@@ -157,6 +157,8 @@ jobs:
 
       - name: Verify startup main menu flow
         run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
+      - name: Verify menu music releases real mixer playback across repeated exits
+        run: bash tools/run_godot_smoke.sh tests/smoke_menu_music_lifetime.gd 120
       - name: Verify canonical regions and climate
         run: bash tools/run_godot_smoke.sh tests/smoke_canonical_regions.tscn 90
       - name: Verify exact and bounded road distances against independent geometry

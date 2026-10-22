@@ -438,11 +438,32 @@ func _play(key: String, rate: float) -> void:
             animation_player.seek(float(grip_modifier.call("gait_phase")) * animation_player.get_animation(key).length, true)
 
 func begin_axe_stroke() -> void:
-    if animation_player != null and animation_player.has_animation("Axe_Chop"):
-        active_animation = "Axe_Chop"
-        animation_player.speed_scale = 1.8
-        animation_player.play("Axe_Chop", 0.06)
-        animation_player.seek(0.0, true)
+    _begin_action_pose("Axe_Chop", 1.8)
+
+func begin_bow_draw() -> void:
+    _begin_action_pose("Bow_Attack_Draw", 1.8)
+
+func begin_bow_release() -> void:
+    _begin_action_pose("Bow_Attack_Shoot", 1.0)
+
+func begin_punch_stroke(duration: float) -> void:
+    if animation_player != null and animation_player.has_animation("Punch"):
+        _begin_action_pose("Punch", animation_player.get_animation("Punch").length / maxf(0.1, duration))
+
+func begin_cast_pose(right_hand: bool) -> void:
+    _begin_action_pose("Cast_Right" if right_hand else "Cast_Left", 1.0)
+
+func _begin_action_pose(key: String, rate: float) -> void:
+    # Accept the transition with the actual input/physics event, before the
+    # animation mixer's next update. Starting it from _process was one render
+    # late and could spend most of a short draw/release showing the old pose.
+    if animation_player != null and animation_player.has_animation(key):
+        active_animation = key
+        animation_player.speed_scale = rate
+        animation_player.play(key, 0.06)
+        # Queue evaluation for the mixer; do not consume the skeleton's
+        # modifier update from inside an input event before the render pass.
+        animation_player.seek(0.0, false)
 
 func play_death() -> void:
     _play("Death", 1.0)
