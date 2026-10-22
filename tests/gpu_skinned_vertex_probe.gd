@@ -228,8 +228,23 @@ func calibrate() -> void:
 func capture() -> PackedVector3Array:
     sync_source()
     _set_parameter("srgb_decode",decode_linear)
-    var points:=PackedVector3Array();points.resize(points_count)
     var picture:=await _read()
+    return _decode_capture(picture)
+
+# Coordinate several real mesh probes on ONE live physics/render frame:
+# begin all, await process_frame + frame_post_draw once, then finish all.
+func begin_capture() -> void:
+    sync_source()
+    _set_parameter("srgb_decode",decode_linear)
+    viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
+
+func finish_capture() -> PackedVector3Array:
+    var picture:=viewport.get_texture().get_image()
+    picture.convert(Image.FORMAT_RGBA8)
+    return _decode_capture(picture)
+
+func _decode_capture(picture: Image) -> PackedVector3Array:
+    var points:=PackedVector3Array();points.resize(points_count)
     for axis in range(3):
         for i in range(points_count):
             var id:=i+axis*points_count

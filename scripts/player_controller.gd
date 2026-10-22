@@ -240,8 +240,9 @@ func _physics_process(delta: float) -> void:
         landing_elapsed = 0.24
         landing_strength = clampf(fall_speed_before_move / 7.0, 0.35, 1.0)
         footstep_distance_accum = 0.0
-        WorldVFX.spawn_landing(global_position, fall_speed_before_move, "", -global_transform.basis.z)
-        _play_footstep_audio(clampf(fall_speed_before_move / 5.5, 0.75, 1.35))
+        var contact := _foot_contact()
+        WorldVFX.spawn_landing(contact.position, fall_speed_before_move, contact.surface, -global_transform.basis.z, contact.normal)
+        _play_footstep_audio(clampf(fall_speed_before_move / 5.5, 0.75, 1.35), contact)
         ScreenVFX.landing_feedback(fall_speed_before_move)
     elif grounded_after and input_vec.length() > 0.08:
         footstep_distance_accum += last_horizontal_motion.length()
@@ -249,8 +250,9 @@ func _physics_process(delta: float) -> void:
         if footstep_distance_accum >= step_distance:
             footstep_distance_accum = 0.0
             var footstep_strength := 1.10 if can_sprint else 0.72
-            WorldVFX.spawn_footstep(global_position, footstep_strength, "", -global_transform.basis.z)
-            _play_footstep_audio(footstep_strength)
+            var contact := _foot_contact()
+            WorldVFX.spawn_footstep(contact.position, footstep_strength, contact.surface, -global_transform.basis.z, contact.normal)
+            _play_footstep_audio(footstep_strength, contact)
     elif not grounded_after:
         footstep_distance_accum = 0.0
 
@@ -265,10 +267,25 @@ func _physics_process(delta: float) -> void:
 func actual_horizontal_speed(delta: float = 1.0 / 60.0) -> float:
     return last_horizontal_motion.length() / maxf(delta, 0.0001)
 
-func _play_footstep_audio(intensity: float) -> void:
+func _foot_contact() -> Dictionary:
+    # Resolve once per audible/visible step, never once per frame. Collider
+    # metadata wins over the map so interiors and bridges retain their material.
+    var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 0.3,
+        global_position - Vector3.UP * 0.6, collision_mask, [get_rid()])
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    var point: Vector3 = hit.get("position", global_position)
+    var surface := WorldVFX.surface_from_collider(hit.get("collider"), point)
+    if surface == "water":
+        point.y = maxf(point.y, WorldData.water_level_at(Vector2(point.x, point.z)))
+    return {"position":point, "normal":hit.get("normal", Vector3.UP), "surface":surface}
+
+func _play_footstep_audio(intensity: float, contact: Dictionary = {}) -> void:
+    if contact.is_empty():
+        contact = _foot_contact()
     var world_audio := get_tree().get_first_node_in_group("world_audio")
     if world_audio != null and world_audio.has_method("play_footstep"):
-        world_audio.call("play_footstep", global_position, "", intensity)
+        var hint := "wood" if contact.surface == "wood" else ("wet" if contact.surface in ["water", "mud"] else "ground")
+        world_audio.call("play_footstep", contact.position, hint, intensity)
 
 func set_dungeon_mode(active: bool) -> void:
     _set_instanced_world_mode(active)

@@ -3,6 +3,7 @@ extends SkeletonModifier3D
 var visual: Node3D
 var support := preload("res://scripts/humanoid_grounding.gd").new()
 var clearance = preload("res://scripts/humanoid_arm_clearance.gd").new()
+var motion_response = preload("res://scripts/humanoid_motion_response.gd").new()
 var last_grip := Transform3D.IDENTITY
 var closed_fingers := 0
 var gait_time := 0.0
@@ -23,6 +24,7 @@ func _process_modification_with_delta(_delta: float) -> void:
         gait_applied = false
         return
     _moving_legs(skeleton, _delta)
+    motion_response.apply(visual, skeleton, _delta)
     support.apply(visual, skeleton, _delta)
     var resting := String(actor.get_meta("activity", "idle")) in ["sit", "sleep"]
     if is_instance_valid(visual.held_weapon):

@@ -96,13 +96,14 @@ func _build_structure() -> void:
     shell.name = "PhysicalShell"
     add_child(shell)
 
-    _add_static_box(
+    var floor_body := _add_static_box(
         shell,
         "Floor",
         Vector3(footprint.x, floor_thickness, footprint.y),
         Vector3(0.0, floor_thickness * 0.5, 0.0),
         floor_material
     )
+    floor_body.set_meta("surface_type", "wood")
     _add_static_box(
         shell,
         "Ceiling",

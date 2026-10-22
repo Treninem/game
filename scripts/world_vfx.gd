@@ -8,6 +8,8 @@ const FLIPBOOK_SCRIPT = preload("res://scripts/vfx_flipbook_3d.gd")
 const KENNEY := "res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/"
 
 const SURFACES := ["dirt", "grass", "sand", "mud", "snow", "stone", "wood", "metal", "glass", "water"]
+const FOOT_DUST_LIMIT := 36
+var _foot_dust_texture: Texture2D
 
 func surface_at(world_position: Vector3) -> String:
     var xz := Vector2(world_position.x, world_position.z)
@@ -16,7 +18,8 @@ func surface_at(world_position: Vector3) -> String:
 
     var biome := WorldData.biome_at(xz)
     var elevation := WorldData.elevation_at(xz)
-    if EnvironmentState.is_underwater or (biome == "ocean" and world_position.y <= WorldData.SEA_LEVEL + 1.5):
+    # Camera immersion must not change the material under another actor's feet.
+    if biome in ["freshwater", "ocean", "underwater"] and world_position.y <= WorldData.water_level_at(xz) + 0.18:
         return "water"
 
     var winter_snow := EnvironmentState.season == EnvironmentState.Season.WINTER and EnvironmentState.temperature_c <= 2.0
@@ -66,6 +69,8 @@ func surface_from_collider(collider: Variant, world_position: Vector3 = Vector3.
                 return surface
 
         var lowered := String(node.name).to_lower()
+        if lowered == "terraincollision":
+            return surface_at(world_position)
         var keywords := {
             "metal": ["metal", "steel", "iron", "pipe", "rail"],
             "wood": ["wood", "tree", "log", "plank", "door"],
@@ -89,7 +94,8 @@ func spawn_footstep(
         world_position: Vector3,
         strength: float = 1.0,
         surface_override: String = "",
-        forward: Vector3 = Vector3.FORWARD
+        forward: Vector3 = Vector3.FORWARD,
+        normal: Vector3 = Vector3.UP
     ) -> void:
     var surface := _safe_surface(surface_override) if not surface_override.is_empty() else surface_at(world_position)
     var host := get_tree().current_scene
@@ -100,44 +106,63 @@ func spawn_footstep(
     match surface:
         "water":
             VFXLibrary.spawn_collision("water", world_position + Vector3.UP * 0.05, Vector3.UP, host, 0.45 * s)
-        "stone":
+        "stone", "wood", "metal", "glass":
             # Walking on intact paving does not chip it or leave soil prints.
             # Impact/break effects remain available for actual tool strikes.
             pass
         "snow":
-            VFXLibrary.spawn("magic_frost", world_position + Vector3.UP * 0.06, host, Vector3.UP, Vector3.ZERO, 0.18 * s)
-            _spawn_flipbook([KENNEY + "smoke_03.png"], world_position + Vector3.UP * 0.10, 0.38 * s, Color(0.90, 0.96, 1.0, 0.68), 0.12)
-            EnvironmentMarks.spawn_footprint(world_position, Vector3.UP, forward, Vector2(0.26, 0.50), 35.0)
+            _spawn_foot_dust(world_position, s, Color(0.90, 0.96, 1.0, 0.24))
+            EnvironmentMarks.spawn_footprint(world_position, normal, forward, Vector2(0.26, 0.50), 35.0)
         "mud":
-            VFXLibrary.spawn_collision("dirt", world_position + Vector3.UP * 0.05, Vector3.UP, host, 0.32 * s)
             VFXLibrary.spawn_collision("water", world_position + Vector3.UP * 0.04, Vector3.UP, host, 0.18 * s)
-            EnvironmentMarks.spawn_mud_mark(world_position, Vector3.UP, forward, Vector2(0.38, 0.52), 28.0)
+            EnvironmentMarks.spawn_mud_mark(world_position, normal, forward, Vector2(0.38, 0.52), 28.0)
         "sand":
-            VFXLibrary.spawn_collision("dirt", world_position + Vector3.UP * 0.05, Vector3.UP, host, 0.34 * s)
-            _spawn_flipbook(_dirt_frames(), world_position + Vector3.UP * 0.12, 0.42 * s, Color(0.82, 0.68, 0.42, 0.72), 0.055)
-            EnvironmentMarks.spawn_footprint(world_position, Vector3.UP, forward, Vector2(0.25, 0.49), 24.0)
+            _spawn_foot_dust(world_position, s, Color(0.76, 0.66, 0.46, 0.22))
+            EnvironmentMarks.spawn_footprint(world_position, normal, forward, Vector2(0.25, 0.49), 24.0)
         "grass":
-            VFXLibrary.spawn_collision("dirt", world_position + Vector3.UP * 0.05, Vector3.UP, host, 0.18 * s)
-            _spawn_flipbook(_dirt_frames(), world_position + Vector3.UP * 0.10, 0.30 * s, Color(0.46, 0.64, 0.28, 0.56), 0.060)
+            if EnvironmentState.wetness < 0.3:
+                _spawn_foot_dust(world_position, s * 0.65, Color(0.49, 0.48, 0.33, 0.10))
         _:
-            VFXLibrary.spawn_collision("dirt", world_position + Vector3.UP * 0.05, Vector3.UP, host, 0.24 * s)
-            _spawn_flipbook(_dirt_frames(), world_position + Vector3.UP * 0.10, 0.34 * s, Color(0.60, 0.47, 0.30, 0.62), 0.060)
+            if EnvironmentState.wetness < 0.3:
+                _spawn_foot_dust(world_position, s, Color(0.60, 0.52, 0.39, 0.18))
             if EnvironmentState.wetness > 0.30:
-                EnvironmentMarks.spawn_footprint(world_position, Vector3.UP, forward, Vector2(0.25, 0.49), 22.0)
+                EnvironmentMarks.spawn_footprint(world_position, normal, forward, Vector2(0.25, 0.49), 22.0)
 
 func spawn_landing(
         world_position: Vector3,
         fall_speed: float,
         surface_override: String = "",
-        forward: Vector3 = Vector3.FORWARD
+        forward: Vector3 = Vector3.FORWARD,
+        normal: Vector3 = Vector3.UP
     ) -> void:
     var strength := clampf((absf(fall_speed) - 3.0) / 6.0, 0.45, 2.2)
     var surface := _safe_surface(surface_override) if not surface_override.is_empty() else surface_at(world_position)
-    spawn_footstep(world_position, strength * 1.35, surface, forward)
+    spawn_footstep(world_position, strength * 1.35, surface, forward, normal)
     if strength > 0.9:
-        spawn_impact(surface, world_position + Vector3.UP * 0.08, Vector3.UP, Vector3.DOWN, strength * 0.75)
         if surface == "mud":
-            EnvironmentMarks.spawn_mud_mark(world_position, Vector3.UP, forward, Vector2(0.72, 0.72), 32.0)
+            EnvironmentMarks.spawn_mud_mark(world_position, normal, forward, Vector2(0.72, 0.72), 32.0)
+
+func _spawn_foot_dust(point: Vector3, strength: float, tint: Color) -> void:
+    # One small shaded card instead of the impact system's opaque dirt chunks.
+    # Retain the existing CC0 texture lazily; no extra cold-start dependency.
+    if get_tree().get_node_count_in_group("foot_contact_dust") >= FOOT_DUST_LIMIT:
+        return
+    if _foot_dust_texture == null:
+        _foot_dust_texture = load(KENNEY + "smoke_03.png") as Texture2D
+    var puff = _spawn_flipbook([KENNEY + "smoke_03.png"], point + Vector3.UP * 0.08,
+        0.22 * clampf(strength, 0.4, 1.8), tint, 0.34)
+    if puff == null:
+        return
+    puff.add_to_group("foot_contact_dust")
+    puff.material.emission_enabled = false
+    puff.material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+    puff.material.roughness = 1.0
+    puff.material.metallic_specular = 0.0
+    puff.mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+    puff.drift_velocity = Vector3(0.015, 0.055, 0.0)
+    puff.growth_rate = 1.1
+    puff.spin_rate = 0.1
+    puff.fade_in_ratio = 0.08
 
 func spawn_impact(
         surface: String,

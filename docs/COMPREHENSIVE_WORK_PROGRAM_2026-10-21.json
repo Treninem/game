@@ -18,7 +18,7 @@
         "Стопы держат рельеф, ступени и склоны без зависания; камера и управление удобны",
         "Изменения внешности и экипировки переживают сохранение/загрузку"
       ],
-      "current": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты. Исправлены первые кадры подготовки лука: прежнее исключение пропускало исходный Idle сквозь одежду. 504 кадра шести настоящих переходов и четыре нативных GPU/цветовых образца прошли; выстрел, хват, тетива и диск повторно проверены."
+      "current": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты. Исправлены первые кадры подготовки лука: прежнее исключение пропускало исходный Idle сквозь одежду. 504 кадра шести настоящих переходов и четыре нативных GPU/цветовых образца прошли; выстрел, хват, тетива и диск повторно проверены. Новый пакет: переходный баланс корпуса/головы/плеч при реальном ускорении, торможении, повороте и приземлении; 30 движущихся поз туники/всей обуви на GPU. Исправлены непрозрачная многогранная пыль и материал физических шагов; дерево/камень не дают земляных обломков. Полная внешность, фазовая опора и художественная приёмка остаются открыты."
     },
     {
       "group": "Природа и рельеф",
@@ -77,11 +77,11 @@
         "Журнал, проверочные кадры и узкие коммиты синхронизируются",
         "Нет стабильного выпуска при красных или отсутствующих обязательных проверках"
       ],
-      "current": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет. Проверены 101113 неизменных высот, 5948 биомов/воды/температуры, 3240 независимых дорожных проб и обычный нативный ввод; полная приёмка открыта."
+      "current": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет. Проверены 101113 неизменных высот, 5948 биомов/воды/температуры, 3240 независимых дорожных проб и обычный нативный ввод; полная приёмка открыта. 3558a4df: все восемь exact-SHA CI SUCCESS. Пакет баланса/контакта проходит новый exact-SHA CI после push; большая локальная проверка рук завершилась по внешнему сроку и не считается принятой. Ни один обязательный прежний gate не ослаблен."
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
   "last_updated": "2026-10-22",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
@@ -119,5 +119,29 @@
     "fps_gain_confirmed": false,
     "full_art_accepted": false,
     "remote_ci": "Exact new SHA verification follows push"
+  },
+  "latest_motion_contact_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-22-body-response",
+    "metrics": {
+      "poses": 30,
+      "tunic_vertices_per_pose": 3776,
+      "boot_vertices_per_pose": 3530,
+      "walked_m": 26.3948098011315,
+      "maximum_tunic_gpu_cpu_error_m": 2.31941726269724e-06,
+      "maximum_boot_gpu_cpu_error_m": 2.11608289646392e-06,
+      "ground_gpu_min_y_m": 0.00283039873465896,
+      "ground_gpu_max_y_m": 0.00400019250810146,
+      "response_self_timing_usec": {
+        "median": 68,
+        "p95": 218,
+        "samples": 433
+      }
+    },
+    "artistic_acceptance": false,
+    "cold_boot_timing_accepted": false,
+    "local_arm_scan": "timeout; not a full pass",
+    "local_world_gameplay": "timeout before successful gameplay capture; not accepted",
+    "candidate_ci": "Pending exact-SHA verification after push; previous 3558a4df all eight SUCCESS."
   }
 }

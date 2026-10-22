@@ -256,6 +256,14 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_arm_clearance.gd 300
       - name: Verify arm clearance through actual runtime crossfades
         run: bash tools/run_godot_smoke.sh tests/smoke_arm_blends.gd 210
+      - name: Verify real world input equipment magic UI and disk in rendered gameplay
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_bow_world.gd 240
+      - name: Verify physical foot contacts and bounded non-emissive dust
+        run: bash tools/run_godot_smoke.sh tests/smoke_foot_contact.gd 120
+      - name: Verify whole-body acceleration turn landing and pause response
+        run: bash tools/run_godot_smoke.sh tests/smoke_motion_response.gd 180
+      - name: Verify live GPU clothing and boot vertices during physical actions
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_motion_response.gd 240
       - name: Verify actual GPU arm vertices and native color poses
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_arm_clearance.gd 180
       - name: Verify first rendered bow frame uses final corrected hands

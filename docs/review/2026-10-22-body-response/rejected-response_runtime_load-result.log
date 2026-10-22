@@ -1,0 +1,9 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MOTION_RESPONSE_SAMPLE {"control":{"arm_crossings":0,"clip":"Airborne","forward":0.0431794747710228,"grounded":false,"side":-0.00590133853256702,"sole_gap":3.27559590339661},"label":"male-rest","response":{"arm_crossings":0,"clip":"Airborne","forward":0.0431794747710228,"grounded":false,"side":-0.00590133853256702,"sole_gap":3.2829167842865}}
+MOTION_RESPONSE_SAMPLE {"control":{"arm_crossings":0,"clip":"Airborne","forward":0.0431795082986355,"grounded":false,"side":-0.00590133853256702,"sole_gap":0.675595045089722},"label":"male-start","response":{"arm_crossings":0,"clip":"Airborne","forward":0.0431795082986355,"grounded":false,"side":-0.00590133853256702,"sole_gap":0.682915925979614}}
+SCRIPT ERROR: Assertion failed: Torso did not respond to actual acceleration
+   at: _run (res://tests/smoke_motion_response.gd:141)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_motion_response.gd:141)
+       [1] _sample (res://tests/smoke_motion_response.gd:95)

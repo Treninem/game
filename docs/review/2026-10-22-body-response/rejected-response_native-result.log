@@ -1,0 +1,16 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+MOTION_RESPONSE_SAMPLE {"control":{"arm_crossings":0,"clip":"Idle","forward":0.00441656121984124,"grounded":true,"side":-0.00263818725943565,"sole_gap":0.00398939289152622},"gpu_error_m":0.00000158596583332837,"label":"male-rest","response":{"arm_crossings":0,"clip":"Idle","forward":0.00441656121984124,"grounded":true,"side":-0.00263818725943565,"sole_gap":0.00398939289152622}}
+MOTION_RESPONSE_SAMPLE {"control":{"arm_crossings":0,"clip":"Run","forward":-0.000704169215168804,"grounded":true,"side":-0.00274606375023723,"sole_gap":0.00399224832653999},"gpu_error_m":0.00000145635510762077,"label":"male-start","response":{"arm_crossings":0,"clip":"Run","forward":-0.000704169215168804,"grounded":true,"side":-0.00274606375023723,"sole_gap":0.00399224832653999}}
+SCRIPT ERROR: Assertion failed: Torso did not respond to actual acceleration
+   at: _run (res://tests/smoke_motion_response.gd:175)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_motion_response.gd:175)
+       [1] _sample (res://tests/smoke_motion_response.gd:128)
+       [2] capture (res://tests/gpu_skinned_vertex_probe.gd:242)
+       [3] _read (res://tests/gpu_skinned_vertex_probe.gd:199)

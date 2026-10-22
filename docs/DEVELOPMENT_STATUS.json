@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Ускорены связанные выборки рельефа, дорожных обочин, биомов и растительности без изменения геометрии: 101113 высот совпали точно; медиана CPU-выборки 6,77 -> 5,28 с. Пройдено 28,50 м автоматизированным вводом, действия/четыре качества/UI/диск проверены. Холодный редактор и мир на UHD610 по-прежнему не укладываются в обязательные сроки. Полная художественная приёмка и стабильный выпуск открыты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+  "current_stage": "Связанный пакет баланса корпуса, головы и плеч при старте/торможении/повороте/приземлении и контакта обуви с поверхностью. 30 движущихся GPU-поз, физический пол/звук/пыль и нативные позы проверены. Полный мир и большая локальная проверка рук не завершились в срок; обязательный прежний CI сохранён. Модели и мир художественно не приняты, холодный запуск открыт.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -207,7 +207,7 @@
   ],
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -384,7 +384,7 @@
       "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
     }
   },
-  "last_verified_runtime_commit": "b8d03d105d5aa1a4f457dd62b234379b6edd17b5",
+  "last_verified_runtime_commit": "3558a4dfe59734538fe922e9bb1aac660156141b",
   "last_verified_runtime_ci": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
   "world_regression": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
@@ -477,5 +477,29 @@
     "full_art_accepted": false,
     "remote_ci": "Exact new SHA verification follows push"
   },
-  "latest_tested_source_mirror": "build/startup-performance; existing build/stability review launcher remains on b8d03d10, user applications were not closed or replaced."
+  "latest_tested_source_mirror": "build/body-response",
+  "latest_motion_contact_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-22-body-response",
+    "metrics": {
+      "poses": 30,
+      "tunic_vertices_per_pose": 3776,
+      "boot_vertices_per_pose": 3530,
+      "walked_m": 26.3948098011315,
+      "maximum_tunic_gpu_cpu_error_m": 2.31941726269724e-06,
+      "maximum_boot_gpu_cpu_error_m": 2.11608289646392e-06,
+      "ground_gpu_min_y_m": 0.00283039873465896,
+      "ground_gpu_max_y_m": 0.00400019250810146,
+      "response_self_timing_usec": {
+        "median": 68,
+        "p95": 218,
+        "samples": 433
+      }
+    },
+    "artistic_acceptance": false,
+    "cold_boot_timing_accepted": false,
+    "local_arm_scan": "timeout; not a full pass",
+    "local_world_gameplay": "timeout before successful gameplay capture; not accepted",
+    "candidate_ci": "Pending exact-SHA verification after push; previous 3558a4df all eight SUCCESS."
+  }
 }

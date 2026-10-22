@@ -1,0 +1,215 @@
+{
+  "date": "2026-10-22",
+  "package": "Transient whole-body balance and physical foot contacts",
+  "parent": "3558a4dfe59734538fe922e9bb1aac660156141b",
+  "branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "goal_status": "active",
+  "requirements": [
+    "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+    "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt",
+    "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json"
+  ],
+  "changes": [
+    "Acceleration/braking/turn/landing balance across spine, head and shoulders for the player and ordinary citizens; authored steady gait and furniture poses preserved.",
+    "Action poses retain reduced movement response before existing sole, garment and grip correction; paused history eases out without derivative spikes.",
+    "Physical floor contact is queried once per step/landing and reused by effects and audio; wood interior floors have explicit semantic metadata.",
+    "Small shaded non-emissive CC0 smoke cards replace polygon dirt bursts on ordinary steps. Wet grass/soil suppress dry dust; intact stone/wood/metal/glass no longer emit soil or impact chips on landing.",
+    "Flipbooks retain supplied tint alpha and fade single-frame effects continuously. Dust lifetime 0.34 s and simultaneous cap 36; camera immersion no longer changes dry-ground material, freshwater uses the real water level.",
+    "Required CI adds paired physical response, live simultaneous tunic/boot GPU skinning and contact/effect checks without removing old gates."
+  ],
+  "native_motion": {
+    "poses": 30,
+    "tunic_vertices_per_pose": 3776,
+    "boot_vertices_per_pose": 3530,
+    "walked_m": 26.3948098011315,
+    "maximum_tunic_gpu_cpu_error_m": 0.00000231941726269724,
+    "maximum_boot_gpu_cpu_error_m": 0.00000211608289646392,
+    "ground_gpu_min_y_m": 0.00283039873465896,
+    "ground_gpu_max_y_m": 0.00400019250810146,
+    "response_self_timing_usec": {
+      "median": 68,
+      "p95": 218,
+      "samples": 433
+    }
+  },
+  "local_checks": {
+    "foot_contact": {
+      "case": "foot_contact",
+      "exit_code": 0,
+      "seconds": 127.61,
+      "errors": [],
+      "sources": {
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+        "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+        "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+        "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+        "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+        "scripts/player_controller.gd": "0c071c459acf8f54e6881e406fe80f279704db102108864a5cf1091a30158cbb",
+        "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+        "tests/smoke_foot_contact.gd": "c929ffc3470d88d16cdc04ec7324f56ad432858f1c4aea241544537a7ff51e17"
+      }
+    },
+    "response_native_final": {
+      "case": "response_native_final",
+      "exit_code": 0,
+      "seconds": 183.94,
+      "errors": [],
+      "sources": {
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+        "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+        "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+        "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+        "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+        "scripts/player_controller.gd": "0c071c459acf8f54e6881e406fe80f279704db102108864a5cf1091a30158cbb",
+        "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+        "tests/smoke_foot_contact.gd": "c929ffc3470d88d16cdc04ec7324f56ad432858f1c4aea241544537a7ff51e17"
+      }
+    }
+  },
+  "rejected_attempts": [
+    {
+      "case": "response_initial",
+      "reason": "Fixture preloaded a controller before singleton initialization; fixed by runtime loading.",
+      "receipt": {
+        "case": "response_initial",
+        "exit_code": 1,
+        "seconds": 9.42,
+        "errors": [
+          "SCRIPT ERROR: Compile Error: Identifier not found: SettingsManager"
+        ]
+      }
+    },
+    {
+      "case": "response_runtime_load",
+      "reason": "Fixture spawn preceded the overworld guard; fixed placement after enabling instanced mode.",
+      "receipt": {
+        "case": "response_runtime_load",
+        "exit_code": 1,
+        "seconds": 52.8,
+        "errors": [
+          "SCRIPT ERROR: Assertion failed: Torso did not respond to actual acceleration"
+        ]
+      }
+    },
+    {
+      "case": "response_native",
+      "reason": "The first GPU observer froze actors and invalidated velocity history; replaced by same-frame live probes.",
+      "receipt": {
+        "case": "response_native",
+        "exit_code": 1,
+        "seconds": 62.45,
+        "errors": [
+          "SCRIPT ERROR: Assertion failed: Torso did not respond to actual acceleration"
+        ],
+        "sources": {
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+          "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+          "scripts/humanoid_motion_response.gd": "23623b5fcf2ba5d50522289bd2791b040c14cb410ef001475d227df36b9e8235",
+          "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+          "tests/smoke_motion_response.gd": "bdd43a1f09dba4f9de968c1525e6de71cb0f6e34c72802e321c09e4840a991fd"
+        }
+      }
+    },
+    {
+      "case": "world",
+      "reason": "Native full-world probe exceeded the 320-second outer bound before gameplay captures; receipt wall time 379.05 s includes delayed termination. Free physical memory was 294624 KiB; no full-world run is accepted locally. Existing internal deadline is unchanged; a mandatory rendered world/save CI gate was added.",
+      "receipt": {
+        "case": "world",
+        "exit_code": 1,
+        "seconds": 379.05,
+        "errors": [],
+        "sources": {
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+          "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+          "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+          "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+          "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+          "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+          "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+          "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+          "scripts/player_controller.gd": "0c071c459acf8f54e6881e406fe80f279704db102108864a5cf1091a30158cbb",
+          "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+          "tests/smoke_foot_contact.gd": "c929ffc3470d88d16cdc04ec7324f56ad432858f1c4aea241544537a7ff51e17"
+        }
+      }
+    },
+    {
+      "case": "arms",
+      "reason": "Local geometry scan hit its 320-second outer bound under memory pressure. No inspected pose failed, but the full scan is NOT accepted locally; unchanged 300-second CI gate remains mandatory.",
+      "receipt": {
+        "case": "arms",
+        "exit_code": 1,
+        "seconds": 321.16,
+        "errors": [],
+        "sources": {
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+          "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+          "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+          "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+          "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+          "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+          "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+          "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+          "scripts/player_controller.gd": "0c071c459acf8f54e6881e406fe80f279704db102108864a5cf1091a30158cbb",
+          "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+          "tests/smoke_foot_contact.gd": "c929ffc3470d88d16cdc04ec7324f56ad432858f1c4aea241544537a7ff51e17"
+        }
+      }
+    }
+  ],
+  "verification_mode": "Automated Input events and real native GL Compatibility/UHD610 frames; not a manual full-world/capital journey. Paired QA floor is explicit test geometry; local full-world attempt did not finish and is not accepted. A mandatory native CI world/equipment/magic/UI/disk probe retains its original internal timeout. Sitting sample has no bench and is not a sole-grounding acceptance.",
+  "assets": {
+    "models_changed": false,
+    "blender_sources_changed": false,
+    "new_third_party_assets": false,
+    "reused_texture": "assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/smoke_03.png",
+    "license": "CC0; existing pack LICENSE.txt retained",
+    "art_acceptance": false
+  },
+  "source_sha256": {
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+    "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+    "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+    "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+    "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+    "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+    "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+    "scripts/player_controller.gd": "0c071c459acf8f54e6881e406fe80f279704db102108864a5cf1091a30158cbb",
+    "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+    "tests/smoke_foot_contact.gd": "c929ffc3470d88d16cdc04ec7324f56ad432858f1c4aea241544537a7ff51e17"
+  },
+  "isolation": {
+    "mirror": "build/body-response",
+    "isolated_profiles": true,
+    "user_review_game_closed": false,
+    "user_profiles_modified": false,
+    "shared_git_head_index_must_be_preserved": true
+  },
+  "limitations": [
+    "Full character/cloth/hair/world artistic acceptance remains false. These fixes do not replace the models or establish Witcher 3 quality.",
+    "Flat-floor GPU sole checks do not establish phase-locked feet on every slope, stair, stream or household seat.",
+    "Response self timing measures this small pass only, not overall frame time, FPS, loading or dedicated GPU memory.",
+    "Previous weak-PC cold-start timing failures remain unaccepted; no loader policy, deadlines or stable-release gates were weakened.",
+    "Local full arm scan timed out and is not counted as passed; exact-head server CI must pass all retained geometry/crossfade/GPU/movement/build checks."
+  ],
+  "ci": {
+    "previous_head": "3558a4df",
+    "previous_all_eight_success": true,
+    "candidate": "Exact candidate SHA is assigned after this journal is committed; all eight checks and actual World Core markers must be verified after push.",
+    "stable_release_published": false
+  },
+  "next": [
+    "Character phase-locked support across slopes/stairs, natural anticipation and full clothing/face/hair art remain open.",
+    "Continue coherent furnished multi-room households, occupation/age-dependent life, nature and animals according to the work program.",
+    "Isolate and correct cold native startup/resource lifetime without reducing required readiness or graphical quality."
+  ],
+  "evidence_text_normalization": "Committed copies normalize CRLF and remove trailing blank lines for repository whitespace rules; original byte-exact logs remain under build/acceptance/body-response-2026-10-22. See raw-log-provenance.json for both hashes."
+}
