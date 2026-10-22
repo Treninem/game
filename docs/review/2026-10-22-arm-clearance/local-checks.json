@@ -2,19 +2,19 @@
   "import": {
     "case": "import",
     "exit_code": 0,
-    "seconds": 76.94,
+    "seconds": 42.0,
     "errors": []
   },
   "arms": {
     "case": "arms",
     "exit_code": 0,
-    "seconds": 101.41,
+    "seconds": 185.12,
     "errors": []
   },
   "frames": {
     "case": "frames",
     "exit_code": 0,
-    "seconds": 19.44,
+    "seconds": 17.11,
     "errors": []
   },
   "coverage": {
@@ -38,13 +38,13 @@
   "household_pose": {
     "case": "household_pose",
     "exit_code": 0,
-    "seconds": 38.84,
+    "seconds": 15.86,
     "errors": []
   },
   "working_pose": {
     "case": "working_pose",
     "exit_code": 0,
-    "seconds": 18.25,
+    "seconds": 6.72,
     "errors": []
   },
   "character_creator": {
@@ -86,7 +86,7 @@
   "workshop": {
     "case": "workshop",
     "exit_code": 0,
-    "seconds": 139.48,
+    "seconds": 117.14,
     "errors": []
   },
   "motion": {
@@ -111,6 +111,30 @@
     "case": "locomotion_facing",
     "exit_code": 0,
     "seconds": 65.8,
+    "errors": []
+  },
+  "household_aisle": {
+    "case": "household_aisle",
+    "exit_code": 0,
+    "seconds": 10.23,
+    "errors": []
+  },
+  "citizen_persistence": {
+    "case": "citizen_persistence",
+    "exit_code": 0,
+    "seconds": 10.33,
+    "errors": []
+  },
+  "square_home_life": {
+    "case": "square_home_life",
+    "exit_code": 0,
+    "seconds": 154.88,
+    "errors": []
+  },
+  "capital_square": {
+    "case": "capital_square",
+    "exit_code": 0,
+    "seconds": 75.66,
     "errors": []
   }
 }

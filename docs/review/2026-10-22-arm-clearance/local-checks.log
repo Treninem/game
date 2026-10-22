@@ -12,23 +12,12 @@ Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
 [0m
 WARNING: UID duplicate detected between res://assets/vfx/third_party/binbun_godot4_electric/shared/scene_empty.tscn and res://assets/vfx/third_party/binbun_godot4_core/shared/scene_empty.tscn.
    at: _process_file_system (editor/file_system/editor_file_system.cpp:1405)
-[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (16 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (5 steps)[39m[0m
 [   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[   5% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  11% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  17% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  23% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  29% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  35% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  41% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  47% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  52% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  58% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  64% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  70% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  76% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  82% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  88% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  16% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  33% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  50% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  66% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
 [92m[ DONE ][39m [1mupdate_scripts_classes[22m
 [0m
 [   0% ] [90m[1mloading_editor_layout[22m | Started Загрузка редактора (5 steps)[39m[0m
@@ -45,24 +34,40 @@ WARNING: UID duplicate detected between res://assets/vfx/third_party/binbun_godo
 CASE arms
 Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
 
-ARM_CONTACT_BODY sex=male build=0.0 cumulative_before_pairs=166 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=male build=-0.5 cumulative_before_pairs=318 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=male build=0.5 cumulative_before_pairs=709 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=male build=-0.35 cumulative_before_pairs=862 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=male build=-0.2 cumulative_before_pairs=1020 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=male build=0.05 cumulative_before_pairs=1201 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=male build=0.12 cumulative_before_pairs=1377 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=male build=0.4 cumulative_before_pairs=1688 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=0.0 cumulative_before_pairs=4998 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=-0.5 cumulative_before_pairs=7846 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=0.5 cumulative_before_pairs=11320 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=-0.35 cumulative_before_pairs=14306 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=-0.2 cumulative_before_pairs=17477 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=0.05 cumulative_before_pairs=20803 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=0.12 cumulative_before_pairs=24182 after_pairs=0 failed_poses=0
-ARM_CONTACT_BODY sex=female build=0.4 cumulative_before_pairs=27588 after_pairs=0 failed_poses=0
-ARM_CONTACT_RECORDED poses=960 before_pairs=27588 after_pairs=0 failed_poses=0 regressions=0
-ARM_CLEARANCE_OK poses=960 shared_profiles=2 cold_usec=[74903, 83955]
+ARM_CONTACT_BODY mode=male_preview build=0.0 cumulative_before_pairs=166 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.5 cumulative_before_pairs=318 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.5 cumulative_before_pairs=709 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.35 cumulative_before_pairs=862 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.2 cumulative_before_pairs=1020 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.05 cumulative_before_pairs=1201 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.12 cumulative_before_pairs=1377 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.4 cumulative_before_pairs=1688 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.0 cumulative_before_pairs=4998 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.5 cumulative_before_pairs=7846 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.5 cumulative_before_pairs=11320 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.35 cumulative_before_pairs=14306 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.2 cumulative_before_pairs=17477 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.05 cumulative_before_pairs=20803 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.12 cumulative_before_pairs=24182 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.4 cumulative_before_pairs=27588 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.0 cumulative_before_pairs=27675 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=-0.5 cumulative_before_pairs=27750 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.5 cumulative_before_pairs=27944 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=-0.35 cumulative_before_pairs=28019 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=-0.2 cumulative_before_pairs=28098 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.05 cumulative_before_pairs=28191 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.12 cumulative_before_pairs=28282 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.4 cumulative_before_pairs=28441 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.0 cumulative_before_pairs=30228 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=-0.5 cumulative_before_pairs=31748 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.5 cumulative_before_pairs=33672 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=-0.35 cumulative_before_pairs=35275 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=-0.2 cumulative_before_pairs=36976 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.05 cumulative_before_pairs=38761 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.12 cumulative_before_pairs=40566 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.4 cumulative_before_pairs=42438 after_pairs=0 failed_poses=0
+ARM_CONTACT_RECORDED poses=1344 before_pairs=42438 after_pairs=0 failed_poses=0 regressions=0
+ARM_CLEARANCE_OK poses=1344 shared_profiles=2 cold_usec=[102241, 86531]
 
 
 CASE frames
@@ -77,7 +82,15 @@ RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=37
 GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
 GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
 GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
-ARM_GPU_VISUAL_OK poses=22 frames=38
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+ARM_GPU_VISUAL_OK poses=34 frames=62
 
 
 CASE coverage
@@ -221,8 +234,8 @@ Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
 OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
 
 WORKSHOP_FINGERTIP bench_local=(-0.09375, 0.985877, 0.482422) side=Left authored_top=0.95
-WORKSHOP_FINGERTIP bench_local=(0.092773, 0.983831, 0.477051) side=Right authored_top=0.95
-WORKSHOP_FRAME_SAMPLE frames=120 mean_ms=37.6710666666667 reported_video_bytes=780038743 draw_calls=900
+WORKSHOP_FINGERTIP bench_local=(0.092773, 0.983835, 0.477051) side=Right authored_top=0.95
+WORKSHOP_FRAME_SAMPLE frames=120 mean_ms=39.9318333333333 reported_video_bytes=784299127 draw_calls=900
 WORKSHOP_WORLD_OK earned_checkpoint=true player_position_assignments=0 walked_m=40.2875630338676 trade_paid=true standing_recipe=true disk_resume=true finite_stock=true quality=Medium clock_fixture=09:00
 WARNING: 100 ObjectDB instances were leaked at exit (run with `--verbose` for details).
    at: cleanup (core/object/object.cpp:2536)
@@ -263,3 +276,39 @@ HUMANOID_LANDING_PROFILE male compression=0.08420550793395 peak_sole_gap=0.00399
 HUMANOID_LANDING_PROFILE female compression=0.07476235494661 peak_sole_gap=0.00157657079399 neutral_hip=0.9957594871521 peak_hip=0.9084507226944
 HUMANOID_LANDING_CHECKED bodies=2 input=jump impact=physical soles=skinned recovery=idle gait_phase=retained transient_reset=true
 LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2
+
+
+CASE household_aisle
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOUSEHOLD_AISLE_OK hero=stationary capsule=physical resident=passed_and_sat
+
+
+CASE citizen_persistence
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CITIZEN_PERSISTENCE_OK moved=physical streaming=last_position save=real_slot load=immediate json=round_trip reset=clean corrupt=bounded doorway=retained reaction=retained
+
+
+CASE square_home_life
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOME_PROGRESS frame=0 trader=(-16.00195, 0.000156, -8.501465) artisan=(-23.00195, 0.000078, -11.03467)
+HOME_PROGRESS frame=600 trader=(-28.79395, 0.000847, -13.34619) artisan=(-35.35254, 0.000078, -17.26953)
+HOME_PROGRESS frame=1200 trader=(-41.22266, 0.000838, -20.00781) artisan=(-44.72461, 0.054496, -26.22705)
+HOME_PROGRESS frame=1800 trader=(-42.2959, 0.05539, -29.08105) artisan=(-40.61133, 0.054496, -32.3833)
+HOME_PROGRESS frame=2400 trader=(-42.02246, 0.05539, -32.34619) artisan=(-42.10156, 0.054496, -31.54639)
+HOME_PROGRESS frame=3000 trader=(-42.1084, 0.05539, -29.29297) artisan=(-42.10156, 0.054496, -31.54639)
+HOME_PROGRESS frame=3600 trader=(-47.18555, 0.055941, -33.09619) artisan=(-48.13965, 0.054496, -30.34619)
+WORK_PROGRESS frame=0 trader=(-47.99219, 0.055941, -33.32568) artisan=(-48.1377, 0.054496, -30.34619)
+WORK_PROGRESS frame=600 trader=(-44.08301, -0.000114, -22.06055) artisan=(-44.54492, 0.054496, -28.5957)
+WORK_PROGRESS frame=1200 trader=(-37.6377, 0.000924, -9.169922) artisan=(-40.87793, 0.000235, -15.64844)
+WORK_PROGRESS frame=1800 trader=(-25.92773, 0.000924, -4.250977) artisan=(-33.29492, 0.000925, -4.354004)
+WORK_PROGRESS frame=2400 trader=(-16.07422, 0.000924, -7.917969) artisan=(-23.14063, 0.000925, -8.713379)
+SQUARE_HOME_LIFE_OK player_walk_m=70.5349437342957 door=physical_round_trip residents=home_and_work streaming=mid_door_resumed money=conserved memory=supply_and_real_spell
+
+
+CASE capital_square
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CAPITAL_SQUARE_OK props=authored grounded=true route=walked paving=textured workshop=canonical_recipe supplied=paid stock=finite reload=persistent lamps=evening

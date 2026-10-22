@@ -113,6 +113,13 @@ func apply_appearance(value: Variant) -> void:
             if get_parent().name == "Player" and not InventorySystem.equipment_changed.is_connected(_refresh_weapon):
                 InventorySystem.equipment_changed.connect(_refresh_weapon)
             _refresh_weapon()
+    else:
+        var skeletons := model.find_children("*", "Skeleton3D", true, false)
+        if not skeletons.is_empty():
+            var clothing_modifier := preload("res://scripts/humanoid_arm_clearance_modifier.gd").new()
+            clothing_modifier.name = "ClothingClearance"
+            clothing_modifier.set("visual", self)
+            skeletons[0].add_child(clothing_modifier)
 
 func _style_model() -> void:
     for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):

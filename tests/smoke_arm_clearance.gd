@@ -37,9 +37,14 @@ func _run() -> void:
     var noop:=NoClearance.new()
     var rows:=[];var after_failures:=0;var regressions:=0;var before_pairs:=0;var after_pairs:=0
     var state:={"requested":false,"limbs":[],"legs":[],"pants":null,"torso":null}
-    for sex:String in ["male","female"]:
+    for body_mode:String in ["male_preview","female_preview","male_citizen","female_citizen"]:
+        var sex:String=body_mode.get_slice("_",0)
+        var citizen:=body_mode.ends_with("citizen")
         for build:float in [0.,-.5,.5,-.35,-.20,.05,.12,.4]:
-            var actor:=CharacterBody3D.new();actor.set_meta("preview_animation","Idle");world.add_child(actor)
+            var actor:=CharacterBody3D.new()
+            if citizen:actor.name="CitizenFixture"
+            else:actor.set_meta("preview_animation","Idle")
+            world.add_child(actor)
             var visual:=load("res://scripts/humanoid_visual.gd").new() as Node3D;visual.set("appearance_profile",{"sex":sex,"Build":build});actor.add_child(visual);visual.set_process(false)
             var skeleton:=visual.find_children("*","Skeleton3D",true,false)[0] as Skeleton3D
             var animator:AnimationPlayer=visual.get("animation_player")
@@ -48,7 +53,8 @@ func _run() -> void:
             var torso:=preload("res://tests/humanoid_layer_intersection_probe.gd").new();torso.setup(visual,skeleton,"VikingTunic")
             torso.inner.complete=_arm_triangles(torso.inner,skeleton,false);torso.outer=pants.outer
             assert(pants.outer.complete.size()>300 and torso.inner.complete.size()>1000)
-            var grip:Node=visual.get("grip_modifier")
+            var grip:Node=skeleton.get_node("ClothingClearance") if citizen else visual.get("grip_modifier")
+            if citizen:assert(visual.get("weapon_socket")==null and visual.get("grip_modifier")==null,"Citizen received player gait/equipment modifier")
             var actual_clearance:RefCounted=grip.get("clearance")
             grip.modification_processed.connect(func():
                 if state.requested:
@@ -56,6 +62,7 @@ func _run() -> void:
                     state.limbs=_limbs(skeleton);state.legs=[]
                     for name:String in ["Hips","LeftUpLeg","RightUpLeg","LeftLeg","RightLeg","LeftFoot","RightFoot"]:state.legs.append(skeleton.get_bone_global_pose(skeleton.find_bone(name))))
             for clip:String in ["Idle","Walk","Run","Jump","Airborne","Bow_Attack_Draw","Bow_Attack_Shoot","Axe_Chop","Punch","Cast_Left","Cast_Right","Sitting","Working","WorkStanding","Death"]:
+                if citizen and clip not in ["Idle","Walk","Run","Sitting","Working","WorkStanding"]:continue
                 actor.set_meta("preview_item","short_bow" if clip in ["Bow_Attack_Draw","Bow_Attack_Shoot","Cast_Right"] else ("starter_axe" if clip in ["Axe_Chop","Cast_Left"] else ""));visual.call("_refresh_weapon")
                 for phase:float in [.15,.4,.5,.7]:
                     grip.set("clearance",noop);animator.play(clip,0);animator.seek(animator.get_animation(clip).length*phase,true);animator.pause()
@@ -76,8 +83,8 @@ func _run() -> void:
                     before_pairs+=count_before;after_pairs+=count_after
                     if count_after>0:after_failures+=1
                     if count_after>count_before:regressions+=1
-                    rows.append({"sex":sex,"build":build,"clip":clip,"phase":phase,"before":before,"after":after,"max_wrist_shift_m":shift,"length_error_m":length_error,"wrist_angle_error_rad":angle_error,"clearance_usec":actual_clearance.get("last_usec")})
-            print("ARM_CONTACT_BODY sex=",sex," build=",build," cumulative_before_pairs=",before_pairs," after_pairs=",after_pairs," failed_poses=",after_failures)
+                    rows.append({"sex":sex,"citizen":citizen,"build":build,"clip":clip,"phase":phase,"before":before,"after":after,"max_wrist_shift_m":shift,"length_error_m":length_error,"wrist_angle_error_rad":angle_error,"clearance_usec":actual_clearance.get("last_usec")})
+            print("ARM_CONTACT_BODY mode=",body_mode," build=",build," cumulative_before_pairs=",before_pairs," after_pairs=",after_pairs," failed_poses=",after_failures)
             actor.free()
     var file:=FileAccess.open("user://arm-contact.json",FileAccess.WRITE);file.store_string(JSON.stringify({"poses":rows,"failed_poses":after_failures,"regressions":regressions,"before_pairs":before_pairs,"after_pairs":after_pairs}))
     print("ARM_CONTACT_RECORDED poses=",rows.size()," before_pairs=",before_pairs," after_pairs=",after_pairs," failed_poses=",after_failures," regressions=",regressions)
