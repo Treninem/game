@@ -95,7 +95,7 @@ func _run() -> void:
             )
             var clothing := visual.find_child("Clothing",true,false) as MeshInstance3D
             var boots := visual.find_child("Boots",true,false) as MeshInstance3D
-            for clip: String in ["Idle","Walk","Run","Jump","Airborne","Bow_Attack_Draw","Bow_Attack_Shoot","Axe_Chop","Punch","Cast_Left","Cast_Right","Sitting","Working","Death"]:
+            for clip: String in ["Idle","Walk","Run","Jump","Airborne","Bow_Attack_Draw","Bow_Attack_Shoot","Axe_Chop","Punch","Cast_Left","Cast_Right","Sitting","Working","WorkStanding","Death"]:
                 actor.set_meta("preview_item","short_bow" if clip in ["Bow_Attack_Draw","Bow_Attack_Shoot","Cast_Right"] else ("starter_axe" if clip in ["Axe_Chop","Cast_Left"] else ""))
                 visual.call("_refresh_weapon")
                 for phase: float in [.15,.4,.7]:

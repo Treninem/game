@@ -145,6 +145,9 @@ func routine_plan(minutes: float) -> Dictionary:
 
 func _follow_routine(delta: float) -> void:
     var plan := routine_plan(GameState.world_minutes)
+    if plan.phase == "work" and has_meta("work_shop_id"):
+        # Production starts at the surface, not at the old loose social radius.
+        plan.arrival_radius = 0.08
     plan = _home_route(plan)
     plan = _work_approach(plan)
     plan = _household_plan(plan)
@@ -163,6 +166,7 @@ func _follow_routine(delta: float) -> void:
         move_and_slide()
         return
     set_meta("activity", "work" if arrived and plan.phase == "work" and role == "craftsman" else "social" if arrived and plan.phase == "social" else "idle")
+    set_meta("work_pose", "WorkStanding" if plan.phase == "work" and has_meta("work_shop_id") else "Working")
     if routine_phase != plan.phase:
         routine_phase = plan.phase
         var saved_record: Variant = GameState.get_world_value("citizen:" + citizen_id, {})

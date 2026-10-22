@@ -97,6 +97,7 @@ func apply_appearance(value: Variant) -> void:
         _prepare_bow_poses(model)
         _prepare_axe_pose(model)
         _prepare_cast_poses(model)
+        preload("res://scripts/humanoid_work_poses.gd").prepare(self)
     last_position = (get_parent() as Node3D).global_position
     if get_parent().name == "Player" or get_parent().has_meta("preview_animation"):
         var skeletons := model.find_children("*", "Skeleton3D", true, false)
@@ -353,7 +354,8 @@ func _process(delta: float) -> void:
         var gait := gait_for_speed(measured_speed)
         _play(gait, gait_rate(gait, measured_speed))
     elif String(body.get_meta("activity", "idle")) == "work":
-        _play("Working" if animation_player.has_animation("Working") else "PickUp", 0.8)
+        var work_pose := String(body.get_meta("work_pose", "Working"))
+        _play(work_pose, 1.0 if work_pose == "WorkStanding" else 0.8)
     else:
         _play("Idle", 1.0)
 

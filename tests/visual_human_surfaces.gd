@@ -36,19 +36,26 @@ func _run() -> void:
         visual.set_process(false)
         var animation: AnimationPlayer = visual.get("animation_player")
         var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
-        for clip: String in ["Idle", "Walk", "Run", "Bow_Attack_Draw", "Axe_Chop"]:
+        for clip: String in ["Idle", "Walk", "Run", "Jump", "Working", "WorkStanding", "Bow_Attack_Draw", "Axe_Chop"]:
             actor.set_meta("preview_item", "short_bow" if clip == "Bow_Attack_Draw" else ("starter_axe" if clip == "Axe_Chop" else ""))
             visual.call("_refresh_weapon")
             animation.play(clip, 0)
-            animation.seek(animation.get_animation(clip).length * 0.4, true)
+            animation.seek(animation.get_animation(clip).length * (0.5 if clip=="Jump" else 0.4), true)
             animation.pause()
             skeleton.advance(0)
             await process_frame
-            camera.position = Vector3(1.3, 1.35, -2.5)
-            camera.look_at(Vector3(0, 1.25, 0))
+            var hips := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Hips")).origin)
+            camera.position = hips+Vector3(1.3, .35, -2.5)
+            camera.look_at(hips+Vector3.UP*.25)
             await RenderingServer.frame_post_draw
             root.get_texture().get_image().save_png("user://surface-" + sex + "-" + clip + ".png")
             count += 1
+            if clip in ["Jump","Working","WorkStanding"]:
+                camera.position=hips+Vector3(-1.3,.35,2.5)
+                camera.look_at(hips+Vector3.UP*.25)
+                await RenderingServer.frame_post_draw
+                root.get_texture().get_image().save_png("user://surface-"+sex+"-"+clip+"-back.png")
+                count+=1
             if clip == "Walk":
                 var hand := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("RightHand")).origin)
                 camera.position = hand + Vector3(0.24, 0.08, -0.5)

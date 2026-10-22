@@ -35,7 +35,8 @@ func _run() -> void:
         errors.append("Stone paving is still treated as soil for walking effects")
     for prop: Node3D in get_tree().get_nodes_in_group("capital_square_prop"):
         if prop is StaticBody3D:
-            var collision := prop.get_child(prop.get_child_count() - 1) as CollisionShape3D
+            var shapes := prop.find_children("*", "CollisionShape3D", false, false)
+            var collision := shapes[0] as CollisionShape3D if shapes.size() == 1 else null
             if collision == null:
                 errors.append("Solid square furniture has no collision")
                 continue
@@ -70,8 +71,12 @@ func _run() -> void:
         errors.append("New furniture blocks the main square crossing or leaves the player unsupported")
     var trader := square.get_node("SquareTrader") as SettlementNPC
     var artisan := square.get_node("SquareArtisan") as SettlementNPC
-    if Vector3(artisan.routine_plan(9 * 60).target).distance_to(Vector3(-23, 0, -10.3)) > 0.01:
-        errors.append("Artisan's actual schedule is not linked to the authored workbench")
+    var bench := square.get_node("SquareWorkbench") as Node3D
+    var depth: Vector2 = bench.get_meta("map_footprint")
+    var work_target := Vector3(artisan.routine_plan(9 * 60).target)
+    var edge_gap := work_target.z - bench.position.z - depth.y * 0.5
+    if absf(work_target.x-bench.position.x) > 0.01 or absf(edge_gap-0.42) > 0.01:
+        errors.append("Artisan's schedule misses the measured bench edge or arm reach")
     var work_stock: Dictionary = trader._shop_stock()
     var arrows_before := int(work_stock.get("arrow", 0))
     var coins_before := GameState.coins
@@ -84,6 +89,15 @@ func _run() -> void:
     await _frames(120)
     if String(artisan.get_meta("activity", "")) != "work":
         errors.append("Supplied artisan does not perform work at the bench")
+    await get_tree().process_frame
+    if artisan.visual.get("animation_player").current_animation != "WorkStanding":
+        errors.append("Supplied artisan kneels instead of working standing at the actual bench")
+    var reached: Vector3 = square.to_local(artisan.global_position)
+    if Vector2(reached.x-work_target.x,reached.z-work_target.z).length() > 0.11:
+        errors.append("Artisan starts productive work outside actual hand reach")
+    var workpieces := bench.get_node("ArrowWorkpieces") as Node3D
+    if not workpieces.visible or workpieces.get_child_count() != 5:
+        errors.append("Productive work has no physical arrow workpieces on the bench")
     await _frames(480)
     work_stock = trader._shop_stock()
     if int(work_stock.get("arrow", 0)) != arrows_before + 5 or int(work_stock.get("wood", 0)) != 0 or int(work_stock.get("stone", 0)) != 0:
@@ -93,6 +107,8 @@ func _run() -> void:
         errors.append("Workshop creates free goods without supplied materials")
     if String(artisan.get_meta("activity", "")) != "idle":
         errors.append("Unsupplied artisan keeps pretending to manufacture goods")
+    if workpieces.visible:
+        errors.append("Empty workshop displays an active production batch")
     # A streamed-out artisan must not reset the finite shop or grant new stock.
     var saved_stock := trader._shop_stock().duplicate(true)
     square.free()

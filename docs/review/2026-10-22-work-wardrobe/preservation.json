@@ -1,0 +1,10 @@
+{
+  "male": {
+    "removed_redundant_triangles": 11560,
+    "authored_surfaces_morphs_uvs_weights_clips_unchanged": true
+  },
+  "female": {
+    "removed_redundant_triangles": 11364,
+    "authored_surfaces_morphs_uvs_weights_clips_unchanged": true
+  }
+}

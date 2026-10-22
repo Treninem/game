@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Дорожные покрытия приведены к зазору 6–12 мм над физическим рельефом; уменьшен чрезмерный размер гравия. 539+156 физических замеров, 15 подходов и графический проход 173.30 м с дверью/диском проверены. Подошвы обеих ног после естественной остановки примерно на 4 мм ниже видимой дороги. Внешность людей/мира и дефекты слоёв одежды остаются открытыми; неудачные варианты одежды не включены в этот пакет.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+  "current_stage": "Проверяется связанный пакет одежды обеих основ и работы у настоящего верстака: лишняя оболочка удалена при сохранении внешней геометрии/девяти форм/десяти клипов; WorkStanding с опорой, ладонями и взглядом, точная рабочая дистанция и отображаемые заготовки. 810 ракурсов тела и 198 рабочих поз, реальный автоматизированный проход 40.29 м с оплатой/производством/диском проверены. Художественная приёмка и пересечения слоёв ткани остаются открытыми.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -443,5 +443,13 @@
     "undressing_and_full_wardrobe_complete": false,
     "visible_cloth_layers_accepted": false,
     "remaining_visible_defects": "Gray lining and lower-coat punctures remain; covered-skin oracle alone is insufficient. Shell-free/GPU prototypes failed the expanded layer probe and are not integrated."
+  },
+  "latest_character_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json",
+    "review_folder": "docs/review/2026-10-22-work-wardrobe",
+    "full_art_acceptance": false,
+    "covered_skin_views": 810,
+    "standing_work_poses": 198,
+    "remote_ci": "Exact new SHA verification follows push"
   }
 }

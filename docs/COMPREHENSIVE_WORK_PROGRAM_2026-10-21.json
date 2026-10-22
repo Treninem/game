@@ -18,7 +18,7 @@
         "Стопы держат рельеф, ступени и склоны без зависания; камера и управление удобны",
         "Изменения внешности и экипировки переживают сохранение/загрузку"
       ],
-      "current": "Стандартный костюм обеих существующих основ получил реальный подогнанный внутренний слой и маску закрытых участков тела с сохранением кистей/лица/шеи, девяти форм и десяти клипов. Исходные модели провалили 408/756 ракурсов, итог 0/756 на тех же финальных runtime-позах. Цветные кадры выявили неверную AO/normal нового слоя: выделен отдельный матовый материал, проверки повторены. Реальные бег/ходьба/прыжки, лук/топор/магия, камера, опора, редактор и диск проверены ограниченно. Лицо/волосы, внешний силуэт ткани, полный гардероб, снятие одежды, переходы и художественное принятие остаются открытыми; новые анимации этим пакетом не заявлены. Расширенная локальная проверка слоёв ткани выявила остаточные пробивания и серую подкладку; варианты без оболочки/с GPU-контактом не приняты и не подключены в пакет дорожек. Прежние 0/756 относятся только к закрытой коже."
+      "current": "Текущий костюм обеих основ: лишняя видимая оболочка снята, исходные внешние треугольники/нормали/UV/веса, девять форм, десять клипов и изображения сохранены независимым сравнением. 0/810 ракурсов закрытой кожи; это не проверка отсутствия пересечений двух слоёв одежды. Целая поза работы стоя: ноги/таз/локти/открытые ладони/взгляд и плавный замкнутый цикл; 198 поз на двух основах/трёх Build. Во время реального графического прохода проверены торговля, рабочая дистанция, отображаемые заготовки, конечный рецепт и диск. Полная внешность/гардероб/динамика ткани и художественная приёмка не завершены; забракованные варианты не включены."
     },
     {
       "group": "Природа и рельеф",
@@ -77,11 +77,11 @@
         "Журнал, проверочные кадры и узкие коммиты синхронизируются",
         "Нет стабильного выпуска при красных или отсутствующих обязательных проверках"
       ],
-      "current": "8282e769 прошёл все восемь exact-SHA CI SUCCESS. Пакет опоры дорожек прошёл 10 локальных этапов; собственный удалённый CI проверяется после push. В графическом деревенском сценарии 100 ObjectDB остатков; их исправление не заявлено. Стабильный релиз не публикуется."
+      "current": "Предыдущий 176a42ae прошёл восемь exact-SHA CI SUCCESS. Новый пакет имеет 20 локальных этапов, независимую проверку GLB и повторное воспроизведение Blender; свой exact-SHA CI проверяется после push. 82/100 ObjectDB остатков в нативных сценариях остаются открытыми. Стабильный релиз не публикуется."
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
   "last_updated": "2026-10-22",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",

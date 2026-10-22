@@ -1,33 +1,37 @@
-# Fitted default outfit — review source
+# Fitted default outfit - editable review sources
 
-These editable male/female Blender files retain the native MakeHuman body,
-rig, nine shape keys and ten existing animation clips. Existing MakeHuman
-Community/MPFB and selected Rehman Polanski Viking clothing graphics are CC0;
-their source/license files remain under `assets/staging/characters/` and
-`assets/production/characters/realistic/`. No new third-party asset was sourced.
+The two Blender files retain the existing MakeHuman body/rig, nine shape keys,
+ten source clips and selected Rehman Polanski Viking outfit. Existing graphics
+are CC0; source licenses remain under assets/staging/characters/ and the
+production character folders. No new pack, image, human identity or artistic
+acceptance is claimed.
 
-The inner cloth uses native body topology and weights with 6 mm clearance.
-Two opening rings and exposed head/neck/hands remain protected. The joined
-Clothing mesh has a separate matte OutfitLining material using only the
-existing tunic cloth strip. Original outer cloth, other five parts and all
-authored image pixels are preserved. This is a fixed default outfit, not a
-complete armor or undressing system. Keep native unmasked source for future
-outfit changes; do not display this masked body without its outfit.
+The redundant visible OutfitLining shell has been removed. Original outer
+positions, normals, UVs, weights, morphs and accepted triangles remain intact;
+the previous covered-body mask still protects exposed head, neck and hands.
+This is a fixed costume. Do not display the masked body without its outfit.
+Full garment swapping and cloth-on-cloth intersection repair remain open.
 
-Rebuild into an isolated directory with `tools/build_viking_humans.py` in
-factory Blender, setting `IMPULS_CHARACTER_OUTPUT` explicitly. This invokes
-`tools/garment_body_coverage.py`; it never writes production by default.
-`tools/save_fitted_human_sources.py` saves portable editable copies with
-repository-relative image paths and disabled thumbnail previews. Source
-textures remain in their canonical folders instead of duplicate packed maps.
+Run tools/export_fitted_outfit.py in factory Blender with --python-exit-code 1.
+Its default output is an isolated build folder; IMPULS_CHARACTER_OUTPUT selects
+another candidate folder. Sources contain repository-relative image paths and
+no duplicate packed maps. The producer preserves four accepted exported
+influences and uses the compressed accepted_outer_triangulation_v1 reference
+stored in Clothing to restore the original quad diagonals after export.
+Ordinary Blender export can retessellate a quad when adjoining lining is
+removed. Intentional refits/retopology need a new explicitly reviewed reference
+and full validation.
 
-Exact accepted GLBs were refitted from retained byte-identical baseline
-editable sources using the same fitting helper. Full builder reproduction
-and its comparison are recorded in the acceptance journal. Re-export with
-GLB, Actions animation mode, force sampling, morphs and morph normals enabled.
-Runtime retains the already validated per-body normal/AO for the original
-three outer material roles. The legacy map bakers do not support the added
-lining role; do not blindly rebake it into outer material atlases.
+Compare an accepted baseline and candidate independently with
+tools/check_outfit_shell_removal.py. It requires original images, seven parts,
+exposed body, bind frames, outer corners/triangles/normals/UVs/weights, nine
+morphs and ten source clip channels/times to agree. A parse-only result does
+not replace these checks. Runtime WorkStanding is authored separately in
+scripts/humanoid_work_poses.gd; legacy ground Working remains available.
 
-Evidence and scope: `docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json` and
-`docs/review/2026-10-22-outfit-fit/`. Full artistic acceptance remains false.
+Existing per-body outer AO/normal maps retain unchanged UVs. No new bake or
+texture enlargement is part of this revision. Full artistic quality,
+faces/hair, tool manipulation and extreme-pose layer contacts remain open.
+
+Evidence: docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json and
+docs/review/2026-10-22-work-wardrobe/. Stable release is not published.

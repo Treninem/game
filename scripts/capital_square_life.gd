@@ -4,9 +4,12 @@ const NPC := preload("res://scripts/settlement_npc.gd")
 const PROP_ROOT := "res://assets/production/medieval/capital_square/"
 const STALL := preload("res://assets/production/medieval/quaternius_market/Stall_Empty.gltf")
 const SHOP_ID := "capital:square:provisions"
+const ARROW := preload("res://assets/production/weapons/woodland/Arrow.glb")
 var lamps: Array[OmniLight3D] = []
 var light_elapsed := 1.0
 var indoor_light: OmniLight3D
+var workpieces: Node3D
+var working_artisan: CharacterBody3D
 
 func _ready() -> void:
     var home := preload("res://scripts/enterable_building.gd").new()
@@ -57,11 +60,35 @@ func _ready() -> void:
         light.shadow_enabled = false
         add_child(light)
         lamps.append(light)
-    _prop("Workbench", Vector3(-23, 0, -12), 0.95)
+    var workbench := _prop("Workbench", Vector3(-23, 0, -12), 0.95)
     _resident("Марта", "trader", "SquareTrader", SHOP_ID, Vector3(-16, 0, -8.5), Vector3(-16, 0, -12), 1)
-    var artisan := _resident("Марек", "craftsman", "SquareArtisan", "capital:square:fletcher", Vector3(-23, 0, -10.3), Vector3(-23, 0, -12), 0)
+    # Stand just outside the measured bench footprint, within arm's reach.
+    var work_depth: Vector2 = workbench.get_meta("map_footprint")
+    var workplace := Vector3(-23, 0, -12 + work_depth.y * 0.5 + 0.42)
+    var artisan := _resident("Марек", "craftsman", "SquareArtisan", "capital:square:fletcher", workplace, Vector3(-23, 0, -12), 0)
     artisan.set_meta("work_shop_id", SHOP_ID)
     artisan.set_meta("work_recipe", "arrow")
+    working_artisan = artisan
+    _prepare_workpieces(workbench)
+
+func _prepare_workpieces(bench: Node3D) -> void:
+    workpieces = Node3D.new()
+    workpieces.name = "ArrowWorkpieces"
+    workpieces.visible = false
+    bench.add_child(workpieces)
+    var footprint: Vector2 = bench.get_meta("map_footprint")
+    for index in range(int(InventorySystem.RECIPES.arrow.amount)):
+        var arrow := Node3D.new()
+        workpieces.add_child(arrow)
+        arrow.add_child(ARROW.instantiate())
+        arrow.scale = Vector3.ONE * 0.75
+        arrow.rotation.x = -PI * 0.5
+        var bounds := _bounds(arrow, Transform3D.IDENTITY)
+        # Rest the actual feather/shaft geometry on the board, near the hands.
+        arrow.position = Vector3((index-2)*0.035, float(bench.get_meta("authored_height"))-bounds.position.y+0.001, footprint.y*0.5-0.29)
+        for mesh: MeshInstance3D in arrow.find_children("*", "MeshInstance3D", true, false):
+            mesh.visibility_range_end = 45.0
+            mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func _process(delta: float) -> void:
     light_elapsed += delta
@@ -71,6 +98,13 @@ func _process(delta: float) -> void:
     var hour := fmod(GameState.world_minutes / 60.0, 24.0)
     for light in lamps:
         light.visible = hour >= 17.5 or hour < 7.0
+    if is_instance_valid(workpieces) and is_instance_valid(working_artisan):
+        var stock: Dictionary = GameState.get_world_value("shop:"+SHOP_ID,{})
+        var recipe: Dictionary = InventorySystem.RECIPES.arrow
+        var supplied := true
+        for item: String in recipe.requirements:
+            supplied = supplied and int(stock.get(item,0)) >= int(recipe.requirements[item])
+        workpieces.visible = supplied and working_artisan.get_meta("activity","idle")=="work"
 
 func _ground_y(point: Vector3) -> float:
     var world := to_global(point)

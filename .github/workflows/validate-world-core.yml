@@ -296,3 +296,5 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_runtime_spawn_transforms.tscn 60
       - name: Verify capital square recipe and production assets
         run: bash tools/run_godot_smoke.sh tests/smoke_capital_square.tscn 180
+      - name: Verify complete supported standing work poses on both human rigs
+        run: bash tools/run_godot_smoke.sh tests/smoke_working_pose.tscn 90
