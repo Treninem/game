@@ -10,6 +10,7 @@ const KENNEY := "res://assets/vfx/third_party/kenney_particle_pack/PNG (Transpar
 const SURFACES := ["dirt", "grass", "sand", "mud", "snow", "stone", "wood", "metal", "glass", "water"]
 const FOOT_DUST_LIMIT := 36
 var _foot_dust_texture: Texture2D
+var _dirt_frame_textures: Array[Texture2D] = []
 
 func surface_at(world_position: Vector3) -> String:
     var xz := Vector2(world_position.x, world_position.z)
@@ -333,7 +334,14 @@ func _safe_surface(surface: String) -> String:
     return lowered if lowered in SURFACES else "dirt"
 
 func _dirt_frames() -> Array[String]:
-    return [KENNEY + "dirt_01.png", KENNEY + "dirt_02.png", KENNEY + "dirt_03.png"]
+    var paths: Array[String] = [KENNEY + "dirt_01.png", KENNEY + "dirt_02.png", KENNEY + "dirt_03.png"]
+    # Impact cards expire quickly; retain these three small shared textures so
+    # consecutive arrows/tools do not repeatedly reload and upload each frame.
+    if _dirt_frame_textures.is_empty():
+        for path: String in paths:
+            var texture := load(path) as Texture2D
+            if texture != null:_dirt_frame_textures.append(texture)
+    return paths
 
 func _spark_frames() -> Array[String]:
     return [KENNEY + "spark_01.png", KENNEY + "spark_02.png", KENNEY + "spark_03.png", KENNEY + "spark_04.png"]

@@ -119,6 +119,12 @@ func _run() -> void:
         await _frames(2)
         assert(float(player.get("attack_elapsed")) > 0.0)
         if item == "short_bow":
+            # Physics can tick repeatedly before one image is rendered. Wait
+            # for a real tension frame within the existing physical draw,
+            # rather than asserting after two ticks of an unfinished render.
+            while airborne_draw_frame.is_empty() and float(player.get("pending_bow_elapsed")) > 0.0:
+                await _frames(1)
+                await RenderingServer.frame_post_draw
             # Check the exact rendered draw frame. Waiting for another draw
             # call can legitimately cross the 0.22 s release on a slow GPU.
             assert(not airborne_draw_frame.is_empty(), "No airborne bow draw frame was rendered")
@@ -294,7 +300,7 @@ func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
     # The first Draw-labelled frame can correctly still be the initial
     # preparation pose. Require actual raised-hand geometry and clip progress,
     # while the physical draw is still pending, for the tension review image.
-    if request_airborne_draw and animator.assigned_animation == "Bow_Attack_Draw" and not player.is_on_floor() and animator.current_animation_position >= 0.20 and points.RightHand.y >= points.Neck.y - 0.25 * ratio:
+    if request_airborne_draw and animator.assigned_animation == "Bow_Attack_Draw" and float(player.get("pending_bow_elapsed")) > 0.0 and not player.is_on_floor() and animator.current_animation_position >= 0.20 and points.RightHand.y >= points.Neck.y - 0.25 * ratio:
         _follow_player()
         assert(root.get_camera_3d() == observer)
         var head := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Head")).origin) + Vector3.UP * 0.32 * ratio

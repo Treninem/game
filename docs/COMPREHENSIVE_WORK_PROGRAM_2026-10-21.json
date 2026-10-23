@@ -156,9 +156,9 @@
     "journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
     "review_folder": "docs/review/2026-10-23-action-audio",
     "local_checks": "5 PASS, strict audio cleanup and 30 live GPU poses",
-    "ci": "7b56: 7/8; wardrobe observer missed final callback. New exact-SHA repetition pending.",
+    "ci": "bf3fa194: 7/8. True low-render-rate action delay fixed using the player physics animation clock; four final local checks PASS, full new exact-SHA pending.",
     "full_artistic_acceptance": false,
     "stable_release_published": false,
-    "render_observers": "810 local wardrobe views PASS; raised-hand geometry and full-body world capture required"
+    "render_observers": "810 wardrobe views, 30 live GPU poses and nine 5 FPS dispatch phases PASS"
   }
 }

@@ -1,0 +1,7 @@
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T23:33:42.3158510Z LIVE_BOW_BLEND_SAMPLE 1
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T23:33:42.4612793Z SCRIPT ERROR: Assertion failed: No airborne bow draw frame was rendered
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T23:33:42.4622108Z LIVE_BOW_BLEND_SAMPLE 2
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T23:33:42.6168431Z LIVE_BOW_BLEND_SAMPLE 3
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T23:33:42.7574238Z LIVE_BOW_BLEND_SAMPLE 4
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T23:33:42.9194287Z LIVE_BOW_BLEND_SAMPLE 5
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T23:36:29.3242975Z ERROR: FACE_NATIVE timeout

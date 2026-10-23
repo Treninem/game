@@ -6,7 +6,7 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Связанный пакет движения, контактов, оружия и звука прошёл локальные проверки. Исправлена временная гонка наблюдателя одежды; 810 локальных ракурсов без проколов. Игровой снимок теперь требует фактически поднятую руку и полный персонаж в кадре. Новый полный exact-SHA CI обязателен; художественная приёмка людей и холодный запуск остаются открытыми.",
+  "current_stage": "Исправлен реальный поздний подъём рук при низком FPS: анимации игрока синхронизированы с физическими действиями. Девять моментов ввода при ограничении 5 кадров/с, три настоящих снаряда, 30 GPU-поз и 810 ракурсов одежды прошли повторно. Полный новый exact-SHA CI обязателен; художественная приёмка и холодный запуск открыты.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
@@ -514,9 +514,9 @@
     "journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
     "review_folder": "docs/review/2026-10-23-action-audio",
     "local_checks": "5 PASS, strict audio cleanup and 30 live GPU poses",
-    "ci": "7b56: 7/8; wardrobe observer missed final callback. New exact-SHA repetition pending.",
+    "ci": "bf3fa194: 7/8. True low-render-rate action delay fixed using the player physics animation clock; four final local checks PASS, full new exact-SHA pending.",
     "full_artistic_acceptance": false,
     "stable_release_published": false,
-    "render_observers": "810 local wardrobe views PASS; raised-hand geometry and full-body world capture required"
+    "render_observers": "810 wardrobe views, 30 live GPU poses and nine 5 FPS dispatch phases PASS"
   }
 }

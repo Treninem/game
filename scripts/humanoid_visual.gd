@@ -1,6 +1,7 @@
 extends Node3D
 
 const GRIP := preload("res://scripts/weapon_grip_modifier.gd")
+const BOW_DRAW_RATE := 3.0
 const GRIP_POINTS := {"starter_axe": Vector3(-0.09865, -0.18, 0), "stone_knife": Vector3(0.0006, -0.12, 0), "short_bow": Vector3(-0.070708, 0, 0)}
 
 const APPEARANCE := preload("res://scripts/character_appearance.gd")
@@ -84,6 +85,12 @@ func apply_appearance(value: Variant) -> void:
     var players := model.find_children("*", "AnimationPlayer", true, false)
     if not players.is_empty():
         animation_player = players[0] as AnimationPlayer
+        if actor.name == "Player":
+            # Short combat windows are counted by the controller's physics
+            # ticks. Sampling the player's clips on those same ticks keeps
+            # a draw visible before release even when a render is very late.
+            # Citizen and preview animation budgets remain render-driven.
+            animation_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS
         # Generated poses belong to this actor. Replacing a shared library
         # while another streamed actor is aiming would interrupt its clip.
         var local_library := animation_player.get_animation_library("").duplicate() as AnimationLibrary
@@ -357,7 +364,7 @@ func _process(delta: float) -> void:
     elif body.name == "Player" and float(body.get("attack_elapsed")) > 0.0:
         var stroke := "Axe_Chop" if held_item == "starter_axe" else "Punch"
         if held_item == "short_bow":
-            _play("Bow_Attack_Draw" if float(body.get("pending_bow_elapsed")) > 0 else "Bow_Attack_Shoot", 1.8 if float(body.get("pending_bow_elapsed")) > 0 else 1.0)
+            _play("Bow_Attack_Draw" if float(body.get("pending_bow_elapsed")) > 0 else "Bow_Attack_Shoot", BOW_DRAW_RATE if float(body.get("pending_bow_elapsed")) > 0 else 1.0)
         else:
             # Complete the jab and recovery within the real attack window.
             # At rate 1 the 1.04 s source punch was cut off after 0.55 s.
@@ -441,7 +448,10 @@ func begin_axe_stroke() -> void:
     _begin_action_pose("Axe_Chop", 1.8)
 
 func begin_bow_draw() -> void:
-    _begin_action_pose("Bow_Attack_Draw", 1.8)
+    # Reach authored tension at 0.08 s, then hold it through the existing
+    # 0.22 s physical preparation. The hold spans a full eight-tick catch-up
+    # render, instead of disappearing between two slow frames.
+    _begin_action_pose("Bow_Attack_Draw", BOW_DRAW_RATE)
 
 func begin_bow_release() -> void:
     _begin_action_pose("Bow_Attack_Shoot", 1.0)
@@ -460,10 +470,14 @@ func _begin_action_pose(key: String, rate: float) -> void:
     if animation_player != null and animation_player.has_animation(key):
         active_animation = key
         animation_player.speed_scale = rate
+        if animation_player.assigned_animation == key:
+            # A second accepted stroke may arrive before an Idle render.
+            # Reset playback while retaining the visible pose in that case.
+            animation_player.stop(true)
         animation_player.play(key, 0.06)
-        # Queue evaluation for the mixer; do not consume the skeleton's
-        # modifier update from inside an input event before the render pass.
-        animation_player.seek(0.0, false)
+        # play() already starts a new clip at zero. Even seek(..., false)
+        # processes a just-started clip at delta zero internally, which can
+        # keep the old blend visible until a short physical draw has ended.
 
 func play_death() -> void:
     _play("Death", 1.0)
