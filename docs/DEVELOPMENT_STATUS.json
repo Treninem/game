@@ -569,5 +569,11 @@
     "visual_acceptance": false,
     "stable_release": false,
     "next_linked_stage": "Actual final world frames retain conspicuously saturated purple woodland bow/axe surfaces. This packet preserves those existing source materials. Audit source palette/material regions and weapon readability together with human costume/hairstyles; no cause or correction is yet claimed."
+  },
+  "latest_experiment": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WEAPON_TRIAL.json",
+    "decision": "REJECTED_NOT_INTEGRATED",
+    "runtime_unchanged_from": "0506245d9be5b2b8a8553eedd73150c1e30fbe54",
+    "next": "Complete weapon shape replacement and final-pose/string review, then real-world regression checks."
   }
 }

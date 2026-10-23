@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-23",
+  "decision": "REJECTED_NOT_INTEGRATED",
+  "existing_runtime_family": "assets/production/weapons/woodland",
+  "production_ready": false,
+  "runtime_changed": false,
+  "sources": [
+    {
+      "file": "assets/staging/ui/materials/cedar/cedar.png",
+      "sha256": "87bb6b1a3145aa07f5f24cf523633e3fcd2800e9b8d480ff813a7784222a858c"
+    },
+    {
+      "file": "assets/staging/materials/oga_ground_texture_set/ground/rock1.png",
+      "sha256": "80b79ed1f8431272ffcce3cdbdba53fece69e447b306990dc73463ce74f7615e"
+    }
+  ],
+  "geometry": [
+    {
+      "name": "Axe_small",
+      "source_sha256": "f7f1bbcad55cbf92777dd3f7813e2035a8853f0c5535108bfdc7f2738354df7e",
+      "candidate_sha256": "ac7e2cb33a7fe489a577e317a035b965c8251b4c56a7c71b3b05abf705314066",
+      "bounds_max_error_m": 0.0005322636999078867,
+      "wood_max_error_m": 0,
+      "triangles": 1621
+    },
+    {
+      "name": "Dagger",
+      "source_sha256": "f5e8ddc3b41d283b4e8fdb14fad8f0374be558edce71c6d9d31fae1d9705349b",
+      "candidate_sha256": "d16545fcad137db61558ef3886e463f119297e94d7a774ccacde63ca5c757ace",
+      "bounds_max_error_m": 0.009192814664198218,
+      "wood_max_error_m": 0,
+      "triangles": 1562,
+      "blade_closed": true
+    },
+    {
+      "name": "Bow_Wooden",
+      "source_sha256": "35b1661f579e9911ac4308643f515d4878dd37c16e0803cde94e78f01a821893",
+      "candidate_sha256": "c143a067ea13f55a5079b96f702bb06a01bdaadc3e97e1c7e940244a8d339835",
+      "bounds_max_error_m": 9.272308421071074e-08,
+      "wood_max_error_m": 9.999999999999593e-06,
+      "triangles": 660,
+      "original_cord_triangles": 28,
+      "candidate_cord_triangles": 28
+    },
+    {
+      "name": "Arrow",
+      "source_sha256": "f2db1543bf261c9f5316e648f80ba48fb305da0fd82d6226e1e9da1f37ab8dc4",
+      "candidate_sha256": "8013d50d8c219e0883dead80967f28911a390b694fb5da2ed4fdd4f37cdced50",
+      "bounds_max_error_m": 6.492267391744466e-08,
+      "wood_max_error_m": 0.0002500000000000002,
+      "triangles": 368
+    }
+  ],
+  "native": {
+    "returncode": 0,
+    "seconds": 52.45399999999995,
+    "timeout": false,
+    "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\woodland-kit-2026-10-23\\visual2.log"
+  },
+  "native_scope": "Godot GL Compatibility, Intel UHD 610; four matched before/after item renders and six posed actor views (two sexes × axe/knife/bow). Automated isolated rendering, not manual gameplay; no movement/projectile/save acceptance for this trial.",
+  "findings": [
+    "Original source palette is purple and nonmetallic; not a missing texture/import failure.",
+    "Existing models have no UVs. Trial authored wood UVs, five shared 512px maps, metal bevels, and closed stone blade/lashing.",
+    "First sandbox import/runner had inaccessible editor/profile paths and a Godot access violation; isolated APPDATA/LOCALAPPDATA/TEMP/TMP resolved this.",
+    "First native run failed on missing mipmaps, then timed out; not a pass. Reimport enabled mipmaps without weakening the condition.",
+    "Final native pass 52.454 seconds; pre-existing external UID fallback warnings remain in the mirror.",
+    "Art review rejected faceted segmented wood silhouettes, angular bow, overly dark steel. Source-model material salvage is insufficient.",
+    "Held bow frame shows string extending beyond the tip and cropped upper limb; review framing and final string endpoint alignment require separate checks."
+  ],
+  "evidence": [
+    "docs/review/2026-10-23-weapon-rejected/weapon-Axe_small-before.png",
+    "docs/review/2026-10-23-weapon-rejected/weapon-Axe_small-after.png",
+    "docs/review/2026-10-23-weapon-rejected/weapon-Dagger-after.png",
+    "docs/review/2026-10-23-weapon-rejected/weapon-Bow_Wooden-before.png",
+    "docs/review/2026-10-23-weapon-rejected/weapon-Bow_Wooden-after.png",
+    "docs/review/2026-10-23-weapon-rejected/weapon-Arrow-after.png",
+    "docs/review/2026-10-23-weapon-rejected/weapon-male-short_bow.png",
+    "docs/review/2026-10-23-weapon-rejected/weapon-female-starter_axe.png"
+  ],
+  "next": "Replace complete starter-weapon geometry with coherent authored forms: curved stave/tapered limbs, continuous handles, functional axe head/eye and stone blade. Preserve actual palm anchors, then validate final string endpoints, both-sex action sweeps, released arrows, fletcher workpieces, ordinary world actions, UI and disk before production integration.",
+  "no_release": true,
+  "overall_percent": null
+}
