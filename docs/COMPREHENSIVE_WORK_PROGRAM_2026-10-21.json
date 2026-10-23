@@ -219,5 +219,7 @@
       "decision": "REJECTED_NOT_INTEGRATED",
       "next": "Whole starter-set geometry and final rendered action checks; material-only updates did not meet art direction."
     }
-  ]
+  ],
+  "equipment_diversity_requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
+  "equipment_diversity_status": "OPEN: distinct archetypes/rarities/forms/stats and persistent per-instance progression/condition/repair. Current three starter weapons are not the intended final catalog."
 }
