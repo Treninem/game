@@ -189,7 +189,14 @@
     "iris_perimeter_sectors": 32,
     "cache_materials": 60,
     "extra_runtime_textures": 0,
-    "ci": "New exact SHA pending push and verification",
+    "ci": "f66f6e0f: 7/8; inherited low-resolution color fixture reproduced/fixed locally, full follow-up CI required",
     "visual_acceptance": false
+  },
+  "latest_export_hygiene_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_EXPORT_HYGIENE.json",
+    "source_review_png_bytes": 126349089,
+    "local_control": "physical PCK before/after PASS; production texture retained",
+    "new_gate": "actual exported human resources and source-only folder absence",
+    "ci": "Exact follow-up SHA required"
   }
 }

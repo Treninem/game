@@ -174,6 +174,13 @@ jobs:
           ./Godot_v4.7.1-stable_linux.x86_64 --headless --path . --export-release "Windows Desktop" build/windows/ImPuls.exe
           test -f build/windows/ImPuls.exe
           test -f build/windows/ImPuls.pck
+      - name: Verify shipped resource hygiene and dynamic human assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          task_root="$PWD"
+          cd build/windows
+          GODOT_BIN="$task_root/Godot_v4.7.1-stable_linux.x86_64" GODOT_SMOKE_PACK="$task_root/build/windows/ImPuls.pck" bash "$task_root/tools/run_godot_smoke.sh" "$task_root/tests/smoke_export_resource_hygiene.gd" 180
       - name: Report compact package size
         run: du -h build/windows/ImPuls.exe build/windows/ImPuls.pck
       - name: Package Windows build

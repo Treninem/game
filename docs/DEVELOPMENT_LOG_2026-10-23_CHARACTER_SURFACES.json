@@ -562,5 +562,12 @@
   "review_folder": "docs/review/2026-10-23-character-surfaces",
   "stable_release_published": false,
   "visual_acceptance": false,
-  "overall_percent": null
+  "overall_percent": null,
+  "ci_followup": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_EXPORT_HYGIENE.json",
+    "f66f6e0f_result": "7/8 jobs; new graphic fixture failed at inherited 70% scale",
+    "local_native_low_control": "reproduced exact CI pixels and failure",
+    "local_native_fixed": "128.95 s PASS at native scale with saved 0.70 profile unchanged",
+    "new_ci": "Required after follow-up push"
+  }
 }

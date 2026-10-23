@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Улучшены пряди/края волос и брови обеих моделей; устранён измеренный красный ободок радужек. Проверены пять оттенков, диск и общий кэш материалов. Новые Blender-карты кожи отклонены по результату осмотра. Полная внешность/мир не приняты; новый exact-SHA CI обязателен.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_CHARACTER_SURFACES.json",
+  "current_stage": "Улучшены пряди/края волос и брови обеих моделей; устранён измеренный красный ободок радужек. Проверены пять оттенков, диск и общий кэш материалов. Новые Blender-карты кожи отклонены по результату осмотра. Полная внешность/мир не приняты; новый exact-SHA CI обязателен. CI выявил зависимость нового цветового стенда от сохранённых 70% рендера: сбой воспроизведён и устранён нативным масштабом только стенда. Документация исключена из игровых ресурсов; добавлен обязательный контроль настоящего PCK. Полный новый CI требуется.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_EXPORT_HYGIENE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -549,5 +549,12 @@
     "extra_runtime_textures": 0,
     "ci": "New exact SHA pending push and verification",
     "visual_acceptance": false
+  },
+  "latest_export_hygiene_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_EXPORT_HYGIENE.json",
+    "source_review_png_bytes": 126349089,
+    "local_control": "physical PCK before/after PASS; production texture retained",
+    "new_gate": "actual exported human resources and source-only folder absence",
+    "ci": "Exact follow-up SHA required"
   }
 }

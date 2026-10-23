@@ -23,6 +23,10 @@ func _pixel(image: Image, uv: Vector2) -> Color:
 
 func _shader_checks() -> bool:
     root.size = Vector2i(512,512)
+    # Prior tests may leave the user's Low preset in settings.cfg. Color/UV
+    # probes require native pixels, rather than a filtered 70% reconstruction.
+    # This changes the test viewport only; the saved preset is untouched.
+    root.scaling_3d_scale = 1.0
     var world := Node3D.new()
     root.add_child(world)
     var env := WorldEnvironment.new()
@@ -58,7 +62,7 @@ func _shader_checks() -> bool:
     hair.set_shader_parameter("strand_contrast",0.0)
     quad.material_override = hair
     var plain := await _image()
-    print("SURFACE_PROBE_VIEWPORT logical=",root.get_visible_rect().size," pixels=",plain.get_size())
+    print("SURFACE_PROBE_VIEWPORT logical=",root.get_visible_rect().size," pixels=",plain.get_size()," scale=",root.scaling_3d_scale)
     _save(plain,"strand-control")
     hair.set_shader_parameter("strand_contrast",.85)
     var detailed := await _image()
@@ -101,7 +105,7 @@ func _shader_checks() -> bool:
         for sector in range(16):
             var angle := TAU*float(sector)/16.0
             var color := _pixel(corrected,center+Vector2(cos(angle),sin(angle))*.105)
-            assert(color.r > color.g*1.1 and color.r < color.g*1.9,"An iris sector retains the red source crescent")
+            assert(color.r > color.g*1.1 and color.r < color.g*1.9,"An iris sector retains the red source crescent: center=%s sector=%d color=%s" % [center,sector,color])
             perimeter += 1
     var white_a := _pixel(source,Vector2(.5,.5))
     var white_b := _pixel(corrected,Vector2(.5,.5))
