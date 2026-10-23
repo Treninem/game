@@ -200,8 +200,8 @@
     "Один живой домашний интерьер: сон, скамьи, конечные вещи и сундуки работают и сохраняются. Остальные дома и непрерывная дальняя симуляция не завершены. Переходы в позы пока простые; согласие владельцев и криминальная система не реализованы."
   ],
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
-  "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
-  "ci_followup_status": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
+  "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
+  "ci_followup_status": "First regional SHA failed the obsolete old-roof literal check; strict replacement now requires the new complete production kit. Exact follow-up SHA gates pending.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",

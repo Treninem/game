@@ -153,13 +153,24 @@ jobs:
         run: |
           set -euo pipefail
           grep -Fq 'res://assets/production/medieval/building_shell/Door_1_Flat.gltf' scripts/enterable_building.gd
-          grep -Fq 'res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf' scripts/enterable_building.gd
+          grep -Fq 'res://assets/production/exteriors/family_home/CottageShingleRoof.tscn' scripts/enterable_building.gd
           ! grep -E 'DOOR_SCENE.*assets/staging|ROOF_SCENE.*assets/staging' scripts/enterable_building.gd
           test -s assets/production/medieval/building_shell/Door_1_Flat.gltf
           test -s assets/production/medieval/building_shell/Door_1_Flat.bin
           test -s assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf
           test -s assets/production/medieval/building_shell/Roof_RoundTiles_8x8.bin
           test -s assets/production/medieval/building_shell/QUATERNIUS_CC0_LICENSE.txt
+          roof_root='assets/production/exteriors/family_home'
+          for asset in CottageShingleRoof.tscn CottageShingleRoof.glb RoofShingle.tres Timber.tres Stone.tres Plaster.tres roof_shingles.jpg cedar.png stone.png SOURCE.md LICENSE.txt; do
+            test -s "$roof_root/$asset"
+          done
+          plaster_root='assets/production/interiors/materials/lime_plaster'
+          for asset in albedo.jpg normal.png orm.png SOURCE.md LICENSE.txt; do
+            test -s "$plaster_root/$asset"
+          done
+          test -s assets/production/nature/meadow/MeadowGrass.glb
+          test -s assets/production/nature/meadow/SOURCE.md
+          test -s assets/production/nature/meadow/LICENSE.txt
 
       - name: Verify startup main menu flow
         run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
