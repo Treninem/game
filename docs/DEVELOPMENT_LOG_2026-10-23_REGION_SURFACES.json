@@ -32,7 +32,7 @@
   "world_marker": "CONCEPT_NATIVE_OK earned_checkpoint=true walked_m=99.7111047485378 player_position_assignments=0 physical_rooms=3 reach_checked_front_door=true save_slot=4 quality=Medium clock_fixture=09:00",
   "manual_play": false,
   "teleport_driver": false,
-  "world_scope": "Actual graphical Bootstrap world from previously earned capital checkpoint. Ordinary automated movement/aim rays/doors, bedroom/dining/kitchen, physical floor, save slot4 and reload. No fresh forest-to-capital run or complete manual roam claim. Observer review cameras/time controls belong only to fixture.",
+  "world_scope": "Actual graphical Bootstrap world from previously earned capital checkpoint: ordinary automated movement/aim rays/doors, bedroom/dining/kitchen, physical floor and save slot4. This original graphical driver DID NOT reload the slot. Separate household/rest disk fixtures covered restore; the later city-concept native5 explicitly saves/reloads and checks state. No fresh forest-to-capital run or complete manual roam claim. Observer review cameras/time controls belong only to fixture.",
   "performance": {
     "draw_calls": 1278.0,
     "driver_player_position_assignments": 0,

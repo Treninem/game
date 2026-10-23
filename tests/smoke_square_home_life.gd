@@ -56,8 +56,16 @@ func _run() -> void:
     var artisan := square.get_node("SquareArtisan") as SettlementNPC
     if not home.get_meta("real_furniture_visuals", false):
         errors.append("Live capital home does not reuse the authored bed/table decorator")
-    if not home.has_node("SharedRoofGables"):
-        errors.append("Live home roof still has an open attic triangle")
+    # Inspect actual front and back attic closures, independent of the roof's
+    # node names. An absent near gable must not pass by hitting the far gable.
+    for side: float in [-1.0, 1.0]:
+        var gable_y := home.wall_height + 1.0
+        var gable_start := home.to_global(Vector3(1.5, gable_y, side * (home.interior_size.z * 0.5 + 2.0)))
+        var gable_end := home.to_global(Vector3(1.5, gable_y, 0))
+        var gable_query := PhysicsRayQueryParameters3D.create(gable_start, gable_end, 1, [player.get_rid()])
+        var gable_hit := get_viewport().world_3d.direct_space_state.intersect_ray(gable_query)
+        if gable_hit.is_empty() or gable_hit.collider.get_parent() != home or side * home.to_local(gable_hit.position).z < home.interior_size.z * 0.45:
+            errors.append("Live home roof has an open near attic triangle on side %s" % side)
     var floor_top := home.global_position.y + home.floor_thickness
     if floor_top < WorldData.elevation_at(CapitalData.CENTER) + 0.045:
         errors.append("Home floor is coplanar with the city paving")

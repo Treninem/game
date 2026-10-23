@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "В проверочную игру подключены Blender-кровля/фронтоны/дымовая труба с физической опорой, шесть окон стандартного дома, известковая штукатурка и низкая трава. Повторены графический проход с персонажем, двери/три зоны/диск, физика отдыха и локальная навигация. Это частичный комплект; композиция мира и качество концепции не приняты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+  "current_stage": "Проверочный пакет по 20 городским референсам: 22 двух-/трёхэтажных Blender-фасада, плотнее ближняя улица, навесы/товары/четыре дерева/цветники и физический питьевой фонтан с сохранением. Графически пройдено189.606 м, проверены вход/три комнаты/наведение/напиться/настоящая загрузка. Дальние кварталы, силуэт, река и художественное качество концепции ещё не приняты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_CITY_CONCEPTS.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -201,7 +201,7 @@
   ],
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
-  "ci_followup_status": "First regional SHA failed the obsolete old-roof literal check; strict replacement now requires the new complete production kit. Exact follow-up SHA gates pending.",
+  "ci_followup_status": "City runtime and physical-gable fix: exact follow-up SHA gates pending. Previous seven green and failing Core b03 are not substituted.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
@@ -593,5 +593,7 @@
     "visual_acceptance": false
   },
   "equipment_diversity_requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
-  "equipment_diversity_status": "OPEN: distinct item forms/rarities/stats and persistent instances, upgrades/progression/condition/repair"
+  "equipment_diversity_status": "OPEN: distinct item forms/rarities/stats and persistent instances, upgrades/progression/condition/repair",
+  "city_concept_registry": "assets/registry/CITY_CONCEPT_MODELS_2026-10-23.json",
+  "overall_percent": null
 }

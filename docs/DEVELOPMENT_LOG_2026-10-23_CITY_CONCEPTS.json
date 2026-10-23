@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-23",
+  "goal": "ACTIVE",
+  "parent": "b03b5297639b7bcd17caa539147d6e9c633465ed",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "delivery": "Unreleased review; no stable release",
+  "reference_archive_sha256": "70ee83623dc3349c07cd610ebece53718033224dd38414af161c9a8100434a67",
+  "reference_images_reviewed": 20,
+  "implemented": {
+    "authored_exterior_shells": 22,
+    "new_canopies": 6,
+    "trees": 4,
+    "goods": 12,
+    "flower_clumps": 32,
+    "cardinal_street_width_m": 14,
+    "inner_frontage_gap_m": 38
+  },
+  "runtime": [
+    "Two/three-storey authored shells: real window openings/reveals, shutters, timber frame, masonry plinth, reused balcony, layered clay roofs, roof/ridge support",
+    "Shared photo materials; clay normal/roughness only High/Ultra, all maps mipmapped",
+    "Four existing normalized trees with separate trunk physics, soil/flower beds, map features; shared foliage wind",
+    "Six muted linen canopies use existing cloth shader, 12 real existing goods props; two redundant unnormalized visual stalls removed",
+    "Fountain stone concave collision separate from shared basin water; reachable drink, no item/money creation, full-thirst guard and persisted use count",
+    "Existing cardinal streets, home, NPC workplace and save version6 preserved"
+  ],
+  "native": {
+    "returncode": 0,
+    "seconds": 160.1720000000023,
+    "stopped": false,
+    "errors": [],
+    "marker": "CAPITAL_CONCEPT_NATIVE_OK edge_houses=22 market_canopies=6 earned_checkpoint=true walked_m=189.605918569257 player_position_assignments=0 physical_rooms=3 reach_checked_front_door=true save_slot=4 disk_reload=true release_checks=true fountain_interaction=true fountain_disk_reload=true quality=Medium clock_fixture=09:00",
+    "source_qa_proposal": true,
+    "manual_play": false,
+    "driver_position_assignments": 0
+  },
+  "disk_proof": {
+    "disk_reload": true,
+    "fountain_use_persisted": true,
+    "full_thirst_no_extra_use": true,
+    "inventory_and_coins_conserved": true,
+    "loaded_position": "(13456.92, 0.097047, -7031.006)",
+    "physical_rooms": 3,
+    "player_position_assignments": 0,
+    "release_checks": true,
+    "saved_position": "(13456.92, 0.097047, -7031.006)",
+    "walked_m": 189.605918569257
+  },
+  "manual_play": false,
+  "native_fixture_controls": "Automated ordinary movement and aim rays from previously earned checkpoint; no driver position writes. Observer cameras and clock fixture only. Not a fresh forest-to-capital run or manual roam.",
+  "local_gates": {
+    "capital_home_work_trade_disk": {
+      "case": "square_home_life",
+      "returncode": 0,
+      "seconds": 146.84299999999712,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "market_court": {
+      "case": "smoke_capital_market_court",
+      "returncode": 0,
+      "seconds": 9.860000000000582,
+      "errors": [],
+      "marker": true
+    },
+    "townhouse_native": {
+      "case": "visual_townhouse_surfaces",
+      "returncode": 0,
+      "seconds": 9.90599999999904,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "performance": {
+    "draw_calls": 899.0,
+    "driver_player_position_assignments": 0,
+    "frames": 120,
+    "max_frame_ms": 51.718,
+    "mean_frame_ms": 44.3393166666666,
+    "median_frame_ms": 44.17,
+    "p95_frame_ms": 47.81,
+    "quality": "Medium",
+    "scale_3d": 0.850000023841858,
+    "scope": "Stationary capital market composition with 22 authored houses, four trees and fountain; actual earned arrival checkpoint, warm cache, no sustained traversal or cross-view speedup claim",
+    "video_memory_bytes": 977764125.0,
+    "viewport": "(1280, 720)",
+    "warmup_frames": 30
+  },
+  "art_iteration": [
+    "Initial old-module perimeter prototype native1 technically passed but was art-rejected: empty square and crude shells",
+    "Authored townhouse candidates corrected roof overlap/winding, ridge fit, chimney and blue glass before selecting candidate6",
+    "Native3 passed232.489m but broad empty frontage still rejected; final native5 tightens inner frontage gap58m to38m and recolors canopies",
+    "Accidental repeated native4 ran old mirror after helper quoting error; owned process stopped63.516s, not accepted",
+    "New standalone market test initially preloaded autoload-dependent scripts too early; changed to runtime load after autoload setup, all assertions retained, final gate passed"
+  ],
+  "prior_report_correction": "REGION_SURFACES original99.711m graphical driver saved slot4 but did not reload. Separate headless fixtures covered restore. This new189.606m graphical driver actually reloads slot4 and verifies position and fountain state.",
+  "previous_ci": "Exact b03 head: seven workflows green, World Core failed obsolete SharedRoofGables node-name assertion. Replaced by actual front/back near-gable physical rays; all other requirements retained; complete local fixture passed before and after city package.",
+  "portable_limit": "Previous b03 Windows-script attempt stopped and corrected attempt timed out480s without checkpoints; not accepted. Sky activation failed system cursor manager; non-target captures rejected. No manual play. New source-native result does not validate that old EXE.",
+  "warnings": "Final native5:100 ObjectDB exit instances; prior regional baseline97 and copied human UID fallbacks persist. No leak-free claim.",
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "remaining": [
+    "Two repeated exterior shells, new doors are not interactive households",
+    "Distant legacy city architecture/skyline/river/terraces remain unchanged",
+    "Full visual acceptance false; no claimed modern-AAA equivalence",
+    "User human model/animation critique and equipment diversity remain open",
+    "Sustained weak-PC performance not accepted",
+    "All city identities and richer purposeful public-space composition still require work",
+    "New interiors, household diversity, inhabitants, work and equipment progression remain open"
+  ],
+  "next": "Continue coherent street/market/civic skyline and distinct inhabited architecture with terrain, river and vegetation while preserving functional household contracts. New exact-SHA CI and actual-PCK gate required; no stable promotion."
+}

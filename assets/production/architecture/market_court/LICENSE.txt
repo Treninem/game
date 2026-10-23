@@ -1,0 +1,3 @@
+CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+Original project-authored geometry/maps and selected source balcony/photographs are CC0; see SOURCE.md for attribution and preserved source locations.

@@ -75,5 +75,23 @@ func _run() -> void:
     for map: Texture2D in [surfaces.PLASTER,surfaces.PLASTER_NORMAL,surfaces.PLASTER_ORM]:
         assert(map!=null and map.get_image().has_mipmaps(),"Packaged lime plaster is missing")
     assert(surfaces.PLASTER_NORMAL.get_width()==512 and surfaces.PLASTER_NORMAL.get_height()==384)
-    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 actual_pck=true")
+    for stories:int in [2,3]:
+        var townhouse_scene:=load("res://assets/production/architecture/townhouse/Townhouse_%d.glb"%stories) as PackedScene
+        assert(townhouse_scene!=null,"Packaged authored townhouse is missing")
+        var townhouse:=townhouse_scene.instantiate()
+        var triangles:=0
+        for mesh:MeshInstance3D in townhouse.find_children("*","MeshInstance3D",true,false):
+            assert(mesh.mesh.get_surface_count()==6)
+            for slot in range(mesh.mesh.get_surface_count()):triangles+=mesh.mesh.surface_get_arrays(slot)[Mesh.ARRAY_INDEX].size()/3
+        assert(triangles==(31040 if stories==2 else 37976))
+        townhouse.free()
+    for name:String in ["albedo","normal","orm"]:
+        var map:=load("res://assets/production/architecture/townhouse/clay_%s.png"%name) as Texture2D
+        assert(map!=null and map.get_image().has_mipmaps(),"Packaged clay surface or mips missing")
+    var fountain_scene:=load("res://assets/production/architecture/market_court/MarketFountain.glb") as PackedScene
+    assert(fountain_scene!=null and load("res://scripts/market_fountain.gd") is GDScript and load("res://scripts/capital_market_court.gd") is GDScript)
+    var fountain:=fountain_scene.instantiate()
+    assert(fountain.find_child("FountainStone",true,false)!=null and fountain.find_child("LowerWater",true,false)!=null and fountain.find_child("UpperWater",true,false)!=null)
+    fountain.free()
+    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 townhouses=2 clay_maps=3 fountain=1 actual_pck=true")
     quit(0)

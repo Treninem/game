@@ -317,6 +317,10 @@ jobs:
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_character_surfaces.gd 300
       - name: Verify steel cloth response saved palettes and actual preview reflections
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_wardrobe_response.gd 300
+      - name: Verify capital market trees fountain physics drinking and disk restore
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_market_court.gd 180
+      - name: Verify authored townhouse materials tangents mip chains and four quality levels
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_townhouse_surfaces.gd 180
       - name: Verify family roof plaster quality front windows and compatible meadow rendering
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_region_surfaces.gd 300
       - name: Verify physical mip levels on character materials

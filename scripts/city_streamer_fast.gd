@@ -2,6 +2,7 @@ extends Node3D
 
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const FACADES := preload("res://scripts/modular_city_facades.gd")
+const MARKET_COURT := preload("res://scripts/capital_market_court.gd")
 const SQUARE_LIFE := preload("res://scripts/capital_square_life.gd")
 const MARKET_STALL_SCENE: PackedScene = preload("res://assets/production/medieval/quaternius_market/Stall_Empty.gltf")
 const RESIDENT := preload("res://scripts/settlement_npc.gd")
@@ -36,6 +37,7 @@ var trim_material: StandardMaterial3D
 func _ready() -> void:
     process_priority = 40
     _prepare_materials()
+    SettingsManager.settings_changed.connect(_apply_facade_quality)
     var landmarks := LANDMARKS.new()
     landmarks.name = "CapitalLandmarks"
     add_child(landmarks)
@@ -237,14 +239,36 @@ func _build_spawn_square(root: Node3D, center: Vector2) -> void:
     # its door and interior. Do not seal it again with the old facade collider.
     _build_house(root, Vector3(45.0, WorldData.elevation_at(right_world), -30.0), Vector3(16.0, 8.5, 14.0), 2)
 
-    _spawn_real_market_stall(root, Vector3(-18.0, base_y + 0.12, 28.0), 0.0)
-    _spawn_real_market_stall(root, Vector3(18.0, base_y + 0.12, 28.0), PI)
+    _build_square_edges(root,center)
+    for side:float in [-1.0,1.0]:
+        for z:float in [18.0,34.0,50.0]:
+            var canopy:=square_life._place(MARKET_STALL_SCENE,"ConceptMarketCanopy",Vector3(side*11,0,z),2.65,-side*PI*.5,true)
+            MARKET_COURT.dress_canopy(canopy,int(z/16.0))
+    root.set_meta("concept_market_canopies",6)
+    MARKET_COURT.build(square_life)
 
-func _build_house(parent: Node3D, base_pos: Vector3, size: Vector3, variant: int, yaw: float = 0.0) -> void:
+func _build_square_edges(root:Node3D,center:Vector2) -> void:
+    # Continuous street walls enclose the square. Preserve the 14m cardinal
+    # streets, working home/workplace/door anchors and the existing civic hall.
+    var index := 0
+    var lots:Array[Vector3]=[]
+    for side:float in [-1.0,1.0]:
+        for z:float in [14.0,25.0,36.0,47.0,58.0]:lots.append(Vector3(side*25, -side*PI*.5, z))
+        for z:float in [-57.0,-36.0,-15.0]:lots.append(Vector3(side*66, -side*PI*.5, z))
+    for x:float in [-31.0,31.0]:lots.append(Vector3(x,0,-61))
+    for x:float in [-44.0,-20.0,20.0,44.0]:lots.append(Vector3(x,PI,73))
+    for lot in lots:
+        var point:=Vector2(lot.x,lot.z)
+        var height:=6.24 if index%3!=0 else 9.36
+        _build_house(root,Vector3(point.x,WorldData.elevation_at(center+point),point.y),Vector3(9.5,height,12),index,lot.y,"ConceptTownhouse_%02d"%index)
+        index += 1
+    root.set_meta("concept_edge_houses",index)
+
+func _build_house(parent: Node3D, base_pos: Vector3, size: Vector3, variant: int, yaw: float = 0.0, label: String = "") -> void:
     var stories := clampi(roundi(size.y / 3.12), 1, 4)
     size.y = float(stories) * 3.12
     var body := StaticBody3D.new()
-    body.name = "House_%d" % variant
+    body.name = label if not label.is_empty() else "House_%d" % variant
     body.add_to_group("map_building")
     body.set_meta("map_footprint", Vector2(size.x, size.z))
     body.position = Vector3(base_pos.x, base_pos.y + size.y * 0.5, base_pos.z)
@@ -256,9 +280,32 @@ func _build_house(parent: Node3D, base_pos: Vector3, size: Vector3, variant: int
     shape.size = size
     collision.shape = shape
     body.add_child(collision)
+    if label.begins_with("ConceptTownhouse"):
+        var roof_collision:=CollisionShape3D.new()
+        roof_collision.name="AuthoredRoofSupport"
+        var roof_shape:=ConvexPolygonShape3D.new()
+        var points:=PackedVector3Array()
+        for z:float in [-size.z*.545,size.z*.545]:
+            points.append(Vector3(-size.x*.55,size.y*.5-.38,z))
+            points.append(Vector3(size.x*.55,size.y*.5-.38,z))
+            points.append(Vector3(0,size.y*.5+3.8,z))
+        roof_shape.points=points
+        roof_collision.shape=roof_shape
+        body.add_child(roof_collision)
+        var ridge_collision:=CollisionShape3D.new()
+        ridge_collision.name="AuthoredRidgeSupport"
+        var ridge_shape:=ConvexPolygonShape3D.new()
+        var ridge_points:=PackedVector3Array()
+        for z:float in [-size.z*.545,size.z*.545]:
+            for k in range(7):
+                var angle:=PI*k/6.0
+                ridge_points.append(Vector3(cos(angle)*.22*size.x/8.0,size.y*.5+3.6+sin(angle)*.32,z))
+        ridge_shape.points=ridge_points
+        ridge_collision.shape=ridge_shape
+        body.add_child(ridge_collision)
 
     var facades = parent.get_meta("facades")
-    facades.add_house(base_pos, yaw, Vector2(size.x, size.z), stories, variant % 4 == 0)
+    facades.add_house(base_pos, yaw, Vector2(size.x, size.z), stories, variant % 4 == 0, label.begins_with("ConceptTownhouse"))
 
 func _limit_facade_range(node: Node) -> void:
     if node is GeometryInstance3D:
@@ -333,3 +380,6 @@ func _add_mesh_box(node_name: String, size: Vector3, pos: Vector3, material: Mat
     mesh_instance.position = pos
     parent.add_child(mesh_instance)
     return mesh_instance
+
+func _apply_facade_quality() -> void:
+    FACADES.apply_surface_quality(int(SettingsManager.get_value("graphics","quality_preset")))

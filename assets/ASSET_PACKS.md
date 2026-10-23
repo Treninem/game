@@ -176,3 +176,7 @@ INTEGRATED in review: project-authored Blender worked timber/stone, planter, flo
 ## Review family-home roof, lime plaster and meadow — 2026-10-23
 
 INTEGRATED on the review branch: project-authored Blender layered shingle roof/gables/chimney and 130-triangle meadow blades; selected existing CC0 B29 plaster/shingle, cedar and musdasch rock photographs. Source packs remain STAGED_PHYSICAL on main; no new pack download. Production families: `assets/production/exteriors/family_home/`, `assets/production/interiors/materials/lime_plaster/`, `assets/production/nature/meadow/`. Editable geometry: `assets/source/exteriors/family_home/` and `assets/source/nature/meadow/`. Exact provenance, native constraints and open art limits: `assets/registry/REGION_SURFACES_2026-10-23.json`. Full concept/world acceptance remains false.
+
+## City concept review models — 2026-10-23
+
+`INTEGRATED` on the review branch, not main: `assets/production/architecture/townhouse/` and `market_court/`. Original Blender townhouse shells and carved fountain, selected existing B29 CC0 balcony, shared existing CC0 photographs, and authored clay response maps. Editable relative-linked sources: `assets/source/architecture/`. Registry: `assets/registry/CITY_CONCEPT_MODELS_2026-10-23.json`. Two repeated exterior shells are not newly enterable homes; full visual acceptance remains false. No third-party download.
