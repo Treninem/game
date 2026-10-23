@@ -246,7 +246,7 @@
   "latest_public_market_package": {
     "journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET.json",
     "local_checked": true,
-    "exact_sha_ci": "pending at commit creation",
+    "exact_sha_ci": "all8success for named runtimeb28; documentation-only follow-up inspected separately",
     "native_walk_m": 125.162813376402,
     "gpu_seated_boot_vertices_per_actor": 3530,
     "actual_disk_reload": true,
@@ -282,6 +282,11 @@
         "warmup_frames": 45
       }
     ],
-    "visual_acceptance": false
+    "visual_acceptance": false,
+    "runtime_commit": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+    "delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET_DELIVERY.json",
+    "actual_pck_gameplay": true,
+    "actual_pck_walk_m": 125.162855732953,
+    "rejected_static_batch_followup": "Reduced draw calls but worsened time and memory; not integrated. Baseline mirror restored."
   }
 }
