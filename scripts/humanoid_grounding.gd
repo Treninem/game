@@ -12,9 +12,11 @@ var last_cost_usec := 0
 var contacts := {}
 var cached_shape_weights := []
 var landing_compression := 0.0
+var pose_points := {}
 
 func apply(visual: Node3D, skeleton: Skeleton3D, delta: float) -> void:
     var started := Time.get_ticks_usec()
+    pose_points.clear()
     contacts.clear()
     landing_compression = 0.0
     var actor := visual.get_parent() as CharacterBody3D
@@ -100,6 +102,7 @@ func apply(visual: Node3D, skeleton: Skeleton3D, delta: float) -> void:
     var hip := skeleton.find_bone("Hips")
     skeleton.set_bone_pose_position(hip, skeleton.get_bone_pose_position(hip) + skeleton.global_basis.inverse() * Vector3.UP * (root_offset - compression))
     skeleton.force_update_all_bone_transforms()
+    pose_points.clear()
     for side: String in ["Left", "Right"]:
         if not hits.has(side) or float(contact_weights.get(side, 0.0)) <= 0.001:
             continue
@@ -114,6 +117,12 @@ func apply(visual: Node3D, skeleton: Skeleton3D, delta: float) -> void:
             _solve_leg(visual, skeleton, side, ankle + Vector3.UP * adjustment)
             _restore_foot_basis(skeleton, foot, foot_bases[side])
         contacts[side] = {"gap": _vertical_gap(_lowest(skeleton, side, hits[side].normal), hits[side]), "weight": contact}
+    # Pelvis support and landing compression can push the other, swinging foot
+    # into an uphill face. Its old hit/stance weight was sampled before that
+    # translation (and may be absent). Check both final skinned soles anew;
+    # lift only penetrations, retaining the authored swing and foot rotation.
+    for side: String in ["Left", "Right"]:
+        _clear_swing_foot(visual, skeleton, actor, side)
     last_cost_usec = Time.get_ticks_usec() - started
 
 func _cache_samples(visual: Node3D, skeleton: Skeleton3D) -> void:
@@ -188,6 +197,18 @@ func _vertical_gap(point: Vector3, hit: Dictionary) -> float:
 func _lowest(skeleton: Skeleton3D, side: String, normal := Vector3.UP) -> Vector3:
     var low := Vector3(0, INF, 0)
     var score := INF
+    for point: Vector3 in _skinned_points(skeleton, side):
+        if point.dot(normal) < score:
+            low = point
+            score = point.dot(normal)
+    return low
+
+func _skinned_points(skeleton: Skeleton3D, side: String) -> PackedVector3Array:
+    if pose_points.has(side):
+        return pose_points[side]
+    # One deformation per unchanged leg pose. Different sole directions and
+    # fallback/contact rays reuse it; every bone/root mutation invalidates it.
+    var points := PackedVector3Array()
     var transforms := {}
     var world := skeleton.global_transform
     for sample: Array in samples[side]:
@@ -198,13 +219,12 @@ func _lowest(skeleton: Skeleton3D, side: String, normal := Vector3.UP) -> Vector
             if not transforms.has(slot):
                 transforms[slot] = skeleton.get_bone_global_pose(bindings[slot][0]) * (bindings[slot][1] as Transform3D)
             point += ((transforms[slot] as Transform3D) * vertex) * float(influence[1])
-        point = world * point
-        if point.dot(normal) < score:
-            low = point
-            score = point.dot(normal)
-    return low
+        points.append(world * point)
+    pose_points[side] = points
+    return points
 
 func _solve_leg(visual: Node3D, skeleton: Skeleton3D, side: String, world_goal: Vector3) -> void:
+    pose_points.erase(side)
     var upper := skeleton.find_bone(side + "UpLeg")
     var knee := skeleton.find_bone(side + "Leg")
     var foot := skeleton.find_bone(side + "Foot")
@@ -227,8 +247,39 @@ func _solve_leg(visual: Node3D, skeleton: Skeleton3D, side: String, world_goal: 
     visual.call("_align_sitting_bone", skeleton, side + "Leg", side + "Foot", to_visual * (goal - joint))
 
 func _restore_foot_basis(skeleton: Skeleton3D, foot: int, world_basis: Basis) -> void:
+    pose_points.erase(String(skeleton.get_bone_name(foot)).trim_suffix("Foot"))
     var local := skeleton.get_bone_pose_rotation(foot)
     var frame := skeleton.get_bone_global_pose(foot).basis.orthonormalized() * Basis(local).inverse()
     var goal := skeleton.global_basis.orthonormalized().inverse() * world_basis
     skeleton.set_bone_pose_rotation(foot, (frame.inverse() * goal).get_rotation_quaternion())
     skeleton.force_update_all_bone_transforms()
+
+func _clear_swing_foot(visual: Node3D, skeleton: Skeleton3D, actor: CharacterBody3D, side: String) -> void:
+    var normal := actor.get_floor_normal()
+    if normal.length_squared() < 0.5:
+        normal = Vector3.UP
+    var point := _lowest(skeleton, side, normal)
+    var reach := 0.45 * visual.scale.x
+    var query := PhysicsRayQueryParameters3D.create(point + Vector3.UP * reach, point + Vector3.DOWN * 0.06, actor.collision_mask, [actor.get_rid()])
+    var hit := actor.get_world_3d().direct_space_state.intersect_ray(query)
+    if hit.is_empty() or Vector3(hit.normal).dot(Vector3.UP) < cos(actor.floor_max_angle):
+        return
+    var gap := _vertical_gap(_lowest(skeleton, side, hit.normal), hit)
+    if gap >= 0.002:
+        return
+    var foot := skeleton.find_bone(side + "Foot")
+    var basis := skeleton.global_basis.orthonormalized() * skeleton.get_bone_global_pose(foot).basis.orthonormalized()
+    var lifted := 0.0
+    for iteration in range(2):
+        var adjustment := clampf(0.004 - gap, 0.0, 0.22 * visual.scale.x)
+        if adjustment < 0.0005:
+            break
+        var ankle := skeleton.to_global(skeleton.get_bone_global_pose(foot).origin)
+        _solve_leg(visual, skeleton, side, ankle + Vector3.UP * adjustment)
+        _restore_foot_basis(skeleton, foot, basis)
+        lifted += adjustment
+        gap = _vertical_gap(_lowest(skeleton, side, hit.normal), hit)
+    var contact: Dictionary = contacts.get(side, {"weight": 0.0})
+    contact["gap"] = gap
+    contact["clearance_lift"] = lifted
+    contacts[side] = contact

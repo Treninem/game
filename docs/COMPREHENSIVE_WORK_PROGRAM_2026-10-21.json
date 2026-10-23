@@ -18,7 +18,7 @@
         "Стопы держат рельеф, ступени и склоны без зависания; камера и управление удобны",
         "Изменения внешности и экипировки переживают сохранение/загрузку"
       ],
-      "current": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты. Исправлены первые кадры подготовки лука: прежнее исключение пропускало исходный Idle сквозь одежду. 504 кадра шести настоящих переходов и четыре нативных GPU/цветовых образца прошли; выстрел, хват, тетива и диск повторно проверены. Новый пакет: переходный баланс корпуса/головы/плеч при реальном ускорении, торможении, повороте и приземлении; 30 движущихся поз туники/всей обуви на GPU. Исправлены непрозрачная многогранная пыль и материал физических шагов; дерево/камень не дают земляных обломков. Полная внешность, фазовая опора и художественная приёмка остаются открыты. Выпуск стрелы теперь учитывает физическое перемещение и поворот после последней отрисовки руки; контроль прежней версии и три новые проверки настоящего снаряда подтвердили исправление. Кадр натяжения в прыжке фиксируется после модификатора и проверяется в момент своей отрисовки."
+      "current": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты. Исправлены первые кадры подготовки лука: прежнее исключение пропускало исходный Idle сквозь одежду. 504 кадра шести настоящих переходов и четыре нативных GPU/цветовых образца прошли; выстрел, хват, тетива и диск повторно проверены. Новый пакет: переходный баланс корпуса/головы/плеч при реальном ускорении, торможении, повороте и приземлении; 30 движущихся поз туники/всей обуви на GPU. Исправлены непрозрачная многогранная пыль и материал физических шагов; дерево/камень не дают земляных обломков. Полная внешность, фазовая опора и художественная приёмка остаются открыты. Выпуск стрелы теперь учитывает физическое перемещение и поворот после последней отрисовки руки; контроль прежней версии и три новые проверки настоящего снаряда подтвердили исправление. Кадр натяжения в прыжке фиксируется после модификатора и проверяется в момент своей отрисовки. Пакет склонов: после смещения таза повторно проверяются обе подошвы; устранено измеренное проникание свободной ноги до 17 см. 76 физических поз окончательного расчёта прошли. Полный графический контроль до оптимизации прошёл 34 позы; два финальных локальных графических повтора завершились по внешнему сроку. Полный новый native CI ещё обязателен. Полная художественная опора, проскальзывание и внешний вид открыты."
     },
     {
       "group": "Природа и рельеф",
@@ -81,7 +81,7 @@
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
   "last_updated": "2026-10-23",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
@@ -160,5 +160,15 @@
     "full_artistic_acceptance": false,
     "stable_release_published": false,
     "render_observers": "810 wardrobe views, 30 live GPU poses and nine 5 FPS dispatch phases PASS"
+  },
+  "latest_slope_support_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
+    "review_folder": "docs/review/2026-10-23-slope-support",
+    "local": "Final cache: 76 physical poses PASS; complete pre-cache Intel control: 76 poses /34 GPU poses PASS. Final-cache native attempts TIMEOUT, with 17 partial positive GPU phases. Complete new native CI remains required.",
+    "before_swing_penetration_m": -0.170834392181199,
+    "player_position_writes_after_setup": 0,
+    "ci": "Pending new exact-SHA verification after push; parent 2d5caf22 all eight SUCCESS",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
   }
 }

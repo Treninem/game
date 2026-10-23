@@ -268,6 +268,10 @@ jobs:
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_bow_world.gd 240
       - name: Verify physical foot contacts and bounded non-emissive dust
         run: bash tools/run_godot_smoke.sh tests/smoke_foot_contact.gd 120
+      - name: Verify both soles and actual jump action phases on inclined terrain
+        run: bash tools/run_godot_smoke.sh tests/smoke_slope_motion.gd 180
+      - name: Verify inclined terrain poses with complete GPU boots and clothing
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_slope_motion.gd 300
       - name: Verify whole-body acceleration turn landing and pause response
         run: bash tools/run_godot_smoke.sh tests/smoke_motion_response.gd 180
       - name: Verify live GPU clothing and boot vertices during physical actions
@@ -336,3 +340,4 @@ jobs:
           path: |
             ~/.local/share/godot/app_userdata/ImPuls/*.png
             ~/.local/share/godot/app_userdata/ImPuls/motion-response.json
+            ~/.local/share/godot/app_userdata/ImPuls/slope-motion.json

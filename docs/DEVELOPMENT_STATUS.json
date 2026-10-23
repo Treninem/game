@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлен реальный поздний подъём рук при низком FPS: анимации игрока синхронизированы с физическими действиями. Девять моментов ввода при ограничении 5 кадров/с, три настоящих снаряда, 30 GPU-поз и 810 ракурсов одежды прошли повторно. Полный новый exact-SHA CI обязателен; художественная приёмка и холодный запуск открыты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
+  "current_stage": "Исправлено измеренное проникание свободной стопы в косой склон до 17 см. 76 физических поз финального расчёта прошли; полный Intel GPU-контроль исправления до оптимизации прошёл 34 позы. Два окончательных графических повтора превысили срок, хотя 17 фаз прошли частично. Полный exact-SHA CI обязателен; локальная производительность и художественная приёмка открыты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -518,5 +518,15 @@
     "full_artistic_acceptance": false,
     "stable_release_published": false,
     "render_observers": "810 wardrobe views, 30 live GPU poses and nine 5 FPS dispatch phases PASS"
+  },
+  "latest_slope_support_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
+    "review_folder": "docs/review/2026-10-23-slope-support",
+    "local": "Final cache: 76 physical poses PASS; complete pre-cache Intel control: 76 poses /34 GPU poses PASS. Final-cache native attempts TIMEOUT, with 17 partial positive GPU phases. Complete new native CI remains required.",
+    "before_swing_penetration_m": -0.170834392181199,
+    "player_position_writes_after_setup": 0,
+    "ci": "Pending new exact-SHA verification after push; parent 2d5caf22 all eight SUCCESS",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
   }
 }
