@@ -56,7 +56,11 @@ func _run() -> void:
                         if material.normal_enabled:
                             _check_texture(material.normal_texture, "actual garment normal")
                     elif material is ShaderMaterial:
-                        _check_texture(material.get_shader_parameter("hair_texture"), String(mesh.name))
+                        if String(mesh.name) == "Eyes":
+                            if material.shader != VISUAL.EYE_SHADER: failures.append("Unexpected eye shader")
+                            _check_texture(material.get_shader_parameter("eye_texture"), "actual eye atlas")
+                        else:
+                            _check_texture(material.get_shader_parameter("hair_texture"), String(mesh.name))
             actor.queue_free()
             await get_tree().process_frame
     for failure in failures:

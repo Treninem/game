@@ -8,9 +8,10 @@ const APPEARANCE := preload("res://scripts/character_appearance.gd")
 const GARMENT_NORMAL := preload("res://assets/production/characters/realistic/details/garment_normal.png")
 const GARMENT_AO := preload("res://assets/production/characters/realistic/details/garment_ao.png")
 const SHOE_ALBEDO := preload("res://assets/production/characters/realistic/details/shoes_albedo.png")
+const EYE_SHADER := preload("res://assets/shaders/characters/human_eyes.gdshader")
 const HAIR_SHADER := preload("res://assets/shaders/characters/hair_tint.gdshader")
 const EYE_TEXTURES := [preload("res://assets/production/characters/realistic/eyes/brown_eye.png"), preload("res://assets/production/characters/realistic/eyes/blue_eye.png"), preload("res://assets/production/characters/realistic/eyes/green_eye.png"), preload("res://assets/production/characters/realistic/eyes/grey_eye.png"), preload("res://assets/production/characters/realistic/eyes/lightblue_eye.png")]
-const HUMANS := {"male": preload("res://assets/production/characters/realistic/male.glb"), "female": preload("res://assets/production/characters/realistic/female.glb")}
+const HUMANS := {"male": preload("res://assets/production/characters/realistic_contours/male.glb"), "female": preload("res://assets/production/characters/realistic_contours/female.glb")}
 const PALETTES := [null, preload("res://assets/production/characters/citizen/citizen_dark.png"), preload("res://assets/production/characters/citizen/citizen_light.png")]
 static var palette_materials: Dictionary = {}
 const WEAPONS := {
@@ -48,6 +49,7 @@ var nocked_arrow: Node3D
 var last_draw_point := Vector3.ZERO
 var draw_point_in_actor := Vector3.ZERO
 var has_draw_point := false
+var detail_lod := preload("res://scripts/humanoid_detail_lod.gd").new()
 
 func _ready() -> void:
     var profile: Variant = appearance_profile
@@ -132,6 +134,10 @@ func apply_appearance(value: Variant) -> void:
             skeletons[0].add_child(clothing_modifier)
 
 func _style_model() -> void:
+    if detail_lod.get_parent() == null:
+        detail_lod.name = "HumanDetailLOD"
+        add_child(detail_lod)
+    detail_lod.configure(self)
     for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
         if String(mesh.name).begins_with("HairShort"):
             mesh.visible = int(current_profile.hair) == 0
@@ -155,6 +161,14 @@ func _style_model() -> void:
                     hair.set_shader_parameter("hair_color", APPEARANCE.HAIR[int(current_profile.hair_color)])
                     palette_materials[key] = hair
                     mesh.set_surface_override_material(surface, hair)
+                    continue
+                if String(source.resource_name).begins_with("EyesHuman"):
+                    var eyes := ShaderMaterial.new()
+                    eyes.shader = EYE_SHADER
+                    eyes.set_shader_parameter("eye_texture", EYE_TEXTURES[int(current_profile.eye_color)])
+                    eyes.set_shader_parameter("brown_iris", int(current_profile.eye_color) == 0)
+                    palette_materials[key] = eyes
+                    mesh.set_surface_override_material(surface, eyes)
                     continue
                 var material := source.duplicate() as StandardMaterial3D
                 var label := String(source.resource_name)
@@ -192,10 +206,6 @@ func _style_model() -> void:
                     material.albedo_texture = SHOE_ALBEDO
                     material.albedo_color = Color(0.72, 0.62, 0.50)
                     material.roughness = 0.73
-                elif label.begins_with("EyesHuman"):
-                    material.albedo_texture = EYE_TEXTURES[int(current_profile.eye_color)]
-                    material.roughness = 0.22
-                    material.metallic_specular = 0.65
                 palette_materials[key] = material
             mesh.set_surface_override_material(surface, palette_materials[key])
 

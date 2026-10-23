@@ -1,14 +1,17 @@
 """Check the actual skinned production geometry in 100 animation poses.
 Blender creates a separate Icosphere bone widget on glTF import; it is not
-exported character geometry. Require all seven skinned model parts instead.
+exported character geometry. Require the exact seven-part baseline, or the
+explicit near/far family with its additional accepted distance body.
 """
 import bpy,json,math,os
 from mathutils import Vector
 from pathlib import Path
 r=Path(__file__).resolve().parents[1];q=Path(os.environ.get('IMPULS_CHARACTER_OUTPUT',str(r/'assets/production/characters/realistic')));results=[]
+expected={'HumanBody','Eyes','Clothing','Boots','Brows','HairShort','HairPonytail'}
+if os.environ.get('IMPULS_CHARACTER_DETAIL_PAIR')=='1':expected.add('HumanBodyFar')
 for sex in ['male','female']:
  bpy.ops.wm.read_factory_settings(use_empty=True);bpy.ops.import_scene.gltf(filepath=str(q/(sex+'.glb')))
- rig=next(o for o in bpy.data.objects if o.type=='ARMATURE');meshes=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.parent==rig];assert len(meshes)==7,[(o.name,o.parent.name if o.parent else '') for o in meshes]
+ rig=next(o for o in bpy.data.objects if o.type=='ARMATURE');meshes=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.parent==rig];assert {o.name for o in meshes}==expected,[(o.name,o.parent.name if o.parent else '') for o in meshes]
  for track in list(rig.animation_data.nla_tracks):rig.animation_data.nla_tracks.remove(track)
  actions=list(bpy.data.actions);assert len(actions)==10
  for action in actions:
@@ -65,4 +68,4 @@ for sex in ['male','female']:
       assert 5.0<angle<50.0,(sex,action.name,'unnatural free finger',side,finger,fraction,angle)
    print('NATIVE_RELAXED_HANDS_OK',sex,action.name,flush=True)
   results.append({'sex':sex,'clip':action.name,'maximum_edge_m':round(max_edge,5),**({'minimum_knee_angle_deg':round(minimum,5),'minimum_forward_lean_deg':round(minimum_lean,5)} if action.name in ['Walk','Run'] else {})})
-(r/'build/acceptance/realistic-character-surfaces.json').write_text(json.dumps(results,indent=2),encoding='utf-8');print('REALISTIC_SURFACES_OK',len(results),'clips,100 poses')
+Path(os.environ.get('IMPULS_CHARACTER_SURFACE_REPORT',str(r/'build/acceptance/realistic-character-surfaces.json'))).write_text(json.dumps(results,indent=2),encoding='utf-8');print('REALISTIC_SURFACES_OK',len(results),'clips,100 poses',sorted(expected))

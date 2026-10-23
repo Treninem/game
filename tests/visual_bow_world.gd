@@ -13,6 +13,7 @@ class CastInputProbe extends Node:
 var bow_blend_samples := 0
 var watched_modifier: Node
 var last_bow_process_frame := -1
+var final_bow_sample: Dictionary = {}
 var walked := 0.0
 var captures: Array[String] = []
 var player: CharacterBody3D
@@ -184,7 +185,10 @@ func _run() -> void:
     assert(is_equal_approx(((player.get_node("CollisionShape3D") as CollisionShape3D).shape as CapsuleShape3D).height, 1.95))
     assert(is_equal_approx((player.get_node("CameraPivot") as Node3D).position.y, 1.35 * 195.0 / 180.0))
     var restored_eyes := player.get_node("Avatar").find_child("Eyes", true, false) as MeshInstance3D
-    assert((restored_eyes.get_active_material(0) as StandardMaterial3D).albedo_texture == load("res://assets/production/characters/realistic/eyes/lightblue_eye.png"))
+    var eye_material := restored_eyes.get_active_material(0) as ShaderMaterial
+    assert(eye_material != null and eye_material.shader == preload("res://assets/shaders/characters/human_eyes.gdshader"))
+    assert(eye_material.get_shader_parameter("eye_texture") == load("res://assets/production/characters/realistic/eyes/lightblue_eye.png"))
+    assert(eye_material.get_shader_parameter("brown_iris") == false, "Saved blue eyes must not receive the local brown-iris correction")
     var magic := root.get_node("MagicSystem")
     for attempt in range(10):
         if magic.call("selected_spell_id") == "heal":
@@ -272,12 +276,14 @@ func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
     if not is_instance_valid(visual) or not is_instance_valid(skeleton):
         return
     var animator: AnimationPlayer = visual.get("animation_player")
-    if animator.assigned_animation not in ["Bow_Attack_Draw", "Bow_Attack_Shoot"]:
-        return
     var frame := Engine.get_process_frames()
-    if frame == last_bow_process_frame:
+    if animator.assigned_animation not in ["Bow_Attack_Draw", "Bow_Attack_Shoot"]:
+        if frame == last_bow_process_frame:
+            final_bow_sample.clear()
         return
-    last_bow_process_frame = frame
+    if frame != last_bow_process_frame:
+        last_bow_process_frame = frame
+        RenderingServer.frame_post_draw.connect(func(): _finish_live_bow_frame(frame), CONNECT_ONE_SHOT)
     var points := {}
     for bone: String in ["LeftArm", "RightArm", "RightForeArm", "RightHand", "Spine1", "Spine2", "Neck"]:
         points[bone] = player.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone(bone)).origin))
@@ -295,8 +301,10 @@ func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
                 continue
             var radial := pow((point - center).dot(side) / radius_x, 2) + pow((point - center).dot(forward) / (0.09 * ratio), 2)
             assert(radial >= 1.0, "Live bow blend enters central torso: " + str(segment) + " point=" + str(point))
-    bow_blend_samples += 1
-    print("LIVE_BOW_BLEND_SAMPLE ", bow_blend_samples)
+    # A slow render can contain eight successive physics/modifier passes.
+    # Validate each pose and retain the LAST one, not the first preparation
+    # sample. Counting/capture happens only after that exact image is shown.
+    final_bow_sample = {"pose":String(animator.assigned_animation), "animation_time":animator.current_animation_position,"wrist_below_neck_m":points.Neck.y-points.RightHand.y,"grounded":player.is_on_floor(),"pending":float(player.get("pending_bow_elapsed")),"frame":frame,"airborne_candidate":false}
     # The first Draw-labelled frame can correctly still be the initial
     # preparation pose. Require actual raised-hand geometry and clip progress,
     # while the physical draw is still pending, for the tension review image.
@@ -310,10 +318,17 @@ func _inspect_live_bow_arm(visual: Node3D, skeleton: Skeleton3D) -> void:
         var frame_rect := root.get_visible_rect().grow(-24)
         assert(observer.is_position_in_frustum(head) and frame_rect.has_point(head_pixel), "Draw head cropped")
         assert(observer.is_position_in_frustum(foot) and frame_rect.has_point(foot_pixel), "Draw feet cropped")
+        final_bow_sample.head_pixel = str(head_pixel)
+        final_bow_sample.foot_pixel = str(foot_pixel)
+        final_bow_sample.airborne_candidate = true
+
+func _finish_live_bow_frame(frame: int) -> void:
+    assert(Engine.get_process_frames() == frame, "Draw image and skeleton observation differ by a frame")
+    if final_bow_sample.is_empty() or int(final_bow_sample.frame) != frame:
+        return
+    bow_blend_samples += 1
+    print("LIVE_BOW_BLEND_SAMPLE ", bow_blend_samples)
+    if request_airborne_draw and bool(final_bow_sample.airborne_candidate):
         request_airborne_draw = false
-        var observed := {"pose":String(animator.assigned_animation), "animation_time":animator.current_animation_position,"wrist_below_neck_m":points.Neck.y-points.RightHand.y,"head_pixel":str(head_pixel),"foot_pixel":str(foot_pixel),"grounded":player.is_on_floor(), "pending":float(player.get("pending_bow_elapsed")), "frame":frame}
-        RenderingServer.frame_post_draw.connect(func():
-            assert(Engine.get_process_frames() == int(observed.frame), "Draw image and skeleton observation differ by a frame")
-            _capture_rendered("short_bow")
-            airborne_draw_frame = observed
-        , CONNECT_ONE_SHOT)
+        _capture_rendered("short_bow")
+        airborne_draw_frame = final_bow_sample.duplicate(true)

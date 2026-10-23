@@ -131,8 +131,8 @@ func _run() -> void:
             eye_choice.select(color_index)
             eye_choice.item_selected.emit(color_index)
             var eyes := creator.visual.find_child("Eyes", true, false) as MeshInstance3D
-            var material := eyes.get_active_material(0) as StandardMaterial3D
-            if not _check(material.albedo_texture == preload("res://scripts/humanoid_visual.gd").EYE_TEXTURES[color_index] and creator.profile.eye_color == color_index, "Eye selection did not reach the physical eye material"):
+            var material := eyes.get_active_material(0) as ShaderMaterial
+            if not _check(material != null and material.shader == preload("res://scripts/humanoid_visual.gd").EYE_SHADER and material.get_shader_parameter("eye_texture") == preload("res://scripts/humanoid_visual.gd").EYE_TEXTURES[color_index] and material.get_shader_parameter("brown_iris") == (color_index == 0) and creator.profile.eye_color == color_index, "Eye selection did not reach the physical eye material and local iris correction"):
                 return
             if not _check(garment.get_active_material(0) == garment_material, "Changing eyes recreated unrelated garment materials"):
                 return

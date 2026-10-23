@@ -112,16 +112,18 @@ func _build() -> void:
     environment.environment.background_color = Color(0.07, 0.09, 0.095)
     environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
     environment.environment.ambient_light_color = Color(0.78, 0.83, 0.88)
-    environment.environment.ambient_light_energy = 0.55
+    environment.environment.ambient_light_energy = 0.32
     world.add_child(environment)
     var key := DirectionalLight3D.new()
-    key.rotation_degrees = Vector3(-35, -25, 0)
-    key.light_energy = 1.5
+    # The model faces -Z. A -25 yaw lit the back of its head, forcing a
+    # strong ambient/omni fill and washing out the actual facial contours.
+    key.rotation_degrees = Vector3(-28, 155, 0)
+    key.light_energy = 0.85
     world.add_child(key)
     var fill := OmniLight3D.new()
-    fill.position = Vector3(1.5, 2, -2)
+    fill.position = Vector3(-1.5, 2, -2)
     fill.omni_range = 6
-    fill.light_energy = 1.3
+    fill.light_energy = 0.45
     world.add_child(fill)
     camera = Camera3D.new()
     camera.fov = 37

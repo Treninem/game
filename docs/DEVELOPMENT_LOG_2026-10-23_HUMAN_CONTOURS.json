@@ -1,0 +1,665 @@
+{
+  "date": "2026-10-23",
+  "parent": "d529fb32b307c7bf3415eabb5c3f71781ca70355",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "branch": "codex/household-persistence-2026-10-19",
+  "package": "Blender human contours, continuous distance selection, eye material and usable creator lighting",
+  "parent_ci": "d529fb32: all 7 workflows /8 jobs green; World Core 98/98 steps (previous packet)",
+  "changes": [
+    "Both native bodies and eyes refined per appearance shape in Blender; original masked boundaries and default costume retained.",
+    "Exact original four-weight body retained as distance role; all interpolated near influences retained in eight-weight layout. One hysteretic decision selects only one body.",
+    "Distance selection remains active when the humanoid animation-selection process is stopped, including death; no animation restart.",
+    "Local brown-iris correction preserves the authored sclera; other four color choices retain their atlas. No appearance/save schema change.",
+    "Creator main light corrected from rear-facing to front oblique, with bounded fill so facial contours are readable.",
+    "Rendered-world observer now retains the final modifier sample per displayed frame. Trace showed Draw .25→.45 within one process frame; the old first-sample guard incorrectly discarded the actual tension frame. Every intermediate torso assertion and all gameplay/shot/deadline conditions remain; only genuinely shown final frames count."
+  ],
+  "native_final": {
+    "receipt": {
+      "case": "native5",
+      "exit_code": 0,
+      "seconds": 82.56,
+      "timeout": false,
+      "bound": 320,
+      "sources": {
+        "scripts/humanoid_visual.gd": "524a4d077bc788676e8d1276fa1a60d8096fbf29adc6a679a02c65588aa18115",
+        "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+        "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+        "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+        "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "errors": [],
+      "sources_unchanged": true,
+      "command": [
+        "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+        "--path",
+        "D:\\Desktop\\GitHub\\game\\build\\body-response",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--script",
+        "res://tests/visual_human_contours.gd"
+      ]
+    },
+    "frames": 18,
+    "complete_gpu_poses": 10,
+    "maximum_body_gpu_error_m": 2.56527550845931e-06,
+    "body_vertices_per_pose": [
+      41822,
+      42157
+    ],
+    "morph_extremes": 4,
+    "distance_profile_transitions": 24,
+    "corpse_distance_transitions": 4,
+    "all_nine_shapes_and_profile_disk_roundtrips": true
+  },
+  "preservation": [
+    {
+      "sex": "male",
+      "unchanged_parts": 5,
+      "far_body_exact": true,
+      "unchanged_images": true,
+      "unchanged_clips": 10,
+      "morphs": 9,
+      "near": {
+        "HumanBody": {
+          "vertices_before": 8518,
+          "vertices_after": 41822,
+          "maximum_influences": 5
+        },
+        "Eyes": {
+          "vertices_before": 96,
+          "vertices_after": 1720,
+          "maximum_influences": 1
+        }
+      }
+    },
+    {
+      "sex": "female",
+      "unchanged_parts": 5,
+      "far_body_exact": true,
+      "unchanged_images": true,
+      "unchanged_clips": 10,
+      "morphs": 9,
+      "near": {
+        "HumanBody": {
+          "vertices_before": 8590,
+          "vertices_after": 42157,
+          "maximum_influences": 5
+        },
+        "Eyes": {
+          "vertices_before": 96,
+          "vertices_after": 1720,
+          "maximum_influences": 1
+        }
+      }
+    }
+  ],
+  "blender_anatomy": {
+    "receipt": {
+      "exit_code": 0,
+      "timeout": false,
+      "seconds": 146.01,
+      "bound": 600
+    },
+    "clips": 20,
+    "poses": 100,
+    "exact_parts": 8,
+    "existing_edge_knee_finger_limits_unchanged": true
+  },
+  "source_portability": {
+    "exit_code": 0,
+    "timeout": false,
+    "seconds": 21.2,
+    "bound": 180
+  },
+  "local_cases": {
+    "native5": {
+      "case": "native5",
+      "exit_code": 0,
+      "seconds": 82.56,
+      "timeout": false,
+      "bound": 320,
+      "sources": {
+        "scripts/humanoid_visual.gd": "524a4d077bc788676e8d1276fa1a60d8096fbf29adc6a679a02c65588aa18115",
+        "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+        "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+        "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+        "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "errors": [],
+      "sources_unchanged": true,
+      "command": [
+        "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+        "--path",
+        "D:\\Desktop\\GitHub\\game\\build\\body-response",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--script",
+        "res://tests/visual_human_contours.gd"
+      ]
+    },
+    "creator": {
+      "case": "creator",
+      "exit_code": 0,
+      "seconds": 14.52,
+      "timeout": false,
+      "bound": 120,
+      "sources": {
+        "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+        "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+        "scripts/character_creator.gd": "9ececfdf17f286b52a915062aad25761619c14f7f400ec876eda87f9e99d3f94",
+        "tests/visual_human_contours.gd": "31faba88408e8ef2975d47c8d8e6af684d3e36282961d2086540be67680ffb13",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+      },
+      "errors": []
+    },
+    "mips": {
+      "case": "mips",
+      "exit_code": 0,
+      "seconds": 12.47,
+      "timeout": false,
+      "bound": 120,
+      "sources": {
+        "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+        "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+        "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+        "tests/visual_human_contours.gd": "31faba88408e8ef2975d47c8d8e6af684d3e36282961d2086540be67680ffb13",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+      },
+      "errors": []
+    },
+    "actions": {
+      "case": "actions",
+      "exit_code": 0,
+      "seconds": 100.14,
+      "timeout": false,
+      "bound": 300,
+      "sources": {
+        "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+        "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+        "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+        "tests/visual_human_contours.gd": "31faba88408e8ef2975d47c8d8e6af684d3e36282961d2086540be67680ffb13",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+      },
+      "errors": []
+    },
+    "coverage": {
+      "case": "coverage",
+      "exit_code": 0,
+      "seconds": 161.19,
+      "timeout": false,
+      "bound": 300,
+      "sources": {
+        "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+        "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+        "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+        "tests/visual_human_contours.gd": "9989895ff8c2552631c7b5003521ffff872304b1aa33f2cea5b9dfdb839e6f76",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+      },
+      "errors": []
+    },
+    "world6": {
+      "case": "world6",
+      "exit_code": 0,
+      "seconds": 174.91,
+      "timeout": false,
+      "bound": 300,
+      "sources": {
+        "scripts/humanoid_visual.gd": "524a4d077bc788676e8d1276fa1a60d8096fbf29adc6a679a02c65588aa18115",
+        "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+        "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+        "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+        "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "errors": [],
+      "sources_unchanged": true,
+      "command": [
+        "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+        "--path",
+        "D:\\Desktop\\GitHub\\game\\build\\body-response",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--script",
+        "res://tests/visual_bow_world.gd"
+      ]
+    }
+  },
+  "ordinary_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png",
+      "user://head-size-outfit-quality-0.png",
+      "user://head-size-outfit-quality-1.png",
+      "user://head-size-outfit-quality-2.png",
+      "user://head-size-outfit-quality-3.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.5044221002609
+  },
+  "rendered_airborne_draw": {
+    "airborne_candidate": true,
+    "animation_time": 0.35,
+    "foot_pixel": "(667.1119, 524.7813)",
+    "frame": 2361,
+    "grounded": false,
+    "head_pixel": "(639.8057, 190.8055)",
+    "pending": 0.0866666666666667,
+    "pose": "Bow_Attack_Draw",
+    "wrist_below_neck_m": -0.0245304107666016
+  },
+  "local_performance_sample": {
+    "frames": 120,
+    "mean_ms": 59.890825,
+    "video_bytes": 631497296,
+    "draw_calls": 1095,
+    "scope": "Bounded local Intel UHD 610 sample after switching all four presets; not a sustained FPS/cold-boot acceptance or before/after benchmark."
+  },
+  "evidence": [
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-male-face-front.png",
+      "case": "integrated-native5",
+      "sha256": "3d1573332304cc84ff1cbdd02113a320de3b9687b422526d2f464f4eb0c2b7ae"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-male-face-angle.png",
+      "case": "integrated-native5",
+      "sha256": "4c8f56a8d3fdd265347604b248b0a23ba328f00cb62f06d985e7067a3b0c9122"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-male-face-side.png",
+      "case": "integrated-native5",
+      "sha256": "17783278c0ce8a556c12ecdf92b15ab47efa5ead4127caa9cd05edd5890cab7a"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-male-hand-walk.png",
+      "case": "integrated-native5",
+      "sha256": "0ba3902b565301f5873d1c456dfee4ece01170844234ff37e6b5f23306dc7fba"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-male-bow.png",
+      "case": "integrated-native5",
+      "sha256": "89b3c06750bed49bfd0f39a6f27307c5d5c1a90b7a459589ae935450e3b94073"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-male-axe.png",
+      "case": "integrated-native5",
+      "sha256": "9c59580e8bfd5f1332bee4aaf8180b4e89ac8199bbc03a19be4213815691cfae"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-extreme-male-160.png",
+      "case": "integrated-native5",
+      "sha256": "f6422af2fbdc11b95bd24904f5668ce7b768f53b20fd185967388f7869caae20"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-extreme-male-195.png",
+      "case": "integrated-native5",
+      "sha256": "542d97da80eeb96a59f1436b0be72b6dca1210a6e64538755b01c5383bba668e"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-female-face-front.png",
+      "case": "integrated-native5",
+      "sha256": "ea6a784ad8914a13e99878cdac2c8849690583fad161955d0054aab1874bae0f"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-female-face-angle.png",
+      "case": "integrated-native5",
+      "sha256": "7efec8d84fd808d20f2ef65577f37f8a647d9927fd8734c6853d21713be8cdc1"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-female-face-side.png",
+      "case": "integrated-native5",
+      "sha256": "115bed014c70e84e36d8e056a9c37ef7259e4c3e91232d57684a2c2757b62d9b"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-female-hand-walk.png",
+      "case": "integrated-native5",
+      "sha256": "594794decc8aee851b6f1cc7d3225a5d8330c6db5d5b4b45fd45773ec62fcff4"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-female-bow.png",
+      "case": "integrated-native5",
+      "sha256": "34bb518d9810ae6bd0f00255589c80cdf5c6dea6038ff7ab58d3648984d3fff9"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-integrated-female-axe.png",
+      "case": "integrated-native5",
+      "sha256": "7ed8c85352935ce352c5053ed3d5082a53df85a743d2e7a7f0e920bde93b8b6a"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-extreme-female-160.png",
+      "case": "integrated-native5",
+      "sha256": "b0b74eea160bb6ea35e962b6ba827d625bf56b543912beff3208ac1c32779413"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-extreme-female-195.png",
+      "case": "integrated-native5",
+      "sha256": "665448a40f0c6e08ca992d57beb3fdcc19195ecfa662d42cca09bf0087432c28"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-creator-0.png",
+      "case": "integrated-native5",
+      "sha256": "9c02a9f2305d79567e66579b9673a5de6eedbeb44f4faeacd93c912490a9938c"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-creator-5.png",
+      "case": "integrated-native5",
+      "sha256": "77ef4fbf1780003f2d68c6506473eba9a4367d4770158d94d05d02c613b3e528"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-baseline-male-face-angle.png",
+      "case": "portrait4 same studio lighting",
+      "sha256": "22a788b460254652b3595dde59177276f3fef864c78b27672900d7fe4598c41e"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-baseline-female-face-front.png",
+      "case": "portrait4 same studio lighting",
+      "sha256": "5def27f551db731c6d30d597a3d2f8f657badd604a37a10d6792fef1a42b6f06"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-baseline-male-hand-walk.png",
+      "case": "portrait4 same studio lighting",
+      "sha256": "8cb6646bc4db9911534d961bd0002e43586e6485751b6da7057883e1b57d6f12"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/contour-baseline-female-hand-walk.png",
+      "case": "portrait4 same studio lighting",
+      "sha256": "b7d59c82b648c3836119ffd65ab4da28ed692020f52b135dffeac1164430c9f4"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/world-head-size-walk.png",
+      "case": "integrated-world6 ordinary input",
+      "sha256": "5cddd1ea73000466ccb621d911706ddf208726a0af3eb56c038d145dbb66b1f0"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/world-head-size-short_bow.png",
+      "case": "integrated-world6 ordinary input",
+      "sha256": "e121da950dac5001b3fbbbe05101761152f889e03105fc10796aa439bc12076a"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/world-head-size-inventory-lifecycle.png",
+      "case": "integrated-world6 ordinary input",
+      "sha256": "44b357bcd142195591145810cd590293a962967caed04485bec6cfc821d9d7d8"
+    },
+    {
+      "file": "docs/review/2026-10-23-human-contours/world-head-size-outfit-quality-3.png",
+      "case": "integrated-world6 ordinary input",
+      "sha256": "3834d417bcc3f552ee28a8f9afdb0a75d6fef84b948e142e897ee27a033427ec"
+    }
+  ],
+  "final_sources": {
+    "scripts/humanoid_visual.gd": "524a4d077bc788676e8d1276fa1a60d8096fbf29adc6a679a02c65588aa18115",
+    "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+    "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+    "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+    "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+    "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+    "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+    "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+    "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+    "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+    "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+    "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+  },
+  "failed_and_limited_attempts": [
+    {
+      "case": "general import",
+      "result": {
+        "exit_code": 1,
+        "seconds": 323.17,
+        "timeout": true,
+        "bound": 320,
+        "profile": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\human-contour-2026-10-23\\profile-import"
+      },
+      "reason": "Whole-source-pack scan exceeded unchanged 320s; two-model isolated imports then passed."
+    },
+    {
+      "case": "portrait first",
+      "result": {
+        "exit_code": 4294967295,
+        "seconds": 100.98,
+        "timeout": false,
+        "bound": 320,
+        "profile": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\human-contour-2026-10-23\\profile-portrait"
+      },
+      "reason": "Missing extracted texture dependencies in isolated mirror; own failed process stopped and full dependencies restored."
+    },
+    {
+      "case": "integrated native first",
+      "result": {
+        "case": "native",
+        "exit_code": 4294967295,
+        "seconds": 56.62,
+        "timeout": false,
+        "bound": 320,
+        "sources": {
+          "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+          "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+          "scripts/character_creator.gd": "9ececfdf17f286b52a915062aad25761619c14f7f400ec876eda87f9e99d3f94",
+          "tests/visual_human_contours.gd": "31faba88408e8ef2975d47c8d8e6af684d3e36282961d2086540be67680ffb13",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+        },
+        "errors": [
+          "SCRIPT ERROR: Parse Error: Preload file \"res://assets/shaders/characters/human_eyes.gdshader\" does not exist.",
+          "SCRIPT ERROR: Parse Error: Cannot infer the type of \"EYE_SHADER\" constant because the value doesn't have a set type.",
+          "SCRIPT ERROR: Parse Error: Preload file \"res://assets/production/characters/realistic_contours/male.glb\" does not exist.",
+          "SCRIPT ERROR: Parse Error: Preload file \"res://assets/production/characters/realistic_contours/female.glb\" does not exist.",
+          "ERROR: Failed to load script \"res://scripts/humanoid_visual.gd\" with error \"Parse error\".",
+          "SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'."
+        ]
+      },
+      "reason": "New paths absent from the protected snapshot asset inventory; new-only paths added, existing user files preserved."
+    },
+    {
+      "case": "portrait3 color",
+      "reason": "Initial local brown-iris correction looked green in rendered frames; rejected and recalibrated in portrait4."
+    },
+    {
+      "case": "world",
+      "result": {
+        "case": "world",
+        "exit_code": 1,
+        "seconds": 126.7,
+        "timeout": false,
+        "bound": 300,
+        "sources": {
+          "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+          "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "9989895ff8c2552631c7b5003521ffff872304b1aa33f2cea5b9dfdb839e6f76",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+        },
+        "errors": [
+          "SCRIPT ERROR: Invalid access to property or key 'albedo_texture' on a base object of type 'Nil'."
+        ]
+      }
+    },
+    {
+      "case": "world2",
+      "result": {
+        "case": "world2",
+        "exit_code": 1,
+        "seconds": 17.67,
+        "timeout": false,
+        "bound": 300,
+        "sources": {
+          "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+          "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "9989895ff8c2552631c7b5003521ffff872304b1aa33f2cea5b9dfdb839e6f76",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+        },
+        "errors": [
+          "SCRIPT ERROR: Compile Error: Identifier not found: GameState",
+          "SCRIPT ERROR: Compile Error: Failed to compile depended scripts."
+        ]
+      }
+    },
+    {
+      "case": "world3",
+      "result": {
+        "case": "world3",
+        "exit_code": 1,
+        "seconds": 108.72,
+        "timeout": false,
+        "bound": 300,
+        "sources": {
+          "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+          "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "9989895ff8c2552631c7b5003521ffff872304b1aa33f2cea5b9dfdb839e6f76",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+        },
+        "errors": [
+          "SCRIPT ERROR: Assertion failed: No airborne bow draw frame was rendered"
+        ]
+      }
+    },
+    {
+      "case": "world4",
+      "result": {
+        "case": "world4",
+        "exit_code": 1,
+        "seconds": 119.23,
+        "timeout": false,
+        "bound": 300,
+        "sources": {
+          "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+          "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "9989895ff8c2552631c7b5003521ffff872304b1aa33f2cea5b9dfdb839e6f76",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+        },
+        "errors": [
+          "SCRIPT ERROR: Assertion failed: No airborne bow draw frame was rendered"
+        ]
+      }
+    },
+    {
+      "case": "world5",
+      "result": {
+        "case": "world5",
+        "exit_code": 0,
+        "seconds": 300.03,
+        "timeout": true,
+        "bound": 300,
+        "sources": {
+          "scripts/humanoid_visual.gd": "0f1610fe600e510e21224ed7a58ccf383ca0258de586b48b39f319bb0c237bcf",
+          "scripts/humanoid_detail_lod.gd": "d775386569fb4122f08303845f92e3c7fe73afd9853b81b5a2ce9fe0047fca22",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "9989895ff8c2552631c7b5003521ffff872304b1aa33f2cea5b9dfdb839e6f76",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0"
+        },
+        "errors": []
+      }
+    }
+  ],
+  "limitations": [
+    "This is a contour/material revision of the existing native bodies, not a newly sculpted photorealistic cast. Hair/brows, skin response, expressions, complete clothing and age diversity remain unaccepted.",
+    "Only the body pair switches distance; other parts retain current production detail. Additional retained data increases storage/memory. No frame-rate improvement is claimed.",
+    "810 clothing views and 30 paired physical/GPU poses passed before the final animation-independent distance-node adjustment. Final exact-SHA CI must repeat existing mandatory gates on the final package.",
+    "The creator functional smoke predates the final lighting direction correction; the final native creator images and exact-SHA creator gate cover the final result.",
+    "The native scene and world use automated game input/observers, not manual play. This run is not a repeated start-to-capital journey or complete NPC/world art acceptance.",
+    "The original world5 run completed all gameplay assertions and audio retirement but met the 300s outer deadline during process exit (timeout=true despite eventual exit_code=0). It is not recorded as a complete pass. world6 uses the existing CI Dummy audio driver with unchanged limits.",
+    "Isolated-cache UID fallbacks in local logs use valid text paths; clean exact-SHA import still required. Existing ObjectDB exit warnings are retained in raw logs."
+  ],
+  "ci": {
+    "state": "pending_exact_sha",
+    "required": "All existing required workflows and two additional World Core gates; no deadline or old assertion weakened."
+  },
+  "stable_release_published": false,
+  "visual_accepted": false,
+  "overall_percent": null,
+  "next_connected_stage": "Hair/brows/face response and coherent clothing detail; then measured region draw/foliage cost and house/world art alongside ordinary gameplay."
+}
