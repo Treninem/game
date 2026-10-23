@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-23",
+  "state": "INTEGRATED",
+  "branch": "codex/household-persistence-2026-10-19",
+  "main_integrated": false,
+  "scope": "Selected review family-home roof/plaster kit and low meadow clump; not full world visual acceptance",
+  "sources": [
+    {
+      "role": "plaster albedo and wood-shingle photograph",
+      "author": "Daniel Andersson",
+      "url": "https://opengameart.org/content/modular-medieval-building-pack",
+      "license": "CC0 1.0",
+      "staged": "assets/staging/sourcechat_b29/models/oga_modular_medieval_building_pack",
+      "files": [
+        "74697_HousePack2_2Upload_blend/Plaster.jpg",
+        "74697_HousePack2_2Upload_blend/RoofTiles.jpg"
+      ]
+    },
+    {
+      "role": "cedar timber",
+      "author": "OpenGameArt Simple Textures source pack",
+      "url": "https://opengameart.org/content/simple-textures",
+      "license": "CC0 1.0",
+      "staged": "assets/staging/ui/materials/cedar",
+      "files": [
+        "cedar.png"
+      ]
+    },
+    {
+      "role": "chimney and masonry",
+      "author": "musdasch",
+      "url": "https://opengameart.org/content/ground-texture-set",
+      "license": "CC0 1.0",
+      "staged": "assets/staging/materials/oga_ground_texture_set",
+      "files": [
+        "ground/rock1.png"
+      ]
+    }
+  ],
+  "geometry": {
+    "roof_triangles": 26888,
+    "grass_triangles": 130,
+    "grass_height_m": 0.38,
+    "grass_budget_max_triangles": 180,
+    "roof_shape_cache": "WeakRef, footprint-relative geometry shared; physical sloped support; geometric AABB headroom rejection retains exact concave obstacles at actor height"
+  },
+  "source_preservation": {
+    "roof_before": {
+      "geometry_uv_sha256": "bc14ab64b9baab7f122752c6dbd25982122d62a80a1f0994ab5a231be2137841",
+      "triangles": 26888,
+      "images": []
+    },
+    "roof_after": {
+      "geometry_uv_sha256": "bc14ab64b9baab7f122752c6dbd25982122d62a80a1f0994ab5a231be2137841",
+      "triangles": 26888,
+      "images": [
+        {
+          "relative": true,
+          "exists": true,
+          "file": "//..\\..\\..\\production\\interiors\\materials\\lime_plaster\\albedo.jpg"
+        },
+        {
+          "relative": true,
+          "exists": true,
+          "file": "//..\\..\\..\\production\\exteriors\\family_home\\cedar.png"
+        },
+        {
+          "relative": true,
+          "exists": true,
+          "file": "//..\\..\\..\\production\\interiors\\materials\\lime_plaster\\normal.png"
+        },
+        {
+          "relative": true,
+          "exists": true,
+          "file": "//..\\..\\..\\production\\interiors\\materials\\lime_plaster\\orm.png"
+        },
+        {
+          "relative": true,
+          "exists": true,
+          "file": "//..\\..\\..\\production\\exteriors\\family_home\\roof_shingles.jpg"
+        },
+        {
+          "relative": true,
+          "exists": true,
+          "file": "//..\\..\\..\\production\\exteriors\\family_home\\stone.png"
+        }
+      ]
+    },
+    "grass": {
+      "geometry_uv_sha256": "4417de9fa33afe6ceb6833098ba9486f15721c738f3824a413fc86828a07576c",
+      "triangles": 130,
+      "images": []
+    },
+    "portable": true
+  },
+  "runtime": [
+    "scripts/enterable_building.gd",
+    "scripts/capital_square_life.gd",
+    "scripts/interior_surface_materials.gd",
+    "scripts/production_nature.gd",
+    "scripts/start_region_streamer.gd",
+    "scripts/village_house_yards.gd"
+  ],
+  "visual_acceptance": false,
+  "not_done": [
+    "Coherent terrain, mountain/river/lake composition and dense streets",
+    "House archetypes, real attics, dormers, richer profession/family-specific interiors",
+    "Dense varied meadow cover, larger plant families, LOD and performance",
+    "People, natural full-body animations and equipment catalog diversity/repair/upgrades"
+  ]
+}

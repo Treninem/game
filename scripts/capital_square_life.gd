@@ -23,6 +23,7 @@ func _ready() -> void:
     home.set_meta("household_owners", [SHOP_ID, "capital:square:fletcher"])
     home.set_meta("external_interior_lantern", true)
     add_child(home)
+    preload("res://scripts/cottage_exterior.gd").build(home)
     home.front_door.persistence_key = "door:capital:square:home"
     home.front_door.set_open(bool(GameState.get_world_value(home.front_door.persistence_key, false)), true)
     # Use the same measured-scale interior surfaces as other enterable homes.

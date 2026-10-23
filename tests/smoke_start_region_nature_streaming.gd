@@ -94,7 +94,7 @@ func _run_test() -> void:
             _fail(4, "understory exceeded the fixed per-cell detail budget")
             return
         for child in cell.get_children():
-            if child is MultiMeshInstance3D and "Grass_Ground" in String(child.get_meta("tree_source","")):
+            if child is MultiMeshInstance3D and String(child.get_meta("tree_source","")) == START_REGION_STREAMER.GROUND_GRASS.resource_path:
                 ground_batches += 1
             if child.is_in_group("map_tree"):
                 var point: Vector3 = child.global_position

@@ -43,8 +43,16 @@ func build(building: EnterableBuilding) -> void:
             obstacles.append({"frame": flat.affine_inverse(), "low": Vector2(box.position.x, box.position.z), "high": Vector2(box.end.x, box.end.z), "scale": minf(flat.x.length(), flat.y.length())})
             continue
         elif collision.shape is ConcavePolygonShape3D:
-            var points := (collision.shape as ConcavePolygonShape3D).get_faces()
             var transform := home.global_transform.affine_inverse() * collision.global_transform
+            # Author-cached bounds use the shape's own coordinate frame. Reject
+            # overhead geometry before reading thousands of roof triangles.
+            # Geometry intersecting actor height keeps the exact triangle path.
+            var cached_bounds: Variant = collision.shape.get_meta("navigation_local_bounds") if collision.shape.has_meta("navigation_local_bounds") else null
+            if cached_bounds is AABB:
+                var local_bounds: AABB = transform * cached_bounds
+                if local_bounds.end.y <= home.floor_thickness + 0.06 or local_bounds.position.y > home.floor_thickness + 1.85:
+                    continue
+            var points := (collision.shape as ConcavePolygonShape3D).get_faces()
             # A merged timber mesh spans the room. Rasterize its real triangles,
             # never its whole-room bounding box, which would seal every path.
             for index in range(0, points.size(), 3):

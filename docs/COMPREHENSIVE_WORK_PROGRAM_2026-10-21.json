@@ -28,7 +28,7 @@
         "Река соединяется с берегом; ресурсы и вырубка сохраняются",
         "Длительный проход без просадок и физического проваливания"
       ],
-      "current": "Проверены ограниченные механики леса/берегов/рубки; художественная приёмка и измеренный длительный FPS не подтверждены."
+      "current": "Проверены ограниченные механики леса/берегов/рубки; художественная приёмка и измеренный длительный FPS не подтверждены. Проверочная версия 23 октября: низкая трава из 26 изогнутых травинок, 130 треугольников, прежняя высота/ветер/распределение; исходная карточная растительность дала 0 изменённых пикселей в независимом сравнении. Плотность, разнообразие, композиция и длительная производительность ещё открыты."
     },
     {
       "group": "Поселения и здания",
@@ -81,7 +81,7 @@
     }
   ],
   "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
-  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
   "last_updated": "2026-10-23",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
@@ -221,5 +221,26 @@
     }
   ],
   "equipment_diversity_requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
-  "equipment_diversity_status": "OPEN: distinct archetypes/rarities/forms/stats and persistent per-instance progression/condition/repair. Current three starter weapons are not the intended final catalog."
+  "equipment_diversity_status": "OPEN: distinct archetypes/rarities/forms/stats and persistent per-instance progression/condition/repair. Current three starter weapons are not the intended final catalog.",
+  "latest_region_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+    "local_checked": true,
+    "exact_sha_ci": "pending publication",
+    "performance": {
+      "draw_calls": 1278.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "max_frame_ms": 268.203,
+      "mean_frame_ms": 54.894675,
+      "median_frame_ms": 46.19,
+      "p95_frame_ms": 91.313,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Stationary exterior view in the real capital after loading the checkpoint earned by the preceding ordinary 99.71m walk; warm cache, no sustained traversal/whole-world FPS claim",
+      "video_memory_bytes": 963462607.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 30
+    },
+    "visual_acceptance": false
+  }
 }

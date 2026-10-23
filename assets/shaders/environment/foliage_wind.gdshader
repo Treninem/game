@@ -5,6 +5,7 @@ render_mode cull_disabled, diffuse_lambert, specular_disabled, depth_draw_opaque
 
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic;
 uniform bool black_key = false;
+uniform bool authored_blade_color = false;
 uniform vec4 vegetation_tint : source_color = vec4(1.0);
 uniform bool height_anchor = false;
 uniform float canopy_normal_blend : hint_range(0.0,1.0) = 0.0;
@@ -37,7 +38,7 @@ void vertex() {
 }
 
 void fragment() {
-    vec4 tex = texture(albedo_texture, UV);
+    vec4 tex = authored_blade_color ? COLOR : texture(albedo_texture, UV);
     // source_color sampling is linear: 0.10 removes real dark green leaves.
     // Keep alpha coverage and reject only a near-black backing (~0.07 sRGB).
     if (tex.a < 0.35 || (black_key && max(tex.r, max(tex.g, tex.b)) < 0.006)) {

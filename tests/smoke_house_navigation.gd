@@ -45,6 +45,28 @@ func _run() -> void:
     var detour: Array = navigation.routes[actor.get_instance_id()].path
     assert(not detour.is_empty() and detour != original, "A* did not adapt to a real additional obstacle")
     obstacle.free()
+    # A concave obstacle at actor height must still be rasterized even with
+    # cached bounds. Moving that same geometry overhead restores the route.
+    var concave_body := StaticBody3D.new()
+    concave_body.position = Vector3(0.3, 0.8, -1.6)
+    var concave_collision := CollisionShape3D.new()
+    var concave_shape := ConcavePolygonShape3D.new()
+    var obstacle_mesh := BoxMesh.new()
+    obstacle_mesh.size = Vector3(0.7, 1.2, 0.7)
+    concave_shape.set_faces(obstacle_mesh.get_faces())
+    concave_shape.set_meta("navigation_local_bounds", obstacle_mesh.get_aabb())
+    concave_collision.shape = concave_shape
+    concave_body.add_child(concave_collision)
+    home.add_child(concave_body)
+    navigation.build(home)
+    navigation.next_point(from, goal, actor)
+    var concave_detour: Array = navigation.routes[actor.get_instance_id()].path
+    assert(not concave_detour.is_empty() and concave_detour != original, "Cached bounds hid a reachable-height concave obstacle")
+    concave_body.position.y = 5.0
+    navigation.build(home)
+    navigation.next_point(from, goal, actor)
+    assert(navigation.routes[actor.get_instance_id()].path == original, "Overhead concave bounds block the room")
+    concave_body.free()
     var person := CharacterBody3D.new()
     person.add_to_group("settlement_npc")
     person.position = Vector3(0.3, 0.22, -1.6)
@@ -68,5 +90,5 @@ func _run() -> void:
     door.set_locked(false)
     navigation.next_point(from, Vector3(-2.8, 0.22, -3.27), actor)
     assert(not navigation.routes[actor.get_instance_id()].path.is_empty(), "AI fails to reconsider an unlocked door")
-    print("HOUSE_NAVIGATION_OK layouts=2 furnishings=occupancy_scaled dynamic_obstacle=detour stationary_person=detour locked_door=unreachable unlocked_door=replanned")
+    print("HOUSE_NAVIGATION_OK layouts=2 furnishings=occupancy_scaled dynamic_obstacle=detour concave_bounds=height_filtered stationary_person=detour locked_door=unreachable unlocked_door=replanned")
     get_tree().quit(0)

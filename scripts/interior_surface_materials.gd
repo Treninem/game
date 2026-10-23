@@ -1,9 +1,9 @@
 extends RefCounted
 
 const ROOT := "res://assets/production/medieval/quaternius_city_core/"
-const PLASTER := preload(ROOT + "T_Plaster_BaseColor.png")
-const PLASTER_NORMAL := preload(ROOT + "T_Plaster_Normal.png")
-const PLASTER_ORM := preload(ROOT + "T_Plaster_ORM.png")
+const PLASTER := preload("res://assets/production/interiors/materials/lime_plaster/albedo.jpg")
+const PLASTER_NORMAL := preload("res://assets/production/interiors/materials/lime_plaster/normal.png")
+const PLASTER_ORM := preload("res://assets/production/interiors/materials/lime_plaster/orm.png")
 const WOOD := preload("res://assets/production/interiors/materials/wood_planks.jpg")
 
 static func _base(tint: Color, tiles_per_metre: float) -> StandardMaterial3D:
@@ -16,11 +16,11 @@ static func _base(tint: Color, tiles_per_metre: float) -> StandardMaterial3D:
     return material
 
 static func plaster(tint: Color) -> StandardMaterial3D:
-    var material := _base(tint.lightened(0.55), 0.35)
+    var material := _base(tint, 0.5)
     material.albedo_texture = PLASTER
     material.normal_enabled = true
     material.normal_texture = PLASTER_NORMAL
-    material.normal_scale = 0.45
+    material.normal_scale = 0.35
     material.roughness = 1.0
     material.roughness_texture = PLASTER_ORM
     material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GREEN

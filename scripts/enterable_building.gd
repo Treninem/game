@@ -3,7 +3,8 @@ extends Node3D
 
 const DOOR_SCRIPT := preload("res://scripts/door_interactable.gd")
 const DOOR_SCENE: PackedScene = preload("res://assets/production/medieval/building_shell/Door_1_Flat.gltf")
-const ROOF_SCENE: PackedScene = preload("res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf")
+static var roof_shape_refs: Dictionary = {}
+const ROOF_SCENE: PackedScene = preload("res://assets/production/exteriors/family_home/CottageShingleRoof.tscn")
 
 @export var building_label := "Дом"
 @export var footprint := Vector2(9.0, 8.0)
@@ -172,7 +173,28 @@ func _build_timberwork() -> void:
         # Actual exposed beam faces block the controller; never a whole-room box.
         mesh.create_trimesh_collision()
 
-func _build_front_wall(shell: Node3D) -> void:
+func _build_front_wall(shell:Node3D)->void:
+    if footprint.x<8.5:
+        _build_small_front_wall(shell)
+        return
+    var z=footprint.y*.5-wall_thickness*.5
+    var side_width=(footprint.x-doorway_width)*.5
+    var post=(side_width-window_width)*.5
+    var top=window_sill_height+window_height
+    for sign_value in [-1,1]:
+        var prefix="FrontWallLeft" if sign_value<0 else "FrontWallRight"
+        var center=sign_value*(doorway_width+side_width)*.5
+        for direction in [-1,1]:
+            var x=center+direction*(window_width+post)*.5
+            _add_static_box(shell,prefix+str(direction),Vector3(post,wall_height-floor_thickness,wall_thickness),Vector3(x,(wall_height+floor_thickness)*.5,z),_wall_material())
+        _add_static_box(shell,prefix+"Sill",Vector3(window_width,window_sill_height-floor_thickness,wall_thickness),Vector3(center,(floor_thickness+window_sill_height)*.5,z),_wall_material())
+        _add_static_box(shell,prefix+"Header",Vector3(window_width,wall_height-top,wall_thickness),Vector3(center,(wall_height+top)*.5,z),_wall_material())
+        var label="FrontWindowLeft" if sign_value<0 else "FrontWindowRight"
+        _add_window_frame(Vector3(center,window_sill_height+window_height*.5,z),Vector3(window_width,window_height,wall_thickness),false,label)
+        (get_node(label) as Node3D).rotation.y=PI
+    _add_static_box(shell,"DoorLintel",Vector3(doorway_width,wall_height-doorway_height,wall_thickness),Vector3(0,(wall_height+doorway_height)*.5,z),_wall_material())
+
+func _build_small_front_wall(shell: Node3D) -> void:
     var front_z := footprint.y * 0.5 - wall_thickness * 0.5
     var side_width := maxf(0.4, (footprint.x - doorway_width) * 0.5)
     var y_center := floor_thickness + (wall_height - floor_thickness) * 0.5
@@ -368,20 +390,54 @@ func _add_window_frame(center: Vector3, opening_size: Vector3, side_wall: bool, 
 
 func _build_roof_visual() -> void:
     var roof := ROOF_SCENE.instantiate() as Node3D
-    if roof == null:
-        return
     roof.name = "RealPackRoof"
-    roof.position = Vector3(0.0, wall_height + 0.03, 0.0)
-    roof.scale = Vector3(maxf(0.75, footprint.x / 8.0), 1.0, maxf(0.75, footprint.y / 8.0))
+    roof.position = Vector3(0, wall_height - 0.01, 0)
+    roof.scale = Vector3(footprint.x / 12.0, 1, footprint.y / 10.0)
     add_child(roof)
-    # Reuse the capital facade's shared textured roof ends. The authored tile
-    # module alone leaves a large open attic triangle above the room ceiling.
-    var gables := MeshInstance3D.new()
-    gables.name = "SharedRoofGables"
-    gables.mesh = preload("res://scripts/modular_city_facades.gd").new()._gables()
-    gables.position = roof.position
-    gables.scale = roof.scale
-    add_child(gables)
+    # Gables share the home's pigment and live quality switches. The other
+    # roof surfaces use the wrapper's immutable shared photographic materials.
+    for mesh: MeshInstance3D in roof.find_children("*", "MeshInstance3D", true, false):
+        for surface in range(mesh.mesh.get_surface_count()):
+            var material := mesh.get_active_material(surface) as StandardMaterial3D
+            if material != null and material.resource_name == "Plaster":
+                mesh.set_surface_override_material(surface, _wall_material())
+        _build_roof_collision(mesh)
+
+func _build_roof_collision(mesh: MeshInstance3D) -> void:
+    # Bake the relative frame into a shared static shape. Physics bodies stay
+    # unscaled even when the same roof fits a differently sized home.
+    var frame := Transform3D.IDENTITY
+    var member: Node3D = mesh
+    while member != self:
+        frame = member.transform * frame
+        member = member.get_parent() as Node3D
+        assert(member != null)
+    for stale_key in roof_shape_refs.keys():
+        if roof_shape_refs[stale_key].get_ref() == null:
+            roof_shape_refs.erase(stale_key)
+    var key := str(mesh.mesh.get_instance_id()) + ":" + str(frame)
+    var shape: ConcavePolygonShape3D
+    if roof_shape_refs.has(key):
+        shape = roof_shape_refs[key].get_ref() as ConcavePolygonShape3D
+    if shape == null:
+        var faces := mesh.mesh.get_faces()
+        var bounds := AABB(frame * faces[0], Vector3.ZERO)
+        for i in range(faces.size()):
+            faces[i] = frame * faces[i]
+            bounds = bounds.expand(faces[i])
+        shape = ConcavePolygonShape3D.new()
+        shape.set_faces(faces)
+        shape.set_meta("navigation_local_bounds", bounds)
+        roof_shape_refs[key] = weakref(shape)
+    var body := StaticBody3D.new()
+    body.name = "RoofCollision"
+    body.collision_layer = 1
+    body.collision_mask = 1
+    body.set_meta("surface_type", "wood")
+    add_child(body)
+    var collision := CollisionShape3D.new()
+    collision.shape = shape
+    body.add_child(collision)
 
 func _add_static_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, material: Material) -> StaticBody3D:
     var body := StaticBody3D.new()
@@ -423,10 +479,10 @@ func _wall_material() -> StandardMaterial3D:
 func _prepare_materials() -> void:
     var surfaces := preload("res://scripts/interior_surface_materials.gd")
     wall_materials = [
-        surfaces.plaster(Color(0.53, 0.45, 0.34)),
-        surfaces.plaster(Color(0.66, 0.60, 0.48)),
-        surfaces.plaster(Color(0.42, 0.34, 0.27)),
-        surfaces.plaster(Color(0.72, 0.68, 0.58))
+        surfaces.plaster(Color(.96, .93, .85)),
+        surfaces.plaster(Color(.88, .87, .81)),
+        surfaces.plaster(Color(.82, .78, .67)),
+        surfaces.plaster(Color(.98, .95, .89))
     ]
     floor_material = surfaces.wood(Color(0.82, 0.77, 0.68))
     ceiling_material = surfaces.wood(Color(0.72, 0.67, 0.58))

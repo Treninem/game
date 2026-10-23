@@ -7,7 +7,7 @@ const BERRY := preload("res://scripts/garden_berry.gd")
 const DOOR := preload("res://scripts/door_interactable.gd")
 const FURNITURE := preload("res://scripts/household_furniture.gd")
 const NATURE := preload("res://scripts/production_nature.gd")
-const GRASS := preload("res://assets/production/nature/woodland/Grass_Ground.glb")
+const GRASS := preload("res://assets/production/nature/meadow/MeadowGrass.glb")
 
 static func build(village: Node3D) -> void:
     var houses: Array[Node3D] = []

@@ -1,0 +1,4 @@
+CC0 1.0 Universal
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+Selected source texture licenses are preserved in SOURCE.md and the staged source packs.
+Project-authored geometry and data-map additions are dedicated to CC0 1.0.

@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "У существующей одежды обеих моделей разделены свойства металла и ткани; редактор получил отражения с сохранением однотонного фона. Два Blender-варианта волос отбракованы по реальным кадрам и стоимости сетки. Проверены редактор, цветовые образы, игровые действия, UI и диск. Внешность и мир художественно не приняты; exact-SHA результаты проверки — в PR №12.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_WARDROBE_RESPONSE.json",
+  "current_stage": "В проверочную игру подключены Blender-кровля/фронтоны/дымовая труба с физической опорой, шесть окон стандартного дома, известковая штукатурка и низкая трава. Повторены графический проход с персонажем, двери/три зоны/диск, физика отдыха и локальная навигация. Это частичный комплект; композиция мира и качество концепции не приняты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
@@ -199,20 +199,15 @@
     "Новый этап проверяется отдельно; не все механики мастер-промпта реализованы.",
     "Один живой домашний интерьер: сон, скамьи, конечные вещи и сундуки работают и сохраняются. Остальные дома и непрерывная дальняя симуляция не завершены. Переходы в позы пока простые; согласие владельцев и криминальная система не реализованы."
   ],
-  "next_stage": [
-    "Завершить проверяемые критерии и расчёт трёх объёмов; не подменять их количеством тестов.",
-    "Этап 1–2: стабильный запуск и полноценный персонаж/редактор; сначала принять одного человека с одеждой, лицом, волосами, хватом и естественными переходами в реальной игре.",
-    "Этап 4: один цельный стартовый регион с согласованными моделями деревьев и зданий, интерьером и живыми NPC вместо расширения пустой карты.",
-    "Проверять совместно картинку, игровой цикл, сохранение и производительность; 30 FPS на низких подтвердить длительным проходом, а не одним видом."
-  ],
+  "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-19_CI_FOLLOWUP.json",
   "ci_followup_status": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
   "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",
-  "visual_acceptance": "Не пройдена: модели, естественность анимаций, окружение и цельность визуального стиля не соответствуют запросу пользователя.",
+  "visual_acceptance": false,
   "character_acceptance": {
     "percent": 58.2,
     "accepted": 32,
@@ -352,7 +347,7 @@
     "npc_punch_fist_modifier_pending": true
   },
   "comprehensive_program": "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json",
-  "comprehensive_goal_status": "active",
+  "comprehensive_goal_status": "ACTIVE",
   "jump_phases": {
     "physical_velocity_driven": true,
     "bodies_checked": 2,
@@ -575,5 +570,28 @@
     "decision": "REJECTED_NOT_INTEGRATED",
     "runtime_unchanged_from": "0506245d9be5b2b8a8553eedd73150c1e30fbe54",
     "next": "Complete weapon shape replacement and final-pose/string review, then real-world regression checks."
-  }
+  },
+  "latest_region_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+    "local_checked": true,
+    "exact_sha_ci": "pending publication",
+    "performance": {
+      "draw_calls": 1278.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "max_frame_ms": 268.203,
+      "mean_frame_ms": 54.894675,
+      "median_frame_ms": 46.19,
+      "p95_frame_ms": 91.313,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Stationary exterior view in the real capital after loading the checkpoint earned by the preceding ordinary 99.71m walk; warm cache, no sustained traversal/whole-world FPS claim",
+      "video_memory_bytes": 963462607.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 30
+    },
+    "visual_acceptance": false
+  },
+  "equipment_diversity_requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
+  "equipment_diversity_status": "OPEN: distinct item forms/rarities/stats and persistent instances, upgrades/progression/condition/repair"
 }

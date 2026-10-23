@@ -1,0 +1,15 @@
+{
+  "draw_calls": 1278.0,
+  "driver_player_position_assignments": 0,
+  "frames": 120,
+  "max_frame_ms": 268.203,
+  "mean_frame_ms": 54.894675,
+  "median_frame_ms": 46.19,
+  "p95_frame_ms": 91.313,
+  "quality": "Medium",
+  "scale_3d": 0.850000023841858,
+  "scope": "Stationary exterior view in the real capital after loading the checkpoint earned by the preceding ordinary 99.71m walk; warm cache, no sustained traversal/whole-world FPS claim",
+  "video_memory_bytes": 963462607.0,
+  "viewport": "(1280, 720)",
+  "warmup_frames": 30
+}

@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-23",
+  "goal": "ACTIVE",
+  "parent": "29d756ff57f3c95afb1f6ffc7f5f03b8814d275b",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "delivery": "Unreleased review; no stable publication",
+  "concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
+  "runtime_changes": [
+    "Shared authored roof: overlapping shingles, deck, eaves, ridge/bargeboards, closed gables and chimney aligned with kitchen hearth",
+    "Roof surface collision shared by equal homes through weak references; no scaled physics body or invisible box; geometric headroom early rejection, exact concave triangles retained for occupied height",
+    "Family frontage split into real sill/header/posts and two openings; six windows total for the standard house; small homes preserve legacy frontage",
+    "Natural lime-plaster palette, restrained authored normal/roughness at High/Ultra; shared gable material follows live quality changes",
+    "Capital SquareHome receives the existing timber/stone/window-box exterior detail kit",
+    "Low grass replaced by 26 tapered curved vertex-colored blades within the existing triangle/height contract; shared environment wind path extended only by opt-in; stable tree distribution and IDs retained"
+  ],
+  "native": {
+    "returncode": 0,
+    "seconds": 47.17200000000048,
+    "stopped": false,
+    "errors": [],
+    "marker": true,
+    "prototype_only": true
+  },
+  "world": {
+    "returncode": 0,
+    "seconds": 208.125,
+    "stopped": false,
+    "errors": [],
+    "marker": true,
+    "prototype_only": true
+  },
+  "world_marker": "CONCEPT_NATIVE_OK earned_checkpoint=true walked_m=99.7111047485378 player_position_assignments=0 physical_rooms=3 reach_checked_front_door=true save_slot=4 quality=Medium clock_fixture=09:00",
+  "manual_play": false,
+  "teleport_driver": false,
+  "world_scope": "Actual graphical Bootstrap world from previously earned capital checkpoint. Ordinary automated movement/aim rays/doors, bedroom/dining/kitchen, physical floor, save slot4 and reload. No fresh forest-to-capital run or complete manual roam claim. Observer review cameras/time controls belong only to fixture.",
+  "performance": {
+    "draw_calls": 1278.0,
+    "driver_player_position_assignments": 0,
+    "frames": 120,
+    "max_frame_ms": 268.203,
+    "mean_frame_ms": 54.894675,
+    "median_frame_ms": 46.19,
+    "p95_frame_ms": 91.313,
+    "quality": "Medium",
+    "scale_3d": 0.850000023841858,
+    "scope": "Stationary exterior view in the real capital after loading the checkpoint earned by the preceding ordinary 99.71m walk; warm cache, no sustained traversal/whole-world FPS claim",
+    "video_memory_bytes": 963462607.0,
+    "viewport": "(1280, 720)",
+    "warmup_frames": 30
+  },
+  "headless": [
+    {
+      "phase": "roof-physics",
+      "case": "cottage_yards",
+      "returncode": 0,
+      "seconds": 13.343000000000757,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "roof-physics",
+      "case": "enterable_building",
+      "returncode": 0,
+      "seconds": 5.593000000000757,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "roof-physics",
+      "case": "house_navigation",
+      "returncode": 0,
+      "seconds": 5.640999999999622,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "roof-physics",
+      "case": "household_aisle",
+      "returncode": 0,
+      "seconds": 11.811999999999898,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "roof-physics",
+      "case": "rest_player_physics",
+      "returncode": 0,
+      "seconds": 46.3130000000001,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "nav-final-fixed",
+      "case": "enterable_building",
+      "returncode": 0,
+      "seconds": 4.07799999999952,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "nav-final-fixed",
+      "case": "house_navigation",
+      "returncode": 0,
+      "seconds": 5.65599999999904,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "nav-final-fixed",
+      "case": "household_aisle",
+      "returncode": 0,
+      "seconds": 9.813000000000102,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "final",
+      "case": "cottage_yards",
+      "returncode": 0,
+      "seconds": 18.54699999999957,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "final",
+      "case": "enterable_building",
+      "returncode": 0,
+      "seconds": 6.171999999999571,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "final",
+      "case": "settlement_interior_assets",
+      "returncode": 0,
+      "seconds": 4.094000000000051,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "phase": "final",
+      "case": "start_region_nature_streaming",
+      "returncode": 0,
+      "seconds": 10.75,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "compatibility": {
+    "legacy_visible_pixels": 55692,
+    "legacy_changed_pixels": 0,
+    "qualities": 4,
+    "roof_vertical_support_rays": 2,
+    "weak_shape_cache_released": true,
+    "human_mesh_rig_morph_clips_unchanged": true,
+    "save_version": 6,
+    "save_migration": false,
+    "saved_user_profile_modified": false,
+    "shared_checkout_index_head_preserved": true
+  },
+  "failed_trials": [
+    "First grass trial too thin/dark; rejected before integration",
+    "First operator-heavy roof trial stopped: inefficient authoring and wrong chimney; selected direct mesh roof3 instead",
+    "Invalid .tres decimal syntax and inherited super call caught by native fixture, corrected then rerun",
+    "WeakRef inferred Variant rejected by strict parser; made explicit",
+    "Optional concave bounds queried absent metadata: native error caught; guard changed to has_meta, exact tests rerun",
+    "Original solid-wall ray now intersected a new real window: retained solid-wall ray moved to actual pier and 18 independent opening/pier/sill/header rays added; no requirement removed"
+  ],
+  "warnings": {
+    "world_objectdb_exit": [
+      "WARNING: 97 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+    ],
+    "uid_fallback": "Pre-existing external human UID fallback warnings remain in copied QA cache; no missing-resource acceptance claim"
+  },
+  "equipment_requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
+  "equipment_status": "OPEN, not implemented by this regional package",
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "next_linked_stage": [
+    "Coherent streets/house composition, diverse plans and room furnishing from supplied concepts",
+    "Terrain/shoreline and denser layered vegetation with measured weak-PC LOD/draw budgets",
+    "Whole people/animation correction and distinct persistent item archetypes remain active"
+  ],
+  "ci": "Pending exact new commit; previous green 29d receipt does not validate this runtime patch",
+  "evidence_directory": "docs/review/2026-10-23-region-surfaces"
+}

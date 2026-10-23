@@ -33,11 +33,12 @@ static func build(home: Node3D) -> void:
             beams.append(KIT.beam(Vector3(-door_half-0.2,2.44,z+0.035),Vector3(door_half+0.2,2.44,z+0.035),0.9))
         else: beams.append(KIT.beam(Vector3(-half.x,0.48,z),Vector3(half.x,0.48,z)))
         # A king post, collar and rafters articulate the existing tall attic.
-        var base := height+0.03
-        beams.append(KIT.beam(Vector3(-half.x,base,z),Vector3(0,base+5.5,z),0.95))
-        beams.append(KIT.beam(Vector3(half.x,base,z),Vector3(0,base+5.5,z),0.95))
-        beams.append(KIT.beam(Vector3(0,base,z),Vector3(0,base+5.45,z),0.9))
-        beams.append(KIT.beam(Vector3(-half.x*0.66,base+1.8,z),Vector3(half.x*0.66,base+1.8,z),0.8))
+        var base := height-0.01
+        var attic_z: float = z+signf(z)*.13
+        beams.append(KIT.beam(Vector3(-half.x,base+.5,attic_z),Vector3(0,base+5.5,attic_z),0.95))
+        beams.append(KIT.beam(Vector3(half.x,base+.5,attic_z),Vector3(0,base+5.5,attic_z),0.95))
+        beams.append(KIT.beam(Vector3(0,base,attic_z),Vector3(0,base+5.45,attic_z),0.9))
+        beams.append(KIT.beam(Vector3(-half.x*0.66,base+1.8,attic_z),Vector3(half.x*0.66,base+1.8,attic_z),0.8))
     for side in [-1,1]:
         # Small diagonal knee braces stay above the glazed openings.
         for z in [-half.y,half.y]:

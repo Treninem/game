@@ -47,5 +47,33 @@ func _run() -> void:
     assert(response != null and response.get_width()==1024 and response.get_image().has_mipmaps(),"Packaged tunic response/mip chain is missing")
     assert(load("res://scripts/character_preview_reflections.gd") is GDScript)
     assert(load("res://scenes/boot_launcher.tscn") is PackedScene)
-    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 actual_pck=true")
+    var ground_scene := load("res://assets/production/nature/meadow/MeadowGrass.glb") as PackedScene
+    assert(ground_scene != null,"Packaged meadow mesh is missing")
+    var grass := ground_scene.instantiate()
+    var grass_triangles := 0
+    for mesh: MeshInstance3D in grass.find_children("*","MeshInstance3D",true,false):
+        for slot in range(mesh.mesh.get_surface_count()):
+            var arrays := mesh.mesh.surface_get_arrays(slot)
+            grass_triangles += arrays[Mesh.ARRAY_INDEX].size()/3
+            assert(arrays[Mesh.ARRAY_COLOR].size()>0,"Packaged grass loses authored blade pigments")
+    assert(grass_triangles==130)
+    grass.free()
+    var roof_scene := load("res://assets/production/exteriors/family_home/CottageShingleRoof.tscn") as PackedScene
+    assert(roof_scene!=null,"Packaged family roof wrapper is missing")
+    var roof := roof_scene.instantiate()
+    var roof_triangles := 0
+    var roof_surfaces := 0
+    for mesh: MeshInstance3D in roof.find_children("*","MeshInstance3D",true,false):
+        for slot in range(mesh.mesh.get_surface_count()):
+            roof_triangles += mesh.mesh.surface_get_arrays(slot)[Mesh.ARRAY_INDEX].size()/3
+            roof_surfaces += 1
+            var material := mesh.get_active_material(slot) as StandardMaterial3D
+            assert(material!=null and material.albedo_texture!=null and material.albedo_texture.get_image().has_mipmaps(),"Packaged roof surface or mip chain is missing")
+    assert(roof_triangles==26888 and roof_surfaces==4)
+    roof.free()
+    var surfaces := load("res://scripts/interior_surface_materials.gd") as GDScript
+    for map: Texture2D in [surfaces.PLASTER,surfaces.PLASTER_NORMAL,surfaces.PLASTER_ORM]:
+        assert(map!=null and map.get_image().has_mipmaps(),"Packaged lime plaster is missing")
+    assert(surfaces.PLASTER_NORMAL.get_width()==512 and surfaces.PLASTER_NORMAL.get_height()==384)
+    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 actual_pck=true")
     quit(0)

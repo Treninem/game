@@ -16,7 +16,7 @@ static func prepare(node: Node, canopy: bool = false) -> void:
         var visual := node as MeshInstance3D
         for index in range(visual.mesh.get_surface_count()):
             var base := visual.get_active_material(index) as StandardMaterial3D
-            if base == null or base.albedo_texture == null:
+            if base == null or (base.albedo_texture == null and base.resource_name != "MeadowGrass"):
                 continue
             if "Bark" in base.resource_name:
                 if bool(base.get_meta("impuls_bark_prepared", false)):
@@ -44,7 +44,13 @@ static func prepare(node: Node, canopy: bool = false) -> void:
                 material.set_shader_parameter("black_key", "Temperate" in base.resource_name)
                 material.set_shader_parameter("wind_strength", 0.045)
                 material.set_shader_parameter("wave_frequency", 2.0)
-                if "Grass" in base.resource_name:
+                if base.resource_name == "MeadowGrass":
+                    material.set_shader_parameter("authored_blade_color",true)
+                    material.set_shader_parameter("vegetation_tint",Color(.9,.93,.8))
+                    material.set_shader_parameter("foliage_desaturate",.35)
+                    material.set_shader_parameter("height_anchor",true)
+                    material.set_shader_parameter("variation_strength",.15)
+                elif "Grass" in base.resource_name:
                     material.set_shader_parameter("vegetation_tint", Color(0.32, 0.45, 0.25))
                     material.set_shader_parameter("foliage_desaturate",0.9)
                     material.set_shader_parameter("variation_strength",0.45)
