@@ -1,6 +1,7 @@
 extends Node3D
 
 const GRIP := preload("res://scripts/weapon_grip_modifier.gd")
+const DETAIL_LOD := preload("res://scripts/humanoid_detail_lod.gd")
 const BOW_DRAW_RATE := 3.0
 const GRIP_POINTS := {"starter_axe": Vector3(-0.09865, -0.18, 0), "stone_knife": Vector3(0.0006, -0.12, 0), "short_bow": Vector3(-0.070708, 0, 0)}
 
@@ -11,7 +12,8 @@ const SHOE_ALBEDO := preload("res://assets/production/characters/realistic/detai
 const EYE_SHADER := preload("res://assets/shaders/characters/human_eyes.gdshader")
 const HAIR_SHADER := preload("res://assets/shaders/characters/hair_tint.gdshader")
 const EYE_TEXTURES := [preload("res://assets/production/characters/realistic/eyes/brown_eye.png"), preload("res://assets/production/characters/realistic/eyes/blue_eye.png"), preload("res://assets/production/characters/realistic/eyes/green_eye.png"), preload("res://assets/production/characters/realistic/eyes/grey_eye.png"), preload("res://assets/production/characters/realistic/eyes/lightblue_eye.png")]
-const HUMANS := {"male": preload("res://assets/production/characters/realistic_contours/male.glb"), "female": preload("res://assets/production/characters/realistic_contours/female.glb")}
+const HUMAN_PATHS := {"male": "res://assets/production/characters/realistic_contours/male.glb", "female": "res://assets/production/characters/realistic_contours/female.glb"}
+static var human_scenes: Dictionary = {}
 const PALETTES := [null, preload("res://assets/production/characters/citizen/citizen_dark.png"), preload("res://assets/production/characters/citizen/citizen_light.png")]
 static var palette_materials: Dictionary = {}
 const WEAPONS := {
@@ -49,7 +51,7 @@ var nocked_arrow: Node3D
 var last_draw_point := Vector3.ZERO
 var draw_point_in_actor := Vector3.ZERO
 var has_draw_point := false
-var detail_lod := preload("res://scripts/humanoid_detail_lod.gd").new()
+var detail_lod: DETAIL_LOD
 
 func _ready() -> void:
     var profile: Variant = appearance_profile
@@ -79,7 +81,11 @@ func apply_appearance(value: Variant) -> void:
     nocked_arrow = null
     active_animation = ""
     current_profile = profile
-    model = (HUMANS[profile.sex] as PackedScene).instantiate() as Node3D
+    # Loading a script or discarding a streamed scene before _ready does not
+    # need both dense bodies. Retain each selected scene for subsequent actors.
+    if not human_scenes.has(profile.sex):
+        human_scenes[profile.sex] = load(HUMAN_PATHS[profile.sex])
+    model = (human_scenes[profile.sex] as PackedScene).instantiate() as Node3D
     model.name = "HumanModel"
     model.rotation.y = PI
     add_child(model)
@@ -134,7 +140,10 @@ func apply_appearance(value: Variant) -> void:
             skeletons[0].add_child(clothing_modifier)
 
 func _style_model() -> void:
-    if detail_lod.get_parent() == null:
+    # Instantiated-but-discarded streamed scenes never reach _ready. Allocate
+    # the node only when it can immediately become this visual's owned child.
+    if not is_instance_valid(detail_lod):
+        detail_lod = DETAIL_LOD.new()
         detail_lod.name = "HumanDetailLOD"
         add_child(detail_lod)
     detail_lod.configure(self)

@@ -294,6 +294,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_magic_state.tscn 90
       - name: Verify playable character creator and saved appearance
         run: bash tools/run_godot_smoke.sh tests/smoke_character_creator.tscn 120
+      - name: Verify detached human visual node lifetime
+        run: bash tools/run_godot_smoke.sh tests/smoke_human_detail_lifetime.gd 90
       - name: Preserve accepted humans and verify the refined near/far family
         run: |
           mkdir -p build

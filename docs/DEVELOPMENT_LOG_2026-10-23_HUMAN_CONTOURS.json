@@ -453,7 +453,7 @@
     }
   ],
   "final_sources": {
-    "scripts/humanoid_visual.gd": "524a4d077bc788676e8d1276fa1a60d8096fbf29adc6a679a02c65588aa18115",
+    "scripts/humanoid_visual.gd": "8beb2351e48c98906423cf89a9f5317579a82f646341ff0d4afdf988e5edc796",
     "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
     "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
     "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
@@ -466,7 +466,8 @@
     "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
     "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
     "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
-    "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+    "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665",
+    "tests/smoke_human_detail_lifetime.gd": "c0e3e0038847558699948ca914e3f7fd1128e675d48b1103b4fcbdbf0d4a1b85"
   },
   "failed_and_limited_attempts": [
     {
@@ -655,11 +656,193 @@
     "Isolated-cache UID fallbacks in local logs use valid text paths; clean exact-SHA import still required. Existing ObjectDB exit warnings are retained in raw logs."
   ],
   "ci": {
-    "state": "pending_exact_sha",
-    "required": "All existing required workflows and two additional World Core gates; no deadline or old assertion weakened."
+    "state": "pending_exact_sha_after_lifecycle_fix",
+    "previous_head": "9a944582ee99fcd047054d2167080c8384b44cf7",
+    "previous_result": "UI/save cleanup failure; World Core artifact step subsequently had no frames because the pipeline stopped early.",
+    "required": "All previous gates plus required detached-human lifetime test; no gate weakened."
   },
   "stable_release_published": false,
   "visual_accepted": false,
   "overall_percent": null,
-  "next_connected_stage": "Hair/brows/face response and coherent clothing detail; then measured region draw/foliage cost and house/world art alongside ordinary gameplay."
+  "next_connected_stage": "Hair/brows/face response and coherent clothing detail; then measured region draw/foliage cost and house/world art alongside ordinary gameplay.",
+  "locally_rendered_sources_at_first_packet": {
+    "scripts/humanoid_visual.gd": "524a4d077bc788676e8d1276fa1a60d8096fbf29adc6a679a02c65588aa18115",
+    "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+    "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+    "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+    "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+    "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+    "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+    "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+    "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+    "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+    "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+    "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+  },
+  "ci_followup": {
+    "failed_head": "9a944582ee99fcd047054d2167080c8384b44cf7",
+    "failed_jobs": [
+      120267608836,
+      120267608841
+    ],
+    "failure": "The unchanged UI/save smoke passed its UI work but emitted cleanup errors: an unparented distance Node, GDScript and native class remained. Humanoid member initialization allocated the Node even when the visual was discarded before _ready.",
+    "fix": "Instantiate the distance node lazily in _style_model and immediately parent it. Body PackedScenes also load/cache by selected sex only when the actual model is built, rather than loading both while reading the script. all_resources export keeps both dynamic paths in the game. Geometry, shaders, animation, saves and deadlines are unchanged.",
+    "local_lifetime": {
+      "case": "lifetime3",
+      "exit_code": 0,
+      "seconds": 29.89,
+      "timeout": false,
+      "bound": 90,
+      "sources": {
+        "scripts/humanoid_visual.gd": "8beb2351e48c98906423cf89a9f5317579a82f646341ff0d4afdf988e5edc796",
+        "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+        "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+        "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+        "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+        "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+        "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+        "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+        "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+        "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+        "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+        "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "errors": [],
+      "sources_unchanged": true,
+      "command": [
+        "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+        "--path",
+        "D:\\Desktop\\GitHub\\game\\build\\body-response",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--headless",
+        "--script",
+        "res://tests/smoke_human_detail_lifetime.gd"
+      ]
+    },
+    "regression": "32 detached visual construction/free cycles: orphan count stays 0; a temporary canary proves the debug monitor is live. New required source CI step uses the same strict orphan condition.",
+    "local_limits": {
+      "initial_regression_attempt": {
+        "case": "lifetime",
+        "exit_code": 1,
+        "seconds": 107.12,
+        "timeout": true,
+        "bound": 90,
+        "sources": {
+          "scripts/humanoid_visual.gd": "524a4d077bc788676e8d1276fa1a60d8096fbf29adc6a679a02c65588aa18115",
+          "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+          "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+          "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+          "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+          "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+          "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+        },
+        "errors": [],
+        "sources_unchanged": true,
+        "command": [
+          "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+          "--path",
+          "D:\\Desktop\\GitHub\\game\\build\\body-response",
+          "--rendering-method",
+          "gl_compatibility",
+          "--audio-driver",
+          "Dummy",
+          "--headless",
+          "--script",
+          "res://tests/smoke_human_detail_lifetime.gd"
+        ]
+      },
+      "ui": {
+        "case": "ui",
+        "exit_code": 1,
+        "seconds": 148.52,
+        "timeout": false,
+        "bound": 180,
+        "sources": {
+          "scripts/humanoid_visual.gd": "eeaaaac0ddda12522aa72b5873469f230508cc24a9972d7bdca0f3a7e17a9040",
+          "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+          "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+          "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+          "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+          "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+          "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+        },
+        "errors": [
+          "ERROR: UI smoke: UI smoke watchdog timeout; inspect the preceding Godot runtime error/checkpoint"
+        ],
+        "sources_unchanged": true,
+        "command": [
+          "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+          "--path",
+          "D:\\Desktop\\GitHub\\game\\build\\body-response",
+          "--rendering-method",
+          "gl_compatibility",
+          "--audio-driver",
+          "Dummy",
+          "--headless",
+          "res://tests/smoke_ui_and_save.tscn"
+        ]
+      },
+      "ui2": {
+        "case": "ui2",
+        "exit_code": 1,
+        "seconds": 116.06,
+        "timeout": false,
+        "bound": 180,
+        "sources": {
+          "scripts/humanoid_visual.gd": "8beb2351e48c98906423cf89a9f5317579a82f646341ff0d4afdf988e5edc796",
+          "scripts/humanoid_detail_lod.gd": "79c829b46f1cf921633f687dfc535b3626578119358ee086db19842d1512cc23",
+          "scripts/character_creator.gd": "69ff4ce5dab0230ea395a19ef4d0d5853fa6b8cfff01e4b3257ba3dcad24f376",
+          "tests/visual_human_contours.gd": "7e262e00f21a92f244f85dab5bc1ec5b1ef1cd1e0984242ae4f7c161f61d43ea",
+          "tests/visual_bow_world.gd": "b2f7e72bcc39188604181f7432b49ad45c88d598bff4d976d3362c90efd2eaef",
+          "tests/smoke_character_creator.gd": "81aa0ce14073467f60cb9dcb801e8b589a1c1ac83dc8f7632708b1118562c41a",
+          "tests/smoke_character_texture_filtering.gd": "a7f065fe9c6d0e59b638355405f10aae41e7adaf8003997d29ba30c4718537f3",
+          "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+          "scripts/humanoid_arm_clearance.gd": "1b5a62ca1b1862742b85edd0702ae4c282b7c8762b8446dc80dfef30b9833449",
+          "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+          "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+          "assets/shaders/characters/human_eyes.gdshader": "68cbcb7949200a99d97330df25ae3fc14a3ddadb73892031769628ec41066dee",
+          "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+          "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+        },
+        "errors": [
+          "ERROR: UI smoke: UI smoke watchdog timeout; inspect the preceding Godot runtime error/checkpoint"
+        ],
+        "sources_unchanged": true,
+        "command": [
+          "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+          "--path",
+          "D:\\Desktop\\GitHub\\game\\build\\body-response",
+          "--rendering-method",
+          "gl_compatibility",
+          "--audio-driver",
+          "Dummy",
+          "--headless",
+          "res://tests/smoke_ui_and_save.tscn"
+        ]
+      },
+      "note": "Local UI warmup exceeded its unchanged 45-second watchdog on this weak/busy machine, including after deferred body loading. No local UI pass is claimed. Exact-SHA UI/export/installer gates remain mandatory; no timeout or cleanup error is ignored."
+    },
+    "native_evidence_scope": "The 18 local frames /10 GPU poses and 28.504 m world run are from before this lifecycle-only follow-up. Assets and posed geometry are unchanged; the final required graphical CI repeats them on the new SHA."
+  }
 }

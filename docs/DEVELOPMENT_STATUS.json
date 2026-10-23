@@ -6,7 +6,7 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Уточнены обе Blender-модели тела и глаз с независимой дальней детализацией; исправлен свет редактора. 18 финальных кадров, 10 полных GPU-поз кожи и крайние формы проверены. Прежние одежда, движение, оружие и сохранения сохраняются; полный exact-SHA CI и художественная приёмка ещё обязательны.",
+  "current_stage": "Обе уточнённые Blender-модели, глаза и свет редактора проверены в 18 кадрах/10 GPU-позах. CI выявил утечку до входа персонажа в сцену: создание узла перенесено к немедленному владению, 32 отделённых цикла без сирот прошли. Локальный UI-warmup превысил прежний watchdog; полный новый exact-SHA CI обязателен. Художественная приёмка и производительность мира открыты.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_HUMAN_CONTOURS.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
@@ -537,6 +537,7 @@
     "local_world_walked_m": 28.5044221002609,
     "ci": "Exact final SHA must be checked on the existing PR after push",
     "visual_acceptance": false,
-    "stable_release": false
+    "stable_release": false,
+    "lifecycle_followup": "Deferred owned node construction and selected-body scene loading; 32 detached cycles leave zero orphans. Final exact-SHA CI required; local UI warmup deadline remains a recorded failure."
   }
 }
