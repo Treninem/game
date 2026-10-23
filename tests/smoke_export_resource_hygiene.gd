@@ -43,6 +43,9 @@ func _run() -> void:
         var image := texture.get_image()
         assert(image != null and image.has_mipmaps(),"Packaged eye mip chain is missing")
     assert(visual.HAIR_SHADER != null and visual.EYE_SHADER != null)
+    var response: Texture2D = visual.TUNIC_RESPONSE
+    assert(response != null and response.get_width()==1024 and response.get_image().has_mipmaps(),"Packaged tunic response/mip chain is missing")
+    assert(load("res://scripts/character_preview_reflections.gd") is GDScript)
     assert(load("res://scenes/boot_launcher.tscn") is PackedScene)
-    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present actual_pck=true")
+    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 actual_pck=true")
     quit(0)

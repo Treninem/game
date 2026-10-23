@@ -10,6 +10,7 @@ const GARMENT_NORMAL := preload("res://assets/production/characters/realistic/de
 const GARMENT_AO := preload("res://assets/production/characters/realistic/details/garment_ao.png")
 const SHOE_ALBEDO := preload("res://assets/production/characters/realistic/details/shoes_albedo.png")
 const EYE_SHADER := preload("res://assets/shaders/characters/human_iris.gdshader")
+const TUNIC_RESPONSE := preload("res://assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png")
 const HAIR_SHADER := preload("res://assets/shaders/characters/hair_strands.gdshader")
 const EYE_TEXTURES := [preload("res://assets/production/characters/realistic/eyes/brown_eye.png"), preload("res://assets/production/characters/realistic/eyes/blue_eye.png"), preload("res://assets/production/characters/realistic/eyes/green_eye.png"), preload("res://assets/production/characters/realistic/eyes/grey_eye.png"), preload("res://assets/production/characters/realistic/eyes/lightblue_eye.png")]
 const HUMAN_PATHS := {"male": "res://assets/production/characters/realistic_contours/male.glb", "female": "res://assets/production/characters/realistic_contours/female.glb"}
@@ -196,6 +197,12 @@ func _style_model() -> void:
                     material.ao_light_affect = 0.2
                     material.roughness = 0.9 if label == "VikingTunic" else 0.86
                     if label == "VikingTunic":
+                        material.metallic = 1.0
+                        material.metallic_texture = TUNIC_RESPONSE
+                        material.metallic_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_RED
+                        material.roughness = 1.0
+                        material.roughness_texture = TUNIC_RESPONSE
+                        material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GREEN
                         material.albedo_color = APPEARANCE.CLOTH[int(current_profile.cloth)].lightened(0.65)
                 elif label.begins_with("ClothTunic") or label.begins_with("ClothTrousers"):
                     # Reuse the garment's authored UV-aligned folds, not a tiled

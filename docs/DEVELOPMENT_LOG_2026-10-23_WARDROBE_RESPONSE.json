@@ -1,0 +1,681 @@
+{
+  "date": "2026-10-23",
+  "status": "ACTIVE",
+  "review_parent": "a515de906cf13b785e9f27d3470f1a4c3c5b06bc",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "scope": "Both existing human outfits: UV-aligned steel/cloth response and a static preview reflection environment. Groom geometry trials were rejected; no body, hair geometry, rig, morph, clip or save schema is replaced.",
+  "implemented": [
+    "One shared Blender-authored 1024 response map, red metal amount / green roughness; original diffuse, normal, AO, authored UVs and palette remain. Pants/boots stay nonmetallic.",
+    "Actual creator gains a static 64px procedural reflection sky while retaining its plain BG_COLOR backdrop, existing ambient color, key and fill lights. No custom sky shader or extra world reflection system is integrated.",
+    "A mandatory native gate compares actual rendered material controls, all ten saved cloth palettes, metal/cloth texels, physical mip levels, unchanged backdrop and disabled-versus-enabled reflection pixels. Two actual creator frames are captured.",
+    "The actual exported-PCK harness now additionally requires the response texture/mips and creator reflection helper. Every pre-existing gate/assertion is retained."
+  ],
+  "sources": {
+    "scripts/humanoid_visual.gd": "aeccc1aafec1e16d2de1dc20cb83386deb13035d1bda3263e7949720152ef2e2",
+    "scripts/character_creator.gd": "b4b008d1f0c92e6210ab3c74e67401724323ab0d49c6605fad8e68c9b2591339",
+    "scripts/character_preview_reflections.gd": "6506fe0ac482ee63af63437db65678780874d6df68c741bf1203d7502267df3d",
+    "tests/visual_wardrobe_response.gd": "e37321d6b46bc1a969d770629404cf0a9d3e9b73462b76bdc8e7cb4aac86bb06",
+    "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+    "assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png": "6f71c41d7e253f1aec107e8a6bb0d8b34f374803be5b013df72a59c2b8d14c23",
+    "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+    "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+  },
+  "local_cases": {
+    "wardrobe7": {
+      "case": "wardrobe7",
+      "exit_code": 0,
+      "timeout": false,
+      "seconds": 256.08,
+      "bound": 300,
+      "errors": [],
+      "sources": {
+        "scripts/humanoid_visual.gd": "aeccc1aafec1e16d2de1dc20cb83386deb13035d1bda3263e7949720152ef2e2",
+        "scripts/character_creator.gd": "b4b008d1f0c92e6210ab3c74e67401724323ab0d49c6605fad8e68c9b2591339",
+        "scripts/character_preview_reflections.gd": "6506fe0ac482ee63af63437db65678780874d6df68c741bf1203d7502267df3d",
+        "tests/visual_wardrobe_response.gd": "e37321d6b46bc1a969d770629404cf0a9d3e9b73462b76bdc8e7cb4aac86bb06",
+        "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+        "assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png": "6f71c41d7e253f1aec107e8a6bb0d8b34f374803be5b013df72a59c2b8d14c23",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "sources_unchanged": true,
+      "saved_low_scale_preserved": true
+    },
+    "creator": {
+      "case": "creator",
+      "exit_code": 0,
+      "timeout": false,
+      "seconds": 96.25,
+      "bound": 180,
+      "errors": [],
+      "sources": {
+        "scripts/humanoid_visual.gd": "aeccc1aafec1e16d2de1dc20cb83386deb13035d1bda3263e7949720152ef2e2",
+        "scripts/character_creator.gd": "b4b008d1f0c92e6210ab3c74e67401724323ab0d49c6605fad8e68c9b2591339",
+        "scripts/character_preview_reflections.gd": "6506fe0ac482ee63af63437db65678780874d6df68c741bf1203d7502267df3d",
+        "tests/visual_wardrobe_response.gd": "e37321d6b46bc1a969d770629404cf0a9d3e9b73462b76bdc8e7cb4aac86bb06",
+        "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+        "assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png": "6f71c41d7e253f1aec107e8a6bb0d8b34f374803be5b013df72a59c2b8d14c23",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "sources_unchanged": true
+    },
+    "surfaces": {
+      "case": "surfaces",
+      "exit_code": 0,
+      "timeout": false,
+      "seconds": 64.86,
+      "bound": 300,
+      "errors": [],
+      "sources": {
+        "scripts/humanoid_visual.gd": "aeccc1aafec1e16d2de1dc20cb83386deb13035d1bda3263e7949720152ef2e2",
+        "scripts/character_creator.gd": "b4b008d1f0c92e6210ab3c74e67401724323ab0d49c6605fad8e68c9b2591339",
+        "scripts/character_preview_reflections.gd": "6506fe0ac482ee63af63437db65678780874d6df68c741bf1203d7502267df3d",
+        "tests/visual_wardrobe_response.gd": "e37321d6b46bc1a969d770629404cf0a9d3e9b73462b76bdc8e7cb4aac86bb06",
+        "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+        "assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png": "6f71c41d7e253f1aec107e8a6bb0d8b34f374803be5b013df72a59c2b8d14c23",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "sources_unchanged": true
+    },
+    "world2": {
+      "case": "world2",
+      "exit_code": 0,
+      "timeout": false,
+      "seconds": 224.3,
+      "bound": 300,
+      "errors": [],
+      "sources": {
+        "scripts/humanoid_visual.gd": "aeccc1aafec1e16d2de1dc20cb83386deb13035d1bda3263e7949720152ef2e2",
+        "scripts/character_creator.gd": "b4b008d1f0c92e6210ab3c74e67401724323ab0d49c6605fad8e68c9b2591339",
+        "scripts/character_preview_reflections.gd": "6506fe0ac482ee63af63437db65678780874d6df68c741bf1203d7502267df3d",
+        "tests/visual_wardrobe_response.gd": "e37321d6b46bc1a969d770629404cf0a9d3e9b73462b76bdc8e7cb4aac86bb06",
+        "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+        "assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png": "6f71c41d7e253f1aec107e8a6bb0d8b34f374803be5b013df72a59c2b8d14c23",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "sources_unchanged": true
+    }
+  },
+  "world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png",
+      "user://head-size-outfit-quality-0.png",
+      "user://head-size-outfit-quality-1.png",
+      "user://head-size-outfit-quality-2.png",
+      "user://head-size-outfit-quality-3.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.5468827933073
+  },
+  "wardrobe": {
+    "metal_pixels": 71078,
+    "roughness_minimum_byte": 122,
+    "samples": [
+      {
+        "changed_samples": 4157,
+        "cloth": 0,
+        "file": "user://wardrobe-response-male-0.png",
+        "maximum_channel_difference": 52,
+        "saved": true,
+        "sex": "male"
+      },
+      {
+        "changed_samples": 4129,
+        "cloth": 1,
+        "file": "user://wardrobe-response-male-1.png",
+        "maximum_channel_difference": 49,
+        "saved": true,
+        "sex": "male"
+      },
+      {
+        "changed_samples": 4122,
+        "cloth": 2,
+        "file": "user://wardrobe-response-male-2.png",
+        "maximum_channel_difference": 51,
+        "saved": true,
+        "sex": "male"
+      },
+      {
+        "changed_samples": 4157,
+        "cloth": 3,
+        "file": "user://wardrobe-response-male-3.png",
+        "maximum_channel_difference": 52,
+        "saved": true,
+        "sex": "male"
+      },
+      {
+        "changed_samples": 4200,
+        "cloth": 4,
+        "file": "user://wardrobe-response-male-4.png",
+        "maximum_channel_difference": 52,
+        "saved": true,
+        "sex": "male"
+      },
+      {
+        "changed_samples": 3996,
+        "cloth": 0,
+        "file": "user://wardrobe-response-female-0.png",
+        "maximum_channel_difference": 64,
+        "saved": true,
+        "sex": "female"
+      },
+      {
+        "changed_samples": 3977,
+        "cloth": 1,
+        "file": "user://wardrobe-response-female-1.png",
+        "maximum_channel_difference": 62,
+        "saved": true,
+        "sex": "female"
+      },
+      {
+        "changed_samples": 3950,
+        "cloth": 2,
+        "file": "user://wardrobe-response-female-2.png",
+        "maximum_channel_difference": 62,
+        "saved": true,
+        "sex": "female"
+      },
+      {
+        "changed_samples": 3985,
+        "cloth": 3,
+        "file": "user://wardrobe-response-female-3.png",
+        "maximum_channel_difference": 65,
+        "saved": true,
+        "sex": "female"
+      },
+      {
+        "changed_samples": 3986,
+        "cloth": 4,
+        "file": "user://wardrobe-response-female-4.png",
+        "maximum_channel_difference": 66,
+        "saved": true,
+        "sex": "female"
+      }
+    ]
+  },
+  "reflection_pixels": "PREVIEW_REFLECTION_PIXELS disabled=(0.0, 0.0, 0.0, 1.0) sky=(0.102, 0.1137, 0.1373, 1.0)",
+  "bounded_performance": {
+    "frames": 120,
+    "mean_ms": 61.5778666666667,
+    "video_bytes": 637192996,
+    "draw_calls": 1095,
+    "scope": "One bounded 120-frame UHD 610 sample after quality changes; not sustained FPS, cold-boot acceptance or a matched performance comparison."
+  },
+  "rejected_geometry_trials": {
+    "construction1": [
+      {
+        "sex": "male",
+        "source_sha256": "740b953620a2ff79f05591aaeb4bc90469574155844df65f5e371312a65a51f0",
+        "hair": [
+          {
+            "part": "HairShort",
+            "source_vertices": 2984,
+            "vertices": 9446,
+            "faces": 7356,
+            "components": 200,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.002999999993973823,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          },
+          {
+            "part": "HairPonytail",
+            "source_vertices": 3718,
+            "vertices": 12743,
+            "faces": 10704,
+            "components": 48,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.00399999992458445,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          }
+        ],
+        "glb_sha256": "86c98787d7837e276d7dfc20e10cc0c0ee6e5ca108fa6039fc9b08533e6fc684",
+        "bytes": 32305316
+      },
+      {
+        "sex": "female",
+        "source_sha256": "fe646e0465292c2a1a4740045773e959708eed7c3b0db10966fbe6d9e8e5318f",
+        "hair": [
+          {
+            "part": "HairShort",
+            "source_vertices": 2984,
+            "vertices": 9446,
+            "faces": 7356,
+            "components": 200,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.002999999996611333,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          },
+          {
+            "part": "HairPonytail",
+            "source_vertices": 3718,
+            "vertices": 12743,
+            "faces": 10704,
+            "components": 48,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.0039999997954426195,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          }
+        ],
+        "glb_sha256": "08067926e1a8eb5892d832b84fcb2579cc122558331828a2effd0964f5e889bc",
+        "bytes": 33102640
+      }
+    ],
+    "construction2": [
+      {
+        "sex": "male",
+        "source_sha256": "740b953620a2ff79f05591aaeb4bc90469574155844df65f5e371312a65a51f0",
+        "hair": [
+          {
+            "part": "HairShort",
+            "source_vertices": 2984,
+            "vertices": 9446,
+            "faces": 7356,
+            "components": 200,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.0007999999983930195,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          },
+          {
+            "part": "HairPonytail",
+            "source_vertices": 3718,
+            "vertices": 12743,
+            "faces": 10704,
+            "components": 48,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.0005999999886876675,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          }
+        ],
+        "glb_sha256": "ed09344cf4481dadf1435626943962b9ef101c4eb59e45f64fb3221e710a8dd9",
+        "bytes": 32425792
+      },
+      {
+        "sex": "female",
+        "source_sha256": "fe646e0465292c2a1a4740045773e959708eed7c3b0db10966fbe6d9e8e5318f",
+        "hair": [
+          {
+            "part": "HairShort",
+            "source_vertices": 2984,
+            "vertices": 9446,
+            "faces": 7356,
+            "components": 200,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.0007999999990963555,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          },
+          {
+            "part": "HairPonytail",
+            "source_vertices": 3718,
+            "vertices": 12743,
+            "faces": 10704,
+            "components": 48,
+            "scalp_components": 1,
+            "max_card_lift_m": 0.0005999999693163928,
+            "morphs": [
+              "FaceWidth",
+              "FaceHeight",
+              "FaceDepth",
+              "Nose",
+              "NoseWidth",
+              "NoseHeight",
+              "Jaw",
+              "HeadSize",
+              "Build"
+            ]
+          }
+        ],
+        "glb_sha256": "42b16988635dd4d88bed762bcd0f04ba1f11d2cadc0befddc017b292e081ba4d",
+        "bytes": 33214848
+      }
+    ],
+    "export_preservation1": [
+      {
+        "sex": "male",
+        "unchanged_parts": 6,
+        "unchanged_images": true,
+        "morphs": 9,
+        "clips": 10,
+        "hair": [
+          {
+            "part": "HairPonytail",
+            "vertices_before": 3902,
+            "vertices_after": 14564,
+            "bounds_delta_m": 0.003494858741760254,
+            "maximum_influences": 6
+          },
+          {
+            "part": "HairShort",
+            "vertices_before": 3050,
+            "vertices_after": 10847,
+            "bounds_delta_m": 0.0023457109928131104,
+            "maximum_influences": 3
+          }
+        ]
+      },
+      {
+        "sex": "female",
+        "unchanged_parts": 6,
+        "unchanged_images": true,
+        "morphs": 9,
+        "clips": 10,
+        "hair": [
+          {
+            "part": "HairPonytail",
+            "vertices_before": 3902,
+            "vertices_after": 14564,
+            "bounds_delta_m": 0.0033778324723243713,
+            "maximum_influences": 6
+          },
+          {
+            "part": "HairShort",
+            "vertices_before": 3050,
+            "vertices_after": 10847,
+            "bounds_delta_m": 0.0023497268557548523,
+            "maximum_influences": 3
+          }
+        ]
+      }
+    ],
+    "export_preservation2": [
+      {
+        "sex": "male",
+        "unchanged_parts": 6,
+        "unchanged_images": true,
+        "morphs": 9,
+        "clips": 10,
+        "hair": [
+          {
+            "part": "HairPonytail",
+            "vertices_before": 3902,
+            "vertices_after": 14564,
+            "bounds_delta_m": 0.006113946437835693,
+            "maximum_influences": 6
+          },
+          {
+            "part": "HairShort",
+            "vertices_before": 3050,
+            "vertices_after": 10847,
+            "bounds_delta_m": 0.0007672309875488281,
+            "maximum_influences": 3
+          }
+        ]
+      },
+      {
+        "sex": "female",
+        "unchanged_parts": 6,
+        "unchanged_images": true,
+        "morphs": 9,
+        "clips": 10,
+        "hair": [
+          {
+            "part": "HairPonytail",
+            "vertices_before": 3902,
+            "vertices_after": 14564,
+            "bounds_delta_m": 0.00467643141746521,
+            "maximum_influences": 6
+          },
+          {
+            "part": "HairShort",
+            "vertices_before": 3050,
+            "vertices_after": 10847,
+            "bounds_delta_m": 0.0013583898544311523,
+            "maximum_influences": 3
+          }
+        ]
+      }
+    ],
+    "native_frames": 48,
+    "inspected": [
+      "prototype1 female ponytail angle/side",
+      "prototype1 male short angle and paired baseline",
+      "prototype2 female ponytail angle/side",
+      "prototype2 male short angle"
+    ],
+    "decision": "NOT SELECTED. Lifted broad cards float as ribbons; narrowing still leaves flat patches. Hair vertices grow about 3.6x/3.7x without adequate visible benefit. No trial GLB or blend is added to runtime/source production. The local groom GPU prototype was not run or accepted."
+  },
+  "failed_attempts": [
+    {
+      "case": "wardrobe2",
+      "result": {
+        "case": "wardrobe2",
+        "exit_code": 1,
+        "timeout": false,
+        "seconds": 4.91,
+        "bound": 300,
+        "errors": [
+          "SCRIPT ERROR: Parse Error: Cannot find member \"REFLECTED_SOURCE_SKY\" in base \"Environment\".",
+          "ERROR: Failed to load script \"res://visual_wardrobe_response_candidate.gd\" with error \"Parse error\"."
+        ]
+      },
+      "cause": "Incorrect reflection enum name; corrected using the running engine ClassDB constants."
+    },
+    {
+      "case": "wardrobe4",
+      "result": {
+        "case": "wardrobe4",
+        "exit_code": 4294967295,
+        "timeout": false,
+        "seconds": 119.47,
+        "bound": 300,
+        "errors": [
+          "SCRIPT ERROR: Assertion failed: Preview sky is configured but does not illuminate metal"
+        ]
+      },
+      "cause": "Reflection fixture used black ambient color and zero ambient energy, so its metal stayed black; this was a fixture error, not proof that BG_COLOR cannot reflect a sky."
+    },
+    {
+      "case": "wardrobe5",
+      "result": {
+        "case": "wardrobe5",
+        "exit_code": 4294967295,
+        "timeout": false,
+        "seconds": 209.94,
+        "bound": 300,
+        "errors": [
+          "SCRIPT ERROR: Assertion failed: Preview sky is configured but does not illuminate metal"
+        ]
+      },
+      "cause": "Rejected custom-sky alternative retained the same black-ambient fixture error. No custom shader is integrated. Separate four-case probe with the actual creator ambient color proved both procedural/material and backdrop modes."
+    },
+    {
+      "case": "world",
+      "result": {
+        "case": "world",
+        "exit_code": 1,
+        "timeout": true,
+        "seconds": 329.7,
+        "bound": 300,
+        "errors": [],
+        "sources": {
+          "scripts/humanoid_visual.gd": "aeccc1aafec1e16d2de1dc20cb83386deb13035d1bda3263e7949720152ef2e2",
+          "scripts/character_creator.gd": "b4b008d1f0c92e6210ab3c74e67401724323ab0d49c6605fad8e68c9b2591339",
+          "scripts/character_preview_reflections.gd": "6506fe0ac482ee63af63437db65678780874d6df68c741bf1203d7502267df3d",
+          "tests/visual_wardrobe_response.gd": "e37321d6b46bc1a969d770629404cf0a9d3e9b73462b76bdc8e7cb4aac86bb06",
+          "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+          "assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png": "6f71c41d7e253f1aec107e8a6bb0d8b34f374803be5b013df72a59c2b8d14c23",
+          "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+          "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+        },
+        "sources_unchanged": true
+      },
+      "cause": "All gameplay markers completed, but process exceeded unchanged 300s outer bound; not a complete pass. world2 is the unchanged repeat."
+    }
+  ],
+  "calibration_probe": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610\n\nREFLECTION_CONTRACT procedural bg=1 disabled=(0.0, 0.0, 0.0, 1.0) sky=(0.251, 0.2627, 0.2824, 1.0) corner=(0.1216, 0.149, 0.1804, 1.0)\nREFLECTION_CONTRACT procedural bg=2 disabled=(0.0, 0.0, 0.0, 1.0) sky=(0.251, 0.2627, 0.2824, 1.0) corner=(0.4196, 0.4745, 0.5686, 1.0)\nREFLECTION_CONTRACT shader bg=1 disabled=(0.0, 0.0, 0.0, 1.0) sky=(0.0941, 0.1059, 0.1216, 1.0) corner=(0.1216, 0.149, 0.1804, 1.0)\nREFLECTION_CONTRACT shader bg=2 disabled=(0.0, 0.0, 0.0, 1.0) sky=(0.0941, 0.1059, 0.1216, 1.0) corner=(0.1098, 0.1451, 0.1765, 1.0)\n",
+  "evidence": [
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/wardrobe-response-male-0.png",
+      "case": "final integrated wardrobe7",
+      "sha256": "2b1ed582e4f2fbb2ba18e218a86e9e5bf43065d07038aeb053e4850ea10b9bb9"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/wardrobe-response-female-4.png",
+      "case": "final integrated wardrobe7",
+      "sha256": "66982c8fbb8e0a7b682578b06d9e3e96a907ccec03ba0f550aa70dd3ddda9510"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/wardrobe-creator-0.png",
+      "case": "final integrated wardrobe7",
+      "sha256": "953ea82c5733cf15dc5fd26ee72ebd83a737642b99776ef2ba5232be67d6cf7f"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/wardrobe-creator-5.png",
+      "case": "final integrated wardrobe7",
+      "sha256": "956f438cf9ef200f46d43e0633fc93bbf06a5e0b3ac7736e6fa1d3b5ab1cce29"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/preview-reflection-disabled.png",
+      "case": "final integrated wardrobe7",
+      "sha256": "0af68aabdaebbce0a19d0bdf9ce2202e2021f917c50918129dce7cdb758a6a5b"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/preview-reflection-sky.png",
+      "case": "final integrated wardrobe7",
+      "sha256": "0dc57b0d61622f3ec31fbf1bb34fcc4fa4b6ff68910743db91bc2adccca5b2f8"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/world-head-size-walk.png",
+      "case": "final world2 automated input",
+      "sha256": "dde425ed9c4822d233392a83570f39b95847b5bfcf56f293ba5559e8897965f3"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/world-head-size-starter_axe.png",
+      "case": "final world2 automated input",
+      "sha256": "bcf03996463c285d7e4c353a0486d28a8bd4429b4d142418fa9b76d7375f1080"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/world-head-size-short_bow.png",
+      "case": "final world2 automated input",
+      "sha256": "6770c983f52f016e62cd1471fbd6707e6120aa564afe18f32f7ef3c8b74f3ee6"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/world-head-size-inventory-lifecycle.png",
+      "case": "final world2 automated input",
+      "sha256": "9db5d2d9123d73ba04e09f17d1d0bd9270ba2bc4bf22649b4574027fbb37c471"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/rejected-groom-baseline-female-1-angle.png",
+      "case": "rejected prototype1 paired lighting/camera",
+      "sha256": "b6332b53e891eb84f7005203ff7016863bf0d1fa6490d9136782a566a42a9767"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/rejected-groom-candidate-female-1-angle.png",
+      "case": "rejected prototype1 paired lighting/camera",
+      "sha256": "52c6aaa965f03232895483afe28a2b94bc1b0b1c0e3201d615c3c21aab802ff9"
+    },
+    {
+      "file": "docs/review/2026-10-23-wardrobe-response/rejected-prototype2-side.png",
+      "case": "rejected prototype2",
+      "sha256": "8c06cda17980574c290659d769d50f00c52505c0356d040bd487e4e90241913c"
+    }
+  ],
+  "ci_contract": {
+    "previous_verified_sha": "a515de906cf13b785e9f27d3470f1a4c3c5b06bc",
+    "previous_verified_workflows": 8,
+    "new_required_gate": "visual_wardrobe_response.gd, 300s wrapper /240s internal",
+    "current_result_reference": "https://github.com/Treninem/game/pull/12/checks",
+    "scope": "Committed local evidence predates its publication SHA; current exact-SHA workflow/job results are recorded on the existing PR and in the local final CI receipt."
+  },
+  "limitations": [
+    "This improves properties of the existing outfit; it is not a new complete wardrobe or a concept-quality human cast.",
+    "Both groom geometry proposals are rejected. Hairstyles, expressions, brows/lashes, anatomical/age diversity and clothing silhouettes still require major work.",
+    "Native tests use automated inputs/observers; this is not manual city travel or complete world/NPC/economy acceptance.",
+    "Only 1,305,456 KiB RAM was free during the first local world attempt on an 8GB machine. This is measured pressure, not proof of the timeout cause. Existing user applications/window/profile were preserved.",
+    "First local world attempt timed out; the unchanged repeat and exact-SHA CI remain distinct evidence. No failing test was skipped or converted to a warning.",
+    "Prior ObjectDB exit-warning investigation, full cold-start/sustained weak-PC performance and full world art remain open.",
+    "No stable release or main merge. Overall progress remains unquantified and full visual acceptance false."
+  ],
+  "observed_world_art_remaining": "Actual final world frames retain conspicuously saturated purple woodland bow/axe surfaces. This packet preserves those existing source materials. Audit source palette/material regions and weapon readability together with human costume/hairstyles; no cause or correction is yet claimed."
+}

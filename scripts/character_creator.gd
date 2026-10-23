@@ -113,6 +113,7 @@ func _build() -> void:
     environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
     environment.environment.ambient_light_color = Color(0.78, 0.83, 0.88)
     environment.environment.ambient_light_energy = 0.32
+    preload("res://scripts/character_preview_reflections.gd").configure(environment.environment)
     world.add_child(environment)
     var key := DirectionalLight3D.new()
     # The model faces -Z. A -25 yaw lit the back of its head, forcing a

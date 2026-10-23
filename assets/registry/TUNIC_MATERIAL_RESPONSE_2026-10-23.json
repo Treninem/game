@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-23",
+  "state": "INTEGRATED",
+  "scope": "Review branch only; full human art/weak-PC acceptance false, no new main physical staging claim",
+  "production": "assets/production/characters/realistic/wardrobe/tunic-metal-roughness.png",
+  "runtime": [
+    "scripts/humanoid_visual.gd",
+    "scripts/character_creator.gd",
+    "scripts/character_preview_reflections.gd"
+  ],
+  "reproducer": "tools/author_tunic_material_mask.py",
+  "provenance": "Project-authored response mask derived in Blender from the retained Rehman Polanski CC0 TUNIC_Viking atlas. Existing selected source/license and all original pixels remain authoritative. No third-party download.",
+  "channels": {
+    "R": "neutral ring-highlight metal amount, 0..0.72",
+    "G": "roughness, 0.48 metal..0.88 cloth"
+  },
+  "map_dimensions": [
+    1024,
+    1024
+  ],
+  "shared_bodies": 2,
+  "new_runtime_maps": 1,
+  "new_models_integrated": 0,
+  "nine_morphs_ten_clips_unchanged": true,
+  "preview_reflection_radiance": 64,
+  "preview_plain_backdrop_preserved": true,
+  "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WARDROBE_RESPONSE.json",
+  "full_visual_acceptance": false
+}

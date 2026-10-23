@@ -18,7 +18,7 @@
         "Стопы держат рельеф, ступени и склоны без зависания; камера и управление удобны",
         "Изменения внешности и экипировки переживают сохранение/загрузку"
       ],
-      "current": "Связанный пакет рук и одежды игрока и обычных жителей: 1344 позы (960 прежних + 384 NPC), восемь Build; проверенные пересечения предплечий с брюками/корпусом туники устранены с сохранением длины рук, поворота ладоней и ног. 34 позы на GPU/62 кадра; бытовой цикл, сохранение и реальная работа жителей повторно проверены. Полная внешность, ткань, мир, холодная загрузка и художественная приёмка открыты. Исправлены первые кадры подготовки лука: прежнее исключение пропускало исходный Idle сквозь одежду. 504 кадра шести настоящих переходов и четыре нативных GPU/цветовых образца прошли; выстрел, хват, тетива и диск повторно проверены. Новый пакет: переходный баланс корпуса/головы/плеч при реальном ускорении, торможении, повороте и приземлении; 30 движущихся поз туники/всей обуви на GPU. Исправлены непрозрачная многогранная пыль и материал физических шагов; дерево/камень не дают земляных обломков. Полная внешность, фазовая опора и художественная приёмка остаются открыты. Выпуск стрелы теперь учитывает физическое перемещение и поворот после последней отрисовки руки; контроль прежней версии и три новые проверки настоящего снаряда подтвердили исправление. Кадр натяжения в прыжке фиксируется после модификатора и проверяется в момент своей отрисовки. Пакет склонов: после смещения таза повторно проверяются обе подошвы; устранено измеренное проникание свободной ноги до 17 см. 76 физических поз окончательного расчёта прошли. Полный графический контроль до оптимизации прошёл 34 позы; два финальных локальных графических повтора завершились по внешнему сроку. Полный новый native CI ещё обязателен. Полная художественная опора, проскальзывание и внешний вид открыты. Новый пакет близких контуров обеих Blender-моделей, отдельная дальняя кожа с исходными весами, девять форм, одежда и десять клипов сохранены. 18 финальных кадров/10 GPU-поз и редактор проверены; итоговый exact-SHA CI обязателен, полная внешность не принята. CI первого пакета выявил неосвобождённый узел до _ready; исправлена отложенная инициализация и добавлены 32 отделённых цикла с нулём сирот. Локальный UI-warmup не прошёл исходный срок; новый полный CI обязателен. Пакет поверхностей обеих моделей: пряди/брови и точная каряя радужка, 10 сохранённых цветовых образов/32 сектора глаз/60 общих материалов; лишние Blender-карты кожи не подключены. Геометрия причёсок, мимика, кожа и полная художественная приёмка остаются открыты. Предыдущий fd4aed9a прошёл все восемь CI jobs; новый SHA требует отдельной проверки."
+      "current": "Обе текущие модели сохраняют геометрию/девять форм/десять клипов и прежнюю одежду; подключена общая карта металла/шероховатости и отражения предпросмотра. Десять сохранённых цветовых образов, реальные контрольные пиксели и два кадра редактора проверены. Неудачные сетки волос не подключены; полный гардероб, формы/мимика/возраст/волосы, естественность всех действий и художественная приёмка остаются открыты."
     },
     {
       "group": "Природа и рельеф",
@@ -177,7 +177,7 @@
     "local_native_frames": 18,
     "local_complete_gpu_body_poses": 10,
     "local_world_walked_m": 28.5044221002609,
-    "ci": "Exact final SHA must be checked on the existing PR after push",
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
     "visual_acceptance": false,
     "stable_release": false,
     "lifecycle_followup": "Deferred owned node construction and selected-body scene loading; 32 detached cycles leave zero orphans. Final exact-SHA CI required; local UI warmup deadline remains a recorded failure."
@@ -189,7 +189,7 @@
     "iris_perimeter_sectors": 32,
     "cache_materials": 60,
     "extra_runtime_textures": 0,
-    "ci": "f66f6e0f: 7/8; inherited low-resolution color fixture reproduced/fixed locally, full follow-up CI required",
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
     "visual_acceptance": false
   },
   "latest_export_hygiene_package": {
@@ -197,6 +197,19 @@
     "source_review_png_bytes": 126349089,
     "local_control": "physical PCK before/after PASS; production texture retained",
     "new_gate": "actual exported human resources and source-only folder absence",
-    "ci": "6a5ada29: export guard rejected an engine-consumed argument. Physical PCK/source controls prove corrected mount metadata; full new exact-SHA CI required."
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks."
+  },
+  "latest_wardrobe_response_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WARDROBE_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-23-wardrobe-response",
+    "native_saved_palettes": 10,
+    "shared_runtime_maps": 1,
+    "new_models_integrated": 0,
+    "rejected_groom_trials": 2,
+    "local_world_walked_m": 28.5468827933073,
+    "ci": "Current exact-SHA checks on PR12; committed journal contains local evidence and the previous verified head.",
+    "visual_acceptance": false,
+    "stable_release": false,
+    "next_linked_stage": "Actual final world frames retain conspicuously saturated purple woodland bow/axe surfaces. This packet preserves those existing source materials. Audit source palette/material regions and weapon readability together with human costume/hairstyles; no cause or correction is yet claimed."
   }
 }

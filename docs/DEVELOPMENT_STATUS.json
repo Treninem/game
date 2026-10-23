@@ -6,14 +6,14 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Улучшены пряди/края волос и брови обеих моделей; устранён измеренный красный ободок радужек. Проверены пять оттенков, диск и общий кэш материалов. Новые Blender-карты кожи отклонены по результату осмотра. Полная внешность/мир не приняты; новый exact-SHA CI обязателен. CI выявил зависимость нового цветового стенда от сохранённых 70% рендера: сбой воспроизведён и устранён нативным масштабом только стенда. Документация исключена из игровых ресурсов; добавлен обязательный контроль настоящего PCK. Полный новый CI требуется. Экспортный guard исправлен по реальным метаданным смонтированного пакета; прежняя проверка CLI-аргумента была неверной. Положительный/отрицательный локальные PCK-контроли прошли; полный CI нового SHA обязателен.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_EXPORT_HYGIENE.json",
+  "current_stage": "У существующей одежды обеих моделей разделены свойства металла и ткани; редактор получил отражения с сохранением однотонного фона. Два Blender-варианта волос отбракованы по реальным кадрам и стоимости сетки. Проверены редактор, цветовые образы, игровые действия, UI и диск. Внешность и мир художественно не приняты; exact-SHA результаты проверки — в PR №12.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_WARDROBE_RESPONSE.json",
   "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
       "status": "Технический прототип; внешность забракована владельцем",
-      "scope": "Две основы MakeHuman, 10 пресетов, девять синхронизированных форм, отдельные категории и два режима редактора. Имеющаяся одежда, анимации, сохранение и старая внешность проверяются отдельно; полный гардероб, лицо, возраст, волосы, коллизии разных пропорций и естественные движения не завершены. Выбор пяти цветов глаз проверен и сохраняется. Рост 160–195 см с капсулой и высотой камеры проверен в ограниченных сценариях; полная приёмка коллизий всех пропорций остаётся открытой. Размер головы: девятая синхронизированная форма проверена с существующими частями и сохранениями. Новый пакет: уточнённые близкие контуры тела/глаз обоих полов и оригинальное дальнее тело; 18 кадров, 10 GPU-поз с девятью формами, работа LOD после остановки анимационного драйвера и исправленное направление света редактора. Художественная приёмка волос/кожи/гардероба остаётся открытой. Пакет поверхностей: локальные пряди и края волос, матовые брови, точная коричневая радужка без красного ободка, сдержанный кожный блик и независимый общий кэш материалов. 10 сохранённых цветовых образов, 32 сектора радужек, два режима MSAA и повторные категории проверены; исходная геометрия волос и полная художественная приёмка открыты.",
+      "scope": "Обе текущие модели сохраняют геометрию/девять форм/десять клипов и прежнюю одежду; подключена общая карта металла/шероховатости и отражения предпросмотра. Десять сохранённых цветовых образов, реальные контрольные пиксели и два кадра редактора проверены. Неудачные сетки волос не подключены; полный гардероб, формы/мимика/возраст/волосы, естественность всех действий и художественная приёмка остаются открыты.",
       "previous_status": "Начальная версия проверена",
       "full_spec_acceptance": "Не подтверждена"
     },
@@ -535,7 +535,7 @@
     "local_native_frames": 18,
     "local_complete_gpu_body_poses": 10,
     "local_world_walked_m": 28.5044221002609,
-    "ci": "Exact final SHA must be checked on the existing PR after push",
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
     "visual_acceptance": false,
     "stable_release": false,
     "lifecycle_followup": "Deferred owned node construction and selected-body scene loading; 32 detached cycles leave zero orphans. Final exact-SHA CI required; local UI warmup deadline remains a recorded failure."
@@ -547,7 +547,7 @@
     "iris_perimeter_sectors": 32,
     "cache_materials": 60,
     "extra_runtime_textures": 0,
-    "ci": "New exact SHA pending push and verification",
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
     "visual_acceptance": false
   },
   "latest_export_hygiene_package": {
@@ -555,6 +555,19 @@
     "source_review_png_bytes": 126349089,
     "local_control": "physical PCK before/after PASS; production texture retained",
     "new_gate": "actual exported human resources and source-only folder absence",
-    "ci": "6a5ada29: export guard rejected an engine-consumed argument. Physical PCK/source controls prove corrected mount metadata; full new exact-SHA CI required."
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks."
+  },
+  "latest_wardrobe_response_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WARDROBE_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-23-wardrobe-response",
+    "native_saved_palettes": 10,
+    "shared_runtime_maps": 1,
+    "new_models_integrated": 0,
+    "rejected_groom_trials": 2,
+    "local_world_walked_m": 28.5468827933073,
+    "ci": "Current exact-SHA checks on PR12; committed journal contains local evidence and the previous verified head.",
+    "visual_acceptance": false,
+    "stable_release": false,
+    "next_linked_stage": "Actual final world frames retain conspicuously saturated purple woodland bow/axe surfaces. This packet preserves those existing source materials. Audit source palette/material regions and weapon readability together with human costume/hairstyles; no cause or correction is yet claimed."
   }
 }
