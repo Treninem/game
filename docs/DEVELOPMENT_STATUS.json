@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Компактная Blender-галерея рынка, физическая мостовая/прилавки, конечные видимые стрелы, шесть рабочих общественных скамей и два стола; выбор мест/путь по препятствиям, посадка/коллизия/камера/опора стоп, настоящая загрузка состояния. Автоматизированный графический проход125.163м; концепция целого города и люди ещё не приняты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET.json",
+  "current_stage": "Проверенный кандидат пространственной отрисовки городских домов: все22 дома/сетки/материалы/позиции сохранены, меньше совместная область отсечения и теней.12 пар кадров в4 режимах,189.609м дом/фонтан/диск и125.164м рынок/отдых/торговля/загрузка; новый exact-SHA CI и пакетная проверка следуют после публикации. Полное художественное качество и плавность всего мира ещё не приняты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_SPATIAL_BATCHES.json",
   "review_launcher": "build/review-2026-10-24-public-market/ImPuls-review.cmd",
   "systems": [
     {
@@ -201,7 +201,7 @@
   ],
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
-  "ci_followup_status": "Runtimeb28 passed all8 exact-SHA workflows including World Core, movement, UI, installers and actual exported-PCK guards. Documentation-only follow-up must be inspected separately.",
+  "ci_followup_status": "Spatial house runtime new exact-SHA pending at commit creation. Deliveredb28 remains validated8/8 with actual packaged gameplay; previous green is not substituted.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",

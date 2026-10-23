@@ -2,6 +2,7 @@ extends RefCounted
 
 const ROOT := "res://assets/production/medieval/quaternius_city_core/"
 const COURT := preload("res://scripts/cottage_yard_assets.gd")
+const HOUSE_BATCH_SPAN_METERS := 16.0
 static var photo_materials: Dictionary = {}
 static var cached_modules: Dictionary = {}
 static var gable_mesh: ArrayMesh
@@ -16,6 +17,8 @@ func _module(path: String) -> Array:
     var result: Array = []
     _collect(source, Transform3D.IDENTITY, result)
     source.free()
+    if path.begins_with("res://assets/production/architecture/townhouse/"):
+        for part:Dictionary in result:part.mesh.set_meta("authored_city_house",true)
     cached_modules[path] = result
     return result
 
@@ -102,7 +105,24 @@ func _gables() -> ArrayMesh:
     return gable_mesh
 
 func finish(parent: Node3D) -> void:
-    for group: Dictionary in groups.values():
+    var render_groups:Array[Dictionary]=[]
+    var clustered:=0
+    for group:Dictionary in groups.values():
+        if not group.mesh.get_meta("authored_city_house",false):
+            render_groups.append(group)
+            continue
+        # Large authored houses keep the exact original shared mesh, materials,
+        # UVs, normals and instance transforms. Only their culling bounds shrink.
+        var clusters:Dictionary={}
+        for transform:Transform3D in group.transforms:
+            var key:=Vector2i(floori(transform.origin.x/HOUSE_BATCH_SPAN_METERS),floori(transform.origin.z/HOUSE_BATCH_SPAN_METERS))
+            if not clusters.has(key):clusters[key]=[]
+            clusters[key].append(transform)
+        for transforms:Array in clusters.values():
+            render_groups.append({"mesh":group.mesh,"transforms":transforms,"range_end":group.range_end})
+        clustered+=clusters.size()
+    parent.set_meta("authored_house_clusters",clustered)
+    for group: Dictionary in render_groups:
         var instances := MultiMesh.new()
         instances.transform_format = MultiMesh.TRANSFORM_3D
         instances.mesh = group.mesh
