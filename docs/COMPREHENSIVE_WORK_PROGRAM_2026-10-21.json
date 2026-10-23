@@ -456,6 +456,12 @@
       }
     },
     "ci": "pending current runtime publication",
-    "visual_acceptance": false
+    "visual_acceptance": false,
+    "runtime_commit": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+    "exact_sha_ci": "all8success for named runtime0ff; current documentation-only followup independently checked",
+    "delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_SPATIAL_DELIVERY.json",
+    "actual_pck_gameplay": true,
+    "actual_pck_walk_m": 125.162855732953,
+    "cold_stalls_remaining": true
   }
 }
