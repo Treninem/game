@@ -232,5 +232,56 @@
     "head": "f66f6e0f130201c8b420b274059f77674a77d2e4",
     "game_windows": 793530088,
     "installer": 343300332
+  },
+  "pack_mount_followup": {
+    "failed_head": "6a5ada293496044303ee82f81ca75aff55e837b0",
+    "failed_job": 120346827521,
+    "failed_check": "OS.get_cmdline_args omitted the engine-consumed --main-pack argument, even though the exported PCK was mounted. Production checks did not run; no PCK pass is claimed for this SHA.",
+    "local_controls": [
+      {
+        "packed": false,
+        "code": 0,
+        "errors": [],
+        "log": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\r\n\r\nPCK_MOUNT_METADATA {\"args\":[\"--script\",\"D:\\\\Desktop\\\\GitHub\\\\game\\\\build\\\\asset_work\\\\export-hygiene-2026-10-23\\\\mount-probe.gd\"],\"binary\":false,\"expected\":false,\"root\":\"D:/Desktop/GitHub/game/build/asset_work/export-hygiene-2026-10-23/fixture/\",\"source\":true}\r\n"
+      },
+      {
+        "packed": true,
+        "code": 0,
+        "errors": [],
+        "log": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\r\n\r\nPCK_MOUNT_METADATA {\"args\":[\"--script\",\"D:\\\\Desktop\\\\GitHub\\\\game\\\\build\\\\asset_work\\\\export-hygiene-2026-10-23\\\\mount-probe.gd\"],\"binary\":true,\"expected\":true,\"root\":\"\",\"source\":false}\r\n"
+      }
+    ],
+    "fix": "Require the physical GODOT_SMOKE_PACK path plus mounted project.binary and absence of source project.godot. The unpacked control has the same environment path but binary=false/source=true and cannot satisfy the new contract. All actual folder/model/morph/clip/mip/shader/boot checks remain unchanged.",
+    "new_ci": "Required after narrow follow-up push",
+    "actual_harness_negative_controls": [
+      {
+        "case": "mount-contract-source",
+        "expected_rejection": "Resource hygiene requires the mounted compiled project",
+        "observed": true,
+        "mount_passed": false,
+        "full_production_pass": false,
+        "terminated_owned_negative_control": true,
+        "seconds": 3.27,
+        "source_sha256": "1bb01c802ffef244881f215b79ce3178e98aeeb5266d2f05f126713828bcfb98"
+      },
+      {
+        "case": "mount-contract-packed",
+        "expected_rejection": "Packaged autoload is unavailable: GameState",
+        "observed": true,
+        "mount_passed": true,
+        "full_production_pass": false,
+        "terminated_owned_negative_control": true,
+        "seconds": 3.59,
+        "source_sha256": "1bb01c802ffef244881f215b79ce3178e98aeeb5266d2f05f126713828bcfb98"
+      }
+    ],
+    "native_surface_ci_steps": {
+      "sha": "6a5ada293496044303ee82f81ca75aff55e837b0",
+      "job": 120346827431,
+      "surface_calibration": "success",
+      "refined_body_GPU": "success",
+      "outfit_coverage": "success",
+      "scope": "Named steps verified; does not claim the failed package job passed."
+    }
   }
 }

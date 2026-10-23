@@ -7,7 +7,13 @@ func _initialize() -> void:
 
 func _run() -> void:
     create_timer(120).timeout.connect(func(): push_error("EXPORT_RESOURCE_HYGIENE timeout"); quit(1))
-    assert(OS.get_cmdline_args().has("--main-pack"),"Resource hygiene requires the actual exported PCK")
+    # Godot consumes --main-pack before exposing script command-line args.
+    # Inspect the mounted compiled project; setting an environment variable
+    # while running the raw source project must not satisfy this contract.
+    var pack_path := OS.get_environment("GODOT_SMOKE_PACK")
+    assert(not pack_path.is_empty() and FileAccess.file_exists(pack_path),"Resource hygiene requires a physical exported PCK")
+    assert(FileAccess.file_exists("res://project.binary") and not FileAccess.file_exists("res://project.godot"),"Resource hygiene requires the mounted compiled project")
+    print("EXPORT_PACK_MOUNT_OK project_binary=present source_project=absent")
     for folder: String in ["res://docs","res://tests"]:
         assert(not DirAccess.dir_exists_absolute(folder),"Source-only material is present in the game package: "+folder)
     for name: String in ["GameState","SaveManager","WorldData","SettingsManager"]:

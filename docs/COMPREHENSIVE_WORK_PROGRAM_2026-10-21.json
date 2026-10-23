@@ -197,6 +197,6 @@
     "source_review_png_bytes": 126349089,
     "local_control": "physical PCK before/after PASS; production texture retained",
     "new_gate": "actual exported human resources and source-only folder absence",
-    "ci": "Exact follow-up SHA required"
+    "ci": "6a5ada29: export guard rejected an engine-consumed argument. Physical PCK/source controls prove corrected mount metadata; full new exact-SHA CI required."
   }
 }
