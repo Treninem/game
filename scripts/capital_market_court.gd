@@ -68,4 +68,17 @@ static func build(square:Node3D) -> void:
         for z:float in [18.0,34.0,50.0]:
             square._prop("Barrel_Apples",Vector3(side*12.5,0,z+1.7),.8)
             square._prop("Barrel",Vector3(side*13.3,0,z+1.9),.95)
+    var arcade:Node3D=preload("res://scripts/market_structures.gd").build_arcade(square)
+    var stock_display:=preload("res://scripts/market_goods_display.gd").new()
+    stock_display.name="ActualArrowStock"
+    stock_display.build(square.get_node("SquareMarketStall"),square.get_node("SquareTrader"))
+    for mount:Node3D in arcade.find_children("LanternMount*","Node3D",true,false):
+        var lantern:Node3D=square._prop("Lantern_Wall",Vector3.ZERO,.5,0,false)
+        lantern.position=square.to_local(mount.global_position)
+        var light:=OmniLight3D.new();light.name="ArcadeLanternLight"
+        light.position=lantern.position+Vector3(0,.25,.15)
+        light.light_color=Color(1,.74,.45);light.light_energy=1.25;light.omni_range=7.0;light.shadow_enabled=false
+        light.set_meta("medium_only",true);square.add_child(light);square.lamps.append(light)
+    var navigation:=preload("res://scripts/public_space_navigation.gd").new()
+    navigation.name="PublicSpaceNavigation";square.add_child(navigation)
     square.set_meta("market_court",{"trees":4,"flower_clumps":flowers.size(),"goods":12,"fountains":1})

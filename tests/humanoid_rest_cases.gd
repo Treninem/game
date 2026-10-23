@@ -105,5 +105,5 @@ func run(parent: Node3D) -> Array[String]:
     actor.queue_free()
     home.queue_free()
     await parent.get_tree().process_frame
-    print("HUMANOID_REST_CHECKED poses=", checked, " bodies=2 heights=3 furniture=2 equipment=4 repeated_pose=true collider_unchanged=true")
+    print("HUMANOID_REST_CHECKED poses=", checked, " bodies=2 heights=3 furniture=2 equipment=4 repeated_pose=true actor_root_unchanged=true")
     return failures

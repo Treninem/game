@@ -319,6 +319,10 @@ jobs:
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_wardrobe_response.gd 300
       - name: Verify capital market trees fountain physics drinking and disk restore
         run: bash tools/run_godot_smoke.sh tests/smoke_capital_market_court.gd 180
+      - name: Verify measured market arcade obstacle navigation and persistent public rest
+        run: bash tools/run_godot_smoke.sh tests/smoke_public_market_life.gd 240
+      - name: Verify actual rendered seated citizen soles and final pose modifiers
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_public_rest.gd 240
       - name: Verify authored townhouse materials tangents mip chains and four quality levels
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_townhouse_surfaces.gd 180
       - name: Verify family roof plaster quality front windows and compatible meadow rendering
@@ -378,3 +382,4 @@ jobs:
             build/human-contour-preservation.json
             ~/.local/share/godot/app_userdata/ImPuls/character-surfaces.json
             ~/.local/share/godot/app_userdata/ImPuls/wardrobe-response.json
+            ~/.local/share/godot/app_userdata/ImPuls/public-rest-gpu.json

@@ -1,6 +1,6 @@
 extends RefCounted
 
-# Player-only visual support. The CharacterBody collider remains authoritative.
+# Player support and shared seated-foot fitting; body collision stays authoritative.
 # Samples come from the existing skinned boot mesh, not an ankle-height guess.
 var boot: MeshInstance3D
 var samples := {"Left": [], "Right": []}
@@ -13,6 +13,7 @@ var contacts := {}
 var cached_shape_weights := []
 var landing_compression := 0.0
 var pose_points := {}
+var seated_rotations:Dictionary={}
 
 func apply(visual: Node3D, skeleton: Skeleton3D, delta: float) -> void:
     var started := Time.get_ticks_usec()
@@ -20,9 +21,14 @@ func apply(visual: Node3D, skeleton: Skeleton3D, delta: float) -> void:
     contacts.clear()
     landing_compression = 0.0
     var actor := visual.get_parent() as CharacterBody3D
-    if actor == null or actor.has_meta("preview_animation") or not actor.is_on_floor() or String(actor.get_meta("activity", "idle")) in ["sit", "sleep"]:
+    if actor == null or actor.has_meta("preview_animation") or (not actor.is_on_floor() and not (String(actor.get_meta("activity","idle"))=="sit" and actor.has_meta("rest_collision_snapshot"))) or String(actor.get_meta("activity", "idle")) == "sleep":
         root_offset = 0.0
         had_support = false
+        return
+    if String(actor.get_meta("activity","idle"))=="sit":
+        root_offset=0.0;had_support=false
+        _seated_feet(visual,skeleton,actor)
+        last_cost_usec=Time.get_ticks_usec()-started
         return
     if last_origin.is_finite() and last_origin.distance_to(actor.global_position) > 2.0:
         root_offset = 0.0
@@ -132,6 +138,7 @@ func _cache_samples(visual: Node3D, skeleton: Skeleton3D) -> void:
     samples = {"Left": [], "Right": []}
     bindings.clear()
     cached_shape_weights.clear()
+    seated_rotations.clear()
     for slot in range(boot.skin.get_bind_count()):
         var bone := boot.skin.get_bind_bone(slot)
         if not boot.skin.get_bind_name(slot).is_empty():
@@ -171,6 +178,42 @@ func _cache_samples(visual: Node3D, skeleton: Skeleton3D) -> void:
             bins[side][cell] = [vertices[vertex], influences, shape_points, vertices[vertex]]
         for side: String in ["Left", "Right"]:
             samples[side].append_array(bins[side].values())
+
+func _seated_feet(visual:Node3D,skeleton:Skeleton3D,actor:CharacterBody3D) -> void:
+    if not is_instance_valid(boot):_cache_samples(visual,skeleton)
+    if not is_instance_valid(boot) or samples.Left.is_empty() or samples.Right.is_empty():return
+    # Rest anchoring must not combine a seated pelvis with the old standing
+    # legs on the first crossfade frame. Preserve the authored seated leg axes;
+    # then solve their finite links against the actual floor, keeping hips on
+    # the seat and never stretching a leg or moving the character body.
+    if seated_rotations.is_empty():
+        var clip:Animation=visual.animation_player.get_animation("Sitting")
+        for track in range(clip.get_track_count()):
+            var path:=clip.track_get_path(track)
+            if clip.track_get_type(track)!=Animation.TYPE_ROTATION_3D or path.get_subname_count()==0:continue
+            var name:=String(path.get_subname(0))
+            if name in ["LeftUpLeg","RightUpLeg","LeftLeg","RightLeg","LeftFoot","RightFoot"]:
+                seated_rotations[skeleton.find_bone(name)]=clip.rotation_track_interpolate(track,0)
+    for bone:int in seated_rotations:skeleton.set_bone_pose_rotation(bone,seated_rotations[bone])
+    skeleton.force_update_all_bone_transforms();pose_points.clear();_refresh_morph_vertices()
+    var excluded:Array[RID]=[actor.get_rid()]
+    var surface:Variant=actor.get_meta("rest_surface_rid",RID())
+    if surface is RID and surface.is_valid():excluded.append(surface)
+    for side:String in ["Left","Right"]:
+        var low:=_lowest(skeleton,side)
+        var query:=PhysicsRayQueryParameters3D.create(low+Vector3.UP*.35,low+Vector3.DOWN*.55,actor.collision_mask,excluded)
+        var hit:=actor.get_world_3d().direct_space_state.intersect_ray(query)
+        if hit.is_empty() or Vector3(hit.normal).dot(Vector3.UP)<cos(actor.floor_max_angle):continue
+        var foot:=skeleton.find_bone(side+"Foot")
+        var basis:=skeleton.global_basis.orthonormalized()*skeleton.get_bone_global_pose(foot).basis.orthonormalized()
+        for iteration in range(3):
+            var gap:=_vertical_gap(_lowest(skeleton,side,hit.normal),hit)
+            var adjustment:=clampf(.004-gap,-.18,.18)
+            if absf(adjustment)<.0004:break
+            var ankle:=skeleton.to_global(skeleton.get_bone_global_pose(foot).origin)
+            _solve_leg(visual,skeleton,side,ankle+Vector3.UP*adjustment)
+            _restore_foot_basis(skeleton,foot,basis)
+        contacts[side]={"mode":"seated","gap":_vertical_gap(_lowest(skeleton,side,hit.normal),hit),"weight":1.0}
 
 func _refresh_morph_vertices() -> void:
     var weights := []

@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-23",
+  "date": "2026-10-24",
   "project_version_label": "0.10.7.3",
   "engine_verified": "Godot 4.7.1.stable.official.a13da4feb",
   "renderer": "GL Compatibility",
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Проверочный пакет по 20 городским референсам: 22 двух-/трёхэтажных Blender-фасада, плотнее ближняя улица, навесы/товары/четыре дерева/цветники и физический питьевой фонтан с сохранением. Графически пройдено189.606 м, проверены вход/три комнаты/наведение/напиться/настоящая загрузка. Дальние кварталы, силуэт, река и художественное качество концепции ещё не приняты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_CITY_CONCEPTS.json",
+  "current_stage": "Компактная Blender-галерея рынка, физическая мостовая/прилавки, конечные видимые стрелы, шесть рабочих общественных скамей и два стола; выбор мест/путь по препятствиям, посадка/коллизия/камера/опора стоп, настоящая загрузка состояния. Автоматизированный графический проход125.163м; концепция целого города и люди ещё не приняты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET.json",
   "review_launcher": "build/review-2026-10-23-city-concepts/ImPuls-review.cmd",
   "systems": [
     {
@@ -201,7 +201,7 @@
   ],
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
-  "ci_followup_status": "Runtime4f9071f9 passed all eight exact-SHA workflows including World Core, movement, UI and actual exported-PCK guards. Following delivery/journal change is documentation only; inspect that head independently in PR12.",
+  "ci_followup_status": "Public-market runtime: exact-SHA CI pending at commit creation; parent e846 all8green is not substituted.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
@@ -599,5 +599,7 @@
   "capital_preview_launcher": "build/review-2026-10-23-city-concepts/ImPuls-capital-preview.cmd",
   "last_delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-23_CITY_DELIVERY.json",
   "packed_gameplay": "Actual Windows PCK loaded by Godot4.7.1 --main-pack:189.600m automated movement, fountain/door/three rooms, disk restore; zero driver position writes; no manual-play or EXE-script claim.",
-  "launcher_fix": "Old20October ImPuls-editor.cmd referenced stale build/stability. It now runs the verified4f9071f9 EXE with the same existing profile; old launcher backed up and all profile JSON/CFG bytes preserved."
+  "launcher_fix": "Old20October ImPuls-editor.cmd referenced stale build/stability. It now runs the verified4f9071f9 EXE with the same existing profile; old launcher backed up and all profile JSON/CFG bytes preserved.",
+  "public_market_registry": "assets/registry/PUBLIC_MARKET_2026-10-24.json",
+  "review_launcher_runtime": "4f9071f90411aadc8afdc51ef36df5182c72664e; new package pending CI/download/check"
 }

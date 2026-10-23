@@ -1,5 +1,6 @@
 extends Node3D
 
+const MARKET_STRUCTURE := preload("res://scripts/market_structures.gd")
 const NPC := preload("res://scripts/settlement_npc.gd")
 const PROP_ROOT := "res://assets/production/medieval/capital_square/"
 const STALL := preload("res://assets/production/medieval/quaternius_market/Stall_Empty.gltf")
@@ -61,6 +62,9 @@ func _ready() -> void:
         light.shadow_enabled = false
         add_child(light)
         lamps.append(light)
+    for side:float in [-1.0,1.0]:
+        _prop("Bench",Vector3(side*10,0,15.8),.47,0)
+        _place(preload("res://assets/production/interiors/quaternius_furniture/Table.fbx"),"PublicMealTable",Vector3(side*10,0,13.9),.72,0,true)
     var workbench := _prop("Workbench", Vector3(-23, 0, -12), 0.95)
     _resident("Марта", "trader", "SquareTrader", SHOP_ID, Vector3(-16, 0, -8.5), Vector3(-16, 0, -12), 1)
     # Stand just outside the measured bench footprint, within arm's reach.
@@ -98,7 +102,7 @@ func _process(delta: float) -> void:
     light_elapsed = 0
     var hour := fmod(GameState.world_minutes / 60.0, 24.0)
     for light in lamps:
-        light.visible = hour >= 17.5 or hour < 7.0
+        light.visible = (hour >= 17.5 or hour < 7.0) and (not light.get_meta("medium_only",false) or int(SettingsManager.get_value("graphics","quality_preset"))>=1)
     if is_instance_valid(workpieces) and is_instance_valid(working_artisan):
         var stock: Dictionary = GameState.get_world_value("shop:"+SHOP_ID,{})
         var recipe: Dictionary = InventorySystem.RECIPES.arrow
@@ -115,12 +119,22 @@ func _prop(kind: String, point: Vector3, height: float, yaw: float = 0.0, physic
     return _place(load(PROP_ROOT + kind + ".gltf") as PackedScene, "Square" + kind, point, height, yaw, physical)
 
 func _place(scene: PackedScene, node_name: String, point: Vector3, height: float, yaw: float, physical: bool) -> Node3D:
-    var body: Node3D = StaticBody3D.new() if physical else Node3D.new()
-    body.name = node_name
+    var public_bench := node_name=="SquareBench"
+    var body: Node3D = HouseholdFurniture.new() if public_bench else StaticBody3D.new() if physical else Node3D.new()
+    body.name = "BenchPublic_%d_%d"%[roundi(point.x*100),roundi(point.z*100)] if public_bench else node_name
+    if public_bench:
+        body.add_to_group("public_rest_furniture")
+        body.set_meta("rest_support_y",height)
+        body.set_meta("approach_offset",Vector3(0,0,-1.05))
     body.add_to_group("capital_square_prop")
     body.position = Vector3(point.x, _ground_y(point), point.z)
     body.rotation.y = yaw
-    add_child(body)
+    if public_bench:
+        var furniture:=get_node_or_null("PublicFurniture")
+        if furniture==null:
+            furniture=Node3D.new();furniture.name="PublicFurniture";add_child(furniture)
+        furniture.add_child(body)
+    else:add_child(body)
     var visual := scene.instantiate() as Node3D
     body.add_child(visual)
     var bounds := _bounds(visual, Transform3D.IDENTITY)
@@ -129,16 +143,24 @@ func _place(scene: PackedScene, node_name: String, point: Vector3, height: float
     visual.scale *= scale_factor
     var center := bounds.get_center()
     visual.position -= Vector3(center.x, bounds.position.y, center.z) * scale_factor
+    if public_bench or node_name=="PublicMealTable":
+        for part in [visual]+visual.find_children("*","MeshInstance3D",true,false):
+            if part is MeshInstance3D:
+                for slot in range(part.mesh.get_surface_count()):
+                    part.set_surface_override_material(slot,preload("res://assets/production/exteriors/family_home/Timber.tres"))
     body.set_meta("authored_height", height)
     if physical:
         body.add_to_group("map_fixture")
         body.set_meta("map_footprint", Vector2(bounds.size.x, bounds.size.z) * scale_factor)
-        var collision := CollisionShape3D.new()
-        var shape := BoxShape3D.new()
-        shape.size = bounds.size * scale_factor
-        collision.shape = shape
-        collision.position.y = height * 0.5
-        body.add_child(collision)
+        if node_name in ["SquareMarketStall","ConceptMarketCanopy"]:
+            MARKET_STRUCTURE.physical_mesh(body,visual,scene.resource_path+"|"+str(height))
+        else:
+            var collision := CollisionShape3D.new()
+            var shape := BoxShape3D.new()
+            shape.size = bounds.size * scale_factor
+            collision.shape = shape
+            collision.position.y = height * 0.5
+            body.add_child(collision)
     return body
 
 func _bounds(node: Node3D, inherited: Transform3D) -> AABB:

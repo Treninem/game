@@ -242,5 +242,46 @@
       "warmup_frames": 30
     },
     "visual_acceptance": false
+  },
+  "latest_public_market_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET.json",
+    "local_checked": true,
+    "exact_sha_ci": "pending at commit creation",
+    "native_walk_m": 125.162813376402,
+    "gpu_seated_boot_vertices_per_actor": 3530,
+    "actual_disk_reload": true,
+    "performance": [
+      {
+        "draw_calls": 1414.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 79.409,
+        "mean_frame_ms": 71.021425,
+        "p95_frame_ms": 73.622,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 984686637.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1489.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 18.5,
+        "max_frame_ms": 75.517,
+        "mean_frame_ms": 68.8549333333333,
+        "p95_frame_ms": 71.467,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 984686637.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      }
+    ],
+    "visual_acceptance": false
   }
 }

@@ -93,5 +93,15 @@ func _run() -> void:
     var fountain:=fountain_scene.instantiate()
     assert(fountain.find_child("FountainStone",true,false)!=null and fountain.find_child("LowerWater",true,false)!=null and fountain.find_child("UpperWater",true,false)!=null)
     fountain.free()
-    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 townhouses=2 clay_maps=3 fountain=1 actual_pck=true")
+    var arcade_scene:=load("res://assets/production/architecture/market_arcade/MarketArcade.glb") as PackedScene
+    assert(arcade_scene!=null,"Packaged authored market arcade is missing")
+    var arcade:=arcade_scene.instantiate()
+    var arcade_triangles:=0
+    for mesh:MeshInstance3D in arcade.find_children("*","MeshInstance3D",true,false):
+        for slot in range(mesh.mesh.get_surface_count()):arcade_triangles+=mesh.mesh.surface_get_arrays(slot)[Mesh.ARRAY_INDEX].size()/3
+    assert(arcade_triangles==32322 and arcade.find_children("LanternMount*","Node3D",true,false).size()==2,"Packaged market roof or measured lantern anchors changed")
+    arcade.free()
+    for script:String in ["market_structures","public_space_navigation","public_seating","market_goods_display"]:
+        assert(load("res://scripts/"+script+".gd") is GDScript,"Packaged public market logic is missing: "+script)
+    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 townhouses=2 clay_maps=3 fountain=1 market_arcade=1 public_market_scripts=4 actual_pck=true")
     quit(0)

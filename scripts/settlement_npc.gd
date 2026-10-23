@@ -1,6 +1,7 @@
 class_name SettlementNPC
 extends CharacterBody3D
 
+const PUBLIC_SEATING := preload("res://scripts/public_seating.gd")
 const HUMANOID := preload("res://scripts/humanoid_visual.gd")
 const RUNTIME_STATE := preload("res://scripts/citizen_runtime_state.gd")
 
@@ -151,6 +152,7 @@ func _follow_routine(delta: float) -> void:
     plan = _home_route(plan)
     plan = _work_approach(plan)
     plan = _household_plan(plan)
+    plan = PUBLIC_SEATING.plan(self,plan)
     plan = _route_home_rooms(plan)
     var target: Vector3 = get_parent_node_3d().to_global(plan.target)
     var flat := target - global_position
@@ -179,6 +181,8 @@ func _follow_routine(delta: float) -> void:
     if arrived:
         if plan.has("furniture"):
             _use_household(plan.furniture, delta)
+        elif plan.has("public_furniture"):
+            PUBLIC_SEATING.use(self,plan.public_furniture,delta)
         velocity.x = move_toward(velocity.x, 0.0, delta * 6.0)
         velocity.z = move_toward(velocity.z, 0.0, delta * 6.0)
         if plan.phase == "work" and has_meta("work_facing"):
@@ -188,7 +192,7 @@ func _follow_routine(delta: float) -> void:
             if has_meta("work_shop_id"):
                 activity = "Изготавливает стрелы" if crafting else "Ждёт материалы у верстака"
                 set_meta("activity", "work" if crafting else "idle")
-        if plan.phase == "social":
+        if plan.phase == "social" and not plan.has("public_furniture"):
             for other: Node3D in get_tree().get_nodes_in_group("settlement_npc"):
                 if other != self and global_position.distance_squared_to(other.global_position) < 16.0:
                     var toward := other.global_position - global_position
@@ -519,7 +523,8 @@ func _household_plan(plan: Dictionary) -> Dictionary:
         return plan
     var home := get_parent().get_node_or_null(String(get_meta("home_building"))) as EnterableBuilding
     if home == null or plan.phase != "home" or home_crossing or home.to_local(global_position).z >= home.footprint.y * 0.5 - 1.0:
-        _leave_furniture()
+        if not is_instance_valid(used_furniture) or not used_furniture.is_in_group("public_rest_furniture"):
+            _leave_furniture()
         if routine_plan(GameState.world_minutes).phase != "home":
             var record: Dictionary = _household_state()
             if float(record.get("seated_seconds", 0)) > 0 or float(record.get("seated_wait_seconds", 0)) > 0 or bool(record.get("clearing_storage", false)):

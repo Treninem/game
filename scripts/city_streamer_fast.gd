@@ -225,7 +225,12 @@ func _build_cell(cell: Vector2i) -> void:
 
 func _build_spawn_square(root: Node3D, center: Vector2) -> void:
     var base_y := WorldData.elevation_at(center)
-    _add_mesh_box("CentralPlaza", Vector3(118.0, 0.14, 118.0), Vector3(0.0, base_y - 0.045, 0.0), plaza_material, root)
+    var plaza:=_add_mesh_box("CentralPlaza", Vector3(118.0, 0.14, 118.0), Vector3(0.0, base_y - 0.045, 0.0), plaza_material, root)
+    # The paving is a real walking surface, including its 25mm rise over terrain.
+    # Reuse its measured mesh dimensions; no duplicate visible box or scaled body.
+    var support:=StaticBody3D.new();support.name="CentralPlazaSupport";support.position=plaza.position;root.add_child(support)
+    var collision:=CollisionShape3D.new();var shape:=BoxShape3D.new();shape.size=(plaza.mesh as BoxMesh).size
+    collision.shape=shape;support.add_child(collision)
     var square_life := SQUARE_LIFE.new()
     square_life.name = "CapitalSquareLife"
     root.add_child(square_life)

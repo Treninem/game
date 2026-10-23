@@ -40,8 +40,21 @@ func _run() -> void:
             if collision == null:
                 errors.append("Solid square furniture has no collision")
                 continue
-            var box := collision.shape as BoxShape3D
-            var bottom := prop.global_position.y + collision.position.y - box.size.y * 0.5
+            var bounds:=AABB()
+            if collision.shape is BoxShape3D:
+                var box:=collision.shape as BoxShape3D
+                bounds=collision.transform*AABB(-box.size*.5,box.size)
+            elif collision.shape is ConcavePolygonShape3D:
+                var faces:PackedVector3Array=(collision.shape as ConcavePolygonShape3D).get_faces()
+                if faces.is_empty():
+                    errors.append("Measured market prop has no structural triangles")
+                    continue
+                bounds=AABB(collision.transform*faces[0],Vector3.ZERO)
+                for point:Vector3 in faces:bounds=bounds.expand(collision.transform*point)
+            else:
+                errors.append("Square prop uses an unsupported unverified collision")
+                continue
+            var bottom := prop.global_position.y + bounds.position.y
             var ground := WorldData.elevation_at(Vector2(prop.global_position.x, prop.global_position.z))
             if absf(bottom - ground - 0.025) > 0.01:
                 errors.append("Authored square prop is floating above its physical ground")

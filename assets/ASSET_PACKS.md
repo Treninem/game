@@ -180,3 +180,7 @@ INTEGRATED on the review branch: project-authored Blender layered shingle roof/g
 ## City concept review models — 2026-10-23
 
 `INTEGRATED` on the review branch, not main: `assets/production/architecture/townhouse/` and `market_court/`. Original Blender townhouse shells and carved fountain, selected existing B29 CC0 balcony, shared existing CC0 photographs, and authored clay response maps. Editable relative-linked sources: `assets/source/architecture/`. Registry: `assets/registry/CITY_CONCEPT_MODELS_2026-10-23.json`. Two repeated exterior shells are not newly enterable homes; full visual acceptance remains false. No third-party download.
+
+## Functional public market — 2026-10-24 review
+
+`INTEGRATED` on the review branch, not main: `assets/production/architecture/market_arcade/MarketArcade.glb`, editable relative-linked source in `assets/source/architecture/market_arcade/`. Original Blender-authored open arcade reuses the existing authored townhouse roof family and existing shared CC0 photo materials. No new third-party download. Registry: `assets/registry/PUBLIC_MARKET_2026-10-24.json`. Two 9m bays, measured post/roof collision and lantern anchors; public benches, finite goods and local obstacle navigation are live game behavior. Full city/human art acceptance remains false.

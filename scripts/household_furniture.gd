@@ -129,6 +129,10 @@ func interact(actor: Node3D) -> void:
     if kind == "chest":
         open_storage(actor)
     elif kind in ["bed", "bench"]:
+        if not actor.is_on_floor() and not actor.has_meta("rest_collision_snapshot"):
+            return
+        if actor.has_method("_leave_furniture_rest") and String(GameState.get_world_value("player:rest_furniture",""))!=furniture_id:
+            actor.call("_leave_furniture_rest")
         # Player rest uses the same supported pose as residents; movement wakes.
         actor.set_meta("rest_furniture", furniture_id)
         GameState.set_world_value("player:rest_furniture", furniture_id)
@@ -165,15 +169,53 @@ func apply_rest_pose(actor: CharacterBody3D, visual: Node3D) -> void:
     var rest_scale := visual.global_basis.get_scale()
     visual.top_level = true
     visual.global_basis = global_basis.orthonormalized() * (Basis(Vector3.RIGHT, PI * 0.5) if kind == "bed" else Basis.IDENTITY) * Basis.from_scale(rest_scale)
-    # The visual alone is supported by furniture; the physical actor remains
-    # on the clear approach floor, so waking never embeds a capsule in wood.
+    # Preserve the approach root for waking; seated collision follows the body
+    # on the furniture, so the visible resident can actually be interacted with.
     var support := float(get_meta("rest_support_y", 0.34 if kind == "bed" else 0.11))
     var hip: Variant = visual.get("standing_hip_height")
     var hip_height := float(hip) if hip is float and is_finite(hip) and hip > 0.3 else 0.95
     visual.global_position = global_position + global_basis * (Vector3(0, support + 0.10 * rest_scale.z, -0.83 * rest_scale.y) if kind == "bed" else Vector3(0, support + (0.09 - hip_height) * rest_scale.y, 0))
     actor.set_meta("activity", "sleep" if kind == "bed" else "sit")
+    actor.set_meta("rest_surface_rid",get_rid())
+    if kind=="bench":_seated_collision(actor)
+    var pivot:=actor.get_node_or_null("CameraPivot") as Node3D
+    if pivot!=null:
+        if not actor.has_meta("rest_camera_pivot"):actor.set_meta("rest_camera_pivot",pivot.position)
+        var focus:=global_position+Vector3.UP*(support+.65*rest_scale.y)
+        pivot.position=actor.to_local(focus)
+
+func _seated_collision(actor:CharacterBody3D) -> void:
+    var saved:Dictionary=actor.get_meta("rest_collision_snapshot",{})
+    if saved.is_empty():
+        var collision:CollisionShape3D
+        for child in actor.get_children():
+            if child is CollisionShape3D and child.shape is CapsuleShape3D:collision=child;break
+        if collision==null:return
+        saved={"node":weakref(collision),"shape":collision.shape,"transform":collision.transform}
+        var capsule:=collision.shape.duplicate() as CapsuleShape3D
+        capsule.radius=minf(capsule.radius,.30);capsule.height=clampf(capsule.height*.60,.85,1.3)
+        collision.shape=capsule
+        var center:=global_position+Vector3.UP*(float(get_meta("rest_support_y",.11))+capsule.height*.5+.002)
+        saved.height=actor.to_local(center).y
+        actor.set_meta("rest_collision_snapshot",saved)
+    var collision:=saved.node.get_ref() as CollisionShape3D
+    if not is_instance_valid(collision):return
+    var target:=actor.to_local(global_position)
+    # Keep the established vertical offset while physics settles onto the seat;
+    # recomputing it every frame would repeatedly lower the actor's root.
+    collision.position=Vector3(target.x,float(saved.height),target.z)
 
 static func clear_pose(actor: Node3D, visual: Node3D) -> void:
+    if actor.has_meta("rest_camera_pivot"):
+        var pivot:=actor.get_node_or_null("CameraPivot") as Node3D
+        if pivot!=null:pivot.position=actor.get_meta("rest_camera_pivot")
+        actor.remove_meta("rest_camera_pivot")
+    if actor.has_meta("rest_collision_snapshot"):
+        var saved:Dictionary=actor.get_meta("rest_collision_snapshot")
+        var collision:=saved.node.get_ref() as CollisionShape3D
+        if is_instance_valid(collision):collision.shape=saved.shape;collision.transform=saved.transform
+        actor.remove_meta("rest_collision_snapshot")
+    if actor.has_meta("rest_surface_rid"):actor.remove_meta("rest_surface_rid")
     var local_scale := visual.global_basis.get_scale() / actor.global_basis.get_scale() if visual.top_level else visual.scale
     visual.top_level = false
     visual.transform = Transform3D(Basis.from_scale(local_scale), Vector3.ZERO)
