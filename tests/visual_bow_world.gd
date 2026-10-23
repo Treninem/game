@@ -186,7 +186,7 @@ func _run() -> void:
     assert(is_equal_approx((player.get_node("CameraPivot") as Node3D).position.y, 1.35 * 195.0 / 180.0))
     var restored_eyes := player.get_node("Avatar").find_child("Eyes", true, false) as MeshInstance3D
     var eye_material := restored_eyes.get_active_material(0) as ShaderMaterial
-    assert(eye_material != null and eye_material.shader == preload("res://assets/shaders/characters/human_eyes.gdshader"))
+    assert(eye_material != null and eye_material.shader == preload("res://assets/shaders/characters/human_iris.gdshader"))
     assert(eye_material.get_shader_parameter("eye_texture") == load("res://assets/production/characters/realistic/eyes/lightblue_eye.png"))
     assert(eye_material.get_shader_parameter("brown_iris") == false, "Saved blue eyes must not receive the local brown-iris correction")
     var magic := root.get_node("MagicSystem")

@@ -9,8 +9,8 @@ const APPEARANCE := preload("res://scripts/character_appearance.gd")
 const GARMENT_NORMAL := preload("res://assets/production/characters/realistic/details/garment_normal.png")
 const GARMENT_AO := preload("res://assets/production/characters/realistic/details/garment_ao.png")
 const SHOE_ALBEDO := preload("res://assets/production/characters/realistic/details/shoes_albedo.png")
-const EYE_SHADER := preload("res://assets/shaders/characters/human_eyes.gdshader")
-const HAIR_SHADER := preload("res://assets/shaders/characters/hair_tint.gdshader")
+const EYE_SHADER := preload("res://assets/shaders/characters/human_iris.gdshader")
+const HAIR_SHADER := preload("res://assets/shaders/characters/hair_strands.gdshader")
 const EYE_TEXTURES := [preload("res://assets/production/characters/realistic/eyes/brown_eye.png"), preload("res://assets/production/characters/realistic/eyes/blue_eye.png"), preload("res://assets/production/characters/realistic/eyes/green_eye.png"), preload("res://assets/production/characters/realistic/eyes/grey_eye.png"), preload("res://assets/production/characters/realistic/eyes/lightblue_eye.png")]
 const HUMAN_PATHS := {"male": "res://assets/production/characters/realistic_contours/male.glb", "female": "res://assets/production/characters/realistic_contours/female.glb"}
 static var human_scenes: Dictionary = {}
@@ -160,14 +160,14 @@ func _style_model() -> void:
             var source := mesh.mesh.surface_get_material(surface) as StandardMaterial3D
             if source == null:
                 continue
-            var eye_index := int(current_profile.eye_color) if String(source.resource_name).begins_with("EyesHuman") else 0
-            var key := "%d:%d:%d:%d:%d" % [source.get_instance_id(), current_profile.skin, current_profile.hair_color, current_profile.cloth, eye_index]
+            var key := _material_palette_key(source)
             if not palette_materials.has(key):
                 if String(source.resource_name).begins_with("HairHuman") or String(source.resource_name).begins_with("BrowsHuman"):
                     var hair := ShaderMaterial.new()
                     hair.shader = HAIR_SHADER
                     hair.set_shader_parameter("hair_texture", source.albedo_texture)
                     hair.set_shader_parameter("hair_color", APPEARANCE.HAIR[int(current_profile.hair_color)])
+                    hair.set_shader_parameter("eyebrows", String(source.resource_name).begins_with("BrowsHuman"))
                     palette_materials[key] = hair
                     mesh.set_surface_override_material(surface, hair)
                     continue
@@ -185,6 +185,7 @@ func _style_model() -> void:
                 if label.begins_with("SkinHuman"):
                     material.albedo_color = APPEARANCE.SKINS[int(current_profile.skin)]
                     material.roughness = 0.64
+                    material.metallic_specular = 0.32
                 elif label.begins_with("Viking"):
                     var stem := "res://assets/production/characters/realistic/wardrobe/%s-%s" % [current_profile.sex, label.to_lower()]
                     material.normal_enabled = true
@@ -217,6 +218,22 @@ func _style_model() -> void:
                     material.roughness = 0.73
                 palette_materials[key] = material
             mesh.set_surface_override_material(surface, palette_materials[key])
+
+func _material_palette_key(source: StandardMaterial3D) -> String:
+    # A morph, hairstyle or unrelated pigment does not create a new material.
+    # Keep each actor's selected pigment independent without multiplying the
+    # same source by every combination of skin, hair, cloth and eye choices.
+    var label := String(source.resource_name)
+    var choice := 0
+    if label.begins_with("SkinHuman"):
+        choice = int(current_profile.skin)
+    elif label.begins_with("HairHuman") or label.begins_with("BrowsHuman"):
+        choice = int(current_profile.hair_color)
+    elif label.begins_with("EyesHuman"):
+        choice = int(current_profile.eye_color)
+    elif label == "VikingTunic" or label.begins_with("ClothTunic"):
+        choice = int(current_profile.cloth)
+    return "%d:%d" % [source.get_instance_id(), choice]
 
 func _refresh_weapon() -> void:
     if weapon_socket == null:

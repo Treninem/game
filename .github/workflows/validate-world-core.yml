@@ -302,6 +302,8 @@ jobs:
           python3 tools/validate_human_contours.py --baseline assets/production/characters/realistic --candidate assets/production/characters/realistic_contours --report build/human-contour-preservation.json
       - name: Verify refined body GPU weights morph extremes distance selection and creator frames
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_human_contours.gd 300
+      - name: Verify rendered strands iris colors cutout coverage and shared appearance materials
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_character_surfaces.gd 300
       - name: Verify physical mip levels on character materials
         run: bash tools/run_godot_smoke.sh tests/smoke_character_texture_filtering.tscn 90
       - name: Verify character height and physical low passages
@@ -355,3 +357,4 @@ jobs:
             ~/.local/share/godot/app_userdata/ImPuls/slope-motion.json
             ~/.local/share/godot/app_userdata/ImPuls/contour-review.json
             build/human-contour-preservation.json
+            ~/.local/share/godot/app_userdata/ImPuls/character-surfaces.json

@@ -28,7 +28,7 @@ func _run() -> void:
         var value: float = swatches[index]
         image.set_pixel(index, 0, Color(value, value, value, 1))
     var material := ShaderMaterial.new()
-    material.shader = preload("res://assets/shaders/characters/hair_tint.gdshader")
+    material.shader = preload("res://assets/shaders/characters/hair_strands.gdshader")
     material.set_shader_parameter("hair_texture", ImageTexture.create_from_image(image))
     material.set_shader_parameter("hair_color", Color(0.5, 0.4, 0.3, 1))
     var visual := MeshInstance3D.new()
