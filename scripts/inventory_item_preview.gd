@@ -55,6 +55,14 @@ func _ready() -> void:
     stage.add_child(light)
     texture = render_view.get_texture()
     set_meta("production_model", packed.resource_path)
+    RenderingServer.frame_post_draw.connect(_freeze_view, CONNECT_ONE_SHOT)
+
+func _freeze_view() -> void:
+    # RenderingServer consumes UPDATE_ONCE internally; SubViewport's cached
+    # property still reports ONCE. Keep both states explicitly disabled after
+    # that actual completed draw, including previews outside the scroll clip.
+    if is_instance_valid(render_view):
+        render_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
 
 func _collect_points(node: Node3D, parent_frame: Transform3D, points: Array[Vector3]) -> void:
     var frame := parent_frame * node.transform
