@@ -196,3 +196,7 @@ INTEGRATED in review: fifteen metre-scaled street materials using existing CC0 g
 ### Rubik gameplay-panel review selection (2026-10-24)
 
 The existing physically staged SIL OFL1.1 Roman Rubik font is selected without modification for the isolated inventory/panel candidate under `assets/production/ui/fonts/rubik/`. The production folder preserves OFL.txt and provenance. No new font download or source pack; this candidate is not yet integrated into the user-opened root project. Native Cyrillic/layout review is required before acceptance.
+
+## Blender starter equipment source review 2026-10-24
+
+Project-authored CC0 four-model source under `assets/staging/project_owned/settler_equipment_2026_10_24/`; selected existing physical CC0 cedar/leather and scratched-steel maps, packed editable Blender master and glTF candidates. Registry: `assets/registry/SETTLER_EQUIPMENT_REVIEW_2026-10-24.json`. Source rights APPROVED; physical files confirmed on the validation branch only, not main. Not PRODUCTION_READY and not INTEGRATED. The old live catalog remains until complete grip/morph/string/projectile/display/UI/save acceptance.

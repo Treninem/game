@@ -1,0 +1,440 @@
+{
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v5.2.39",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        4
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "BeardedForgedHead"
+    },
+    {
+      "mesh": 1,
+      "name": "ContinuousAshHaft"
+    },
+    {
+      "name": "GripAnchor",
+      "translation": [
+        -0.0986500009894371,
+        -0.18000000715255737,
+        0
+      ]
+    },
+    {
+      "mesh": 2,
+      "name": "HollowForgedEye"
+    },
+    {
+      "children": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "name": "Axe_small"
+    }
+  ],
+  "materials": [
+    {
+      "name": "ForgedSteel",
+      "normalTexture": {
+        "index": 0,
+        "scale": 0.2199999988079071
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.9200000166893005,
+        "metallicRoughnessTexture": {
+          "index": 2
+        },
+        "baseColorFactor": [
+          0.7200000286102295,
+          0.7400000095367432,
+          0.7599999904632568,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "HonedEdge",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.41999998688697815,
+          0.44999998807907104,
+          0.47999998927116394,
+          1
+        ],
+        "metallicFactor": 0.9599999785423279,
+        "roughnessFactor": 0.33000001311302185
+      }
+    },
+    {
+      "name": "AshWood",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7599999904632568,
+        "baseColorFactor": [
+          0.3199999928474426,
+          0.3799999952316284,
+          0.47999998927116394,
+          1.0
+        ]
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "BeardedForgedHead",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "ContinuousAshHaft",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 8,
+            "NORMAL": 9,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 2
+        }
+      ]
+    },
+    {
+      "name": "HollowForgedEye",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 12,
+            "NORMAL": 13,
+            "TEXCOORD_0": 14
+          },
+          "indices": 15,
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/jpeg",
+      "name": "scratchy_metal_norm",
+      "uri": "scratchy_metal_norm.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "scratchy_metal_dark",
+      "uri": "scratchy_metal_dark.jpg"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "scratchy_metal_roughness",
+      "uri": "scratchy_metal_roughness.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "cedar",
+      "uri": "cedar.png"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 1900,
+      "max": [
+        0.12739843130111694,
+        0.31489601731300354,
+        0.01579991541802883
+      ],
+      "min": [
+        -0.07113926857709885,
+        0.14652208983898163,
+        -0.01579991541802883
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 1900,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1900,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 11244,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 200,
+      "max": [
+        0.146860733628273,
+        0.3149999976158142,
+        0.002310914220288396
+      ],
+      "min": [
+        0.12311072647571564,
+        0.1459999978542328,
+        -0.002310914220288396
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 200,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 200,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5123,
+      "count": 1044,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 3969,
+      "max": [
+        -0.07656576484441757,
+        0.31214001774787903,
+        0.010863109491765499
+      ],
+      "min": [
+        -0.11700934916734695,
+        -0.33527010679244995,
+        -0.012589694000780582
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5126,
+      "count": 3969,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5126,
+      "count": 3969,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5123,
+      "count": 23316,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 12,
+      "componentType": 5126,
+      "count": 256,
+      "max": [
+        -0.0651392713189125,
+        0.3050000071525574,
+        0.02125534787774086
+      ],
+      "min": [
+        -0.11313927173614502,
+        0.19499999284744263,
+        -0.01874465122818947
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 13,
+      "componentType": 5126,
+      "count": 256,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 14,
+      "componentType": 5126,
+      "count": 256,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 15,
+      "componentType": 5123,
+      "count": 1536,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 22800,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 22800,
+      "byteOffset": 22800,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 15200,
+      "byteOffset": 45600,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 22488,
+      "byteOffset": 60800,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2400,
+      "byteOffset": 83288,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2400,
+      "byteOffset": 85688,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1600,
+      "byteOffset": 88088,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2088,
+      "byteOffset": 89688,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 47628,
+      "byteOffset": 91776,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 47628,
+      "byteOffset": 139404,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 31752,
+      "byteOffset": 187032,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 46632,
+      "byteOffset": 218784,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3072,
+      "byteOffset": 265416,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3072,
+      "byteOffset": 268488,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2048,
+      "byteOffset": 271560,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3072,
+      "byteOffset": 273608,
+      "target": 34963
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 276680,
+      "uri": "Axe_small.bin"
+    }
+  ]
+}
