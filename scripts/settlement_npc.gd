@@ -221,13 +221,13 @@ func _follow_routine(delta: float) -> void:
                     break
     else:
         var waypoint:=Vector2(target.x,target.z)
-        if not bool(plan.get("indoor_path",false)):
+        if not bool(plan.get("indoor_path",false)) and not bool(plan.get("measured_door_link",false)):
             waypoint=preload("res://scripts/capital_canal_data.gd").navigation_target(Vector2(global_position.x,global_position.z),waypoint)
         var desired:=Vector3(waypoint.x-global_position.x,0,waypoint.y-global_position.z).normalized()
-        var lookahead:=0.5 if plan.get("indoor_path",false) else 1.8
+        var lookahead:=0.5 if plan.get("indoor_path",false) or plan.get("measured_door_link",false) else 1.8
         # A snapped public anchor may be only centimetres away. Steering must
         # not inspect beyond that verified corner and turn away from the goal.
-        if bool(plan.get("measured_public_link",false)):lookahead=minf(lookahead,flat.length())
+        if bool(plan.get("measured_public_link",false)) or bool(plan.get("measured_door_link",false)):lookahead=minf(lookahead,flat.length())
         var direction := _routine_direction(desired,delta,lookahead)
         velocity.x = move_toward(velocity.x, direction.x * move_speed, delta * 5.5)
         velocity.z = move_toward(velocity.z, direction.z * move_speed, delta * 5.5)
@@ -311,7 +311,15 @@ func _home_route(plan: Dictionary) -> Dictionary:
             home.set_meta("door_user", get_instance_id())
             home.set_meta("auto_close", true)
             home.front_door.set_open(true)
+            plan.measured_door_link = true
             plan.target = home.position + Vector3(0, 0, front - 1.8)
+            # Enter along the opening axis, not diagonally against its jamb.
+            # Keep the centering point outside the leaf's complete swing. A
+            # restored189cm citizen can graze the threshold at the capital's
+            # float precision, holding the other resident out.
+            if local.z > front and absf(local.x) > 0.10:
+                plan.target = home.position + Vector3(0, 0, maxf(local.z, front + 2.0))
+                plan.arrival_radius = 0.08
         else:
             plan.target = approach
         plan.walking = "Идёт домой"
@@ -321,9 +329,14 @@ func _home_route(plan: Dictionary) -> Dictionary:
         home.set_meta("door_user", get_instance_id())
         home.set_meta("auto_close", true)
         home.front_door.set_open(true)
+        plan.measured_door_link = true
         plan.target = approach
         if local.z < front + 1.0 and absf(local.x) > 0.18:
-            plan.target = home.position + Vector3(0, 0, clampf(local.z, -front + 2.0, front - 2.0))
+            # Once outside the wall, align on the current side of the opening.
+            # Clamping that point back to the hall reverses an interrupted
+            # entry/exit and pins the citizen against the same threshold.
+            var align_z := clampf(local.z, -front + 2.0, front - 2.0) if local.z < front else local.z
+            plan.target = home.position + Vector3(0, 0, align_z)
             plan.arrival_radius = 0.1
         plan.walking = "Выходит из дома"
         # Routine arrival accepts a 0.75 m radius around the +2 m approach.
