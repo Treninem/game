@@ -155,7 +155,7 @@ func rebind_action(action: String, event: InputEvent) -> bool:
             last_binding_conflict = other
             return false
     bindings[action] = encoded
-    _apply_binding(action, encoded)
+    _apply_bindings()
     save_settings()
     bindings_changed.emit()
     return true
@@ -183,7 +183,8 @@ func binding_text(action: String) -> String:
             MOUSE_BUTTON_RIGHT: return "ПКМ"
             MOUSE_BUTTON_MIDDLE: return "СКМ"
             _: return "Mouse %d" % code
-    return OS.get_keycode_string(int(binding.get("code", 0)))
+    var label := OS.get_keycode_string(int(binding.get("code", 0)))
+    return "%s / Tab" % label if action == "open_inventory" and has_default_inventory_alias() else label
 
 func apply_all() -> void:
     var fullscreen := bool(get_value("graphics", "fullscreen"))
@@ -285,9 +286,30 @@ func _binding_is_valid(binding: Dictionary) -> bool:
         return code > 0
     return false
 
+func has_default_inventory_alias() -> bool:
+    var inventory: Dictionary = bindings.get("open_inventory", DEFAULT_BINDINGS.open_inventory)
+    if inventory.get("type", "key") != "key" or int(inventory.get("code", 0)) != KEY_I:
+        return false
+    for action: String in bindings:
+        if action == "open_inventory":
+            continue
+        var assigned: Dictionary = bindings[action]
+        if assigned.get("type", "key") == "key" and int(assigned.get("code", 0)) == KEY_TAB:
+            return false
+    return true
+
 func _apply_bindings() -> void:
     for action in bindings:
         _apply_binding(action, bindings[action])
+    # Preserve the saved primary binding. Tab is only a default shortcut and
+    # yields immediately to an explicit user assignment on another action.
+    if has_default_inventory_alias():
+        var alias := InputEventKey.new()
+        alias.physical_keycode = KEY_TAB
+        InputMap.action_add_event("open_inventory", alias)
+        alias = InputEventKey.new()
+        alias.keycode = KEY_TAB
+        InputMap.action_add_event("open_inventory", alias)
 
 func _apply_binding(action: String, binding: Dictionary) -> void:
     if not InputMap.has_action(action):

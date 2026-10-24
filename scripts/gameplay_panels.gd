@@ -42,6 +42,15 @@ func _input(event: InputEvent) -> void:
         close_panel()
         get_viewport().set_input_as_handled()
         return
+    var focused := get_viewport().gui_get_focus_owner()
+    if not focused is LineEdit and not focused is TextEdit and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not event.shift_pressed:
+        # Tab would otherwise be consumed by GUI focus traversal before the
+        # panel shortcut reaches _unhandled_input. Text editors retain Tab.
+        for section: String in PANEL_ACTIONS:
+            if event.is_action_pressed(PANEL_ACTIONS[section]):
+                _toggle(section)
+                get_viewport().set_input_as_handled()
+                return
     if current_section == "inventory" and event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not event.shift_pressed and (event.keycode == KEY_F or event.physical_keycode == KEY_F):
         var search := content.find_child("InventorySearch", true, false) as LineEdit
         if search != null:

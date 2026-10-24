@@ -17,6 +17,14 @@ func _input(event: InputEvent) -> void:
     var physical_escape: bool = event is InputEventKey and event.pressed and not event.echo and (event.physical_keycode == KEY_ESCAPE or event.keycode == KEY_ESCAPE)
     if event.is_echo() or not (physical_escape or event.is_action_pressed("pause_menu")) or DialogueManager.is_open:
         return
+    # Escape always backs out. A printable rebound pause key must still be
+    # usable in search/settings text fields before GUI consumes the event.
+    if not physical_escape and event is InputEventKey:
+        var focused := get_viewport().gui_get_focus_owner()
+        if focused is LineEdit or focused is TextEdit:
+            var key: int = event.physical_keycode if event.physical_keycode != 0 else event.keycode
+            if event.unicode >= 32 or (key >= KEY_SPACE and key <= KEY_ASCIITILDE) or key in [KEY_TAB, KEY_BACKSPACE, KEY_DELETE, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_HOME, KEY_END]:
+                return
     var menu := get_tree().get_first_node_in_group("game_menu") as Control
     var panels := get_tree().get_first_node_in_group("gameplay_panels") as Control
     if menu == null:

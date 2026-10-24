@@ -198,6 +198,8 @@ jobs:
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-corner" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_corner.gd 120
       - name: Verify citizen bridge anchors and walking links retain actual surface elevation
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-links" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_walkable_links.gd 150
+      - name: Verify citizens physically descend bridge parapets at all supported adult heights
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-perch" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_perch.gd 120
       - name: Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-household" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_household.gd 420
       - name: Verify new household interiors markets and civic rooms survive actual world load transfer
@@ -357,6 +359,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_character_texture_filtering.tscn 90
       - name: Verify character height and physical low passages
         run: bash tools/run_godot_smoke.sh tests/smoke_character_dimensions.tscn 90
+      - name: Verify inventory aliases text-entry pause ownership and focused panel shortcuts
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-input-audit" bash tools/run_godot_smoke.sh tests/audit_editor_ui_inputs.gd 60
       - name: Verify conflicting control assignments are rejected safely
         run: bash tools/run_godot_smoke.sh tests/smoke_binding_conflicts.tscn 60
       - name: Verify unlimited inventory browsing and persistence
@@ -413,3 +417,14 @@ jobs:
             ~/.local/share/godot/app_userdata/ImPuls/public-rest-gpu.json
             ~/.local/share/godot/app_userdata/ImPuls/city-facade-batches.json
             ~/.local/share/godot/app_userdata/ImPuls/city-street-fixture.json
+
+      - name: Upload isolated keyboard and physical recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: isolated-input-canal-recovery-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/impuls-canal-perch/godot/app_userdata/ImPuls/canal-perch.json
+            ${{ runner.temp }}/impuls-input-audit/godot/app_userdata/ImPuls/editor-ui-input-audit.json

@@ -15,6 +15,7 @@ var probe:=PhysicsShapeQueryParameters3D.new()
 var anchor_probe:=PhysicsShapeQueryParameters3D.new()
 var cursor:=0
 var routes:Dictionary={}
+var perched_routes:Dictionary={}
 
 func _enter_tree() -> void:
     # WorldLoading reparents the prepared world. _ready runs only once, while
@@ -168,7 +169,8 @@ func _actor_dimensions(actor:Node3D)->void:
     if collision==null or not collision.shape is CapsuleShape3D:return
     var actual:=collision.shape as CapsuleShape3D
     var capsule:=anchor_probe.shape as CapsuleShape3D
-    capsule.height=actual.height-.12;capsule.radius=actual.radius
+    var clearance:=float(actor.get("safe_margin"))+.004 if actor is CharacterBody3D else .004
+    capsule.height=actual.height-.12+clearance;capsule.radius=actual.radius+clearance
 
 func can_reach(from:Vector3,destination:Vector3,actor:Node3D=null) -> bool:
     if actor!=null:_actor_dimensions(actor)
@@ -192,9 +194,62 @@ func _arrival_point(from_world:Vector3,destination:Vector3,radius:float) -> Vect
         if _connection_clear(from_world,edge):return edge
     return Vector3.INF
 
+func _capsule_clear(at:Vector3,motion:Vector3=Vector3.ZERO)->bool:
+    anchor_probe.transform=Transform3D(Basis.IDENTITY,at+Vector3.UP*((anchor_probe.shape as CapsuleShape3D).height*.5+.12))
+    anchor_probe.motion=motion
+    if motion.length_squared()>0:
+        var sweep:=get_world_3d().direct_space_state.cast_motion(anchor_probe)
+        if sweep.size()!=2 or sweep[0]<.99999:return false
+    anchor_probe.transform.origin+=motion;anchor_probe.motion=Vector3.ZERO
+    return get_world_3d().direct_space_state.intersect_shape(anchor_probe,1).is_empty()
+
+func _perched_point(from:Vector3,actor:Node3D)->Vector3:
+    var canal:=preload("res://scripts/capital_canal_data.gd")
+    var bridge:=canal.bridge_at(Vector2(from.x,from.z))
+    var key:=actor.get_instance_id()
+    var gap:=from.y-_surface_height(Vector2(from.x,from.z))
+    if is_inf(bridge.x) or gap<.08 or gap>1.25 or actor.has_meta("rest_collision_snapshot"):
+        perched_routes.erase(key);return Vector3.INF
+    if perched_routes.has(key):
+        var saved:Dictionary=perched_routes[key]
+        if Time.get_ticks_msec()-int(saved.started)<4000 and from.y<=float(saved.start_y)+.10:
+            var target:Vector3=saved.target;target.y=from.y
+            if _capsule_clear(from,target-from):return target
+        perched_routes.erase(key)
+    if gap<.12 or not actor is CharacterBody3D or not actor.is_on_floor():return Vector3.INF
+    # A capsule can perch on the top/rounded edge of a parapet. Its current
+    # support then differs from the abstract deck. Never snap it down: find a
+    # clear neighbouring deck landing and let ordinary movement/gravity descend.
+    var center:=_cell(to_local(from));var candidates:Array[Vector3]=[]
+    for x in range(center.x-3,center.x+4):
+        for z in range(center.y-3,center.y+4):
+            var id:=Vector2i(x,z)
+            if not grid.is_in_boundsv(id) or grid.is_point_solid(id):continue
+            var local:=grid.get_point_position(id);var point:=to_global(Vector3(local.x,0,local.y))
+            point.y=_surface_height(Vector2(point.x,point.z))
+            if from.y-point.y<.10 or from.y-point.y>1.20:continue
+            var ray:=PhysicsRayQueryParameters3D.create(point+Vector3.UP*.2,point-Vector3.UP*.2,1,anchor_probe.exclude)
+            var hit:=get_world_3d().direct_space_state.intersect_ray(ray)
+            if hit.is_empty() or not hit.collider is StaticBody3D or Vector3(hit.normal).dot(Vector3.UP)<cos(deg_to_rad(48)):continue
+            if absf(Vector3(hit.position).y-point.y)>.08:continue
+            point.y=Vector3(hit.position).y+.02
+            if not _capsule_clear(point):continue
+            var step:=Vector3(point.x,from.y,point.z)
+            if not _capsule_clear(from,step-from):continue
+            candidates.append(step)
+    if candidates.is_empty():return Vector3.INF
+    candidates.sort_custom(func(a:Vector3,b:Vector3)->bool:return a.distance_squared_to(from)<b.distance_squared_to(from))
+    for stale in perched_routes.keys():
+        if perched_routes[stale].actor.get_ref()==null:perched_routes.erase(stale)
+    perched_routes[key]={"target":candidates[0],"started":Time.get_ticks_msec(),"start_y":from.y,"actor":weakref(actor)}
+    return candidates[0]
+
 func next_point(from_world:Vector3,destination_world:Vector3,actor:Node3D,arrival_radius:float=0.) -> Vector3:
     if not grid_ready:return from_world
     _actor_dimensions(actor)
+    _exclude_people()
+    var descent:=_perched_point(from_world,actor)
+    if not is_inf(descent.x):return descent
     var from:=to_local(from_world);var destination:=to_local(destination_world)
     _exclude_people()
     var start:=_nearest(_cell(from),from_world);var finish:=_nearest(_cell(destination))
