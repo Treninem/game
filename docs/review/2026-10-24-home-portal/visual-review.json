@@ -1,0 +1,23 @@
+{
+  "exact_source_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+  "run_id": 40086370281,
+  "artifact_id": 12556909851,
+  "actually_viewed": [
+    "door-entry.png"
+  ],
+  "sha256": {
+    "door-entry.png": "c42160fb6ffbad45e7f07aee7b7216a898c2f55f92738bce3152c332a00cceae"
+  },
+  "full_graphical_case": "FAILED_TIMEOUT_240_SECONDS",
+  "manual_play": false,
+  "controlled_diagnostic_lighting": true,
+  "visual_findings": [
+    "The actual male resident is visible at the open production home doorway; door, window frame and flower boxes are actual production geometry.",
+    "The temporary physical floor has no visible mesh, so the grey background cannot demonstrate visually continuous ground support or completed environment composition.",
+    "This is one entry pose, not a complete animation, exit or full native household acceptance.",
+    "No new character or environment artwork was implemented in the doorway movement fix."
+  ],
+  "render_progress_observation": "The log advanced by600 physics frames over roughly37-44 wall-clock seconds during software rendering. This is not a measured target-PC FPS or a diagnosed GPU-only bottleneck.",
+  "full_art_acceptance": false,
+  "visual_support_acceptance": false
+}

@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-24",
+  "recorded_at_utc": "2026-10-24T10:49:40.245650+00:00",
+  "goal_status": "ACTIVE",
+  "scope": "Fix reproduced household doorway deadlock as a connected entry, neighbour ownership, disk restoration, sleep and morning-work lifecycle.",
+  "requirements": [
+    "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+    "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt",
+    "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json"
+  ],
+  "package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOME_PORTAL_ALIGNMENT.json",
+    "runtime_fix_sha": "39a7a2ae4405bc98395ab9bced32ecaac8e0be6c",
+    "exact_render_and_core_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+    "focused_run": "https://github.com/Treninem/game/actions/runs/40085783795",
+    "focused_result": "SUCCESS;12 single crossings plus2 complete streamed disk household cycles",
+    "rendered_run": "https://github.com/Treninem/game/actions/runs/40086370281",
+    "rendered_result": "FAILED full graphical lifecycle:240s timeout. One actual entry frame was produced and viewed; exit and complete rendered lifecycle are not verified.",
+    "full_world_core": {
+      "id": 40086445556,
+      "name": "Validate World Core",
+      "head_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Treninem/game/actions/runs/40086445556",
+      "updated_at": "2026-10-24T10:34:25Z"
+    },
+    "root_runtime_integrated": false,
+    "PR12_runtime_integrated": false,
+    "manual_play": false,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "baseline": {
+    "single_cases_run": 40084592182,
+    "single_cases_passed": 12,
+    "representative_heights_cm": [
+      160,
+      180,
+      200
+    ],
+    "paired_run": 40085023717,
+    "default_identity_heights_cm": [
+      167,
+      189
+    ],
+    "reproduced": "Marek remained at home-local(0.262695,0.168993,5.148926) after restoration. Marta waited outside; both sleep and subsequent workplace return failed. The two200cm control residents passed.",
+    "hypothesis_refinement": "A clear centre ray combined with a blocked body sweep is not by itself proof of deadlock: all twelve solo cases passed. Do not claim a generic capsule-query bug fixed."
+  },
+  "implementation": [
+    "Align outside the complete door-leaf swing before entering the narrow opening, using the ordinary movement controller.",
+    "Bound doorway steering lookahead to its current local target.",
+    "Keep an interrupted exit alignment on the current side of the wall rather than clamping its goal back inside the house."
+  ],
+  "runtime_integrity": {
+    "new_actor_position_or_Y_assignments": 0,
+    "ordinary_speed_preserved_m_s": 1.45,
+    "existing_gravity_collision_and_save_schema_preserved": true,
+    "required_world_core_workflow_unchanged": true,
+    "failing_tests_assertions_or_bounds_weakened": false
+  },
+  "after": {
+    "focused": {
+      "id": 40085783795,
+      "name": "Investigate Physical Home Door Clearance",
+      "head_sha": "39a7a2ae4405bc98395ab9bced32ecaac8e0be6c",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40085783795",
+      "updated_at": "2026-10-24T10:31:08Z"
+    },
+    "single_cases_passed": 12,
+    "default_night_frames": 3720,
+    "default_morning_frames": 2581,
+    "two200cm_night_frames": 3724,
+    "two200cm_morning_frames": 2582,
+    "disk_restore_position_error_m": [
+      0,
+      0
+    ],
+    "native": {
+      "id": 40086370281,
+      "name": "Verify Rendered Household Doorway",
+      "head_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40086370281",
+      "updated_at": "2026-10-24T10:39:47Z"
+    },
+    "core": {
+      "id": 40086445556,
+      "name": "Validate World Core",
+      "head_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Treninem/game/actions/runs/40086445556",
+      "updated_at": "2026-10-24T10:34:25Z"
+    }
+  },
+  "persistent_evidence_folder": "docs/review/2026-10-24-home-portal",
+  "visual_review": {
+    "exact_source_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+    "run_id": 40086370281,
+    "artifact_id": 12556909851,
+    "actually_viewed": [
+      "door-entry.png"
+    ],
+    "sha256": {
+      "door-entry.png": "c42160fb6ffbad45e7f07aee7b7216a898c2f55f92738bce3152c332a00cceae"
+    },
+    "full_graphical_case": "FAILED_TIMEOUT_240_SECONDS",
+    "manual_play": false,
+    "controlled_diagnostic_lighting": true,
+    "visual_findings": [
+      "The actual male resident is visible at the open production home doorway; door, window frame and flower boxes are actual production geometry.",
+      "The temporary physical floor has no visible mesh, so the grey background cannot demonstrate visually continuous ground support or completed environment composition.",
+      "This is one entry pose, not a complete animation, exit or full native household acceptance.",
+      "No new character or environment artwork was implemented in the doorway movement fix."
+    ],
+    "render_progress_observation": "The log advanced by600 physics frames over roughly37-44 wall-clock seconds during software rendering. This is not a measured target-PC FPS or a diagnosed GPU-only bottleneck.",
+    "full_art_acceptance": false,
+    "visual_support_acceptance": false
+  },
+  "diagnostic_development_failures_retained": [
+    {
+      "run": 40083690589,
+      "result": "Eager class compilation before game autoload initialization; outer240s timeout; no gameplay proof."
+    },
+    {
+      "run": 40084225677,
+      "result": "Untyped dynamic probe result prevented driver parsing; no gameplay proof."
+    },
+    {
+      "local": "First tiny parser attempt could not create its log directory in restricted user storage; private-profile retry passed."
+    },
+    {
+      "publication": "An extra final blank line was rejected by diff-check before any render-driver push; normalized and rechecked."
+    },
+    {
+      "run": 40086370281,
+      "result": "Actual continuous software-rendered household cycle reached the240s wall-clock limit during the evening seating phase. The original test, assertions, graphics configuration and deadline remain unchanged; this is not a pass."
+    }
+  ],
+  "handoff": {
+    "mode": "USER_EDITOR_HANDOFF",
+    "root_runtime_scenes_and_workflows_untouched": true,
+    "shared_HEAD_and_index_preserved": true,
+    "user_editor_and_game_not_closed": true,
+    "normal_profiles_untouched": true,
+    "review_PR12_runtime_head": "74a0222d3c014aeede30d7257dbd43cc2692bfbc"
+  },
+  "limits": [
+    "Automated controlled physics plus a partial software-rendered attempt, not manual player input or a full city tour.",
+    "The proof matrix samples160/180/200cm and the actual167/189cm family; it does not exhaust every body/door/crowd configuration.",
+    "Household render uses explicitly controlled diagnostic lighting and an isolated square with an invisible collider floor. The entrance frame does not establish full visual support, final world art, or natural complete animation.",
+    "Continuous native rendering timed out and remains FAILED. No lowering graphics, acceleration, selective-draw workaround, skipped assertion or raised deadline was applied.",
+    "The complete new World Core result is the timestamped exact481850ec run above; other required workflows, hardware mouse, prolonged weak-PC performance and a final installer are not accepted."
+  ],
+  "acceptance": {
+    "complete_TZ": false,
+    "full_visual_quality": false,
+    "full_animation_quality": false,
+    "all_required_exact_sha_gates": false,
+    "stable_release": false,
+    "overall_percent": null
+  },
+  "next_connected_work": [
+    "Inspect the exact full World Core result and repair any actual regression without weakening gates.",
+    "Profile the continuous software-rendered household attempt, separate rendering, animation and fixture overhead, and repair the relevant bottleneck; retain the failing run and ordinary physics-clock test.",
+    "Reconcile user editor changes before integrating the reviewed source package.",
+    "Continue original inventory/menu visual and interaction redesign and the complete character/environment art work from the observed reference and actual rendered deficiencies."
+  ]
+}
