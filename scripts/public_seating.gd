@@ -21,9 +21,10 @@ static func plan(npc:CharacterBody3D,routine:Dictionary) -> Dictionary:
             if not navigation.contains(npc.global_position) or Vector2(destination.x-npc.global_position.x,destination.z-npc.global_position.z).length()<.3:
                 saved.departing=false;GameState.set_world_value(key,saved)
             else:
-                var point:Vector3=navigation.next_point(npc.global_position,destination,npc)
+                var point:Vector3=navigation.next_point(npc.global_position,destination,npc,.27)
                 routine.target=npc.get_parent_node_3d().to_local(point)
                 routine.phase="public_departure";routine.arrival_radius=.08;routine.indoor_path=true
+                routine.navigation_pending=true;routine.measured_public_link=true
         return routine
     if saved.get("phase","")!=routine.phase:
         if is_instance_valid(npc.used_furniture) and npc.used_furniture.is_in_group("public_rest_furniture"):npc._leave_furniture()
@@ -53,12 +54,14 @@ static func plan(npc:CharacterBody3D,routine:Dictionary) -> Dictionary:
     npc.used_furniture=selected
     saved.seat=selected.furniture_id;GameState.set_world_value(key,saved)
     var destination:=selected.approach_point()
-    var point:Vector3=navigation.next_point(npc.global_position,destination,npc)
+    var point:Vector3=navigation.next_point(npc.global_position,destination,npc,.24)
     routine.target=npc.get_parent_node_3d().to_local(point)
     routine.arrival_radius=.15;routine.indoor_path=true
+    routine.navigation_pending=true;routine.measured_public_link=true
     routine.walking="Идёт на обеденный перерыв" if routine.phase=="meal" else "Идёт к месту встречи"
     if Vector2(npc.global_position.x-destination.x,npc.global_position.z-destination.z).length()<.24:
         routine.target=npc.get_parent_node_3d().to_local(destination)
+        routine.erase("navigation_pending")
         routine.arrival_radius=.27;routine.public_furniture=selected
         routine.activity="Отдыхает в обеденный перерыв" if routine.phase=="meal" else "Отдыхает и общается"
     return routine

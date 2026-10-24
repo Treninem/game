@@ -196,6 +196,8 @@ jobs:
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-core" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_capital_canals.gd 200
       - name: Verify actual far-capital bridge corner releases a grazing citizen capsule
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-corner" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_corner.gd 120
+      - name: Verify citizen bridge anchors and walking links retain actual surface elevation
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-links" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_walkable_links.gd 150
       - name: Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-household" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_household.gd 420
       - name: Verify physical hydrology

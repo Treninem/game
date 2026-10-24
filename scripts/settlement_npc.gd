@@ -173,6 +173,7 @@ func _follow_routine(delta: float) -> void:
                 plan.erase("furniture");plan.erase("public_furniture")
                 plan.arrival_radius=.08
                 plan.navigation_pending=true
+                plan.measured_public_link=true
             plan.indoor_path=true
     var target: Vector3 = get_parent_node_3d().to_global(plan.target)
     var flat := target - global_position
@@ -223,7 +224,11 @@ func _follow_routine(delta: float) -> void:
         if not bool(plan.get("indoor_path",false)):
             waypoint=preload("res://scripts/capital_canal_data.gd").navigation_target(Vector2(global_position.x,global_position.z),waypoint)
         var desired:=Vector3(waypoint.x-global_position.x,0,waypoint.y-global_position.z).normalized()
-        var direction := _routine_direction(desired, delta, 0.5 if plan.get("indoor_path", false) else 1.8)
+        var lookahead:=0.5 if plan.get("indoor_path",false) else 1.8
+        # A snapped public anchor may be only centimetres away. Steering must
+        # not inspect beyond that verified corner and turn away from the goal.
+        if bool(plan.get("measured_public_link",false)):lookahead=minf(lookahead,flat.length())
+        var direction := _routine_direction(desired,delta,lookahead)
         velocity.x = move_toward(velocity.x, direction.x * move_speed, delta * 5.5)
         velocity.z = move_toward(velocity.z, direction.z * move_speed, delta * 5.5)
         rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), minf(1.0, delta * 7.0))

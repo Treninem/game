@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Квартал канала реализован и локально проверен. После исправления чистого CI новая проверка выявила застревание жительницы у каменных перил на больших координатах. Сбой воспроизведён; безопасный зазор капсулы исправлен, прежний полный жизненный цикл и связанные проверки повторены. Новая ревизия ждёт exact-SHA CI и фактического PCK; главный запуск пока6d3. Весь город и художественное качество концепций ещё не приняты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CONTACTS.json",
+  "current_stage": "Обход четырёх мостов и обоих концов канала завершён:2.692км обычным автоматизированным движением,26GPU-проверок обуви, имущество сохранено. Сервер подтвердил исправление контакта капсулы, затем обнаружил неверный выбор нижнего берега вместо связанной точки мостового настила. Проходимость начальных и следующих звеньев пути исправлена и проверена вместе с прежним полным циклом семьи, рынком и старым угловым случаем. Новая ревизия ждёт exact-SHA CI и фактического PCK; основной запуск пока6d3. Полная композиция городов по концепциям не достигнута.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_WALKABLE_LINKS.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -635,6 +635,14 @@
     "controlled_corner_before_failed_after_passed": true,
     "related_regressions_passed": 9,
     "runtime_change": "NPC capsule recovery margin0.02m",
+    "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
+  },
+  "latest_canal_walkable_links": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_WALKABLE_LINKS.json",
+    "failed_parent": "275b5ad7220fd71d6aa90fec6fdcdc68dc9f6c8d",
+    "actual_level_snap_reproduced_and_fixed": true,
+    "required_lifecycle_market_old_corner_passed": true,
     "current_ci": "pending exact followup SHA",
     "actual_final_PCK": "pending"
   }

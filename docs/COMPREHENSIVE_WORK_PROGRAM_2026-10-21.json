@@ -537,5 +537,13 @@
     "runtime_change": "NPC capsule recovery margin0.02m",
     "current_ci": "pending exact followup SHA",
     "actual_final_PCK": "pending"
+  },
+  "latest_canal_walkable_links": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_WALKABLE_LINKS.json",
+    "failed_parent": "275b5ad7220fd71d6aa90fec6fdcdc68dc9f6c8d",
+    "actual_level_snap_reproduced_and_fixed": true,
+    "required_lifecycle_market_old_corner_passed": true,
+    "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
   }
 }
