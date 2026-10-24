@@ -1,0 +1,495 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "runtime_commit": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+  "runtime_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE.json",
+  "ci_runtime_ref_only": {
+    "Build ImPuls Release Candidate": {
+      "run_id": 40048700182,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700182"
+    },
+    "Build Windows Installer": {
+      "run_id": 40048700294,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700294"
+    },
+    "Diagnose UI Smoke": {
+      "run_id": 40048700253,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700253"
+    },
+    "Validate Delta Updater": {
+      "run_id": 40048700171,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700171"
+    },
+    "Validate Magic Runtime": {
+      "run_id": 40048700170,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700170"
+    },
+    "Validate Player Movement": {
+      "run_id": 40048700298,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700298"
+    },
+    "Validate World Core": {
+      "run_id": 40048700283,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700283"
+    },
+    "Validate World VFX": {
+      "run_id": 40048700371,
+      "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40048700371"
+    }
+  },
+  "actual_packaged_gameplay": {
+    "result": {
+      "sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+      "pck_sha256": "25291e1850de3c4de818df95d12bbab5f6330b3c552a1753b5aa68773a28ef28",
+      "actual_compiled_pck": true,
+      "engine": "Godot4.7.1 desktop debug engine with --main-pack; not exported EXE script execution",
+      "manual_play": false,
+      "returncode": 0,
+      "seconds": 351.68799999999464,
+      "stopped": false,
+      "errors": [],
+      "marker": "CITY_STREETSCAPE_NATIVE_OK ordinary_walk_m=287.975904673105 player_position_assignments=0 arcade=true paid_trade=true finite_visible_stock=true npc_seats=true player_rest=true actual_scene_reload=true jump_wake=true npc_return_work=true gpu_boot_coverage=3530_per_actor manual_play=false"
+    },
+    "proof": {
+      "exclusive_seats": true,
+      "foot_samples": [
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00400043129920959,
+          "label": "trader-public-rest",
+          "minimum_y": 0.0290004312992096,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "artisan-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "hero-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        }
+      ],
+      "jump_wake_and_land": true,
+      "manual_play": false,
+      "paid_trade_and_visible_stock": true,
+      "player_position_assignments": 0,
+      "real_scene_disk_restore": true,
+      "residents_return_to_work": true,
+      "street_foot_samples": [
+        {
+          "gap_m": 0.00399903953075409,
+          "label": "east-promenade-entry",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.0039995089173317,
+          "label": "east-promenade-north",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399144738912582,
+          "label": "west-promenade",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        }
+      ],
+      "streetscape": {
+        "actual_walked_m": 287.975904673105,
+        "details": {
+          "central_clear_width_m": 14.0,
+          "flowers": 12,
+          "lantern_posts": 4,
+          "panel_ramp_rise_m": 0.039,
+          "panel_ramp_run_m": 0.1,
+          "paving_panels": 28,
+          "planters": 6
+        },
+        "driver_position_assignments": 0,
+        "four_night_lights_bounded_and_low_disabled": true,
+        "manual_play": false,
+        "planter_physical_heights_m": [
+          0.340000038966537,
+          0.58999983035028
+        ]
+      },
+      "talk_to_visible_seated_resident": true,
+      "walked_m": 287.975904673105
+    }
+  },
+  "artifact": {
+    "sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+    "run_id": 40048700182,
+    "artifact": {
+      "id": 12543010657,
+      "node_id": "MDg6QXJ0aWZhY3QxMjU0MzAxMDY1Nw==",
+      "name": "game-windows",
+      "size_in_bytes": 809842867,
+      "url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12543010657",
+      "archive_download_url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12543010657/zip",
+      "expired": false,
+      "digest": "sha256:ea6d47fa2b1b1e697979da1738d00b99bf0614703ef2f669d60d6b460a0bc4e1",
+      "created_at": "2026-10-24T01:17:42Z",
+      "updated_at": "2026-10-24T01:17:42Z",
+      "expires_at": "2027-01-22T01:12:09Z",
+      "workflow_run": {
+        "id": 40048700182,
+        "repository_id": 1333892669,
+        "head_repository_id": 1333892669,
+        "head_branch": "codex/household-persistence-2026-10-19",
+        "head_sha": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c"
+      }
+    },
+    "download_digest_verified": true,
+    "inner_zip_sha256": "7fd0f553472039413740a604f9ce9fee7c086dcf3f80c5e81798b2e4b49553d3",
+    "exe_sha256": "630befc8c604d131d0d55db71e0bbaf82545749c73b3454484b550e259e38167",
+    "pck_sha256": "25291e1850de3c4de818df95d12bbab5f6330b3c552a1753b5aa68773a28ef28",
+    "profile_copied_from": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-20-airborne-actions\\userdata\\Godot\\app_userdata\\ImPuls",
+    "original_profile_modified": false,
+    "launcher": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
+    "stable_release": false
+  },
+  "preview_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-capital-preview.cmd",
+  "ordinary_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
+  "old_primary_launcher_updated": "build\\review-2026-10-20-airborne-actions\\ImPuls-editor.cmd",
+  "old_launcher_backup": "build\\review-2026-10-20-airborne-actions\\ImPuls-editor-before-streetscape-2026-10-24.cmd",
+  "original_profile_json_cfg_hashes_unchanged": true,
+  "original_earned_checkpoint_unchanged": true,
+  "documentation_followup_runtime_blobs_unchanged": true,
+  "geometry_quality_preserved": "22house source mesh/material/UV/normal/transform coverage and12actual before/after pairs across4qualities pass; no asset bytes changed",
+  "limitations": [
+    "Full city/reference and human/art/action acceptance remain false",
+    "Cold 8-10second rendering/preparation stalls remain, despite faster ordinary and stationary frame samples; warm repeat does not isolate cache causality",
+    "105 RefCounted exit warning and copied local QA human UID fallbacks persist",
+    "Not a sustained whole-world FPS or manual gameplay acceptance",
+    "Current documentation-only commit requires its own exact-head checks; green results here name runtime6d3 only",
+    "Only one square; broader city and household/age/architecture variety remain open",
+    "The authored bridge remains a private fixture; the live canal district still has no physical canal water"
+  ],
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "paired_stationary_performance": [
+    {
+      "decoration_enabled": false,
+      "draw_calls": 729.0,
+      "frames": 120,
+      "max_frame_ms": 30.605,
+      "mean_frame_ms": 25.2048083333333,
+      "p95_frame_ms": 27.411,
+      "player_position_assignments": 0,
+      "quality": "Low",
+      "scale_3d": 0.699999988079071,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 987072681.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 749.0,
+      "frames": 120,
+      "max_frame_ms": 30.303,
+      "mean_frame_ms": 26.0505166666667,
+      "p95_frame_ms": 28.041,
+      "player_position_assignments": 0,
+      "quality": "Low",
+      "scale_3d": 0.699999988079071,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 987072681.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": false,
+      "draw_calls": 854.0,
+      "frames": 120,
+      "max_frame_ms": 125.49,
+      "mean_frame_ms": 39.5115833333333,
+      "p95_frame_ms": 44.056,
+      "player_position_assignments": 0,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 988786857.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 898.0,
+      "frames": 120,
+      "max_frame_ms": 45.439,
+      "mean_frame_ms": 39.5568166666667,
+      "p95_frame_ms": 43.185,
+      "player_position_assignments": 0,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 988786857.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": false,
+      "draw_calls": 900.0,
+      "frames": 120,
+      "max_frame_ms": 51.443,
+      "mean_frame_ms": 46.0324083333333,
+      "p95_frame_ms": 50.17,
+      "player_position_assignments": 0,
+      "quality": "High",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 998467752.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 948.0,
+      "frames": 120,
+      "max_frame_ms": 53.565,
+      "mean_frame_ms": 48.771475,
+      "p95_frame_ms": 52.372,
+      "player_position_assignments": 0,
+      "quality": "High",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 998467752.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": false,
+      "draw_calls": 910.0,
+      "frames": 120,
+      "max_frame_ms": 58.671,
+      "mean_frame_ms": 48.4000333333333,
+      "p95_frame_ms": 52.14,
+      "player_position_assignments": 0,
+      "quality": "Ultra",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 1013213352.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 954.0,
+      "frames": 120,
+      "max_frame_ms": 57.047,
+      "mean_frame_ms": 49.8905833333333,
+      "p95_frame_ms": 52.189,
+      "player_position_assignments": 0,
+      "quality": "Ultra",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 1013213352.0,
+      "viewport": "(1280, 720)"
+    }
+  ],
+  "test_phase_followup": {
+    "commit": "8cfc380d4be0f42d3c46dcffad45bee05cee91a9",
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_SLOPE_PHASE_SYNC.json",
+    "all19_assertions_preserved": true,
+    "shipping_trees_identical_to_fa": true
+  },
+  "public_light_scope_followup": {
+    "commit": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_LIGHT_SCOPE.json",
+    "all24_original_assertions_retained": true,
+    "arcade_and_street_lights_verified_separately": true,
+    "full_local_scenario_seconds": 98.688,
+    "initial_local_subset_omitted_this_scenario": true,
+    "shipping_trees_identical_to_fa": true
+  },
+  "models": {
+    "original_Blender_modules": 3,
+    "source_triangles": 8880,
+    "paving_panels": 28,
+    "planters": 6,
+    "lantern_posts": 4,
+    "physical_support_and_marker_fixture_passed": true,
+    "source_images_relative": true
+  },
+  "additional_ordinary_city_road_survey": {
+    "actual_scene_disk_reload": true,
+    "district": "canals",
+    "driver_position_assignments": 0,
+    "full_city_art_accepted": false,
+    "inventory_money_preserved": true,
+    "manual_play": false,
+    "ordinary_road_samples": [
+      {
+        "kind": "",
+        "local_xz": "(-0.001953, -0.120117)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 3.64607028663158
+      },
+      {
+        "kind": "",
+        "local_xz": "(160.0508, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 163.280022248626
+      },
+      {
+        "kind": "",
+        "local_xz": "(320.0674, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 322.798576936126
+      },
+      {
+        "kind": "",
+        "local_xz": "(480.084, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 482.317131623626
+      },
+      {
+        "kind": "",
+        "local_xz": "(640.0557, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 641.775139436126
+      },
+      {
+        "kind": "",
+        "local_xz": "(800.1045, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 801.348381623626
+      },
+      {
+        "kind": "",
+        "local_xz": "(960.0654, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 960.781975373626
+      },
+      {
+        "kind": "",
+        "local_xz": "(1120.082, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 1120.30053006113
+      },
+      {
+        "kind": "",
+        "local_xz": "(1120.002, -160.0654)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 1279.94599109702
+      },
+      {
+        "kind": "",
+        "local_xz": "(1180.107, -160.001)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 1339.63251638226
+      }
+    ],
+    "physical_water_present": false,
+    "runtime": "fa1383cb93673909c16af13fd882a29316a195a0 source mirror",
+    "walked_m": 1339.63251638226
+  },
+  "private_bridge_prototype": {
+    "construction": {
+      "state": "PRIVATE_NOT_INTEGRATED",
+      "source_triangles": {
+        "DeckAndApproaches": 1408,
+        "MeasuredArchVaults": 14784,
+        "PiersAndSpandrels": 13504,
+        "ParapetsAndCaps": 10736
+      },
+      "vaults": 3,
+      "length_m": 96,
+      "deck_width_m": 16,
+      "clear_lane_width_m": 14,
+      "deck_top_center_m": 2.2,
+      "approach_top_m": 0.025,
+      "pier_bottom_m": -1.35,
+      "material_source": "Existing original CityStreetKit cut-stone family",
+      "source_image_links_relative": true,
+      "existing_staging_review": "Kenney castle bridge previews/files checked; flat stylized wooden/cuboid pieces do not provide the intended three-vault masonry span. No duplicate pack downloaded.",
+      "geometry_physics_gameplay_verified": false,
+      "visual_acceptance": false
+    },
+    "test": {
+      "returncode": 0,
+      "seconds": 42.43800000000192,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "proof": {
+      "actual_open_arch_ray": true,
+      "actual_pier_ray": true,
+      "driver_position_assignments_after_initial_spawn": 0,
+      "live_world_integrated": false,
+      "scope": "Private bridge and analytic canal collision fixture; NOT live world hydrology/integration or earned gameplay",
+      "sole_samples": [
+        {
+          "gap_m": 0.0135754346847534,
+          "label": "station--36.0",
+          "local_actor": "(-35.67676, 1.193592, 0.000488)",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399994850158691,
+          "label": "station-0.0",
+          "local_actor": "(0.331055, 2.241941, 0.000977)",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00686943531036377,
+          "label": "station-36.0",
+          "local_actor": "(36.3291, 1.117883, 0.000977)",
+          "vertices": 3530
+        }
+      ],
+      "visual_acceptance": false,
+      "walked_m": 104.166018642485
+    },
+    "live_world_integrated": false,
+    "source_path": "build/asset_work/capital-canals-2026-10-24/portable1/assets/source/architecture/capital_canal_bridge/CapitalCanalBridge.blend",
+    "not_in_delivered_PCK": true,
+    "visual_acceptance": false,
+    "remaining": "Connect carved terrain, continuous shared water, clipped city paving, bridge supports, goal-based NPC crossings and old-save safety as one coherent regional package.",
+    "additional_character_arch_visual_test": {
+      "returncode": 0,
+      "seconds": 41.812000000005355,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "visual_review": "Actual character/deck and arch frames inspected; the flat homogeneous deck and repetitive stone remain rejected for live integration. Passing physical traversal is not art acceptance."
+  },
+  "reference_archive": {
+    "sha256": "70ee83623dc3349c07cd610ebece53718033224dd38414af161c9a8100434a67",
+    "entries": 20,
+    "kind": "20 reference images/locations, not 20 city models",
+    "all_reviewed": true,
+    "archive_pixels_used_as_runtime_assets": false
+  }
+}

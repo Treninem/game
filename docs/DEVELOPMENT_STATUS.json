@@ -6,9 +6,9 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Модели улицы проверены реальным288м PCK-прогоном; длинный1.34км обход дошёл до района каналов и подтвердил отсутствие физической воды. НаCI фаза приземления уже прошла; следующий старый тест ошибочно считал4уличных фонаря частью2фонарей галереи. Проверка уточнена по настоящим креплениям и отдельно проверяет все4уличных. Полный локальный98.7с сценарий прошёл, все24исходные проверки сохранены. Новый полныйCI обязателен; прежний запуск пока0ff.",
+  "current_stage": "Уличные модели изBlender доставлены после8/8 CI и реального288м PCK-прогона: мощение/физика/опора, цветочницы/грунт, кованые фонари/крепления, четыре режима материалов. Текущая полная композиция города, холодные паузы и люди остаются открытыми.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_LIGHT_SCOPE.json",
-  "review_launcher": "build\\review-2026-10-24-city-spatial-batches\\ImPuls-review.cmd",
+  "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
       "system": "Модели людей и редактор",
@@ -201,7 +201,7 @@
   ],
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
-  "ci_followup_status": "8cf slope gate passed; public-market-life failed an obsolete optional-light count. Current test-only identity correction retains24assertions and passes full local scenario. Shipping runtime unchanged; new exact-head all8pending.",
+  "ci_followup_status": "Runtime6d3 passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
@@ -596,10 +596,11 @@
   "equipment_diversity_status": "OPEN: distinct item forms/rarities/stats and persistent instances, upgrades/progression/condition/repair",
   "city_concept_registry": "assets/registry/CITY_CONCEPT_MODELS_2026-10-23.json",
   "overall_percent": null,
-  "capital_preview_launcher": "build\\review-2026-10-24-city-spatial-batches\\ImPuls-capital-preview.cmd",
-  "last_delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_SPATIAL_DELIVERY.json",
-  "packed_gameplay": "Actual compiled Windows PCK through Godot4.7.1 desktop --main-pack:125m ordinary automated input, paid/visible finite trade, seated dialogue, support/camera, real scene/disk restore, jump/landing, NPC return to work and3530 rendered boot vertices per actor. Zero driver position assignments. No manual or exported-EXE-script claim.",
+  "capital_preview_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-capital-preview.cmd",
+  "last_delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE_DELIVERY.json",
+  "packed_gameplay": "Actual compiled Windows PCK through Godot4.7.1 desktop --main-pack:288m ordinary automated input, paid/visible finite trade, seated dialogue, support/camera, real scene/disk restore, jump/landing, NPC return to work and3530 rendered boot vertices per actor. Zero driver position assignments. No manual or exported-EXE-script claim.",
   "launcher_fix": "Old20October primary launcher now runs verifiedb28 EXE with its same existing profile; old launcher is backed up and profile JSON/CFG hashes are unchanged.",
   "public_market_registry": "assets/registry/PUBLIC_MARKET_2026-10-24.json",
-  "review_launcher_runtime": "0ffeb626a5987d48bf18f75e6c7b394acccc4425"
+  "review_launcher_runtime": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+  "next_coherent_region": "Canal district: terrain basin, water, clipped paving, authored bridge, goal-based crossings and old-save support. Current private bridge is not integrated."
 }

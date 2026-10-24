@@ -490,13 +490,17 @@
       }
     ],
     "quality_modes": 4,
-    "ci": "8cf slope passed, obsolete public light scope failed; new exact-SHA pending after measured-mount test correction",
+    "ci": "All 8 exact-SHA workflows succeeded for runtime 6d3b2cc9; prior fa/8cf failures remain recorded and current documentation-only CI is separate",
     "visual_acceptance": false,
-    "runtime_commit": "fa1383cb93673909c16af13fd882a29316a195a0",
-    "actual_pck_walk_m": 288.017479456961,
+    "runtime_commit": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+    "actual_pck_walk_m": 287.975904673105,
     "additional_city_road_walk_m": 1339.63251638226,
     "physical_canals_missing_confirmed": true,
     "validation_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_LIGHT_SCOPE.json",
-    "all_original_public_market_assertions_preserved": 24
+    "all_original_public_market_assertions_preserved": 24,
+    "exact_sha_ci": "all8success for named runtime6d3; current documentation-only followup independently checked",
+    "delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE_DELIVERY.json",
+    "actual_pck_gameplay": true,
+    "cold_stalls_remaining": true
   }
 }
