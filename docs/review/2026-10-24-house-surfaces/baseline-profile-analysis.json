@@ -1,0 +1,59 @@
+{
+  "metadata": {
+    "actor_positions_changed": false,
+    "adapter": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "engine": {
+      "build": "official",
+      "hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+      "hex": 263937,
+      "major": 4,
+      "minor": 7,
+      "patch": 1,
+      "status": "stable",
+      "string": "4.7.1-stable (official)",
+      "timestamp": 0
+    },
+    "graphics_changed": false,
+    "normal_clock_required": true,
+    "passive_observer": true,
+    "platform": "Linux",
+    "render_loop_changed": false,
+    "scope": "Unchanged continuous household diagnostic with observer overhead. Draw signal intervals do not isolate GPU execution; software-renderer measurements are not target-PC FPS."
+  },
+  "summary": {
+    "elapsed_wall_ms": 234432.502,
+    "frames": {
+      "max_ms": 4704.576,
+      "mean_ms": 526.897448192771,
+      "median_ms": 497.551,
+      "p95_ms": 588.889,
+      "samples": 415
+    },
+    "idle_to_pre_draw": {
+      "max_ms": 11.334,
+      "mean_ms": 0.957546987951808,
+      "median_ms": 0.744,
+      "p95_ms": 1.508,
+      "samples": 415
+    },
+    "max_draw_calls": 275.0,
+    "max_physics_steps_per_frame": 8,
+    "maximum_physics_delta": 0.0166666666666667,
+    "mean_draw_calls": 205.906024096386,
+    "minimum_physics_delta": 0.0166666666666667,
+    "observed_physics_callbacks": 3327,
+    "physics_ticks_per_second": 60,
+    "pre_to_post_draw": {
+      "max_ms": 4700.269,
+      "mean_ms": 515.921684337349,
+      "median_ms": 488.076,
+      "p95_ms": 575.416,
+      "samples": 415
+    },
+    "scale_3d": 1.0,
+    "time_scale": 1.0,
+    "video_memory_bytes": 886474026.0,
+    "viewport": "(1280, 720)"
+  },
+  "sample_count": 415
+}

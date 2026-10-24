@@ -1,0 +1,25 @@
+{
+  "exact_source_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+  "actually_viewed": [
+    "projection-world-source.png",
+    "projection-metric-uv-candidate.png",
+    "projection-side-X-metric.png",
+    "projection-floor-Y-metric.png",
+    "door-entry.png",
+    "door-exit.png"
+  ],
+  "sha256": {
+    "projection-floor-Y-metric.png": "e6375f507017b69ef87b08deb9ff3014bf563bbaca0f522ec2e228a07399c0ca",
+    "projection-floor-Y-source.png": "35b5493aecce6241f7f13493acdecdb07a064d4fe4cee378c005200b023d56a9",
+    "projection-metric-uv-candidate.png": "fbd944f184334bb886c5f2f63b07b818f1e0348cf52b03fd8041089453d90a3c",
+    "projection-restored-world-source.png": "d88c5ebb5956c8b8b07bb10aa359d3a289024177344440d794e47b518d45ef89",
+    "projection-side-X-metric.png": "6d5e85ae71581ba08ee26713f80798fc62cc0af80113f89aec792aa05c25c784",
+    "projection-side-X-source.png": "4b97afd37db6d5c7ef3936338585a844f123525cfc496babfc91717a75f9bf84",
+    "projection-world-source.png": "b84ba8f36487f15770e3598456744fb8b0eaa23074903df56935bbf06cd54aae",
+    "door-entry.png": "da08322622517fabdcb2c7819c84a44eafc041cd0b5781ccf8bcd60632d16724",
+    "door-exit.png": "4da863a150cc71916c472649bd5b4818eb010b4c147e49470524d59c801e436f"
+  },
+  "observed": "Facade plaster and wood keep their scale and phase. The floor retains the original photographic planks. Actual continuous entry and exit frames were produced, but the morning workplace return did not finish before timeout. The dark void is the controlled diagnostic fixture, not a finished terrain scene.",
+  "visual_acceptance": false,
+  "manual_play": false
+}

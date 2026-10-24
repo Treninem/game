@@ -1,0 +1,6 @@
+{
+  "returncode": 0,
+  "seconds": 0.9060000000026776,
+  "stdout": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\r\n\r\nBOX_SURFACE_PROJECTION_OK cases=24 vertices=576 existing_maps_retained=true rotated_fallback=true\r\n",
+  "stderr": ""
+}

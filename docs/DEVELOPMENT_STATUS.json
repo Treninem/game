@@ -6,7 +6,7 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "В отдельной ветке исправлен воспроизведённый клин Марека у двери после загрузки:12 одиночных проходов и два полных бытовых цикла(обычные167/189см и два200см) прошли; позиции восстановились точно. Просмотрен реальный кадр входа; полный графический бытовой цикл на программном рендерере провален по лимиту240с и не объявлен успешным. Полный World Core481850ec: in_progress/None. Открытый пользователю проект и runtimePR12 остаются прежними до согласования ручных правок. Художественная приёмка людей, интерфейса и мира не пройдена; стабильного релиза нет.",
+  "current_stage": "В изолированной ветке проверена оптимизация материалов домов:24 геометрических случая, три реальных пиксельных сравнения и4 пресета прошли; медиана кадра контрольной сцены353→313мс на программном рендерере. Полный графический бытовой цикл по-прежнему FAIL240с. Предыдущие World Core481850ec и Movement599fd11b завершились SUCCESS; новые полные gates точного4f2f3097 запущены, результаты в пакете. Открытый пользователю проект и runtimePR12 не изменены. Полная художественная приёмка и стабильный релиз не подтверждены.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_EDITOR_HANDOFF_INPUT_AUDIT.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
@@ -202,7 +202,7 @@
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
   "ci_followup_status": "Runtime6d3 passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOME_PORTAL_ALIGNMENT.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOUSE_SURFACE_PERFORMANCE.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -742,14 +742,61 @@
       "id": 40086445556,
       "name": "Validate World Core",
       "head_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "html_url": "https://github.com/Treninem/game/actions/runs/40086445556",
-      "updated_at": "2026-10-24T10:34:25Z"
+      "updated_at": "2026-10-24T11:08:47Z"
     },
     "root_runtime_integrated": false,
     "PR12_runtime_integrated": false,
     "manual_play": false,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "latest_house_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOUSE_SURFACE_PERFORMANCE.json",
+    "isolated_runtime_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+    "branch": "codex/editor-handoff-validation-2026-10-24",
+    "root_runtime_integrated": false,
+    "PR12_runtime_integrated": false,
+    "material_review": {
+      "id": 40091621762,
+      "name": "Verify Metric House Surface Appearance and Cost",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40091621762",
+      "updated_at": "2026-10-24T11:55:45Z"
+    },
+    "continuous_graphical_lifecycle": {
+      "id": 40091621698,
+      "name": "Verify Rendered Household Doorway",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40091621698",
+      "updated_at": "2026-10-24T11:58:38Z"
+    },
+    "new_world_core": {
+      "id": 40092376914,
+      "name": "Validate World Core",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092376914",
+      "updated_at": "2026-10-24T12:03:45Z"
+    },
+    "new_player_movement": {
+      "id": 40092380209,
+      "name": "Validate Player Movement",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092380209",
+      "updated_at": "2026-10-24T12:08:03Z"
+    },
+    "stationary_frame_time_reduction_percent": 11.245,
+    "target_PC_FPS_verified": false,
     "full_visual_acceptance": false,
     "stable_release": false
   }
