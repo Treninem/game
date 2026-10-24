@@ -552,7 +552,7 @@
     "home_meshes": 132,
     "town_meshes": 2125,
     "duplicate_models": false,
-    "exact_sha_ci": "pending",
+    "exact_sha_ci": "8266796d: all8 workflows succeeded, World Core40069695447; later711edb0d fails canal family life.",
     "actual_final_PCK": "pending"
   },
   "latest_human_street_scale": {
@@ -574,7 +574,7 @@
     "actual_automated_walk_m": 148.006318959408,
     "GPU_sole_samples": 5,
     "manual_play": false,
-    "exact_sha_ci": "pending",
+    "exact_sha_ci": "711edb0d: 7 workflows succeeded; mandatory Validate World Core FAILED, run40073175183 step24 canal household sleep.",
     "actual_final_PCK": "pending",
     "full_visual_acceptance": false
   },
@@ -588,5 +588,24 @@
     "fifteen_surface_types": true,
     "dense_streets_squares_gardens_farms_waterfront": true,
     "boats_docks_piers_horses_carts_still_open": true
+  },
+  "manual_editor_handoff": {
+    "mode": "USER_EDITOR_HANDOFF",
+    "project": "D:/Desktop/GitHub/game/project.godot",
+    "opened_scene": "res://scenes/stage1.tscn",
+    "editor_process_id_observed": 15652,
+    "runtime_root_writes": "Do not change the user-opened runtime/scenes until the user asks to resume integration after manual edits. Re-read current files and reconcile their changes first.",
+    "isolated_proposals_allowed": true,
+    "goal_status": "ACTIVE; no completion or goal pause claimed",
+    "unsaved_windows_closed": false
+  },
+  "latest_input_audit": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_EDITOR_HANDOFF_INPUT_AUDIT.json",
+    "integrated": false,
+    "confirmed_default_failures": 2,
+    "isolated_candidate_cases_passed": 10,
+    "existing_regressions_passed": 1,
+    "regression_suite": "NOT PASSED: binding first timeout; traced binding retry pass; unlimited inventory timeout; lifecycle not run",
+    "visual_acceptance": false
   }
 }

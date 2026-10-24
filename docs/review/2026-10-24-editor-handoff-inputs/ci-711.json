@@ -1,0 +1,91 @@
+{
+  "runtime_sha": "711edb0dc5ee39e6b4b0d3b3a1d2db46535a0df9",
+  "workflows": [
+    {
+      "id": 40073175337,
+      "name": "Validate Delta Updater",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 102,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175337/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175337/logs",
+      "workflow_id": 334468829
+    },
+    {
+      "id": 40073175169,
+      "name": "Diagnose UI Smoke",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 144,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175169/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175169/logs",
+      "workflow_id": 334664304
+    },
+    {
+      "id": 40073175173,
+      "name": "Validate Magic Runtime",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 201,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175173/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175173/logs",
+      "workflow_id": 334237115
+    },
+    {
+      "id": 40073175176,
+      "name": "Validate World VFX",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 207,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175176/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175176/logs",
+      "workflow_id": 334245633
+    },
+    {
+      "id": 40073175201,
+      "name": "Validate Player Movement",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 254,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175201/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175201/logs",
+      "workflow_id": 334245722
+    },
+    {
+      "id": 40073175233,
+      "name": "Build Windows Installer",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 228,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175233/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175233/logs",
+      "workflow_id": 335690677
+    },
+    {
+      "id": 40073175183,
+      "name": "Validate World Core",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_number": 403,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175183/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175183/logs",
+      "workflow_id": 334776448
+    },
+    {
+      "id": 40073175199,
+      "name": "Build ImPuls Release Candidate",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 786,
+      "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175199/jobs",
+      "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175199/logs",
+      "workflow_id": 334116455
+    }
+  ],
+  "mandatory_world_core": "FAILED",
+  "failed_run": 40073175183,
+  "failed_job": 120810822360,
+  "failed_step": 24,
+  "failure": "Canal household could not complete sleep; CanalTrader remains at (36.51758,1.97715,-7.804199) while clock advances.",
+  "stable_release": false
+}
