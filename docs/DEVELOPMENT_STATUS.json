@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Новые модели уличного набора изBlender подключены к проверочному исходному проекту:28панелей мощения,6посадок,4фонаря; полный287.936м игровой обход,3измерения подошв,4режима графики и физические пробы прошли. Новый exact-SHA CI/PCK ещё проверяются после публикации. Доставленная сборка пока0ff. Полная композиция и люди художественно не приняты.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE.json",
+  "current_stage": "Модели улицыfa прошли реальный288м PCK-прогон, ноWorldCore завершился ошибкой ожидания фазы приземления. Отсчёт исправлен с30обновлений модификатора на ограниченное ожидание физических кадров; все19проверок сохранены. Локально76поз и34GPUпозы прошли. Новый полный exact-SHA CI обязателен, прежний запуск пока0ff.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_SLOPE_PHASE_SYNC.json",
   "review_launcher": "build\\review-2026-10-24-city-spatial-batches\\ImPuls-review.cmd",
   "systems": [
     {
@@ -201,7 +201,7 @@
   ],
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
-  "ci_followup_status": "New streetscape exact-SHA pending at commit creation. Delivered0ff is8/8green with actualPCK gameplay; earlier green is not substituted.",
+  "ci_followup_status": "fa:7success/WorldCore failure at slope observation. Test-only cadence correction current exact-SHA pending. Shipping runtime trees remain identical to the actual288m tested faPCK; no primary promotion yet.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",

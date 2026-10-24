@@ -79,7 +79,14 @@ func _sample(label: String, airborne := false, phase_filter := "") -> void:
     requested = true
     var accepted := false
     var deadline := Time.get_ticks_msec()+15000
-    for attempt in range(30):
+    var first_physics:=Engine.get_physics_frames()
+    var callbacks:=0
+    # A completed skeleton modifier can run several times between physics
+    # steps. Bound phase observation by actual simulation time, not callback
+    # count, so a valid falling pose cannot exhaust the landing wait early.
+    # The15s wall watchdog and every phase/sole/GPU assertion remain unchanged.
+    while Engine.get_physics_frames()-first_physics<120:
+        callbacks+=1
         if use_gpu:
             boot_gpu.begin_capture()
             cloth_gpu.begin_capture()
@@ -105,6 +112,9 @@ func _sample(label: String, airborne := false, phase_filter := "") -> void:
         assert(not bool(latest.grounded), "An airborne label captured a grounded pose")
     var row := latest.duplicate(true)
     row["label"] = label
+    row["wait_physics_ticks"] = Engine.get_physics_frames()-first_physics
+    row["wait_modifier_callbacks"] = callbacks
+    row["phase_filter"] = phase_filter
     if not airborne:
         assert(bool(row.grounded), "Inclined physical floor was lost: "+label)
         assert(minf(float(row.gaps.Left),float(row.gaps.Right))<=0.025, "Neither final sole supports the body: "+label)

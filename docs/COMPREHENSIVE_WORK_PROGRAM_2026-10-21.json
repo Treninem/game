@@ -490,7 +490,12 @@
       }
     ],
     "quality_modes": 4,
-    "ci": "pending current runtime publication",
-    "visual_acceptance": false
+    "ci": "faWorldCore failed observation cadence; current test-only fix full exact-SHA pending",
+    "visual_acceptance": false,
+    "runtime_commit": "fa1383cb93673909c16af13fd882a29316a195a0",
+    "actual_pck_walk_m": 288.017479456961,
+    "additional_city_road_walk_m": 1339.63251638226,
+    "physical_canals_missing_confirmed": true,
+    "validation_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-24_SLOPE_PHASE_SYNC.json"
   }
 }
