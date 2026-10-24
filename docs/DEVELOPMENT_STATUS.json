@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Обход четырёх мостов и обоих концов канала завершён:2.692км обычным автоматизированным движением,26GPU-проверок обуви, имущество сохранено. Сервер подтвердил исправление контакта капсулы, затем обнаружил неверный выбор нижнего берега вместо связанной точки мостового настила. Проходимость начальных и следующих звеньев пути исправлена и проверена вместе с прежним полным циклом семьи, рынком и старым угловым случаем. Новая ревизия ждёт exact-SHA CI и фактического PCK; основной запуск пока6d3. Полная композиция городов по концепциям не достигнута.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_WALKABLE_LINKS.json",
+  "current_stage": "Исправлено оформление новых домов, рынков и общественных интерьеров после загрузки мира: потерянные обработчики восстановлены при каждом входе в дерево. Реальная загрузка и повторный перенос мира проверены,132модели дома и2125моделей города без дублей;4 прежние проверки прошли. Семейная жизнь и мосты прошли на сервере845, но полный графический тест превысил240с при программном рендеринге; ограничение не снято, исправление производительности открыто. Рост160–200см, плотность и пропорции улиц,15покрытий и цветники являются следующей связанной работой. Полное художественное соответствие концептам не достигнуто.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_LOADED_SETTLEMENT_SERVICES.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -644,6 +644,15 @@
     "actual_level_snap_reproduced_and_fixed": true,
     "required_lifecycle_market_old_corner_passed": true,
     "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
+  },
+  "latest_loaded_settlement_services": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_LOADED_SETTLEMENT_SERVICES.json",
+    "actual_load_new_home_and_town_passed": true,
+    "home_meshes": 132,
+    "town_meshes": 2125,
+    "duplicate_models": false,
+    "exact_sha_ci": "pending",
     "actual_final_PCK": "pending"
   }
 }

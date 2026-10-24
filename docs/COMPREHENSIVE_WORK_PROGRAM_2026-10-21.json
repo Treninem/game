@@ -545,5 +545,14 @@
     "required_lifecycle_market_old_corner_passed": true,
     "current_ci": "pending exact followup SHA",
     "actual_final_PCK": "pending"
+  },
+  "latest_loaded_settlement_services": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_LOADED_SETTLEMENT_SERVICES.json",
+    "actual_load_new_home_and_town_passed": true,
+    "home_meshes": 132,
+    "town_meshes": 2125,
+    "duplicate_models": false,
+    "exact_sha_ci": "pending",
+    "actual_final_PCK": "pending"
   }
 }

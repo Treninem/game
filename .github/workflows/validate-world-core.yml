@@ -200,6 +200,8 @@ jobs:
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-links" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_walkable_links.gd 150
       - name: Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-household" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_household.gd 420
+      - name: Verify new household interiors markets and civic rooms survive actual world load transfer
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-loaded-settlement" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_loaded_settlement_services.gd 180
       - name: Verify physical hydrology
         run: bash tools/run_godot_smoke.sh tests/smoke_world_hydrology.tscn 180
       - name: Verify bounded start-region production nature streaming

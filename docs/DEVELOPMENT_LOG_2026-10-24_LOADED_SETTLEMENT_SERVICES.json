@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent": "8455638026564117758ea4e792256dc1c7a747d8",
+  "problem": "WorldLoading reparents the prepared world. Three settlement dressing services disconnected SceneTree.node_added in exit but only connected in ready, which does not run again. Newly streamed homes after disk load retained proxy furniture and missed household details; later markets/civic rooms also lost live listeners.",
+  "fix": "Idempotent connection and deferred existing-node rescan on every enter_tree, symmetric exit disconnection, one-time material/settings setup retained. Civic and public deferred candidates use WeakRef to tolerate freed nodes. Existing per-building decoration markers prevent duplicates.",
+  "actual_load_fixture_before": {
+    "returncode": 1,
+    "seconds": 22.625,
+    "stopped": true,
+    "errors": [
+      "SCRIPT ERROR: Assertion failed: Home created after real load stays on proxy furniture and has no household dressing"
+    ],
+    "marker": false
+  },
+  "actual_load_fixture_after": {
+    "returncode": 0,
+    "seconds": 19.360000000000582,
+    "stopped": false,
+    "errors": [],
+    "marker": true
+  },
+  "component_proof": {
+    "actual_load_transfer": true,
+    "actual_post_load_town_market_and_council": true,
+    "avatar_position_assignments": 0,
+    "civic_room_excludes_dwelling_dressing": true,
+    "controlled_component_fixture": true,
+    "full_visual_acceptance": false,
+    "household_models_not_duplicated": true,
+    "inventory_money_unchanged": true,
+    "manual_play": false,
+    "mesh_instances_first_home": 132,
+    "new_homes_after_load_and_reentry_decorated": true,
+    "three_live_service_subscriptions": true,
+    "town_meshes_not_duplicated": 2125
+  },
+  "existing_regressions": [
+    {
+      "case": "smoke_household_furniture.tscn",
+      "returncode": 0,
+      "seconds": 83.73500000000058,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_settlement_interior_assets.tscn",
+      "returncode": 0,
+      "seconds": 11.453000000001339,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_settlement_public_works.tscn",
+      "returncode": 0,
+      "seconds": 9.718000000000757,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_settlement_civic_spaces.tscn",
+      "returncode": 0,
+      "seconds": 7.14100000000326,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "manual_play": false,
+  "avatar_position_assignments": 0,
+  "original_profiles_untouched": true,
+  "art_assets_layouts_saves_unchanged": true,
+  "all_previous_tests_bounds_assertions_retained": true,
+  "parent_ci": {
+    "seven_workflows_success": true,
+    "world_core": "failed at unchanged visual_bow_world.gd240s bound on software-rendered four-quality world fixture; preceding canal lifecycle and link gates passed",
+    "run": 40068211173,
+    "reported_medium_frame_ms": 641.219533333333,
+    "draw_calls": 1101,
+    "issue_open": true
+  },
+  "new_exact_sha_ci": "pending",
+  "actual_final_PCK": "pending; primary launch remains6d3",
+  "full_visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "next": "Human160-200cm scale, denser streets, varied paving and flower beds; resolve rendered full-world performance without weakening gates."
+}

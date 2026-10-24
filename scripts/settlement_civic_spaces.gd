@@ -9,11 +9,15 @@ var stone_material: StandardMaterial3D
 var cloth_material: StandardMaterial3D
 var parchment_material: StandardMaterial3D
 
+func _enter_tree() -> void:
+    # The loading scene transfers this same prepared world to the game root.
+    # Reentering does not call _ready again; keep streamed dressing subscribed.
+    if not get_tree().node_added.is_connected(_on_node_added):get_tree().node_added.connect(_on_node_added)
+    call_deferred("_decorate_existing")
+
 func _ready() -> void:
     process_priority = 46
     _prepare_materials()
-    get_tree().node_added.connect(_on_node_added)
-    call_deferred("_decorate_existing")
 
 func _exit_tree() -> void:
     if get_tree().node_added.is_connected(_on_node_added):
@@ -33,7 +37,11 @@ func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
 
 func _on_node_added(node: Node) -> void:
     if node is Node3D and node.name.begins_with("Settlement_"):
-        call_deferred("_decorate_candidate", node)
+        call_deferred("_decorate_candidate_ref",weakref(node))
+
+func _decorate_candidate_ref(reference:WeakRef) -> void:
+    var node:=reference.get_ref() as Node
+    if is_instance_valid(node):_decorate_candidate(node)
 
 func _decorate_existing() -> void:
     var world := get_parent()

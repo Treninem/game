@@ -16,11 +16,15 @@ var decorated_buildings := 0
 var real_model_instances := 0
 var dressing_materials: Dictionary = {}
 
+func _enter_tree() -> void:
+    # The loading scene transfers this same prepared world to the game root.
+    # Reentering does not call _ready again; keep streamed dressing subscribed.
+    if not get_tree().node_added.is_connected(_on_node_added):get_tree().node_added.connect(_on_node_added)
+    call_deferred("_decorate_existing")
+
 func _ready() -> void:
     process_priority = 46
-    get_tree().node_added.connect(_on_node_added)
     SettingsManager.settings_changed.connect(_apply_dressing_quality)
-    call_deferred("_decorate_existing")
 
 func _exit_tree() -> void:
     if get_tree().node_added.is_connected(_on_node_added):
