@@ -6,19 +6,24 @@ extends SceneTree
 var errors: Array[String] = []
 var rows: Array = []
 var fixture: Node3D
-var home: EnterableBuilding
+var home: Node3D
 
 func _initialize() -> void:
+    create_timer(210).timeout.connect(func():
+        push_error("Home doorway diagnostic watchdog expired")
+        quit(1)
+    )
     call_deferred("_run")
 
 func _frames(count: int) -> void:
     for frame in range(count):
         await physics_frame
 
-func _resident(height: float, side: float, entering: bool, identity: String) -> SettlementNPC:
+func _resident(height: float, side: float, entering: bool, identity: String) -> CharacterBody3D:
     var state := root.get_node("GameState")
     state.set_world_value("appearance:" + identity, {"sex": "male", "height_cm": height})
-    var npc := SettlementNPC.new()
+    # Load production scripts only after the normal autoloads are available.
+    var npc: CharacterBody3D = load("res://scripts/settlement_npc.gd").new()
     npc.name = "DoorCitizen" + str(rows.size())
     npc.role = "craftsman"
     npc.set_meta("citizen_id", identity)
@@ -33,7 +38,7 @@ func _resident(height: float, side: float, entering: bool, identity: String) -> 
     npc.autonomous = true
     return npc
 
-func _travel(npc: SettlementNPC, entering: bool, limit: int) -> Dictionary:
+func _travel(npc: CharacterBody3D, entering: bool, limit: int) -> Dictionary:
     var previous := npc.global_position
     var walked := 0.0
     var maximum_frame_motion := 0.0
@@ -59,7 +64,7 @@ func _run() -> void:
     root.get_node("GameState").world_minutes = 22 * 60
     fixture = Node3D.new()
     fixture.name = "FarCapitalDoorFixture"
-    var center := CapitalData.CENTER
+    var center: Vector2 = load("res://scripts/capital_data.gd").CENTER
     var elevation: float = root.get_node("WorldData").elevation_at(center)
     fixture.position = Vector3(center.x, elevation + .025, center.y)
     root.add_child(fixture)
@@ -72,7 +77,7 @@ func _run() -> void:
     collision.position.y = -.1
     ground.add_child(collision)
     fixture.add_child(ground)
-    home = EnterableBuilding.new()
+    home = load("res://scripts/enterable_building.gd").new()
     home.name = "Home"
     home.configure(Vector3(12, 3.2, 10), 1, "Проверка настоящего прохода")
     home.position.y = .03 - home.floor_thickness
@@ -87,7 +92,7 @@ func _run() -> void:
                 home.set_meta("door_user", 0)
                 home.front_door.set_open(true, true)
                 var identity := "audit:door:%s:%s:%s" % [height, side, entering]
-                var npc: SettlementNPC = await _resident(height, side, entering, identity)
+                var npc: CharacterBody3D = await _resident(height, side, entering, identity)
                 var target := home.to_global(Vector3(0, home.floor_thickness, 3.2 if entering else 7))
                 var desired := target - npc.global_position
                 desired.y = 0
