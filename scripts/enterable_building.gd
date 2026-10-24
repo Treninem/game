@@ -2,6 +2,7 @@ class_name EnterableBuilding
 extends Node3D
 
 const DOOR_SCRIPT := preload("res://scripts/door_interactable.gd")
+const BOX_PROJECTION := preload("res://scripts/box_surface_projection.gd")
 const DOOR_SCENE: PackedScene = preload("res://assets/production/medieval/building_shell/Door_1_Flat.gltf")
 static var roof_shape_refs: Dictionary = {}
 const ROOF_SCENE: PackedScene = preload("res://assets/production/exteriors/family_home/CottageShingleRoof.tscn")
@@ -39,6 +40,7 @@ var iron_material: StandardMaterial3D
 var window_lights: Array[SpotLight3D] = []
 var room_lantern: OmniLight3D
 var interior_scenes: Dictionary = {}
+var projected_materials: Dictionary = {}
 var light_elapsed := 0.0
 
 func configure(size: Vector3, variant: int = 0, label: String = "Дом") -> void:
@@ -449,10 +451,18 @@ func _add_static_box(parent: Node3D, node_name: String, size: Vector3, pos: Vect
     parent.add_child(body)
 
     var mesh_node := MeshInstance3D.new()
-    var mesh := BoxMesh.new()
-    mesh.size = size
-    mesh.material = material
-    mesh_node.mesh = mesh
+    var standard := material as StandardMaterial3D
+    var projected: ArrayMesh
+    if standard != null and standard.uv1_triplanar and standard.uv1_world_triplanar:
+        projected = BOX_PROJECTION.build(size, body.global_transform, standard.uv1_scale, standard.uv1_offset)
+    if projected != null:
+        mesh_node.mesh = projected
+        mesh_node.material_override = _projected_material(standard)
+    else:
+        var mesh := BoxMesh.new()
+        mesh.size = size
+        mesh.material = material
+        mesh_node.mesh = mesh
     body.add_child(mesh_node)
 
     var collision := CollisionShape3D.new()
@@ -462,6 +472,23 @@ func _add_static_box(parent: Node3D, node_name: String, size: Vector3, pos: Vect
     body.add_child(collision)
     structural_piece_count += 1
     return body
+
+func _projected_material(source: StandardMaterial3D) -> StandardMaterial3D:
+    var key := source.get_instance_id()
+    if not projected_materials.has(key):
+        projected_materials[key] = {"source": source, "mapped": BOX_PROJECTION.material(source)}
+    return projected_materials[key].mapped
+
+func _refresh_projected_materials() -> void:
+    # Normal/AO/roughness choices still follow the same live graphics preset.
+    # The source remains triplanar for authored room partitions and furniture.
+    for record: Dictionary in projected_materials.values():
+        var source: StandardMaterial3D = record.source
+        var mapped: StandardMaterial3D = record.mapped
+        mapped.normal_enabled = source.normal_enabled
+        mapped.ao_enabled = source.ao_enabled
+        mapped.roughness_texture = source.roughness_texture
+        mapped.roughness = source.roughness
 
 func _add_visual_box(parent: Node3D, node_name: String, size: Vector3, pos: Vector3, material: Material) -> MeshInstance3D:
     var mesh_node := MeshInstance3D.new()
@@ -509,4 +536,5 @@ func _apply_surface_quality() -> void:
         material.ao_enabled = detailed
         material.roughness_texture = surfaces.PLASTER_ORM if detailed else null
         material.roughness = 1.0 if detailed else 0.94
+    _refresh_projected_materials()
     _update_window_light()
