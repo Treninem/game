@@ -40,17 +40,25 @@ func _run() -> void:
         var layout: BoxContainer = panels.find_child("InventoryLayout", true, false)
         assert(grid != null and grid.get_child_count() == original_inventory.size())
         assert(scroll.follow_focus and scroll.mouse_force_pass_scroll_events == false)
+        var picture := root.get_texture().get_image()
+        var filename := "inventory-models-%dx%d.png" % [size.x,size.y]
+        assert(picture.save_png("user://"+filename) == OK)
         var frame: Control = panels.frame
-        var bounds := frame.get_global_rect()
-        assert(bounds.position.x >= -1 and bounds.position.y >= -1 and bounds.end.x <= size.x + 1 and bounds.end.y <= size.y + 1, "Inventory frame leaves the actual viewport")
+        # Compare rendered pixel coordinates, including the production canvas
+        # stretch transform, against the actual captured image dimensions.
+        var bounds := frame.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, frame.size)
+        var pixels := picture.get_size()
+        assert(bounds.position.x >= -1 and bounds.position.y >= -1 and bounds.end.x <= pixels.x + 1 and bounds.end.y <= pixels.y + 1, "Inventory frame leaves the actual viewport")
+        for cell: Button in grid.get_children():
+            var caption := cell.get_node("ItemCaption") as Label
+            assert(not caption.text.is_empty() and caption.size.y >= 24)
+            assert(caption.position.y >= 0 and caption.get_rect().end.y <= cell.size.y, "Item name is outside its visible cell")
         if not layout.vertical:
             assert(scroll.get_global_rect().end.x <= details.get_global_rect().position.x, "Grid overlaps selected item")
         var preview: TextureRect = panels.find_child("SelectedItemModel", true, false)
         assert(preview != null and preview.get_meta("production_model").ends_with("Bow_Wooden.glb"))
         var texture_pixels := _verify_preview(preview)
         assert(texture_pixels > 100, "Actual bow model preview is blank")
-        var filename := "inventory-models-%dx%d.png" % [size.x,size.y]
-        assert(root.get_texture().get_image().save_png("user://"+filename) == OK)
         records.append({"size":str(size),"columns":grid.columns,"compact":layout.vertical,"grid_scroll_size":str(scroll.size),"frame":str(bounds),"bow_nontransparent_pixels":texture_pixels,"file":filename})
     # Actual production models, including the arrow, not replacement drawings.
     for item: String in ["starter_axe","stone_knife","short_bow","arrow"]:

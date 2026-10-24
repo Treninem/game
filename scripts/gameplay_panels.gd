@@ -414,36 +414,37 @@ func _show_inventory() -> void:
         cell.add_theme_stylebox_override("focus", _button_style(Color(0,0,0,0), Color(.94,.85,.62)))
         cell.pressed.connect(_inventory_select.bind(item_id))
         grid.add_child(cell)
-        var labels := VBoxContainer.new()
-        labels.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-        labels.offset_left = 6; labels.offset_right = -6
-        labels.offset_top = 5; labels.offset_bottom = -5
-        labels.mouse_filter = Control.MOUSE_FILTER_IGNORE
-        labels.add_theme_constant_override("separation", 2)
-        cell.add_child(labels)
+        cell.clip_contents = true
         var count := Label.new()
         count.text = "×%d" % int(info.amount)
         count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
         count.add_theme_font_size_override("font_size", 11)
         count.mouse_filter = Control.MOUSE_FILTER_IGNORE
-        labels.add_child(count)
+        cell.add_child(count)
+        count.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+        count.offset_left = 6; count.offset_right = -6
+        count.offset_top = 3; count.offset_bottom = 19
         if ITEM_MODELS.scene_for(item_id) != null:
             var preview := ITEM_PREVIEW.new()
             preview.item_id = item_id
-            preview.custom_minimum_size = Vector2(0, 42)
-            preview.size_flags_vertical = Control.SIZE_EXPAND_FILL
-            labels.add_child(preview)
+            cell.add_child(preview)
+            preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+            preview.offset_left = 8; preview.offset_right = -8
+            preview.offset_top = 18; preview.offset_bottom = -29
         else:
             var category := Label.new()
             category.text = String(info.get("category", "Предмет"))
             category.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
             category.modulate = Color(.65,.62,.54)
             category.add_theme_font_size_override("font_size", 10)
-            category.size_flags_vertical = Control.SIZE_EXPAND_FILL
             category.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
             category.mouse_filter = Control.MOUSE_FILTER_IGNORE
-            labels.add_child(category)
+            cell.add_child(category)
+            category.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+            category.offset_left = 5; category.offset_right = -5
+            category.offset_top = 19; category.offset_bottom = -29
         var caption := Label.new()
+        caption.name = "ItemCaption"
         caption.text = String(info.get("name", item_id))
         caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
         caption.max_lines_visible = 2
@@ -452,7 +453,10 @@ func _show_inventory() -> void:
         caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
         caption.add_theme_font_size_override("font_size", 12)
         caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
-        labels.add_child(caption)
+        cell.add_child(caption)
+        caption.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+        caption.offset_left = 4; caption.offset_right = -4
+        caption.offset_top = -29; caption.offset_bottom = -2
     var details := GridContainer.new()
     details.name = "InventoryDetails"
     details.columns = 1
@@ -476,11 +480,18 @@ func _layout_inventory() -> void:
     details.size_flags_horizontal = Control.SIZE_EXPAND_FILL if compact else Control.SIZE_FILL
     var available := frame.size.x - 82 - (0 if compact else 308)
     grid.columns = clampi(int(available / 95.0), 2, 8)
-    scroller.custom_minimum_size.y = clampf(frame.size.y - 300, 190, 480)
+    scroller.custom_minimum_size.y = clampf(frame.size.y - 430, 170, 480)
 
 func _inventory_insurance() -> void:
-    _text("Страхование • зарядов на одну смерть: %d" % ProgressionSystem.inventory_insurance_charges())
-    _button("Купить страховку инвентаря — %d монет" % ProgressionSystem.INSURANCE_PRICE, Callable(self, "_buy_insurance"))
+    var row := HBoxContainer.new()
+    row.add_theme_constant_override("separation", 12)
+    content.add_child(row)
+    var label := Label.new()
+    label.text = "Страховка: %d" % ProgressionSystem.inventory_insurance_charges()
+    label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    label.modulate = Color(.72,.69,.61)
+    row.add_child(label)
+    _button("Застраховать · %d монет" % ProgressionSystem.INSURANCE_PRICE, Callable(self, "_buy_insurance"), row)
 
 func _inventory_card(parent: GridContainer, info: Dictionary) -> void:
     var card := PanelContainer.new()
@@ -521,7 +532,7 @@ func _inventory_card(parent: GridContainer, info: Dictionary) -> void:
         var preview := ITEM_PREVIEW.new()
         preview.name = "SelectedItemModel"
         preview.item_id = item_id
-        preview.custom_minimum_size = Vector2(0, 150)
+        preview.custom_minimum_size = Vector2(0, 120)
         stack.add_child(preview)
         stack.move_child(preview, 1)
     var equip_slot := String(info.get("equip_slot", ""))
