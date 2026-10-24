@@ -521,5 +521,12 @@
     "visual_acceptance": false,
     "additional_legacy_jump_case_passed": true,
     "supplemental_migration_regressions_passed": 3
+  },
+  "latest_canal_ci_followup": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CI_DEPENDENCIES.json",
+    "failed_parent": "1d53b19b7490f474cd43cbd4058f82472f8b9e01",
+    "clean_dependency_fixture_passed": true,
+    "fresh_three_photo_mips_passed": true,
+    "current_ci": "pending exact followupSHA"
   }
 }

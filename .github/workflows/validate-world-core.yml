@@ -396,6 +396,8 @@ jobs:
             ~/.local/share/godot/app_userdata/ImPuls/slope-motion.json
             ~/.local/share/godot/app_userdata/ImPuls/contour-review.json
             build/human-contour-preservation.json
+            ${{ runner.temp }}/impuls-canal-materials/godot/app_userdata/ImPuls/*.png
+            ${{ runner.temp }}/impuls-canal-household/godot/app_userdata/ImPuls/canal-household-proof.json
             ~/.local/share/godot/app_userdata/ImPuls/character-surfaces.json
             ~/.local/share/godot/app_userdata/ImPuls/wardrobe-response.json
             ~/.local/share/godot/app_userdata/ImPuls/public-rest-gpu.json

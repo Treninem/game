@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Подключён связанный квартал канала: физическое русло и непрерывная вода, четыре каменных моста из Blender, берега и мощение, озеленение, фонари, жилой дом, торговка и мастерская. Исправлены заторы жителей у парапета и сундука, ложное прибытие к верстаку и грязевой цвет сухой земли. Реальные920м автоматизированного прохода,23GPUпроверки подошв, загрузка дома отдельным процессом и18локальных сценариев прошли. После публикации требуются exact-SHA CI и проверка итогового PCK; полная композиция городов и людей по концептам не принята. Дополнительно воспроизведена и исправлена загрузка старого сохранения в прыжке над прежней дорогой; проверены17случаев версии геометрии и повторены связанные проверки опоры и движения.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CAPITAL_CANALS.json",
+  "current_stage": "Локальный связанный квартал канала проверен, но CI1d53 выявил пропущенную зависимость в малом географическом проекте и незафиксированные настройки детализации фотографических текстур. Оба сбоя воспроизведены в чистых проектах и исправлены; проверки не ослаблены. Новая ревизия ждёт повторных exact-SHA gates и фактического PCK. Главный запуск остаётся на6d3.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CI_DEPENDENCIES.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -616,10 +616,17 @@
     "native_walk_m": 919.530722988537,
     "gpu_sole_samples": 23,
     "citizens_clock_unfrozen": true,
-    "current_ci": "pending exactSHA",
+    "current_ci": "1d53failed: isolated fixture dependency and fresh photo mip settings; followup pending",
     "actual_final_PCK": "pending",
     "visual_acceptance": false,
     "additional_legacy_jump_case_passed": true,
     "supplemental_migration_regressions_passed": 3
+  },
+  "latest_canal_ci_followup": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CI_DEPENDENCIES.json",
+    "failed_parent": "1d53b19b7490f474cd43cbd4058f82472f8b9e01",
+    "clean_dependency_fixture_passed": true,
+    "fresh_three_photo_mips_passed": true,
+    "current_ci": "pending exact followupSHA"
   }
 }
