@@ -36,10 +36,10 @@
       "id": 40092376914,
       "name": "Validate World Core",
       "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "html_url": "https://github.com/Treninem/game/actions/runs/40092376914",
-      "updated_at": "2026-10-24T12:03:45Z"
+      "updated_at": "2026-10-24T12:37:40Z"
     },
     "new_player_movement": {
       "id": 40092380209,
@@ -185,5 +185,30 @@
     "Inspect new full-gate results.",
     "Profile remaining material, shadow and overdraw costs in the ordinary continuous scene; preserve fidelity and original acceptance bounds.",
     "Continue household interior and complete character/environment quality with actual game evidence after reconciliation."
-  ]
+  ],
+  "verification_follow_up": {
+    "recorded_at_utc": "2026-10-24T13:31:47.802603+00:00",
+    "exact_runtime_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+    "world_core_successful_steps": 124,
+    "core": {
+      "id": 40092376914,
+      "name": "Validate World Core",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092376914",
+      "updated_at": "2026-10-24T12:37:40Z"
+    },
+    "movement": {
+      "id": 40092380209,
+      "name": "Validate Player Movement",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092380209",
+      "updated_at": "2026-10-24T12:08:03Z"
+    },
+    "continuous_rendered_household_still_failed": true,
+    "not_full_art_or_release_acceptance": true
+  }
 }

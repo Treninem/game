@@ -1,0 +1,72 @@
+{
+  "source_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+  "runtime_errors_after_first_gameplay_test": [],
+  "markers": [
+    "rendered-household\tPreserve existing inventory search keyboard actions quantities and JSON persistence\t2026-10-24T13:07:21.9338332Z INVENTORY_UNLIMITED_OK kinds=144 million_stacks=true json_roundtrip=true actual_UI=true",
+    "rendered-household\tPreserve focused text input and remapped inventory shortcuts\t2026-10-24T13:07:23.3008407Z EDITOR_UI_INPUT_AUDIT [{\"actual\":true,\"case\":\"default_inventory_caption_exposes_both_shortcuts\",\"expected\":true},{\"actual\":true,\"case\":\"default_tab_opens_inventory\",\"expected\":true},{\"actual\":true,\"case\":\"default_I_opens_inventory\",\"expected\":true},{\"actual\":true,\"case\":\"default_tab_closes_inventory_from_focused_cell\",\"expected\":true},{\"actual\":true,\"case\":\"pause_bound_letter_types_in_search_without_guard\",\"expected\":true},{\"actual\":true,\"case\":\"pause_bound_letter_types_in_search_with_actual_guard\",\"expected\":true,\"panel_visible\":true,\"search\":\"p\"},{\"actual\":true,\"case\":\"rebound_pause_opens_menu_outside_text\",\"expected\":true},{\"actual\":true,\"case\":\"explicit_tab_pause_binding_takes_priority_over_alias\",\"expected\":true},{\"actual\":true,\"case\":\"default_tab_alias_returns_after_default_bindings\",\"expected\":true},{\"actual\":true,\"case\":\"inventory_unchanged\",\"expected\":true},{\"actual\":true,\"case\":\"coins_unchanged\",\"expected\":true}]",
+    "rendered-household\tRender actual inventory layout and held-weapon models at three viewport sizes\t2026-10-24T13:07:37.1345912Z INVENTORY_RENDERED_BOUNDS (1280, 720) image=(1280, 720) bounds=[P: (30.0, 18.0), S: (1220.0, 684.0)]",
+    "rendered-household\tRender actual inventory layout and held-weapon models at three viewport sizes\t2026-10-24T13:07:37.6040185Z INVENTORY_RENDERED_BOUNDS (960, 540) image=(960, 540) bounds=[P: (22.5, 13.5), S: (915.0, 513.0)]",
+    "rendered-household\tRender actual inventory layout and held-weapon models at three viewport sizes\t2026-10-24T13:07:38.9720339Z INVENTORY_RENDERED_BOUNDS (1920, 1080) image=(1920, 1080) bounds=[P: (45.0, 27.0), S: (1830.0, 1026.0)]",
+    "rendered-household\tRender actual inventory layout and held-weapon models at three viewport sizes\t2026-10-24T13:07:40.8892835Z INVENTORY_PRESENTATION_REVIEW_OK [{\"bow_nontransparent_pixels\":1278,\"columns\":8,\"compact\":false,\"file\":\"inventory-models-1280x720.png\",\"frame\":\"[P: (30.0, 18.0), S: (1220.0, 684.0)]\",\"grid_scroll_size\":\"(846.0, 286.0)\",\"size\":\"(1280, 720)\"},{\"bow_nontransparent_pixels\":1278,\"columns\":8,\"compact\":false,\"file\":\"inventory-models-960x540.png\",\"frame\":\"[P: (22.5, 13.5), S: (915.0, 513.0)]\",\"grid_scroll_size\":\"(846.0, 286.0)\",\"size\":\"(960, 540)\"},{\"bow_nontransparent_pixels\":1278,\"columns\":8,\"compact\":false,\"file\":\"inventory-models-1920x1080.png\",\"frame\":\"[P: (45.0, 27.0), S: (1830.0, 1026.0)]\",\"grid_scroll_size\":\"(846.0, 286.0)\",\"size\":\"(1920, 1080)\"}]"
+  ],
+  "input_cases": [
+    {
+      "actual": true,
+      "case": "default_inventory_caption_exposes_both_shortcuts",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "default_tab_opens_inventory",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "default_I_opens_inventory",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "default_tab_closes_inventory_from_focused_cell",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "pause_bound_letter_types_in_search_without_guard",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "pause_bound_letter_types_in_search_with_actual_guard",
+      "expected": true,
+      "panel_visible": true,
+      "search": "p"
+    },
+    {
+      "actual": true,
+      "case": "rebound_pause_opens_menu_outside_text",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "explicit_tab_pause_binding_takes_priority_over_alias",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "default_tab_alias_returns_after_default_bindings",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "inventory_unchanged",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "coins_unchanged",
+      "expected": true
+    }
+  ],
+  "cold_import_errors_before_runtime_tests_are_not_erased": true
+}
