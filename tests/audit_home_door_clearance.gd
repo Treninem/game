@@ -97,7 +97,7 @@ func _run() -> void:
                 var desired := target - npc.global_position
                 desired.y = 0
                 desired = desired.normalized()
-                var ray_clear := npc._routine_way_clear(desired, 1.8)
+                var ray_clear: bool = npc._routine_way_clear(desired, 1.8)
                 var capsule_blocked := npc.test_move(npc.global_transform, desired * .3)
                 var result: Dictionary = await _travel(npc, entering, 480)
                 result.merge({"height_cm": height, "side": side, "entering": entering,
