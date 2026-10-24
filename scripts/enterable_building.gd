@@ -456,8 +456,8 @@ func _add_static_box(parent: Node3D, node_name: String, size: Vector3, pos: Vect
     if standard != null and standard.uv1_triplanar and standard.uv1_world_triplanar:
         projected = BOX_PROJECTION.build(size, body.global_transform, standard.uv1_scale, standard.uv1_offset)
     if projected != null:
+        projected.surface_set_material(0, _projected_material(standard))
         mesh_node.mesh = projected
-        mesh_node.material_override = _projected_material(standard)
     else:
         var mesh := BoxMesh.new()
         mesh.size = size

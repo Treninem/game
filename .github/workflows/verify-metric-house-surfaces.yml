@@ -1,0 +1,65 @@
+name: Verify Metric House Surface Appearance and Cost
+
+on:
+  push:
+    branches: [codex/editor-handoff-validation-2026-10-24]
+    paths:
+      - tests/measure_metric_house_surfaces.gd
+      - scripts/box_surface_projection.gd
+      - scripts/enterable_building.gd
+      - .github/workflows/verify-metric-house-surfaces.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: impuls-metric-house-surface-review-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  rendered-household:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/audio
+            assets/branding
+            assets/production
+            assets/registry
+            assets/shaders
+            assets/staging/nature/kenney_nature_kit
+            assets/ui
+            assets/vfx
+            scenes
+            scripts
+            story
+            tests
+            tools/run_godot_smoke.sh
+      - name: Install Godot and a software rendering display
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+      - name: Parse actual project and rendered diagnostic
+        run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Compare source and metric PBR on actual walls floor and ceiling
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-home-render" GODOT_SMOKE_GRAPHICAL=1 IMPULS_DOOR_HEIGHT_MODE=default bash tools/run_godot_smoke.sh tests/measure_metric_house_surfaces.gd 180
+      - name: Upload actual rendered doorway and disk restoration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metric-house-surfaces-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/impuls-home-render/godot/app_userdata/ImPuls/metric-house-projection.json
+            ${{ runner.temp }}/impuls-home-render/godot/app_userdata/ImPuls/projection-*.png
