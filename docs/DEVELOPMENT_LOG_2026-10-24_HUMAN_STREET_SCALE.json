@@ -1,0 +1,378 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent": "8266796d0022714dea70f3b2ced34bce0f1dd9b3",
+  "requirements": [
+    "Adult stature160-200cm with matching physical bodies and preserved legacy looks.",
+    "Human-scale streets/doors,15visibly differentiated road surfaces, flower beds and less empty canal streets."
+  ],
+  "runtime_changes": [
+    "Extend creator/normalization limit from195to200cm; retain160and195compatibility.",
+    "NPC default adult heights derive deterministically from citizen identity,160-200inclusive; saved explicit looks and legacy missing-height180defaults retain precedence. Actual NPC capsules scale from their feet with the visual.",
+    "Navigation link probes use the actual querying actor dimensions. Keep floor-clearance lift out of the headroom by shortening only the probe lower end; additionally reject an overlapping endpoint instead of relying on a cast that can ignore initial overlap.",
+    "Ordinary home door opening1.20m wide and2.20m above the finished18cm floor. Real closed/open door sweeps pass for160/180/200cm. Grand gates retain authored dimensions.",
+    "Fifteen original metre-scaled material layouts reuse existing CC0 photographs. Remove underlying photographic grout by using continuous rock for stone grain; fade subpixel seams/variation with derivatives. Round cobbles use rounded staggered stones instead of a regular circle grid.",
+    "Ordinary carriageways6m, household lanes2.2m, canal promenades3m;14mgrand axes and the existing physical bridges remain.",
+    "Reuse original editable Blender CityStreetKit/CottageYardKit troughs and shared-wind flowers for spatially bounded street/canal pocket gardens.",
+    "Canal quarter possible houses per cell2to12, retaining original deterministic lots and household/civic/water protection. Remove the non-canal green-courtyard stone carpet. Keep all bridge approach envelopes clear.",
+    "Persist one open background lot when an older player position would otherwise be enclosed by a new house; no horizontal avatar relocation."
+  ],
+  "existing_regressions": [
+    {
+      "case": "dimensions",
+      "returncode": 0,
+      "seconds": 29.29699999999866,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "creator",
+      "returncode": 0,
+      "seconds": 7.734000000004016,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "building",
+      "returncode": 0,
+      "seconds": 5.109000000004016,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "canal",
+      "returncode": 0,
+      "seconds": 36.46899999999732,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "locomotion",
+      "returncode": 0,
+      "seconds": 67.07800000000134,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "rest",
+      "returncode": 0,
+      "seconds": 16.43800000000192,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "standing",
+      "returncode": 0,
+      "seconds": 9.828000000001339,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "corner",
+      "returncode": 0,
+      "seconds": 57.43800000000192,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "links",
+      "returncode": 0,
+      "seconds": 58.015999999995984,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "family",
+      "returncode": 0,
+      "seconds": 172.86000000000058,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "market",
+      "returncode": 0,
+      "seconds": 111.13999999999942,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "native_and_component_checks": [
+    {
+      "case": "city",
+      "returncode": 0,
+      "seconds": 6.125,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "streets",
+      "returncode": 0,
+      "seconds": 157.7809999999954,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "palette",
+      "returncode": 0,
+      "seconds": 6.125,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "performance",
+      "returncode": 0,
+      "seconds": 115.60899999999674,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "actual_native_world": {
+    "GPU_sole_samples": [
+      {
+        "gap_m": 0.00399981066584587,
+        "label": "(1125.0, -160.0)",
+        "surface": "TerrainCollision",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.00399981066584587,
+        "label": "(1125.0, -210.0)",
+        "surface": "TerrainCollision",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.00398696213960648,
+        "label": "(1154.0, -210.0)",
+        "surface": "TerrainCollision",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.00399354845285416,
+        "label": "(1154.0, -195.0)",
+        "surface": "TerrainCollision",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.00400064140558243,
+        "label": "200cm-after-jump",
+        "surface": "TerrainCollision",
+        "vertices": 3530
+      }
+    ],
+    "actual_disk_height_round_trip": true,
+    "captures": [
+      "user://canal-human-scale-promenade.png",
+      "user://canal-two-metre-jump.png",
+      "user://canal-residential-lanes-and-flowers.png"
+    ],
+    "clock_frozen_fixture": true,
+    "controlled_appearance_fixture": true,
+    "grand_arterials_and_bridge_geometry_retained": true,
+    "height_cm": 200,
+    "inventory_money_unchanged": true,
+    "loaded_flower_beds": 18,
+    "loaded_surface_styles": [
+      "basket_bond",
+      "limestone_flags",
+      "square_flags",
+      "earth_lane",
+      "gravel_soil_mix",
+      "large_setts",
+      "slate_flags",
+      "rounded_cobbles",
+      "gravel_lane",
+      "diagonal_setts",
+      "sandstone_rows",
+      "small_setts",
+      "edge_setts",
+      "brick_bond",
+      "granite_rows"
+    ],
+    "manual_play": false,
+    "ordinary_6m_carriageways": 20,
+    "ordinary_automated_input": true,
+    "palette_ids": [
+      "small_setts",
+      "large_setts",
+      "diagonal_setts",
+      "granite_rows",
+      "sandstone_rows",
+      "limestone_flags",
+      "slate_flags",
+      "brick_bond",
+      "basket_bond",
+      "rounded_cobbles",
+      "square_flags",
+      "edge_setts",
+      "gravel_lane",
+      "earth_lane",
+      "gravel_soil_mix"
+    ],
+    "palette_rendered_at_same_scale": 15,
+    "player_position_assignments": 0,
+    "promenade_m": 3.0,
+    "visual_acceptance": false,
+    "walked_m": 148.006318959408
+  },
+  "performance": {
+    "bounded_night_lights": true,
+    "driver_position_assignments": 0,
+    "full_performance_acceptance": false,
+    "grass_instances_in_loaded_cells": 20427,
+    "manual_play": false,
+    "physical_tree_instances_in_loaded_cells": 29,
+    "quality_invariant_world_geometry": true,
+    "samples": [
+      {
+        "draw_calls": 854.0,
+        "max_frame_ms": 33.83,
+        "mean_frame_ms": 23.4993583333333,
+        "p95_frame_ms": 29.466,
+        "park_rendering": false,
+        "quality": "Low",
+        "samples": 120,
+        "scale_3d": 0.699999988079071,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 993408453.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 868.0,
+        "max_frame_ms": 49.854,
+        "mean_frame_ms": 28.4156666666667,
+        "p95_frame_ms": 38.228,
+        "park_rendering": true,
+        "quality": "Low",
+        "samples": 120,
+        "scale_3d": 0.699999988079071,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 993408453.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 868.0,
+        "max_frame_ms": 36.849,
+        "mean_frame_ms": 30.4830583333334,
+        "p95_frame_ms": 34.191,
+        "park_rendering": false,
+        "quality": "Medium",
+        "samples": 120,
+        "scale_3d": 0.850000023841858,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 995122629.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 892.0,
+        "max_frame_ms": 36.6,
+        "mean_frame_ms": 32.5907583333333,
+        "p95_frame_ms": 34.657,
+        "park_rendering": true,
+        "quality": "Medium",
+        "samples": 120,
+        "scale_3d": 0.850000023841858,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 995122629.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 931.0,
+        "max_frame_ms": 49.657,
+        "mean_frame_ms": 36.2182583333333,
+        "p95_frame_ms": 39.065,
+        "park_rendering": false,
+        "quality": "High",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1004541381.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 959.0,
+        "max_frame_ms": 53.87,
+        "mean_frame_ms": 39.3417916666667,
+        "p95_frame_ms": 48.168,
+        "park_rendering": true,
+        "quality": "High",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1004541381.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 1031.0,
+        "max_frame_ms": 62.141,
+        "mean_frame_ms": 42.5828,
+        "p95_frame_ms": 50.451,
+        "park_rendering": false,
+        "quality": "Ultra",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1019286981.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 1065.0,
+        "max_frame_ms": 56.053,
+        "mean_frame_ms": 43.6726916666667,
+        "p95_frame_ms": 51.661,
+        "park_rendering": true,
+        "quality": "Ultra",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1019286981.0,
+        "viewport": "(1280, 720)"
+      }
+    ]
+  },
+  "parent_exact_sha_all_eight_workflows": "success; WorldCore40069695447/job120800271379 completed119steps",
+  "earlier_server_render_timeout": {
+    "sha": "8455638026564117758ea4e792256dc1c7a747d8",
+    "run": 40068211173,
+    "unchanged_bound_s": 240,
+    "no_gate_weakened": true,
+    "current_parent_pass_does_not_establish_a_performance_guarantee": true
+  },
+  "failed_prototypes_and_fixture_repairs": [
+    "physical-first: a globally enlarged raster capsule invalidated the unchanged thin-obstacle free-endpoint regression; restored the coarse raster radius and moved accurate dimension checks to the individual actor links.",
+    "visual-first: fixture captures array was undeclared; repaired fixture.",
+    "visual-second: fixture changed only world data without applying the editor appearance call; applied the selected2m look explicitly, retained assertion.",
+    "visual-third: automated driver attempted to leave a bridge through its physical parapet; corrected the player test journey around the actual ramp, retained collision.",
+    "visual-fourth: action_press alone did not dispatch the jump input handler; used actual parsed press/release events, retained airborne assertion."
+  ],
+  "manual_play": false,
+  "original_user_profiles_and_checkpoints_untouched": true,
+  "physical_bridge_geometry_and_shared_head_index_workflow_preserved": true,
+  "full_city_art_acceptance": false,
+  "full_human_art_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "new_exact_sha_ci": "pending after publication",
+  "actual_final_PCK": "pending for this new revision; separate source preview may be shown, primary verified launcher remains6d3",
+  "open": [
+    "House facades, populated interiors, dense continuous urban composition and natural vegetation still fall well short of the supplied concepts.",
+    "New background houses remain non-enterable scenery; existing functional household interiors stay in place.",
+    "Boats, piers, carts, horses, child/age models and broader alive-world composition are not completed by this package.",
+    "Resource UID fallback warnings and exit-time RefCounted leaks remain; no false performance/art completion claim."
+  ],
+  "next": "Verify exact new-SHA CI and compiled Windows package; continue coherent human-scale street walls, functional diverse homes and waterfront detail using real Blender assets and new ordinary gameplay reviews."
+}

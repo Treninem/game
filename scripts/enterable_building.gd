@@ -12,8 +12,9 @@ const ROOF_SCENE: PackedScene = preload("res://assets/production/exteriors/famil
 @export var wall_thickness := 0.28
 @export var floor_thickness := 0.18
 @export var ceiling_thickness := 0.16
-@export var doorway_width := 1.45
-@export var doorway_height := 2.35
+@export var doorway_width := 1.20
+# Door coordinates start at the foundation; the18cm floor leaves2.20m clear.
+@export var doorway_height := 2.38
 @export var window_width := 1.35
 @export var window_height := 1.15
 @export var window_sill_height := 1.05

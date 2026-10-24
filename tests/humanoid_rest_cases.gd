@@ -26,7 +26,7 @@ func run(parent: Node3D) -> Array[String]:
     visual.set_process(false)
     var checked := 0
     for sex: String in ["male", "female"]:
-        for height: float in [160.0, 180.0, 195.0]:
+        for height: float in [160.0, 180.0, 195.0, 200.0]:
             var profile := {"sex": sex, "height_cm": height}
             GameState.set_world_value("player_appearance", profile)
             visual.call("apply_appearance", profile)

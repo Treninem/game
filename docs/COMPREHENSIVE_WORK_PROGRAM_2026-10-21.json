@@ -554,5 +554,39 @@
     "duplicate_models": false,
     "exact_sha_ci": "pending",
     "actual_final_PCK": "pending"
+  },
+  "latest_human_street_scale": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HUMAN_STREET_SCALE.json",
+    "adult_height_cm": [
+      160,
+      200
+    ],
+    "ordinary_door_clear_m": [
+      1.2,
+      2.2
+    ],
+    "street_surfaces": 15,
+    "ordinary_carriageway_m": 6,
+    "promenade_m": 3,
+    "canal_quarter_possible_houses_per_cell": 12,
+    "old_saved_position_keeps_a_persisted_open_plot": true,
+    "local_checks": 15,
+    "actual_automated_walk_m": 148.006318959408,
+    "GPU_sole_samples": 5,
+    "manual_play": false,
+    "exact_sha_ci": "pending",
+    "actual_final_PCK": "pending",
+    "full_visual_acceptance": false
+  },
+  "user_scale_and_city_constraints": {
+    "adult_stature_cm": [
+      160,
+      200
+    ],
+    "children_require_age_appropriate_models_and_households": true,
+    "human_scale_doors_furniture_streets_bridges_vehicles": true,
+    "fifteen_surface_types": true,
+    "dense_streets_squares_gardens_farms_waterfront": true,
+    "boats_docks_piers_horses_carts_still_open": true
   }
 }

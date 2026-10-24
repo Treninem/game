@@ -55,7 +55,7 @@ func _ready() -> void:
     # At capital coordinates the default millimetre recovery margin is close
     # to float precision. A two-centimetre capsule margin separates grazing
     # masonry contacts instead of pinning a resident to a bevel indefinitely.
-    # Geometry, capsule size, movement speed and collision masks stay intact.
+    # Keep this recovery margin independent of the adult stature and capsule size.
     safe_margin = 0.02
     floor_snap_length = 0.35
     floor_max_angle = deg_to_rad(48.0)
@@ -529,6 +529,15 @@ func _build_collision() -> void:
     collision.shape = shape
     add_child(collision)
 
+func apply_character_dimensions(height_cm:float) -> void:
+    var appearance:=preload("res://scripts/character_appearance.gd")
+    var height:=clampf(height_cm,appearance.MIN_HEIGHT_CM,appearance.MAX_HEIGHT_CM) if is_finite(height_cm) else appearance.DEFAULT_HEIGHT_CM
+    var collider:=get_node_or_null("CollisionShape3D") as CollisionShape3D
+    if collider==null:return
+    var capsule:=collider.shape as CapsuleShape3D
+    capsule.height=height/100.0;capsule.radius=.34*height/180.0
+    collider.position.y=capsule.height*.5
+
 func _build_visual() -> void:
     visual = HUMANOID.new()
     visual.name = "Visual"
@@ -553,6 +562,9 @@ func _build_visual() -> void:
     # node instance or a temporary palette index on reload.
     var appearance_id := "appearance:" + citizen_id
     var fallback := preload("res://scripts/character_appearance.gd").preset((5 if body_sex == "female" else 0) + palette_index % 5)
+    # Identity, not scene order or a random frame, chooses an adult's stature.
+    # Preserve explicit old looks; missing legacy heights remain180cm.
+    fallback.height_cm=160.0+float(absi(citizen_id.hash())%41)
     visual.appearance_profile = preload("res://scripts/character_appearance.gd").normalized(GameState.get_world_value(appearance_id, fallback))
     add_child(visual)
 

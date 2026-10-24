@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлено оформление новых домов, рынков и общественных интерьеров после загрузки мира: потерянные обработчики восстановлены при каждом входе в дерево. Реальная загрузка и повторный перенос мира проверены,132модели дома и2125моделей города без дублей;4 прежние проверки прошли. Семейная жизнь и мосты прошли на сервере845, но полный графический тест превысил240с при программном рендеринге; ограничение не снято, исправление производительности открыто. Рост160–200см, плотность и пропорции улиц,15покрытий и цветники являются следующей связанной работой. Полное художественное соответствие концептам не достигнуто.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_LOADED_SETTLEMENT_SERVICES.json",
+  "current_stage": "Рост взрослых160–200см связан с моделью, капсулой и проверкой проходимости; реальные двери1,20×2,20м от чистого пола проверены.15покрытий используют разную укладку, обычные проезды6м, пешеходные проходы2,2м, набережные3м; добавлены цветники из существующих Blender-моделей. В квартале каналов до12домов на участок вместо2, зелёные дворы открыты, подходы к мостам и старое положение сохранения защищены. Проверены редактор,448поз опоры, отдых/оружие, семейная жизнь,рынок,148м обычного автоматизированного движения,прыжок/приземление и5GPU-подошв. Предыдущая ревизия826 прошла8серверных workflows; новая ждёт собственные CI иPCK. Дома/люди/общая композиция ещё не соответствуют концептам, стабильный релиз не объявлен.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_HUMAN_STREET_SCALE.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -654,5 +654,28 @@
     "duplicate_models": false,
     "exact_sha_ci": "pending",
     "actual_final_PCK": "pending"
+  },
+  "latest_human_street_scale": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HUMAN_STREET_SCALE.json",
+    "adult_height_cm": [
+      160,
+      200
+    ],
+    "ordinary_door_clear_m": [
+      1.2,
+      2.2
+    ],
+    "street_surfaces": 15,
+    "ordinary_carriageway_m": 6,
+    "promenade_m": 3,
+    "canal_quarter_possible_houses_per_cell": 12,
+    "old_saved_position_keeps_a_persisted_open_plot": true,
+    "local_checks": 15,
+    "actual_automated_walk_m": 148.006318959408,
+    "GPU_sole_samples": 5,
+    "manual_play": false,
+    "exact_sha_ci": "pending",
+    "actual_final_PCK": "pending",
+    "full_visual_acceptance": false
   }
 }

@@ -40,7 +40,7 @@ func run(parent: Node3D) -> Array[String]:
     visual.set_process(false)
     var probe := preload("res://tests/humanoid_skin_probe.gd").new()
     for sex: String in ["male", "female"]:
-        for height: float in [160.0, 180.0, 195.0]:
+        for height: float in [160.0, 180.0, 195.0, 200.0]:
             var profile := {"sex":sex, "height_cm":height, "Build":-0.5 if height == 160.0 else (0.5 if height == 195.0 else 0.0)}
             GameState.set_world_value("player_appearance", profile)
             visual.call("apply_appearance", profile)
@@ -125,7 +125,7 @@ func run(parent: Node3D) -> Array[String]:
     step.queue_free()
     await tree.process_frame
     costs.sort()
-    print("HUMANOID_SUPPORT_CHECKED poses=",checked," bodies=2 heights=3 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=",worst_penetration," max_gap=",worst_support_gap," modifier_p95_usec=",costs[int(costs.size()*0.95)] if not costs.is_empty() else -1)
+    print("HUMANOID_SUPPORT_CHECKED poses=",checked," bodies=2 heights=4 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=",worst_penetration," max_gap=",worst_support_gap," modifier_p95_usec=",costs[int(costs.size()*0.95)] if not costs.is_empty() else -1)
     return failures
 
 func _height(point: Vector3, terrain: String) -> float:

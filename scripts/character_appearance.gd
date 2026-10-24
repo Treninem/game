@@ -2,7 +2,7 @@ extends RefCounted
 
 const VERSION := 1
 const MIN_HEIGHT_CM := 160.0
-const MAX_HEIGHT_CM := 195.0
+const MAX_HEIGHT_CM := 200.0
 const DEFAULT_HEIGHT_CM := 180.0
 const SHAPES := ["HeadSize", "FaceWidth", "FaceHeight", "FaceDepth", "Nose", "NoseWidth", "NoseHeight", "Jaw", "Build"]
 const SKINS := [Color(1, 0.97, 0.94), Color(0.85, 0.73, 0.62), Color(0.62, 0.45, 0.33)]

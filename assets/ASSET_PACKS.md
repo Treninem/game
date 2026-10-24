@@ -188,3 +188,7 @@ INTEGRATED on the review branch: project-authored Blender layered shingle roof/g
 
 ## Connected capital canal neighbourhood — 2026-10-24 review
 - INTEGRATED in review only: original five-part Blender CapitalCanalKit (43,348triangles), editable source and safe exporter. Four96x16m actual open-vault bridges,6m quays, a continuous carved600m canal, conforming dry paving, existing shared photographs/water/wind/nature, one two-adult working household, shop and finite fletcher production. No new third-party pack or concept pixels. See assets/registry/CAPITAL_CANALS_2026-10-24.json. Main integration, full city composition, human/household variety and overall art acceptance are not claimed.
+
+### Human-scale city surface family - 2026-10-24
+
+INTEGRATED in review: fifteen metre-scaled street materials using existing CC0 ground photographs, differentiated stone/brick bond and gravel/soil treatments; six-metre ordinary carriageways, two-point-two-metre household lanes and three-metre canal promenades. Existing Blender CityStreetKit stone troughs and CottageYardKit wind-driven flowers reused for bounded pocket gardens; no new third-party download or generated bitmap. Grand arterials and physical canal bridges are retained. Scope, sources, measured door/stature limits and evidence: assets/registry/HUMAN_STREET_SCALE_2026-10-24.json. Full city composition, house density and art acceptance remain open.

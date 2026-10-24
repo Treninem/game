@@ -1,5 +1,6 @@
 extends Node3D
 
+const STREET_SURFACES := preload("res://scripts/street_surface_palette.gd")
 const CANAL_DATA := preload("res://scripts/capital_canal_data.gd")
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const FACADES := preload("res://scripts/modular_city_facades.gd")
@@ -183,9 +184,22 @@ func _build_cell(cell: Vector2i) -> void:
         if canal_builder==null:canal_builder=load("res://scripts/capital_canals.gd")
         canal_builder.city_cell(root,self)
     else:
-        _add_mesh_box("DistrictPaving", Vector3(CELL_SIZE - 2.0, 0.08, CELL_SIZE - 2.0), Vector3(0.0, base_y - 0.025, 0.0), ground_material, root)
-        _add_mesh_box("RoadNS", Vector3(14.0, 0.11, CELL_SIZE), Vector3(0.0, base_y - 0.035, 0.0), road_material, root)
-        _add_mesh_box("RoadEW", Vector3(CELL_SIZE, 0.11, 14.0), Vector3(0.0, base_y - 0.033, 0.0), road_material, root)
+        # The canal quarter has actual green courtyards between streets.
+        # Covering every160m cell in a flat stone carpet erased that landscape.
+        if String(CAPITAL.district_at(center).get("id",""))!="canals":
+            _add_mesh_box("DistrictPaving", Vector3(CELL_SIZE - 2.0, 0.08, CELL_SIZE - 2.0), Vector3(0.0, base_y - 0.025, 0.0), ground_material, root)
+        var carriage_width:=14.0 if cell.x==0 or cell.y==0 else 6.0
+        var ns:=_add_mesh_box("RoadNS", Vector3(carriage_width, 0.11, CELL_SIZE), Vector3(0.0, base_y - 0.035, 0.0), road_material, root)
+        var ew:=_add_mesh_box("RoadEW", Vector3(CELL_SIZE, 0.11, carriage_width), Vector3(0.0, base_y - 0.033, 0.0), road_material, root)
+        ns.material_override=STREET_SURFACES.material(STREET_SURFACES.index_for(cell))
+        ew.material_override=STREET_SURFACES.material(STREET_SURFACES.index_for(cell,5))
+        root.set_meta("carriage_width_m",carriage_width)
+        for side:float in [-1,1]:
+            for axis in range(2):
+                var lane:=_add_mesh_box("HouseholdLane",Vector3(2.2,.12,CELL_SIZE) if axis==0 else Vector3(CELL_SIZE,.12,2.2),Vector3(side*40 if axis==0 else 0,base_y-.034,side*40 if axis==1 else 0),road_material,root)
+                lane.material_override=STREET_SURFACES.material(STREET_SURFACES.index_for(cell,8+axis))
+        root.set_meta("household_lane_width_m",2.2)
+        preload("res://scripts/street_pocket_gardens.gd").build(root)
 
     var district: Dictionary = CAPITAL.district_at(center)
     var district_id := String(district.get("id", "city"))
@@ -201,9 +215,9 @@ func _build_cell(cell: Vector2i) -> void:
         for direction in [Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1), Vector2(1, 1)]:
             lots.append(offset * direction)
     var house_count := 8
-    if district_id in ["market", "crafts", "old_town", "residential"]:
+    if district_id in ["market", "crafts", "old_town", "residential", "canals"]:
         house_count = 12
-    elif district_id in ["arena", "hippodrome", "farms", "canals"]:
+    elif district_id in ["arena", "hippodrome", "farms"]:
         house_count = 2
 
     for i in range(mini(house_count, lots.size())):
@@ -225,6 +239,19 @@ func _build_cell(cell: Vector2i) -> void:
         var yaw := (PI if lot.y > 0.0 else 0.0)
         if absf(lot.x) < absf(lot.y):
             yaw = -PI * 0.5 if lot.x > 0.0 else PI * 0.5
+        var half:=Vector2(width,depth)*.5
+        if absf(sin(yaw))>.5:half=Vector2(half.y,half.x)
+        var envelope:=Rect2(world_lot-half,half*2).grow(.5)
+        var crossing_clear:=true
+        for crossing:Vector2 in CANAL_DATA.bridges():
+            if envelope.intersects(Rect2(crossing-Vector2(54,10.2),Vector2(108,20.4))):crossing_clear=false
+        if not crossing_clear:continue
+        var clearance_key:="capital:open_lot:%d:%d:%d"%[cell.x,cell.y,i]
+        if bool(GameState.get_world_value(clearance_key,false)):continue
+        # An older save can stand where a previously empty background lot now
+        # gains a house. Persist that one open plot instead of enclosing/moving it.
+        if is_instance_valid(player) and envelope.grow(1).has_point(Vector2(player.global_position.x,player.global_position.z)):
+            GameState.set_world_value(clearance_key,true);continue
         _build_house(root, Vector3(lot.x, y, lot.y), Vector3(width, height, depth), i, yaw)
 
     if district_id == "market" and cell.x % 2 == 0:

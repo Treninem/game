@@ -27,7 +27,7 @@ func _ready() -> void:
     grid.region=Rect2i(0,0,ceili((upper_bound.x-lower_bound.x)/CELL),ceili((upper_bound.y-lower_bound.y)/CELL))
     grid.cell_size=Vector2.ONE*CELL;grid.offset=lower_bound+Vector2.ONE*CELL*.5
     grid.diagonal_mode=AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES;grid.update()
-    var capsule:=CapsuleShape3D.new();capsule.radius=.36;capsule.height=1.7
+    var capsule:=CapsuleShape3D.new();capsule.radius=.36;capsule.height=2.0
     probe.shape=capsule;probe.collision_mask=1
     var body:=CapsuleShape3D.new();body.radius=.34;body.height=1.8
     anchor_probe.shape=body;anchor_probe.collision_mask=1
@@ -95,7 +95,7 @@ func _physics_process(_delta:float) -> void:
         var canal:=preload("res://scripts/capital_canal_data.gd")
         var bridge:=canal.bridge_at(point_xz)
         var forbidden_water:=canal.wet_at(point_xz) and is_inf(bridge.x)
-        world.y=(canal.deck_height(point_xz.x-bridge.x) if not is_inf(bridge.x) else WorldData.elevation_at(point_xz))+1.0
+        world.y=(canal.deck_height(point_xz.x-bridge.x) if not is_inf(bridge.x) else WorldData.elevation_at(point_xz))+1.12
         probe.transform=Transform3D(Basis.IDENTITY,world)
         grid.set_point_solid(id,forbidden_water or not get_world_3d().direct_space_state.intersect_shape(probe,1).is_empty())
         if not grid.is_point_solid(id):graph.add_point(_index(id),point)
@@ -137,9 +137,13 @@ func _connection_clear(from_world:Vector3,to_world:Vector3) -> bool:
     # Lift the standing capsule by12cm only for the obstacle sweep. Otherwise
     # an initial floor touch makes cast_motion ignore the whole joined bridge.
     # The support samples above independently reject steps/drops and steepness.
-    anchor_probe.transform=Transform3D(Basis.IDENTITY,from_world+Vector3.UP*1.02)
+    anchor_probe.transform=Transform3D(Basis.IDENTITY,from_world+Vector3.UP*((anchor_probe.shape as CapsuleShape3D).height*.5+.12))
     anchor_probe.motion=destination-from_world
     var result:=get_world_3d().direct_space_state.cast_motion(anchor_probe)
+    # A shared coarse raster may fit a smaller citizen. Reject destinations
+    # that overlap geometry for THIS actual capsule, even after a start-overlap.
+    anchor_probe.transform.origin+=anchor_probe.motion;anchor_probe.motion=Vector3.ZERO
+    if not get_world_3d().direct_space_state.intersect_shape(anchor_probe,1).is_empty():return false
     return result.size()==2 and result[0]>=.99999
 
 func _nearest(id:Vector2i,from_world:Vector3=Vector3.INF) -> Vector2i:
@@ -159,7 +163,15 @@ func _nearest(id:Vector2i,from_world:Vector3=Vector3.INF) -> Vector2i:
         if _connection_clear(from_world,to_global(Vector3(point.x,0,point.y))):return candidate
     return Vector2i(-1,-1)
 
-func can_reach(from:Vector3,destination:Vector3) -> bool:
+func _actor_dimensions(actor:Node3D)->void:
+    var collision:=actor.get_node_or_null("CollisionShape3D") as CollisionShape3D
+    if collision==null or not collision.shape is CapsuleShape3D:return
+    var actual:=collision.shape as CapsuleShape3D
+    var capsule:=anchor_probe.shape as CapsuleShape3D
+    capsule.height=actual.height-.12;capsule.radius=actual.radius
+
+func can_reach(from:Vector3,destination:Vector3,actor:Node3D=null) -> bool:
+    if actor!=null:_actor_dimensions(actor)
     if not grid_ready:return false
     _exclude_people()
     var a:=_nearest(_cell(to_local(from)),from);var b:=_nearest(_cell(to_local(destination)))
@@ -182,6 +194,7 @@ func _arrival_point(from_world:Vector3,destination:Vector3,radius:float) -> Vect
 
 func next_point(from_world:Vector3,destination_world:Vector3,actor:Node3D,arrival_radius:float=0.) -> Vector3:
     if not grid_ready:return from_world
+    _actor_dimensions(actor)
     var from:=to_local(from_world);var destination:=to_local(destination_world)
     _exclude_people()
     var start:=_nearest(_cell(from),from_world);var finish:=_nearest(_cell(destination))

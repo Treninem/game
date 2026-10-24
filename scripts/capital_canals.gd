@@ -1,5 +1,6 @@
 extends Node3D
 
+const STREET_SURFACES:=preload("res://scripts/street_surface_palette.gd")
 const DATA:=preload("res://scripts/capital_canal_data.gd")
 const CAPITAL:=preload("res://scripts/capital_data.gd")
 const PATHS:=preload("res://scripts/terrain_paths.gd")
@@ -92,9 +93,10 @@ static func city_cell(root:Node3D,city:Node3D) -> void:
     _prepare()
     var bounds:=Rect2(Vector2(root.global_position.x,root.global_position.z)-Vector2.ONE*80,Vector2.ONE*160)
     var center:=Vector2(root.global_position.x,root.global_position.z)
-    var footprints:Array[PackedVector2Array]=[PATHS.strip(center-Vector2(80,0),center+Vector2(80,0),14),PATHS.strip(center-Vector2(0,80),center+Vector2(0,80),14)]
+    var carriage_width:=14.0 if _owner(center).x==0 or _owner(center).y==0 else 6.0
+    var footprints:Array[PackedVector2Array]=[PATHS.strip(center-Vector2(80,0),center+Vector2(80,0),carriage_width),PATHS.strip(center-Vector2(0,80),center+Vector2(0,80),carriage_width)]
     for side:float in [-1,1]:
-        footprints.append(PATHS.strip(DATA.CENTER+Vector2(side*26,-320),DATA.CENTER+Vector2(side*26,320),8))
+        footprints.append(PATHS.strip(DATA.CENTER+Vector2(side*26,-320),DATA.CENTER+Vector2(side*26,320),3.0))
     var home_center:Vector2=DATA.bridges()[1]
     footprints.append(PATHS.strip(home_center+Vector2(-45,-23),home_center+Vector2(-49.5,0),3))
     footprints.append(PATHS.strip(home_center+Vector2(49.5,0),home_center+Vector2(55,-20),3))
@@ -106,7 +108,9 @@ static func city_cell(root:Node3D,city:Node3D) -> void:
             for polygon:PackedVector2Array in Geometry2D.clip_polygons(piece,DATA.water_polygon()):dry.append(polygon)
     # The same four-metre terrain triangles own rendering and physics. No flat
     # district box covers the excavated basin or floats above its approaches.
-    PATHS.add(root,"CanalDistrictPaving",dry,"paving")
+    var pavement:=PATHS.add(root,"CanalDistrictPaving",dry,"paving")
+    if pavement!=null:pavement.material_override=STREET_SURFACES.material(STREET_SURFACES.index_for(_owner(center)))
+    root.set_meta("carriage_width_m",carriage_width);root.set_meta("promenade_width_m",3.0)
     var cell:=_owner(Vector2(root.global_position.x,root.global_position.z))
     for bridge_center:Vector2 in DATA.bridges():
         if _owner(bridge_center)==cell:bridge(root,bridge_center)
@@ -136,6 +140,7 @@ static func city_cell(root:Node3D,city:Node3D) -> void:
     details.set_meta("quay_modules",transforms.size())
     _bank_lamps(details,cell)
     _park(root,center)
+    _flower_beds(root,center)
 
 static func _bounds(node:Node3D,inherited:Transform3D=Transform3D.IDENTITY) -> AABB:
     var transform:=inherited*node.transform
@@ -220,3 +225,30 @@ func _process(delta:float) -> void:
     var player:=get_tree().get_first_node_in_group("player") as Node3D
     for lamp:OmniLight3D in lamps:
         lamp.visible=(hour>=17.5 or hour<7) and int(SettingsManager.get_value("graphics","quality_preset"))>=1 and (player==null or lamp.global_position.distance_squared_to(player.global_position)<14400)
+
+static func _flower_beds(root:Node3D,center:Vector2)->void:
+    # Fixed building-scale furnishings, not random obstacles across routines.
+    # Keep the full3m promenade, bridge entrances and household work goals clear.
+    var street:=preload("res://scripts/capital_streetscape.gd");street._prepare()
+    var court:=preload("res://scripts/cottage_yard_assets.gd")
+    var flowers:Array[Transform3D]=[];var planters:Array[Transform3D]=[]
+    var shape:Shape3D=street.parts.StonePlanter.mesh.create_trimesh_shape()
+    var cell:=_owner(center)
+    for side:float in [-1,1]:
+        for index in range(12):
+            var point:=DATA.CENTER+Vector2(side*29.7,-275+50*index)
+            if _owner(point)!=cell:continue
+            var clear:=true
+            for crossing:Vector2 in DATA.bridges():
+                if absf(point.y-crossing.y)<17:clear=false
+            if not clear:continue
+            var at:=root.to_local(Vector3(point.x,WorldData.elevation_at(point),point.y))
+            var transform:=Transform3D(Basis(Vector3.UP,PI*.5),at)
+            planters.append(transform)
+            var body:=StaticBody3D.new();body.name="CanalFlowerBed";body.transform=transform;root.add_child(body)
+            var collision:=CollisionShape3D.new();collision.shape=shape;collision.transform=street.parts.StonePlanter.transform;body.add_child(collision)
+            body.add_to_group("map_fixture");body.set_meta("map_footprint",Vector2(1.25,1.7))
+            for offset:float in [-.48,0,.48]:flowers.append(transform*Transform3D(Basis.from_scale(Vector3.ONE*.75),Vector3(offset,.34,0)))
+    if not planters.is_empty():street._batch(root,"StonePlanter",planters)
+    court.batch(root,"MeadowFlowers",flowers,100,false)
+    root.set_meta("canal_flower_beds",planters.size())

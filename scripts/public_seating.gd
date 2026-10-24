@@ -49,7 +49,7 @@ static func plan(npc:CharacterBody3D,routine:Dictionary) -> Dictionary:
         if bench.furniture_id==saved.get("seat",""):
             selected=bench;break
         var score:=npc.global_position.distance_to(bench.approach_point())+2*bench.global_position.distance_to(goal)
-        if score<cost and navigation.can_reach(npc.global_position,bench.approach_point()):selected=bench;cost=score
+        if score<cost and navigation.can_reach(npc.global_position,bench.approach_point(),npc):selected=bench;cost=score
     if selected==null or not selected.claim(npc.citizen_id):return routine
     npc.used_furniture=selected
     saved.seat=selected.furniture_id;GameState.set_world_value(key,saved)

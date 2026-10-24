@@ -202,6 +202,8 @@ jobs:
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-household" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_household.gd 420
       - name: Verify new household interiors markets and civic rooms survive actual world load transfer
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-loaded-settlement" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_loaded_settlement_services.gd 180
+      - name: Verify human-scale residential lanes and old-save open plots retain disk state
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-city-street-scale" bash tools/run_godot_smoke.sh tests/smoke_city_street_scale.gd 120
       - name: Verify physical hydrology
         run: bash tools/run_godot_smoke.sh tests/smoke_world_hydrology.tscn 180
       - name: Verify bounded start-region production nature streaming
@@ -341,6 +343,8 @@ jobs:
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_public_rest.gd 240
       - name: Verify authored canal materials four quality modes and rendered freshwater bank moisture
         run: xvfb-run -a env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-materials" GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_capital_canal_materials.gd 180
+      - name: Verify fifteen metre-scaled street materials render with physical mip levels and bounded cache
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_street_surface_palette.gd 90
       - name: Verify authored street meshes materials lantern marker four quality modes and physical support
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_city_streetscape_fixture.gd 180
       - name: Verify spatial house bounds conserve meshes materials transforms and actual rendered views

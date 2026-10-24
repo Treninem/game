@@ -71,8 +71,8 @@ func _run() -> void:
     var height_slider := creator.find_child("height_cm", true, false) as HSlider
     if not _check(height_slider != null, "Body category has no physical height control"):
         return
-    height_slider.value = 195.0
-    if not _check(is_equal_approx(creator.visual.scale.y, 195.0 / 180.0), "Height slider does not resize the actual avatar"):
+    height_slider.value = 200.0
+    if not _check(is_equal_approx(creator.visual.scale.y, 200.0 / 180.0), "Height slider does not resize the actual avatar"):
         return
     creator.call("select_trait_category", "face")
     advanced.button_pressed = false

@@ -66,7 +66,7 @@ func apply_appearance(value: Variant) -> void:
     var profile := APPEARANCE.normalized(value)
     scale = Vector3.ONE * body_scale * (float(profile.height_cm) / APPEARANCE.DEFAULT_HEIGHT_CM)
     var actor := (get_parent() as Node3D)
-    if actor.name == "Player" and actor.has_method("apply_character_dimensions"):
+    if actor.has_method("apply_character_dimensions"):
         actor.call("apply_character_dimensions", float(profile.height_cm))
     if is_instance_valid(model) and profile.sex == current_profile.get("sex", ""):
         current_profile = profile
