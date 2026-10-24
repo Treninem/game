@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-24",
+  "recorded_at_utc": "2026-10-24T09:09:55.974288+00:00",
+  "goal": "ACTIVE",
+  "purpose": "Continue input and citizen-physics verification without overwriting the user-opened Godot project or loading another game locally.",
+  "integration_review_sha_unchanged": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+  "isolated_validation_branch": "codex/editor-handoff-validation-2026-10-24",
+  "exact_runtime_and_test_commit": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+  "server_run": {
+    "id": 40080419924,
+    "status": "in_progress",
+    "conclusion": null,
+    "head_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+    "event": "workflow_dispatch",
+    "html_url": "https://github.com/Treninem/game/actions/runs/40080419924",
+    "created_at": "2026-10-24T09:03:05Z"
+  },
+  "latest_job_observation": {
+    "run_id": 40080419924,
+    "source_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+    "jobs": [
+      {
+        "id": 120832623150,
+        "status": "in_progress",
+        "conclusion": null,
+        "checks": [
+          {
+            "name": "Verify citizens physically descend bridge parapets at all supported adult heights",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24
+          },
+          {
+            "name": "Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 25
+          },
+          {
+            "name": "Verify inventory aliases text-entry pause ownership and focused panel shortcuts",
+            "status": "pending",
+            "conclusion": null,
+            "number": 103
+          }
+        ]
+      }
+    ]
+  },
+  "candidate_changes": [
+    "Preserve configured primary bindings while adding default I/Tab inventory access; explicit Tab assignment elsewhere takes priority.",
+    "Display I / Tab in default inventory hints.",
+    "Process visible-panel shortcuts before GUI focus navigation without stealing text entry.",
+    "Keep Escape as back while printable rebound pause keys remain usable in focused editors.",
+    "Physically descend from bridge parapets via measured supported landing targets and capsule casts. No navigation coordinate assignment or teleportation."
+  ],
+  "workflow_integrity": "All previous workflow text, assertions and time bounds preserved byte-for-byte; add two bounded checks and a proof upload. No old gate bypass, warning conversion or stable release.",
+  "local_trace": {
+    "returncode": 1,
+    "seconds": 66.73500000000058,
+    "stopped": true,
+    "marker": false,
+    "errors": [],
+    "trace_only": true,
+    "original_assertions_and_watchdog_retained": true,
+    "private_runtime_sha256": {
+      "settings_manager.gd": "73b192b4835b121513ef245793ae1541b35d6909764e2ba8ab4c628aa7081b35",
+      "gameplay_panels.gd": "8e5e11b983946365f31d4e09e320dde08bd5c0f85a845de1dfa97b954be7650e",
+      "runtime_stability_guard.gd": "568eb1096089510c8d27bb749d0d3f86bc524b684d73d18dda8e86dcefc24fa7"
+    }
+  },
+  "local_trace_observations": {
+    "first_callback_ms": 36649,
+    "main_scene_load_started_ms": 37349,
+    "outer_limit_seconds": 65,
+    "inventory_grid_not_reached": true,
+    "actual_machine_free_ram_mb_during_test": 521,
+    "actual_machine_total_ram_mb": 8042,
+    "after_stop_free_ram_mb": 506,
+    "editor_temporarily_not_responding_then_responding": true,
+    "only_this_owned_test_process_was_stopped": true,
+    "cause_not_reduced_to_memory_alone": true
+  },
+  "earlier_local_input_proof": "Ten focused cases passed on the earlier private UI proposal; the server candidate adds a caption case. Previous unlimited-inventory and control-test timeouts remain recorded, not promoted to success.",
+  "unchanged_runtime_retry": {
+    "source_sha": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+    "runtime_same_as": "711edb0dc5ee39e6b4b0d3b3a1d2db46535a0df9",
+    "run_id": 40079148597,
+    "observed_jobs": [
+      {
+        "id": 120828854738,
+        "status": "in_progress",
+        "conclusion": null,
+        "canal_household": {
+          "name": "Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24
+        },
+        "active": [
+          {
+            "name": "Verify capital gate collisions and physical street access",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 56
+          }
+        ]
+      }
+    ],
+    "meaning": "An unchanged-runtime retry passed the formerly failed household step. Prior failure remains real; intermittent behavior is not proved fixed."
+  },
+  "handoff": {
+    "main_project": "D:/Desktop/GitHub/game/project.godot",
+    "root_runtime_and_workflow_untouched": true,
+    "shared_head_index_preserved": true,
+    "normal_user_profiles_untouched": true,
+    "user_game_and_editor_not_closed": true,
+    "game_close_question": "Pending user response at record time; no closure authorized by elapsed time.",
+    "integration": "Wait for the user to finish editor changes; reconcile files before any integration."
+  },
+  "acceptance": {
+    "full_spec": false,
+    "full_visual_quality": false,
+    "real_mouse_hardware": "Not verified by headless checks",
+    "complete_gameplay": false,
+    "stable_release": false,
+    "server_core": "Pending; inspect exact run, not just dispatch acceptance"
+  },
+  "next": [
+    "Observe the exact server run and proof artifacts; repair actual failures in the isolated branch without weakening gates.",
+    "After checks and reconciliation of user edits, integrate a reviewed connected package and verify the actual rendered game."
+  ]
+}
