@@ -17,11 +17,8 @@ const HUMAN_PATHS := {"male": "res://assets/production/characters/realistic_cont
 static var human_scenes: Dictionary = {}
 const PALETTES := [null, preload("res://assets/production/characters/citizen/citizen_dark.png"), preload("res://assets/production/characters/citizen/citizen_light.png")]
 static var palette_materials: Dictionary = {}
-const WEAPONS := {
-    "starter_axe": preload("res://assets/production/weapons/woodland/Axe_small.glb"),
-    "stone_knife": preload("res://assets/production/weapons/woodland/Dagger.glb"),
-    "short_bow": preload("res://assets/production/weapons/woodland/Bow_Wooden.glb")
-}
+const MODEL_CATALOG = preload("res://scripts/weapon_model_catalog.gd")
+const WEAPONS = MODEL_CATALOG.SCENES
 
 @export var skin_color := Color(0.72, 0.55, 0.42)
 @export var primary_color := Color(0.11, 0.18, 0.28)
@@ -355,7 +352,7 @@ func _prepare_bow_cord(weapon_model: Node3D) -> void:
         held_weapon.add_child(cord)
         bow_cords.append(cord)
     nocked_arrow = Node3D.new()
-    nocked_arrow.add_child(preload("res://assets/production/weapons/woodland/Arrow.glb").instantiate())
+    nocked_arrow.add_child(MODEL_CATALOG.ARROW.instantiate())
     nocked_arrow.name = "NockedArrow"
     held_weapon.add_child(nocked_arrow)
     nocked_arrow.top_level = true

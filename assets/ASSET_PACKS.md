@@ -192,3 +192,7 @@ INTEGRATED on the review branch: project-authored Blender layered shingle roof/g
 ### Human-scale city surface family - 2026-10-24
 
 INTEGRATED in review: fifteen metre-scaled street materials using existing CC0 ground photographs, differentiated stone/brick bond and gravel/soil treatments; six-metre ordinary carriageways, two-point-two-metre household lanes and three-metre canal promenades. Existing Blender CityStreetKit stone troughs and CottageYardKit wind-driven flowers reused for bounded pocket gardens; no new third-party download or generated bitmap. Grand arterials and physical canal bridges are retained. Scope, sources, measured door/stature limits and evidence: assets/registry/HUMAN_STREET_SCALE_2026-10-24.json. Full city composition, house density and art acceptance remain open.
+
+### Rubik gameplay-panel review selection (2026-10-24)
+
+The existing physically staged SIL OFL1.1 Roman Rubik font is selected without modification for the isolated inventory/panel candidate under `assets/production/ui/fonts/rubik/`. The production folder preserves OFL.txt and provenance. No new font download or source pack; this candidate is not yet integrated into the user-opened root project. Native Cyrillic/layout review is required before acceptance.
