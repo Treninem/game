@@ -147,7 +147,34 @@ func _run() -> void:
         assert(gap>0.002 and gap<0.0125,"Path buries soles or intersects terrain")
         local_max=maxf(local_max,gap)
     assert(surface_count>=30 and kinds.size()==3)
+    _verify_far_coverage()
     generator.free()
     print("PATH_SUPPORT_OK surfaces=",surface_count," ray_samples=",samples.size()," max_gap_m=",local_max," materials=3")
     print("TERRAIN_PATHS_OK physical_triangle_samples=",checked," max_gap_m=",max_gap," chunk_seam=true entrances=",homes," materials=3")
     get_tree().quit(0)
+
+func _verify_far_coverage() -> void:
+    # This actual far-city strip previously lost 52 of its 800 square metres.
+    # Test the produced mesh, not only the triangles that happened to survive.
+    var footprints:Array[PackedVector2Array]=[PATHS.strip(Vector2(14654,-7140),Vector2(14654,-7040),8)]
+    var transform:=Transform3D(Basis.IDENTITY,Vector3(14620,0,-7160))
+    var mesh:ArrayMesh=PATHS.build(footprints,transform)
+    assert(mesh!=null,"Far city path disappeared")
+    var arrays:=mesh.surface_get_arrays(0)
+    var vertices:PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
+    var ids:PackedInt32Array=arrays[Mesh.ARRAY_INDEX]
+    var area:=0.
+    for index in range(0,ids.size(),3):
+        var a:=vertices[ids[index]];var b:=vertices[ids[index+1]];var c:=vertices[ids[index+2]]
+        area+=absf((b.x-a.x)*(c.z-a.z)-(b.z-a.z)*(c.x-a.x))*.5
+    assert(absf(area-800)<.025,"Far path has unmeshed holes: %sm2 instead of800"%area)
+    for z in range(-7139,-7040,2):
+        for x in range(14651,14658,2):
+            var point:=Vector2(x,z);var covered:=false
+            for index in range(0,ids.size(),3):
+                var a:=transform*vertices[ids[index]];var b:=transform*vertices[ids[index+1]];var c:=transform*vertices[ids[index+2]]
+                var origin:=Vector2(a.x,a.z)
+                if Geometry2D.is_point_in_polygon(point-origin,PackedVector2Array([Vector2.ZERO,Vector2(b.x,b.z)-origin,Vector2(c.x,c.z)-origin])):
+                    covered=true;break
+            assert(covered,"Far path contains an uncovered walkable sample at"+str(point))
+    print("FAR_PATH_COVERAGE_OK actual_area_m2=",area," expected_m2=800 original_assertions_retained=true")

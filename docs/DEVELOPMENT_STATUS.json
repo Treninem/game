@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Уличные модели изBlender доставлены после8/8 CI и реального288м PCK-прогона: мощение/физика/опора, цветочницы/грунт, кованые фонари/крепления, четыре режима материалов. Текущая полная композиция города, холодные паузы и люди остаются открытыми.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_LIGHT_SCOPE.json",
+  "current_stage": "Исправлена потеря маленьких полигонов дорожек в дальних координатах: полный участок теперь800м² вместо748. Новый контроль встроен в обязательный сценарий без удаления прежних проверок. Частный пакет канала/мостов/озеленения/дома продолжает проходить проверку; в эту узкую правку не включён.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_FAR_PATH_COVERAGE.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -602,5 +602,12 @@
   "launcher_fix": "Old20October primary launcher now runs verifiedb28 EXE with its same existing profile; old launcher is backed up and profile JSON/CFG hashes are unchanged.",
   "public_market_registry": "assets/registry/PUBLIC_MARKET_2026-10-24.json",
   "review_launcher_runtime": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
-  "next_coherent_region": "Canal district: terrain basin, water, clipped paving, authored bridge, goal-based crossings and old-save support. Current private bridge is not integrated."
+  "next_coherent_region": "Canal district: terrain basin, water, clipped paving, authored bridge, goal-based crossings and old-save support. Current private bridge is not integrated.",
+  "latest_far_path_coverage": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_FAR_PATH_COVERAGE.json",
+    "full_footprint_m2": 800,
+    "clean_parent_regression": true,
+    "current_ci": "pending exactSHA",
+    "original_assertions_retained": 27
+  }
 }

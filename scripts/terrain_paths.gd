@@ -93,7 +93,12 @@ static func build(polygons: Array[PackedVector2Array], transform: Transform3D,
                             var b := _corner(ground[1], heights)
                             var c := _corner(ground[2], heights)
                             var normal := (c-a).cross(b-a).normalized()
-                            var triangulation := Geometry2D.triangulate_polygon(piece)
+                            # Ear clipping must operate near zero. At world coordinates
+                            # around 15 km, float polygon areas can cancel to zero and
+                            # silently drop small clipped road triangles.
+                            var local_piece:=PackedVector2Array()
+                            for point in piece:local_piece.append(point-piece[0])
+                            var triangulation := Geometry2D.triangulate_polygon(local_piece)
                             for index in triangulation:
                                 var p := piece[index]
                                 var y := a.y - (normal.x*(p.x-a.x)+normal.z*(p.y-a.z))/normal.y

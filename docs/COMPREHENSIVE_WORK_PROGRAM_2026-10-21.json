@@ -502,5 +502,12 @@
     "delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE_DELIVERY.json",
     "actual_pck_gameplay": true,
     "cold_stalls_remaining": true
+  },
+  "latest_far_path_coverage": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_FAR_PATH_COVERAGE.json",
+    "full_footprint_m2": 800,
+    "clean_parent_regression": true,
+    "current_ci": "pending exactSHA",
+    "original_assertions_retained": 27
   }
 }
