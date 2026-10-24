@@ -6,7 +6,7 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Пользователь открыл основной проект в Godot для самостоятельной работы; живые сцены/код не менять до согласования его правок. Последний runtime711edb0d:7 workflows прошли, обязательный World Core провален на сне жителя у канального моста. Отдельная физическая коррекция схода с парапета прошла6 случаев, полный повтор упёрся в реальный тайм-аут загрузки и не принят. В отдельной копии подтверждены и исправлены Tab и конфликт поиска с переназначенной паузой:10 целевых случаев; повтор переназначения прошёл, большой инвентарь достиг лимита, следующий тест не запускался. Пакет остаётся неприменённым и не принят. Меню, люди, дома, улицы и интерьеры художественно не приняты. Стабильный релиз не объявлен.",
+  "current_stage": "Основной проект остаётся открыт пользователю для ручной работы. Отдельный неприменённый пакет1127512c прошёл полный Validate World Core:124 шага SUCCESS, включая11 проверок ввода,6 физических сходов с парапета, большой инвентарь и бытовые циклы. Просмотрены4 реальных отрисованных кадра; меню, люди, оружие и мир художественно не приняты. Ранее найденное периодическое застревание у двери не объявлено исправленным по успешному повтору. Работающий проект, профили и веткаPR12 не перезаписаны; стабильного релиза нет.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_EDITOR_HANDOFF_INPUT_AUDIT.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
@@ -202,7 +202,7 @@
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
   "ci_followup_status": "Runtime6d3 passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-24_INPUT_RECOVERY_VERIFIED.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -695,6 +695,39 @@
     "isolated_candidate_cases_passed": 10,
     "existing_regressions_passed": 1,
     "regression_suite": "NOT PASSED: binding first timeout; traced binding retry pass; unlimited inventory timeout; lifecycle not run",
-    "visual_acceptance": false
+    "visual_acceptance": false,
+    "remote_followup": {
+      "journal": "docs/DEVELOPMENT_LOG_2026-10-24_INPUT_RECOVERY_VERIFIED.json",
+      "branch": "codex/editor-handoff-validation-2026-10-24",
+      "exact_runtime_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+      "world_core_run": "https://github.com/Treninem/game/actions/runs/40080419924",
+      "world_core": "SUCCESS; all124 steps",
+      "input_cases_passed": 11,
+      "physical_perch_cases_passed": 6,
+      "downloaded_native_frames": 321,
+      "actually_viewed_native_frames": 4,
+      "root_runtime_integrated": false,
+      "PR12_runtime_integrated": false,
+      "all_eight_exact_sha_gates": false,
+      "visual_acceptance": false,
+      "intermittent_home_door_issue": "OPEN; failed on parent74, passed repeat112; no doorway fix claimed"
+    },
+    "previous_local_failures_retained": true
+  },
+  "latest_isolated_validation": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_INPUT_RECOVERY_VERIFIED.json",
+    "branch": "codex/editor-handoff-validation-2026-10-24",
+    "exact_runtime_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+    "world_core_run": "https://github.com/Treninem/game/actions/runs/40080419924",
+    "world_core": "SUCCESS; all124 steps",
+    "input_cases_passed": 11,
+    "physical_perch_cases_passed": 6,
+    "downloaded_native_frames": 321,
+    "actually_viewed_native_frames": 4,
+    "root_runtime_integrated": false,
+    "PR12_runtime_integrated": false,
+    "all_eight_exact_sha_gates": false,
+    "visual_acceptance": false,
+    "intermittent_home_door_issue": "OPEN; failed on parent74, passed repeat112; no doorway fix claimed"
   }
 }
