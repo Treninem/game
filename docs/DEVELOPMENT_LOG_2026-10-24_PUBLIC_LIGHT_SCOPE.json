@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent_runtime": "8cfc380d4be0f42d3c46dcffad45bee05cee91a9",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "type": "Test fixture identity; shipping runtime unchanged",
+  "observed_failure": {
+    "run": 40045576522,
+    "job": 120726397942,
+    "step": 83,
+    "message": "Arcade lanterns lost their measured mounts",
+    "cause": "The test counted every medium_only point light as an arcade lamp. Adding4street lamps makes6optional lights; medium_only denotes quality policy, not the2arcade Blender mounts.",
+    "slope_followup_step66": "success on exact8cf CI"
+  },
+  "change": "Keep original visibility/shadow policy checks for every optional light. Identify the2original arcade lights by measured Blender mount positions and require unique anchors. Independently require4authored street lights with bounded range. All24original assertions, full obstacle add/remove, actual NPC walks/seats/work, collision and disk-state checks remain.",
+  "local_full_public_life": {
+    "returncode": 0,
+    "seconds": 98.68799999999464,
+    "stopped": false,
+    "errors": [],
+    "marker": true,
+    "all_original_assertions_retained": true,
+    "original_assertions": 24
+  },
+  "actual_current_packaged_gameplay": {
+    "result": {
+      "sha": "8cfc380d4be0f42d3c46dcffad45bee05cee91a9",
+      "pck_sha256": "b963df11b06514409bc6e46d465101ac83a8ec9cc1a740cc1fb8a6b8ab827b8e",
+      "actual_compiled_pck": true,
+      "engine": "Godot4.7.1 desktop debug engine with --main-pack; not exported EXE script execution",
+      "manual_play": false,
+      "returncode": 0,
+      "seconds": 275.2810000000027,
+      "stopped": false,
+      "errors": [],
+      "marker": "CITY_STREETSCAPE_NATIVE_OK ordinary_walk_m=287.930883517955 player_position_assignments=0 arcade=true paid_trade=true finite_visible_stock=true npc_seats=true player_rest=true actual_scene_reload=true jump_wake=true npc_return_work=true gpu_boot_coverage=3530_per_actor manual_play=false"
+    },
+    "proof": {
+      "exclusive_seats": true,
+      "foot_samples": [
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00400043129920959,
+          "label": "trader-public-rest",
+          "minimum_y": 0.0290004312992096,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "artisan-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "hero-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        }
+      ],
+      "jump_wake_and_land": true,
+      "manual_play": false,
+      "paid_trade_and_visible_stock": true,
+      "player_position_assignments": 0,
+      "real_scene_disk_restore": true,
+      "residents_return_to_work": true,
+      "street_foot_samples": [
+        {
+          "gap_m": 0.00400006771087646,
+          "label": "east-promenade-entry",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.0039997324347496,
+          "label": "east-promenade-north",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399954617023468,
+          "label": "west-promenade",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        }
+      ],
+      "streetscape": {
+        "actual_walked_m": 287.930883517955,
+        "details": {
+          "central_clear_width_m": 14.0,
+          "flowers": 12,
+          "lantern_posts": 4,
+          "panel_ramp_rise_m": 0.039,
+          "panel_ramp_run_m": 0.1,
+          "paving_panels": 28,
+          "planters": 6
+        },
+        "driver_position_assignments": 0,
+        "four_night_lights_bounded_and_low_disabled": true,
+        "manual_play": false,
+        "planter_physical_heights_m": [
+          0.340000038966537,
+          0.58999983035028
+        ]
+      },
+      "talk_to_visible_seated_resident": true,
+      "walked_m": 287.930883517955
+    }
+  },
+  "local_test_gap": "The initial streetscape subset omitted the full public-market-life gate. Its existing count assumption should have been caught before publication; the complete scenario is now run locally.",
+  "shipping_files_changed": false,
+  "workflow_or_timeouts_changed": false,
+  "new_exact_sha_ci": "Pending after publication; all8required, no primary launcher promotion before success",
+  "old_primary": "Previous validated0ff remains selected; current8cf actualPCK passed287.931m but failedWorldCore is not treated as green",
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "next": "Inspect the complete exact-head CI, deliver the current tested package only after mandatory gates pass, then continue actual canal/shore/bridge/architecture integration and whole human quality."
+}

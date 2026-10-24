@@ -11,16 +11,33 @@ func _run() -> void:
     var square:Node3D=load("res://scripts/capital_square_life.gd").new();square.position=Vector3(CapitalData.CENTER.x,0,CapitalData.CENTER.y);world.add_child(square)
     load("res://scripts/capital_market_court.gd").build(square)
     var quality:int=root.get_node("SettingsManager").get_value("graphics","quality_preset")
+    var arcade_mounts:=square.get_node("MarketArcade").find_children("LanternMount*","Node3D",true,false)
+    assert(arcade_mounts.size()==2,"Authored arcade lost its two actual Blender mounts")
     state.world_minutes=20*60
     for preset:int in [0,1]:
         root.get_node("SettingsManager").set_quality_preset(preset)
         square._process(1.1)
         var checked_lights:=0
+        var checked_street:=0
+        var occupied_mounts:Dictionary={}
         for lamp:OmniLight3D in square.lamps:
             if lamp.get_meta("medium_only",false):
                 assert(lamp.visible==(preset>=1) and not lamp.shadow_enabled)
-                checked_lights+=1
+                # Quality policy is not fixture identity. Locate the original
+                # arcade lights by actual Blender mounts, including uniqueness.
+                var anchor_id:=0
+                for mount:Node3D in arcade_mounts:
+                    var expected:=square.to_local(mount.global_position)+Vector3(0,.25,.15)
+                    if lamp.position.distance_to(expected)<.003:anchor_id=mount.get_instance_id();break
+                if anchor_id!=0:
+                    assert(not occupied_mounts.has(anchor_id),"Two arcade lamps share one measured mount")
+                    occupied_mounts[anchor_id]=true
+                    checked_lights+=1
+                else:
+                    assert(String(lamp.name).begins_with("StreetPostLight_") and lamp.omni_range<=5.5,"Unknown optional light is not an authored street post")
+                    checked_street+=1
         assert(checked_lights==2,"Arcade lanterns lost their measured mounts")
+        assert(checked_street==4,"Authored street lights lost coverage")
     root.get_node("SettingsManager").set_quality_preset(quality);state.world_minutes=9*60
     var nav:Node=square.get_node("PublicSpaceNavigation")
     while not nav.grid_ready:await physics_frame
