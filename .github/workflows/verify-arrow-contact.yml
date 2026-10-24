@@ -1,0 +1,72 @@
+name: Verify Arrow Contact and Combat
+
+on:
+  push:
+    branches: [codex/editor-handoff-validation-2026-10-24]
+    paths:
+      - scripts/weapon_projectile.gd
+      - tests/smoke_arrow_tip_contact.gd
+      - .github/workflows/verify-arrow-contact.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: impuls-arrow-contact-review-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  arrow-contact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/audio
+            assets/branding
+            assets/production
+            assets/registry
+            assets/shaders
+            assets/staging/nature/kenney_nature_kit
+            assets/ui
+            assets/vfx
+            scenes
+            scripts
+            story
+            tests
+            tools/run_godot_smoke.sh
+      - name: Install Godot and a software rendering display
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+      - name: Parse actual project and rendered diagnostic
+        run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Verify actual rendered arrow endpoint contact at ten distances angles and tick rates
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-arrow-tip" bash tools/run_godot_smoke.sh tests/smoke_arrow_tip_contact.gd 90
+      - name: Preserve actual moving and jumping controller release origins
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-arrow-release" bash tools/run_godot_smoke.sh tests/smoke_projectile_release.gd 180
+      - name: Preserve whole-body grip draw cancellation and axe contact
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-arrow-grip" bash tools/run_godot_smoke.sh tests/smoke_weapon_grip.tscn 90
+      - name: Preserve real equipment arrows magic graphics and quantities
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-arrow-actions" bash tools/run_godot_smoke.sh tests/smoke_gameplay_actions.tscn 120
+      - name: Render ordinary world input equipment magic UI and actual disk save
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-arrow-world" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/visual_bow_world.gd 240
+      - name: Upload actual endpoint and gameplay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arrow-contact-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/impuls-arrow-tip/godot/app_userdata/ImPuls/arrow-tip-contact.json
+            ${{ runner.temp }}/impuls-arrow-world/godot/app_userdata/ImPuls/head-size-*.png
