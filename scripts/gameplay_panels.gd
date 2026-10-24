@@ -30,7 +30,10 @@ func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     mouse_force_pass_scroll_events = false
     theme = Theme.new()
-    theme.default_font = UI_FONT
+    var readable_font := FontVariation.new()
+    readable_font.base_font = UI_FONT
+    readable_font.variation_opentype = {"wght": 450}
+    theme.default_font = readable_font
     theme.default_font_size = 14
     _build_shell()
     SettingsManager.bindings_changed.connect(_refresh_tabs)
@@ -333,7 +336,7 @@ func _show_inventory() -> void:
     var summary := Label.new()
     var weapon := InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON)
     var weapon_name := "Без оружия" if weapon.is_empty() else String(InventorySystem.item_info(weapon).get("name", weapon))
-    summary.text = "%s   ·   Монеты: %d   ·   Вместимость не ограничена" % [weapon_name, GameState.coins]
+    summary.text = "%s   ·   Атака +%.0f   ·   Монеты: %d   ·   Вместимость не ограничена" % [weapon_name, InventorySystem.attack_bonus(), GameState.coins]
     summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     summary.add_theme_font_size_override("font_size", 13)
     summary.modulate = Color(.78, .75, .67)
@@ -430,7 +433,7 @@ func _show_inventory() -> void:
             cell.add_child(preview)
             preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
             preview.offset_left = 8; preview.offset_right = -8
-            preview.offset_top = 18; preview.offset_bottom = -29
+            preview.offset_top = 18; preview.offset_bottom = -36
         else:
             var category := Label.new()
             category.text = String(info.get("category", "Предмет"))
@@ -442,7 +445,7 @@ func _show_inventory() -> void:
             cell.add_child(category)
             category.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
             category.offset_left = 5; category.offset_right = -5
-            category.offset_top = 19; category.offset_bottom = -29
+            category.offset_top = 19; category.offset_bottom = -36
         var caption := Label.new()
         caption.name = "ItemCaption"
         caption.text = String(info.get("name", item_id))
@@ -456,7 +459,7 @@ func _show_inventory() -> void:
         cell.add_child(caption)
         caption.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
         caption.offset_left = 4; caption.offset_right = -4
-        caption.offset_top = -29; caption.offset_bottom = -2
+        caption.offset_top = -36; caption.offset_bottom = -2
     var details := GridContainer.new()
     details.name = "InventoryDetails"
     details.columns = 1
@@ -532,9 +535,15 @@ func _inventory_card(parent: GridContainer, info: Dictionary) -> void:
         var preview := ITEM_PREVIEW.new()
         preview.name = "SelectedItemModel"
         preview.item_id = item_id
-        preview.custom_minimum_size = Vector2(0, 120)
+        preview.custom_minimum_size = Vector2(0, 104)
         stack.add_child(preview)
         stack.move_child(preview, 1)
+    if item_id == "short_bow":
+        var ammunition := Label.new()
+        ammunition.text = "Стрелы: %d · %s — изготовить" % [int(GameState.inventory.get("arrow", 0)), SettingsManager.binding_text("open_crafting")]
+        ammunition.add_theme_font_size_override("font_size", 12)
+        ammunition.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+        stack.add_child(ammunition)
     var equip_slot := String(info.get("equip_slot", ""))
     if not equip_slot.is_empty():
         if InventorySystem.equipped_item(equip_slot) == item_id:

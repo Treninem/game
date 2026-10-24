@@ -46,8 +46,9 @@ func _run() -> void:
         var frame: Control = panels.frame
         # Compare rendered pixel coordinates, including the production canvas
         # stretch transform, against the actual captured image dimensions.
-        var bounds := frame.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, frame.size)
+        var bounds := frame.get_viewport_transform() * frame.get_global_transform() * Rect2(Vector2.ZERO, frame.size)
         var pixels := picture.get_size()
+        print("INVENTORY_RENDERED_BOUNDS ", size, " image=", pixels, " bounds=", bounds)
         assert(bounds.position.x >= -1 and bounds.position.y >= -1 and bounds.end.x <= pixels.x + 1 and bounds.end.y <= pixels.y + 1, "Inventory frame leaves the actual viewport")
         for cell: Button in grid.get_children():
             var caption := cell.get_node("ItemCaption") as Label
