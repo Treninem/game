@@ -323,6 +323,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_public_market_life.gd 240
       - name: Verify actual rendered seated citizen soles and final pose modifiers
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_public_rest.gd 240
+      - name: Verify authored street meshes materials lantern marker four quality modes and physical support
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_city_streetscape_fixture.gd 180
       - name: Verify spatial house bounds conserve meshes materials transforms and actual rendered views
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_city_facade_batches.gd 180
       - name: Verify authored townhouse materials tangents mip chains and four quality levels
@@ -386,3 +388,4 @@ jobs:
             ~/.local/share/godot/app_userdata/ImPuls/wardrobe-response.json
             ~/.local/share/godot/app_userdata/ImPuls/public-rest-gpu.json
             ~/.local/share/godot/app_userdata/ImPuls/city-facade-batches.json
+            ~/.local/share/godot/app_userdata/ImPuls/city-street-fixture.json

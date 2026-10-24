@@ -103,5 +103,20 @@ func _run() -> void:
     arcade.free()
     for script:String in ["market_structures","public_space_navigation","public_seating","market_goods_display"]:
         assert(load("res://scripts/"+script+".gd") is GDScript,"Packaged public market logic is missing: "+script)
-    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 townhouses=2 clay_maps=3 fountain=1 market_arcade=1 public_market_scripts=4 actual_pck=true")
+    var street_scene:=load("res://assets/production/architecture/city_street/CityStreetKit.glb") as PackedScene
+    assert(street_scene!=null,"Packaged authored street kit is missing")
+    var street:=street_scene.instantiate()
+    var street_triangles:=0
+    for key:String in ["PavingPanel","StonePlanter","LanternPost"]:
+        var mesh:=street.find_child(key,true,false) as MeshInstance3D
+        assert(mesh!=null,"Packaged street module missing: "+key)
+        for slot in range(mesh.mesh.get_surface_count()):street_triangles+=mesh.mesh.surface_get_arrays(slot)[Mesh.ARRAY_INDEX].size()/3
+    var marker:=street.find_child("LanternAnchor",true,false) as Node3D
+    assert(street_triangles==8880 and marker!=null and marker.position.distance_to(Vector3(.47,2.4,0))<.001,"Packaged street geometry or lantern marker changed")
+    street.free()
+    for key:String in ["albedo","normal","orm"]:
+        var texture:=load("res://assets/production/architecture/city_street/stone_%s.png"%key) as Texture2D
+        assert(texture!=null and texture.get_width()==256 and texture.get_image().has_mipmaps(),"Packaged street surface or mip chain missing: "+key)
+    assert(load("res://scripts/capital_streetscape.gd") is GDScript,"Packaged street integration is missing")
+    print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 townhouses=2 clay_maps=3 fountain=1 market_arcade=1 public_market_scripts=4 street_kit=3 street_maps=3 street_triangles=8880 actual_pck=true")
     quit(0)

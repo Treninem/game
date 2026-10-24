@@ -1,0 +1,382 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent": "89e449cd6a175beef9c6dbbc44596e60fbd41e38",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "delivery": "Unreleased review candidate; no stable promotion",
+  "implemented": [
+    "Original Blender3module street kit: measured shallow paving ramps, hollow stone troughs/soil and tapered forged lantern posts",
+    "28paving panels border the existing14m cardinal passage without replacing trees/home/work/market anchors;6plantings reuse existing temperate leaves and shared foliage wind",
+    "4street lanterns follow the exported Blender marker and real geometry,5.5m light range/no shadows/disabled atLow",
+    "Original256px procedural cut-stone maps with mipmaps and High/Ultra normal/ORM; editable source relative images verified",
+    "Mandatory independent rendered/physics/material/quality fixture and stricter actual-PCK geometry/texture guards; previous tests retained"
+  ],
+  "checks": {
+    "native-street-second": {
+      "returncode": 0,
+      "seconds": 280.0939999999973,
+      "stopped": false,
+      "errors": [],
+      "marker": "CITY_STREETSCAPE_NATIVE_OK ordinary_walk_m=287.93634263007 player_position_assignments=0 arcade=true paid_trade=true finite_visible_stock=true npc_seats=true player_rest=true actual_scene_reload=true jump_wake=true npc_return_work=true gpu_boot_coverage=3530_per_actor manual_play=false",
+      "manual_play": false
+    },
+    "fixture-first": {
+      "returncode": 0,
+      "seconds": 27.453999999997905,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "performance-paired": {
+      "returncode": 0,
+      "seconds": 171.2190000000046,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "gates/smoke_square_home_life": {
+      "case": "smoke_square_home_life.tscn",
+      "returncode": 0,
+      "seconds": 147.20300000000134,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "gates/smoke_capital_square": {
+      "case": "smoke_capital_square.tscn",
+      "returncode": 0,
+      "seconds": 44.875,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "gates/smoke_capital_market_court": {
+      "case": "smoke_capital_market_court.gd",
+      "returncode": 0,
+      "seconds": 7.686999999998079,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "ordinary_actual_gameplay": {
+    "exclusive_seats": true,
+    "foot_samples": [
+      {
+        "boot_vertices": 3530,
+        "gap": 0.00399929881095886,
+        "label": "trader-public-rest",
+        "minimum_y": 0.0289992988109589,
+        "paving_y": 0.025
+      },
+      {
+        "boot_vertices": 3530,
+        "gap": 0.00399971604347229,
+        "label": "artisan-public-rest",
+        "minimum_y": 0.0289997160434723,
+        "paving_y": 0.025
+      },
+      {
+        "boot_vertices": 3530,
+        "gap": 0.00399971604347229,
+        "label": "hero-public-rest",
+        "minimum_y": 0.0289997160434723,
+        "paving_y": 0.025
+      }
+    ],
+    "jump_wake_and_land": true,
+    "manual_play": false,
+    "paid_trade_and_visible_stock": true,
+    "player_position_assignments": 0,
+    "real_scene_disk_restore": true,
+    "residents_return_to_work": true,
+    "street_foot_samples": [
+      {
+        "gap_m": 0.00400010496377945,
+        "label": "east-promenade-entry",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.0039999857544899,
+        "label": "east-promenade-north",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.00399237126111984,
+        "label": "west-promenade",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      }
+    ],
+    "streetscape": {
+      "actual_walked_m": 287.93634263007,
+      "details": {
+        "central_clear_width_m": 14.0,
+        "flowers": 12,
+        "lantern_posts": 4,
+        "panel_ramp_rise_m": 0.039,
+        "panel_ramp_run_m": 0.1,
+        "paving_panels": 28,
+        "planters": 6
+      },
+      "driver_position_assignments": 0,
+      "four_night_lights_bounded_and_low_disabled": true,
+      "manual_play": false,
+      "planter_physical_heights_m": [
+        0.340000038966537,
+        0.58999983035028
+      ]
+    },
+    "talk_to_visible_seated_resident": true,
+    "walked_m": 287.93634263007
+  },
+  "independent_fixture": {
+    "blender_marker_matches_lantern_top": true,
+    "details": {
+      "central_clear_width_m": 14.0,
+      "flowers": 12,
+      "lantern_posts": 4,
+      "panel_ramp_rise_m": 0.039,
+      "panel_ramp_run_m": 0.1,
+      "paving_panels": 28,
+      "planters": 6
+    },
+    "iron_material_preserved": true,
+    "physical_probes": [
+      {
+        "height_m": 0.0640002712607384,
+        "surface": "MeasuredWalkablePaving"
+      },
+      {
+        "height_m": 0.364999920129776,
+        "surface": "PlantedStoneTrough_-1_24"
+      },
+      {
+        "height_m": 0.614999890327454,
+        "surface": "PlantedStoneTrough_-1_24"
+      },
+      {
+        "height_m": 0.173999667167664,
+        "surface": "StreetLanternPost_-1_25"
+      }
+    ],
+    "rendered_quality_modes": [
+      {
+        "normal_enabled": false,
+        "quality": 0,
+        "roughness_map_enabled": false
+      },
+      {
+        "normal_enabled": false,
+        "quality": 1,
+        "roughness_map_enabled": false
+      },
+      {
+        "normal_enabled": true,
+        "quality": 2,
+        "roughness_map_enabled": true
+      },
+      {
+        "normal_enabled": true,
+        "quality": 3,
+        "roughness_map_enabled": true
+      }
+    ],
+    "scope": "Isolated capital public-square fixture, not ordinary gameplay or full city art acceptance",
+    "source_triangles": 8880
+  },
+  "paired_stationary_performance": [
+    {
+      "decoration_enabled": false,
+      "draw_calls": 729.0,
+      "frames": 120,
+      "max_frame_ms": 30.605,
+      "mean_frame_ms": 25.2048083333333,
+      "p95_frame_ms": 27.411,
+      "player_position_assignments": 0,
+      "quality": "Low",
+      "scale_3d": 0.699999988079071,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 987072681.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 749.0,
+      "frames": 120,
+      "max_frame_ms": 30.303,
+      "mean_frame_ms": 26.0505166666667,
+      "p95_frame_ms": 28.041,
+      "player_position_assignments": 0,
+      "quality": "Low",
+      "scale_3d": 0.699999988079071,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 987072681.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": false,
+      "draw_calls": 854.0,
+      "frames": 120,
+      "max_frame_ms": 125.49,
+      "mean_frame_ms": 39.5115833333333,
+      "p95_frame_ms": 44.056,
+      "player_position_assignments": 0,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 988786857.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 898.0,
+      "frames": 120,
+      "max_frame_ms": 45.439,
+      "mean_frame_ms": 39.5568166666667,
+      "p95_frame_ms": 43.185,
+      "player_position_assignments": 0,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 988786857.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": false,
+      "draw_calls": 900.0,
+      "frames": 120,
+      "max_frame_ms": 51.443,
+      "mean_frame_ms": 46.0324083333333,
+      "p95_frame_ms": 50.17,
+      "player_position_assignments": 0,
+      "quality": "High",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 998467752.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 948.0,
+      "frames": 120,
+      "max_frame_ms": 53.565,
+      "mean_frame_ms": 48.771475,
+      "p95_frame_ms": 52.372,
+      "player_position_assignments": 0,
+      "quality": "High",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 998467752.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": false,
+      "draw_calls": 910.0,
+      "frames": 120,
+      "max_frame_ms": 58.671,
+      "mean_frame_ms": 48.4000333333333,
+      "p95_frame_ms": 52.14,
+      "player_position_assignments": 0,
+      "quality": "Ultra",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 1013213352.0,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "decoration_enabled": true,
+      "draw_calls": 954.0,
+      "frames": 120,
+      "max_frame_ms": 57.047,
+      "mean_frame_ms": 49.8905833333333,
+      "p95_frame_ms": 52.189,
+      "player_position_assignments": 0,
+      "quality": "Ultra",
+      "scale_3d": 1.0,
+      "scope": "Paired same loaded world and street camera; toggled only new decoration visibility. NPCs remain active. Assets loaded in both samples. Warm stationary samples, not sustained traversal or isolated CPU/GPU profiling.",
+      "video_memory_bytes": 1013213352.0,
+      "viewport": "(1280, 720)"
+    }
+  ],
+  "performance_limits": "Same loaded world/street camera, toggled only15 new decoration nodes; NPCs remain active.120warm frames per case. Assets loaded in both cases, no allocation or sustained whole-world FPS claim.",
+  "source": {
+    "source": "assets/source/architecture/city_street/CityStreetKit.blend",
+    "geometry_uv_sha256": "7c36fc9574507c9fc2fc39a55052d4272c3558db0f65de793a7674f6355066c4",
+    "all_images_relative_and_exist": true,
+    "normal_ORM_connected_in_editable_source": true,
+    "production_GLB_unchanged": true,
+    "source_parts": {
+      "PavingPanel": {
+        "triangles": 3252,
+        "bounds": [
+          [
+            -1.5,
+            -1.5,
+            0.0
+          ],
+          [
+            1.5,
+            1.5,
+            0.038999997079372406
+          ]
+        ]
+      },
+      "StonePlanter": {
+        "triangles": 4536,
+        "bounds": [
+          [
+            -0.8500000238418579,
+            -0.6449999809265137,
+            0.0
+          ],
+          [
+            0.8500000238418579,
+            0.6449999809265137,
+            0.5900000333786011
+          ]
+        ]
+      },
+      "LanternPost": {
+        "triangles": 1092,
+        "bounds": [
+          [
+            -0.22499999403953552,
+            -0.22499999403953552,
+            0.0
+          ],
+          [
+            0.5137876272201538,
+            0.22499999403953552,
+            2.723829507827759
+          ]
+        ]
+      }
+    }
+  },
+  "frames": {
+    "day": "docs/review/2026-10-24-city-streetscape/native-street-day.png",
+    "evening": "docs/review/2026-10-24-city-streetscape/native-street-evening.png"
+  },
+  "repairs": [
+    "Fixed Blender source UV creation, local generator variable/output-directory errors; final complete GLB/maps/import manifest explicitly checked",
+    "Fixed disconnected material export causing white iron; retain Principled output and assert dark metallic material",
+    "Replaced the red stylized bush with existing original temperate foliage and rejected over-bright double-patterned paving",
+    "Failed first extended driver aimed straight through a new physical planter. Error remained fatal despite its old success marker. Fixed driver error propagation and chose an actual clear passage; reran full287.936m successfully. No collision or assertion was removed."
+  ],
+  "preservation": "No human mesh/rig/morph/clip, world anchor, save format/inventory/control bytes changed. Original earned slot1 remains unchanged; ordinary automated input, zero driver position writes, controlled clock/observer cameras. No manual/fresh forest-to-city claim.",
+  "ci": "New exact-SHA gates follow publication. Delivered runtime0ff remains8/8verified with actualPCK; parent89 is documentation-only/runtime-identical and its own CI is tracked separately, never represented as green merely by equivalence.",
+  "warnings": [
+    "105 RefCounted exit instances observed; no leak-free claim. Verbose exit diagnostics retained locally",
+    "Copied QA human UID fallbacks persist",
+    "Cold8-10second rendering/preparation stalls remain from previous diagnostics",
+    "Full city/reference/human appearance and all actions remain unaccepted",
+    "This package does not make exterior-only22shells into inhabited houses or complete20cities"
+  ],
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "next": "Verify current-SHA CI and actual exported package; continue coherent city composition, terrain/river/terraces/bridges/skyline and diverse inhabited architecture together with character quality. Flower/planting variety and night window life remain open."
+}

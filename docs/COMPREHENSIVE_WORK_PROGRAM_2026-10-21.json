@@ -463,5 +463,34 @@
     "actual_pck_gameplay": true,
     "actual_pck_walk_m": 125.162855732953,
     "cold_stalls_remaining": true
+  },
+  "latest_city_streetscape_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE.json",
+    "source_models": 3,
+    "source_triangles": 8880,
+    "native_walk_m": 287.93634263007,
+    "actual_GPU_boot_samples": [
+      {
+        "gap_m": 0.00400010496377945,
+        "label": "east-promenade-entry",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.0039999857544899,
+        "label": "east-promenade-north",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.00399237126111984,
+        "label": "west-promenade",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      }
+    ],
+    "quality_modes": 4,
+    "ci": "pending current runtime publication",
+    "visual_acceptance": false
   }
 }

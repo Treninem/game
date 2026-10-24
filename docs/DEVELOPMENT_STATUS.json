@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Пространственная отрисовка22 городских домов доставлена после8/8 CI и проверки фактического PCK. Геометрия и материалы сохранены. Холодные паузы остаются; полная композиция города и люди художественно не приняты. Следующий уличный прототип ещё частный.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_SPATIAL_BATCHES.json",
+  "current_stage": "Новые модели уличного набора изBlender подключены к проверочному исходному проекту:28панелей мощения,6посадок,4фонаря; полный287.936м игровой обход,3измерения подошв,4режима графики и физические пробы прошли. Новый exact-SHA CI/PCK ещё проверяются после публикации. Доставленная сборка пока0ff. Полная композиция и люди художественно не приняты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE.json",
   "review_launcher": "build\\review-2026-10-24-city-spatial-batches\\ImPuls-review.cmd",
   "systems": [
     {
@@ -201,7 +201,7 @@
   ],
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
-  "ci_followup_status": "Runtime0ff passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
+  "ci_followup_status": "New streetscape exact-SHA pending at commit creation. Delivered0ff is8/8green with actualPCK gameplay; earlier green is not substituted.",
   "last_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",

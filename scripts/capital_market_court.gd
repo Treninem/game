@@ -60,6 +60,7 @@ static func build(square:Node3D) -> void:
                 flowers.append(Transform3D(Basis(Vector3.UP,angle),tree.position+Vector3(cos(angle)*1.9,.1,sin(angle)*1.9)))
     COURT.batch(square,"StoneCourse",stone,180)
     COURT.batch(square,"MeadowFlowers",flowers,180,false)
+    preload("res://scripts/capital_streetscape.gd").build(square)
     NATURE.sync_wind()
     var fountain:=FOUNTAIN.new()
     fountain.position=Vector3(-16,square._ground_y(Vector3(-16,0,29)),29)
