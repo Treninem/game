@@ -118,5 +118,19 @@ func _run() -> void:
         var texture:=load("res://assets/production/architecture/city_street/stone_%s.png"%key) as Texture2D
         assert(texture!=null and texture.get_width()==256 and texture.get_image().has_mipmaps(),"Packaged street surface or mip chain missing: "+key)
     assert(load("res://scripts/capital_streetscape.gd") is GDScript,"Packaged street integration is missing")
+    var canal_scene:=load("res://assets/production/architecture/capital_canal/CapitalCanalKit.glb") as PackedScene
+    assert(canal_scene!=null,"Packaged original canal kit is absent")
+    var canal_kit:=canal_scene.instantiate();var canal_triangles:=0
+    for key:String in ["DeckAndApproaches","MeasuredArchVaults","PiersAndSpandrels","ParapetsAndCaps","QuayWall6m"]:
+        var mesh:=canal_kit.find_child(key,true,false) as MeshInstance3D
+        assert(mesh!=null,"Packaged canal part is missing: "+key)
+        canal_triangles+=mesh.mesh.get_faces().size()/3
+    assert(canal_triangles==43348,"Packaged canal mesh coverage changed")
+    canal_kit.free()
+    for script:String in ["capital_canals","capital_canal_data","canal_household"]:
+        assert(load("res://scripts/"+script+".gd") is GDScript,"Packaged canal integration is missing: "+script)
+    assert(load("res://assets/shaders/environment/terrain_ground.gdshader") is Shader)
+    assert(not FileAccess.file_exists("res://assets/source/architecture/capital_canal/CapitalCanalKit.blend"),"Editable Blender source leaked into the game PCK")
+    print("EXPORT_CAPITAL_CANAL_OK parts=5 triangles=43348 scripts=3 shared_materials=true editable_source=absent")
     print("EXPORT_RESOURCE_HYGIENE_OK docs=absent tests=absent bodies=",bodies," morphs=18 clips=20 eyes=5 shaders=2 boot=present wardrobe_response=1 meadow=1 family_roof=1 lime_maps=3 townhouses=2 clay_maps=3 fountain=1 market_arcade=1 public_market_scripts=4 street_kit=3 street_maps=3 street_triangles=8880 actual_pck=true")
     quit(0)

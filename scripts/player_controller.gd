@@ -389,6 +389,7 @@ func _physical_surface_exists_below(terrain_y: float) -> bool:
     if hit.is_empty():
         return false
     var hit_position: Vector3 = hit.get("position", Vector3.ZERO)
+    terrain_y = preload("res://scripts/capital_canal_data.gd").supported_height(Vector2(global_position.x,global_position.z),global_position.y,terrain_y)
     # At spawn/recovery we need a walking surface, not an unrelated roof or
     # ceiling high above the authoritative terrain.
     return hit_position.y >= terrain_y - 1.0 and hit_position.y <= terrain_y + 1.5

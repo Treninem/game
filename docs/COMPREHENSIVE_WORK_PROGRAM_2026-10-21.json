@@ -509,5 +509,17 @@
     "clean_parent_regression": true,
     "current_ci": "pending exactSHA",
     "original_assertions_retained": 27
+  },
+  "latest_capital_canals": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CAPITAL_CANALS.json",
+    "local_regressions_passed": 18,
+    "native_walk_m": 919.530722988537,
+    "gpu_sole_samples": 23,
+    "citizens_clock_unfrozen": true,
+    "current_ci": "pending exactSHA",
+    "actual_final_PCK": "pending",
+    "visual_acceptance": false,
+    "additional_legacy_jump_case_passed": true,
+    "supplemental_migration_regressions_passed": 3
   }
 }

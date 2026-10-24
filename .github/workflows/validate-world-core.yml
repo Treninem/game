@@ -186,6 +186,16 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_river_shoreline.tscn 90
       - name: Verify forest avoids inhabited clearings
         run: bash tools/run_godot_smoke.sh tests/smoke_nature_clearings.tscn 90
+      - name: Verify configurable day duration real menu midnight survival and save state
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-day-duration" bash tools/run_godot_smoke.sh tests/smoke_day_length.gd 60
+      - name: Verify canal geometry revision migration preserves underarch saves and inventories
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-revision" bash tools/run_godot_smoke.sh tests/smoke_canal_save_revision.gd 60
+      - name: Verify old airborne road save acquires the actual new bridge deck
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-airborne" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_legacy_airborne.gd 120
+      - name: Verify actual streamed canal basin open bridge vaults water paving and legacy disk load
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-core" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_capital_canals.gd 200
+      - name: Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-household" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_household.gd 420
       - name: Verify physical hydrology
         run: bash tools/run_godot_smoke.sh tests/smoke_world_hydrology.tscn 180
       - name: Verify bounded start-region production nature streaming
@@ -323,6 +333,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_public_market_life.gd 240
       - name: Verify actual rendered seated citizen soles and final pose modifiers
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_public_rest.gd 240
+      - name: Verify authored canal materials four quality modes and rendered freshwater bank moisture
+        run: xvfb-run -a env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-materials" GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_capital_canal_materials.gd 180
       - name: Verify authored street meshes materials lantern marker four quality modes and physical support
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_city_streetscape_fixture.gd 180
       - name: Verify spatial house bounds conserve meshes materials transforms and actual rendered views

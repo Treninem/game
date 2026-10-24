@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Исправлена потеря маленьких полигонов дорожек в дальних координатах: полный участок теперь800м² вместо748. Новый контроль встроен в обязательный сценарий без удаления прежних проверок. Частный пакет канала/мостов/озеленения/дома продолжает проходить проверку; в эту узкую правку не включён.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_FAR_PATH_COVERAGE.json",
+  "current_stage": "Подключён связанный квартал канала: физическое русло и непрерывная вода, четыре каменных моста из Blender, берега и мощение, озеленение, фонари, жилой дом, торговка и мастерская. Исправлены заторы жителей у парапета и сундука, ложное прибытие к верстаку и грязевой цвет сухой земли. Реальные920м автоматизированного прохода,23GPUпроверки подошв, загрузка дома отдельным процессом и18локальных сценариев прошли. После публикации требуются exact-SHA CI и проверка итогового PCK; полная композиция городов и людей по концептам не принята. Дополнительно воспроизведена и исправлена загрузка старого сохранения в прыжке над прежней дорогой; проверены17случаев версии геометрии и повторены связанные проверки опоры и движения.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CAPITAL_CANALS.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -607,7 +607,19 @@
     "journal": "docs/DEVELOPMENT_LOG_2026-10-24_FAR_PATH_COVERAGE.json",
     "full_footprint_m2": 800,
     "clean_parent_regression": true,
-    "current_ci": "pending exactSHA",
+    "current_ci": "all eight exact5af9de3 workflows succeeded",
     "original_assertions_retained": 27
+  },
+  "latest_capital_canals": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CAPITAL_CANALS.json",
+    "local_regressions_passed": 18,
+    "native_walk_m": 919.530722988537,
+    "gpu_sole_samples": 23,
+    "citizens_clock_unfrozen": true,
+    "current_ci": "pending exactSHA",
+    "actual_final_PCK": "pending",
+    "visual_acceptance": false,
+    "additional_legacy_jump_case_passed": true,
+    "supplemental_migration_regressions_passed": 3
   }
 }

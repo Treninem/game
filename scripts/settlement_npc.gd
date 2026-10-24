@@ -154,10 +154,25 @@ func _follow_routine(delta: float) -> void:
     plan = _household_plan(plan)
     plan = PUBLIC_SEATING.plan(self,plan)
     plan = _route_home_rooms(plan)
+    # A commute is a goal too. Use the same measured obstacle grid as public
+    # seating, including the entire bridge approach, rather than leaving the
+    # deck diagonally through a parapet. Interior/door crossing has its own
+    # geometry planner and must not use the exterior grid's closed-door sample.
+    var navigation:=get_parent().get_node_or_null("PublicSpaceNavigation")
+    if navigation!=null and bool(navigation.get_meta("commute_navigation",false)) and not home_crossing and not bool(plan.get("indoor_path",false)):
+        var destination:Vector3=get_parent_node_3d().to_global(plan.target)
+        if navigation.contains(global_position) and navigation.contains(destination):
+            var point:Vector3=navigation.next_point(global_position,destination,self)
+            if Vector2(point.x-destination.x,point.z-destination.z).length()>.02:
+                plan.target=get_parent_node_3d().to_local(point)
+                plan.erase("furniture");plan.erase("public_furniture")
+                plan.arrival_radius=.08
+                plan.navigation_pending=true
+            plan.indoor_path=true
     var target: Vector3 = get_parent_node_3d().to_global(plan.target)
     var flat := target - global_position
     flat.y = 0
-    var arrived := flat.length() < float(plan.get("arrival_radius", 0.75))
+    var arrived := flat.length() < float(plan.get("arrival_radius", 0.75)) and not bool(plan.get("navigation_pending",false))
     activity = String(plan.activity if arrived else plan.walking)
     if witnessed_pause > 0.0:
         _leave_furniture()
@@ -199,7 +214,11 @@ func _follow_routine(delta: float) -> void:
                     rotation.y = lerp_angle(rotation.y, atan2(-toward.x, -toward.z), delta * 3.0)
                     break
     else:
-        var direction := _routine_direction(flat.normalized(), delta, 0.5 if plan.get("indoor_path", false) else 1.8)
+        var waypoint:=Vector2(target.x,target.z)
+        if not bool(plan.get("indoor_path",false)):
+            waypoint=preload("res://scripts/capital_canal_data.gd").navigation_target(Vector2(global_position.x,global_position.z),waypoint)
+        var desired:=Vector3(waypoint.x-global_position.x,0,waypoint.y-global_position.z).normalized()
+        var direction := _routine_direction(desired, delta, 0.5 if plan.get("indoor_path", false) else 1.8)
         velocity.x = move_toward(velocity.x, direction.x * move_speed, delta * 5.5)
         velocity.z = move_toward(velocity.z, direction.z * move_speed, delta * 5.5)
         rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), minf(1.0, delta * 7.0))
@@ -220,7 +239,7 @@ func capture_runtime_state() -> void:
     if is_instance_valid(visual):
         GameState.set_world_value("appearance:" + citizen_id, visual.current_profile.duplicate(true))
     GameState.set_world_value("citizen:" + citizen_id, {
-        "runtime_version": 1, "role": role, "phase": routine_phase,
+        "runtime_version": 1, "capital_canals_revision":1, "role": role, "phase": routine_phase,
         "anchor": [anchor.x, anchor.y, anchor.z],
         "position": [position.x, position.y, position.z], "yaw": rotation.y,
         "home_crossing": home_crossing, "route_index": route_index,
@@ -237,6 +256,9 @@ func restore_runtime_state() -> void:
         visual.call("apply_appearance", saved_appearance)
     var decoded := RUNTIME_STATE.decode(GameState.get_world_value("citizen:" + citizen_id), get_parent_node_3d().global_position, authored_position, role)
     position = decoded.get("position", authored_position)
+    var old_record:Variant=GameState.get_world_value("citizen:"+citizen_id,{})
+    if old_record is Dictionary and not preload("res://scripts/capital_canal_data.gd").has_current_revision(old_record.get("capital_canals_revision",0)):
+        global_position=preload("res://scripts/capital_canal_data.gd").legacy_bridge_position(global_position)
     rotation.y = float(decoded.get("yaw", authored_yaw))
     home_crossing = bool(decoded.get("home_crossing", false))
     route_index = clampi(int(decoded.get("route_index", authored_route_index)), 0, maxi(0, route_points_local.size() - 1))
@@ -369,6 +391,11 @@ func _end_conversation() -> void:
 func _workbench_step(delta: float) -> bool:
     if role != "craftsman" or not has_meta("work_shop_id"):
         return false
+    # Waiting for a local path is not arrival at the actual work surface.
+    var places:Dictionary=get_meta("routine_places",{})
+    if not places.has("work") or not is_on_floor():return false
+    var workplace:Vector3=get_parent_node_3d().to_global(places.work)
+    if Vector2(workplace.x-global_position.x,workplace.z-global_position.z).length()>.10:return false
     var recipe_id := String(get_meta("work_recipe", ""))
     if not InventorySystem.RECIPES.has(recipe_id):
         return false
@@ -447,6 +474,7 @@ func complete_trade(item: String, sell: bool) -> bool:
 func _wait_for_ground(terrain_y: float) -> bool:
     # Residents can stream in before the terrain physics chunk. Never let them
     # fall below the arriving mesh or display a person standing in empty air.
+    terrain_y=preload("res://scripts/capital_canal_data.gd").supported_height(Vector2(global_position.x,global_position.z),global_position.y,terrain_y)
     var from := Vector3(global_position.x, terrain_y + 2.0, global_position.z)
     var to := Vector3(global_position.x, terrain_y - 2.0, global_position.z)
     var query := PhysicsRayQueryParameters3D.create(from, to, 1, [get_rid()])
@@ -550,6 +578,10 @@ func _household_plan(plan: Dictionary) -> Dictionary:
                 var seat := home.get_node_or_null("InteriorFurniture/" + ("Bench" if role == "trader" or not home.has_node("InteriorFurniture/BenchSecond") else "BenchSecond")) as HouseholdFurniture
                 if seat != null:
                     exit_point = home.to_local(seat.approach_point())
+                    # Distance from the chest alone releases the queue while
+                    # its user is still in the narrow table-side aisle. Keep
+                    # ownership until the measured next approach is clear.
+                    clearing=Vector2(storage_local.x-exit_point.x,storage_local.z-exit_point.z).length()>.25
             if clearing:
                 plan.target = get_parent_node_3d().to_local(home.to_global(exit_point))
                 plan.arrival_radius = 0.20
@@ -575,7 +607,8 @@ func _household_plan(plan: Dictionary) -> Dictionary:
         _leave_furniture()
     # Only one user per seat/container, with a clear waiting position.
     if not furniture.occupant.is_empty() and furniture.occupant != citizen_id:
-        plan.target = home.position + Vector3(2.7, 0, 0.8)
+        # Wait in the common hall, away from the chest-to-seat aisle.
+        plan.target = home.position + Vector3(0, 0, 0.8)
         plan.activity = "Ждёт свободное место"
         return plan
     if not furniture.claim(citizen_id):

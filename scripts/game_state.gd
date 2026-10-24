@@ -253,7 +253,7 @@ func complete_city_quest() -> bool:
     return false
 
 func advance_survival(real_seconds: float) -> void:
-    var elapsed_minutes := maxf(0.0, real_seconds) * 4.0
+    var elapsed_minutes := maxf(0.0, real_seconds) * SettingsManager.world_minutes_per_second()
     var total_minutes := world_minutes + elapsed_minutes
     if total_minutes >= 1440.0:
         world_day += int(floor(total_minutes / 1440.0))

@@ -27,8 +27,15 @@ func surface_at(world_position: Vector3) -> String:
     if EnvironmentState.snow_intensity >= 0.15 or winter_snow or (EnvironmentState.frost_amount > 0.55 and biome in ["tundra", "taiga"]):
         return "snow"
 
+    var canal_park:=false
     if CapitalData.inside_capital(xz):
-        return "stone"
+        for park:Node3D in get_tree().get_nodes_in_group("capital_canal_park"):
+            if not park.is_queued_for_deletion() and Rect2(park.get_meta("surface_bounds")).has_point(xz):
+                canal_park=true;break
+        if not canal_park:return "stone"
+        var canal:=preload("res://scripts/capital_canal_data.gd")
+        var bridge:=canal.bridge_at(xz)
+        if not is_inf(bridge.x) and absf(world_position.y-canal.deck_height(xz.x-bridge.x))<.20:return "stone"
 
     if absf(world_position.y-elevation)<0.65:
         var surface := ""
@@ -44,6 +51,8 @@ func surface_at(world_position: Vector3) -> String:
                     break
         if not surface.is_empty(): return surface
         if WorldGeography.is_on_primary_road(xz): return "dirt"
+
+    if canal_park:return "grass"
 
     match biome:
         "mountains": return "stone"

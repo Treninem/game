@@ -138,7 +138,10 @@ func _run_test() -> void:
         return
 
     var first_event_id := String(event_data.get("id", ""))
-    GameState.advance_survival(241.0)
+    # Reach the same four game minutes after midnight at the selected clock
+    # rate. All day/event/reward assertions below remain unchanged.
+    var until_midnight:=1440.0-GameState.world_minutes+4.0
+    GameState.advance_survival(until_midnight/SettingsManager.world_minutes_per_second())
     if not _check(GameState.world_day == 1, 45, "world day did not advance across midnight"):
         return
     var next_event := ProgressionSystem.active_event()

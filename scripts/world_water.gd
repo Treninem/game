@@ -1,5 +1,6 @@
 extends Node
 
+const CANAL_DATA := preload("res://scripts/capital_canal_data.gd")
 const CHUNK_SIZE := 192.0
 const SAMPLE_SPACING := 12.0
 const CHUNK_MARGIN := 6.0
@@ -7,6 +8,8 @@ const PATCH_THICKNESS := 0.018
 
 var water_material: StandardMaterial3D
 var materialized_water_chunks := 0
+var canal_material_elapsed:=0.
+var capital_canals:GDScript
 var materialized_water_patches := 0
 var materialized_by_kind := {"river": 0, "lake": 0, "sea": 0}
 
@@ -22,11 +25,20 @@ func _on_node_added(node: Node) -> void:
     if node is Node3D and node.name.begins_with("WorldChunk_"):
         call_deferred("_materialize_chunk", node)
 
+func _process(delta:float) -> void:
+    canal_material_elapsed+=delta
+    if canal_material_elapsed>=1:
+        canal_material_elapsed=0
+        if capital_canals!=null:capital_canals.sync_water()
+
 func _materialize_chunk(chunk: Node3D) -> void:
     if not is_instance_valid(chunk) or chunk.get_node_or_null("WaterSurface") != null:
         return
 
     var origin := Vector2(chunk.global_position.x, chunk.global_position.z)
+    if CANAL_DATA.affects_rect(Rect2(origin,Vector2.ONE*CHUNK_SIZE)):
+        if capital_canals==null:capital_canals=load("res://scripts/capital_canals.gd")
+        capital_canals.water_chunk(chunk,CHUNK_SIZE)
     var transforms: Array[Transform3D] = []
     var kind_counts := {"river": 0, "lake": 0, "sea": 0}
     var steps := int(ceil(CHUNK_SIZE / SAMPLE_SPACING))
@@ -40,7 +52,7 @@ func _materialize_chunk(chunk: Node3D) -> void:
             var world_pos := origin + Vector2(local_x, local_z)
             var kind := WorldData.water_kind_at(world_pos)
             # The prologue river has one continuous curved surface, never square overlays.
-            if kind == "river" and WorldGeography.in_start_region(world_pos):
+            if CANAL_DATA.wet_at(world_pos) or (kind == "river" and WorldGeography.in_start_region(world_pos)):
                 continue
             if kind.is_empty():
                 continue

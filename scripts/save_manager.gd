@@ -50,6 +50,7 @@ func save_game(player: Node3D, slot: int = -1) -> bool:
     current_slot = slot
     var payload := {
         "save_version": SAVE_VERSION,
+        "world_geometry_revisions": {"capital_canals":1},
         "slot": slot,
         "saved_at_unix": int(Time.get_unix_time_from_system()),
         "saved_at": Time.get_datetime_string_from_system(false, true),
@@ -76,6 +77,10 @@ func load_game(player: Node3D, slot: int = -1) -> bool:
     var saved_state = data.get("game_state", {})
     if typeof(saved_state) == TYPE_DICTIONARY:
         GameState.load_snapshot(saved_state)
+    var revisions:Variant=data.get("world_geometry_revisions",{})
+    var revision:Variant=revisions.get("capital_canals",0) if revisions is Dictionary else 0
+    if not preload("res://scripts/capital_canal_data.gd").has_current_revision(revision) and String(GameState.get_world_value("current_realm","main"))=="main" and not ProgressionSystem.is_in_dungeon():
+        player.global_position=preload("res://scripts/capital_canal_data.gd").legacy_bridge_position(player.global_position)
     game_loaded.emit(slot)
     return true
 

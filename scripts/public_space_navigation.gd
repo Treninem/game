@@ -5,6 +5,8 @@ extends Node3D
 const CELL:=0.75
 const LOW:=Vector2(-38,-25)
 const HIGH:=Vector2(38,55)
+var lower_bound:=LOW
+var upper_bound:=HIGH
 var grid:=AStarGrid2D.new()
 var grid_ready:=false
 var probe:=PhysicsShapeQueryParameters3D.new()
@@ -12,8 +14,8 @@ var cursor:=0
 var routes:Dictionary={}
 
 func _ready() -> void:
-    grid.region=Rect2i(0,0,ceili((HIGH.x-LOW.x)/CELL),ceili((HIGH.y-LOW.y)/CELL))
-    grid.cell_size=Vector2.ONE*CELL;grid.offset=LOW+Vector2.ONE*CELL*.5
+    grid.region=Rect2i(0,0,ceili((upper_bound.x-lower_bound.x)/CELL),ceili((upper_bound.y-lower_bound.y)/CELL))
+    grid.cell_size=Vector2.ONE*CELL;grid.offset=lower_bound+Vector2.ONE*CELL*.5
     grid.diagonal_mode=AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES;grid.update()
     var capsule:=CapsuleShape3D.new();capsule.radius=.36;capsule.height=1.7
     probe.shape=capsule;probe.collision_mask=1
@@ -34,7 +36,7 @@ func _consider_geometry(reference:WeakRef) -> void:
     var body:=shape.get_parent() as StaticBody3D
     if body==null:return
     var point:=to_local(shape.global_position)
-    if point.x<LOW.x-4 or point.x>HIGH.x+4 or point.z<LOW.y-4 or point.z>HIGH.y+4:return
+    if point.x<lower_bound.x-4 or point.x>upper_bound.x+4 or point.z<lower_bound.y-4 or point.z>upper_bound.y+4:return
     if not body.tree_exiting.is_connected(invalidate):body.tree_exiting.connect(invalidate)
     invalidate()
 
@@ -61,9 +63,13 @@ func _physics_process(_delta:float) -> void:
         var id:=Vector2i(cursor%grid.region.size.x,int(cursor/grid.region.size.x))
         var point:=grid.get_point_position(id)
         var world:=to_global(Vector3(point.x,0,point.y))
-        world.y=WorldData.elevation_at(Vector2(world.x,world.z))+1.0
+        var point_xz:=Vector2(world.x,world.z)
+        var canal:=preload("res://scripts/capital_canal_data.gd")
+        var bridge:=canal.bridge_at(point_xz)
+        var forbidden_water:=canal.wet_at(point_xz) and is_inf(bridge.x)
+        world.y=(canal.deck_height(point_xz.x-bridge.x) if not is_inf(bridge.x) else WorldData.elevation_at(point_xz))+1.0
         probe.transform=Transform3D(Basis.IDENTITY,world)
-        grid.set_point_solid(id,not get_world_3d().direct_space_state.intersect_shape(probe,1).is_empty())
+        grid.set_point_solid(id,forbidden_water or not get_world_3d().direct_space_state.intersect_shape(probe,1).is_empty())
         cursor+=1
         if Time.get_ticks_usec()-started>=1800:break
 
@@ -87,7 +93,7 @@ func can_reach(from:Vector3,destination:Vector3) -> bool:
 
 func contains(world:Vector3) -> bool:
     var point:=to_local(world)
-    return point.x>=LOW.x and point.x<=HIGH.x and point.z>=LOW.y and point.z<=HIGH.y
+    return point.x>=lower_bound.x and point.x<=upper_bound.x and point.z>=lower_bound.y and point.z<=upper_bound.y
 
 func next_point(from_world:Vector3,destination_world:Vector3,actor:Node3D) -> Vector3:
     if not grid_ready:return from_world

@@ -35,3 +35,11 @@ is limited to arid biomes or actual strong dust storms.
 
 ## Canopy and understory controls
 `foliage_wind.gdshader` retains the shared wind, opaque cutout and black-key paths. Optional canopy center/radius and normal blending round the existing temperate branch-card lighting; the default blend is zero. Optional pigment desaturation and stable instance brightness variation mute stylized grass colors. Prepared grass keeps height anchoring. Dense ground cover uses 32 m spatial groups; distant trees use 64 m groups. Near choppable tree batches stay unsplit to retain their indices.
+
+
+## Freshwater bank ground policy
+`terrain_ground.gdshader` has an opt-in capsule-distance moisture mask for the
+capital canal. A zero-height dry bank no longer inherits the old height-only
+wet-soil palette. The material retains the shared photographic grass/rock maps
+and original default behaviour for other biomes. Water continues to use the
+existing ice/frost/wet environment core, and foliage retains shared wind.

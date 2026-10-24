@@ -1,5 +1,6 @@
 extends Node3D
 
+const CANAL_DATA := preload("res://scripts/capital_canal_data.gd")
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const FACADES := preload("res://scripts/modular_city_facades.gd")
 const MARKET_COURT := preload("res://scripts/capital_market_court.gd")
@@ -19,6 +20,7 @@ const BUILD_INTERVAL := 0.10
 const CITY_SEED := 470219
 
 var player: Node3D
+var canal_builder:GDScript
 var loaded_cells: Dictionary = {}
 var pending_cells: Array[Vector2i] = []
 var queued_cells: Dictionary = {}
@@ -177,9 +179,13 @@ func _build_cell(cell: Vector2i) -> void:
     root.set_meta("facades", facades)
 
     var base_y := WorldData.elevation_at(center)
-    _add_mesh_box("DistrictPaving", Vector3(CELL_SIZE - 2.0, 0.08, CELL_SIZE - 2.0), Vector3(0.0, base_y - 0.025, 0.0), ground_material, root)
-    _add_mesh_box("RoadNS", Vector3(14.0, 0.11, CELL_SIZE), Vector3(0.0, base_y - 0.035, 0.0), road_material, root)
-    _add_mesh_box("RoadEW", Vector3(CELL_SIZE, 0.11, 14.0), Vector3(0.0, base_y - 0.033, 0.0), road_material, root)
+    if CANAL_DATA.affects_rect(Rect2(center-Vector2.ONE*CELL_SIZE*.5,Vector2.ONE*CELL_SIZE),2):
+        if canal_builder==null:canal_builder=load("res://scripts/capital_canals.gd")
+        canal_builder.city_cell(root,self)
+    else:
+        _add_mesh_box("DistrictPaving", Vector3(CELL_SIZE - 2.0, 0.08, CELL_SIZE - 2.0), Vector3(0.0, base_y - 0.025, 0.0), ground_material, root)
+        _add_mesh_box("RoadNS", Vector3(14.0, 0.11, CELL_SIZE), Vector3(0.0, base_y - 0.035, 0.0), road_material, root)
+        _add_mesh_box("RoadEW", Vector3(CELL_SIZE, 0.11, 14.0), Vector3(0.0, base_y - 0.033, 0.0), road_material, root)
 
     var district: Dictionary = CAPITAL.district_at(center)
     var district_id := String(district.get("id", "city"))
@@ -209,6 +215,8 @@ func _build_cell(cell: Vector2i) -> void:
             continue
         # Reserve courtyards and approach space for the canonical civic buildings.
         if not CAPITAL.protected_infrastructure_near(world_lot, 58.0).is_empty():
+            continue
+        if CANAL_DATA.distance_to_channel(world_lot)<CANAL_DATA.BANK_WIDTH+18 or (absf(world_lot.x-CANAL_DATA.bridges()[1].x)<90 and absf(world_lot.y-CANAL_DATA.bridges()[1].y)<55):
             continue
         var y := WorldData.elevation_at(world_lot)
         var width := rng.randf_range(12.0, 18.0)

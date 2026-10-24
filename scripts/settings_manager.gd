@@ -31,6 +31,7 @@ const DEFAULTS := {
         "mouse_sensitivity": 0.0025,
         "compatible_mouse": true,
         "autosave_seconds": 60.0,
+        "day_length_minutes": 48.0,
         "camera_fov": 75.0,
         "camera_distance": 5.5,
         "subtitles": true
@@ -200,6 +201,14 @@ func apply_all() -> void:
     _apply_volume("Master", float(get_value("audio", "master_volume")), bool(get_value("audio", "muted")))
     _apply_volume("Music", float(get_value("audio", "music_volume")), false)
     _apply_volume("SFX", float(get_value("audio", "sfx_volume")), false)
+
+func day_length_minutes() -> float:
+    var value:Variant=get_value("gameplay","day_length_minutes")
+    var duration:=float(value) if (value is int or value is float) and is_finite(float(value)) else 48.0
+    return clampf(duration,6.,120.)
+
+func world_minutes_per_second() -> float:
+    return 24.0/day_length_minutes()
 
 func quality_profile() -> Dictionary:
     return QUALITY_PRESETS[clampi(int(get_value("graphics", "quality_preset")), 0, QUALITY_PRESETS.size() - 1)]

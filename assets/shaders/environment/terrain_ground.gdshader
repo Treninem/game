@@ -2,6 +2,11 @@ shader_type spatial;
 render_mode specular_disabled;
 uniform sampler2D grass_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D rock_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+// Opt-in freshwater-bank policy. Legacy biome materials retain their defaults.
+uniform bool freshwater_bank = false;
+uniform vec2 freshwater_center = vec2(0.0);
+uniform float freshwater_half_length = 300.0;
+uniform float freshwater_half_width = 18.0;
 varying vec3 ground_world;
 varying vec3 ground_normal;
 float hash21(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
@@ -25,6 +30,11 @@ void fragment() {
     vec3 rock=texture(rock_texture,p*0.18).rgb*vec3(0.62,0.60,0.53);
     float slope=smoothstep(0.18,0.65,1.0-abs(normalize(ground_normal).y));
     float damp=1.0-smoothstep(1.3,3.1,ground_world.y);
+    if (freshwater_bank) {
+        vec2 offset=p-freshwater_center;
+        offset.y-=clamp(offset.y,-freshwater_half_length,freshwater_half_length);
+        damp=1.0-smoothstep(freshwater_half_width,freshwater_half_width+2.0,length(offset));
+    }
     vec3 soil=grass*vec3(0.48,0.38,0.26);
     ALBEDO=mix(mix(grass*tint,soil,damp*0.65),rock,slope);
     ROUGHNESS=mix(0.96,0.78,damp);

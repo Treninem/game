@@ -429,6 +429,7 @@ func _show_other() -> void:
     _add_slider("Поле зрения", float(SettingsManager.get_value("gameplay", "camera_fov")), 60.0, 100.0, 1.0, Callable(self, "_set_setting_float").bind("gameplay", "camera_fov"))
     _add_slider("Расстояние камеры · колёсико мыши", float(SettingsManager.get_value("gameplay", "camera_distance")), 2.0, 9.0, 0.5, Callable(self, "_set_setting_float").bind("gameplay", "camera_distance"))
     _add_slider("Автосохранение, сек.", float(SettingsManager.get_value("gameplay", "autosave_seconds")), 30.0, 300.0, 30.0, Callable(self, "_set_setting_float").bind("gameplay", "autosave_seconds"))
+    _add_slider("Сутки, реальных минут", SettingsManager.day_length_minutes(), 6.0, 120.0, 6.0, Callable(self, "_set_setting_float").bind("gameplay", "day_length_minutes"))
     _add_checkbox("Субтитры", bool(SettingsManager.get_value("gameplay", "subtitles")), Callable(self, "_set_setting_bool").bind("gameplay", "subtitles"))
 
 func _show_updates() -> void:

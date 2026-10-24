@@ -1,6 +1,7 @@
 class_name WorldHydrology
 extends RefCounted
 
+const CAPITAL_CANAL := preload("res://scripts/capital_canal_data.gd")
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 
 # Stable implementation geometry for already-established world features. These
@@ -109,6 +110,7 @@ static func crossing_kind_at(pos: Vector2) -> String:
     return ""
 
 static func freshwater_kind_at(pos: Vector2) -> String:
+    if CAPITAL_CANAL.wet_at(pos):return "river"
     if GEOGRAPHY.in_start_region(pos) \
     and GEOGRAPHY.distance_to_start_river(pos) <= GEOGRAPHY.START_RIVER_HALF_WIDTH:
         return "river"
@@ -119,6 +121,7 @@ static func freshwater_kind_at(pos: Vector2) -> String:
     return ""
 
 static func freshwater_level_at(pos: Vector2) -> float:
+    if CAPITAL_CANAL.wet_at(pos):return CAPITAL_CANAL.WATER_LEVEL
     var kind := freshwater_kind_at(pos)
     if kind == "river":
         return GEOGRAPHY.START_RIVER_WATER_LEVEL
@@ -185,4 +188,4 @@ static func carve_height(pos: Vector2, terrain_height: float) -> float:
             var marsh_bed := WHISPER_MARSH_WATER_LEVEL - marsh_depth
             height = minf(height, lerpf(height, marsh_bed, marsh_edge_weight))
 
-    return height
+    return CAPITAL_CANAL.carve_height(pos,height)

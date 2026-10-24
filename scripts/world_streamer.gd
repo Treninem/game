@@ -2,6 +2,7 @@ extends Node3D
 
 const STREAMED_RESOURCE := preload("res://scripts/streamed_resource.gd")
 const ENEMY := preload("res://scripts/enemy.gd")
+const CANAL_DATA := preload("res://scripts/capital_canal_data.gd")
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const NATURE := preload("res://scripts/production_nature.gd")
@@ -182,7 +183,7 @@ func _generate_chunk(coord: Vector2i) -> void:
     terrain.visibility_range_end = CHUNK_SIZE * float(VISUAL_RADIUS + 2)
     var center_world := origin + Vector2(CHUNK_SIZE * 0.5, CHUNK_SIZE * 0.5)
     var biome := WorldData.biome_at(center_world)
-    terrain.material_override = terrain_materials.get(biome, terrain_materials["plains"])
+    terrain.material_override = terrain_materials["capital_canal"] if CANAL_DATA.affects_rect(Rect2(origin,Vector2.ONE*CHUNK_SIZE)) else terrain_materials.get(biome, terrain_materials["plains"])
     chunk.add_child(terrain)
 
     if _distance_chunks(coord, current_center) <= PHYSICS_RADIUS:
@@ -242,7 +243,7 @@ func _build_terrain_mesh(coord: Vector2i) -> ArrayMesh:
 
     var row := GRID_RESOLUTION + 1
     var shore_edges := {"next": vertices.size()}
-    var river_level := GEOGRAPHY.START_RIVER_WATER_LEVEL
+    var river_level := _shore_level(origin)
     for z in range(GRID_RESOLUTION):
         for x in range(GRID_RESOLUTION):
             var i0 := z * row + x
@@ -263,13 +264,16 @@ func _build_terrain_mesh(coord: Vector2i) -> ArrayMesh:
                     _append_shore_triangle(st, origin, triangle, vertices, normals, shore_edges)
     return st.commit()
 
+func _shore_level(origin:Vector2) -> float:
+    return CANAL_DATA.WATER_LEVEL if CANAL_DATA.affects_rect(Rect2(origin,Vector2.ONE*CHUNK_SIZE)) else GEOGRAPHY.START_RIVER_WATER_LEVEL
+
 func _append_shore_triangle(st: SurfaceTool, origin: Vector2, triangle: PackedInt32Array, vertices: PackedVector3Array, normals: PackedVector3Array, cache: Dictionary) -> void:
-    var level := GEOGRAPHY.START_RIVER_WATER_LEVEL
+    var level := _shore_level(origin)
     var a := vertices[triangle[0]]
     var b := vertices[triangle[1]]
     var c := vertices[triangle[2]]
     var center := origin + Vector2((a.x+b.x+c.x)/3.0, (a.z+b.z+c.z)/3.0)
-    if minf(a.y,minf(b.y,c.y)) >= level or maxf(a.y,maxf(b.y,c.y)) <= level or not GEOGRAPHY.in_start_region(center) or GEOGRAPHY.distance_to_start_river(center) > GEOGRAPHY.START_RIVER_BANK_WIDTH:
+    if minf(a.y,minf(b.y,c.y)) >= level or maxf(a.y,maxf(b.y,c.y)) <= level or not (CANAL_DATA.near_channel(center) or (GEOGRAPHY.in_start_region(center) and GEOGRAPHY.distance_to_start_river(center) <= GEOGRAPHY.START_RIVER_BANK_WIDTH)):
         for index in triangle:
             st.add_index(index)
         return
@@ -298,7 +302,7 @@ func _shore_edge_index(st: SurfaceTool, origin: Vector2, first: int, second: int
         return int(cache[key])
     var a := vertices[key.x]
     var b := vertices[key.y]
-    var level := GEOGRAPHY.START_RIVER_WATER_LEVEL
+    var level := _shore_level(origin)
     if absf(a.y-level) < 0.000001:
         return key.x
     if absf(b.y-level) < 0.000001:
@@ -502,7 +506,7 @@ func _add_landmark_if_needed(chunk: Node3D, coord: Vector2i) -> void:
 func _chunk_needs_water(coord: Vector2i) -> bool:
     var origin := _chunk_origin(coord)
     for sample in [Vector2.ZERO, Vector2(CHUNK_SIZE, 0), Vector2(0, CHUNK_SIZE), Vector2(CHUNK_SIZE, CHUNK_SIZE), Vector2(CHUNK_SIZE * 0.5, CHUNK_SIZE * 0.5)]:
-        if WorldData.elevation_at(origin + sample) < WorldData.SEA_LEVEL:
+        if WorldData.elevation_at(origin + sample) < WorldData.SEA_LEVEL and not CANAL_DATA.wet_at(origin+sample):
             return true
     return false
 
@@ -569,6 +573,12 @@ func _prepare_materials() -> void:
             material.albedo_texture = preload("res://assets/production/materials/ground/lichen_rock.jpg")
             material.uv1_scale = Vector3.ONE * 0.25
         terrain_materials[biome] = material
+    var canal_ground:=terrain_materials["plains"].duplicate() as ShaderMaterial
+    canal_ground.set_shader_parameter("freshwater_bank",true)
+    canal_ground.set_shader_parameter("freshwater_center",CANAL_DATA.CENTER)
+    canal_ground.set_shader_parameter("freshwater_half_length",CANAL_DATA.HALF_LENGTH)
+    canal_ground.set_shader_parameter("freshwater_half_width",CANAL_DATA.HALF_WIDTH)
+    terrain_materials["capital_canal"]=canal_ground
     trunk_material = _material(Color(0.24, 0.13, 0.065), 0.96)
     foliage_materials["forest"] = _material(Color(0.08, 0.28, 0.10), 0.96)
     foliage_materials["taiga"] = _material(Color(0.055, 0.20, 0.15), 0.98)
