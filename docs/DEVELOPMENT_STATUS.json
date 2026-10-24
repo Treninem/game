@@ -6,7 +6,7 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "В проверочной ветке переработан инвентарь: отдельная прокрутка сетки, описание сбоку, видимые названия, поиск/монеты/атака/боеприпасы, настоящие текущие модели оружия с одноразовой отрисовкой. Native56d6b895 SUCCESS:3 физических разрешения и4 модели; прежний тест144 записей/миллионных стеков/JSON и11 проверок ввода прошёл. Movement56d6b895 SUCCESS; Core56d6b895: in_progress/None. Core и Movement материалов домов4f2f3097 уже SUCCESS; непрерывный графический бытовой цикл всё ещё FAIL240с. Корневой runtime и runtimePR12 не изменены. Полная художественная готовность и стабильный релиз не подтверждены.",
+  "current_stage": "В основной проверочной ветке PR12 объединён проверенный runtime56d6b895: новый инвентарь, восстановление управления I/Tab, физический сход жителей с парапетов, исправление входа/выхода семьи после загрузки и эквивалентные UV материалов домов. Точные Core56d6b895(124 шага), Movement56d6b895 и native UI56d6b895 SUCCESS. Новые проверки SHA текущего PR и installer/export ожидаются после переноса; стабильного релиза нет. Полный непрерывный графический бытовой тест остаётся FAIL240с. Корневые runtime/сцены пользователя и общий HEAD/index сохранены; новые модели оружия ещё не входят в runtime.",
   "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_EDITOR_HANDOFF_INPUT_AUDIT.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
@@ -202,7 +202,7 @@
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
   "ci_followup_status": "Runtime6d3 passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-24_INVENTORY_PRESENTATION.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-24_REVIEW_INTEGRATION_SYNC.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -748,7 +748,7 @@
       "updated_at": "2026-10-24T11:08:47Z"
     },
     "root_runtime_integrated": false,
-    "PR12_runtime_integrated": false,
+    "PR12_runtime_integrated": true,
     "manual_play": false,
     "full_visual_acceptance": false,
     "stable_release": false
@@ -758,7 +758,7 @@
     "isolated_runtime_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
     "branch": "codex/editor-handoff-validation-2026-10-24",
     "root_runtime_integrated": false,
-    "PR12_runtime_integrated": false,
+    "PR12_runtime_integrated": true,
     "material_review": {
       "id": 40091621762,
       "name": "Verify Metric House Surface Appearance and Cost",
@@ -826,14 +826,53 @@
       "id": 40096743716,
       "name": "Validate World Core",
       "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
-      "updated_at": "2026-10-24T13:06:57Z"
+      "updated_at": "2026-10-24T13:40:36Z"
     },
     "root_runtime_integrated": false,
-    "PR12_runtime_integrated": false,
+    "PR12_runtime_integrated": true,
     "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "review_integration_follow_up": {
+    "recorded_at_utc": "2026-10-24T14:40:36.214373+00:00",
+    "validated_runtime_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "review_branch": "codex/household-persistence-2026-10-19",
+    "prior_review_sha": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+    "private_documentation_parent": "709c0a2fd335c755d6ce10f257d7afa68f174bac",
+    "PR12_runtime_integrated": true,
+    "root_runtime_integrated": false,
+    "atomic_fast_forward_required": true,
+    "source_trees_unchanged_from_validated_runtime": true,
+    "core": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    },
+    "movement": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "native_inventory": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
     "stable_release": false
   }
 }

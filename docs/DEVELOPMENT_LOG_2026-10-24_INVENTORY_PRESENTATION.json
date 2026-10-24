@@ -34,13 +34,13 @@
       "id": 40096743716,
       "name": "Validate World Core",
       "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
-      "updated_at": "2026-10-24T13:06:57Z"
+      "updated_at": "2026-10-24T13:40:36Z"
     },
     "root_runtime_integrated": false,
-    "PR12_runtime_integrated": false,
+    "PR12_runtime_integrated": true,
     "full_visual_acceptance": false,
     "stable_release": false
   },
@@ -94,10 +94,10 @@
       "id": 40096743716,
       "name": "Validate World Core",
       "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
-      "updated_at": "2026-10-24T13:06:57Z"
+      "updated_at": "2026-10-24T13:40:36Z"
     }
   },
   "evidence_folder": "docs/review/2026-10-24-inventory-presentation",
@@ -218,5 +218,44 @@
     "Use the read-only reconciliation as a starting point; revalidate shared-tree ownership and integrate only exact reviewed changes while preserving user edits.",
     "Replace the visibly faceted, flat weapon surfaces/handles as a complete axe/knife/bow/arrow package with grip, draw, impact and equipped-state reviews; keep the newly unified source catalogue.",
     "Continue complete human clothing/anatomy/locomotion/support and consistent house/region art; complete the still failing continuous household render case without weakening its graphics, clock or deadline."
-  ]
+  ],
+  "review_integration_follow_up": {
+    "recorded_at_utc": "2026-10-24T14:40:36.214373+00:00",
+    "validated_runtime_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "review_branch": "codex/household-persistence-2026-10-19",
+    "prior_review_sha": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+    "private_documentation_parent": "709c0a2fd335c755d6ce10f257d7afa68f174bac",
+    "PR12_runtime_integrated": true,
+    "root_runtime_integrated": false,
+    "atomic_fast_forward_required": true,
+    "source_trees_unchanged_from_validated_runtime": true,
+    "core": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    },
+    "movement": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "native_inventory": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
+    "stable_release": false
+  }
 }
