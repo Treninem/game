@@ -52,6 +52,11 @@ func _ready() -> void:
         add_to_group("ally")
     collision_layer = 1
     collision_mask = 1
+    # At capital coordinates the default millimetre recovery margin is close
+    # to float precision. A two-centimetre capsule margin separates grazing
+    # masonry contacts instead of pinning a resident to a bevel indefinitely.
+    # Geometry, capsule size, movement speed and collision masks stay intact.
+    safe_margin = 0.02
     floor_snap_length = 0.35
     floor_max_angle = deg_to_rad(48.0)
     up_direction = Vector3.UP

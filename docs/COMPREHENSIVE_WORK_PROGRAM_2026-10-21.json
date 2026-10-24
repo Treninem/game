@@ -528,5 +528,14 @@
     "clean_dependency_fixture_passed": true,
     "fresh_three_photo_mips_passed": true,
     "current_ci": "pending exact followupSHA"
+  },
+  "latest_canal_contact_fix": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CONTACTS.json",
+    "failed_parent": "c1bca99e43ec8b4ccfb7588ba31ebfeaef0bc764",
+    "controlled_corner_before_failed_after_passed": true,
+    "related_regressions_passed": 9,
+    "runtime_change": "NPC capsule recovery margin0.02m",
+    "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
   }
 }
