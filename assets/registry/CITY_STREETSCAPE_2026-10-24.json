@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-24",
+  "state": "INTEGRATED",
+  "branch": "codex/household-persistence-2026-10-19",
+  "main_integrated": false,
+  "authoring": {
+    "source": "assets/source/architecture/city_street/CityStreetKit.blend",
+    "geometry_uv_sha256": "7c36fc9574507c9fc2fc39a55052d4272c3558db0f65de793a7674f6355066c4",
+    "all_images_relative_and_exist": true,
+    "normal_ORM_connected_in_editable_source": true,
+    "production_GLB_unchanged": true,
+    "source_parts": {
+      "PavingPanel": {
+        "triangles": 3252,
+        "bounds": [
+          [
+            -1.5,
+            -1.5,
+            0.0
+          ],
+          [
+            1.5,
+            1.5,
+            0.038999997079372406
+          ]
+        ]
+      },
+      "StonePlanter": {
+        "triangles": 4536,
+        "bounds": [
+          [
+            -0.8500000238418579,
+            -0.6449999809265137,
+            0.0
+          ],
+          [
+            0.8500000238418579,
+            0.6449999809265137,
+            0.5900000333786011
+          ]
+        ]
+      },
+      "LanternPost": {
+        "triangles": 1092,
+        "bounds": [
+          [
+            -0.22499999403953552,
+            -0.22499999403953552,
+            0.0
+          ],
+          [
+            0.5137876272201538,
+            0.22499999403953552,
+            2.723829507827759
+          ]
+        ]
+      }
+    }
+  },
+  "construction": {
+    "state": "CANDIDATE_NOT_INTEGRATED",
+    "parts": {
+      "PavingPanel": {
+        "triangles": 3252,
+        "bounds": [
+          [
+            -1.5,
+            -1.5,
+            0.0
+          ],
+          [
+            1.5,
+            1.5,
+            0.038999997079372406
+          ]
+        ]
+      },
+      "StonePlanter": {
+        "triangles": 4536,
+        "bounds": [
+          [
+            -0.8500000238418579,
+            -0.6449999809265137,
+            0.0
+          ],
+          [
+            0.8500000238418579,
+            0.6449999809265137,
+            0.5900000333786011
+          ]
+        ]
+      },
+      "LanternPost": {
+        "triangles": 1092,
+        "bounds": [
+          [
+            -0.22499999403953552,
+            -0.22499999403953552,
+            0.0
+          ],
+          [
+            0.5137876272201538,
+            0.22499999403953552,
+            2.723829507827759
+          ]
+        ]
+      }
+    },
+    "total_triangles": 8880,
+    "lantern_anchor_m": [
+      0.47,
+      2.4,
+      0
+    ],
+    "paving_outer_ramp_height_m": 0.035,
+    "paving_outer_ramp_run_m": 0.1,
+    "images_relative": true,
+    "source_original": true
+  },
+  "material": {
+    "original_procedural_material": true,
+    "scanned": false,
+    "resolution": [
+      256,
+      256
+    ],
+    "normal_convention": "OpenGL tangent space",
+    "texture_period_m": 0.75,
+    "relief_height_range_m": [
+      -0.0002619235064645108,
+      0.00025870418529682076
+    ],
+    "third_party_files": 0
+  },
+  "provenance": {
+    "reference_archive_sha256": "70ee83623dc3349c07cd610ebece53718033224dd38414af161c9a8100434a67",
+    "reference_images_reviewed": "All20 previously;02market re-inspected this package",
+    "reference_pixels_in_runtime": false,
+    "third_party_new_downloads": 0,
+    "reused_production": [
+      "TemperateBush.glb existing CC0 foliage with original leaf texture and shared wind",
+      "CottageYardKit MeadowFlowers original project source",
+      "Existing CC0 production wall lantern and its license"
+    ],
+    "new_material": "Original Blender procedural fine-grained cut stone256px albedo/OpenGLnormal/ORM; not scanned",
+    "new_geometry": "Original Blender CityStreetKit,8880triangles,3modules and measured lantern marker",
+    "delivery_scope": "Central capital public market only; not20complete cities"
+  },
+  "runtime_details": {
+    "central_clear_width_m": 14.0,
+    "flowers": 12,
+    "lantern_posts": 4,
+    "panel_ramp_rise_m": 0.039,
+    "panel_ramp_run_m": 0.1,
+    "paving_panels": 28,
+    "planters": 6
+  },
+  "physical_geometry": "Shared exact concave planter/lantern shapes;39mm shallow convex ramp supports paving within4mm slab joints, not a tall invisible box",
+  "quality": "Low/Medium albedo only; High/Ultra normal and ORM;4non-shadowed5.5m street lights disabled atLow",
+  "visual_acceptance": false,
+  "limitations": [
+    "One square only; broad flat paving and repeated exterior shells remain",
+    "Flowers/planting variety and richer night windows remain open",
+    "Full skyline/river/bridges/terraces/distinct cities and inhabited homes remain open",
+    "Human meshes/actions/ages/clothes are unchanged and remain unaccepted"
+  ]
+}

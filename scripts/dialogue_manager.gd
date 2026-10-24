@@ -7,8 +7,10 @@ var is_open := false
 var speaker := ""
 var text := ""
 var options: Array = []
+var dialogue_revision := 0
 
 func open_dialogue(p_speaker: String, p_text: String, p_options: Array = []) -> void:
+    dialogue_revision += 1
     speaker = p_speaker
     text = p_text
     options = p_options.duplicate(true)
@@ -19,20 +21,40 @@ func close_dialogue() -> void:
     if not is_open:
         return
     is_open = false
+    dialogue_revision += 1
     speaker = ""
     text = ""
     options = []
     dialogue_closed.emit()
 
-func choose(index: int) -> void:
-    if not is_open or index < 0 or index >= options.size():
+func choose(index: int, quantity: int = -1, expected_revision: int = -1) -> void:
+    if not is_open or index < 0 or index >= options.size() or (expected_revision != -1 and expected_revision != dialogue_revision):
         return
     var option = options[index]
     if typeof(option) != TYPE_DICTIONARY:
         close_dialogue()
         return
     var action := String(option.get("action", "close"))
+    if quantity != -1 and (action != "furniture_transfer" or not option.has("quantity_max") or quantity < 1 or quantity > int(option.quantity_max)):
+        GameState.notify("Укажите количество в доступном диапазоне.")
+        return
     match action:
+        "furniture_transfer":
+            var furniture := instance_from_id(int(option.get("furniture", 0))) as Node
+            var actor := get_tree().get_first_node_in_group("player") as Node3D
+            if is_instance_valid(furniture) and furniture.is_inside_tree() and furniture.has_method("transfer"):
+                var amount := quantity if quantity != -1 else int(option.get("amount", 1))
+                if not furniture.call("transfer", actor, String(option.get("item", "")), bool(option.get("deposit", false)), amount):
+                    GameState.notify("Перенос недоступен: проверьте запас, место в сундуке и доступ к нему.")
+                furniture.call("open_storage", actor)
+            else:
+                close_dialogue()
+        "merchant_trade":
+            var merchant := instance_from_id(int(option.get("merchant", 0))) as Node
+            if is_instance_valid(merchant) and merchant.is_inside_tree() and merchant.has_method("complete_trade"):
+                merchant.call("complete_trade", String(option.get("item", "")), bool(option.get("sell", false)))
+            else:
+                close_dialogue()
         "start_quest":
             GameState.start_quest()
             open_dialogue("Мира", "Хорошо. Принеси мне 8 единиц древесины и 4 камня. Эти материалы нужны для первого убежища.", [{"text": "Я вернусь с материалами.", "action": "close"}])

@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "1a59b5fcafde5e7eb4799abf678b02a03944091e",
+  "spec_attachment": "a8435fa5-261a-4d87-a250-75f1baa95c93",
+  "spec_comparison": "Same complete 2579-line specification after trailing-space normalization",
+  "changes": [
+    "Add bounded HeadSize morph composed from the three existing authored MakeHuman head-axis fields; no new download.",
+    "Rebuild both bodies and synchronize all seven fitted parts, including eyes, brows and both hair meshes.",
+    "Add actual creator slider, neutral legacy default, randomization and look/game-save round-trip.",
+    "Rendered source review exposed clipped hair at maximum head size; close-up camera gains bounded extra distance. Final exported screenshots verify the correction."
+  ],
+  "source_checks": [
+    {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.33
+    },
+    {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.16
+    },
+    {
+      "case": "character_dimensions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 73.56
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 97.34,
+      "marker": true
+    }
+  ],
+  "geometry": {
+    "exit_code": 0,
+    "seconds": 30.67,
+    "marker": true
+  },
+  "model_sha256": {
+    "male": "19daa75c9e74e9d9a4850bdfd519998b785670012d11cfc8746a7ea0ae870825",
+    "female": "4dc0fc77c4354ab6ef748f6acba737ab677f85dacc25e838e52cfae10516c31d"
+  },
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 55.39,
+    "sha256": "a38d3737e3f13224b558a64394c1df9e7bd6ab78e05c04f7339fa9df4174f165"
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 57.67,
+    "marker": true
+  },
+  "native": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-0-height-160.0.png",
+      "user://head-size-0-height-180.0.png",
+      "user://head-size-0-height-195.0.png",
+      "user://head-size-0-eyes-0.png",
+      "user://head-size-0-eyes-1.png",
+      "user://head-size-0-eyes-2.png",
+      "user://head-size-0-eyes-3.png",
+      "user://head-size-0-eyes-4.png",
+      "user://head-size-0-head-size--0.5.png",
+      "user://head-size-0-head-size-0.0.png",
+      "user://head-size-0-head-size-0.5.png",
+      "user://head-size-0-extreme--0.5.png",
+      "user://head-size-0-extreme-0.5.png",
+      "user://head-size-0-motion-1.png",
+      "user://head-size-0-motion-2.png",
+      "user://head-size-0-motion-4.png",
+      "user://head-size-0-motion-5.png",
+      "user://head-size-5-height-160.0.png",
+      "user://head-size-5-height-180.0.png",
+      "user://head-size-5-height-195.0.png",
+      "user://head-size-5-eyes-0.png",
+      "user://head-size-5-eyes-1.png",
+      "user://head-size-5-eyes-2.png",
+      "user://head-size-5-eyes-3.png",
+      "user://head-size-5-eyes-4.png",
+      "user://head-size-5-head-size--0.5.png",
+      "user://head-size-5-head-size-0.0.png",
+      "user://head-size-5-head-size-0.5.png",
+      "user://head-size-5-extreme--0.5.png",
+      "user://head-size-5-extreme-0.5.png",
+      "user://head-size-5-motion-1.png",
+      "user://head-size-5-motion-2.png",
+      "user://head-size-5-motion-4.png",
+      "user://head-size-5-motion-5.png",
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 23.6596078961156
+  },
+  "editor_acceptance": {
+    "accepted": 32,
+    "total": 55,
+    "percent": 58.2,
+    "visual_acceptance": false,
+    "metric": "Equal-weight criterion coverage, not whole-game completion or work-effort coverage"
+  },
+  "limitations": [
+    "Modern realistic appearance, natural animations and full wardrobe remain unaccepted.",
+    "Full body-proportion/armor collision acceptance remains open; HeadSize is a bounded facial control.",
+    "Automated graphical QA with explicit test gear/profile switches and save restoration; not a manual city/world tour.",
+    "79 ObjectDB cleanup warning remains unresolved; no stable publication, new-commit remote CI pending."
+  ]
+}

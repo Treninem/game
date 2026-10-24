@@ -78,7 +78,8 @@ func _spawn_siege_enemy(day: int, slot: int, gate_id: String, index: int, xz: Ve
     enemy.set("move_speed", 3.0 + float(slot) * 0.18)
     enemy.set("detection_range", 42.0)
     enemy.set("attack_damage", 8.0 + float(slot) * 2.0)
-    enemy.global_position = Vector3(xz.x, WorldData.elevation_at(xz) + 0.9, xz.y)
+    # Local transform is valid before add_child; global transforms require a tree.
+    enemy.position = to_local(Vector3(xz.x, WorldData.elevation_at(xz) + 0.9, xz.y))
 
     var collision := CollisionShape3D.new()
     collision.name = "CollisionShape3D"

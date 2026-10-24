@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "actual": false,
+      "case": "default_tab_opens_inventory",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "default_I_opens_inventory",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "pause_bound_letter_types_in_search_without_guard",
+      "expected": true
+    },
+    {
+      "actual": false,
+      "case": "pause_bound_letter_types_in_search_with_actual_guard",
+      "expected": true,
+      "panel_visible": false,
+      "search": ""
+    },
+    {
+      "actual": true,
+      "case": "rebound_pause_opens_menu_outside_text",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "inventory_unchanged",
+      "expected": true
+    },
+    {
+      "actual": true,
+      "case": "coins_unchanged",
+      "expected": true
+    }
+  ],
+  "headless": true,
+  "manual_play": false,
+  "root_runtime_changed": false,
+  "source_sha": "711edb0dc5ee39e6b4b0d3b3a1d2db46535a0df9"
+}

@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 coast/nature source follow-up",
+  "parent": "b9631d5535614cf04b350e341d556282af5b7cd4",
+  "changes": [
+    "4 m terrain grid replaces 8 m grid; one-sample height halo gives matching edge normals",
+    "Physical triangles are generated from the same mesh as rendered ground",
+    "Existing Pine_1 replaces duplicate tree alias; tree placement RNG and persistent IDs retained",
+    "Grass target 40 to 120 per 96 m cell, same 25-cell cap and existing MultiMesh batches; grass-only spawn clearance reduced to 2 m",
+    "Grass/needles receive muted material tint; grass wind displacement uses root-height anchoring"
+  ],
+  "checks_geometry_movement_chopping": [
+    {
+      "name": "terrain_geometry",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.25
+    },
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 6.59
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 30.83
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.19
+    }
+  ],
+  "checks_start_and_diversity": [
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.08
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 24.31
+    }
+  ],
+  "final_nature_check": [
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 11.0
+    }
+  ],
+  "native": {
+    "exit_code": 0,
+    "walked_m": 3.75489735603333,
+    "player_position_assignments": 0,
+    "quality": "high",
+    "views": 3,
+    "input": "ordinary automated movement Input; inspection camera moves independently",
+    "clock": "noon set only in inspection fixture; then advances normally",
+    "log": "build/acceptance/coast-final-native/stdout.log",
+    "shader_errors": [],
+    "warnings": [
+      "89 ObjectDB instances leaked at shutdown"
+    ]
+  },
+  "observed_iteration": "First native pass exposed neon-yellow source grass; material tint/root anchor corrected and full native inspection repeated. Final actual capture reviewed.",
+  "limits": [
+    "No new realistic tree sculpt or textures; existing CC0 stylized pine remains stylized",
+    "Grid triangles quadrupled; movement 30.83 s and startup 24.31 s are test durations, not FPS benchmarks; loading/performance need broader profiling",
+    "No full city traversal, package export, installer or stable release in this stage",
+    "Character appearance and advanced natural combat animations remain unfinished"
+  ],
+  "assets": "Existing production Pine_1 and grass reused; no external assets/downloads",
+  "ci": "Add bounded terrain geometry smoke to existing world-core; new commit remote checks pending"
+}

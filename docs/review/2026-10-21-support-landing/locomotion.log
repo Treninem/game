@@ -1,0 +1,14 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+STRIDE_PROFILE_CHECKED male forefoot_supports={ "Walk": 1.81501408824974, "Run": 5.92899951550366 }
+STRIDE_PROFILE_CHECKED female forefoot_supports={ "Walk": 1.72875647463823, "Run": 5.45938308658054 }
+STRIDE_SPEED_CHECKED bodies=2 visual_heights=3 speeds=5 physical_motion=true combat_phase=retained
+AIRBORNE_ACTIONS_CHECKED bodies=2 actions=6 legs=6 idle=retained landing=reset gait=frozen
+JUMP_PHASE_PROFILE male knee_bends=[59.219768670194, 89.713510219742, 17.0467468569301]
+JUMP_PHASE_PROFILE female knee_bends=[59.2197959909507, 89.7135238801203, 17.0467485644774]
+JUMP_PHASES_CHECKED bodies=2 physical_velocity=rise,apex,fall combat_legs=matched
+HUMANOID_SUPPORT_CHECKED poses=336 bodies=2 heights=3 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=-0.00010078764171 max_gap=0.00448320154101 modifier_p95_usec=1352
+HUMANOID_LANDING_PROFILE male compression=0.07476235494661 peak_sole_gap=0.00279541732743 neutral_hip=1.04184103012085 peak_hip=0.96295881271362
+HUMANOID_LANDING_PROFILE female compression=0.07476235494661 peak_sole_gap=0.00231064064428 neutral_hip=0.99977177381516 peak_hip=0.90530204772949
+HUMANOID_LANDING_CHECKED bodies=2 input=jump impact=physical soles=skinned recovery=idle gait_phase=retained transient_reset=true
+LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2

@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Unlimited inventory browsing",
+  "owner_spec": "a106ad83-bdb4-4d63-9fb8-d431733067be; same canonical master except six Markdown trailing-space lines",
+  "changes": [
+    "Case-insensitive name, ID and category search",
+    "At most 48 item cards displayed per page; no inventory storage limit",
+    "Page clamp after filtering or item removal; empty search results can be reset",
+    "Existing equipment and consumable actions retained; snapshot schema unchanged"
+  ],
+  "validation": {
+    "headless_actual_ui": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 10.7
+    },
+    "visible_actual_ui": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 20.14,
+      "mode": "visible automated UI; not manual playthrough"
+    },
+    "source_gameplay_regression": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 48.67,
+      "marker": true
+    },
+    "coverage": "144 inventory dictionary entries including zero remnants; 137 synthetic positive supply kinds with million-unit stacks; every positive item appears exactly once across pages; JSON snapshot roundtrip, filtered bow equipment and unpause verified"
+  },
+  "test_repair": "Initial test incorrectly counted zero remnants as owned items; fixed oracle to require every positive item exactly once. Initial stalled test stopped and rerun; production code was not relaxed.",
+  "limits": [
+    "Existing two-column card style retained; compact cell grid and item icons still pending",
+    "Visible automated checks are not a manual full playthrough or art acceptance",
+    "No new exported package; prior heal package does not contain these inventory changes",
+    "Functional editor count remains 32/55 (58.2%); no overall-game percentage claimed"
+  ],
+  "release": "Unreleased review; no stable publication"
+}

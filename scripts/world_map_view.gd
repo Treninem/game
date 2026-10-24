@@ -2,15 +2,32 @@ extends Control
 
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const LOCAL_RADIUS := 2400.0
+const CARTOGRAPHY := preload("res://scripts/local_map_renderer.gd")
 
 var player: Node3D
 var redraw_elapsed := 0.0
+var cartography := CARTOGRAPHY.new()
+var local_view := false
+var zoom_radius := 600.0
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_IGNORE
     custom_minimum_size = Vector2(640, 430)
-    if not MapSystem.explored_changed.is_connected(queue_redraw):
-        MapSystem.explored_changed.connect(queue_redraw)
+    texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+    MapSystem.explored_changed.connect(_on_explored_changed)
+    queue_redraw()
+
+func _on_explored_changed() -> void:
+    cartography.invalidate()
+    queue_redraw()
+
+func set_local_view(enabled: bool) -> void:
+    local_view = enabled
+    queue_redraw()
+
+func change_zoom(factor: float) -> void:
+    local_view = true
+    zoom_radius = clampf(zoom_radius * factor, 130.0, 4800.0)
     queue_redraw()
 
 func _process(delta: float) -> void:
@@ -29,6 +46,14 @@ func _draw() -> void:
     draw_style_box(_panel_style(), map_rect)
     var inner := map_rect.grow(-8)
     draw_rect(inner, Color(0.006, 0.010, 0.016, 1.0), true)
+
+    if local_view and is_instance_valid(player):
+        var center := Vector2(player.global_position.x, player.global_position.z)
+        cartography.draw_terrain(self, inner, center, zoom_radius)
+        cartography.draw_features(self, inner, center, zoom_radius)
+        draw_circle(inner.get_center(), 5.0, Color(0.2, 0.88, 1.0))
+        draw_string(ThemeDB.fallback_font, Vector2(14, size.y - 10), "Дома • деревья • жители (жёлтые) • союзники (зелёные) • враги (красные)", HORIZONTAL_ALIGNMENT_LEFT, size.x - 28, 12, Color(0.85, 0.85, 0.75))
+        return
 
     _draw_continent_frame(inner)
     for cell in MapSystem.explored_cells():
@@ -88,17 +113,8 @@ func _draw_local_inset(rect: Rect2, player_world: Vector2) -> void:
     var inner := inset.grow(-7)
     draw_rect(inner, Color(0.012, 0.017, 0.025, 0.98), true)
 
-    var local_min := player_world - Vector2(LOCAL_RADIUS, LOCAL_RADIUS)
-    var local_max := player_world + Vector2(LOCAL_RADIUS, LOCAL_RADIUS)
-    for cell in MapSystem.explored_cells():
-        var center := MapSystem.cell_to_world_center(cell)
-        if center.x < local_min.x or center.x > local_max.x or center.y < local_min.y or center.y > local_max.y:
-            continue
-        var half := MapSystem.CELL_SIZE * 0.5
-        var p1 := _local_to_screen(center - Vector2(half, half), inner, player_world)
-        var p2 := _local_to_screen(center + Vector2(half, half), inner, player_world)
-        var r := Rect2(Vector2(minf(p1.x, p2.x), minf(p1.y, p2.y)), Vector2(absf(p2.x - p1.x), absf(p2.y - p1.y)))
-        draw_rect(r.grow(0.4), WorldData.biome_color(WorldData.biome_at(center)).lightened(0.06), true)
+    cartography.draw_terrain(self, inner, player_world, LOCAL_RADIUS)
+    cartography.draw_features(self, inner, player_world, LOCAL_RADIUS)
 
     _draw_capital_local(inner, player_world)
     var pp := _local_to_screen(player_world, inner, player_world)
@@ -165,14 +181,14 @@ func _poi_color(kind: String) -> Color:
 func _world_to_screen(world: Vector2, rect: Rect2) -> Vector2:
     var nx := inverse_lerp(WorldData.WORLD_MIN.x, WorldData.WORLD_MAX.x, world.x)
     var ny := inverse_lerp(WorldData.WORLD_MIN.y, WorldData.WORLD_MAX.y, world.y)
-    return Vector2(rect.position.x + nx * rect.size.x, rect.end.y - ny * rect.size.y)
+    return Vector2(rect.position.x + nx * rect.size.x, rect.position.y + ny * rect.size.y)
 
 func _local_to_screen(world: Vector2, rect: Rect2, center: Vector2) -> Vector2:
     var local_min := center - Vector2(LOCAL_RADIUS, LOCAL_RADIUS)
     var local_max := center + Vector2(LOCAL_RADIUS, LOCAL_RADIUS)
     var nx := inverse_lerp(local_min.x, local_max.x, world.x)
     var ny := inverse_lerp(local_min.y, local_max.y, world.y)
-    return Vector2(rect.position.x + nx * rect.size.x, rect.end.y - ny * rect.size.y)
+    return Vector2(rect.position.x + nx * rect.size.x, rect.position.y + ny * rect.size.y)
 
 func _panel_style() -> StyleBoxFlat:
     var style := StyleBoxFlat.new()

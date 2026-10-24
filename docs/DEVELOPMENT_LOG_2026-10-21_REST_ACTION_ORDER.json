@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-21",
+  "parent": "11d7587a366df990960212635068e59a8c0aa9b8",
+  "parent_ci": "8/8 passed",
+  "problem": "Attack/cast input executes while the visual is still attached to rest furniture; release previously waited for the next physics tick. Blocked magic could leave rest active indefinitely.",
+  "changes": [
+    "Shared immediate rest release before attack, cast attempt and accepted jump",
+    "Release occupancy, persistent rest ID and transient metadata together",
+    "Reuse the same release path for movement, lost furniture and death handling"
+  ],
+  "validation": {
+    "action-wake-final-household_furniture": {
+      "exit_code": 0,
+      "seconds": 76.62,
+      "errors": [],
+      "marker": true
+    },
+    "action-wake-final-household_pose": {
+      "exit_code": 0,
+      "seconds": 19.86,
+      "errors": [],
+      "marker": true
+    },
+    "action-wake-render-household_pose": {
+      "exit_code": 0,
+      "seconds": 62.39,
+      "errors": [],
+      "marker": true
+    },
+    "before-household_pose": {
+      "exit_code": 1,
+      "seconds": 30.02,
+      "errors": [
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/",
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/",
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/stone_knife",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/starter_axe",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/short_bow",
+        "ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/stone_knife"
+      ],
+      "marker": false
+    },
+    "gameplay_actions": {
+      "exit_code": 0,
+      "seconds": 21.69,
+      "errors": [],
+      "marker": true
+    },
+    "physical_actions": {
+      "exit_code": 0,
+      "seconds": 28.25,
+      "errors": [],
+      "marker": true
+    },
+    "source_world": {
+      "exit_code": 0,
+      "seconds": 50.44,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "negative_control": "48 immediate-action rest failures on parent implementation; updated 48-case matrix passes",
+  "matrix_actions": {
+    "attack_attempts": 36,
+    "blocked_magic_attempts": 12,
+    "bodies": 2,
+    "heights_cm": [
+      160,
+      180,
+      195
+    ],
+    "furniture": [
+      "bed",
+      "bench"
+    ]
+  },
+  "rendered_method": "Automated 24-frame rest fixture plus immediate-action capture. Capsule physics disabled at a fixed probe position: wake frames do not demonstrate ground support. Separate actual source-world movement/jump/bow/magic/save/menu run passed.",
+  "manual_play": false,
+  "remaining": [
+    "Dedicated lie-down/get-up animations and relaxed sleeping pose",
+    "Jump-from-rest branch added; physical jump from real furniture not separately covered by this fixture",
+    "Known threaded loader exit leftovers remain open",
+    "Full character/world visual acceptance remains open"
+  ],
+  "release": false
+}

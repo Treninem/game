@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-20",
+  "action": "Preserve newly supplied visual/gameplay requirements at explicit request to remember them",
+  "source_attachment": "C:\\Users\\Dexp\\.codex\\attachments\\d5f5bbff-2bad-44dc-953e-84c47a8cfcab\\Вставленный текст.txt",
+  "preserved_document": "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt",
+  "sha256": "e8767eeec7a14c0d98d7f78c2a2f76f685e6af8da1b9ad3b5d9843159e9cc0e8",
+  "verified": "Byte-for-byte identical to attachment",
+  "priority": "Enshrouded is now primary visual/control/UI/building reference; Skyrim atmosphere/RPG, Kenshi living world, Mantella memory/free-text dialogue",
+  "runtime_modified": false,
+  "game_tests_run": false,
+  "reference_games_researched_this_task": false,
+  "readiness_percent_changed": false
+}

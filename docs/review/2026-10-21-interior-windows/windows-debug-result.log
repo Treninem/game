@@ -1,0 +1,9 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+
+
+INTERIOR_WINDOWS_START
+
+INTERIOR_WINDOWS_PLAYER_READY
+
+INTERIOR_WINDOWS_OK glass=3 quality=4 day_night=true distance_budget=true physical_character=true

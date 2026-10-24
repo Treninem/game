@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Inventory remapped controls and captions",
+  "spec_attachment": "25f2beb6-945c-40cb-ae29-df0cb5b51709; full comparison differs only in Markdown trailing spaces",
+  "reproduced": "Rebinding pause away from Escape disables focused-search Escape close because early close required the pause action mapping. Expanded smoke failed before production fix.",
+  "changes": [
+    "Escape always closes gameplay panels as UI cancel, independently of pause binding; modal/upper-menu priority retained",
+    "Tab captions derive current panel hotkeys from SettingsManager, refresh on bindings_changed and rebuild",
+    "Remove fixed I/M/K/J footer hint; refer to actual tab captions",
+    "QA resets/restores only its isolated binding map for deterministic standard/custom key checks"
+  ],
+  "checks": {
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 11.39
+    },
+    "ui_responsive": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 11.11
+    },
+    "visible_inventory": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 14.36,
+      "mode": "visible automated UI; not manual playthrough"
+    }
+  },
+  "coverage": [
+    "Rebind inventory to unused F10: new key opens and old I does not",
+    "Rebind pause to F8: custom pause closes panel; Escape remains usable from search",
+    "Rebind pause to letter P: real Unicode p still types in search, Escape closes",
+    "Visible tab caption updates immediately after rebind and after reopening",
+    "Prior standard I/Escape, Ctrl+F/Enter, Space actions, arrows, ownership/count/JSON and responsive checks retained"
+  ],
+  "test_note": "Initial exploratory F9 choice overlapped existing quick_load. Final test uses unused F10; this change does not implement conflict detection.",
+  "limits": [
+    "Conflicting assignments, all layouts/mouse/controller bindings and other HUD/action hints not exhaustively audited",
+    "Visible isolated UI tests only; no new full-world route",
+    "Independent inventory stacks, icons and drag/drop remain pending",
+    "Historical intermittent native heal action observation remains open",
+    "No new export or stable release; earlier 32/55 editor functional count unchanged"
+  ]
+}

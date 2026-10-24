@@ -77,8 +77,11 @@ static func distance_to_start_river(pos: Vector2) -> float:
 static func in_start_region(pos: Vector2) -> bool:
     return pos.distance_squared_to(START_SPAWN) <= START_REGION_RADIUS * START_REGION_RADIUS
 
-static func distance_to_primary_road(pos: Vector2) -> float:
-    var best := INF
+static func distance_to_primary_road(pos: Vector2, maximum_distance: float = INF) -> float:
+    # Callers that only use a road's shoulder can cap the query. Outside that
+    # radius the result is the cap; the default still returns the true distance.
+    # Rejecting from the first segment matters for the many off-road vertices.
+    var best := maxf(0.0, maximum_distance)
     for road in PRIMARY_ROADS:
         var points: Array = road.get("points", [])
         for i in range(points.size() - 1):
@@ -99,7 +102,8 @@ static func distance_to_primary_road(pos: Vector2) -> float:
     return best
 
 static func is_on_primary_road(pos: Vector2) -> bool:
-    return distance_to_primary_road(pos) <= PRIMARY_ROAD_HALF_WIDTH
+    # Keep a cap strictly beyond the inclusive boundary of this predicate.
+    return distance_to_primary_road(pos, PRIMARY_ROAD_HALF_WIDTH + 1.0) <= PRIMARY_ROAD_HALF_WIDTH
 
 static func _distance_to_segment(point: Vector2, a: Vector2, b: Vector2) -> float:
     var ab := b - a

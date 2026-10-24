@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7 unreleased capital-square review",
+  "implemented": [
+    "Five selected existing CC0 B46 props, normalized by measured bounds with grounded collision; existing authored market stalls reused",
+    "Photographic CC0 stone paving with world-space scale and mipmaps; surface meets physical terrain",
+    "World dirt-road overlays stop inside the capital so they cannot paint over paving; bridge and terrain physics unchanged",
+    "Readable bounded night ambient fill and warm evening stall lanterns",
+    "Square artisan and trader use actual bench/stall/home/meal/social positions",
+    "Player can sell wood and stone; artisan consumes the existing arrow recipe at the workbench over eight seconds and replenishes finite merchant stock; progress and stock survive streaming",
+    "Map retains actual street furniture footprints beneath living markers",
+    "47 cm bench seats and reduced daytime overexposure",
+    "Composed VFX use weak-reference expiry so early owner deletion does not trigger freed-object callbacks",
+    "Capital paving resolves as stone; ordinary walking emits no soil prints or stone fragments",
+    "Merchant dialogue now fits the viewport and scrolls long content, with seven real choices, reachable close and keyboard-focus following; checked at 1280x720 and 800x450"
+  ],
+  "tests": [
+    {
+      "name": "capital_square",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 47.12
+    },
+    {
+      "name": "capital_gameplay",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 32.28
+    },
+    {
+      "name": "citizen_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 36.81
+    },
+    {
+      "name": "cartography",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.64
+    },
+    {
+      "name": "capital_gate_traversal",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 49.47
+    },
+    {
+      "name": "bridge_traversal",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 30.23
+    },
+    {
+      "name": "world_crossings",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.62
+    },
+    {
+      "name": "world_hydrology",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.66
+    },
+    {
+      "name": "capital_road",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.36
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.16
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 13.16
+    },
+    {
+      "name": "visual_grounding",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.41
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 16.33
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 11.17
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.34
+    },
+    {
+      "name": "vfx_lifetime",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 6.25
+    },
+    {
+      "name": "living_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.11
+    },
+    {
+      "name": "merchant_dialogue",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.47
+    },
+    {
+      "name": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.95
+    }
+  ],
+  "journey": {
+    "distance_m": 16911.5896268496,
+    "engine_time_scale": 1.0,
+    "position": [
+      13499.9853515625,
+      0.0376806482672691,
+      -6996.02685546875
+    ],
+    "position_assignments": 0,
+    "reason": "Capital square reached on foot",
+    "saved_slot_1": true,
+    "simulated_seconds": 2272.83333333466,
+    "success": true,
+    "waypoints_completed": 16
+  },
+  "journey_method": "External autopilot against the frozen exported PCK. Ordinary Input movement, run speed/stamina/gravity unchanged; no driver position assignment. Headless --fixed-fps 60 uses 1/60-second simulation steps and time scale 1, but can execute faster than wall time. Explicit test supplies: ten berries and ten water flasks. Arrival save retained.",
+  "graphical": "Square traversal/grounding/recipe/trade/streaming/map/light smoke and full gameplay-actions smoke with four quality presets, equipment, melee, bow/ammo and ten spells.",
+  "native": "Official game loaded the real prior arrival save for visual review. First inspection found brown world-road overlays hiding paving; fixed and rechecked. A separate native inspection helper then loaded the earned save and walked to the stalls through ordinary Input, without driver position assignment. Only this visual fixture holds the clock at 09:00 and then 20:00 for comparable day/night renders. Viewport captures are from the actual game, not mockups. Final observations are recorded in the development status. World art captures precede only the dialogue layout change; the unchanged world renderer is shown. Final merchant UI has a separate graphical capture.",
+  "test_sequence": "Fifteen baseline scenarios passed after removing the duplicate dirt overlay. Square/citizen cases repeated after making workshop activity wait honestly for missing materials. Native approach exposed VFX lifetime errors and wrong soil-step effects on paving; five affected/new scenarios passed after fixing ownership and surface semantics, giving seventeen unique scenarios. No smoke gate weakened. Final merchant review exposed clipped bottom choices; fixed bounded dialogue layout, added a failing-before/passing-after regression and repeated affected UI/gameplay cases. The final PCK route is repeated after this UI-only change. Nineteen unique scenarios include responsive UI and merchant dialogue.",
+  "known_issues": [
+    "Not Witcher 3 realism: simple human materials, unfinished grip and sparse flat forest remain",
+    "Ordinary capital houses remain closed collision shells; repeated architecture and oversized city spaces remain",
+    "Two square workers have a concrete supply loop; the rest of the city is not a complete reactive society or external AI",
+    "Workshop recipe has timed work and real inventory effects, not detailed hand/tool assembly animation",
+    "Known ObjectDB warnings at shutdown; full FPS/memory and remote stable release gates not completed"
+  ],
+  "git": {
+    "branch": "main",
+    "head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "new_commit": false,
+    "release_published": false
+  },
+  "artifact": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-19-capital-square-ui\\ImPuls-review.cmd",
+  "sha256": "87b65d270bd5e0576e11f0b051590296190c4c51a9ea16d6ef4322fe0d023b27"
+}

@@ -59,13 +59,13 @@ func _sync_ambience(player_position: Vector3) -> void:
     var night := hour >= 20 or hour < 5
     var calm_enough := EnvironmentState.rain_intensity < 0.28 and EnvironmentState.snow_intensity < 0.15
 
-    mote_particles.emitting = not underwater and calm_enough and biome in ["forest", "plains", "taiga", "marsh"]
+    mote_particles.emitting = EnvironmentState.season == EnvironmentState.Season.SPRING and not underwater and calm_enough and biome in ["forest", "plains", "taiga", "marsh"]
     firefly_particles.emitting = not underwater and night and EnvironmentState.temperature_c > 5.0 and EnvironmentState.rain_intensity < 0.40 and biome in ["forest", "marsh"]
     ash_particles.emitting = not underwater and xz.distance_to(ashen_peak_position) < 3600.0
     underwater_particles.emitting = underwater
     underwater_particles.amount_ratio = 1.0 if underwater else 0.0
 
-    mote_particles.amount = 75 if biome in ["forest", "marsh"] else 48
+    mote_particles.amount = 18 if biome in ["forest", "marsh"] else 10
     firefly_particles.amount = 46 if biome == "marsh" else 34
     var ash_distance := xz.distance_to(ashen_peak_position)
     ash_particles.amount = maxi(20, int(125.0 * clampf(1.0 - ash_distance / 3600.0, 0.0, 1.0)))
@@ -93,7 +93,7 @@ func _sync_ambience(player_position: Vector3) -> void:
 func _make_motes() -> GPUParticles3D:
     var particles := GPUParticles3D.new()
     particles.name = "BiomeMotes"
-    particles.amount = 60
+    particles.amount = 18
     particles.lifetime = 5.0
     particles.local_coords = false
     particles.visibility_aabb = AABB(Vector3(-12, -8, -12), Vector3(24, 16, 24))
@@ -108,12 +108,12 @@ func _make_motes() -> GPUParticles3D:
     process.gravity = Vector3.ZERO
     process.scale_min = 0.45
     process.scale_max = 1.35
-    process.color = Color(0.84, 0.88, 0.58, 0.38)
+    process.color = Color(0.84, 0.88, 0.70, 0.14)
     particles.process_material = process
 
     var quad := QuadMesh.new()
     quad.size = Vector2(0.026, 0.026)
-    quad.material = _particle_material(Color(0.84, 0.88, 0.58, 0.38), true, 0.35)
+    quad.material = _particle_material(Color(0.84, 0.88, 0.70, 0.14), true, 0.35)
     particles.draw_pass_1 = quad
     return particles
 
@@ -203,14 +203,14 @@ func _make_underwater_suspension() -> GPUParticles3D:
     particles.draw_pass_1 = quad
     return particles
 
-func _particle_material(color: Color, billboard: bool, emission_energy: float) -> StandardMaterial3D:
+func _particle_material(color: Color, billboard: bool, emission_energy: float) -> Material:
+    if billboard:
+        return preload("res://scripts/environment_particle_material.gd").soft(color, emission_energy)
     var material := StandardMaterial3D.new()
     material.albedo_color = color
     material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
     material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
     material.cull_mode = BaseMaterial3D.CULL_DISABLED
-    if billboard:
-        material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
     if emission_energy > 0.0:
         material.emission_enabled = true
         material.emission = Color(color.r, color.g, color.b, 1.0)

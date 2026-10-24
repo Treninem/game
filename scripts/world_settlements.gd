@@ -2,6 +2,10 @@ extends Node3D
 class_name WorldSettlements
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
+const PATHS := preload("res://scripts/terrain_paths.gd")
+const VILLAGE_PATHS := preload("res://scripts/settlement_paths.gd")
+const COTTAGE_EXTERIOR := preload("res://scripts/cottage_exterior.gd")
+const HOUSE_YARDS := preload("res://scripts/village_house_yards.gd")
 const ENTERABLE_BUILDING_PATH := "res://scripts/enterable_building.gd"
 const SETTLEMENT_NPC_PATH := "res://scripts/settlement_npc.gd"
 
@@ -119,9 +123,9 @@ func _update_location(player_pos: Vector2) -> void:
 func _materialize_settlement(spec: Dictionary) -> Node3D:
     var id := String(spec.get("id", ""))
     if loaded.has(id):
-        var existing: Node3D = loaded.get(id)
-        if is_instance_valid(existing):
-            return existing
+        var existing: Variant = loaded.get(id)
+        if is_instance_valid(existing) and existing is Node3D:
+            return existing as Node3D
         loaded.erase(id)
 
     var center: Vector2 = spec.get("center", Vector2.ZERO)
@@ -144,8 +148,7 @@ func _materialize_settlement(spec: Dictionary) -> Node3D:
 func _build_village(root: Node3D, center: Vector2, id: String) -> void:
     var yaw := _road_facing_yaw(center)
     root.rotation.y = yaw
-    _add_surface(root, "VillageSquare", Vector2(52.0, 40.0), Vector2.ZERO, 0.055, earth_material)
-    _add_surface(root, "VillageThroughRoad", Vector2(7.0, VILLAGE_HALF_SIZE.y * 2.25), Vector2.ZERO, 0.065, path_material)
+    _add_surface(root, "VillageSquare", Vector2(32.0, 24.0), Vector2.ZERO, 0.006, PATHS.material("paving"),"paving")
 
     var layouts: Array[Dictionary] = [
         {"p":Vector2(-42,-34), "s":Vector3(10.0,3.35,8.5), "r":0.35},
@@ -169,6 +172,8 @@ func _build_village(root: Node3D, center: Vector2, id: String) -> void:
     _build_village_fence(root, center)
     _add_well(root, center, Vector2(-8.0, 3.0))
     _add_crate_stack(root, center, Vector2(12.0, 8.0))
+    VILLAGE_PATHS.build_village(root)
+    HOUSE_YARDS.build(root)
     _populate_village(root, center, id)
 
 func _build_village_fence(root: Node3D, center: Vector2) -> void:
@@ -190,9 +195,10 @@ func _build_village_fence(root: Node3D, center: Vector2) -> void:
 func _build_fortified_town(root: Node3D, center: Vector2) -> void:
     var yaw := _road_facing_yaw(center)
     root.rotation.y = yaw
-    _add_surface(root, "TownGround", Vector2(TOWN_HALF_SIZE.x * 1.92, TOWN_HALF_SIZE.y * 1.90), Vector2.ZERO, 0.045, earth_material)
-    _add_surface(root, "TownMainRoad", Vector2(10.0, TOWN_HALF_SIZE.y * 2.05), Vector2.ZERO, 0.075, path_material)
-    _add_surface(root, "TownCrossRoad", Vector2(TOWN_HALF_SIZE.x * 1.75, 8.0), Vector2(0, -4), 0.073, path_material)
+    # Keep real meadow ground in unused plots; do not paint the entire town as
+    # one giant brown rectangle. Streets and the public market own their paving.
+    _add_surface(root, "TownMainRoad", Vector2(10.0, TOWN_HALF_SIZE.y * 2.05), Vector2.ZERO, 0.008, path_material)
+    _add_surface(root, "TownCrossRoad", Vector2(TOWN_HALF_SIZE.x * 1.75, 8.0), Vector2(0, -4), 0.009, path_material)
     _build_town_walls(root, center)
 
     var buildings: Array[Dictionary] = [
@@ -326,6 +332,7 @@ func _add_enterable_building(root: Node3D, center: Vector2, local_pos: Vector2, 
     building.position = _local_position_on_terrain(root, center, local_pos, 0.02)
     building.rotation.y = local_yaw
     root.add_child(building)
+    COTTAGE_EXTERIOR.build(building)
     materialized_buildings += 1
     return building
 
@@ -366,16 +373,10 @@ func _add_crate_stack(root: Node3D, center: Vector2, local_pos: Vector2) -> void
         var offset := local_pos + Vector2(float(i % 2) * 1.15, float(i / 2) * 1.05)
         _add_static_box_local(root, center, "SupplyCrate", Vector3(1.0, 1.0, 1.0), offset, 0.5 + float(i / 2), timber_material)
 
-func _add_surface(root: Node3D, node_name: String, size: Vector2, local_pos: Vector2, lift: float, material: Material) -> void:
-    var mesh_node := MeshInstance3D.new()
-    mesh_node.name = node_name
-    var mesh := BoxMesh.new()
-    mesh.size = Vector3(size.x, 0.045, size.y)
-    mesh.material = material
-    mesh_node.mesh = mesh
-    mesh_node.position = _local_position_on_terrain(root, Vector2(root.global_position.x, root.global_position.z), local_pos, lift)
-    mesh_node.visibility_range_end = 780.0
-    root.add_child(mesh_node)
+func _add_surface(root: Node3D, node_name: String, size: Vector2, local_pos: Vector2, lift: float, material: Material, kind: String = "gravel") -> void:
+    var polygons: Array[PackedVector2Array] = [PATHS.rectangle(root,local_pos,size)]
+    var visual := PATHS.add(root,node_name,polygons,kind,clampf(lift,PATHS.LIFT,PATHS.MAX_LIFT))
+    if visual != null: visual.material_override = material
 
 func _add_static_box_local(root: Node3D, center: Vector2, node_name: String, size: Vector3, local_pos: Vector2, height_center: float, material: Material) -> StaticBody3D:
     var body := StaticBody3D.new()
@@ -404,26 +405,11 @@ func _local_position_on_terrain(root: Node3D, center: Vector2, local_pos: Vector
     return Vector3(local_pos.x, world_y - root.global_position.y, local_pos.y)
 
 func _road_facing_yaw(center: Vector2) -> float:
-    var closest_point := center + Vector2(0, 100)
-    var closest_distance := INF
-    for road in GEOGRAPHY.road_catalog():
-        var points: Array = road.get("points", [])
-        for point in points:
-            var p: Vector2 = point
-            if p == center:
-                continue
-            var distance := p.distance_to(center)
-            if distance < closest_distance:
-                closest_distance = distance
-                closest_point = p
-    var toward_road := (closest_point - center).normalized()
-    if toward_road.length_squared() < 0.1:
-        toward_road = Vector2(0, 1)
-    return atan2(toward_road.x, toward_road.y)
+    return PATHS.settlement_yaw(center)
 
 func _prepare_materials() -> void:
-    earth_material = _material(Color(0.34, 0.255, 0.15, 1.0), 0.99)
-    path_material = _material(Color(0.27, 0.205, 0.13, 1.0), 0.995)
+    earth_material = PATHS.material("soil")
+    path_material = PATHS.material("gravel")
     stone_material = _material(Color(0.36, 0.37, 0.35, 1.0), 0.97)
     timber_material = _material(Color(0.22, 0.115, 0.05, 1.0), 0.96)
     water_material = _material(Color(0.20, 0.46, 0.56, 0.82), 0.22)

@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-22",
+  "parent_commit": "8282e7691a8083d5c75ababd1ab4c652f9ca8b00",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; no stable release, full visual/concept acceptance remains false",
+  "owner_direction": "Distinct stone paving, gravel fill, compacted earth and forest tracks appropriate to connected streets, squares, homes, work and fields. Raised graded embankments/shoulders remain open.",
+  "problem": "Thin visual path overlays previously stood 25-45 mm above authoritative physical terrain. Feet supported by that terrain could be buried by the painted surface. Close actual frames also showed oversized gravel detail.",
+  "changes": [
+    "Constrain shared terrain path overlays to 6-12 mm above the same physical 4 m terrain triangles. Main roads use 6 mm, village lanes/gate approaches 8 mm, home/garden paths 10 mm, market paving 12 mm. Forest track/ruts retain separate 7/9 mm layers; cultivated soil uses 6 mm.",
+    "Preserve village street-versus-paving feedback priority. Separate town crossroad/main-road layers by 1 mm; retain existing geography, homes, gate and interaction IDs, terrain collision and save schema.",
+    "Reuse the same unmodified CC0 gravel diffuse, with world texture frequency 3.0 rather than .65; individual gravel detail is about 4.6 times smaller. Stone paving and soil retain their distinct scales, generated mipmaps and anisotropic filtering.",
+    "Strengthen the existing mandatory terrain-path test: actual dedicated reference terrain collision, 539 road rays plus 156 rays across 52 real village/garden/cart overlays. All three material kinds, chunk seams and 15 real entrance paths remain required.",
+    "Extend the existing graphical village journey with naturally settled Idle, final-modifier snapshots of all 3530 native boot vertices, actual physical ray support and top visible path layer, plus a close road/boots capture. No actor coordinate assignment or forced animation pose."
+  ],
+  "local_checks": {
+    "import": {
+      "case": "import",
+      "exit_code": 0,
+      "seconds": 41.86,
+      "errors": []
+    },
+    "terrain_paths": {
+      "case": "terrain_paths",
+      "exit_code": 0,
+      "seconds": 19.36,
+      "errors": []
+    },
+    "terrain_geometry": {
+      "case": "terrain_geometry",
+      "exit_code": 0,
+      "seconds": 6.22,
+      "errors": []
+    },
+    "settlement_road_gate_overlay": {
+      "case": "settlement_road_gate_overlay",
+      "exit_code": 0,
+      "seconds": 9.25,
+      "errors": []
+    },
+    "settlement_public_works": {
+      "case": "settlement_public_works",
+      "exit_code": 0,
+      "seconds": 8.69,
+      "errors": []
+    },
+    "cottage_yards": {
+      "case": "cottage_yards",
+      "exit_code": 0,
+      "seconds": 15.33,
+      "errors": []
+    },
+    "player_movement": {
+      "case": "player_movement",
+      "exit_code": 0,
+      "seconds": 21.53,
+      "errors": []
+    },
+    "step_grounding": {
+      "case": "step_grounding",
+      "exit_code": 0,
+      "seconds": 17.34,
+      "errors": []
+    },
+    "ui_and_save": {
+      "case": "ui_and_save",
+      "exit_code": 0,
+      "seconds": 10.7,
+      "errors": []
+    },
+    "village": {
+      "case": "village",
+      "exit_code": 0,
+      "seconds": 77.8,
+      "errors": []
+    }
+  },
+  "physical_support": {
+    "world_road_ray_samples": 539,
+    "world_max_gap_m": 0.00604343414307,
+    "local_surfaces": 52,
+    "local_ray_samples": 156,
+    "local_max_gap_m": 0.01004123687744,
+    "supported_overlay_range_m": [
+      0.006,
+      0.012
+    ],
+    "seam_checked": true,
+    "connected_home_entrances": 15,
+    "sole_samples": [
+      {
+        "gap_to_visible_road_m": -0.00399933624267578,
+        "native_skinned_vertices": 1765,
+        "side": "Left"
+      },
+      {
+        "gap_to_visible_road_m": -0.004002197265625,
+        "native_skinned_vertices": 1765,
+        "side": "Right"
+      }
+    ]
+  },
+  "graphical_gameplay": {
+    "walked_m": 173.302463488653,
+    "ordinary_automated_input": true,
+    "driver_position_assignments": 0,
+    "checkpoint": "Slot 4 previously earned by ordinary forest journey; isolated copy, not a new full forest/capital journey",
+    "actions": [
+      "street approach",
+      "natural stop",
+      "final visible sole support",
+      "reach-checked front door interaction",
+      "save slot 5"
+    ],
+    "quality": "Medium",
+    "test_clock": "09:00 held by the existing review driver",
+    "manual_play": false,
+    "captures": 4
+  },
+  "performance": {
+    "renderer": "Godot 4.7.1 GL Compatibility, Intel UHD 610",
+    "frames": 120,
+    "mean_ms": 36.9572833333333,
+    "reported_video_bytes": 542718125,
+    "draw_calls": 1442,
+    "scope": "Stationary bounded sample, not sustained/worst-case FPS or a performance-improvement claim"
+  },
+  "unchanged_live_character_models": {
+    "male": "539686d7c45a617358cabc4af9c278255be1eeb538dcbf35b9e77d7e7dd1538e",
+    "female": "3d4be573315c6b615bc916e4a89edcfeeb60df04bf8801d4cf892d43b53d8fe0"
+  },
+  "rejected_character_research": {
+    "integrated": false,
+    "scope": "Local shell-free native garment fitting/underlayer mask and GPU leg contact prototypes. The last static candidate passed 100 raw poses but still failed 52/1008 actual clothed-layer views, so no new character GLB/contact shader/material change was delivered in this path package. Existing gray lining and lower-coat layer defects remain open; 756 covered-skin views do not prove complete outer-cloth quality. Unaccepted native source/tool experiments remain local for continuation, outside this narrow commit."
+  },
+  "verification_corrections": [
+    "Initial live boot snapshot preceded final rendering; the check now waits for the actual modifier/frame. A later capture still sampled the walk-to-idle transition. The stationary contract now waits at most 60 physics frames for the game to enter Idle naturally; unchanged numeric contact bounds remain enforced. No game grounding change is claimed.",
+    "After shrinking gravel detail, terrain paths and the ordinary graphical journey were repeated; other unaffected movement/yard/save checks remain from the same geometry package."
+  ],
+  "ci": {
+    "parent_exact_sha_all_eight": "SUCCESS, reverified before integration",
+    "implementation_exact_sha": "Pending after this journal is committed; subsequently verified results belong in the PR/local CI artifact",
+    "mandatory_workflows": "Unchanged from parent; stronger existing terrain-path gate remains mandatory"
+  },
+  "evidence": "docs/review/2026-10-22-path-support/",
+  "open": [
+    "Road shoulders, graded embankments, drainage, organic edge transitions and full material/art acceptance",
+    "Village path map layer and dense coherent varied blocks, farms/barns/domestic livestock",
+    "Concept-quality humans, gray inner lining, lower-coat punctures, full wardrobe and natural transitions",
+    "Graphical village process reports 100 ObjectDB exit leftovers; cleanup unresolved",
+    "Full long-session weak-PC performance, all regions and release readiness"
+  ]
+}

@@ -1,0 +1,377 @@
+CASE import
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Инициализация проекта (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Сканирование структуры файлов…[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Загрузка глобальных имен классов…[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Проверка GDExtensions…[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Создание скриптов автозагрузки…[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Инициализация плагинов…[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Начало сканирование файлов…[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+WARNING: UID duplicate detected between res://assets/vfx/third_party/binbun_godot4_electric/shared/scene_empty.tscn and res://assets/vfx/third_party/binbun_godot4_core/shared/scene_empty.tscn.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1405)
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (3 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  25% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  50% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Загрузка редактора (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Загрузка макета редактора…[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Загрузка док-панели…[39m[0m
+[  33% ] [90m[1mloading_editor_layout[22m | Повторное открытие сцен…[39m[0m
+[  50% ] [90m[1mloading_editor_layout[22m | Загрузка макета центрального редактора…[39m[0m
+[  66% ] [90m[1mloading_editor_layout[22m | Загрузка макета окна плагина…[39m[0m
+[  83% ] [90m[1mloading_editor_layout[22m | Макет редактора готов.[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+
+
+CASE arms
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ARM_CONTACT_BODY mode=male_preview build=0.0 cumulative_before_pairs=166 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.5 cumulative_before_pairs=318 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.5 cumulative_before_pairs=709 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.35 cumulative_before_pairs=862 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.2 cumulative_before_pairs=1020 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.05 cumulative_before_pairs=1201 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.12 cumulative_before_pairs=1377 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.4 cumulative_before_pairs=1688 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.0 cumulative_before_pairs=4998 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.5 cumulative_before_pairs=7846 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.5 cumulative_before_pairs=11320 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.35 cumulative_before_pairs=14306 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.2 cumulative_before_pairs=17477 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.05 cumulative_before_pairs=20803 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.12 cumulative_before_pairs=24182 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.4 cumulative_before_pairs=27588 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.0 cumulative_before_pairs=27675 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=-0.5 cumulative_before_pairs=27750 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.5 cumulative_before_pairs=27944 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=-0.35 cumulative_before_pairs=28019 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=-0.2 cumulative_before_pairs=28098 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.05 cumulative_before_pairs=28191 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.12 cumulative_before_pairs=28282 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_citizen build=0.4 cumulative_before_pairs=28441 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.0 cumulative_before_pairs=30228 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=-0.5 cumulative_before_pairs=31748 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.5 cumulative_before_pairs=33672 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=-0.35 cumulative_before_pairs=35275 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=-0.2 cumulative_before_pairs=36976 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.05 cumulative_before_pairs=38761 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.12 cumulative_before_pairs=40566 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_citizen build=0.4 cumulative_before_pairs=42438 after_pairs=0 failed_poses=0
+ARM_CONTACT_RECORDED poses=1344 before_pairs=42438 after_pairs=0 failed_poses=0 regressions=0
+ARM_CLEARANCE_OK poses=1344 shared_profiles=2 cold_usec=[82629, 73859]
+
+
+CASE frames
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+ARM_GPU_VISUAL_OK poses=34 frames=62
+
+
+CASE coverage
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+WARDROBE_COVERAGE views=810 failed_views=0 final_modifiers=true bodies=2 builds=3 angles=3
+WARDROBE_COVERAGE_OK
+
+
+CASE weapon_grip
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+BOW_RIGHT_ARM_DIAGNOSTIC shoulder=(0.107748, 1.299372, 0.165176) elbow=(0.291383, 1.345418, 0.029854) wrist=(0.086823, 1.411255, -0.077422)
+BOW_HOLD_ALIGNMENT_MIN 0.9382529258728
+BOW_BODY_SWEEP_CHECKED 900
+AXE_SWEEP_CHECKED 150
+PUNCH_FINGERS_CHECKED 240 final_modifier=true free_hand_recovery=checked
+WEAPON_GRIP_OK poses=180 bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged
+
+
+CASE cast_pose
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CAST_POSE_OK bodies=2 hands=2 palm=forward occupied_arm=unchanged duration=0.45
+
+
+CASE household_pose
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SITTING_JOINTS Left hip=(-0.112761, 0.977714, 0.003991) knee=(-0.114152, 0.98037, -0.438379) foot=(-0.112351, 0.530155, -0.441087)
+SITTING_JOINTS Right hip=(0.11328, 0.978623, 0.003286) knee=(0.111889, 0.981278, -0.439084) foot=(0.11369, 0.531062, -0.441792)
+HUMANOID_REST_CHECKED poses=48 bodies=2 heights=3 furniture=2 equipment=4 repeated_pose=true collider_unchanged=true
+HOUSEHOLD_POSE_OK knees=forward shins=down
+
+
+CASE working_pose
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WORKING_POSE_BODY_OK sex=male build=0.0 hand_span_m=0.0484664849937
+WORKING_POSE_BODY_OK sex=male build=-0.5 hand_span_m=0.0484664849937
+WORKING_POSE_BODY_OK sex=male build=0.5 hand_span_m=0.0484664849937
+WORKING_POSE_BODY_OK sex=female build=0.0 hand_span_m=0.03701937198639
+WORKING_POSE_BODY_OK sex=female build=-0.5 hand_span_m=0.03701937198639
+WORKING_POSE_BODY_OK sex=female build=0.5 hand_span_m=0.03701937198639
+WORKING_POSE_OK final_poses=198 bodies=2 builds=3 supported_feet=true open_palms=true gaze=hand_task legacy_ground_work_retained=true
+
+
+CASE character_creator
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHARACTER_CREATOR_OK presets=10 geometry=male+female clothes=separate morphs=9 clips=10 library=roundtrip save=roundtrip cache=bounded legacy=default
+
+
+CASE character_dimensions
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHARACTER_DIMENSIONS_OK heights=160,195,180 grounded_root=stable low_roof=physical camera=scaled shared_shape=isolated
+
+
+CASE character_texture_filtering
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHARACTER_TEXTURE_FILTERING_OK bodies=2 textures=34 mip_levels=physical
+
+
+CASE player_movement
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Surface smoke [spawn]: collider=TerrainCollision:<StaticBody3D#217684380740> position=(65.0, 4.695675, 48.0) terrain_y=4.70712775564511
+Story world smoke: spawn=(65.0, 48.0) river=34 ford=11 real_trees=234 real_detail=9172 road=62 evidence=75 capital_distance=15171.470703125
+HUD runtime smoke: size=(1280.0, 720.0)
+Void recovery smoke: before=(65.0, 4.737128, 48.0) recovered=(65.0, 4.737128, 48.0) terrain_y=4.70712775564511
+Surface smoke [recovery]: collider=TerrainCollision:<StaticBody3D#217684380740> position=(65.0, 4.695675, 48.0) terrain_y=4.70712775564511
+Mapped-W movement smoke: start=(65.0, 48.0) finish=(65.01192, 44.69759) distance=3.30243158340454
+Movement actions smoke: strafe=ok sprint_speed=8.0 jump_height=0.88675498962402
+Input navigation smoke: four panels close directly, focused Enter rebinding works, Escape cancels safely
+Forest river story start + real nature + civilization signs + input + UI + recovery smoke passed
+
+
+CASE camera_input
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+CAMERA_MOTION_CHECK scale=0.75 compatible=false paused=false mode=2 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=0.75 compatible=true paused=false mode=4 yaw_delta=-0.08000004291534 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.0 compatible=false paused=false mode=2 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.0 compatible=true paused=false mode=4 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.5 compatible=false paused=false mode=2 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.5 compatible=true paused=false mode=4 yaw_delta=-0.08000004291534 pitch_delta=-0.02999999932945
+CAMERA_INPUT_SMOKE_OK mouse=confined_or_captured yaw=responsive pitch=responsive scales=3 modes=2 warp=no_drift
+BOOT_WORLD_SMOKE_PASS: boot -> menu -> new game -> physical world -> save -> loading screen -> restored world
+WARNING: 84 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+
+
+CASE world
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+LIVE_BOW_BLEND_SAMPLE 1
+LIVE_BOW_BLEND_SAMPLE 2
+AIRBORNE_WORLD_POSE Bow_Attack_Draw grounded=false
+LIVE_BOW_BLEND_SAMPLE 3
+LIVE_BOW_BLEND_SAMPLE 4
+LIVE_BOW_BLEND_SAMPLE 5
+LIVE_BOW_BLEND_SAMPLE 6
+LIVE_BOW_BLEND_SAMPLE 7
+LIVE_BOW_BLEND_SAMPLE 8
+LIVE_BOW_BLEND_SAMPLE 9
+LIVE_BOW_BLEND_SAMPLE 10
+LIVE_BOW_BLEND_SAMPLE 11
+LIVE_BOW_BLEND_SAMPLE 12
+LIVE_BOW_BLEND_SAMPLE 13
+LIVE_BOW_BLEND_SAMPLE 14
+LIVE_BOW_BLEND_SAMPLE 15
+LIVE_BOW_BLEND_SAMPLE 16
+LIVE_BOW_BLEND_SAMPLE 17
+LIVE_BOW_BLEND_SAMPLE 18
+LIVE_BOW_BLEND_SAMPLE 19
+LIVE_BOW_BLEND_SAMPLE 20
+LIVE_BOW_BLEND_SAMPLE 21
+LIVE_BOW_BLEND_SAMPLE 22
+LIVE_BOW_BLEND_SAMPLE 23
+LIVE_BOW_BLEND_SAMPLE 24
+LIVE_BOW_BLEND_SAMPLE 25
+LIVE_BOW_BLEND_SAMPLE 26
+LIVE_BOW_BLEND_SAMPLE 27
+LIVE_BOW_BLEND_SAMPLE 28
+LIVE_BOW_BLEND_SAMPLE 29
+CAST_BEFORE input_disabled=false player_unhandled=true focus=true
+CAST_INPUT_STAGE input paused=false handled=false
+CAST_INPUT_STAGE unhandled paused=false
+MAGIC_INPUT_DIAGNOSTIC {"casts":1,"cooldown":3.84421333333333,"dialogue":false,"focus":"<Object#null>","mana":70.7789333333333,"paused":false,"selected":"heal"}
+CAST_INPUT_STAGE input paused=false handled=false
+CAST_INPUT_STAGE unhandled paused=false
+MAGIC_NATIVE_SAVE_OK action=cast_magic selected=heal cooldown=restored blocked_cast=no_mana_cost
+UI_NATIVE_REOPEN_OK cycles=12 inventory+map gameplay_resumed=true
+LIVE_BOW_BLEND_OK samples=29
+OUTFIT_WORLD_FRAME_SAMPLE frames=120 mean_ms=41.91635 video_bytes=484186374 draw_calls=1095
+FACE_CONTROLS_NATIVE_OK {"bow_arrow_consumed":true,"captures":["user://head-size-walk.png","user://head-size-run.png","user://head-size-tall-jump.png","user://head-size-starter_axe.png","user://head-size-short_bow.png","user://head-size-bow-released.png","user://head-size-short-walk.png","user://head-size-short-jump.png","user://head-size-cast-free-hand.png","user://head-size-magic-after-load.png","user://head-size-inventory-lifecycle.png","user://head-size-outfit-quality-0.png","user://head-size-outfit-quality-1.png","user://head-size-outfit-quality-2.png","user://head-size-outfit-quality-3.png"],"game_save_roundtrip":true,"jump_both_heights":true,"look_roundtrip":true,"morphs":9,"physical_heights_cm":[160,195],"player_position_assignments":0,"walked_m":28.2695438424125}
+WARNING: 82 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+
+
+CASE workshop
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+WORKSHOP_FINGERTIP bench_local=(-0.09375, 0.985877, 0.482422) side=Left authored_top=0.95
+WORKSHOP_FINGERTIP bench_local=(0.092773, 0.983835, 0.477051) side=Right authored_top=0.95
+WORKSHOP_FRAME_SAMPLE frames=120 mean_ms=39.9318333333333 reported_video_bytes=784299127 draw_calls=900
+WORKSHOP_WORLD_OK earned_checkpoint=true player_position_assignments=0 walked_m=40.2875630338676 trade_paid=true standing_recipe=true disk_resume=true finite_stock=true quality=Medium clock_fixture=09:00
+WARNING: 100 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+
+
+CASE motion
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+MOTION_ACTIONS_OK walked_m=27.2236036113463 bodies=2 normal_input=true
+
+
+CASE visual_grounding
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+VISUAL_GROUNDING_SMOKE_OK human=skinned animations=responsive feet=grounded spawn_support=retired water=curved shore=joined
+
+
+CASE step_grounding
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+STEP_GROUNDING_OK stairs=22cm wall=no_air_climb maximum_y=5.6276798248291
+
+
+CASE locomotion_facing
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+STRIDE_PROFILE_CHECKED male forefoot_supports={ "Walk": 1.81583965075835, "Run": 5.92900005194545 }
+STRIDE_PROFILE_CHECKED female forefoot_supports={ "Walk": 1.7278380862365, "Run": 5.64927489610687 }
+STRIDE_SPEED_CHECKED bodies=2 visual_heights=3 speeds=5 physical_motion=true combat_phase=retained
+AIRBORNE_ACTIONS_CHECKED bodies=2 actions=6 legs=6 idle=retained landing=reset gait=frozen
+JUMP_PHASE_PROFILE male knee_bends=[59.219768670194, 89.7135033895528, 17.0467451493828]
+JUMP_PHASE_PROFILE female knee_bends=[59.2197755003832, 89.713551200877, 17.0467502720247]
+JUMP_PHASES_CHECKED bodies=2 physical_velocity=rise,apex,fall combat_legs=matched
+HUMANOID_SUPPORT_CHECKED poses=336 bodies=2 heights=3 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=0.0 max_gap=0.00400030883448 modifier_p95_usec=1485
+HUMANOID_EDGE_CHECKED poses=24 bodies=2 heights=3 ledge_sides=2 actions=1 phases=2 all_boot_vertices=true min_gap=0.0 max_gap=0.0040001058951 modifier_p95_usec=2757
+HUMANOID_LANDING_PROFILE male compression=0.08420550793395 peak_sole_gap=0.00399999320507 neutral_hip=1.02771985530853 peak_hip=0.94523131847382
+HUMANOID_LANDING_PROFILE female compression=0.07476235494661 peak_sole_gap=0.00199010595679 neutral_hip=0.99571007490158 peak_hip=0.9085009098053
+HUMANOID_LANDING_CHECKED bodies=2 input=jump impact=physical soles=skinned recovery=idle gait_phase=retained transient_reset=true
+LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2
+
+
+CASE household_aisle
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOUSEHOLD_AISLE_OK hero=stationary capsule=physical resident=passed_and_sat
+
+
+CASE citizen_persistence
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CITIZEN_PERSISTENCE_OK moved=physical streaming=last_position save=real_slot load=immediate json=round_trip reset=clean corrupt=bounded doorway=retained reaction=retained
+
+
+CASE square_home_life
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOME_PROGRESS frame=0 trader=(-16.00195, 0.000156, -8.501465) artisan=(-23.00195, 0.000078, -11.03467)
+HOME_PROGRESS frame=600 trader=(-28.79395, 0.000847, -13.34619) artisan=(-35.35254, 0.000078, -17.26953)
+HOME_PROGRESS frame=1200 trader=(-41.22266, 0.000838, -20.00781) artisan=(-44.72461, 0.054496, -26.22705)
+HOME_PROGRESS frame=1800 trader=(-42.2959, 0.05539, -29.08105) artisan=(-40.61133, 0.054496, -32.3833)
+HOME_PROGRESS frame=2400 trader=(-42.02246, 0.05539, -32.34619) artisan=(-42.10156, 0.054496, -31.54639)
+HOME_PROGRESS frame=3000 trader=(-42.1084, 0.05539, -29.29297) artisan=(-42.10156, 0.054496, -31.54639)
+HOME_PROGRESS frame=3600 trader=(-47.18555, 0.055941, -33.09619) artisan=(-48.13965, 0.054496, -30.34619)
+WORK_PROGRESS frame=0 trader=(-47.99219, 0.055941, -33.32568) artisan=(-48.1377, 0.054496, -30.34619)
+WORK_PROGRESS frame=600 trader=(-44.08301, -0.000114, -22.06055) artisan=(-44.54492, 0.054496, -28.5957)
+WORK_PROGRESS frame=1200 trader=(-37.6377, 0.000924, -9.169922) artisan=(-40.87793, 0.000235, -15.64844)
+WORK_PROGRESS frame=1800 trader=(-25.92773, 0.000924, -4.250977) artisan=(-33.29492, 0.000925, -4.354004)
+WORK_PROGRESS frame=2400 trader=(-16.07422, 0.000924, -7.917969) artisan=(-23.14063, 0.000925, -8.713379)
+SQUARE_HOME_LIFE_OK player_walk_m=70.5349437342957 door=physical_round_trip residents=home_and_work streaming=mid_door_resumed money=conserved memory=supply_and_real_spell
+
+
+CASE capital_square
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CAPITAL_SQUARE_OK props=authored grounded=true route=walked paving=textured workshop=canonical_recipe supplied=paid stock=finite reload=persistent lamps=evening
+
+
+CASE blends
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ARM_BLEND_PHASE sex=male transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=male transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Bow_Attack_Draw"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Bow_Attack_Shoot", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Cast_Left"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Axe_Chop", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Working", "Idle"] failed=0
+ARM_BLEND_PHASE sex=female transition=["Idle", "Sitting"] failed=0
+ARM_BLEND_CONTACT_RECORDED poses=504 failed=0
+ARM_BLEND_CONTACT_OK poses=504 bodies=2 builds=3 transitions=6 runtime_play=true
+
+
+CASE bow_transition_view
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+BOW_TRANSITION_GPU_OK samples=4 frames=4

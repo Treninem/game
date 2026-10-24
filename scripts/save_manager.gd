@@ -9,14 +9,21 @@ const LEGACY_SAVE_PATH := "user://savegame.json"
 var current_slot: int = 1
 var pending_new_game: bool = false
 var pending_load_game: bool = false
+var pending_character_profile: Dictionary = {}
 
 func _ready() -> void:
     _migrate_legacy_save_once()
 
-func prepare_new_game(slot: int) -> void:
+func prepare_new_game(slot: int, appearance: Dictionary = {}) -> void:
     current_slot = _valid_slot(slot)
     pending_new_game = true
     pending_load_game = false
+    pending_character_profile = preload("res://scripts/character_appearance.gd").normalized(appearance)
+
+func consume_character_profile() -> Dictionary:
+    var profile := preload("res://scripts/character_appearance.gd").normalized(pending_character_profile)
+    pending_character_profile = {}
+    return profile
 
 func prepare_load(slot: int) -> bool:
     slot = _valid_slot(slot)
@@ -25,6 +32,7 @@ func prepare_load(slot: int) -> bool:
     current_slot = slot
     pending_new_game = false
     pending_load_game = true
+    pending_character_profile = {}
     return true
 
 func consume_new_game_request() -> bool:
@@ -42,6 +50,7 @@ func save_game(player: Node3D, slot: int = -1) -> bool:
     current_slot = slot
     var payload := {
         "save_version": SAVE_VERSION,
+        "world_geometry_revisions": {"capital_canals":1},
         "slot": slot,
         "saved_at_unix": int(Time.get_unix_time_from_system()),
         "saved_at": Time.get_datetime_string_from_system(false, true),
@@ -68,6 +77,10 @@ func load_game(player: Node3D, slot: int = -1) -> bool:
     var saved_state = data.get("game_state", {})
     if typeof(saved_state) == TYPE_DICTIONARY:
         GameState.load_snapshot(saved_state)
+    var revisions:Variant=data.get("world_geometry_revisions",{})
+    var revision:Variant=revisions.get("capital_canals",0) if revisions is Dictionary else 0
+    if not preload("res://scripts/capital_canal_data.gd").has_current_revision(revision) and String(GameState.get_world_value("current_realm","main"))=="main" and not ProgressionSystem.is_in_dungeon():
+        player.global_position=preload("res://scripts/capital_canal_data.gd").legacy_bridge_position(player.global_position)
     game_loaded.emit(slot)
     return true
 
@@ -98,7 +111,9 @@ func slot_info(slot: int) -> Dictionary:
     var hour := int(world_minutes / 60.0) % 24
     var minute := int(world_minutes) % 60
     var location := String(state.get("current_location", "неизвестная локация")) if typeof(state) == TYPE_DICTIONARY else "неизвестная локация"
-    return {"slot": slot, "exists": true, "saved_at": String(data.get("saved_at", "неизвестно")), "location": location, "world_time": "%02d:%02d" % [hour, minute], "recovered_from_backup": from_backup}
+    var timestamp = data.get("saved_at_unix", -1)
+    var saved_at_unix := int(timestamp) if _is_finite_number(timestamp) else -1
+    return {"slot": slot, "exists": true, "saved_at": String(data.get("saved_at", "неизвестно")), "saved_at_unix": saved_at_unix, "location": location, "world_time": "%02d:%02d" % [hour, minute], "recovered_from_backup": from_backup}
 
 func list_slots() -> Array[Dictionary]:
     var result: Array[Dictionary] = []
@@ -125,8 +140,20 @@ func _write_atomic(path: String, backup_path: String, payload: Dictionary) -> bo
         push_error("Unable to open temporary save file for writing")
         return false
     file.store_string(JSON.stringify(payload))
+    file.flush()
+    var write_error := file.get_error()
     file.close()
-    var had_previous := FileAccess.file_exists(path)
+    if write_error != OK:
+        DirAccess.remove_absolute(ProjectSettings.globalize_path(temp_path))
+        push_error("Unable to write complete save file")
+        return false
+    # Never rotate a corrupt primary over the last recoverable backup.
+    var had_previous := not _read_save(path).is_empty()
+    if FileAccess.file_exists(path) and not had_previous:
+        var remove_invalid := DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+        if remove_invalid != OK:
+            DirAccess.remove_absolute(ProjectSettings.globalize_path(temp_path))
+            return false
     if had_previous:
         if FileAccess.file_exists(backup_path):
             var backup_remove := DirAccess.remove_absolute(ProjectSettings.globalize_path(backup_path))
@@ -154,14 +181,39 @@ func _read_save(path: String) -> Dictionary:
     var file := FileAccess.open(path, FileAccess.READ)
     if file == null:
         return {}
-    var parsed = JSON.parse_string(file.get_as_text())
+    var json := JSON.new()
+    if json.parse(file.get_as_text()) != OK:
+        return {}
+    var parsed = json.data
     if typeof(parsed) != TYPE_DICTIONARY:
         return {}
-    var version := int(parsed.get("save_version", 1))
+    var raw_version = parsed.get("save_version", 1)
+    if not _is_finite_number(raw_version) or float(raw_version) != floorf(float(raw_version)):
+        return {}
+    var version := int(raw_version)
+    if version < 1:
+        return {}
     if version > SAVE_VERSION:
         push_error("Save file is newer than this game build")
         return {}
+    # Validate before choosing primary versus backup or mutating the player.
+    var player_data = parsed.get("player")
+    if typeof(player_data) != TYPE_DICTIONARY:
+        return {}
+    var position_data = player_data.get("position")
+    if typeof(position_data) != TYPE_ARRAY or position_data.size() != 3:
+        return {}
+    for component in position_data:
+        if not _is_finite_number(component):
+            return {}
+    if not _is_finite_number(player_data.get("rotation_y", 0.0)):
+        return {}
+    if typeof(parsed.get("game_state", {})) != TYPE_DICTIONARY:
+        return {}
     return parsed
+
+func _is_finite_number(value: Variant) -> bool:
+    return (typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT) and is_finite(float(value))
 
 func _migrate_legacy_save_once() -> void:
     if not FileAccess.file_exists(LEGACY_SAVE_PATH) or slot_exists(1):

@@ -1,0 +1,165 @@
+--- a/scripts/gameplay_panels.gd
++++ b/scripts/gameplay_panels.gd
+@@ -44,0 +45,9 @@
++    var focused := get_viewport().gui_get_focus_owner()
++    if not focused is LineEdit and not focused is TextEdit and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not event.shift_pressed:
++        # Tab would otherwise be consumed by GUI focus traversal before the
++        # panel shortcut reaches _unhandled_input. Text editors retain Tab.
++        for section: String in PANEL_ACTIONS:
++            if event.is_action_pressed(PANEL_ACTIONS[section]):
++                _toggle(section)
++                get_viewport().set_input_as_handled()
++                return
+--- a/scripts/runtime_stability_guard.gd
++++ b/scripts/runtime_stability_guard.gd
+@@ -19,0 +20,8 @@
++    # Escape always backs out. A printable rebound pause key must still be
++    # usable in search/settings text fields before GUI consumes the event.
++    if not physical_escape and event is InputEventKey:
++        var focused := get_viewport().gui_get_focus_owner()
++        if focused is LineEdit or focused is TextEdit:
++            var key: int = event.physical_keycode if event.physical_keycode != 0 else event.keycode
++            if event.unicode >= 32 or (key >= KEY_SPACE and key <= KEY_ASCIITILDE) or key in [KEY_TAB, KEY_BACKSPACE, KEY_DELETE, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_HOME, KEY_END]:
++                return
+--- a/scripts/settings_manager.gd
++++ b/scripts/settings_manager.gd
+@@ -158 +158 @@
+-    _apply_binding(action, encoded)
++    _apply_bindings()
+@@ -287,0 +288,12 @@
++func has_default_inventory_alias() -> bool:
++    var inventory: Dictionary = bindings.get("open_inventory", DEFAULT_BINDINGS.open_inventory)
++    if inventory.get("type", "key") != "key" or int(inventory.get("code", 0)) != KEY_I:
++        return false
++    for action: String in bindings:
++        if action == "open_inventory":
++            continue
++        var assigned: Dictionary = bindings[action]
++        if assigned.get("type", "key") == "key" and int(assigned.get("code", 0)) == KEY_TAB:
++            return false
++    return true
++
+@@ -290,0 +303,9 @@
++    # Preserve the saved primary binding. Tab is only a default shortcut and
++    # yields immediately to an explicit user assignment on another action.
++    if has_default_inventory_alias():
++        var alias := InputEventKey.new()
++        alias.physical_keycode = KEY_TAB
++        InputMap.action_add_event("open_inventory", alias)
++        alias = InputEventKey.new()
++        alias.keycode = KEY_TAB
++        InputMap.action_add_event("open_inventory", alias)
+--- /dev/null
++++ b/tests/audit_editor_ui_inputs.gd
+@@ -0,0 +1,111 @@
++extends SceneTree
++
++var results: Array = []
++
++func _initialize() -> void:
++    _run.call_deferred()
++
++func _settle() -> void:
++    for frame in range(6):
++        await process_frame
++
++func _key(code: Key, unicode: int = 0) -> void:
++    var press := InputEventKey.new()
++    press.keycode = code
++    press.physical_keycode = code
++    press.unicode = unicode
++    press.pressed = true
++    Input.parse_input_event(press)
++    await process_frame
++    var release := InputEventKey.new()
++    release.keycode = code
++    release.physical_keycode = code
++    Input.parse_input_event(release)
++    await _settle()
++
++func _run() -> void:
++    var settings := root.get_node("SettingsManager")
++    var game := root.get_node("GameState")
++    settings.bindings = settings.DEFAULT_BINDINGS.duplicate(true)
++    settings._apply_bindings()
++    game.reset_new_game()
++    var before: Dictionary = game.inventory.duplicate(true)
++    var before_coins := int(game.coins)
++    var stage := Node.new()
++    stage.name = "UIInputAudit"
++    root.add_child(stage)
++    current_scene = stage
++    var menu: Control = load("res://scripts/game_menu.gd").new()
++    menu.add_to_group("game_menu")
++    stage.add_child(menu)
++    var panels: Control = load("res://scripts/gameplay_panels.gd").new()
++    panels.add_to_group("gameplay_panels")
++    stage.add_child(panels)
++    await _settle()
++    await _key(KEY_TAB)
++    results.append({"case": "default_tab_opens_inventory", "expected": true, "actual": panels.visible})
++    if panels.visible:
++        panels.close_panel()
++    await _key(KEY_I)
++    results.append({"case": "default_I_opens_inventory", "expected": true, "actual": panels.visible})
++    if panels.visible:
++        await _key(KEY_TAB)
++        results.append({"case": "default_tab_closes_inventory_from_focused_cell", "expected": true, "actual": not panels.visible})
++    panels.close_panel()
++    var event := InputEventKey.new()
++    event.keycode = KEY_P
++    event.physical_keycode = KEY_P
++    event.pressed = true
++    assert(settings.rebind_action("pause_menu", event))
++    panels.open_panel("inventory")
++    await _settle()
++    var search := panels.find_child("InventorySearch", true, false) as LineEdit
++    assert(search != null)
++    search.grab_focus()
++    search.text = ""
++    await _key(KEY_P, 112)
++    results.append({"case": "pause_bound_letter_types_in_search_without_guard", "expected": true, "actual": panels.visible and search.text == "p"})
++    panels.close_panel()
++    var guard: Node = load("res://scripts/runtime_stability_guard.gd").new()
++    stage.add_child(guard)
++    panels.open_panel("inventory")
++    await _settle()
++    search = panels.find_child("InventorySearch", true, false) as LineEdit
++    search.text = ""
++    search.grab_focus()
++    await _key(KEY_P, 112)
++    results.append({"case": "pause_bound_letter_types_in_search_with_actual_guard", "expected": true, "actual": panels.visible and search.text == "p", "panel_visible": panels.visible, "search": search.text})
++    if panels.visible:
++        panels.close_panel()
++    await _key(KEY_P, 112)
++    results.append({"case": "rebound_pause_opens_menu_outside_text", "expected": true, "actual": menu.visible and paused})
++    if menu.visible:
++        menu.close_menu()
++    event = InputEventKey.new()
++    event.keycode = KEY_TAB
++    event.physical_keycode = KEY_TAB
++    event.pressed = true
++    assert(settings.rebind_action("pause_menu", event))
++    await _key(KEY_TAB)
++    results.append({"case": "explicit_tab_pause_binding_takes_priority_over_alias", "expected": true, "actual": menu.visible and not panels.visible})
++    if menu.visible:
++        menu.close_menu()
++    settings.bindings = settings.DEFAULT_BINDINGS.duplicate(true)
++    settings._apply_bindings()
++    await _key(KEY_TAB)
++    results.append({"case": "default_tab_alias_returns_after_default_bindings", "expected": true, "actual": panels.visible})
++    if panels.visible:
++        panels.close_panel()
++    results.append({"case": "inventory_unchanged", "expected": true, "actual": game.inventory == before})
++    results.append({"case": "coins_unchanged", "expected": true, "actual": int(game.coins) == before_coins})
++    var file := FileAccess.open("user://editor-ui-input-audit.json", FileAccess.WRITE)
++    file.store_string(JSON.stringify({"source_sha": "711edb0dc5ee39e6b4b0d3b3a1d2db46535a0df9", "cases": results, "headless": true, "manual_play": false, "root_runtime_changed": false}, "  "))
++    file.close()
++    print("EDITOR_UI_INPUT_AUDIT ", JSON.stringify(results))
++    paused = false
++    stage.queue_free()
++    await _settle()
++    var failed := false
++    for result: Dictionary in results:
++        failed = failed or result.actual != result.expected
++    quit(1 if failed else 0)

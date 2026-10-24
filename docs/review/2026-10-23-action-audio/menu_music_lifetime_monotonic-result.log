@@ -1,0 +1,97 @@
+WorkerThreadPool: 4 threads, 1 max low-priority.
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3769296884
+EDITOR API HASH: 3146738256
+Loading resource: res://tests/smoke_menu_music_lifetime.gd remapped: res://tests/smoke_menu_music_lifetime.gd
+Completed load for: 'res://tests/smoke_menu_music_lifetime.gd' remapped 'res://tests/smoke_menu_music_lifetime.gd' at thread -1
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/game_state.gd remapped: res://scripts/game_state.gd
+Completed load for: 'res://scripts/game_state.gd' remapped 'res://scripts/game_state.gd' at thread -1
+Loading resource: res://scripts/progression_system.gd remapped: res://scripts/progression_system.gd
+Completed load for: 'res://scripts/progression_system.gd' remapped 'res://scripts/progression_system.gd' at thread -1
+Loading resource: res://scripts/save_manager.gd remapped: res://scripts/save_manager.gd
+Completed load for: 'res://scripts/save_manager.gd' remapped 'res://scripts/save_manager.gd' at thread -1
+Loading resource: res://scripts/settings_manager.gd remapped: res://scripts/settings_manager.gd
+Completed load for: 'res://scripts/settings_manager.gd' remapped 'res://scripts/settings_manager.gd' at thread -1
+Loading resource: res://scripts/ui_layout_guard.gd remapped: res://scripts/ui_layout_guard.gd
+Completed load for: 'res://scripts/ui_layout_guard.gd' remapped 'res://scripts/ui_layout_guard.gd' at thread -1
+Loading resource: res://scripts/update_manager.gd remapped: res://scripts/update_manager.gd
+Completed load for: 'res://scripts/update_manager.gd' remapped 'res://scripts/update_manager.gd' at thread -1
+Loading resource: res://scripts/inventory_system.gd remapped: res://scripts/inventory_system.gd
+Completed load for: 'res://scripts/inventory_system.gd' remapped 'res://scripts/inventory_system.gd' at thread -1
+Loading resource: res://scripts/dialogue_manager.gd remapped: res://scripts/dialogue_manager.gd
+Completed load for: 'res://scripts/dialogue_manager.gd' remapped 'res://scripts/dialogue_manager.gd' at thread -1
+Loading resource: res://scripts/world_data_runtime.gd remapped: res://scripts/world_data_runtime.gd
+Completed load for: 'res://scripts/world_data_runtime.gd' remapped 'res://scripts/world_data_runtime.gd' at thread -1
+Loading resource: res://scripts/world_roads.gd remapped: res://scripts/world_roads.gd
+Completed load for: 'res://scripts/world_roads.gd' remapped 'res://scripts/world_roads.gd' at thread -1
+Loading resource: res://scripts/world_water.gd remapped: res://scripts/world_water.gd
+Completed load for: 'res://scripts/world_water.gd' remapped 'res://scripts/world_water.gd' at thread -1
+Loading resource: res://scripts/map_system.gd remapped: res://scripts/map_system.gd
+Completed load for: 'res://scripts/map_system.gd' remapped 'res://scripts/map_system.gd' at thread -1
+Loading resource: res://scripts/vfx_library.gd remapped: res://scripts/vfx_library.gd
+Loading resource: res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png remapped: res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png
+Loading resource: res://.godot/imported/light_01.png-a3efbe94607ba9911a4c137a7fff78cb.ctex remapped: res://.godot/imported/light_01.png-a3efbe94607ba9911a4c137a7fff78cb.ctex
+Completed load for: 'res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png' remapped 'res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png' at thread -1
+Completed load for: 'res://scripts/vfx_library.gd' remapped 'res://scripts/vfx_library.gd' at thread -1
+Loading resource: res://scripts/third_party_vfx.gd remapped: res://scripts/third_party_vfx.gd
+Completed load for: 'res://scripts/third_party_vfx.gd' remapped 'res://scripts/third_party_vfx.gd' at thread -1
+Loading resource: res://scripts/magic_system.gd remapped: res://scripts/magic_system.gd
+Completed load for: 'res://scripts/magic_system.gd' remapped 'res://scripts/magic_system.gd' at thread -1
+Loading resource: res://scripts/magic_hud.gd remapped: res://scripts/magic_hud.gd
+Completed load for: 'res://scripts/magic_hud.gd' remapped 'res://scripts/magic_hud.gd' at thread -1
+Loading resource: res://scripts/environment_state.gd remapped: res://scripts/environment_state.gd
+Completed load for: 'res://scripts/environment_state.gd' remapped 'res://scripts/environment_state.gd' at thread -1
+Loading resource: res://scripts/environment_exposure.gd remapped: res://scripts/environment_exposure.gd
+Completed load for: 'res://scripts/environment_exposure.gd' remapped 'res://scripts/environment_exposure.gd' at thread -1
+Loading resource: res://scripts/environment_mark_pool.gd remapped: res://scripts/environment_mark_pool.gd
+Loading resource: res://assets/shaders/environment/track_mark.gdshader remapped: res://assets/shaders/environment/track_mark.gdshader
+Completed load for: 'res://assets/shaders/environment/track_mark.gdshader' remapped 'res://assets/shaders/environment/track_mark.gdshader' at thread -1
+Completed load for: 'res://scripts/environment_mark_pool.gd' remapped 'res://scripts/environment_mark_pool.gd' at thread -1
+Loading resource: res://scripts/world_vfx.gd remapped: res://scripts/world_vfx.gd
+Completed load for: 'res://scripts/world_vfx.gd' remapped 'res://scripts/world_vfx.gd' at thread -1
+Loading resource: res://scripts/weather_vfx.gd remapped: res://scripts/weather_vfx.gd
+Loading resource: res://assets/shaders/environment/soft_particle.gdshader remapped: res://assets/shaders/environment/soft_particle.gdshader
+Completed load for: 'res://assets/shaders/environment/soft_particle.gdshader' remapped 'res://assets/shaders/environment/soft_particle.gdshader' at thread -1
+Completed load for: 'res://scripts/weather_vfx.gd' remapped 'res://scripts/weather_vfx.gd' at thread -1
+Loading resource: res://scripts/weather_hail_vfx.gd remapped: res://scripts/weather_hail_vfx.gd
+Completed load for: 'res://scripts/weather_hail_vfx.gd' remapped 'res://scripts/weather_hail_vfx.gd' at thread -1
+Loading resource: res://scripts/ambient_vfx.gd remapped: res://scripts/ambient_vfx.gd
+Completed load for: 'res://scripts/ambient_vfx.gd' remapped 'res://scripts/ambient_vfx.gd' at thread -1
+Loading resource: res://scripts/nature_vfx.gd remapped: res://scripts/nature_vfx.gd
+Loading resource: res://assets/shaders/environment/leaf_particle.gdshader remapped: res://assets/shaders/environment/leaf_particle.gdshader
+Completed load for: 'res://assets/shaders/environment/leaf_particle.gdshader' remapped 'res://assets/shaders/environment/leaf_particle.gdshader' at thread -1
+Loading resource: res://assets/production/nature/woodland/wind_leaf_mask.png remapped: res://assets/production/nature/woodland/wind_leaf_mask.png
+Loading resource: res://.godot/imported/wind_leaf_mask.png-f776c4ae06e42a7836440e8a06b63d9a.ctex remapped: res://.godot/imported/wind_leaf_mask.png-f776c4ae06e42a7836440e8a06b63d9a.ctex
+Completed load for: 'res://assets/production/nature/woodland/wind_leaf_mask.png' remapped 'res://assets/production/nature/woodland/wind_leaf_mask.png' at thread -1
+Completed load for: 'res://scripts/nature_vfx.gd' remapped 'res://scripts/nature_vfx.gd' at thread -1
+Loading resource: res://scripts/landmark_vfx.gd remapped: res://scripts/landmark_vfx.gd
+Completed load for: 'res://scripts/landmark_vfx.gd' remapped 'res://scripts/landmark_vfx.gd' at thread -1
+MbedTLS: Some X509 certificates could not be parsed (1 certificates skipped).
+Loaded system CA certificates
+Loading resource: res://assets/production/materials/ground/road_gravel.png remapped: res://assets/production/materials/ground/road_gravel.png
+Loading resource: res://.godot/imported/road_gravel.png-2f761f9383eaba4b831fc7f0017b5dd7.ctex remapped: res://.godot/imported/road_gravel.png-2f761f9383eaba4b831fc7f0017b5dd7.ctex
+Completed load for: 'res://assets/production/materials/ground/road_gravel.png' remapped 'res://assets/production/materials/ground/road_gravel.png' at thread -1
+Loading resource: res://scripts/menu_music.gd remapped: res://scripts/menu_music.gd
+Completed load for: 'res://scripts/menu_music.gd' remapped 'res://scripts/menu_music.gd' at thread -1
+Loading resource: res://assets/audio/music/production/impuls_menu_slow_down.mp3 remapped: res://assets/audio/music/production/impuls_menu_slow_down.mp3
+Loading resource: res://.godot/imported/impuls_menu_slow_down.mp3-b828043e17f6a2fd054c10f40507fd9d.mp3str remapped: res://.godot/imported/impuls_menu_slow_down.mp3-b828043e17f6a2fd054c10f40507fd9d.mp3str
+Completed load for: 'res://assets/audio/music/production/impuls_menu_slow_down.mp3' remapped 'res://assets/audio/music/production/impuls_menu_slow_down.mp3' at thread -1
+MENU_MUSIC_RETIRED cycle=0 elapsed_msec=14
+Loading resource: res://assets/audio/music/production/impuls_menu_slow_down.mp3 remapped: res://assets/audio/music/production/impuls_menu_slow_down.mp3
+Loading resource: res://.godot/imported/impuls_menu_slow_down.mp3-b828043e17f6a2fd054c10f40507fd9d.mp3str remapped: res://.godot/imported/impuls_menu_slow_down.mp3-b828043e17f6a2fd054c10f40507fd9d.mp3str
+Completed load for: 'res://assets/audio/music/production/impuls_menu_slow_down.mp3' remapped 'res://assets/audio/music/production/impuls_menu_slow_down.mp3' at thread -1
+MENU_MUSIC_RETIRED cycle=1 elapsed_msec=83
+Loading resource: res://assets/audio/music/production/impuls_menu_slow_down.mp3 remapped: res://assets/audio/music/production/impuls_menu_slow_down.mp3
+Loading resource: res://.godot/imported/impuls_menu_slow_down.mp3-b828043e17f6a2fd054c10f40507fd9d.mp3str remapped: res://.godot/imported/impuls_menu_slow_down.mp3-b828043e17f6a2fd054c10f40507fd9d.mp3str
+Completed load for: 'res://assets/audio/music/production/impuls_menu_slow_down.mp3' remapped 'res://assets/audio/music/production/impuls_menu_slow_down.mp3' at thread -1
+MENU_MUSIC_RETIRED cycle=2 elapsed_msec=48
+MENU_MUSIC_LIFETIME_OK cycles=3 explicit_stop=true natural_exit=true streams_released=true
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"

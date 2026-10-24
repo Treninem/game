@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bcd0it5645w8j"]
 
-[sub_resource type="Resource" id="Resource_jwkyc"]
-metadata/__load_path__ = "res://assets/vfx/third_party/binbun_godot4_beam/beam_vfx/src/script/vfx_beam_controller.gd"
+[ext_resource type="Script" path="res://assets/vfx/third_party/binbun_godot4_beam/beam_vfx/src/script/vfx_beam_controller.gd" id="1_beam_controller"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2lygp"]
 
@@ -129,7 +128,7 @@ alpha_curve = SubResource("CurveTexture_2segj")
 radius = 0.1
 
 [node name="BaseBeamVFX" type="Node3D" unique_id=335639217]
-script = SubResource("Resource_jwkyc")
+script = ExtResource("1_beam_controller")
 
 [node name="BeamStart" type="MeshInstance3D" parent="." unique_id=1923619505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001, -0.006, 0)

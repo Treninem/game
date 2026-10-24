@@ -45,6 +45,7 @@ func elevation_at(pos: Vector2) -> float:
     var ridges := pow(absf(ridge_noise.get_noise_2d(pos.x, pos.y)), 2.4) * 48.0
     var macro_relief := 0.0
     var height := broad + detail + ridges
+    var continental_floor := -INF
 
     # Political regions describe inhabited pieces of the continent. Procedural
     # noise may shape their coasts, lakes and lowlands, but it must never sink a
@@ -61,12 +62,13 @@ func elevation_at(pos: Vector2) -> float:
         var sovereign_weight := 1.0 - smoothstep(0.42, 0.92, sovereign_normalized)
         if sovereign_weight > 0.0:
             var sovereign_floor := lerpf(-3.5, 7.0, sovereign_weight)
+            continental_floor = sovereign_floor
             height = maxf(height, sovereign_floor)
 
     # The canonical mountain federation must read as mountain country at macro
     # scale rather than depending on a lucky noise seed. The added relief blends
     # through the state's ellipse and leaves frontier terrain continuous.
-    var state := WORLD_GEOGRAPHY.state_at(pos)
+    var state := sovereign_state
     if String(state.get("id", "")) == "dor_karn":
         var center: Vector2 = state.get("center", Vector2.ZERO)
         var radius: Vector2 = state.get("radius", Vector2.ONE)
@@ -81,14 +83,16 @@ func elevation_at(pos: Vector2) -> float:
     # Suppress high-frequency bumps and most ridge noise at the carriageway,
     # then blend through a broad shoulder so traversal stays smooth without a
     # hard trench or political-border seam.
-    var road_distance := WORLD_GEOGRAPHY.distance_to_primary_road(pos)
+    var road_distance := WORLD_GEOGRAPHY.distance_to_primary_road(pos, WORLD_GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH)
     if road_distance < WORLD_GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH:
         var road_weight := 1.0 - smoothstep(
             WORLD_GEOGRAPHY.PRIMARY_ROAD_HALF_WIDTH,
             WORLD_GEOGRAPHY.PRIMARY_ROAD_SHOULDER_WIDTH,
             road_distance
         )
-        var roadbed := broad + ridges * 0.34 + macro_relief
+        # Road smoothing must retain the continental floor established above.
+        # Otherwise low noise excavates a sea trench through inhabited land.
+        var roadbed := maxf(broad + ridges * 0.34 + macro_relief, continental_floor)
         height = lerpf(height, roadbed, road_weight * 0.88)
 
     # The 4 x 4 km Asterna capital remains a stable buildable plateau, but it is
@@ -129,9 +133,10 @@ func moisture_at(pos: Vector2) -> float:
         "kaldera": base -= 0.04
     return clampf(base, 0.0, 1.0)
 
-func temperature_at(pos: Vector2) -> float:
+func temperature_at(pos: Vector2, known_elevation: float = NAN) -> float:
     var latitude := clampf((pos.y + WORLD_HALF_SIZE) / (WORLD_HALF_SIZE * 2.0), 0.0, 1.0)
-    var altitude_penalty := maxf(0.0, elevation_at(pos) - 18.0) / 120.0
+    var elevation := elevation_at(pos) if is_nan(known_elevation) else known_elevation
+    var altitude_penalty := maxf(0.0, elevation - 18.0) / 120.0
     var temperature := 0.18 + latitude * 0.72 - altitude_penalty
 
     var state_id := WORLD_GEOGRAPHY.state_id_at(pos)
@@ -160,8 +165,10 @@ func water_level_at(pos: Vector2) -> float:
     return -INF
 
 func biome_at(pos: Vector2) -> String:
-    var water_kind := water_kind_at(pos)
     var elevation := elevation_at(pos)
+    var water_kind := WORLD_HYDROLOGY.freshwater_kind_at(pos)
+    if water_kind.is_empty() and elevation < SEA_LEVEL - 0.35:
+        water_kind = "sea"
     if water_kind == "sea":
         return "underwater" if elevation < SEA_LEVEL - 8.0 else "ocean"
     if water_kind in ["river", "lake"]:
@@ -177,7 +184,7 @@ func biome_at(pos: Vector2) -> String:
         return "forest"
 
     var state_id := WORLD_GEOGRAPHY.state_id_at(pos)
-    var temperature := temperature_at(pos)
+    var temperature := temperature_at(pos, elevation)
     var moisture := moisture_at(pos)
 
     if pos.distance_to(Vector2(21600.0, 26000.0)) < 5200.0 and moisture > 0.48:

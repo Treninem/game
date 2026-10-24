@@ -1,0 +1,25 @@
+{
+  "files_verified": 15,
+  "failures": [],
+  "parts": [
+    {
+      "part": "rehmanpolanski_viking_boots",
+      "vertices": 3196,
+      "fitting_records": 3196,
+      "license": "CC0"
+    },
+    {
+      "part": "rehmanpolanski_viking_pants",
+      "vertices": 1312,
+      "fitting_records": 1312,
+      "license": "CC0"
+    },
+    {
+      "part": "rehmanpolanski_viking_tunic",
+      "vertices": 3346,
+      "fitting_records": 3346,
+      "license": "CC0"
+    }
+  ],
+  "candidate_builder_syntax": "passed"
+}

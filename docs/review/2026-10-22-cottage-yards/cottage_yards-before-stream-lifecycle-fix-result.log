@@ -1,0 +1,18 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SCRIPT ERROR: Trying to assign invalid previously freed instance.
+   at: WorldSettlements._materialize_settlement (res://scripts/world_settlements.gd:126)
+   GDScript backtrace (most recent call first):
+       [0] _materialize_settlement (res://scripts/world_settlements.gd:126)
+       [1] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [2] _run (res://tests/smoke_cottage_yards.gd:113)
+       [3] _frames (res://tests/smoke_cottage_yards.gd:12)
+SCRIPT ERROR: Assertion failed: Streaming resets depleted harvest
+   at: _run (res://tests/smoke_cottage_yards.gd:118)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_cottage_yards.gd:118)
+       [1] _frames (res://tests/smoke_cottage_yards.gd:12)
+ERROR: Cottage yards watchdog
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] <anonymous lambda> (res://tests/smoke_cottage_yards.gd:8)

@@ -1,0 +1,240 @@
+{
+  "date": "2026-10-22",
+  "version": "0.10.7.3",
+  "branch": "codex/household-persistence-2026-10-19",
+  "parent_commit": "176a42aeba3680fdf305f26b70bea0b65b43a453",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; full character, art, world and stable-release acceptance remain false",
+  "scope": "Both existing clothed human bases and the connected capital fletcher scenario; not a claim that every profession or animation is finished",
+  "changes": [
+    "Removed the redundant OutfitLining primitive from both default costumes. Independent GLB comparison retains every authored outer triangle, position, normal, UV, weight, nine morphs, ten source animation channels/times, exposed body, bind frames and embedded image pixels. Removed 11560 male and 11364 female lining triangles.",
+    "Portable Blender sources now retain a compressed reference of the accepted outer triangulation. Export preserves those diagonals explicitly; a normal re-export had changed them. Keep the accepted four exported influences; exporting all influences would unintentionally change the body. Reproduction and independent preservation checks passed.",
+    "Authored WorkStanding with planted Idle legs/hips, bounded bent elbows, open downward palms, a small right-hand stroke and neck/head gaze toward the work. Baked immutable clips are shared per source rig; no per-frame IK or cloth solver. Existing ground Working remains available and keeps its rate.",
+    "Fletcher workplace derives from the measured bench edge. Production requires reaching it within 8 cm instead of the loose 75 cm social arrival radius. Night chest use continues to select the ground-work pose.",
+    "Five existing CC0 arrow meshes rest on the measured board while supplied production is active, disappear when materials run out and derive again from saved stock/task state. They are a work display, not extra inventory or collectible stock; interaction/recipe/save schemas remain unchanged.",
+    "Extended mandatory body coverage from 756 to 810 final rendered views, preserving old cases and positive controls. Added 198 work poses on both bodies/three builds and an exact supported-hand/gaze/loop/cache check. Square collision check now finds exactly one direct physical shape instead of assuming it is the last child; the shape/ground requirements remain."
+  ],
+  "models": {
+    "male": {
+      "sha256": "615a5a5661035e60d5e5a743b4889748646e7b378ff42029f48114f93afb49a0",
+      "bytes": 21497988
+    },
+    "female": {
+      "sha256": "76bf774548eace4c4a4db3a227fdba0dcd16ab8de24ae9d11eb1779b4587e861",
+      "bytes": 22207168
+    }
+  },
+  "preservation": {
+    "male": {
+      "removed_redundant_triangles": 11560,
+      "authored_surfaces_morphs_uvs_weights_clips_unchanged": true
+    },
+    "female": {
+      "removed_redundant_triangles": 11364,
+      "authored_surfaces_morphs_uvs_weights_clips_unchanged": true
+    }
+  },
+  "local_checks": {
+    "import": {
+      "case": "import",
+      "exit_code": 0,
+      "seconds": 54.25,
+      "errors": []
+    },
+    "working_pose": {
+      "case": "working_pose",
+      "exit_code": 0,
+      "seconds": 15.84,
+      "errors": []
+    },
+    "capital_square": {
+      "case": "capital_square",
+      "exit_code": 0,
+      "seconds": 59.74,
+      "errors": []
+    },
+    "character_creator": {
+      "case": "character_creator",
+      "exit_code": 0,
+      "seconds": 5.69,
+      "errors": []
+    },
+    "workshop": {
+      "case": "workshop",
+      "exit_code": 0,
+      "seconds": 58.62,
+      "errors": []
+    },
+    "surfaces": {
+      "case": "surfaces",
+      "exit_code": 0,
+      "seconds": 21.02,
+      "errors": []
+    },
+    "coverage": {
+      "case": "coverage",
+      "exit_code": 0,
+      "seconds": 36.84,
+      "errors": []
+    },
+    "world": {
+      "case": "world",
+      "exit_code": 0,
+      "seconds": 72.88,
+      "errors": []
+    },
+    "motion": {
+      "case": "motion",
+      "exit_code": 0,
+      "seconds": 38.09,
+      "errors": []
+    },
+    "player_movement": {
+      "case": "player_movement",
+      "exit_code": 0,
+      "seconds": 23.62,
+      "errors": []
+    },
+    "step_grounding": {
+      "case": "step_grounding",
+      "exit_code": 0,
+      "seconds": 17.38,
+      "errors": []
+    },
+    "visual_grounding": {
+      "case": "visual_grounding",
+      "exit_code": 0,
+      "seconds": 20.47,
+      "errors": []
+    },
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "seconds": 13.8,
+      "errors": []
+    },
+    "gameplay_actions": {
+      "case": "gameplay_actions",
+      "exit_code": 0,
+      "seconds": 24.61,
+      "errors": []
+    },
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "seconds": 49.7,
+      "errors": []
+    },
+    "character_dimensions": {
+      "case": "character_dimensions",
+      "exit_code": 0,
+      "seconds": 9.27,
+      "errors": []
+    },
+    "character_texture_filtering": {
+      "case": "character_texture_filtering",
+      "exit_code": 0,
+      "seconds": 4.14,
+      "errors": []
+    },
+    "household_pose": {
+      "case": "household_pose",
+      "exit_code": 0,
+      "seconds": 11.28,
+      "errors": []
+    },
+    "ui_and_save": {
+      "case": "ui_and_save",
+      "exit_code": 0,
+      "seconds": 10.3,
+      "errors": []
+    },
+    "camera_input": {
+      "case": "camera_input",
+      "exit_code": 0,
+      "seconds": 57.56,
+      "errors": []
+    }
+  },
+  "native_evidence": {
+    "method": "Actual Godot graphical runs on Windows GL Compatibility / Intel UHD 610. Automated ordinary input, not manual mouse/keyboard play.",
+    "workshop": "Unedited previously earned capital arrival, 40.287563 m ordinary walk with zero driver position assignments; actual aim-selected merchant dialogue; paid wood/stone transactions; final standing production frame; disk save during work and reload; exactly five arrows and idle after inputs exhausted. Only fixture clock/survival held at 09:00; the full forest-capital journey was not repeated.",
+    "player": {
+      "scope": "Actual creator/world run with ordinary input; script checks the nine forms, both heights, weapon/magic/save and repeated UI transitions. Not manual play.",
+      "actual_result": {
+        "bow_arrow_consumed": true,
+        "captures": [
+          "user://head-size-walk.png",
+          "user://head-size-run.png",
+          "user://head-size-tall-jump.png",
+          "user://head-size-starter_axe.png",
+          "user://head-size-short_bow.png",
+          "user://head-size-bow-released.png",
+          "user://head-size-short-walk.png",
+          "user://head-size-short-jump.png",
+          "user://head-size-cast-free-hand.png",
+          "user://head-size-magic-after-load.png",
+          "user://head-size-inventory-lifecycle.png",
+          "user://head-size-outfit-quality-0.png",
+          "user://head-size-outfit-quality-1.png",
+          "user://head-size-outfit-quality-2.png",
+          "user://head-size-outfit-quality-3.png"
+        ],
+        "game_save_roundtrip": true,
+        "jump_both_heights": true,
+        "look_roundtrip": true,
+        "morphs": 9,
+        "physical_heights_cm": [
+          160,
+          195
+        ],
+        "player_position_assignments": 0,
+        "walked_m": 28.4430095562711
+      },
+      "live_bow_blend_samples": 29,
+      "UI_reopen_cycles": 12,
+      "separate_both_body_action_fixture_walked_m": 27.2196888099425
+    },
+    "coverage": "810 views, zero visible covered-skin pixels. This proves the covered-skin condition only, not zero cloth-on-cloth intersections.",
+    "surfaces": "24 native color frames, including front/back Working and WorkStanding. Saved a known remaining pants/tunic intersection in surface-female-Working-back.png.",
+    "performance": {
+      "scope": "120-frame local samples only; not sustained FPS or dedicated VRAM guarantees",
+      "workshop_reload_Medium": {
+        "scope": "WORKSHOP_FRAME_SAMPLE",
+        "frames": 120,
+        "mean_ms": 33.5449583333333,
+        "reported_video_bytes": 777790727,
+        "draw_calls": 900
+      },
+      "forest_action_sample": {
+        "scope": "OUTFIT_WORLD_FRAME_SAMPLE",
+        "frames": 120,
+        "mean_ms": 47.02505,
+        "reported_video_bytes": 490678950,
+        "draw_calls": 1094,
+        "quality_at_sample": "Medium: measured inside the preset==1 branch; the script separately captures all four presets"
+      }
+    },
+    "warnings": "100 ObjectDB instances at workshop exit and 82 at forest-world exit remain unresolved."
+  },
+  "rerun_scope": "After the final work-only neck/head gaze change, the 198 work poses, 810 coverage views, actual workshop/save journey, 24 color views and full creator/world action run were repeated. Other local movement/physics/material/UI fixtures retain their unchanged relevant paths; exact final remote CI follows push.",
+  "failed_attempts_and_repairs": [
+    "Panelled native rigging trial was rejected: 205/336 sampled poses had >0.5 mm cloth intersections, maximum edge-plane depth about 40.5 mm. It is not connected to live models. Pixel components alone were insufficient to distinguish a hem opening from actual clipping.",
+    "First shell-only re-export changed quad diagonals; explicit accepted triangulation preservation fixed the strict geometry comparison. A trial all-influence export changed native body attributes and was rejected.",
+    "Work pose first presented palms upward; final pose has open downward palms and downward gaze. Its work cycle is an authored initial gesture, not motion capture or every craft tool interaction.",
+    "First graphical walk driver ran into the actual barrel at local (-21,-6); fixture approach was corrected around it without moving/removing its collision or teleporting the player.",
+    "Adding the work display invalidated a test assumption that a collision was the last child. It now requires exactly one direct CollisionShape3D and retains the original physical ground check."
+  ],
+  "remaining": [
+    "Full artistic quality of faces/hair/materials and the owner concept is unaccepted; existing body identities and authored outer costume are preserved, not a replacement photorealistic wardrobe.",
+    "Visible pants/tunic intersection in deep legacy Working and other extreme motions remains. Full dynamic cloth/layer contact and shoulder/cuff refinement are open; the rejected panelled and GPU trials are not shipped.",
+    "The fletcher has a standing hand-work loop and displayed batch; cutting tools, per-item manipulation, other professions and broader living NPC behavior remain incomplete.",
+    "Existing simplified bow/arrow art, full startup/landing transitions, broader world/animals/housing, road shoulders/raised embankments and full weak-PC optimization remain open.",
+    "No stable installer or release publication. New exact-SHA CI is checked after push and recorded separately to avoid self-referential commits."
+  ],
+  "next_connected_work": "Resolve actual final-skinned cloth intersections through the full movement/action matrix, then verify the complete person in ordinary gameplay; continue coherent region work under the active comprehensive program.",
+  "overall_percent": null,
+  "visual_acceptance": false,
+  "review_folder": "docs/review/2026-10-22-work-wardrobe"
+}

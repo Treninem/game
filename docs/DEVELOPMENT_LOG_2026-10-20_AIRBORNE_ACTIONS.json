@@ -1,0 +1,194 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased source review",
+  "parent": "c875d008a9030b91f731d03b449f2eba0d1d21a8",
+  "problem": "Airborne full-body animation had priority over player combat animations, while the actual shot/attack/cast remained active. The old pack reproduces the drawing arms moving behind the body during a jumping shot. Earlier bow acceptance omitted this combination.",
+  "changes": [
+    "Preserve player attack/cast upper-body pose in the air; retain existing furniture and hostile NPC priority",
+    "Apply only hips/leg/foot tracks from Airborne to airborne combat, with a clamped 0.22-second transition clock",
+    "Freeze ground gait phase in the air, reset airborne time on physical landing and leave non-physical previews unchanged",
+    "Extend existing mandatory locomotion smoke: both bodies, six actions, six leg bones, airborne idle and landing reset",
+    "Extend visible bow-world scenario with ordinary jump input before firing",
+    "Flush buffered test input after press/release so assertions run after actual event dispatch; all mana/heal/ammunition/save assertions retained"
+  ],
+  "baseline_smoke": {
+    "case": "locomotion_facing",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Airborne action lost its arm pose: male Bow_Attack_Draw got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Draw LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Draw RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Draw LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Draw RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Draw LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Draw RightFoot",
+      "ERROR: Airborne action lost its arm pose: male Bow_Attack_Shoot got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Shoot LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Shoot RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Shoot LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Shoot RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Shoot LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: male Bow_Attack_Shoot RightFoot",
+      "ERROR: Airborne action lost its arm pose: male Axe_Chop got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: male Axe_Chop LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Axe_Chop RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Axe_Chop LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Axe_Chop RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Axe_Chop LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: male Axe_Chop RightFoot",
+      "ERROR: Airborne action lost its arm pose: male Punch got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: male Punch LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Punch RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Punch LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Punch RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Punch LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: male Punch RightFoot",
+      "ERROR: Airborne action lost its arm pose: male Cast_Left got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Left LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Left RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Left LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Left RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Left LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Left RightFoot",
+      "ERROR: Airborne action lost its arm pose: male Cast_Right got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Right LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Right RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Right LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Right RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Right LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: male Cast_Right RightFoot",
+      "ERROR: Airborne action lost its arm pose: female Bow_Attack_Draw got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Draw LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Draw RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Draw LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Draw RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Draw LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Draw RightFoot",
+      "ERROR: Airborne action lost its arm pose: female Bow_Attack_Shoot got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Shoot LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Shoot RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Shoot LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Shoot RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Shoot LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: female Bow_Attack_Shoot RightFoot",
+      "ERROR: Airborne action lost its arm pose: female Axe_Chop got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: female Axe_Chop LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Axe_Chop RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Axe_Chop LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Axe_Chop RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Axe_Chop LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: female Axe_Chop RightFoot",
+      "ERROR: Airborne action lost its arm pose: female Punch got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: female Punch LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Punch RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Punch LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Punch RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Punch LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: female Punch RightFoot",
+      "ERROR: Airborne action lost its arm pose: female Cast_Left got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Left LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Left RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Left LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Left RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Left LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Left RightFoot",
+      "ERROR: Airborne action lost its arm pose: female Cast_Right got Airborne",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Right LeftUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Right RightUpLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Right LeftLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Right RightLeg",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Right LeftFoot",
+      "ERROR: Airborne action uses grounded leg pose: female Cast_Right RightFoot"
+    ],
+    "seconds": 70.42
+  },
+  "baseline_world": {
+    "exit_code": 1,
+    "seconds": 111.06,
+    "errors": [
+      "ERROR: AIRBORNE_WORLD lost bow draw during jump"
+    ],
+    "marker": false
+  },
+  "checks": {
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 56.41
+    },
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 26.22
+    },
+    "gameplay_actions": {
+      "case": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 52.98
+    }
+  },
+  "graphical_world": {
+    "exit_code": 0,
+    "seconds": 80.23,
+    "errors": [],
+    "marker": true
+  },
+  "native_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.3835020894185
+  },
+  "live_bow_blend_samples": 37,
+  "input_race_failed_attempt": {
+    "exit_code": -1,
+    "seconds": 211.47,
+    "errors": [
+      "SCRIPT ERROR: Assertion failed."
+    ],
+    "marker": false
+  },
+  "input_race_evidence": "In the failed attempt, cast input-stage logs appeared after the zero-cast assertion. Input.flush_buffered_events in the QA driver delivers the same InputEventAction before assertions; no runtime magic behavior changed. This does not establish universal physical input correctness.",
+  "screenshots": [
+    "docs/review/2026-10-20-airborne-actions/before-jump-bow.png",
+    "docs/review/2026-10-20-airborne-actions/after-jump-bow.png"
+  ],
+  "source_sha256": {
+    "scripts/humanoid_visual.gd": "5e19d9e56284246d6e6da7976924a397b37f756467f864bbd70d8c42c86babc0",
+    "scripts/weapon_grip_modifier.gd": "aa1f3856444901ae790fdc914373d930eb004341367628c556eaae9694bd6f12",
+    "tests/smoke_locomotion_facing.gd": "902ef5636f1e2cdfe4ba1a7d88fa99d4453eab487a08fbfea9e68714f1903d55",
+    "tests/visual_bow_world.gd": "769f9d1ae81e532eeaa4d5f355fc9362540f76d0f3ec5296e8c1d16869b81293"
+  },
+  "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
+  "review_delivery": "Current imported source project build/stability; previous pack retained as negative reproduction, not claimed to contain this fix. Existing review launcher commands now use the verified source project while preserving their profiles.",
+  "limits": [
+    "No new human meshes or wardrobe geometry in this change; shoulder/garment corrective shapes and overall visual acceptance remain open",
+    "Central torso bone guard is not exact cloth/skin surface collision",
+    "Graphical world run uses automated ordinary input and observer camera, not a manual full-world/city tour",
+    "Existing 79 ObjectDB exit warning remains; no stable release or measured FPS claim",
+    "Current-commit remote gates pending after push; no local new installer/export acceptance"
+  ]
+}

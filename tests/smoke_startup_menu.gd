@@ -28,18 +28,17 @@ func _run_test() -> void:
         _fail(4, "boot launcher root is not a Control")
         return
     add_child(boot)
-    for _i in range(8):
+    var deadline := Time.get_ticks_msec() + 15000
+    while Time.get_ticks_msec() < deadline:
+        var current := get_tree().current_scene
+        if current != null and current.name == "MainMenu":
+            break
         await get_tree().process_frame
 
-    var menu_packed := load("res://scenes/main_menu.tscn") as PackedScene
-    if menu_packed == null:
-        _fail(5, "main menu scene is missing")
+    var menu := get_tree().current_scene as Control
+    if menu == null or menu.name != "MainMenu":
+        _fail(6, "boot launcher did not open the main menu within 15 seconds")
         return
-    var menu := menu_packed.instantiate() as Control
-    if menu == null:
-        _fail(6, "main menu scene root is not a Control")
-        return
-    add_child(menu)
     for _i in range(4):
         await get_tree().process_frame
 
@@ -125,5 +124,30 @@ func _run_test() -> void:
         _fail(25, "update page has no real progress channel")
         return
 
-    print("STARTUP_MENU_SMOKE_OK boot=non-blocking menu=first loading=mandatory updates=byte-progress saves=10 settings=reused music=production-looped")
+    menu.call("show_page", "home")
+    var original_size := get_viewport().get_visible_rect().size
+    for logical_size in [Vector2i(853,480), Vector2i(640,360)]:
+        get_tree().root.content_scale_size = logical_size
+        menu.call("_layout_ui")
+        for _i in range(4):
+            await get_tree().process_frame
+        var frame := menu.get("frame") as Control
+        var viewport_rect := menu.get_viewport_rect()
+        if frame.get_global_rect().end.y > viewport_rect.end.y + 2.0:
+            _fail(26, "startup menu extends below the viewport with large UI text")
+            return
+        var scroll := menu.get("menu_scroll") as ScrollContainer
+        var column := menu.get("menu_column") as VBoxContainer
+        var exit_button := column.get_child(column.get_child_count() - 1) as Button
+        scroll.ensure_control_visible(exit_button)
+        for _i in range(3):
+            await get_tree().process_frame
+        if exit_button.get_global_rect().end.y > scroll.get_global_rect().end.y + 2.0:
+            _fail(27, "startup exit action cannot be reached at large UI scale")
+            return
+    get_tree().root.content_scale_size = Vector2i(original_size)
+    print("STARTUP_MENU_SMOKE_OK boot=non-blocking menu=first loading=mandatory updates=byte-progress saves=10 settings=reused music=production-looped responsive=scrollable")
+    menu.queue_free()
+    # Let the audio server retire playback before checking shutdown for leaks.
+    await get_tree().create_timer(0.1).timeout
     get_tree().quit(0)

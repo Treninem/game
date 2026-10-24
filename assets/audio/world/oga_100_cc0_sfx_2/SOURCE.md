@@ -8,3 +8,5 @@ License: CC0 1.0 Universal / public-domain dedication as stated on the source pa
 
 Promoted for runtime use from `assets/staging/sourcechat_b04/audio/oga_100_cc0_sfx_2/`.
 This production subset contains the water-flow loop and ground/wet/wood footsteps used by the spatial world-audio system. The original filenames are preserved so provenance remains mechanically traceable.
+
+INTEGRATED — 2026-10-19: sfx100v2_wood_hit_01/02/03.ogg, selected from the same physically staged CC0 source on main. Delayed axe contact uses spatial SFX emitters at the bark collision point; no new download or synthesis.

@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-24",
+  "recorded_at_utc": "2026-10-24T09:46:19.314334+00:00",
+  "goal_status": "ACTIVE",
+  "scope": "Completed evidence review for the isolated input and citizen physical-recovery package during the user editor handoff.",
+  "previous_timestamped_pending_record_retained": "docs/DEVELOPMENT_LOG_2026-10-24_REMOTE_INPUT_RECOVERY_VALIDATION.json",
+  "exact_tested_runtime_test_workflow_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+  "isolated_branch": "codex/editor-handoff-validation-2026-10-24",
+  "integration_review_sha_unchanged": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+  "server": {
+    "id": 40080419924,
+    "head_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/Treninem/game/actions/runs/40080419924",
+    "created_at": "2026-10-24T09:03:05Z",
+    "updated_at": "2026-10-24T09:35:15Z"
+  },
+  "workflow": {
+    "name": "Validate World Core",
+    "job_id": 120832623150,
+    "all_124_steps_success": true,
+    "selected_steps": [
+      {
+        "number": 24,
+        "name": "Verify citizens physically descend bridge parapets at all supported adult heights",
+        "conclusion": "success"
+      },
+      {
+        "number": 25,
+        "name": "Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock",
+        "conclusion": "success"
+      },
+      {
+        "number": 64,
+        "name": "Verify menus across resolutions and UI scales",
+        "conclusion": "success"
+      },
+      {
+        "number": 66,
+        "name": "Verify third-person camera obstruction and persistent zoom",
+        "conclusion": "success"
+      },
+      {
+        "number": 103,
+        "name": "Verify inventory aliases text-entry pause ownership and focused panel shortcuts",
+        "conclusion": "success"
+      },
+      {
+        "number": 104,
+        "name": "Verify conflicting control assignments are rejected safely",
+        "conclusion": "success"
+      },
+      {
+        "number": 105,
+        "name": "Verify unlimited inventory browsing and persistence",
+        "conclusion": "success"
+      },
+      {
+        "number": 116,
+        "name": "Verify live home and workplace routes",
+        "conclusion": "success"
+      }
+    ],
+    "previous_assertions_and_bounds_preserved": true,
+    "all_eight_workflows_at_this_sha_verified": false
+  },
+  "proofs": {
+    "canal-perch.json": {
+      "relative_path": "build/asset_work/editor-input-regression-2026-10-24/validated-input-proofs/impuls-canal-perch/godot/app_userdata/ImPuls/canal-perch.json",
+      "sha256": "1eb80ae79605ae38d8ce065d6c2a80c6c9a6b8e448689a414c471f8805291150",
+      "data": {
+        "actual_bridge_geometry": true,
+        "cases": [
+          {
+            "height_cm": 160.0,
+            "maximum_frame_drop_m": 0.0850000381469727,
+            "ordinary_speed": 1.45,
+            "setup_position_assignments": 1,
+            "side": 1.0,
+            "walked_m": 1.24186653969809
+          },
+          {
+            "height_cm": 160.0,
+            "maximum_frame_drop_m": 0.0850000381469727,
+            "ordinary_speed": 1.45,
+            "setup_position_assignments": 1,
+            "side": -1.0,
+            "walked_m": 1.01415432943031
+          },
+          {
+            "height_cm": 180.0,
+            "maximum_frame_drop_m": 0.0995047092437744,
+            "ordinary_speed": 1.45,
+            "setup_position_assignments": 1,
+            "side": 1.0,
+            "walked_m": 2.30866565322503
+          },
+          {
+            "height_cm": 180.0,
+            "maximum_frame_drop_m": 0.0850000381469727,
+            "ordinary_speed": 1.45,
+            "setup_position_assignments": 1,
+            "side": -1.0,
+            "walked_m": 1.26023602031637
+          },
+          {
+            "height_cm": 200.0,
+            "maximum_frame_drop_m": 0.0850000381469727,
+            "ordinary_speed": 1.45,
+            "setup_position_assignments": 1,
+            "side": 1.0,
+            "walked_m": 1.20786351209972
+          },
+          {
+            "height_cm": 200.0,
+            "maximum_frame_drop_m": 0.0850000381469727,
+            "ordinary_speed": 1.45,
+            "setup_position_assignments": 1,
+            "side": -1.0,
+            "walked_m": 1.2010320359841
+          }
+        ],
+        "controlled_physics_fixture": true,
+        "rendered_visual_acceptance": false
+      }
+    },
+    "editor-ui-input-audit.json": {
+      "relative_path": "build/asset_work/editor-input-regression-2026-10-24/validated-input-proofs/impuls-input-audit/godot/app_userdata/ImPuls/editor-ui-input-audit.json",
+      "sha256": "8f210bbadd84abfdbdbc68b1fd2d7792b950dcabc8170eacb30ba77c706c0352",
+      "data": {
+        "cases": [
+          {
+            "actual": true,
+            "case": "default_inventory_caption_exposes_both_shortcuts",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "default_tab_opens_inventory",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "default_I_opens_inventory",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "default_tab_closes_inventory_from_focused_cell",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "pause_bound_letter_types_in_search_without_guard",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "pause_bound_letter_types_in_search_with_actual_guard",
+            "expected": true,
+            "panel_visible": true,
+            "search": "p"
+          },
+          {
+            "actual": true,
+            "case": "rebound_pause_opens_menu_outside_text",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "explicit_tab_pause_binding_takes_priority_over_alias",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "default_tab_alias_returns_after_default_bindings",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "inventory_unchanged",
+            "expected": true
+          },
+          {
+            "actual": true,
+            "case": "coins_unchanged",
+            "expected": true
+          }
+        ],
+        "headless": true,
+        "manual_play": false,
+        "private_server_proposal": true,
+        "root_runtime_changed": false,
+        "source_sha": "711edb0dc5ee39e6b4b0d3b3a1d2db46535a0df9"
+      }
+    }
+  },
+  "legacy_proof_metadata_clarification": "The input JSON source_sha=711edb0d identifies the original runtime base inherited by its driver, not the tested candidate. Run head_sha=1127512c and the artifact associated with that run identify the actual tested revision.",
+  "physical_scope": "Six deliberately positioned setup fixtures, then normal 1.45 m/s physics movement on actual bridge geometry. Setup assignment is counted separately; the navigation recovery does not assign actor position or Y. This is automated controlled verification, not a manual journey.",
+  "rendered_evidence": {
+    "artifact_id": 12555523412,
+    "artifact_name": "native-human-world-40080419924",
+    "downloaded_png_count": 321,
+    "actually_viewed": [
+      {
+        "path": "build/asset_work/editor-input-regression-2026-10-24/candidate-rendered-artifacts/.local/share/godot/app_userdata/ImPuls/head-size-inventory-lifecycle.png",
+        "sha256": "9033f0360dace07d9a09c36315b008751f8a629f270c27eefb7f5108201fe207"
+      },
+      {
+        "path": "build/asset_work/editor-input-regression-2026-10-24/candidate-rendered-artifacts/.local/share/godot/app_userdata/ImPuls/head-size-short-walk.png",
+        "sha256": "dc4344ec7bdaf038acab763233cf69effdd8b0593a3bf7e9ffbf53371149ac74"
+      },
+      {
+        "path": "build/asset_work/editor-input-regression-2026-10-24/candidate-rendered-artifacts/.local/share/godot/app_userdata/ImPuls/contour-integrated-male-bow.png",
+        "sha256": "2c978d1e4eb225ddaf8d9dfb316a34c207db2f9d5b2ef432125b30da7fd468d7"
+      },
+      {
+        "path": "build/asset_work/editor-input-regression-2026-10-24/candidate-rendered-artifacts/.local/share/godot/app_userdata/ImPuls/city-street-fixture-quality-2.png",
+        "sha256": "18fea2ea7235e1426c20d75a2b3477b2353027fc0827dbbb9042bef23ad4ac55"
+      }
+    ],
+    "all_321_visually_reviewed": false,
+    "findings": [
+      "The inventory visibly shows I / Tab and preserves the cell layout; large text-only cells, dense navigation and oversized panels remain below the requested art direction.",
+      "The actual walking frame retains sparse-looking woodland, a flat distant treeline and conspicuous colored markers. No new environment art was implemented in this package.",
+      "The bow frame still has angular weapon contours and a stylized human/clothing silhouette; a single pose cannot establish natural full animation.",
+      "The street-quality picture is an isolated component fixture with missing scene surroundings by design. It is not a finished-city acceptance picture."
+    ]
+  },
+  "open_regression": {
+    "parent_sha": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+    "run_id": 40079148597,
+    "failed_step": 114,
+    "test": "tests/smoke_square_home_life.tscn",
+    "observed": "Marta waits for a neighbour in the doorway while Marek fails to enter; subsequent departure to actual workplaces also failed.",
+    "candidate_rerun_same_test_step": 116,
+    "candidate_rerun": "success",
+    "doorway_fix_implemented": false,
+    "conclusion": "The passing repeat does not prove that the intermittent doorway failure is fixed. Reproduce actual capsule/jamb clearance before a navigation change."
+  },
+  "local_limits_retained": "The earlier local inventory test timed out before reaching the grid while available host memory was about 0.5 GB. The remote pass does not erase that local failure or establish weak-PC performance.",
+  "handoff": {
+    "root_runtime_and_workflow_written": false,
+    "user_editor_and_game_closed": false,
+    "shared_head_and_index_preserved": true,
+    "normal_profiles_modified": false,
+    "candidate_integrated_into_user_project": false,
+    "candidate_integrated_into_PR12_runtime": false
+  },
+  "acceptance": {
+    "input_targeted_cases": "11/11 PASS",
+    "parapet_physical_cases": "6/6 PASS",
+    "complete_world_core": "SUCCESS at exact 1127512c",
+    "manual_play": false,
+    "hardware_mouse_accepted": false,
+    "full_visual_quality": false,
+    "complete_TZ": false,
+    "stable_release": false,
+    "overall_percent": null
+  },
+  "next_connected_work": [
+    "Reproduce intermittent home-door capsule/jamb congestion at 160/180/200 cm with real moving neighbours; preserve actual physics and existing lifecycle assertions.",
+    "Redesign inventory and menu hierarchy against the viewed reference screens, with actual item imagery and readable spacing; preserve unlimited capacity, existing actions, bindings and save data.",
+    "Reconcile the user editor changes before proposing integration; run the remaining mandatory gates and actual Windows gameplay/render/performance checks."
+  ]
+}

@@ -106,6 +106,43 @@ func _run_test() -> void:
         _fail(4, "mapped move_forward leaves the player walking in place; distance=%s" % distance)
         return
 
+    var strafe_start := player.global_position
+    Input.action_press("move_right", 1.0)
+    for _i in range(30):
+        await tree.physics_frame
+    Input.action_release("move_right")
+    if Vector2(player.global_position.x, player.global_position.z).distance_to(Vector2(strafe_start.x, strafe_start.z)) < MIN_DISTANCE:
+        _fail(19, "strafe input leaves the player walking in place")
+        return
+
+    GameState.stamina = GameState.max_stamina
+    var sprint_stamina := GameState.stamina
+    var top_speed := 0.0
+    Input.action_press("move_forward", 1.0)
+    Input.action_press("sprint", 1.0)
+    for _i in range(30):
+        await tree.physics_frame
+        top_speed = maxf(top_speed, Vector2(player.velocity.x, player.velocity.z).length())
+    Input.action_release("sprint")
+    Input.action_release("move_forward")
+    if top_speed <= float(player.get("walk_speed")) * 1.15 or GameState.stamina >= sprint_stamina:
+        _fail(20, "sprint must exceed walking speed and consume stamina; speed=%s stamina=%s" % [top_speed, GameState.stamina])
+        return
+
+    for _i in range(30):
+        await tree.physics_frame
+    var jump_start_y := player.global_position.y
+    var jump_peak_y := jump_start_y
+    _send_physical_key(KEY_SPACE, true)
+    _send_physical_key(KEY_SPACE, false)
+    for _i in range(50):
+        await tree.physics_frame
+        jump_peak_y = maxf(jump_peak_y, player.global_position.y)
+    if jump_peak_y < jump_start_y + 0.35 or not player.is_on_floor():
+        _fail(21, "jump did not rise and land on a physical floor; start=%s peak=%s" % [jump_start_y, jump_peak_y])
+        return
+    print("Movement actions smoke: strafe=ok sprint_speed=", top_speed, " jump_height=", jump_peak_y - jump_start_y)
+
     var menu := scene.get_node_or_null("UI/GameMenu") as Control
     if menu == null:
         _fail(16, "game menu node missing")
@@ -118,6 +155,15 @@ func _run_test() -> void:
         _fail(17, "physical ESC did not open and pause the game menu")
         return
 
+    var paused_position := player.global_position
+    Input.action_press("move_forward", 1.0)
+    for _i in range(6):
+        await tree.process_frame
+    Input.action_release("move_forward")
+    if player.global_position.distance_to(paused_position) > 0.01:
+        _fail(22, "movement continued while the pause menu was open")
+        return
+
     _send_physical_key(KEY_ESCAPE, true)
     _send_physical_key(KEY_ESCAPE, false)
     for _i in range(3):
@@ -126,7 +172,63 @@ func _run_test() -> void:
         _fail(18, "second physical ESC did not close the menu and resume gameplay")
         return
 
+    var panels := scene.get_node_or_null("UI/GameplayPanels") as Control
+    if panels == null:
+        _fail(23, "gameplay panels missing")
+        return
+    for key in [KEY_I, KEY_M, KEY_K, KEY_J]:
+        _send_physical_key(key, true)
+        _send_physical_key(key, false)
+        for _i in range(3):
+            await tree.process_frame
+        if not tree.paused or not panels.visible:
+            _fail(24, "panel shortcut failed: %s" % key)
+            return
+        _send_physical_key(KEY_ESCAPE, true)
+        _send_physical_key(KEY_ESCAPE, false)
+        for _i in range(3):
+            await tree.process_frame
+        if tree.paused or panels.visible or menu.visible:
+            _fail(25, "Escape must close a gameplay panel directly back to the world")
+            return
+
+    menu.call("open_menu", "controls")
+    var original_jump := InputMap.action_get_events("jump")[0].duplicate() as InputEvent
+    original_jump.set("pressed", true)
+    var jump_button: Button
+    for button in menu.find_children("*", "Button", true, false):
+        if (button as Button).text == SettingsManager.binding_text("jump"):
+            jump_button = button as Button
+            break
+    if jump_button == null:
+        _fail(26, "jump binding button missing")
+        return
+    jump_button.grab_focus()
+    menu.call("_begin_rebind", "jump")
+    _send_physical_key(KEY_ENTER, true)
+    _send_physical_key(KEY_ENTER, false)
+    for _i in range(3):
+        await tree.process_frame
+    var rebound_to_enter := int(SettingsManager.bindings["jump"].get("code", 0)) == KEY_ENTER
+    SettingsManager.rebind_action("jump", original_jump)
+    if not rebound_to_enter or not menu.visible or not tree.paused or not String(menu.get("awaiting_action")).is_empty():
+        _fail(27, "focused buttons intercepted Enter instead of recording the new binding")
+        return
+
+    var forward_before: Dictionary = SettingsManager.bindings["move_forward"].duplicate(true)
+    menu.call("_begin_rebind", "move_forward")
+    _send_physical_key(KEY_ESCAPE, true)
+    _send_physical_key(KEY_ESCAPE, false)
+    for _i in range(3):
+        await tree.process_frame
+    if not menu.visible or not tree.paused or not String(menu.get("awaiting_action")).is_empty() or SettingsManager.bindings["move_forward"] != forward_before:
+        _fail(28, "Escape must cancel rebinding without closing settings or changing the binding")
+        return
+    menu.call("close_menu")
+    print("Input navigation smoke: four panels close directly, focused Enter rebinding works, Escape cancels safely")
     print("Forest river story start + real nature + civilization signs + input + UI + recovery smoke passed")
+    scene.queue_free()
+    await tree.create_timer(0.1).timeout
     tree.quit(0)
 
 func _physical_key_event(code: Key, pressed: bool) -> InputEventKey:

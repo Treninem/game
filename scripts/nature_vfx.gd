@@ -61,8 +61,9 @@ func _sync_nature(player_position: Vector3) -> void:
     var mist_factor := maxf(EnvironmentState.fog_density, EnvironmentState.wetness * 0.55)
     mist_particles.amount = maxi(18, int(35.0 + 95.0 * mist_factor))
 
-    leaf_particles.emitting = not underwater and biome in ["forest", "taiga"] and wind > 0.22 and EnvironmentState.rain_intensity < 0.60
-    leaf_particles.amount = maxi(16, int(28.0 + 95.0 * wind))
+    var leaves_in_season := EnvironmentState.season == EnvironmentState.Season.AUTUMN or wind > 0.55
+    leaf_particles.emitting = not underwater and leaves_in_season and biome in ["forest", "taiga"] and wind > 0.22 and EnvironmentState.rain_intensity < 0.60
+    leaf_particles.amount = maxi(6, int(8.0 + 14.0 * wind))
 
     var near_sea := biome == "ocean" and absf(player_position.y - WorldData.SEA_LEVEL) < 8.0
     spray_particles.emitting = not underwater and near_sea and wind > 0.18
@@ -114,6 +115,7 @@ func _make_mist() -> GPUParticles3D:
 func _make_leaves() -> GPUParticles3D:
     var particles := GPUParticles3D.new()
     particles.name = "WindLeaves"
+    particles.emitting = false
     particles.amount = 55
     particles.lifetime = 3.6
     particles.local_coords = false
@@ -133,8 +135,11 @@ func _make_leaves() -> GPUParticles3D:
     particles.process_material = process
 
     var quad := QuadMesh.new()
-    quad.size = Vector2(0.095, 0.045)
-    quad.material = _material(Color(0.42, 0.56, 0.18, 0.74), true)
+    quad.size = Vector2(0.06, 0.11)
+    var leaf_material := ShaderMaterial.new()
+    leaf_material.shader = preload("res://assets/shaders/environment/leaf_particle.gdshader")
+    leaf_material.set_shader_parameter("leaf_mask", preload("res://assets/production/nature/woodland/wind_leaf_mask.png"))
+    quad.material = leaf_material
     particles.draw_pass_1 = quad
     return particles
 
@@ -179,7 +184,9 @@ func _spawn_cold_breath(player: Node3D) -> void:
     var point := player.global_position + Vector3.UP * 1.55 + forward.normalized() * 0.35
     WorldVFX.spawn_environment_effect("steam", point, 0.30)
 
-func _material(color: Color, billboard: bool) -> StandardMaterial3D:
+func _material(color: Color, billboard: bool) -> Material:
+    if billboard:
+        return preload("res://scripts/environment_particle_material.gd").soft(color)
     var material := StandardMaterial3D.new()
     material.albedo_color = color
     material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA

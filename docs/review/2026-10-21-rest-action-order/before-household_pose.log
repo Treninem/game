@@ -1,0 +1,245 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SITTING_JOINTS Left hip=(-0.112761, 0.977714, 0.003991) knee=(-0.114152, 0.98037, -0.438379) foot=(-0.112351, 0.530155, -0.441087)
+SITTING_JOINTS Right hip=(0.11328, 0.978623, 0.003286) knee=(0.111889, 0.981278, -0.439084) foot=(0.11369, 0.531062, -0.441792)
+HUMANOID_REST_CHECKED poses=48 bodies=2 heights=3 furniture=2 equipment=4 repeated_pose=true collider_unchanged=true
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bed/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/160.0/bench/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bed/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/180.0/bench/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bed/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: male/195.0/bench/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bed/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/160.0/bench/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bed/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/180.0/bench/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bed/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/starter_axe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/short_bow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)
+ERROR: Action starts before releasing furniture and rest pose: female/195.0/bench/stone_knife
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_household_pose.gd:38)
+       [1] run (res://tests/humanoid_rest_cases.gd:109)

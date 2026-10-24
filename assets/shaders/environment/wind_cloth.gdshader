@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode cull_disabled, diffuse_burley, specular_schlick_ggx;
 
+#include "wind_motion.gdshaderinc"
+
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap;
 uniform float wind_speed : hint_range(0.0, 12.0) = 2.5;
 uniform float wind_strength : hint_range(0.0, 1.0) = 0.18;
@@ -12,12 +14,7 @@ uniform float roughness : hint_range(0.0, 1.0) = 0.75;
 
 void vertex() {
     float anchor = clamp(UV.x, 0.0, 1.0);
-    float phase = UV.x * wave_frequency + UV.y * wave_frequency * 0.35 + TIME * wind_speed;
-    float gust = sin(TIME * gust_frequency * 6.2831853 + UV.y * 2.0) * gust_strength;
-    float wave = sin(phase) * wind_strength * (0.65 + gust);
-    vec3 dir = normalize(vec3(wind_direction.x, 0.0, wind_direction.z) + vec3(0.0001, 0.0, 0.0));
-    VERTEX += dir * wave * anchor;
-    VERTEX.y += cos(phase * 0.73) * wind_strength * 0.18 * anchor;
+    VERTEX += environment_wind_motion(UV, TIME, anchor, wind_direction, wind_strength, wave_frequency, wind_speed, gust_frequency, gust_strength);
 }
 
 void fragment() {

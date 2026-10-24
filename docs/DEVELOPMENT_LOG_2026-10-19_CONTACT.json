@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7 working-tree contact review",
+  "implemented": [
+    "Anatomical shoulder alignment fixes sideways chop retargeting",
+    "Axe contact is limited to 1.35 m from chest to bark surface; distant selected trunks do not yield cuts",
+    "Contact particles and three existing CC0 spatial wood-hit samples originate on bark; cancelled strokes stay silent",
+    "Short audio emitters have bounded weak-reference cleanup",
+    "Persistent felling hides old discovered canopy footprints after streaming and saved-state restoration",
+    "Stone/plant melee impacts remain visible"
+  ],
+  "tests": [
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.31
+    },
+    {
+      "name": "cartography",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.02
+    },
+    {
+      "name": "world_audio",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.0
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 11.77
+    },
+    {
+      "name": "visual_grounding",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.02
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 13.0
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.28
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 10.22
+    },
+    {
+      "name": "living_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 7.12
+    }
+  ],
+  "test_sequence": "Eight regressions after animation/audio/map changes; targeted chopping and living_world repeated after tightening bark reach. Nine unique passing scenarios.",
+  "graphical": "Intel UHD 610 / GL Compatibility: real batch removal, neighbouring transforms, arm forward direction, bark audio and wall-safe collection",
+  "native": "Separate far and near start-position fixtures: far click rejected; three manual near clicks and E collected six wood. No player teleport. Native key taps did not provide sustained movement; no new manual world traversal claimed.",
+  "package": "External exported-game smoke, using only shipped resources",
+  "known_issues": [
+    "Stylized visuals, not Witcher 3 realism",
+    "Finger grip and exact swept blade collision remain unfinished; bark reach is bounded ray contact",
+    "Controlled tree fall has no rigid-body destruction or surrounding damage",
+    "Outside-start batched forests are not fully harvestable",
+    "Exported-game shutdown reports 70 ObjectDB instances; no complete FPS/memory acceptance benchmark",
+    "Full manual capital traversal not repeated"
+  ],
+  "next": [
+    "Exact grip/blade trajectory and fall sound",
+    "World-event reactions at NPC workplaces",
+    "Sustained performance measurements"
+  ],
+  "git": {
+    "branch": "main",
+    "head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "new_commit": false,
+    "release_published": false
+  },
+  "artifact": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-19-contact\\ImPuls-review.cmd",
+  "sha256": "4b578d802829613477a8334c08f5509a2194b033e06f029364f226819b0e0fe5",
+  "failed_intermediates": [
+    "Freed emitter lambda capture replaced by WeakRef",
+    "WeakRef inference warning fixed with explicit type; stalled own test stopped",
+    "Result aggregation relative path corrected; tests themselves retained strict error checks"
+  ]
+}

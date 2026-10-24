@@ -1,0 +1,17 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ARM_CONTACT_BODY mode=male_preview build=0.0 cumulative_before_pairs=166 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.5 cumulative_before_pairs=318 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.5 cumulative_before_pairs=709 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.35 cumulative_before_pairs=862 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=-0.2 cumulative_before_pairs=1020 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.05 cumulative_before_pairs=1201 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.12 cumulative_before_pairs=1377 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=male_preview build=0.4 cumulative_before_pairs=1688 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.0 cumulative_before_pairs=4998 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.5 cumulative_before_pairs=7846 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.5 cumulative_before_pairs=11320 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.35 cumulative_before_pairs=14306 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=-0.2 cumulative_before_pairs=17477 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.05 cumulative_before_pairs=20803 after_pairs=0 failed_poses=0
+ARM_CONTACT_BODY mode=female_preview build=0.12 cumulative_before_pairs=24182 after_pairs=0 failed_poses=0

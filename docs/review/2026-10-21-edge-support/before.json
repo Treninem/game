@@ -1,0 +1,13 @@
+{
+  "exit_code": 1,
+  "seconds": 65.91,
+  "errors": [
+    "ERROR: Skinned sole misses physical surface: male/160.0/ledge_right/Walk/0.75 gap=0.02272",
+    "ERROR: Skinned sole misses physical surface: male/180.0/ledge_right/Walk/0.75 gap=0.02552",
+    "ERROR: Skinned sole misses physical surface: male/195.0/ledge_right/Walk/0.75 gap=0.02763",
+    "ERROR: Skinned sole misses physical surface: female/160.0/ledge_right/Walk/0.75 gap=0.04488",
+    "ERROR: Skinned sole misses physical surface: female/180.0/ledge_right/Walk/0.75 gap=0.05046",
+    "ERROR: Skinned sole misses physical surface: female/195.0/ledge_right/Walk/0.75 gap=0.05464"
+  ],
+  "marker": false
+}

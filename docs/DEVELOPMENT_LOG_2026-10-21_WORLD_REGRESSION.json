@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-21",
+  "tested_commit": "e31efac8b30b799a2ba5a5d3942190534377fa8f",
+  "runtime_changes": false,
+  "purpose": "Broader regression and visual audit after household rest integration",
+  "ci": "8/8 exact-SHA checks passed; world-core/movement/UI/magic/VFX/build/game/installer",
+  "physical_actions": {
+    "exit_code": 0,
+    "seconds": 48.81,
+    "errors": [],
+    "marker": true
+  },
+  "source_world": {
+    "exit_code": 0,
+    "seconds": 58.52,
+    "errors": [],
+    "marker": true
+  },
+  "gameplay_observations": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.6205832567066
+  },
+  "captures": 59,
+  "archived_selected_images": 6,
+  "method": "Automated actual input, Godot rendering and final modifier checks. No manual free roam or city journey.",
+  "visual_findings": [
+    "Forests remain repetitive and crowns visibly coarse",
+    "Human facial detail and overall artistic quality remain below requested level",
+    "Selected bow frame shows no right arm through central torso; geometric runtime checks cover 22 final draw/shoot blends"
+  ],
+  "lifecycle": {
+    "unreleased_exit_objects": 79,
+    "verbose_types": {
+      "RefCounted": 79
+    },
+    "reported_reference_count": 0,
+    "root_cause": "Not established. Must not claim fixed or infer continuous runtime growth from exit-only evidence."
+  },
+  "remaining": [
+    "Diagnose and correct 79 exit ObjectDB leftovers",
+    "Full character/world visual acceptance remains open",
+    "Long steady-world performance and complete gameplay coverage not measured"
+  ],
+  "release": false
+}

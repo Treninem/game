@@ -8,6 +8,11 @@ var total_elapsed := 0.0
 var current_frame := -1
 var mesh_instance: MeshInstance3D
 var material: StandardMaterial3D
+var base_alpha := 1.0
+var drift_velocity := Vector3.ZERO
+var growth_rate := 0.0
+var spin_rate := 0.65
+var fade_in_ratio := 0.0
 
 func setup(paths: Array[String], size: float, tint: Color = Color.WHITE, seconds_per_frame: float = 0.065, loops: int = 1) -> bool:
     frames.clear()
@@ -36,6 +41,7 @@ func setup(paths: Array[String], size: float, tint: Color = Color.WHITE, seconds
     material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
     material.cull_mode = BaseMaterial3D.CULL_DISABLED
     material.albedo_color = tint
+    base_alpha = tint.a
     material.emission_enabled = true
     material.emission = Color(tint.r, tint.g, tint.b, 1.0)
     material.emission_energy_multiplier = 1.8
@@ -49,6 +55,7 @@ func _process(delta: float) -> void:
         return
     elapsed += delta
     total_elapsed += delta
+    position += drift_velocity * delta
     var frame_index := int(floor(elapsed / frame_time))
     var total_frames := frames.size() * loop_count
     if frame_index >= total_frames:
@@ -56,12 +63,13 @@ func _process(delta: float) -> void:
         return
     _show_frame(frame_index % frames.size())
     if mesh_instance != null:
-        mesh_instance.rotation.z += delta * 0.65
-        var life_ratio := clampf(float(frame_index) / maxf(float(total_frames - 1), 1.0), 0.0, 1.0)
+        mesh_instance.rotation.z += delta * spin_rate
+        var life_ratio := clampf(total_elapsed / (float(total_frames) * frame_time), 0.0, 1.0)
         var pulse := 1.0 + sin(total_elapsed * 12.0) * 0.04
         var fade := 1.0 - maxf(0.0, (life_ratio - 0.72) / 0.28)
-        mesh_instance.scale = Vector3.ONE * pulse
-        material.albedo_color.a = clampf(fade, 0.0, 1.0)
+        var fade_in := minf(1.0, life_ratio / fade_in_ratio) if fade_in_ratio > 0.0 else 1.0
+        mesh_instance.scale = Vector3.ONE * pulse * (1.0 + growth_rate * total_elapsed)
+        material.albedo_color.a = base_alpha * clampf(fade * fade_in, 0.0, 1.0)
 
 func _show_frame(index: int) -> void:
     if index == current_frame or index < 0 or index >= frames.size():

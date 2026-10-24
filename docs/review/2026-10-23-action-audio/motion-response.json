@@ -1,0 +1,1185 @@
+{
+  "control": "same physical controller and rig with additive response replaced by no-op",
+  "gpu": [
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00400002114474773,
+      "label": "male-rest",
+      "maximum_boot_error_m": 0.00000119822959732119,
+      "maximum_error_m": 0.00000150215601024684,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399298779666424,
+      "label": "male-start",
+      "maximum_boot_error_m": 0.00000114535566808627,
+      "maximum_error_m": 0.00000143577926792204,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00382018089294434,
+      "label": "male-run",
+      "maximum_boot_error_m": 0.00000139376152219484,
+      "maximum_error_m": 0.0000014354699260366,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.0036262720823288,
+      "label": "male-turn",
+      "maximum_boot_error_m": 0.00000137033987357427,
+      "maximum_error_m": 0.0000015679534044466,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00400002114474773,
+      "label": "male-brake",
+      "maximum_boot_error_m": 0.00000139276039590186,
+      "maximum_error_m": 0.00000166039330906642,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399298779666424,
+      "label": "male-settled",
+      "maximum_boot_error_m": 0.00000143651845974091,
+      "maximum_error_m": 0.00000147091895996709,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.858259081840515,
+      "label": "male-rise",
+      "maximum_boot_error_m": 0.00000137640279262996,
+      "maximum_error_m": 0.00000213581006391905,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399986235424876,
+      "label": "male-landing",
+      "maximum_boot_error_m": 0.00000140342126542237,
+      "maximum_error_m": 0.0000016312518482664,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00397976860404015,
+      "label": "male-recovered",
+      "maximum_boot_error_m": 0.00000142757869525667,
+      "maximum_error_m": 0.00000173980231465976,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.0015413761138916,
+      "label": "male-short_bow-prepare",
+      "maximum_boot_error_m": 0.00000143825150189514,
+      "maximum_error_m": 0.00000159936041654873,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00295096170157194,
+      "label": "male-short_bow-recover",
+      "maximum_boot_error_m": 0.00000136571395614737,
+      "maximum_error_m": 0.00000163885681558895,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.0016830381937325,
+      "label": "male-starter_axe-prepare",
+      "maximum_boot_error_m": 0.00000134902836634865,
+      "maximum_error_m": 0.00000160379693170398,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00310568464919925,
+      "label": "male-starter_axe-recover",
+      "maximum_boot_error_m": 0.00000139276039590186,
+      "maximum_error_m": 0.0000015781166666784,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399986235424876,
+      "label": "male-cast",
+      "maximum_boot_error_m": 0.00000137640279262996,
+      "maximum_error_m": 0.00000149962249906821,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.398863732814789,
+      "label": "male-sitting",
+      "maximum_boot_error_m": 0.00000141333407555067,
+      "maximum_error_m": 0.00000162825449478987,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "label": "female-rest",
+      "maximum_boot_error_m": 0.00000143500585636502,
+      "maximum_error_m": 0.00000169873237609863,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "label": "female-start",
+      "maximum_boot_error_m": 0.00000134672211515863,
+      "maximum_error_m": 0.00000173801458913658,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "label": "female-run",
+      "maximum_boot_error_m": 0.00000151735969211586,
+      "maximum_error_m": 0.00000169008342254529,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00360468775033951,
+      "label": "female-turn",
+      "maximum_boot_error_m": 0.00000203408012566797,
+      "maximum_error_m": 0.00000202304863705649,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "label": "female-brake",
+      "maximum_boot_error_m": 0.00000158597640620428,
+      "maximum_error_m": 0.00000198962584363471,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399406999349594,
+      "label": "female-settled",
+      "maximum_boot_error_m": 0.00000197438976101694,
+      "maximum_error_m": 0.00000205095420824364,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.802598059177399,
+      "label": "female-rise",
+      "maximum_boot_error_m": 0.00000198850966626196,
+      "maximum_error_m": 0.00000215979457607318,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00134004466235638,
+      "label": "female-landing",
+      "maximum_boot_error_m": 0.00000207099333238148,
+      "maximum_error_m": 0.00000195517782231036,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00397510593757033,
+      "label": "female-recovered",
+      "maximum_boot_error_m": 0.00000197438976101694,
+      "maximum_error_m": 0.00000200186445908912,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00353674544021487,
+      "label": "female-short_bow-prepare",
+      "maximum_boot_error_m": 0.00000157389001742558,
+      "maximum_error_m": 0.00000196695327758789,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "label": "female-short_bow-recover",
+      "maximum_boot_error_m": 0.00000149962249906821,
+      "maximum_error_m": 0.00000208190067496616,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "label": "female-starter_axe-prepare",
+      "maximum_boot_error_m": 0.00000190806144928501,
+      "maximum_error_m": 0.00000197326494344452,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "label": "female-starter_axe-recover",
+      "maximum_boot_error_m": 0.00000151728659147921,
+      "maximum_error_m": 0.00000188321439509309,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "label": "female-cast",
+      "maximum_boot_error_m": 0.000001533878958071,
+      "maximum_error_m": 0.00000188580656867998,
+      "vertices": 3776
+    },
+    {
+      "boot_vertices": 3530,
+      "gpu_boot_min_y": 0.476998031139374,
+      "label": "female-sitting",
+      "maximum_boot_error_m": 0.00000223099800678028,
+      "maximum_error_m": 0.00000186687225323112,
+      "vertices": 3776
+    }
+  ],
+  "native": true,
+  "player_position_writes_after_setup": 0,
+  "response_self_timing_usec": {
+    "median": 77,
+    "p95": 265,
+    "samples": 466
+  },
+  "samples": [
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": -0.0133680058643222,
+        "grounded": true,
+        "side": -0.00414373306557536,
+        "sole_gap": 0.00400002859532833
+      },
+      "gpu_boot_error_m": 0.00000119822959732119,
+      "gpu_boot_min_y": 0.00400002114474773,
+      "gpu_error_m": 0.00000150215601024684,
+      "label": "male-rest",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 42,
+          "delta": 0.126454666666667,
+          "guard": false,
+          "last_physics_frame": 42,
+          "pitch": 0.0,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": -0.0133680058643222,
+        "grounded": true,
+        "side": -0.00414373306557536,
+        "sole_gap": 0.00400002859532833
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": -0.0156875494867563,
+        "grounded": true,
+        "side": -0.0045182085596025,
+        "sole_gap": 0.00399320758879185
+      },
+      "gpu_boot_error_m": 0.00000114535566808627,
+      "gpu_boot_min_y": 0.00399298779666424,
+      "gpu_error_m": 0.00000143577926792204,
+      "label": "male-start",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -22.0)",
+          "current_physics_frame": 50,
+          "delta": 0.139876666666667,
+          "guard": false,
+          "last_physics_frame": 50,
+          "pitch": -0.102546818860407,
+          "velocity": "(0.0, 0.0, -2.933333)"
+        },
+        "clip": "Run",
+        "forward": 0.0699015110731125,
+        "grounded": true,
+        "side": -0.0045538479462266,
+        "sole_gap": 0.00399320758879185
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": 0.275875091552734,
+        "grounded": true,
+        "side": 0.0348707586526871,
+        "sole_gap": 0.00381969474256039
+      },
+      "gpu_boot_error_m": 0.00000139376152219484,
+      "gpu_boot_min_y": 0.00382018089294434,
+      "gpu_error_m": 0.0000014354699260366,
+      "label": "male-run",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 131,
+          "delta": 0.025,
+          "guard": false,
+          "last_physics_frame": 131,
+          "pitch": -0.000198230088595548,
+          "velocity": "(0.0, 0.0, -7.999992)"
+        },
+        "clip": "Run",
+        "forward": 0.276032298803329,
+        "grounded": true,
+        "side": 0.0348707363009453,
+        "sole_gap": 0.00381966680288315
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": 0.191924437880516,
+        "grounded": true,
+        "side": -0.0272940620779991,
+        "sole_gap": 0.00362641178071499
+      },
+      "gpu_boot_error_m": 0.00000137033987357427,
+      "gpu_boot_min_y": 0.0036262720823288,
+      "gpu_error_m": 0.0000015679534044466,
+      "label": "male-turn",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(-21.99989, 0.0, -0.000858)",
+          "current_physics_frame": 144,
+          "delta": 0.0257516666666589,
+          "guard": false,
+          "last_physics_frame": 144,
+          "pitch": -0.0362649183797712,
+          "velocity": "(-4.766664, 0.0, -5.656871)"
+        },
+        "clip": "Run",
+        "forward": 0.221298336982727,
+        "grounded": true,
+        "side": -0.10283425450325,
+        "sole_gap": 0.00362641178071499
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": 0.241401821374893,
+        "grounded": true,
+        "side": -0.00824594497680664,
+        "sole_gap": 0.00399982370436192
+      },
+      "gpu_boot_error_m": 0.00000139276039590186,
+      "gpu_boot_min_y": 0.00400002114474773,
+      "gpu_error_m": 0.00000166039330906642,
+      "label": "male-brake",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(19.79893, 0.0, 19.79905)",
+          "current_physics_frame": 152,
+          "delta": 0.133333333333333,
+          "guard": false,
+          "last_physics_frame": 152,
+          "pitch": 0.0851325837363403,
+          "velocity": "(-1.833333, 0.0, -2.723522)"
+        },
+        "clip": "Run",
+        "forward": 0.172404423356056,
+        "grounded": true,
+        "side": -0.00440983474254608,
+        "sole_gap": 0.00399991311132908
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": -0.0120351891964674,
+        "grounded": true,
+        "side": -0.0047667408362031,
+        "sole_gap": 0.00399324297904968
+      },
+      "gpu_boot_error_m": 0.00000143651845974091,
+      "gpu_boot_min_y": 0.00399298779666424,
+      "gpu_error_m": 0.00000147091895996709,
+      "label": "male-settled",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 222,
+          "delta": 0.0316666666666667,
+          "guard": false,
+          "last_physics_frame": 222,
+          "pitch": 0.0000000184183014446633,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": -0.012035078369081,
+        "grounded": true,
+        "side": -0.00476691406220198,
+        "sole_gap": 0.00399324297904968
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Airborne",
+        "forward": 0.0911259204149246,
+        "grounded": false,
+        "side": -0.00181295350193977,
+        "sole_gap": 0.858258605003357
+      },
+      "gpu_boot_error_m": 0.00000137640279262996,
+      "gpu_boot_min_y": 0.858259081840515,
+      "gpu_error_m": 0.00000213581006391905,
+      "label": "male-rise",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 232,
+          "delta": 0.0166666666666667,
+          "guard": false,
+          "last_physics_frame": 232,
+          "pitch": 0.00000000320062087369817,
+          "velocity": "(0.0, 2.800001, 0.0)"
+        },
+        "clip": "Airborne",
+        "forward": 0.0911257117986679,
+        "grounded": false,
+        "side": -0.00181255117058754,
+        "sole_gap": 0.858258605003357
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": 0.0431802347302437,
+        "grounded": true,
+        "side": -0.00590124726295471,
+        "sole_gap": 0.00399998156353831
+      },
+      "gpu_boot_error_m": 0.00000140342126542237,
+      "gpu_boot_min_y": 0.00399986235424876,
+      "gpu_error_m": 0.0000016312518482664,
+      "label": "male-landing",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 269,
+          "delta": 0.136227,
+          "guard": false,
+          "last_physics_frame": 269,
+          "pitch": -0.0644842672371182,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": 0.0969347879290581,
+        "grounded": true,
+        "side": -0.00593140721321106,
+        "sole_gap": 0.00399995828047395
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": -0.0150140346959233,
+        "grounded": true,
+        "side": -0.00448459386825562,
+        "sole_gap": 0.00397993857041001
+      },
+      "gpu_boot_error_m": 0.00000142757869525667,
+      "gpu_boot_min_y": 0.00397976860404015,
+      "gpu_error_m": 0.00000173980231465976,
+      "label": "male-recovered",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 314,
+          "delta": 0.0607286666666667,
+          "guard": false,
+          "last_physics_frame": 314,
+          "pitch": -0.00000207786630900025,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": -0.0150142498314381,
+        "grounded": true,
+        "side": -0.00448428001254797,
+        "sole_gap": 0.00397993857041001
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Bow_Attack_Draw",
+        "forward": -0.0563119910657406,
+        "grounded": true,
+        "side": 0.0459602475166321,
+        "sole_gap": 0.00154127646237612
+      },
+      "gpu_boot_error_m": 0.00000143825150189514,
+      "gpu_boot_min_y": 0.0015413761138916,
+      "gpu_error_m": 0.00000159936041654873,
+      "label": "male-short_bow-prepare",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -22.00012)",
+          "current_physics_frame": 342,
+          "delta": 0.046571,
+          "guard": false,
+          "last_physics_frame": 342,
+          "pitch": -0.0474124734795306,
+          "velocity": "(0.0, 0.0, -3.300018)"
+        },
+        "clip": "Bow_Attack_Draw",
+        "forward": -0.0169159546494484,
+        "grounded": true,
+        "side": 0.0518648214638233,
+        "sole_gap": 0.0015412075445056
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Bow_Attack_Shoot",
+        "forward": 0.0317863263189793,
+        "grounded": true,
+        "side": 0.157955929636955,
+        "sole_gap": 0.00295128067955375
+      },
+      "gpu_boot_error_m": 0.00000136571395614737,
+      "gpu_boot_min_y": 0.00295096170157194,
+      "gpu_error_m": 0.00000163885681558895,
+      "label": "male-short_bow-recover",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 362,
+          "delta": 0.042392,
+          "guard": false,
+          "last_physics_frame": 362,
+          "pitch": -0.00125987626774385,
+          "velocity": "(0.0, 0.0, -4.99998)"
+        },
+        "clip": "Bow_Attack_Shoot",
+        "forward": 0.0328186750411987,
+        "grounded": true,
+        "side": 0.158030450344086,
+        "sole_gap": 0.00295128067955375
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Axe_Chop",
+        "forward": -0.0265982113778591,
+        "grounded": true,
+        "side": -0.043447770178318,
+        "sole_gap": 0.00168323004618287
+      },
+      "gpu_boot_error_m": 0.00000134902836634865,
+      "gpu_boot_min_y": 0.0016830381937325,
+      "gpu_error_m": 0.00000160379693170398,
+      "label": "male-starter_axe-prepare",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -22.00012)",
+          "current_physics_frame": 425,
+          "delta": 0.036093,
+          "guard": false,
+          "last_physics_frame": 425,
+          "pitch": -0.049910518500362,
+          "velocity": "(0.0, 0.0, -3.300018)"
+        },
+        "clip": "Axe_Chop",
+        "forward": 0.0150130046531558,
+        "grounded": true,
+        "side": -0.0436103083193302,
+        "sole_gap": 0.00168322864919901
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Axe_Chop",
+        "forward": 0.112385913729668,
+        "grounded": true,
+        "side": 0.0613360926508904,
+        "sole_gap": 0.00310559710487723
+      },
+      "gpu_boot_error_m": 0.00000139276039590186,
+      "gpu_boot_min_y": 0.00310568464919925,
+      "gpu_error_m": 0.0000015781166666784,
+      "label": "male-starter_axe-recover",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 446,
+          "delta": 0.025,
+          "guard": false,
+          "last_physics_frame": 446,
+          "pitch": -0.0011662749655841,
+          "velocity": "(0.0, 0.0, -4.99998)"
+        },
+        "clip": "Axe_Chop",
+        "forward": 0.113354600965977,
+        "grounded": true,
+        "side": 0.0613413453102112,
+        "sole_gap": 0.00310559710487723
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Cast_Left",
+        "forward": 0.021255137398839,
+        "grounded": true,
+        "side": -0.0149808516725898,
+        "sole_gap": 0.00400006771087646
+      },
+      "gpu_boot_error_m": 0.00000137640279262996,
+      "gpu_boot_min_y": 0.00399986235424876,
+      "gpu_error_m": 0.00000149962249906821,
+      "label": "male-cast",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -24.75013)",
+          "current_physics_frame": 493,
+          "delta": 0.117684333333326,
+          "guard": false,
+          "last_physics_frame": 493,
+          "pitch": -0.0408350765636501,
+          "velocity": "(0.0, 0.0, -4.766693)"
+        },
+        "clip": "Cast_Left",
+        "forward": 0.0553270094096661,
+        "grounded": true,
+        "side": -0.0150274662300944,
+        "sole_gap": 0.00400008168071508
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Sitting",
+        "forward": -0.00265787844546139,
+        "grounded": true,
+        "side": -0.00290028820745647,
+        "sole_gap": 0.398863792419434
+      },
+      "gpu_boot_error_m": 0.00000141333407555067,
+      "gpu_boot_min_y": 0.398863732814789,
+      "gpu_error_m": 0.00000162825449478987,
+      "label": "male-sitting",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 565,
+          "delta": 0.0974153333333333,
+          "guard": false,
+          "last_physics_frame": -1,
+          "pitch": 0.0,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Sitting",
+        "forward": -0.00265787844546139,
+        "grounded": true,
+        "side": -0.00289989612065256,
+        "sole_gap": 0.398863792419434
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": -0.0908258929848671,
+        "grounded": true,
+        "side": -0.00355413719080389,
+        "sole_gap": 0.0039998572319746
+      },
+      "gpu_boot_error_m": 0.00000143500585636502,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "gpu_error_m": 0.00000169873237609863,
+      "label": "female-rest",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 613,
+          "delta": 0.127712,
+          "guard": false,
+          "last_physics_frame": 613,
+          "pitch": 0.0,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": -0.0908258929848671,
+        "grounded": true,
+        "side": -0.00355413719080389,
+        "sole_gap": 0.0039998572319746
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": -0.0954261273145676,
+        "grounded": true,
+        "side": -0.0040621436201036,
+        "sole_gap": 0.00399992428719997
+      },
+      "gpu_boot_error_m": 0.00000134672211515863,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "gpu_error_m": 0.00000173801458913658,
+      "label": "female-start",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -22.0)",
+          "current_physics_frame": 621,
+          "delta": 0.142966666666667,
+          "guard": false,
+          "last_physics_frame": 621,
+          "pitch": -0.102546818860407,
+          "velocity": "(0.0, 0.0, -2.933333)"
+        },
+        "clip": "Run",
+        "forward": -0.013891433365643,
+        "grounded": true,
+        "side": -0.00405934266746044,
+        "sole_gap": 0.00399992428719997
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": 0.222549304366112,
+        "grounded": true,
+        "side": 0.00671189744025469,
+        "sole_gap": 0.00400003418326378
+      },
+      "gpu_boot_error_m": 0.00000151735969211586,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "gpu_error_m": 0.00000169008342254529,
+      "label": "female-run",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 700,
+          "delta": 0.024877,
+          "guard": false,
+          "last_physics_frame": 700,
+          "pitch": -0.000187282000649575,
+          "velocity": "(0.0, 0.0, -7.999992)"
+        },
+        "clip": "Run",
+        "forward": 0.222695246338844,
+        "grounded": true,
+        "side": 0.0067119081504643,
+        "sole_gap": 0.00400003418326378
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": 0.281306505203247,
+        "grounded": true,
+        "side": 0.0321546867489815,
+        "sole_gap": 0.00360443256795406
+      },
+      "gpu_boot_error_m": 0.00000203408012566797,
+      "gpu_boot_min_y": 0.00360468775033951,
+      "gpu_error_m": 0.00000202304863705649,
+      "label": "female-turn",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(-22.00013, 0.0, 0.0)",
+          "current_physics_frame": 712,
+          "delta": 0.0266959999999919,
+          "guard": false,
+          "last_physics_frame": 712,
+          "pitch": -0.0176437902095094,
+          "velocity": "(-4.400003, 0.0, -5.656843)"
+        },
+        "clip": "Run",
+        "forward": 0.294730722904205,
+        "grounded": true,
+        "side": -0.0360683128237724,
+        "sole_gap": 0.00360441952943802
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Run",
+        "forward": 0.229966297745705,
+        "grounded": true,
+        "side": 0.0231809616088867,
+        "sole_gap": 0.00400049798190594
+      },
+      "gpu_boot_error_m": 0.00000158597640620428,
+      "gpu_boot_min_y": 0.00400019250810146,
+      "gpu_error_m": 0.00000198962584363471,
+      "label": "female-brake",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(19.79904, 0.0, 19.79894)",
+          "current_physics_frame": 720,
+          "delta": 0.147617000000008,
+          "guard": false,
+          "last_physics_frame": 720,
+          "pitch": 0.0892875190471153,
+          "velocity": "(-1.466668, 0.0, -2.723522)"
+        },
+        "clip": "Run",
+        "forward": 0.160278499126434,
+        "grounded": true,
+        "side": 0.0366166085004807,
+        "sole_gap": 0.00400044582784176
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": -0.0988373160362244,
+        "grounded": true,
+        "side": -0.00548746436834335,
+        "sole_gap": 0.00399447605013847
+      },
+      "gpu_boot_error_m": 0.00000197438976101694,
+      "gpu_boot_min_y": 0.00399406999349594,
+      "gpu_error_m": 0.00000205095420824364,
+      "label": "female-settled",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 790,
+          "delta": 0.055922,
+          "guard": false,
+          "last_physics_frame": 790,
+          "pitch": 0.0000000178188960446563,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": -0.0988374873995781,
+        "grounded": true,
+        "side": -0.00548731163144112,
+        "sole_gap": 0.00399447605013847
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Airborne",
+        "forward": -0.0162245109677315,
+        "grounded": false,
+        "side": -0.00219740346074104,
+        "sole_gap": 0.802597880363464
+      },
+      "gpu_boot_error_m": 0.00000198850966626196,
+      "gpu_boot_min_y": 0.802598059177399,
+      "gpu_error_m": 0.00000215979457607318,
+      "label": "female-rise",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 799,
+          "delta": 0.0166666666666666,
+          "guard": false,
+          "last_physics_frame": 799,
+          "pitch": 0.00000000309645983361347,
+          "velocity": "(0.0, 3.1, 0.0)"
+        },
+        "clip": "Airborne",
+        "forward": -0.016224417835474,
+        "grounded": false,
+        "side": -0.00219759484753013,
+        "sole_gap": 0.802597880363464
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": -0.0533395409584045,
+        "grounded": true,
+        "side": -0.00365570560097694,
+        "sole_gap": 0.00133954361081123
+      },
+      "gpu_boot_error_m": 0.00000207099333238148,
+      "gpu_boot_min_y": 0.00134004466235638,
+      "gpu_error_m": 0.00000195517782231036,
+      "label": "female-landing",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 836,
+          "delta": 0.05,
+          "guard": false,
+          "last_physics_frame": 836,
+          "pitch": -0.0628274617874633,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": -0.00332384672947228,
+        "grounded": true,
+        "side": -0.0036546322517097,
+        "sole_gap": 0.00133959017693996
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Idle",
+        "forward": -0.103133901953697,
+        "grounded": true,
+        "side": -0.00536323711276054,
+        "sole_gap": 0.0039755254983902
+      },
+      "gpu_boot_error_m": 0.00000197438976101694,
+      "gpu_boot_min_y": 0.00397510593757033,
+      "gpu_error_m": 0.00000200186445908912,
+      "label": "female-recovered",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 882,
+          "delta": 0.0569833333333333,
+          "guard": false,
+          "last_physics_frame": 882,
+          "pitch": -0.00000102779172717484,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Idle",
+        "forward": -0.103134162724018,
+        "grounded": true,
+        "side": -0.00536293163895607,
+        "sole_gap": 0.0039755254983902
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Bow_Attack_Draw",
+        "forward": 0.134098738431931,
+        "grounded": true,
+        "side": -0.13302007317543,
+        "sole_gap": 0.00353677663952112
+      },
+      "gpu_boot_error_m": 0.00000157389001742558,
+      "gpu_boot_min_y": 0.00353674544021487,
+      "gpu_error_m": 0.00000196695327758789,
+      "label": "female-short_bow-prepare",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -22.00012)",
+          "current_physics_frame": 910,
+          "delta": 0.0276120000000082,
+          "guard": false,
+          "last_physics_frame": 910,
+          "pitch": -0.047587459406126,
+          "velocity": "(0.0, 0.0, -3.300018)"
+        },
+        "clip": "Bow_Attack_Draw",
+        "forward": 0.171168640255928,
+        "grounded": true,
+        "side": -0.128504708409309,
+        "sole_gap": 0.0035367738455534
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Bow_Attack_Shoot",
+        "forward": 0.194450035691261,
+        "grounded": true,
+        "side": -0.0373433567583561,
+        "sole_gap": 0.00400000484660268
+      },
+      "gpu_boot_error_m": 0.00000149962249906821,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "gpu_error_m": 0.00000208190067496616,
+      "label": "female-short_bow-recover",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 930,
+          "delta": 0.05858,
+          "guard": false,
+          "last_physics_frame": 930,
+          "pitch": -0.00131988858302796,
+          "velocity": "(0.0, 0.0, -4.99998)"
+        },
+        "clip": "Bow_Attack_Shoot",
+        "forward": 0.195479243993759,
+        "grounded": true,
+        "side": -0.0372911617159843,
+        "sole_gap": 0.00400009285658598
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Axe_Chop",
+        "forward": 0.13640832901001,
+        "grounded": true,
+        "side": -0.0695632323622704,
+        "sole_gap": 0.00399954011663795
+      },
+      "gpu_boot_error_m": 0.00000190806144928501,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "gpu_error_m": 0.00000197326494344452,
+      "label": "female-starter_axe-prepare",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -22.00012)",
+          "current_physics_frame": 995,
+          "delta": 0.0699983333333333,
+          "guard": false,
+          "last_physics_frame": 995,
+          "pitch": -0.0370061352274973,
+          "velocity": "(0.0, 0.0, -4.033356)"
+        },
+        "clip": "Axe_Chop",
+        "forward": 0.165474563837051,
+        "grounded": true,
+        "side": -0.0695468410849571,
+        "sole_gap": 0.00399958761408925
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Axe_Chop",
+        "forward": 0.19182488322258,
+        "grounded": true,
+        "side": -0.0182195939123631,
+        "sole_gap": 0.00400025025010109
+      },
+      "gpu_boot_error_m": 0.00000151728659147921,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "gpu_error_m": 0.00000188321439509309,
+      "label": "female-starter_axe-recover",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 1015,
+          "delta": 0.067236333333325,
+          "guard": false,
+          "last_physics_frame": 1015,
+          "pitch": -0.000760054374073657,
+          "velocity": "(0.0, 0.0, -4.99998)"
+        },
+        "clip": "Axe_Chop",
+        "forward": 0.192417681217194,
+        "grounded": true,
+        "side": -0.0182193201035261,
+        "sole_gap": 0.00400010077282786
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Cast_Left",
+        "forward": 0.13161227107048,
+        "grounded": true,
+        "side": -0.0720990151166916,
+        "sole_gap": 0.00400014407932758
+      },
+      "gpu_boot_error_m": 0.000001533878958071,
+      "gpu_boot_min_y": 0.00399959553033113,
+      "gpu_error_m": 0.00000188580656867998,
+      "label": "female-cast",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, -24.75013)",
+          "current_physics_frame": 1062,
+          "delta": 0.136567444444444,
+          "guard": false,
+          "last_physics_frame": 1062,
+          "pitch": -0.038855244219103,
+          "velocity": "(0.0, 0.0, -4.766693)"
+        },
+        "clip": "Cast_Left",
+        "forward": 0.162142544984818,
+        "grounded": true,
+        "side": -0.0720793306827545,
+        "sole_gap": 0.00400013104081154
+      }
+    },
+    {
+      "control": {
+        "arm_crossings": 0,
+        "clip": "Sitting",
+        "forward": -0.0874799266457558,
+        "grounded": true,
+        "side": -0.00323331519030035,
+        "sole_gap": 0.476998567581177
+      },
+      "gpu_boot_error_m": 0.00000223099800678028,
+      "gpu_boot_min_y": 0.476998031139374,
+      "gpu_error_m": 0.00000186687225323112,
+      "label": "female-sitting",
+      "response": {
+        "arm_crossings": 0,
+        "balance": {
+          "acceleration": "(0.0, 0.0, 0.0)",
+          "current_physics_frame": 1132,
+          "delta": 0.053515,
+          "guard": false,
+          "last_physics_frame": -1,
+          "pitch": 0.0,
+          "velocity": "(0.0, 0.0, 0.0)"
+        },
+        "clip": "Sitting",
+        "forward": -0.0874799266457558,
+        "grounded": true,
+        "side": -0.00323331519030035,
+        "sole_gap": 0.476998567581177
+      }
+    }
+  ],
+  "walked_m": 26.3467781376094
+}

@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Inventory selection focus",
+  "spec_attachment": "847cc658-bf9d-4124-a332-b52381ac6af4; full text matches canonical master except Markdown trailing spaces",
+  "reproduced": "Selecting a cell removes its focused button during content rebuild; new selected button has no keyboard focus. Strengthened existing smoke failed the focus assertion before fix.",
+  "fix": "Defer focus restoration to the matching new cell, only while the inventory remains visible with unchanged selected ID, query and page; preserve an already focused control such as search input.",
+  "validation": {
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 23.2
+    },
+    "ui_responsive": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.59
+    },
+    "visible_inventory": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 37.98,
+      "mode": "visible automated UI; not manual playthrough"
+    }
+  },
+  "coverage": [
+    "Selected cell regains focus after rebuild",
+    "Actual right-arrow key navigates to adjacent cell and Space selects it",
+    "A newly focused search editor is not overridden by deferred callback",
+    "Closing before callback does not restore hidden focus or pause world",
+    "Prior 137 million-unit supply kinds, JSON snapshot, search, equipment and quantity invariants retained",
+    "Existing UI responsive checks cover four resolutions and two scales"
+  ],
+  "limits": [
+    "This verifies keyboard selection after a cell is selected; complete keyboard-only inventory workflow remains unaccepted",
+    "No full gameplay route repeated this turn; targeted visible UI and responsive checks used",
+    "Independent stacks, drag/drop and icons remain pending",
+    "Older intermittent action-event heal input observation remains open",
+    "No new export or stable release; editor functional 32/55 count unchanged"
+  ]
+}

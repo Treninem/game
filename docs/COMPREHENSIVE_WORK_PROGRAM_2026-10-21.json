@@ -1,0 +1,611 @@
+{
+  "date": "2026-10-21",
+  "status": "ACTIVE",
+  "scope": "Комплексная разработка существующего ImPuls по двум каноническим ТЗ. Закрывать связанные игровые сценарии и их регрессии, а не объявлять персонажа готовым после исправления одной кости.",
+  "requirements": [
+    "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+    "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt"
+  ],
+  "overall_percent": null,
+  "visual_acceptance": false,
+  "work_groups": [
+    {
+      "group": "Персонаж целиком",
+      "acceptance": [
+        "Лицо, пропорции, волосы, плечи, кисти и одежда согласованы в одном образе",
+        "Idle, ходьба, бег, старт/стоп, повороты, подъём/верхняя точка/падение/приземление",
+        "Топор, лук, нож, кулак, магия и смена экипировки стоя, в движении и воздухе",
+        "Стопы держат рельеф, ступени и склоны без зависания; камера и управление удобны",
+        "Изменения внешности и экипировки переживают сохранение/загрузку"
+      ],
+      "current": "Обе текущие модели сохраняют геометрию/девять форм/десять клипов и прежнюю одежду; подключена общая карта металла/шероховатости и отражения предпросмотра. Десять сохранённых цветовых образов, реальные контрольные пиксели и два кадра редактора проверены. Неудачные сетки волос не подключены; полный гардероб, формы/мимика/возраст/волосы, естественность всех действий и художественная приёмка остаются открыты."
+    },
+    {
+      "group": "Природа и рельеф",
+      "acceptance": [
+        "Цельный лес с пологом, подлеском, травой и просветами",
+        "Согласованный масштаб, материалы, LOD, ветер и сезоны",
+        "Река соединяется с берегом; ресурсы и вырубка сохраняются",
+        "Длительный проход без просадок и физического проваливания"
+      ],
+      "current": "Проверены ограниченные механики леса/берегов/рубки; художественная приёмка и измеренный длительный FPS не подтверждены. Проверочная версия 23 октября: низкая трава из 26 изогнутых травинок, 130 треугольников, прежняя высота/ветер/распределение; исходная карточная растительность дала 0 изменённых пикселей в независимом сравнении. Плотность, разнообразие, композиция и длительная производительность ещё открыты."
+    },
+    {
+      "group": "Поселения и здания",
+      "acceptance": [
+        "Выразительные фасады, крыши, двери и интерьер в едином стиле",
+        "Физические проходы, лестницы и улицы пригодны для игрока и жителей",
+        "Рабочие кровати, скамьи, сундуки, торговые и ремесленные места",
+        "Домашняя жизнь сохраняется и восстанавливается при стриминге"
+      ],
+      "current": "В проверочной версии дом разделён на две жилые/приватные комнаты, общую столовую/проход и кухню с тремя внутренними дверями и дополнительным окном спальни. Подключены Blender-текстиль/очаг и выбранная бытовая мебель/утварь; рабочие скамьи перенесены к столу с сохранением ID. Локальные проходы, отдых/диск/прыжки, бытовой цикл/стриминг и поиск пути проверены. Пакет ещё не равен художественному качеству концепции; полное разнообразие домов и семей открыто. Пройдено 99.68 м от ранее заработанного столичного сохранения обычным автоматизированным движением без перестановки персонажа; проверены настоящий вход, три зоны, диск и игровые кадры. Это не ручной полный обход мира. Пакет дорожек 22 октября: два деревенских уличных каркаса и 15 подходов к реальным входам; мощение/гравий/грунт прилегают к земле. Дома не переносились; хозяйственные участки и плотная разнообразная застройка ещё не завершены. Следующий пакет: 15 физических хозяйственных участков с проходами от улиц, калитками, ягодными кустами и выбранными навесами/сундуками. Фасады получили Blender-каркас/цоколь/оконные ящики. Реальное автоматизированное движение, UI, сбор, диск и восстановление проверены; полноценные хозяйства/животные и художественная приёмка открыты. Проверка опоры дорожек: 539+156 лучей, 52 поверхности, 15 входов, естественный Idle и все 3530 вершин обуви в реальном графическом проходе; художественная приёмка по-прежнему открыта. Пакет 23 октября: Blender-кровля с закрытыми фронтонами, деревянной черепицей, дымовой трубой и физической опорой скатов; два реальных фасадных окна (шесть окон всего), натуральная штукатурка с картами для High/Ultra. Сохранены двери, предметные ID и комнаты. Новая автоматизированная прогулка 99.711 м, диск и замер производительности в журнале REGION_SURFACES; художественная приёмка false. Городской пакет по20 пользовательским референсам: 22 новых повторяющихся двух-/трёхэтажных наружных Blender-оболочки, ближние ряды плотнее, навесы/товары/деревья/цветники и физический питьевой фонтан. Настоящий автоматизированный графический проход189.606 м, наведение, вход/три комнаты и загрузка с диска с восстановлением использования фонтана. Новые оболочки не являются новыми доступными домами; дальние кварталы/силуэт/террасы/река/разнообразие ещё открыты. Художественная приёмка false."
+    },
+    {
+      "group": "Животные и экология",
+      "acceptance": [
+        "Выбрать совместимые с реалистичным направлением существующие модели и анимации",
+        "Наземная опора, навигация, питание, вода, отдых, избегание угроз",
+        "Сохранение состояния, добыча, взаимодействия и бюджет дальней симуляции"
+      ],
+      "current": "STAGED_PHYSICAL исходные пакеты перечислены в индексе. Это не INTEGRATED живые животные; нельзя подменять систему примитивными фигурами или случайными неподходящими моделями."
+    },
+    {
+      "group": "Жители, ремёсла и экономика",
+      "acceptance": [
+        "Работа, отдых, дом, торговля, поездки и реакции на действия героя",
+        "Конечные запасы, валюта, сделки и производство без дублирования",
+        "Быстрый местный контекстный диалог, память и сохранение",
+        "Дети живут с родителями/опекунами и физически посещают занятия; возраст соответствует модели и поведению",
+        "Разные профессии выполняют реальные действия с конечными ресурсами и результатом; путь вычисляется по среде"
+      ],
+      "current": "В ограниченном сценарии два взрослых физически выходят из комнат и дома к разным дневным рабочим местам. В настоящей площади подтверждены оплата сырья, конечный рецепт стрел, остановка без материалов и сохранение запасов. Внутренний A* вычисляет путь по коллизиям и состоянию дверей. Полная популяция/возрасты/дети/учёба, кузнецы, гильдии и авантюристы с реальными рабочими циклами остаются открытыми."
+    },
+    {
+      "group": "Интерфейс и игровой цикл",
+      "acceptance": [
+        "Камера, меню, карта, безлимитный инвентарь с ячейками и экипировка согласованы",
+        "Состояния паузы/диалога/сохранения не ломают ввод и магию",
+        "Проверки на четырёх размерах экрана и пользовательское визуальное принятие"
+      ],
+      "current": "Обструкция камеры и ограниченный цикл интерфейса проверены; визуальная приёмка и весь UX остаются открытыми."
+    },
+    {
+      "group": "Надёжность и поставка",
+      "acceptance": [
+        "Исправления проходят обязательные World Core, движение, gameplay/UI, export/installer",
+        "Измеренные frame time, память и загрузки на целевой слабой машине",
+        "Журнал, проверочные кадры и узкие коммиты синхронизируются",
+        "Нет стабильного выпуска при красных или отсутствующих обязательных проверках"
+      ],
+      "current": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет. Проверены 101113 неизменных высот, 5948 биомов/воды/температуры, 3240 независимых дорожных проб и обычный нативный ввод; полная приёмка открыта. 3558a4df: все восемь exact-SHA CI SUCCESS. Пакет баланса/контакта проходит новый exact-SHA CI после push; большая локальная проверка рук завершилась по внешнему сроку и не считается принятой. Ни один обязательный прежний gate не ослаблен. 18ab50ee: 7/8 CI, World Core красный из-за проверки снимка уже перешедшего к выстрелу. Ошибка наблюдения исправлена без изменения времени выстрела, сроков и минимального покрытия; новый exact-SHA полностью перепроверяется."
+    }
+  ],
+  "execution_rule": "Сначала цельный проверяемый персонаж и стартовый регион. Расширение карты и количество ассетов не считаются качеством. Каждую группу завершать проверкой реальной игры, сохранений и регрессий; новые проблемы оставлять явно открытыми.",
+  "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+  "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
+  "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
+  "last_updated": "2026-10-23",
+  "owner_household_requirements": {
+    "source": "Direct owner messages, 21–22 October 2026",
+    "visual_target": "Owner-supplied house concept; current sparse rooms rejected",
+    "housing": "Vary plans, furnishing and beds by household size, wealth and occupation; ordinary homes >=2 living/private rooms plus kitchen",
+    "families": "Adults, children and ages must be logically linked; children have guardians and schooling, not child-only households",
+    "jobs": "Adults physically attend work and perform finite productive/trade/guild/adventure actions",
+    "navigation": "Autonomous computed paths from actual environment, not prescribed room routes",
+    "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
+    "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
+  },
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+  "owner_settlement_landscape_requirements": {
+    "source": "Direct owner messages, 22 October 2026",
+    "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
+    "landscape": "Mountains, valleys, rivers and lakes form a coherent world matching the supplied concept; preserve established anchors",
+    "paths": "Stone paving, gravel fill, compacted soil and forest tracks according to function; connected entrances, physical contact and readable map. Owner explicitly reiterated paving/fill on 22 October.",
+    "implemented_scope": "Terrain-conforming road/market/gate surfaces; both established villages: clear gate-to-square streets and 15 actual entrance paths; legacy duplicate cart overlay removed; 15 connected fenced household plots, persistent finite berries and selected roofed storage, measured Blender exterior details Покрытия ограничены зазором 6–12 мм; масштаб гравия уменьшен; физическая опора и 173.30 м обычного автоматизированного движения с дверью/диском повторно проверены.",
+    "open_scope": "Dense varied blocks/estates, crop fields/barns/domestic livestock and actual resident agriculture, full naturalistic art; far terrain/mountains/river expansion and village-path map layer Raised graded embankments, shoulders/drainage and soft natural path borders remain open."
+  },
+  "latest_startup_performance_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+    "height_points": 101113,
+    "changed_heights": 0,
+    "biome_water_temperature_points": 5948,
+    "road_oracle_points": 3240,
+    "median_elevation_ms": {
+      "old": 6771.3975,
+      "new": 5275.477
+    },
+    "native_walk_m": 28.5022018309683,
+    "cold_start_accepted": false,
+    "fps_gain_confirmed": false,
+    "full_art_accepted": false,
+    "remote_ci": "Exact new SHA verification follows push"
+  },
+  "latest_motion_contact_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-22-body-response",
+    "metrics": {
+      "poses": 30,
+      "tunic_vertices_per_pose": 3776,
+      "boot_vertices_per_pose": 3530,
+      "walked_m": 26.3948098011315,
+      "maximum_tunic_gpu_cpu_error_m": 2.31941726269724e-06,
+      "maximum_boot_gpu_cpu_error_m": 2.11608289646392e-06,
+      "ground_gpu_min_y_m": 0.00283039873465896,
+      "ground_gpu_max_y_m": 0.00400019250810146,
+      "response_self_timing_usec": {
+        "median": 68,
+        "p95": 218,
+        "samples": 433
+      }
+    },
+    "artistic_acceptance": false,
+    "cold_boot_timing_accepted": false,
+    "local_arm_scan": "timeout; not a full pass",
+    "local_world_gameplay": "timeout before successful gameplay capture; not accepted",
+    "candidate_ci": "Pending exact-SHA verification after push; previous 3558a4df all eight SUCCESS."
+  },
+  "latest_bow_release_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_BOW_RELEASE.json",
+    "review_folder": "docs/review/2026-10-23-bow-release",
+    "local_unit": "three transformed releases PASS; old parent reproduced displacement",
+    "ci": "18ab50ee World Core failed on temporal frame observation; followup exact-SHA pending",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
+  },
+  "latest_action_audio_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
+    "review_folder": "docs/review/2026-10-23-action-audio",
+    "local_checks": "5 PASS, strict audio cleanup and 30 live GPU poses",
+    "ci": "bf3fa194: 7/8. True low-render-rate action delay fixed using the player physics animation clock; four final local checks PASS, full new exact-SHA pending.",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false,
+    "render_observers": "810 wardrobe views, 30 live GPU poses and nine 5 FPS dispatch phases PASS"
+  },
+  "latest_slope_support_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
+    "review_folder": "docs/review/2026-10-23-slope-support",
+    "local": "Final cache: 76 physical poses PASS; complete pre-cache Intel control: 76 poses /34 GPU poses PASS. Final-cache native attempts TIMEOUT, with 17 partial positive GPU phases. Complete new native CI remains required.",
+    "before_swing_penetration_m": -0.170834392181199,
+    "player_position_writes_after_setup": 0,
+    "ci": "Pending new exact-SHA verification after push; parent 2d5caf22 all eight SUCCESS",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
+  },
+  "latest_human_contour_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_HUMAN_CONTOURS.json",
+    "scope": "Both Blender human near/far bodies, skin/eye contours, original morphs/clips/clothing, stopped-driver LOD and creator lighting",
+    "local_native_frames": 18,
+    "local_complete_gpu_body_poses": 10,
+    "local_world_walked_m": 28.5044221002609,
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
+    "visual_acceptance": false,
+    "stable_release": false,
+    "lifecycle_followup": "Deferred owned node construction and selected-body scene loading; 32 detached cycles leave zero orphans. Final exact-SHA CI required; local UI warmup deadline remains a recorded failure."
+  },
+  "latest_character_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_CHARACTER_SURFACES.json",
+    "review_folder": "docs/review/2026-10-23-character-surfaces",
+    "native_portraits": 10,
+    "iris_perimeter_sectors": 32,
+    "cache_materials": 60,
+    "extra_runtime_textures": 0,
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
+    "visual_acceptance": false
+  },
+  "latest_export_hygiene_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_EXPORT_HYGIENE.json",
+    "source_review_png_bytes": 126349089,
+    "local_control": "physical PCK before/after PASS; production texture retained",
+    "new_gate": "actual exported human resources and source-only folder absence",
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks."
+  },
+  "latest_wardrobe_response_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WARDROBE_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-23-wardrobe-response",
+    "native_saved_palettes": 10,
+    "shared_runtime_maps": 1,
+    "new_models_integrated": 0,
+    "rejected_groom_trials": 2,
+    "local_world_walked_m": 28.5468827933073,
+    "ci": "Current exact-SHA checks on PR12; committed journal contains local evidence and the previous verified head.",
+    "visual_acceptance": false,
+    "stable_release": false,
+    "next_linked_stage": "Actual final world frames retain conspicuously saturated purple woodland bow/axe surfaces. This packet preserves those existing source materials. Audit source palette/material regions and weapon readability together with human costume/hairstyles; no cause or correction is yet claimed."
+  },
+  "experiments": [
+    {
+      "date": "2026-10-23",
+      "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WEAPON_TRIAL.json",
+      "decision": "REJECTED_NOT_INTEGRATED",
+      "next": "Whole starter-set geometry and final rendered action checks; material-only updates did not meet art direction."
+    }
+  ],
+  "equipment_diversity_requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
+  "equipment_diversity_status": "OPEN: distinct archetypes/rarities/forms/stats and persistent per-instance progression/condition/repair. Current three starter weapons are not the intended final catalog.",
+  "latest_region_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+    "local_checked": true,
+    "exact_sha_ci": "pending publication",
+    "performance": {
+      "draw_calls": 1278.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "max_frame_ms": 268.203,
+      "mean_frame_ms": 54.894675,
+      "median_frame_ms": 46.19,
+      "p95_frame_ms": 91.313,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Stationary exterior view in the real capital after loading the checkpoint earned by the preceding ordinary 99.71m walk; warm cache, no sustained traversal/whole-world FPS claim",
+      "video_memory_bytes": 963462607.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 30
+    },
+    "visual_acceptance": false
+  },
+  "latest_public_market_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET.json",
+    "local_checked": true,
+    "exact_sha_ci": "all8success for named runtimeb28; documentation-only follow-up inspected separately",
+    "native_walk_m": 125.162813376402,
+    "gpu_seated_boot_vertices_per_actor": 3530,
+    "actual_disk_reload": true,
+    "performance": [
+      {
+        "draw_calls": 1414.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 79.409,
+        "mean_frame_ms": 71.021425,
+        "p95_frame_ms": 73.622,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 984686637.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1489.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 18.5,
+        "max_frame_ms": 75.517,
+        "mean_frame_ms": 68.8549333333333,
+        "p95_frame_ms": 71.467,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 984686637.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      }
+    ],
+    "visual_acceptance": false,
+    "runtime_commit": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+    "delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET_DELIVERY.json",
+    "actual_pck_gameplay": true,
+    "actual_pck_walk_m": 125.162855732953,
+    "rejected_static_batch_followup": "Reduced draw calls but worsened time and memory; not integrated. Baseline mirror restored."
+  },
+  "latest_city_rendering_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_SPATIAL_BATCHES.json",
+    "source_assets_changed": 0,
+    "houses_preserved": 22,
+    "render_pairs": 12,
+    "quality_modes": 4,
+    "native_city_walk_m": 189.609389984747,
+    "native_market_walk_m": 125.163575056707,
+    "same_view_quality_before": [
+      {
+        "draw_calls": 863.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 35.238,
+        "mean_frame_ms": 31.4548083333333,
+        "p95_frame_ms": 33.052,
+        "preset": 0,
+        "quality": "Low",
+        "scale_3d": 0.699999988079071,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 982985037.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1414.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 78.145,
+        "mean_frame_ms": 71.0502833333333,
+        "p95_frame_ms": 74.08,
+        "preset": 1,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 984699213.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1542.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 88.698,
+        "mean_frame_ms": 78.9514833333333,
+        "p95_frame_ms": 81.614,
+        "preset": 2,
+        "quality": "High",
+        "scale_3d": 1.0,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 994380108.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1561.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 83.79,
+        "mean_frame_ms": 81.4047083333333,
+        "p95_frame_ms": 83.103,
+        "preset": 3,
+        "quality": "Ultra",
+        "scale_3d": 1.0,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 1009125708.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      }
+    ],
+    "same_view_quality_after": [
+      {
+        "draw_calls": 875.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 31.279,
+        "mean_frame_ms": 26.0349833333333,
+        "p95_frame_ms": 28.089,
+        "preset": 0,
+        "quality": "Low",
+        "scale_3d": 0.699999988079071,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 980842269.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1330.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 55.954,
+        "mean_frame_ms": 49.679775,
+        "p95_frame_ms": 51.849,
+        "preset": 1,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 982556445.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1476.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 66.934,
+        "mean_frame_ms": 58.0987833333333,
+        "p95_frame_ms": 63.951,
+        "preset": 2,
+        "quality": "High",
+        "scale_3d": 1.0,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 992237340.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      },
+      {
+        "draw_calls": 1501.0,
+        "driver_player_position_assignments": 0,
+        "frames": 120,
+        "hour": 9.0,
+        "max_frame_ms": 71.821,
+        "mean_frame_ms": 60.5453833333333,
+        "p95_frame_ms": 63.568,
+        "preset": 3,
+        "quality": "Ultra",
+        "scale_3d": 1.0,
+        "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+        "video_memory_bytes": 1006982940.0,
+        "viewport": "(1280, 720)",
+        "warmup_frames": 45
+      }
+    ],
+    "ordinary_traversal": {
+      "baseline": {
+        "driver_position_assignments": 0,
+        "max_ms": 10059.309,
+        "mean_ms": 82.8423512705531,
+        "moving_frames": 669,
+        "p95_ms": 81.233,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Complete ordinary capital/home test route; only complete rendered frame intervals while movement input is held, excluding loading dialogue and stationary captures. Not a whole-world FPS guarantee.",
+        "viewport": "(1280, 720)",
+        "walked_m": 189.609389984747
+      },
+      "candidate": {
+        "driver_position_assignments": 0,
+        "max_ms": 8039.134,
+        "mean_ms": 64.9281605839416,
+        "moving_frames": 822,
+        "p95_ms": 62.795,
+        "quality": "Medium",
+        "scale_3d": 0.850000023841858,
+        "scope": "Complete ordinary capital/home test route; only complete rendered frame intervals while movement input is held, excluding loading dialogue and stationary captures. Not a whole-world FPS guarantee.",
+        "viewport": "(1280, 720)",
+        "walked_m": 189.609389984747
+      }
+    },
+    "ci": "pending current runtime publication",
+    "visual_acceptance": false,
+    "runtime_commit": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+    "exact_sha_ci": "all8success for named runtime0ff; current documentation-only followup independently checked",
+    "delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_SPATIAL_DELIVERY.json",
+    "actual_pck_gameplay": true,
+    "actual_pck_walk_m": 125.162855732953,
+    "cold_stalls_remaining": true
+  },
+  "latest_city_streetscape_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE.json",
+    "source_models": 3,
+    "source_triangles": 8880,
+    "native_walk_m": 287.93634263007,
+    "actual_GPU_boot_samples": [
+      {
+        "gap_m": 0.00400010496377945,
+        "label": "east-promenade-entry",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.0039999857544899,
+        "label": "east-promenade-north",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      },
+      {
+        "gap_m": 0.00399237126111984,
+        "label": "west-promenade",
+        "surface": "MeasuredWalkablePaving",
+        "vertices": 3530
+      }
+    ],
+    "quality_modes": 4,
+    "ci": "All 8 exact-SHA workflows succeeded for runtime 6d3b2cc9; prior fa/8cf failures remain recorded and current documentation-only CI is separate",
+    "visual_acceptance": false,
+    "runtime_commit": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+    "actual_pck_walk_m": 287.975904673105,
+    "additional_city_road_walk_m": 1339.63251638226,
+    "physical_canals_missing_confirmed": true,
+    "validation_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_LIGHT_SCOPE.json",
+    "all_original_public_market_assertions_preserved": 24,
+    "exact_sha_ci": "all8success for named runtime6d3; current documentation-only followup independently checked",
+    "delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE_DELIVERY.json",
+    "actual_pck_gameplay": true,
+    "cold_stalls_remaining": true
+  },
+  "latest_far_path_coverage": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_FAR_PATH_COVERAGE.json",
+    "full_footprint_m2": 800,
+    "clean_parent_regression": true,
+    "current_ci": "pending exactSHA",
+    "original_assertions_retained": 27
+  },
+  "latest_capital_canals": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CAPITAL_CANALS.json",
+    "local_regressions_passed": 18,
+    "native_walk_m": 919.530722988537,
+    "gpu_sole_samples": 23,
+    "citizens_clock_unfrozen": true,
+    "current_ci": "pending exactSHA",
+    "actual_final_PCK": "pending",
+    "visual_acceptance": false,
+    "additional_legacy_jump_case_passed": true,
+    "supplemental_migration_regressions_passed": 3
+  },
+  "latest_canal_ci_followup": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CI_DEPENDENCIES.json",
+    "failed_parent": "1d53b19b7490f474cd43cbd4058f82472f8b9e01",
+    "clean_dependency_fixture_passed": true,
+    "fresh_three_photo_mips_passed": true,
+    "current_ci": "pending exact followupSHA"
+  },
+  "latest_canal_contact_fix": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CONTACTS.json",
+    "failed_parent": "c1bca99e43ec8b4ccfb7588ba31ebfeaef0bc764",
+    "controlled_corner_before_failed_after_passed": true,
+    "related_regressions_passed": 9,
+    "runtime_change": "NPC capsule recovery margin0.02m",
+    "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
+  },
+  "latest_canal_walkable_links": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_WALKABLE_LINKS.json",
+    "failed_parent": "275b5ad7220fd71d6aa90fec6fdcdc68dc9f6c8d",
+    "actual_level_snap_reproduced_and_fixed": true,
+    "required_lifecycle_market_old_corner_passed": true,
+    "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
+  },
+  "latest_loaded_settlement_services": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_LOADED_SETTLEMENT_SERVICES.json",
+    "actual_load_new_home_and_town_passed": true,
+    "home_meshes": 132,
+    "town_meshes": 2125,
+    "duplicate_models": false,
+    "exact_sha_ci": "8266796d: all8 workflows succeeded, World Core40069695447; later711edb0d fails canal family life.",
+    "actual_final_PCK": "pending"
+  },
+  "latest_human_street_scale": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HUMAN_STREET_SCALE.json",
+    "adult_height_cm": [
+      160,
+      200
+    ],
+    "ordinary_door_clear_m": [
+      1.2,
+      2.2
+    ],
+    "street_surfaces": 15,
+    "ordinary_carriageway_m": 6,
+    "promenade_m": 3,
+    "canal_quarter_possible_houses_per_cell": 12,
+    "old_saved_position_keeps_a_persisted_open_plot": true,
+    "local_checks": 15,
+    "actual_automated_walk_m": 148.006318959408,
+    "GPU_sole_samples": 5,
+    "manual_play": false,
+    "exact_sha_ci": "711edb0d: 7 workflows succeeded; mandatory Validate World Core FAILED, run40073175183 step24 canal household sleep.",
+    "actual_final_PCK": "pending",
+    "full_visual_acceptance": false
+  },
+  "user_scale_and_city_constraints": {
+    "adult_stature_cm": [
+      160,
+      200
+    ],
+    "children_require_age_appropriate_models_and_households": true,
+    "human_scale_doors_furniture_streets_bridges_vehicles": true,
+    "fifteen_surface_types": true,
+    "dense_streets_squares_gardens_farms_waterfront": true,
+    "boats_docks_piers_horses_carts_still_open": true
+  },
+  "manual_editor_handoff": {
+    "mode": "USER_EDITOR_HANDOFF",
+    "project": "D:/Desktop/GitHub/game/project.godot",
+    "opened_scene": "res://scenes/stage1.tscn",
+    "editor_process_id_observed": 15652,
+    "runtime_root_writes": "Do not change the user-opened runtime/scenes until the user asks to resume integration after manual edits. Re-read current files and reconcile their changes first.",
+    "isolated_proposals_allowed": true,
+    "goal_status": "ACTIVE; no completion or goal pause claimed",
+    "unsaved_windows_closed": false
+  },
+  "latest_input_audit": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_EDITOR_HANDOFF_INPUT_AUDIT.json",
+    "integrated": false,
+    "confirmed_default_failures": 2,
+    "isolated_candidate_cases_passed": 10,
+    "existing_regressions_passed": 1,
+    "regression_suite": "NOT PASSED: binding first timeout; traced binding retry pass; unlimited inventory timeout; lifecycle not run",
+    "visual_acceptance": false
+  }
+}

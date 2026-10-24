@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-22",
+  "status": "INTEGRATED",
+  "review_only": true,
+  "source_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "source_fence": "assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/OBJ/Prop_WoodenFence_Single.obj",
+  "source_status": "STAGED_PHYSICAL selected OBJ/license checked on main; no selected-pack failure manifest found",
+  "source_sha256": "eddf77f93e9f65e284165dce448c173bf4d59eb1800f453b214220ccff9a911c",
+  "source_license": "CC0 1.0 Universal; preserved FENCE_LICENSE.txt",
+  "project_authored": [
+    "TimberBeam",
+    "StoneCourse",
+    "WindowPlanter",
+    "TimberStore",
+    "MeadowFlowers"
+  ],
+  "production": "assets/production/exteriors/cottage_yard/CottageYardKit.glb",
+  "editable": "assets/source/exteriors/CottageYardKit.blend",
+  "builder": "tools/build_cottage_yard_kit.py",
+  "sha256": "4c28e05c91376c269c38e89bab2f92de2d97ab16c80e7fb5263b7d26552d08d1",
+  "geometry": {
+    "GardenFence": {
+      "triangles": 264,
+      "vertices": 160
+    },
+    "MeadowFlowers": {
+      "triangles": 336,
+      "vertices": 330
+    },
+    "StoneCourse": {
+      "triangles": 864,
+      "vertices": 448
+    },
+    "TimberBeam": {
+      "triangles": 108,
+      "vertices": 56
+    },
+    "TimberStore": {
+      "triangles": 3564,
+      "vertices": 1848
+    },
+    "WindowPlanter": {
+      "triangles": 756,
+      "vertices": 392
+    },
+    "fence_source_sha256": "eddf77f93e9f65e284165dce448c173bf4d59eb1800f453b214220ccff9a911c"
+  },
+  "textures": "No new bitmaps. Existing photographed plank/paving maps and shared environment foliage wind. Runtime flower gradient is flat white, semantic source pigments retained.",
+  "existing_live_reuse": [
+    "TemperateBush.glb",
+    "Grass_Ground.glb",
+    "Chest_Wood.gltf and original animation"
+  ],
+  "rejected_selection": "Quaternius Nature Crops Pack Jan2020 preview: faceted bright appearance conflicts with owner concept; not integrated",
+  "checks": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
+  "artistic_acceptance": false
+}

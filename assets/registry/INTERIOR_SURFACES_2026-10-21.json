@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-21",
+  "status": "INTEGRATED",
+  "scope": "Review runtime interior wall/floor/ceiling surfaces; no full interior artistic acceptance",
+  "wood": {
+    "author": "Daniel Andersson",
+    "license": "CC0 1.0",
+    "source_page": "https://opengameart.org/content/modular-medieval-building-pack",
+    "source_file": "assets/staging/sourcechat_b29/models/oga_modular_medieval_building_pack/74697_HousePack2_2Upload_blend/Wood.jpg",
+    "selected_source_file_confirmed_on_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+    "production_file": "assets/production/interiors/materials/wood_planks.jpg",
+    "sha256": "1d3df87ca38b526153c35f6985c46cf8b7ea3332df2bb7318ebab9789941b464",
+    "maps": "Unmodified diffuse photograph only; scalar roughness 0.9, no fabricated PBR channels"
+  },
+  "plaster": {
+    "source": "Existing Quaternius city-core CC0 material family, provenance in its SOURCE.md",
+    "production_root": "assets/production/medieval/quaternius_city_core/",
+    "maps": [
+      "T_Plaster_BaseColor.png",
+      "T_Plaster_Normal.png",
+      "T_Plaster_ORM.png"
+    ],
+    "use": "normal 0.45; ORM red=AO, green=roughness; physical mip levels"
+  },
+  "integration": [
+    "scripts/interior_surface_materials.gd",
+    "scripts/enterable_building.gd",
+    "scripts/capital_square_life.gd"
+  ],
+  "projection": "World-aligned triplanar; plaster tile 2.86m, wood tile 2m; scale independent of structural box dimensions",
+  "remaining": [
+    "Full interior art/lighting/prop dressing",
+    "Better windows, trim and furniture",
+    "Measured steady-world performance on weak hardware"
+  ],
+  "quality": "Live presets 0/1 retain diffuse textures and scalar roughness; presets 2/3 enable plaster normal/AO/roughness maps."
+}

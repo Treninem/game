@@ -1,0 +1,1 @@
+MakeHuman Community MPFB core graphics. CC0 per LICENSE.ASSETS.md. Code is not included in this selection. Source https://github.com/makehumancommunity/mpfb2 tree 3af0cd5a2ffba072e93a34e5f6f494fdc4813ddf. Selected base mesh, authored morph targets and weights. Physical working-branch selection; main confirmation is pending.

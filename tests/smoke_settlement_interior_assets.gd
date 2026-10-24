@@ -44,6 +44,30 @@ func _run_test() -> void:
         _fail(5, "building was not marked as upgraded with real furniture")
         return
 
+    var original_quality := int(SettingsManager.get_value("graphics", "quality_preset"))
+    SettingsManager.set_quality_preset(2)
+    var surfaces := preload("res://scripts/interior_surface_materials.gd")
+    for material: StandardMaterial3D in building.wall_materials:
+        if material.albedo_texture != surfaces.PLASTER or material.normal_texture != surfaces.PLASTER_NORMAL or not material.normal_enabled or material.roughness_texture != surfaces.PLASTER_ORM or material.roughness_texture_channel != BaseMaterial3D.TEXTURE_CHANNEL_GREEN:
+            _fail(22, "wall does not use the complete shared plaster surface")
+            return
+        if not material.uv1_world_triplanar or not material.uv1_triplanar:
+            _fail(23, "wall texture scale depends on individual wall box dimensions")
+            return
+    if building.floor_material.albedo_texture != surfaces.WOOD or building.ceiling_material.albedo_texture != surfaces.WOOD:
+        _fail(24, "floor or ceiling still uses flat color/trim atlas")
+        return
+    for texture: Texture2D in [surfaces.PLASTER, surfaces.PLASTER_NORMAL, surfaces.PLASTER_ORM, surfaces.WOOD]:
+        if not texture.get_image().has_mipmaps():
+            _fail(25, "interior surface has no physical mip levels: " + texture.resource_path)
+            return
+    for quality in range(4):
+        SettingsManager.set_quality_preset(quality)
+        for material: StandardMaterial3D in building.wall_materials:
+            if material.normal_enabled != (quality >= 2) or material.ao_enabled != (quality >= 2) or (material.roughness_texture != null) != (quality >= 2) or material.albedo_texture != surfaces.PLASTER:
+                _fail(26, "live interior quality switch fails at preset " + str(quality))
+                return
+    SettingsManager.set_quality_preset(original_quality)
     var furniture := building.get_node_or_null("InteriorFurniture") as Node3D
     if furniture == null:
         _fail(6, "building lost its physical furniture root")
@@ -51,7 +75,9 @@ func _run_test() -> void:
 
     var checks := [
         {"proxy":"Bed", "model":"RealBedModel"},
-        {"proxy":"Table", "model":"RealTableModel"}
+        {"proxy":"Table", "model":"RealTableModel"},
+        {"proxy":"Bench", "model":"RealBenchModel"},
+        {"proxy":"StorageChest", "model":"RealChestModel"}
     ]
     for check in checks:
         var proxy_name := String(check.get("proxy", ""))
@@ -68,7 +94,8 @@ func _run_test() -> void:
         if model == null:
             _fail(9, "%s does not contain its production Quaternius model" % proxy_name)
             return
-        if String(model.get_meta("source_pack", "")) != "quaternius_furniture_pack":
+        var expected_pack := "quaternius_fantasy_props_megakit_standard" if proxy_name in ["Bench", "StorageChest"] else "quaternius_furniture_pack"
+        if String(model.get_meta("source_pack", "")) != expected_pack:
             _fail(10, "%s model lacks verified source-pack metadata" % proxy_name)
             return
         if String(model.get_meta("license", "")) != "CC0":
@@ -83,6 +110,29 @@ func _run_test() -> void:
             _fail(12, "%s production model has no visible imported mesh" % proxy_name)
             return
 
+    var bed_model := furniture.get_node("Bed/RealBedModel") as Node3D
+    var bed_bounds := decorator._combined_mesh_bounds(bed_model)
+    var bed_size := bed_bounds.size * bed_model.scale
+    if bed_size.z < 2.0 or bed_size.z <= bed_size.x or bed_size.x > 1.72 + 0.001:
+        _fail(21, "bed length does not follow the gameplay sleeping axis: " + str(bed_size))
+        return
+    var chest := furniture.get_node("StorageChest") as HouseholdFurniture
+    var players := chest.get_node("RealChestModel").find_children("*", "AnimationPlayer", true, false)
+    if players.is_empty() or not players[0].has_animation("Chest_Open") or not players[0].has_animation("Chest_Close"):
+        _fail(18, "authored chest has no real opening/closing animations")
+        return
+    for prop_name in ["Bed", "Bench"]:
+        var prop := furniture.get_node(prop_name) as StaticBody3D
+        if not prop.has_meta("rest_support_y") or not is_finite(float(prop.get_meta("rest_support_y"))):
+            _fail(19, "authored rest surface was not measured for " + prop_name)
+            return
+        var expected_y := prop.global_position.y + float(prop.get_meta("rest_support_y"))
+        var query := PhysicsRayQueryParameters3D.create(prop.global_position + Vector3.UP * 1.2, Vector3(prop.global_position.x, expected_y - 0.04, prop.global_position.z), 1)
+        var hit := get_world_3d().direct_space_state.intersect_ray(query)
+        if hit.get("collider") != prop or absf(Vector3(hit.get("position", Vector3.ZERO)).y - expected_y) > 0.02:
+            _fail(20, "physical support floats above or below the authored surface: " + prop_name)
+            return
+    print("HOUSEHOLD_MEASURED_SUPPORT bed=", furniture.get_node("Bed").get_meta("rest_support_y"), " bench=", furniture.get_node("Bench").get_meta("rest_support_y"))
     var primitive_bed_mesh := furniture.get_node_or_null("Bed/Mesh") as MeshInstance3D
     var primitive_table_mesh := furniture.get_node_or_null("Table/Mesh") as MeshInstance3D
     if primitive_bed_mesh == null or primitive_table_mesh == null:
@@ -92,7 +142,7 @@ func _run_test() -> void:
         _fail(14, "primitive placeholder furniture is still visibly overlapping real models")
         return
 
-    if decorator.real_furniture_model_count() < 2:
+    if decorator.real_furniture_model_count() < 4:
         _fail(15, "decorator did not account for both production furniture instances")
         return
 

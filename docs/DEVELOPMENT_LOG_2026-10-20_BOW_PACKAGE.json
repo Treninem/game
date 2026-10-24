@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased review",
+  "source_parent": "5eec941cbfd0d4463f0381ba8e551bbb6c60e12e",
+  "problem": "Development status still linked the heal-vfx review package from before recent human and bow fixes. No running game process was present when inspected, so the specific package seen by the owner is not established.",
+  "changes": [
+    "Build a fresh review PCK with current human/weapon sources",
+    "Point development status to the verified fresh launcher",
+    "Update the former heal-vfx launcher to use the verified new pack while keeping its original APPDATA/LOCALAPPDATA save folders",
+    "Add reproducible graphical world test with ordinary movement, bow shooting while walking and frame-by-frame central torso arm checks"
+  ],
+  "checks": {
+    "export": {
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 783.78,
+      "sha256": "f107f2e6d4a51b68629eab3fc6693074501ada292254113a6831edeae14c155a"
+    },
+    "weapon": {
+      "exit_code": 0,
+      "seconds": 11.52,
+      "errors": [],
+      "marker": true
+    },
+    "views": {
+      "exit_code": 0,
+      "seconds": 31.92,
+      "errors": [],
+      "marker": true
+    },
+    "native": {
+      "exit_code": 0,
+      "seconds": 98.38,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "source_sha256": {
+    "scripts/humanoid_visual.gd": "d4d491dc0c9f1dd63bea5b67498d08916c0007bf72b209f03aa77343a3fd297f",
+    "scripts/weapon_grip_modifier.gd": "bc7b892949ab7b6a7a611180afc2f7946f98ff3abe71060bf9ebd8014ee3dded",
+    "assets/production/characters/realistic/male.glb": "ff5091022a06d29607c65cf230fe4819edef3967a7bff075ae436a3e5b0a5212",
+    "assets/production/characters/realistic/female.glb": "360b04caea6a8707f1885d5501d21d044a8fe32db36664f22f6ff447ddf90a91"
+  },
+  "native_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.4179069483653
+  },
+  "live_bow_blend_samples": 39,
+  "screenshots": [
+    "docs/review/2026-10-20-bow-package/world-draw-moving.png",
+    "docs/review/2026-10-20-bow-package/world-release.png",
+    "docs/review/2026-10-20-bow-package/female-side.png",
+    "docs/review/2026-10-20-bow-package/male-back.png"
+  ],
+  "review_launcher": "build/review-2026-10-20-bow-clearance/ImPuls-editor.cmd",
+  "failed_export_attempts": [
+    "Console-wrapper export exceeded 300 seconds; only its own child was stopped",
+    "Direct process export exceeded 180 seconds while writing resources; final full attempt uses a 900-second packaging limit"
+  ],
+  "limits": [
+    "Visible world scenario is automated input, not a manual full-world tour",
+    "Central skeletal torso guard is not exact skin/garment surface collision",
+    "Overall human appearance, wardrobe and natural animation quality remain unfinished",
+    "Historical intermittent heal input and ObjectDB shutdown warning remain open; all failures must remain recorded",
+    "No stable release publication; no overall completion percentage claim"
+  ],
+  "ordinary_launcher_check": {
+    "process_id": 19384,
+    "pack": "build/review-2026-10-20-bow-clearance/ImPuls-bow-review.pck",
+    "scene": "res://scenes/character_creator.tscn",
+    "startup_log_errors": false,
+    "window_helper": "list_windows timed out twice; reset and final retry also timed out. No desktop-window inspection claimed. Earlier real Godot viewport screenshots and automated world checks remain the visual evidence.",
+    "remote_checks_at_dd7c1f65": "Pending; preceding 5eec941c passed world-core, movement and build/installer checks."
+  }
+}

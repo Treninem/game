@@ -1,0 +1,7 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PROJECTILE_RELEASE_SAMPLE {"actual":"(-0.289715, 0.856675, 0.155721)","error":1.1401754617691,"expected":"(-0.289715, 1.756675, -0.544279)","hand_radius":0.906404554843903,"local":"(-0.289715, 0.826675, 0.155721)","predicted":"(-0.289715, 0.856675, 0.155721)","scenario":"(0.0, 0.9, -0.7, 0.0)"}
+SCRIPT ERROR: Assertion failed: Arrow left the old world-space pose instead of the moving hand: error=1.1401754617691
+   at: _run (res://tests/smoke_projectile_release.gd:59)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_projectile_release.gd:59)

@@ -13,6 +13,8 @@ on:
       - "scripts/world_data.gd"
       - "scripts/world_data_runtime.gd"
       - "scripts/world_geography.gd"
+      - "scripts/world_hydrology.gd"
+      - "scripts/capital_canal_data.gd"
       - "scripts/start_region_streamer.gd"
       - "scripts/start_civilization_signs.gd"
       - "scripts/start_spawn_surface.gd"
@@ -72,6 +74,8 @@ on:
       - "scripts/world_data.gd"
       - "scripts/world_data_runtime.gd"
       - "scripts/world_geography.gd"
+      - "scripts/world_hydrology.gd"
+      - "scripts/capital_canal_data.gd"
       - "scripts/start_region_streamer.gd"
       - "scripts/start_civilization_signs.gd"
       - "scripts/start_spawn_surface.gd"
@@ -145,11 +149,8 @@ jobs:
             assets/ui
             assets/vfx
             assets/shaders
-            assets/audio/world/oga_100_cc0_sfx_2
-            assets/production/nature/kenney_nature_kit
-            assets/production/medieval/building_shell
-            assets/production/medieval/quaternius_market
-            assets/production/interiors/quaternius_furniture
+            assets/production
+            assets/audio
             assets/staging/sourcechat_b47
             assets/staging/nature/kenney_nature_kit/License.txt
             assets/staging/nature/kenney_nature_kit/Models/GLTF format/tree_oak.glb
@@ -196,6 +197,7 @@ jobs:
           cp scripts/world_data_runtime.gd "$smoke_root/scripts/"
           cp scripts/world_geography.gd "$smoke_root/scripts/"
           cp scripts/world_hydrology.gd "$smoke_root/scripts/"
+          cp scripts/capital_canal_data.gd "$smoke_root/scripts/"
           cp scripts/capital_data.gd "$smoke_root/scripts/"
           cp tests/smoke_canonical_regions.gd "$smoke_root/tests/"
           cp tests/smoke_canonical_regions.tscn "$smoke_root/tests/"

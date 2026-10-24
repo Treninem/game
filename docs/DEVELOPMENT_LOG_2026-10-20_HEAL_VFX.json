@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-20",
+  "task": "Replace opaque neon healing blobs with soft bounded lifetime-faded motes",
+  "baseline": {
+    "case": "heal_vfx",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Healing contains an opaque glowing sphere",
+      "ERROR: Healing motes use solid geometry instead of soft sprites",
+      "ERROR: Healing motes use solid geometry instead of soft sprites"
+    ],
+    "seconds": 6.44
+  },
+  "source_checks": {
+    "heal_vfx": {
+      "case": "heal_vfx",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.94
+    },
+    "vfx_lifetime": {
+      "case": "vfx_lifetime",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 7.86
+    },
+    "magic_runtime": {
+      "case": "magic_runtime",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.64
+    },
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 81.86,
+      "marker": true
+    }
+  },
+  "export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 129.34,
+    "sha256": "86124648267dd918fec123e6de0049e87e90bc0ea5760a1ef4339702ab7c10ed"
+  },
+  "package_format_audit": {
+    "before_files": 3900,
+    "after_files": 3900,
+    "added_paths": 46,
+    "removed_paths": 46,
+    "logical_added": [],
+    "logical_removed": [],
+    "removed_examples": [
+      ".godot/imported/Bush_Common_Leaves_TwistedTree_C.png-7d2656b341f5153f5480df3a2339521c.ctex",
+      ".godot/imported/Fern_1_Leaves.png-13188e3331953cab2fc3a5ade69d3a1f.ctex",
+      ".godot/imported/Grass_Ground_Grass.png-6ade566856c89d925fc3f9536eabeb00.ctex",
+      ".godot/imported/Grass_Wispy_Tall_Grass.png-093ddc8a7e756c34455c3a6ebcf4700a.ctex",
+      ".godot/imported/Pine_1_Bark_NormalTree.png-a8dbc829a4b0c5d567cc62759a668b4f.ctex"
+    ]
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 41.39,
+    "marker": true
+  },
+  "implementation": [
+    "Healing only: remove glowing sphere flash and solid sphere bursts",
+    "Reuse existing Kenney CC0 light_01 texture; 32 transparent billboard motes, vertex alpha and birth/death fade",
+    "Gentle short-range light; one-shot emitters at most 1.2 seconds; existing ownership/lifetime cleanup retained",
+    "Other primary VFX presets and secondary cast flipbook unchanged"
+  ],
+  "visual_inspection": "Inspected actual source and exported gameplay frames during healing while walking. The large saturated green circles are gone; small translucent motes remain. Not full visual acceptance.",
+  "qa_scope": "Ordinary action events in rendered world, QA observer camera/profile/items, no driver coordinate assignments on gameplay route; retained casting, movement, jump, axe/bow, save/load/cooldown and UI checks. Not a manual city traversal.",
+  "harness_issue": "First new test did not parse because weakref type inference was treated as error; declared WeakRef explicitly before reproducing the three baseline visual-structure failures. No smoke test weakened. First frozen attempt stopped at a post-render mana assertion under rendering startup; now exact post-cost mana/health are sampled synchronously at spell_cast and the full scenario is repeated with the same bounds.",
+  "editor_findings": {
+    "observed": "Desktop Godot reported Parse error on the following library-only scripts during import; root cause not resolved in this task",
+    "paths": [
+      "assets/vfx/third_party/binbun_godot4_core/shared/script/VFXControllerBB.gd",
+      "assets/vfx/third_party/binbun_godot4_core/shared/script/VFXEmitterBB.gd",
+      "assets/vfx/third_party/binbun_godot4_core/shared/script/VFXOmniLightBB.gd"
+    ],
+    "action": "Stopped only our editor after normal close did not complete, to avoid competing with rendered QA/export; no unsaved scene changes"
+  },
+  "percentages": {
+    "editor_functional": "32/55 = 58.2%; unchanged, not visual/game readiness",
+    "visual_acceptance": "Models/world remain owner-rejected; no overall percentage invented"
+  },
+  "review_launcher": "build/review-2026-10-20-heal-vfx/ImPuls-editor.cmd"
+}

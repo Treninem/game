@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-23",
+  "state": "INTEGRATED",
+  "branch": "codex/household-persistence-2026-10-19",
+  "main_integrated": false,
+  "models": {
+    "Townhouse_2": {
+      "triangles": 31040,
+      "semantic_materials": 6
+    },
+    "Townhouse_3": {
+      "triangles": 37976,
+      "semantic_materials": 6
+    },
+    "MarketFountain": {
+      "triangles": 5388,
+      "basins": 2,
+      "water_below_stone_rims": true
+    }
+  },
+  "composition": {
+    "authored_exterior_shells": 22,
+    "new_canopies": 6,
+    "trees": 4,
+    "goods": 12,
+    "flower_clumps": 32,
+    "cardinal_street_width_m": 14,
+    "inner_frontage_gap_m": 38
+  },
+  "clay_maps": {
+    "size": [
+      256,
+      256
+    ],
+    "mip_chains": 3,
+    "normal_and_roughness_enabled_at": [
+      "High",
+      "Ultra"
+    ],
+    "source": "Authored approximations, not scanned"
+  },
+  "sources": [
+    {
+      "source": "assets/source/architecture/townhouse/Townhouse_2.blend",
+      "geometry_uv_sha256": "4a505d798b8e18137e4cc301646ed4d9d111da8f2b4a216dfd41b9b1b19477bf",
+      "all_images_relative_and_exist": true
+    },
+    {
+      "source": "assets/source/architecture/townhouse/Townhouse_3.blend",
+      "geometry_uv_sha256": "894b515ba09b488288d8fdd2f2601b18eb0ed542de11705301abbda52f2a526e",
+      "all_images_relative_and_exist": true
+    },
+    {
+      "source": "assets/source/architecture/market_court/MarketFountain.blend",
+      "geometry_uv_sha256": "2f4bd404f643d67aee5497f1dfe5030b894c47a4f38add3846298513b44c3251",
+      "all_images_relative_and_exist": true
+    }
+  ],
+  "third_party": "Existing staged B29 CC0 balcony and existing shared CC0 photo maps; see per-family SOURCE.md. Existing temperate trees and CottageYardKit reused; no duplicate pack downloaded.",
+  "limitations": [
+    "Two repeated exterior shells, new doors are not interactive households",
+    "Distant legacy city architecture/skyline/river/terraces remain unchanged",
+    "Full visual acceptance false; no claimed modern-AAA equivalence",
+    "User human model/animation critique and equipment diversity remain open"
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "d89a294e1c6f21f2ab63f139861f1f94602de4c0",
+  "spec_attachment": "9d7a607d-8213-46b4-a11f-03992d8bb958",
+  "spec_comparison": "Same complete normalized 2579-line specification",
+  "changes": [
+    "Creator height slider 160–195 cm and randomized height; missing/malformed legacy height defaults to 180 cm.",
+    "Uniform scaling of existing authored bodies; no new model or ninth morph target. Creator camera framing fits height range.",
+    "Unique physical capsule scales from feet, leaving player root unchanged; camera pivot follows height without cumulative drift.",
+    "Walk/run and moving-attack gait timing follows body scale. Weapon/arrow dimensions stay fixed."
+  ],
+  "source_checks": [
+    {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 9.64
+    },
+    {
+      "case": "character_dimensions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.33
+    },
+    {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.86
+    },
+    {
+      "case": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 20.3
+    },
+    {
+      "case": "camera_obstruction",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.16
+    },
+    {
+      "case": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 29.34
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 75.0,
+      "marker": true
+    }
+  ],
+  "physical_test": "Actual floor and low-roof collision queries at 160, 195 and 180 cm; original shared scene capsule remains unchanged.",
+  "weapon_test": "180 poses: two bodies, three heights, both weapons, existing contact/arrow/finger/final aim assertions retained.",
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 52.89,
+    "sha256": "12d941a25b2f8f24ff3d89dcf76e7631b792068d8e362d6e721b1b430c9e0366"
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 57.42,
+    "marker": true
+  },
+  "native": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://height-0-height-160.0.png",
+      "user://height-0-height-180.0.png",
+      "user://height-0-height-195.0.png",
+      "user://height-0-eyes-0.png",
+      "user://height-0-eyes-1.png",
+      "user://height-0-eyes-2.png",
+      "user://height-0-eyes-3.png",
+      "user://height-0-eyes-4.png",
+      "user://height-0-extreme--0.5.png",
+      "user://height-0-extreme-0.5.png",
+      "user://height-0-motion-1.png",
+      "user://height-0-motion-2.png",
+      "user://height-0-motion-4.png",
+      "user://height-0-motion-5.png",
+      "user://height-5-height-160.0.png",
+      "user://height-5-height-180.0.png",
+      "user://height-5-height-195.0.png",
+      "user://height-5-eyes-0.png",
+      "user://height-5-eyes-1.png",
+      "user://height-5-eyes-2.png",
+      "user://height-5-eyes-3.png",
+      "user://height-5-eyes-4.png",
+      "user://height-5-extreme--0.5.png",
+      "user://height-5-extreme-0.5.png",
+      "user://height-5-motion-1.png",
+      "user://height-5-motion-2.png",
+      "user://height-5-motion-4.png",
+      "user://height-5-motion-5.png",
+      "user://height-walk.png",
+      "user://height-run.png",
+      "user://height-tall-jump.png",
+      "user://height-starter_axe.png",
+      "user://height-short_bow.png",
+      "user://height-bow-released.png",
+      "user://height-short-walk.png",
+      "user://height-short-jump.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 8,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 23.6588474041782
+  },
+  "editor_acceptance": {
+    "accepted": 31,
+    "total": 55,
+    "percent": 56.4,
+    "metric": "Equal-weight criterion coverage, not total game completion or remaining effort",
+    "visual_acceptance": false
+  },
+  "limitations": [
+    "Realistic models, hair, clothing quality and natural animation remain unaccepted.",
+    "Graphical QA uses automated ordinary gameplay input and an observer camera, explicit QA gear/profile changes and legitimate save restoration. No manual full-world/city tour claimed.",
+    "Normal camera view at both new heights not visually accepted; pivot and obstruction regressions pass.",
+    "Full collision acceptance for all future body proportions/armor remains open.",
+    "ObjectDB cleanup warnings remain; no stable publication. New-commit remote CI pending."
+  ]
+}

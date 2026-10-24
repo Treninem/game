@@ -1,0 +1,43 @@
+{
+  "actual_model_ids": [
+    "starter_axe",
+    "stone_knife",
+    "short_bow",
+    "arrow"
+  ],
+  "cases": [
+    {
+      "bow_nontransparent_pixels": 1278,
+      "columns": 8,
+      "compact": false,
+      "file": "inventory-models-1280x720.png",
+      "frame": "[P: (30.0, 18.0), S: (1220.0, 684.0)]",
+      "grid_scroll_size": "(846.0, 286.0)",
+      "size": "(1280, 720)"
+    },
+    {
+      "bow_nontransparent_pixels": 1278,
+      "columns": 8,
+      "compact": false,
+      "file": "inventory-models-960x540.png",
+      "frame": "[P: (22.5, 13.5), S: (915.0, 513.0)]",
+      "grid_scroll_size": "(846.0, 286.0)",
+      "size": "(960, 540)"
+    },
+    {
+      "bow_nontransparent_pixels": 1278,
+      "columns": 8,
+      "compact": false,
+      "file": "inventory-models-1920x1080.png",
+      "frame": "[P: (45.0, 27.0), S: (1830.0, 1026.0)]",
+      "grid_scroll_size": "(846.0, 286.0)",
+      "size": "(1920, 1080)"
+    }
+  ],
+  "fixture": "Actual stage1 UI and models with world pruned. Existing unmodified unlimited-inventory keyboard/save test is a separate required step.",
+  "full_visual_acceptance": false,
+  "inventory_and_currency_unchanged": true,
+  "manual_play": false,
+  "one_shot_previews": true,
+  "source_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6"
+}

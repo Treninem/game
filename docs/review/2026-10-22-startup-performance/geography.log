@@ -1,0 +1,5 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Cannot open file 'res://tests/smoke_geography.tscn'.
+   at: load (scene/resources/resource_format_text.cpp:1442)
+ERROR: Failed loading resource: res://tests/smoke_geography.tscn.

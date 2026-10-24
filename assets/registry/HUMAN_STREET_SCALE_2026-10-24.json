@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-24",
+  "status": "INTEGRATED",
+  "review_only": true,
+  "source_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "no_new_third_party_assets": true,
+  "existing_ground_provenance": [
+    "assets/production/materials/ground/SOURCE.md",
+    "assets/production/materials/ground/ROAD_SOURCE.txt",
+    "assets/production/materials/ground/LICENSE.txt",
+    "assets/production/materials/ground/ROAD_LICENSE.txt"
+  ],
+  "existing_Blender_kits": [
+    "assets/source/architecture/city_street/CityStreetKit.blend",
+    "assets/source/exteriors/CottageYardKit.blend"
+  ],
+  "actual_existing_kit_paths": [
+    "assets/production/architecture/city_street/CityStreetKit.glb",
+    "assets/production/exteriors/cottage_yard/CottageYardKit.glb"
+  ],
+  "shared_wind": "Existing cottage_yard_assets.gd uses the shared environment foliage wind; no separate wind system.",
+  "surface_catalogue": "scripts/street_surface_palette.gd",
+  "surface_shader": "assets/shaders/environment/street_paving.gdshader",
+  "surface_count": 15,
+  "metres_per_unit": true,
+  "new_bitmaps": false,
+  "runtime_owners": [
+    "scripts/city_streamer_fast.gd",
+    "scripts/capital_canals.gd",
+    "scripts/street_pocket_gardens.gd"
+  ],
+  "ordinary_carriageway_m": 6,
+  "household_walk_lane_m": 2.2,
+  "canal_promenade_m": 3,
+  "grand_arterial_m": 14,
+  "canal_bridge_geometry_unchanged": true,
+  "ordinary_home_door": {
+    "opening_width_m": 1.2,
+    "finished_floor_clear_height_m": 2.2,
+    "foundation_relative_height_m": 2.38
+  },
+  "adult_stature_cm": [
+    160,
+    200
+  ],
+  "children_age_models_remain_open": true,
+  "full_visual_acceptance": false,
+  "evidence": "docs/DEVELOPMENT_LOG_2026-10-24_HUMAN_STREET_SCALE.json",
+  "selected_existing_photographs": [
+    "lichen_rock.jpg",
+    "road_gravel.png",
+    "road_soil.png"
+  ],
+  "canal_quarter_possible_lots_per_cell": 12,
+  "old_player_position_persists_as_an_open_lot": true,
+  "flat_stone_carpet_removed_in_canal_green_courtyards": true,
+  "existing_editable_sha256": {
+    "assets/source/architecture/city_street/CityStreetKit.blend": "4ef97aa516808072e962f7d07aeeb68fafb714a2fb5640f9c1bf1c2d41e15fbc",
+    "assets/source/exteriors/CottageYardKit.blend": "b4ac47d0bf20ba130043a4223c956671e241ca89ba87b5b589f04f5e564fe900"
+  }
+}

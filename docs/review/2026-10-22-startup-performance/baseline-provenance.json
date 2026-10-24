@@ -1,0 +1,9 @@
+{
+  "parent": "b8d03d105d5aa1a4f457dd62b234379b6edd17b5",
+  "sha256_normalized_original": {
+    "world_data.gd": "14397b60eef36bd67e7554b000f7acdd3ce55bcdc6a0b6a453fbb9f809c6d211",
+    "world_data_runtime.gd": "96cdad8f03ad460ebc59957b5f9bec38255346324f4223062aef70ae749a2cca",
+    "world_geography.gd": "bd668019444cc70cfe5cb3b9f984fd8eef5f5b8e34f86d143baea87916b7405f"
+  },
+  "only_fixture_changes": "Rename baseline class and redirect its geography/base-data preloads; no algorithm changes"
+}

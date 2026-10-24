@@ -1,0 +1,34 @@
+{
+  "source_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+  "actually_viewed": [
+    "inventory-models-1280x720.png",
+    "inventory-models-960x540.png",
+    "inventory-models-1920x1080.png",
+    "item-model-starter_axe.png",
+    "item-model-stone_knife.png",
+    "item-model-short_bow.png",
+    "item-model-arrow.png"
+  ],
+  "also_viewed_failed_candidate": [
+    "candidate-before-caption-fix.png",
+    "intermediate1280 and960 frames at38ca9959 retained in prior CI artifact"
+  ],
+  "sha256": {
+    "inventory-models-1280x720.png": "8f6c0bbc945fd6c1543a588c7d38c9ec231fe6282b18b2a253868bddad975693",
+    "inventory-models-960x540.png": "5d5cc9022b0a76908824ac0cd4cb6edb90bdf44d9c9c81dba5251a0dc02b329a",
+    "inventory-models-1920x1080.png": "49bf60a9adc37e5488f577f6ac4f6908cb2cb211d5672980198ceca519349843",
+    "item-model-starter_axe.png": "0be9c59b41c0179f1a882d591213a9886d481e01fea41f2be9463f3d5f056dc1",
+    "item-model-stone_knife.png": "872cbe045149e709303b57acc6d9732ea9b0316c51dde6a53c13b99a180463ce",
+    "item-model-short_bow.png": "b00c1298c9c4873523dcdb597dc3b05ac257404c554e8fd806676588df8d1afb",
+    "item-model-arrow.png": "81bd0232ef5551e765b88b5cbd6b62ae6935ad60874085336c182f379202c6db"
+  },
+  "observations": [
+    "Search, quantities, pagination and owned item names remain visible at all three captured physical resolutions.",
+    "Selected model and equipment action are beside the grid; current attack bonus, coins, bow ammunition and current crafting binding are shown.",
+    "Long item names use two lines and full tooltips.",
+    "Existing weapon meshes retain flat colors and faceted handles. These are honest previews of current production geometry, not new realistic weapon art.",
+    "The world is pruned from this controlled UI fixture. This is not a city walkthrough, manual mouse test or combat animation review."
+  ],
+  "full_visual_acceptance": false,
+  "manual_play": false
+}

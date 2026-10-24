@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Human walk/run phase continuity",
+  "change": "Preserve normalized foot-cycle phase when changing between Walk and Run; retain existing combat-return behavior and blend duration",
+  "baseline": {
+    "case": "locomotion_facing",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Walk/run transition restarted foot cycle: [\"Walk\", \"Run\"]",
+      "ERROR: Walk/run transition restarted foot cycle: [\"Run\", \"Walk\"]"
+    ],
+    "seconds": 43.39
+  },
+  "validation": {
+    "phase": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 32.06
+    },
+    "graphical_fixture": {
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 26.59,
+      "marker": true
+    },
+    "full_world": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 71.41,
+      "marker": true
+    }
+  },
+  "coverage": [
+    "12 phase transitions: male/female, walk/run both directions, phases 0.2/0.63/0.92",
+    "Speed-only updates retain phase; Idle to Run starts normally",
+    "Existing camera, facing, combat and furniture assertions retained",
+    "Graphical isolated physical-floor fixture: 23.549989 m normal input; 8 images generated, walk/run images inspected for both bodies",
+    "Visible full-world automatic input run: 24.299396 m, no player coordinate assignment by driver, jumps at 160/195 cm, axe, bow/one arrow, healing, look/save roundtrip, 12 inventory/map reopen cycles",
+    "Full-world walk/run/axe/bow captures inspected after final runtime change"
+  ],
+  "failed_attempts": [
+    "First full-world launch exceeded 240 seconds; did not count prior stale result as current",
+    "First graphical helper had a type-inference parse error, fixed before final run",
+    "First graphical fixture left streaming ground guard active and walked zero metres; rejected visually, corrected fixture realm mode and added mandatory distance assertion"
+  ],
+  "visual_findings_open": [
+    "Shoulder/armpit silhouette and dark clothing deformation visible in final full-world run",
+    "Hands still look stiff/splayed in unarmed locomotion",
+    "Male/female garment silhouettes too similar; current outfit and face/skin/hair detail remain below requested realism",
+    "Terrain and forest material/lighting quality remain owner-rejected; no environment redesign this turn"
+  ],
+  "limits": [
+    "Actual manual free-roam via desktop input was not completed: window capture repeatedly timed out; successful run used automated normal game actions in the graphical game",
+    "Camera for QA captures is an observer; no full city route repeated",
+    "Existing ObjectDB leak warning (79) remains in full-world exit log; no SCRIPT ERROR/ERROR",
+    "Full four-reference visual/video study remains incomplete; only Enshrouded live-stream frames observed this turn",
+    "No new mesh/texture/asset pack or exported installer; no stable publication",
+    "Historical intermittent heal input issue remains open despite this passing run",
+    "12/12 phase checks is local regression coverage, not overall game readiness; no overall percentage increase"
+  ]
+}

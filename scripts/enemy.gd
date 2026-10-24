@@ -1,4 +1,5 @@
 extends CharacterBody3D
+const HUMANOID := preload("res://scripts/humanoid_visual.gd")
 
 @export var enemy_id: String = ""
 @export var max_health := 70.0
@@ -16,6 +17,8 @@ var spawn_position := Vector3.ZERO
 var statuses: Dictionary = {}
 var status_tick_elapsed := 0.0
 var track_distance_accum := 0.0
+var ground_ready := false
+var attack_windup := 0.0
 
 func _ready() -> void:
     if enemy_id.is_empty():
@@ -26,10 +29,41 @@ func _ready() -> void:
     health = max_health
     spawn_position = global_position
     add_to_group("hostile")
+    floor_snap_length = 0.35
+    if get_node_or_null("CollisionShape3D") == null:
+        var collision := CollisionShape3D.new()
+        collision.name = "CollisionShape3D"
+        collision.position.y = 0.9
+        var capsule := CapsuleShape3D.new()
+        capsule.height = 1.8
+        capsule.radius = 0.35
+        collision.shape = capsule
+        add_child(collision)
+    if get_node_or_null("Avatar") == null:
+        var avatar := HUMANOID.new()
+        avatar.name = "Avatar"
+        avatar.primary_color = Color(0.28, 0.10, 0.07)
+        avatar.secondary_color = Color(0.17, 0.14, 0.10)
+        add_child(avatar)
+    # Legacy spawners still provide primitive body meshes for their old
+    # placeholders. Keep collision, but let the skinned human own appearance.
+    for child in get_children():
+        if child is MeshInstance3D and child.mesh is PrimitiveMesh:
+            child.visible = false
+    visible = false
 
 func _physics_process(delta: float) -> void:
     if health <= 0.0:
         return
+    if not ground_ready:
+        var height := WorldData.elevation_at(Vector2(global_position.x, global_position.z))
+        var query := PhysicsRayQueryParameters3D.create(Vector3(global_position.x, height + 2, global_position.z), Vector3(global_position.x, height - 2, global_position.z), 1, [get_rid()])
+        var hit := get_world_3d().direct_space_state.intersect_ray(query)
+        if hit.is_empty() or not hit.collider is StaticBody3D:
+            return
+        global_position.y = Vector3(hit.position).y + 0.04
+        ground_ready = true
+        visible = true
     _update_statuses(delta)
     if health <= 0.0:
         return
@@ -40,6 +74,14 @@ func _physics_process(delta: float) -> void:
 
     if not is_instance_valid(target):
         target = get_tree().get_first_node_in_group("player") as CharacterBody3D
+
+    if attack_windup > 0.0:
+        attack_windup -= delta
+        if attack_windup <= 0.0 and is_instance_valid(target) and global_position.distance_to(target.global_position) <= attack_range + 0.3 and _can_reach_target():
+            var impact := (global_position - target.global_position).normalized()
+            VFXLibrary.spawn("hit_blunt", target.global_position + Vector3.UP * 0.9, get_tree().current_scene, impact, -impact, 0.85)
+            ScreenVFX.damage_feedback(attack_damage)
+            GameState.apply_damage(attack_damage)
 
     if not is_instance_valid(target) or GameState.is_dead:
         _idle_return(delta)
@@ -68,10 +110,12 @@ func _physics_process(delta: float) -> void:
         if attack_elapsed <= 0.0:
             var interval_multiplier := 1.35 if statuses.has("shocked") else 1.0
             attack_elapsed = attack_interval * interval_multiplier
-            var impact_direction := -flat_to_player.normalized() if flat_to_player.length_squared() > 0.001 else Vector3.UP
-            VFXLibrary.spawn("hit_blunt", target.global_position + Vector3.UP * 0.9, get_tree().current_scene, impact_direction, flat_to_player.normalized(), 0.85)
-            ScreenVFX.damage_feedback(attack_damage)
-            GameState.apply_damage(attack_damage)
+            attack_windup = 0.28
+
+func _can_reach_target() -> bool:
+    var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP, target.global_position + Vector3.UP, 1, [get_rid()])
+    var hit := get_world_3d().direct_space_state.intersect_ray(query)
+    return hit.is_empty() or hit.collider == target
 
 func _idle_return(delta: float) -> void:
     var flat_home := spawn_position - global_position
@@ -170,10 +214,13 @@ func _status_speed_multiplier() -> float:
 
 func _die() -> void:
     VFXLibrary.spawn("death_burst", global_position + Vector3.UP * 0.75, get_tree().current_scene, Vector3.UP, Vector3.ZERO, 1.0)
-    GameState.register_enemy_defeat(enemy_id)
+    GameState.register_enemy_defeat(enemy_id, "coins", 3)
     set_physics_process(false)
-    visible = false
+    remove_from_group("hostile")
+    var avatar := get_node_or_null("Avatar")
+    if avatar != null:
+        avatar.call("play_death")
     var collision := get_node_or_null("CollisionShape3D") as CollisionShape3D
     if collision != null:
         collision.set_deferred("disabled", true)
-    queue_free()
+    get_tree().create_timer(8.0, false).timeout.connect(queue_free)

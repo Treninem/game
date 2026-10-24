@@ -115,3 +115,84 @@ Support dry↔wet, clean↔dirty, intact↔cracked/broken, warm↔frosted/conden
 `nature`, `materials`, `lighting`, `world`, `buildings`, `interiors`, `characters`, `animations`, `animals`, `food`, `items`, `resources`, `tools`, `weapons`, `clothing`, `props`, `vehicles`, `machines`, `technology`, `shaders`, `vfx`, `decals`, `audio`, `music`, `ui`, `icons`, `prototype`.
 
 Every development session working on `Treninem/game` must read this file before adding art and update it when approving another pack. Goal: a coherent reusable production library, not a random pile of downloads.
+## Integrated woodland and animated human selection — 2026-10-18
+
+- PRODUCTION_READY: Quaternius RPG Ranger from existing source chat B36, normalized skinned GLB retained under `assets/production/characters/ranger/`; the live human selection below supersedes its body mesh. Its bow animation source is reused for retargeting.
+- INTEGRATED: six selected Quaternius Stylized Nature MegaKit models from existing source chat B44: `assets/production/nature/woodland/`. Authored textured trees replace geometric crowns in near and far rendering; shared wind animates leaves.
+- INTEGRATED: two CC0 photographic diffuse ground textures from the existing OpenGameArt Seamless Textures pack: `assets/production/materials/ground/`.
+- Every production selection preserves source and license metadata. Detailed record: `assets/registry/VISUAL_WORLD_INTEGRATION_2026-10-18.md`.
+
+- INTEGRATED: one existing CC0 Tree Leaves Pack 1 silhouette atlas by TrachinusDraco, runtime-capped to 256 px with mipmaps, for seasonal wind leaves under `assets/production/nature/woodland/`.
+- INTEGRATED: axe, dagger visual proxy, wooden bow and arrow from the existing B36 Quaternius Low Poly RPG Pack, normalized under `assets/production/weapons/woodland/`; animated equipment and physical bow projectiles.
+
+### Adult human and temperate tree selection — 2026-10-19
+
+- INTEGRATED: existing CC0 byzmod3d B89 anatomical human geometry (`homen_base.obj`) under `assets/production/characters/citizen/`, normalized to 1.8 m and fitted to the existing Quaternius Animated Human rig. Ten clips, clothing and skin variants retained; Axe_Chop reuses the physically staged CC0 Universal Animation Library 2 Standard. Project materials replace the source OBJ's absent MTL. This is an anatomical mesh, not a photorealistic scan.
+- INTEGRATED: existing CC0 Free Vegetation Asset Pack with LOD, physically present on `main` under B44, selected into `assets/production/nature/temperate/`. Reconstructed materials reuse original branch textures and existing Quaternius bark. Shared environment wind shader supplies required black-key cutout; seeded card layers enrich the canopy.
+- INTEGRATED: existing production city-core wall, window, door, tile roof and gable modules now form ordinary capital house facades in batched geometry. Solid collision shells remain; this does not establish enterable capital homes.
+- Details and limitations: `assets/registry/VISUAL_WORLD_INTEGRATION_2026-10-18.md`.
+
+- INTEGRATED: `TemperateTree_Broad.glb`, the existing B44 Free Vegetation `tree_leaves_higher` mesh with original `branches_leaves.png`, grounded to 11 m and using shared foliage wind/cutout. Selected for the near-start forest.
+- INTEGRATED: existing B47 Quaternius city-core `Prop_Chimney.gltf` and its buffer/textures, selected for ordinary capital roofs with wider eaves. Ordinary houses still have solid collision shells.
+
+- INTEGRATED — 2026-10-19 contact refinement: three existing CC0 rubberduck wood-hit sounds from B04, preserving original filenames under `assets/audio/world/oga_100_cc0_sfx_2/`. Source/license metadata retained; no download. Axe_Chop retargeting now aligns the source and target shoulder axes before transferring motion.
+
+- INTEGRATED — 2026-10-19 capital-square follow-up: Bench, Lantern_Wall, Workbench, Barrel and Barrel_Apples from the existing physically staged B46 CC0 Quaternius Fantasy Props MegaKit Standard, selected into `assets/production/medieval/capital_square/`. Original glTF buffers and OpenGL furniture/metal textures plus source licenses retained. Props are measured, grounded and given collision; no new download. Existing market-stall scene reused.
+- INTEGRATED — existing CC0 OpenGameArt seamless photograph `100_1453_seamless.JPG` selected as `assets/production/materials/ground/stone_paving.jpg` for capital paving. Mipmapped, world-scaled diffuse only.
+
+- INTEGRATED — 2026-10-19 household furniture: existing B46 CC0 Chest_Wood glTF, buffer and shared textures selected into `assets/production/medieval/capital_square/`; original open/close clips drive actual storage. Existing production Bench and Quaternius Bed/Table reused for household places. Physical source and both source licenses checked on main; no new download.
+
+## Character family review — 2026-10-19
+- INTEGRATED in the 0.10.7.2 review candidate: MakeHuman native male/female bodies, separate face/hair/garments and a playable creator. Source selections: `assets/staging/characters/makehuman_mpfb_core/` and `makehuman_system_selected/`; target: `assets/production/characters/realistic/`. Official core/system graphics are CC0; no tool code embedded. Main physical confirmation and final production readiness are pending. See `assets/registry/REALISTIC_HUMANS_2026-10-19.md`.
+
+## Forest understory review — 2026-10-20
+- INTEGRATED in the review: `assets/production/nature/woodland/Grass_Ground.glb`, a 155-triangle, 0.38 m derivative of the existing Quaternius CC0 `Grass_Wispy_Tall.glb`. Embedded texture retained; existing woodland license applies. No new source pack or download. Reproducer/checksums: `tools/prepare_ground_cover.py`, adjacent `Grass_Ground.source.json`. Existing temperate trees and shrub/fern assets supply the denser bounded forest. See `assets/registry/FOREST_UNDERSTORY_2026-10-20.md`.
+
+## Eye color selection — 2026-10-20 review
+- INTEGRATED in review: five existing MakeHuman CC0 eye atlases in `assets/production/characters/realistic/eyes/`; exact source hashes and license preserved there. Runtime choice and save compatibility verified on both bodies. No new download; STAGED_PHYSICAL on main is not claimed.
+
+- INTEGRATED in review: Rehman Polanski Viking tunic/pants/boots, selected from official MakeHuman suits02 CC0 pack; local physical files and hashes under `assets/staging/characters/makehuman_viking_selected/`. Physical confirmation on main pending. Selected outfit is referenced by the review male/female GLBs with per-body normal/AO maps; overall art acceptance remains open. Builder: `tools/build_viking_humans.py`. See `assets/registry/VIKING_HUMAN_WARDROBE_2026-10-21.json`.
+
+## Household concept kit — 2026-10-22 review
+- INTEGRATED in review: 19 selected existing B46 CC0 Fantasy Props MegaKit Standard objects, normalized in Blender into `assets/production/interiors/architecture/HouseholdProps.glb`; editable `.blend`, source license and 512px cloth derivatives retained. Original source files were verified on main 0015b68c; no download. Shared photographed plank/stone and original metal/props maps reused. Project-authored Blender partitions, bedding, curtains, rugs and arched hearth are integrated alongside the selected objects. See `assets/registry/HOUSEHOLD_DRESSING_2026-10-21.json`. Overall concept acceptance remains open.
+
+### Terrain path selection — 22 October 2026
+Existing CC0 musdasch ground set: unmodified 512px dirt1/gravel1 selected as road_soil/road_gravel under assets/production/materials/ground/, with licenses, mipmaps and anisotropic filtering. Reuses photographic stone_paving.jpg. INTEGRATED in the review through shared terrain_paths.gd; no download. Exact scope/evidence: assets/registry/TERRAIN_PATHS_2026-10-22.json and docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json. This is not completed farms/animals/mountain content.
+
+### Cottage exteriors and connected yards — 22 October 2026
+INTEGRATED in review: project-authored Blender worked timber/stone, planter, flowers and open timber store with selected existing B47 CC0 WoodenFence_Single geometry. Editable source and reproducer retained; actual game references CottageYardKit.glb. Existing photo wood/stone, temperate bush, woodland grass and animated B46 chest reused. No download or full concept/farm/livestock acceptance. See assets/registry/COTTAGE_YARDS_2026-10-22.json.
+
+## Fitted human outfit — 2026-10-22 review
+- INTEGRATED in review: both existing native human costumes retain their covered-body mask and authored outer surfaces, while the redundant visible OutfitLining shell is removed. Independent comparison preserves outer triangles/normals/UVs/weights, nine morphs, ten source clips, bind frames and embedded image pixels. Portable Blender sources: `assets/source/characters/fitted_outfit/`; current producer: `tools/export_fitted_outfit.py`. Source licenses remain the selected MakeHuman/Rehman Polanski CC0 records; no new pack or bitmap. Seven skinned parts remain. Existing CC0 woodland arrows also display a supplied fletcher batch on the actual bench, driven by finite recipe state. The standing work pose is project-authored. Full wardrobe, layer contact, human/weapon art and concept acceptance remain open. See `assets/registry/FITTED_HUMAN_OUTFIT_2026-10-22.json` and `docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json`. Main physical staging is not newly claimed.
+
+## Refined human contours — 2026-10-23 review
+- INTEGRATED in review: `realistic_contours/{male,female}.glb` adds Blender-refined near skin/eyes and retains the exact accepted original body as a complementary distance mesh. Five other parts, original clothing triangles, nine morphs, ten source clips and embedded image pixels are independently compared. Existing CC0 sources and wardrobe maps are reused; no new pack/download/bitmap. Editable sources: `assets/source/characters/refined_contours/`; builder: `tools/refine_human_contours.py`. Eight skinned parts, explicit 7/9 metre body selection and the near eight-weight layout require the runtime helper. The baseline remains for preservation checks and the already-open user review. Hair, full skin/wardrobe realism, weak-PC frame-rate and concept acceptance remain open. See `assets/registry/HUMAN_CONTOURS_2026-10-23.json`. No new physical-staging-on-main claim.
+
+## Character strand and iris surfaces — 2026-10-23 review
+- INTEGRATED in review: existing MakeHuman CC0 atlases are reused by `hair_strands.gdshader` and `human_iris.gdshader`; source pixels, native geometry, wardrobe, rig and save profile remain unchanged. Local strand contrast/cutout, measured brown-iris centers and independent material reuse are verified. Four experimental Blender skin maps were not selected, so no new runtime texture or source pack is added. Full art acceptance is false. See `assets/registry/HUMAN_SURFACES_2026-10-23.json` and the character-surfaces journal.
+
+- INTEGRATED in review: one Blender-authored UV response map separates neutral ring highlights from the cloth of the existing Rehman Polanski CC0 tunic on both native bodies. Original source pixels/UVs/rig/morphs/clips remain unchanged. The creator uses a small static reflection sky with its existing plain backdrop and lights. No rejected groom candidate is selected. Full human art acceptance remains false. See `assets/registry/TUNIC_MATERIAL_RESPONSE_2026-10-23.json` and the wardrobe-response journal. No new pack download or main physical-staging claim.
+
+## Review family-home roof, lime plaster and meadow — 2026-10-23
+
+INTEGRATED on the review branch: project-authored Blender layered shingle roof/gables/chimney and 130-triangle meadow blades; selected existing CC0 B29 plaster/shingle, cedar and musdasch rock photographs. Source packs remain STAGED_PHYSICAL on main; no new pack download. Production families: `assets/production/exteriors/family_home/`, `assets/production/interiors/materials/lime_plaster/`, `assets/production/nature/meadow/`. Editable geometry: `assets/source/exteriors/family_home/` and `assets/source/nature/meadow/`. Exact provenance, native constraints and open art limits: `assets/registry/REGION_SURFACES_2026-10-23.json`. Full concept/world acceptance remains false.
+
+## City concept review models — 2026-10-23
+
+`INTEGRATED` on the review branch, not main: `assets/production/architecture/townhouse/` and `market_court/`. Original Blender townhouse shells and carved fountain, selected existing B29 CC0 balcony, shared existing CC0 photographs, and authored clay response maps. Editable relative-linked sources: `assets/source/architecture/`. Registry: `assets/registry/CITY_CONCEPT_MODELS_2026-10-23.json`. Two repeated exterior shells are not newly enterable homes; full visual acceptance remains false. No third-party download.
+
+## Functional public market — 2026-10-24 review
+
+`INTEGRATED` on the review branch, not main: `assets/production/architecture/market_arcade/MarketArcade.glb`, editable relative-linked source in `assets/source/architecture/market_arcade/`. Original Blender-authored open arcade reuses the existing authored townhouse roof family and existing shared CC0 photo materials. No new third-party download. Registry: `assets/registry/PUBLIC_MARKET_2026-10-24.json`. Two 9m bays, measured post/roof collision and lantern anchors; public benches, finite goods and local obstacle navigation are live game behavior. Full city/human art acceptance remains false.
+
+
+## Connected capital canal neighbourhood — 2026-10-24 review
+- INTEGRATED in review only: original five-part Blender CapitalCanalKit (43,348triangles), editable source and safe exporter. Four96x16m actual open-vault bridges,6m quays, a continuous carved600m canal, conforming dry paving, existing shared photographs/water/wind/nature, one two-adult working household, shop and finite fletcher production. No new third-party pack or concept pixels. See assets/registry/CAPITAL_CANALS_2026-10-24.json. Main integration, full city composition, human/household variety and overall art acceptance are not claimed.
+
+### Human-scale city surface family - 2026-10-24
+
+INTEGRATED in review: fifteen metre-scaled street materials using existing CC0 ground photographs, differentiated stone/brick bond and gravel/soil treatments; six-metre ordinary carriageways, two-point-two-metre household lanes and three-metre canal promenades. Existing Blender CityStreetKit stone troughs and CottageYardKit wind-driven flowers reused for bounded pocket gardens; no new third-party download or generated bitmap. Grand arterials and physical canal bridges are retained. Scope, sources, measured door/stature limits and evidence: assets/registry/HUMAN_STREET_SCALE_2026-10-24.json. Full city composition, house density and art acceptance remain open.
+
+### Rubik gameplay-panel review selection (2026-10-24)
+
+The existing physically staged SIL OFL1.1 Roman Rubik font is selected without modification for the isolated inventory/panel candidate under `assets/production/ui/fonts/rubik/`. The production folder preserves OFL.txt and provenance. No new font download or source pack; this candidate is not yet integrated into the user-opened root project. Native Cyrillic/layout review is required before acceptance.

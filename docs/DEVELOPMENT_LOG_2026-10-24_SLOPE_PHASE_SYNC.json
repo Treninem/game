@@ -1,0 +1,4615 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent_runtime": "fa1383cb93673909c16af13fd882a29316a195a0",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "type": "Test phase observation synchronization; shipping runtime unchanged",
+  "failure": {
+    "run_id": 40043314193,
+    "job_id": 120719434770,
+    "step": 66,
+    "name": "Verify both soles and actual jump action phases on inclined terrain",
+    "observed": "Female landing wait stopped after30 final-modifier callbacks while actor was still airborne,velocity_y=-5.600000858 and sole gap77.94mm. The landing predicate was correctly false; missing sample caused final coverage failure.",
+    "not_a_green_runtime": "fa runtime has7green workflows and failed WorldCore; actual PCK/native results do not substitute."
+  },
+  "change": "Wait for the actual phase within120 physics ticks and the existing15second wall deadline, instead of30 modifier completions. Modifiers can run more than once between physics steps. Record both callback and physics wait counts. All19 assertions,76total poses,34GPUposes, both sexes/fourcourses, motion floor/gap/leg-length and0.1mmGPU matching remain identical. Global CI timeouts/workflows are unchanged.",
+  "local_checks": {
+    "baseline240": {
+      "case": "baseline240",
+      "returncode": 0,
+      "seconds": 31.625,
+      "stopped": false,
+      "errors": [],
+      "marker": true,
+      "gpu_marker": false
+    },
+    "fixed240": {
+      "case": "fixed240",
+      "returncode": 0,
+      "seconds": 28.093999999997322,
+      "stopped": false,
+      "errors": [],
+      "marker": true,
+      "gpu_marker": false
+    },
+    "fixedgpu": {
+      "case": "fixedgpu",
+      "returncode": 0,
+      "seconds": 50.265999999995984,
+      "stopped": false,
+      "errors": [],
+      "marker": true,
+      "gpu_marker": true
+    }
+  },
+  "local_evidence": {
+    "fixed240": {
+      "native": false,
+      "player_position_writes_after_setup": 0,
+      "samples": [
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399983860552311,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00398265011608601,
+              "weight": 1.0
+            }
+          },
+          "frame": 56,
+          "gaps": {
+            "Left": 0.00399983860552311,
+            "Right": 0.00398265011608601
+          },
+          "grounded": true,
+          "label": "male-course0-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.433333333333333,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399989075958729,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399988144636154,
+              "weight": 1.0
+            }
+          },
+          "frame": 63,
+          "gaps": {
+            "Left": 0.0039029847830534,
+            "Right": 0.00399988144636154
+          },
+          "grounded": true,
+          "label": "male-course0-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0291974653800329,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.151111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400080718100071,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399953685700893,
+              "weight": 1.0
+            }
+          },
+          "frame": 70,
+          "gaps": {
+            "Left": 0.00400080718100071,
+            "Right": 0.00399953685700893
+          },
+          "grounded": true,
+          "label": "male-course0-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.147615208228429,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.361111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00355766527354717,
+              "weight": 0.95594116864131
+            },
+            "Right": {
+              "gap": 0.00398565270006657,
+              "weight": 1.0
+            }
+          },
+          "frame": 80,
+          "gaps": {
+            "Left": 0.00355766527354717,
+            "Right": 0.00398565270006657
+          },
+          "grounded": true,
+          "label": "male-course0-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.276274573802948,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.571111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399893522262573,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399999506771564,
+              "weight": 0.580536261305658
+            }
+          },
+          "frame": 89,
+          "gaps": {
+            "Left": 0.00399893522262573,
+            "Right": 0.00230862386524677
+          },
+          "grounded": true,
+          "label": "male-course0-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.253064584107751,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.952222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00398562103509903,
+              "weight": 1.0
+            }
+          },
+          "frame": 96,
+          "gaps": {
+            "Left": 0.00376695021986961,
+            "Right": 0.172005489468575
+          },
+          "grounded": true,
+          "label": "male-course0-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.351204096646661,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -1.632778)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399973429739475,
+              "weight": 1.0
+            }
+          },
+          "frame": 103,
+          "gaps": {
+            "Left": 0.394711285829544,
+            "Right": 0.00399973429739475
+          },
+          "grounded": true,
+          "label": "male-course0-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.477905296655054,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -2.270555)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00370817043193862,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399996481295461,
+              "weight": 1.0
+            }
+          },
+          "frame": 173,
+          "gaps": {
+            "Left": 0.00370816828114122,
+            "Right": 0.00399989813823536
+          },
+          "grounded": true,
+          "label": "male-course1-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.55,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399977124118904,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399678808520186,
+              "weight": 1.0
+            }
+          },
+          "frame": 178,
+          "gaps": {
+            "Left": 0.00397962042039314,
+            "Right": 0.00399683540274456
+          },
+          "grounded": true,
+          "label": "male-course1-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0301378538211187,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.151111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400297162771314,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399754301508759,
+              "weight": 1.0
+            }
+          },
+          "frame": 187,
+          "gaps": {
+            "Left": 0.00400297808010533,
+            "Right": 0.00399755807066935
+          },
+          "grounded": true,
+          "label": "male-course1-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.150192752480507,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.361111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00397857083126427,
+              "weight": 0.961898306816534
+            },
+            "Right": {
+              "gap": 0.00399933462931781,
+              "weight": 1.0
+            }
+          },
+          "frame": 194,
+          "gaps": {
+            "Left": 0.00387344845777503,
+            "Right": 0.00399931312134386
+          },
+          "grounded": true,
+          "label": "male-course1-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.278112056851387,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.571111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399976478879686,
+              "weight": 1.0
+            },
+            "Right": {
+              "clearance_lift": 0.0067234256937354,
+              "gap": 0.00399993120674531,
+              "weight": 0.581000461832592
+            }
+          },
+          "frame": 203,
+          "gaps": {
+            "Left": 0.003999700264875,
+            "Right": -9.47383236650689e-05
+          },
+          "grounded": true,
+          "label": "male-course1-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.257377708033758,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.952222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00397717281295737,
+              "weight": 1.0
+            }
+          },
+          "frame": 211,
+          "gaps": {
+            "Left": 0.00334982392712204,
+            "Right": 0.0417632546760916
+          },
+          "grounded": true,
+          "label": "male-course1-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.350104086673297,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -1.632778)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399965939972449,
+              "weight": 1.0
+            }
+          },
+          "frame": 218,
+          "gaps": {
+            "Left": 0.358522130328687,
+            "Right": 0.00399962283616877
+          },
+          "grounded": true,
+          "label": "male-course1-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.472831490711409,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -2.270555)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00364449001931626,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400083525859138,
+              "weight": 1.0
+            }
+          },
+          "frame": 289,
+          "gaps": {
+            "Left": 0.00351184604969234,
+            "Right": 0.00400078669823632
+          },
+          "grounded": true,
+          "label": "male-course2-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.533333333333333,
+          "phase_filter": "",
+          "position": "(0.0, 0.07, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400006353039176,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399988986585683,
+              "weight": 1.0
+            }
+          },
+          "frame": 294,
+          "gaps": {
+            "Left": 0.00363780523687693,
+            "Right": 0.00399989885120486
+          },
+          "grounded": true,
+          "label": "male-course2-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0246313144763311,
+          "phase_filter": "",
+          "position": "(0.0, 0.141074, -0.117969)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399909964084283,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400177756852354,
+              "weight": 1.0
+            }
+          },
+          "frame": 303,
+          "gaps": {
+            "Left": 0.00392145592181474,
+            "Right": 0.00396085002343259
+          },
+          "grounded": true,
+          "label": "male-course2-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.123711956540744,
+          "phase_filter": "",
+          "position": "(0.0, 0.2215, -0.290465)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399991966627998,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400310933915831,
+              "weight": 1.0
+            }
+          },
+          "frame": 311,
+          "gaps": {
+            "Left": 0.00399991529281655,
+            "Right": 0.00355030297944364
+          },
+          "grounded": true,
+          "label": "male-course2-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.228835954268773,
+          "phase_filter": "",
+          "position": "(0.0, 0.301935, -0.462958)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399810081286676,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400427052806054,
+              "weight": 1.0
+            }
+          },
+          "frame": 320,
+          "gaps": {
+            "Left": 0.0039980080658601,
+            "Right": 0.00171183484308981
+          },
+          "grounded": true,
+          "label": "male-course2-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.226710213086326,
+          "phase_filter": "",
+          "position": "(0.0, 0.445169, -0.777278)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400007380639975,
+              "weight": 1.0
+            }
+          },
+          "frame": 329,
+          "gaps": {
+            "Left": 0.00400011259215688,
+            "Right": 0.421937858336706
+          },
+          "grounded": true,
+          "label": "male-course2-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.303867177527467,
+          "phase_filter": "",
+          "position": "(0.0, 0.695594, -1.341058)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.0055740807773805,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400009435841572,
+              "weight": 1.0
+            }
+          },
+          "frame": 338,
+          "gaps": {
+            "Left": 0.00557403519636085,
+            "Right": 0.00306432182100451
+          },
+          "grounded": true,
+          "label": "male-course2-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.410469587009469,
+          "phase_filter": "",
+          "position": "(0.0, 0.949761, -1.860317)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399806007742823,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00366948550593183,
+              "weight": 1.0
+            }
+          },
+          "frame": 410,
+          "gaps": {
+            "Left": 0.00399810135250945,
+            "Right": 0.00366949837171303
+          },
+          "grounded": true,
+          "label": "male-course3-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.55,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399753736056451,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399945544713139,
+              "weight": 1.0
+            }
+          },
+          "frame": 417,
+          "gaps": {
+            "Left": 0.00399751958399054,
+            "Right": 0.00399945298012105
+          },
+          "grounded": true,
+          "label": "male-course3-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0415647665659587,
+          "phase_filter": "",
+          "position": "(0.009777, -0.011208, -0.211369)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400001315759269,
+              "weight": 0.900418176163067
+            },
+            "Right": {
+              "gap": 0.00399968509261546,
+              "weight": 1.0
+            }
+          },
+          "frame": 426,
+          "gaps": {
+            "Left": 0.00400003037444057,
+            "Right": 0.00399968481268873
+          },
+          "grounded": true,
+          "label": "male-course3-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.179553945859273,
+          "phase_filter": "",
+          "position": "(0.009777, -0.122829, -0.484006)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399999019304428,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399772107695176,
+              "weight": 1.0
+            }
+          },
+          "frame": 433,
+          "gaps": {
+            "Left": 0.00399994289045276,
+            "Right": 0.00202617289957419
+          },
+          "grounded": true,
+          "label": "male-course3-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.341671317815781,
+          "phase_filter": "",
+          "position": "(0.027217, -0.261337, -0.771065)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399909020145674,
+              "weight": 1.0
+            },
+            "Right": {
+              "clearance_lift": 0.0111629668854536,
+              "gap": 0.00399999730111879,
+              "weight": 0.702768571806164
+            }
+          },
+          "frame": 436,
+          "gaps": {
+            "Left": 0.00399913803776495,
+            "Right": 0.00326280280920183
+          },
+          "grounded": true,
+          "label": "male-course3-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.321190360803468,
+          "phase_filter": "",
+          "position": "(0.027217, -0.508309, -1.217189)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400006127378935,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400223306393862,
+              "weight": 1.0
+            }
+          },
+          "frame": 444,
+          "gaps": {
+            "Left": 0.00294408114482806,
+            "Right": 0.00400207749975522
+          },
+          "grounded": true,
+          "label": "male-course3-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.439021834352675,
+          "phase_filter": "",
+          "position": "(0.027217, -0.874077, -2.00374)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399901365296205,
+              "weight": 1.0
+            }
+          },
+          "frame": 452,
+          "gaps": {
+            "Left": 0.299228762159662,
+            "Right": 0.0036911244134986
+          },
+          "grounded": true,
+          "label": "male-course3-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.584916733323597,
+          "phase_filter": "",
+          "position": "(0.027217, -1.181558, -2.744686)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 555,
+          "gaps": {
+            "Left": 0.219712745976104,
+            "Right": 0.340359184058542
+          },
+          "grounded": false,
+          "label": "male-course3-rise",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0166666666666667,
+          "phase_filter": "rise",
+          "position": "(0.065927, -1.248705, -3.254698)",
+          "velocity_y": 5.19999980926514,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 558,
+          "gaps": {
+            "Left": 1.07373794374416,
+            "Right": 1.14107107976027
+          },
+          "grounded": false,
+          "label": "male-course3-apex",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.290000031211159,
+          "phase_filter": "apex",
+          "position": "(0.065927, -0.577038, -3.254698)",
+          "velocity_y": 1.29999971389771,
+          "wait_modifier_callbacks": 16,
+          "wait_physics_ticks": 13
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 559,
+          "gaps": {
+            "Left": 1.11714658865988,
+            "Right": 1.18455279130261
+          },
+          "grounded": false,
+          "label": "male-course3-fall",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.431212144187003,
+          "phase_filter": "fall",
+          "position": "(0.065927, -0.552038, -3.254698)",
+          "velocity_y": -0.500000298023224,
+          "wait_modifier_callbacks": 7,
+          "wait_physics_ticks": 6
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400030732252227,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400004268344064,
+              "weight": 1.0
+            }
+          },
+          "frame": 561,
+          "gaps": {
+            "Left": 0.00400032781999911,
+            "Right": 0.00400018784561862
+          },
+          "grounded": true,
+          "label": "male-course3-landing",
+          "landing_compression": 0.066455427114343,
+          "landing_elapsed": 0.156666666666667,
+          "phase": 0.0,
+          "phase_filter": "landing",
+          "position": "(0.065927, -1.458705, -3.254698)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 21,
+          "wait_physics_ticks": 23
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399811912912414,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00372876684731761,
+              "weight": 1.0
+            }
+          },
+          "frame": 623,
+          "gaps": {
+            "Left": 0.00399808822991128,
+            "Right": 0.00372877752185018
+          },
+          "grounded": true,
+          "label": "male-course3-recovered",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.566666666666667,
+          "phase_filter": "",
+          "position": "(0.065927, -1.458705, -3.254698)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Draw",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399697746300337,
+              "weight": 1.0
+            }
+          },
+          "frame": 660,
+          "gaps": {
+            "Left": 0.100248391536897,
+            "Right": 0.00380954273939241
+          },
+          "grounded": true,
+          "label": "male-course3-short_bow-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.15,
+          "phase_filter": "",
+          "position": "(0.072731, -1.592723, -3.547451)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Shoot",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400166004377839,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00378509122970861,
+              "weight": 0.958615596986159
+            }
+          },
+          "frame": 702,
+          "gaps": {
+            "Left": 0.00400130764066253,
+            "Right": 0.00378504722280681
+          },
+          "grounded": true,
+          "label": "male-course3-short_bow-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.2,
+          "phase_filter": "",
+          "position": "(0.072731, -1.968895, -4.396765)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Left": {
+              "gap": 0.00387794892796414,
+              "weight": 0.998694587987797
+            },
+            "Right": {
+              "gap": 0.00399921705324794,
+              "weight": 1.0
+            }
+          },
+          "frame": 835,
+          "gaps": {
+            "Left": 0.00387785023707111,
+            "Right": 0.00366382940930322
+          },
+          "grounded": true,
+          "label": "male-course3-starter_axe-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0899999976158142,
+          "phase_filter": "",
+          "position": "(0.086734, -2.188459, -4.769018)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399787198684129,
+              "weight": 1.0
+            }
+          },
+          "frame": 878,
+          "gaps": {
+            "Left": 0.00399822820429177,
+            "Right": 0.32960187296919
+          },
+          "grounded": true,
+          "label": "male-course3-starter_axe-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.749999980131785,
+          "phase_filter": "",
+          "position": "(0.086734, -2.567268, -5.625608)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Cast_Left",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399789604493962,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400291325199142,
+              "weight": 1.0
+            }
+          },
+          "frame": 975,
+          "gaps": {
+            "Left": 0.00399766830676981,
+            "Right": 0.00400326728198938
+          },
+          "grounded": true,
+          "label": "male-course3-cast",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0666666666666667,
+          "phase_filter": "",
+          "position": "(0.09642, -2.590023, -5.711892)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399977341294289,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399770028889179,
+              "weight": 1.0
+            }
+          },
+          "frame": 1047,
+          "gaps": {
+            "Left": 0.00399977341294289,
+            "Right": 0.00399770028889179
+          },
+          "grounded": true,
+          "label": "female-course0-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.516666666666667,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399985164403915,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400014966726303,
+              "weight": 1.0
+            }
+          },
+          "frame": 1052,
+          "gaps": {
+            "Left": 0.00399985164403915,
+            "Right": 0.00400014966726303
+          },
+          "grounded": true,
+          "label": "female-course0-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0253894070784251,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.151111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400049425661564,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399996526539326,
+              "weight": 1.0
+            }
+          },
+          "frame": 1061,
+          "gaps": {
+            "Left": 0.00400049425661564,
+            "Right": 0.00379796698689461
+          },
+          "grounded": true,
+          "label": "female-course0-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.127658547957738,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.361111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400005839765072,
+              "weight": 0.963944667363001
+            },
+            "Right": {
+              "gap": 0.00399916060268879,
+              "weight": 1.0
+            }
+          },
+          "frame": 1068,
+          "gaps": {
+            "Left": 0.00307503156363964,
+            "Right": 0.00399916060268879
+          },
+          "grounded": true,
+          "label": "female-course0-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.235861892501513,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.571111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039993841201067,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0039998609572649,
+              "weight": 1.0
+            }
+          },
+          "frame": 1078,
+          "gaps": {
+            "Left": 0.0039993841201067,
+            "Right": 0.0039998609572649
+          },
+          "grounded": true,
+          "label": "female-course0-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.233851918799839,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.952222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399920530617237,
+              "weight": 1.0
+            }
+          },
+          "frame": 1085,
+          "gaps": {
+            "Left": 0.003591513261199,
+            "Right": 0.215773582458496
+          },
+          "grounded": true,
+          "label": "female-course0-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.317269985102774,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -1.632778)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.053906686604023,
+              "weight": 0.0504741114548861
+            },
+            "Right": {
+              "gap": 0.00399885699152946,
+              "weight": 1.0
+            }
+          },
+          "frame": 1094,
+          "gaps": {
+            "Left": 0.053906686604023,
+            "Right": 0.00399885699152946
+          },
+          "grounded": true,
+          "label": "female-course0-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.430797770841084,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -2.270555)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00376009498265425,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0039998809318562,
+              "weight": 1.0
+            }
+          },
+          "frame": 1165,
+          "gaps": {
+            "Left": 0.00376009283185685,
+            "Right": 0.00399986372547704
+          },
+          "grounded": true,
+          "label": "female-course1-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.55,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399953250267817,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400001858288949,
+              "weight": 1.0
+            }
+          },
+          "frame": 1174,
+          "gaps": {
+            "Left": 0.00399953250267817,
+            "Right": 0.00400003578926866
+          },
+          "grounded": true,
+          "label": "female-course1-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0291870872179667,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.151111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400286408784338,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399734729252462,
+              "weight": 1.0
+            }
+          },
+          "frame": 1181,
+          "gaps": {
+            "Left": 0.0039121886204579,
+            "Right": 0.00384609031490771
+          },
+          "grounded": true,
+          "label": "female-course1-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.123467549681664,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.361111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400002503528168,
+              "weight": 0.965146258841281
+            },
+            "Right": {
+              "gap": 0.00399729137179234,
+              "weight": 1.0
+            }
+          },
+          "frame": 1188,
+          "gaps": {
+            "Left": 0.00194167106289654,
+            "Right": 0.00399731718136109
+          },
+          "grounded": true,
+          "label": "female-course1-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.231144473950068,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.571111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399942281201102,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399784197592552,
+              "weight": 1.0
+            }
+          },
+          "frame": 1197,
+          "gaps": {
+            "Left": 0.00399938194686051,
+            "Right": 0.00399776454721929
+          },
+          "grounded": true,
+          "label": "female-course1-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.23057864449688,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.952222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399962283616877,
+              "weight": 1.0
+            }
+          },
+          "frame": 1204,
+          "gaps": {
+            "Left": 0.00359389641553268,
+            "Right": 0.0937560975106155
+          },
+          "grounded": true,
+          "label": "female-course1-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.313757361394845,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -1.632778)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.021491468733084,
+              "weight": 0.48160950782783
+            },
+            "Right": {
+              "gap": 0.003998796929969,
+              "weight": 1.0
+            }
+          },
+          "frame": 1213,
+          "gaps": {
+            "Left": 0.0171568247898499,
+            "Right": 0.00399883134272733
+          },
+          "grounded": true,
+          "label": "female-course1-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.425345950745227,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -2.270555)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400013135204446,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400001934355743,
+              "weight": 1.0
+            }
+          },
+          "frame": 1287,
+          "gaps": {
+            "Left": 0.00400016191699196,
+            "Right": 0.00399998105926333
+          },
+          "grounded": true,
+          "label": "female-course2-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.533333333333333,
+          "phase_filter": "",
+          "position": "(0.0, 0.07, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400114148362932,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399996899111831,
+              "weight": 1.0
+            }
+          },
+          "frame": 1295,
+          "gaps": {
+            "Left": 0.00400113197208188,
+            "Right": 0.00399998105926333
+          },
+          "grounded": true,
+          "label": "female-course2-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0231292734543482,
+          "phase_filter": "",
+          "position": "(0.0, 0.148503, -0.114504)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399921062172906,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0040014775090904,
+              "weight": 1.0
+            }
+          },
+          "frame": 1302,
+          "gaps": {
+            "Left": 0.00399925762834881,
+            "Right": 0.00400144436270406
+          },
+          "grounded": true,
+          "label": "female-course2-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0993667095899582,
+          "phase_filter": "",
+          "position": "(0.0, 0.22893, -0.287001)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399980765779295,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400305590391679,
+              "weight": 1.0
+            }
+          },
+          "frame": 1311,
+          "gaps": {
+            "Left": 0.00127264651153063,
+            "Right": 0.00400307208226172
+          },
+          "grounded": true,
+          "label": "female-course2-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.187566427389781,
+          "phase_filter": "",
+          "position": "(0.0, 0.309365, -0.459493)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399937709305841,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400422531362541,
+              "weight": 1.0
+            }
+          },
+          "frame": 1319,
+          "gaps": {
+            "Left": 0.00309332482403201,
+            "Right": 0.00400419011185689
+          },
+          "grounded": true,
+          "label": "female-course2-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.302315972248713,
+          "phase_filter": "",
+          "position": "(0.0, 0.452599, -0.773813)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399541774718206,
+              "weight": 1.0
+            }
+          },
+          "frame": 1328,
+          "gaps": {
+            "Left": 0.0039954431744359,
+            "Right": 0.344355515785854
+          },
+          "grounded": true,
+          "label": "female-course2-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.277283091435234,
+          "phase_filter": "",
+          "position": "(0.0, 0.703031, -1.33759)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400315866399664,
+              "weight": 1.0
+            }
+          },
+          "frame": 1335,
+          "gaps": {
+            "Left": 0.00400320361515527,
+            "Right": 0.0967534919681412
+          },
+          "grounded": true,
+          "label": "female-course2-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.367119804113508,
+          "phase_filter": "",
+          "position": "(0.0, 0.957247, -1.856825)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399767077365525,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00375317925582335,
+              "weight": 1.0
+            }
+          },
+          "frame": 1410,
+          "gaps": {
+            "Left": 0.00399766830676981,
+            "Right": 0.00375318992864736
+          },
+          "grounded": true,
+          "label": "female-course3-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.55,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399533932521706,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400011595128555,
+              "weight": 1.0
+            }
+          },
+          "frame": 1416,
+          "gaps": {
+            "Left": 0.00399531061329845,
+            "Right": 0.00400009598743142
+          },
+          "grounded": true,
+          "label": "female-course3-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0338867028554281,
+          "phase_filter": "",
+          "position": "(0.00477, 0.024084, -0.210713)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400311883937715,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399955824082426,
+              "weight": 1.0
+            }
+          },
+          "frame": 1423,
+          "gaps": {
+            "Left": 0.00400316230120401,
+            "Right": 0.00352371942863298
+          },
+          "grounded": true,
+          "label": "female-course3-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.172374478975932,
+          "phase_filter": "",
+          "position": "(0.00477, -0.142029, -0.477009)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039996643151669,
+              "weight": 1.0
+            },
+            "Right": {
+              "clearance_lift": 0.0098318886226576,
+              "gap": 0.00399987701062714,
+              "weight": 1.0
+            }
+          },
+          "frame": 1432,
+          "gaps": {
+            "Left": 0.00169330507437224,
+            "Right": 0.00399986415486374
+          },
+          "grounded": true,
+          "label": "female-course3-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.312661264340083,
+          "phase_filter": "",
+          "position": "(0.00477, -0.248377, -0.756393)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399962166671986,
+              "weight": 1.0
+            },
+            "Right": {
+              "clearance_lift": 0.0807557967594249,
+              "gap": 0.00399998773255695,
+              "weight": 0.319549771983107
+            }
+          },
+          "frame": 1441,
+          "gaps": {
+            "Left": 0.00399955796090642,
+            "Right": 0.0024933811364506
+          },
+          "grounded": true,
+          "label": "female-course3-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.283001916528328,
+          "phase_filter": "",
+          "position": "(0.00477, -0.43822, -1.206879)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399484941485106,
+              "weight": 1.0
+            }
+          },
+          "frame": 1448,
+          "gaps": {
+            "Left": 0.00399486881916003,
+            "Right": 0.250187443192273
+          },
+          "grounded": true,
+          "label": "female-course3-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.379814204494738,
+          "phase_filter": "",
+          "position": "(0.00477, -0.838659, -1.976746)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.0146419773538233,
+              "weight": 1.0
+            }
+          },
+          "frame": 1456,
+          "gaps": {
+            "Left": 0.10767228274209,
+            "Right": 0.0146418800966859
+          },
+          "grounded": true,
+          "label": "female-course3-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.510359719316745,
+          "phase_filter": "",
+          "position": "(0.00477, -1.144222, -2.716759)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 1561,
+          "gaps": {
+            "Left": 0.241942357290345,
+            "Right": 0.408892950323302
+          },
+          "grounded": false,
+          "label": "female-course3-rise",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0166666666666667,
+          "phase_filter": "rise",
+          "position": "(0.009302, -1.190148, -3.21205)",
+          "velocity_y": 5.19999980926514,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 1564,
+          "gaps": {
+            "Left": 1.13007511235219,
+            "Right": 1.2303413506226
+          },
+          "grounded": false,
+          "label": "female-course3-apex",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.284848519527551,
+          "phase_filter": "apex",
+          "position": "(0.009302, -0.518482, -3.21205)",
+          "velocity_y": 1.29999971389771,
+          "wait_modifier_callbacks": 16,
+          "wait_physics_ticks": 13
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 1565,
+          "gaps": {
+            "Left": 1.18831460277825,
+            "Right": 1.28872088541634
+          },
+          "grounded": false,
+          "label": "female-course3-fall",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.420909114317461,
+          "phase_filter": "fall",
+          "position": "(0.009302, -0.493482, -3.21205)",
+          "velocity_y": -0.500000298023224,
+          "wait_modifier_callbacks": 7,
+          "wait_physics_ticks": 6
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399793978693658,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399983709605491,
+              "weight": 1.0
+            }
+          },
+          "frame": 1567,
+          "gaps": {
+            "Left": 0.00399794825553079,
+            "Right": 0.00399976792247715
+          },
+          "grounded": true,
+          "label": "female-course3-landing",
+          "landing_compression": 0.055585728118609,
+          "landing_elapsed": 0.19,
+          "phase": 0.0,
+          "phase_filter": "landing",
+          "position": "(0.009302, -1.400149, -3.21205)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 21,
+          "wait_physics_ticks": 21
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399788948364007,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0038499846693049,
+              "weight": 1.0
+            }
+          },
+          "frame": 1627,
+          "gaps": {
+            "Left": 0.00399766830676981,
+            "Right": 0.00384999533535377
+          },
+          "grounded": true,
+          "label": "female-course3-recovered",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.566666666666667,
+          "phase_filter": "",
+          "position": "(0.009302, -1.400149, -3.21205)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Draw",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399850405869742,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0039994423245323,
+              "weight": 1.0
+            }
+          },
+          "frame": 1665,
+          "gaps": {
+            "Left": 0.00399850815305275,
+            "Right": 0.00387547067260279
+          },
+          "grounded": true,
+          "label": "female-course3-short_bow-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.15,
+          "phase_filter": "",
+          "position": "(0.015955, -1.534656, -3.508016)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Shoot",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399870964608315,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0037782587297828,
+              "weight": 0.934662040626611
+            }
+          },
+          "frame": 1705,
+          "gaps": {
+            "Left": 0.00399878810181372,
+            "Right": 0.00289131080338366
+          },
+          "grounded": true,
+          "label": "female-course3-short_bow-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.2,
+          "phase_filter": "",
+          "position": "(0.015955, -1.913465, -4.357811)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039975461089639,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399888898827071,
+              "weight": 1.0
+            }
+          },
+          "frame": 1839,
+          "gaps": {
+            "Left": 0.0039978082811503,
+            "Right": 0.00385699405437823
+          },
+          "grounded": true,
+          "label": "female-course3-starter_axe-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0899999976158142,
+          "phase_filter": "",
+          "position": "(0.030076, -2.132663, -4.73084)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399862872338877,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00268788447465652,
+              "weight": 0.895150897046365
+            }
+          },
+          "frame": 1880,
+          "gaps": {
+            "Left": 0.00399850815305275,
+            "Right": 0.00268792802853294
+          },
+          "grounded": true,
+          "label": "female-course3-starter_axe-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.749999980131785,
+          "phase_filter": "",
+          "position": "(0.030076, -2.511472, -5.587434)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Cast_Left",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399729896668106,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00392770107531126,
+              "weight": 1.0
+            }
+          },
+          "frame": 1977,
+          "gaps": {
+            "Left": 0.00399738835800883,
+            "Right": 0.0039282410140472
+          },
+          "grounded": true,
+          "label": "female-course3-cast",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0666666666666667,
+          "phase_filter": "",
+          "position": "(0.039762, -2.534227, -5.673718)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        }
+      ],
+      "support_cost_usec": {
+        "median": 401,
+        "p95": 772,
+        "samples": 3263
+      },
+      "walked_m": 20.9163996162824
+    },
+    "fixedgpu": {
+      "native": true,
+      "player_position_writes_after_setup": 0,
+      "samples": [
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399982742965221,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00398731231689453,
+              "weight": 1.0
+            }
+          },
+          "frame": 20,
+          "gaps": {
+            "Left": 0.00399982742965221,
+            "Right": 0.00398731231689453
+          },
+          "grounded": true,
+          "label": "male-course0-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.433333333333333,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399985536932945,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399198569357395,
+              "weight": 1.0
+            }
+          },
+          "frame": 21,
+          "gaps": {
+            "Left": 0.00399985536932945,
+            "Right": 0.00399198569357395
+          },
+          "grounded": true,
+          "label": "male-course0-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.181111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400066934525967,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399954617023468,
+              "weight": 1.0
+            }
+          },
+          "frame": 22,
+          "gaps": {
+            "Left": 0.00400066934525967,
+            "Right": 0.00393375940620899
+          },
+          "grounded": true,
+          "label": "male-course0-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.129807682832082,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.421111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00395789369940758,
+              "weight": 0.962048154931322
+            },
+            "Right": {
+              "gap": 0.00398746505379677,
+              "weight": 1.0
+            }
+          },
+          "frame": 23,
+          "gaps": {
+            "Left": 0.00395789369940758,
+            "Right": 0.00398746505379677
+          },
+          "grounded": true,
+          "label": "male-course0-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.278159320354462,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.661111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399923697113991,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400002673268318,
+              "weight": 0.949725684826171
+            }
+          },
+          "frame": 24,
+          "gaps": {
+            "Left": 0.00399923697113991,
+            "Right": 0.00399325974285603
+          },
+          "grounded": true,
+          "label": "male-course0-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.272966940036355,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -1.121111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.003999849781394,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0768472403287888,
+              "weight": 0.125604688879543
+            }
+          },
+          "frame": 25,
+          "gaps": {
+            "Left": 0.003999849781394,
+            "Right": 0.0763455331325531
+          },
+          "grounded": true,
+          "label": "male-course0-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.392697118551471,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -1.972222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399983115494251,
+              "weight": 1.0
+            }
+          },
+          "frame": 26,
+          "gaps": {
+            "Left": 0.549793720245361,
+            "Right": 0.00376133993268013
+          },
+          "grounded": true,
+          "label": "male-course0-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.586626329850096,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -2.774445)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00378187180628095,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399988953504578,
+              "weight": 1.0
+            }
+          },
+          "frame": 61,
+          "gaps": {
+            "Left": 0.00378186750468616,
+            "Right": 0.00399986372547704
+          },
+          "grounded": true,
+          "label": "male-course1-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.55,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00396624246059481,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399990674142494,
+              "weight": 1.0
+            }
+          },
+          "frame": 62,
+          "gaps": {
+            "Left": 0.00396623385740523,
+            "Right": 0.00399993255099369
+          },
+          "grounded": true,
+          "label": "male-course1-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.181111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400000137651033,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399766130894432,
+              "weight": 1.0
+            }
+          },
+          "frame": 63,
+          "gaps": {
+            "Left": 0.00400000137651033,
+            "Right": 0.00392049069840349
+          },
+          "grounded": true,
+          "label": "male-course1-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.129807682832082,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.421111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00393965215239759,
+              "weight": 0.96204818093695
+            },
+            "Right": {
+              "gap": 0.0039977172296766,
+              "weight": 1.0
+            }
+          },
+          "frame": 64,
+          "gaps": {
+            "Left": 0.00383556001086067,
+            "Right": 0.00399771292808181
+          },
+          "grounded": true,
+          "label": "male-course1-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.278159320354462,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.661111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039998357651109,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00386240196235313,
+              "weight": 0.949725729075715
+            }
+          },
+          "frame": 65,
+          "gaps": {
+            "Left": 0.00399982070952913,
+            "Right": 0.00386240196235313
+          },
+          "grounded": true,
+          "label": "male-course1-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.272966940036355,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -1.121111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039998809318562,
+              "weight": 1.0
+            },
+            "Right": {
+              "clearance_lift": 0.00365484440282078,
+              "gap": 0.00400005165139945,
+              "weight": 0.125604645498214
+            }
+          },
+          "frame": 66,
+          "gaps": {
+            "Left": 0.00399988953504578,
+            "Right": 0.000699250042757852
+          },
+          "grounded": true,
+          "label": "male-course1-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.392697118551471,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -1.972222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00400006590043219,
+              "weight": 1.0
+            }
+          },
+          "frame": 67,
+          "gaps": {
+            "Left": 0.620179641481001,
+            "Right": 0.00372466489716263
+          },
+          "grounded": true,
+          "label": "male-course1-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.586626329850096,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -2.774445)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00365133178543222,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400084450699857,
+              "weight": 1.0
+            }
+          },
+          "frame": 102,
+          "gaps": {
+            "Left": 0.00351983667297542,
+            "Right": 0.00400086890629478
+          },
+          "grounded": true,
+          "label": "male-course2-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.516666666666667,
+          "phase_filter": "",
+          "position": "(0.0, 0.07, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00391154908041731,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00394617717212284,
+              "weight": 1.0
+            }
+          },
+          "frame": 103,
+          "gaps": {
+            "Left": 0.00380159657256847,
+            "Right": 0.0039462005474136
+          },
+          "grounded": true,
+          "label": "male-course2-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.0, 0.152559, -0.142613)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039901469257867,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400152683392873,
+              "weight": 1.0
+            }
+          },
+          "frame": 104,
+          "gaps": {
+            "Left": 0.00321821530645652,
+            "Right": 0.00395927162871
+          },
+          "grounded": true,
+          "label": "male-course2-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.106635632117589,
+          "phase_filter": "",
+          "position": "(0.0, 0.244482, -0.339749)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399988267265124,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400317510560941,
+              "weight": 1.0
+            }
+          },
+          "frame": 105,
+          "gaps": {
+            "Left": 0.00399991529281655,
+            "Right": 0.00355724133957834
+          },
+          "grounded": true,
+          "label": "male-course2-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.22849073211352,
+          "phase_filter": "",
+          "position": "(0.0, 0.336407, -0.536883)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399791995512624,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400426025205255,
+              "weight": 1.0
+            }
+          },
+          "frame": 106,
+          "gaps": {
+            "Left": 0.00399794229941332,
+            "Right": 0.00168950713440991
+          },
+          "grounded": true,
+          "label": "male-course2-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.224221159593986,
+          "phase_filter": "",
+          "position": "(0.0, 0.509444, -0.916194)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399937812065921,
+              "weight": 1.0
+            }
+          },
+          "frame": 107,
+          "gaps": {
+            "Left": 0.00399945492768913,
+            "Right": 0.312839609710337
+          },
+          "grounded": true,
+          "label": "male-course2-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.322858867622144,
+          "phase_filter": "",
+          "position": "(0.0, 0.817551, -1.623633)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399923528414823,
+              "weight": 1.0
+            }
+          },
+          "frame": 108,
+          "gaps": {
+            "Left": 0.773286550590642,
+            "Right": 0.00399925762834881
+          },
+          "grounded": true,
+          "label": "male-course2-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.484027506487297,
+          "phase_filter": "",
+          "position": "(0.0, 1.142386, -2.274383)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399805351612869,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00398250104910806,
+              "weight": 1.0
+            }
+          },
+          "frame": 137,
+          "gaps": {
+            "Left": 0.0039980357395186,
+            "Right": 0.00398250295748369
+          },
+          "gpu": {
+            "boot_error_m": 1.24261748624122e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00398297974521723,
+            "tunic_error_m": 1.67901521308522e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.700000000000001,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399817708727011,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00386540153613495,
+              "weight": 1.0
+            }
+          },
+          "frame": 138,
+          "gaps": {
+            "Left": 0.0039939808566838,
+            "Right": 0.00386541001400514
+          },
+          "gpu": {
+            "boot_error_m": 1.13212058749923e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.0038654712527966,
+            "tunic_error_m": 1.4283367590906e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.009777, -0.011208, -0.249785)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400293731008975,
+              "weight": 0.962011557021075
+            },
+            "Right": {
+              "gap": 0.00399678499821673,
+              "weight": 1.0
+            }
+          },
+          "frame": 139,
+          "gaps": {
+            "Left": 0.00400295233963328,
+            "Right": 0.00399678471849297
+          },
+          "gpu": {
+            "boot_error_m": 1.16353169232752e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399637354375029,
+            "tunic_error_m": 1.55115287725494e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.10638342117928,
+          "phase_filter": "",
+          "position": "(0.009777, -0.179958, -0.563877)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399991473809952,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399988193160179,
+              "weight": 1.0
+            }
+          },
+          "frame": 140,
+          "gaps": {
+            "Left": 0.00399987290326252,
+            "Right": 0.00392140851459957
+          },
+          "gpu": {
+            "boot_error_m": 1.30527712371986e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00392114606263616,
+            "tunic_error_m": 1.36441269660281e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.275359125966989,
+          "phase_filter": "",
+          "position": "(0.027217, -0.315829, -0.887386)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399987974450195,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399993442199815,
+              "weight": 1.0
+            }
+          },
+          "frame": 141,
+          "gaps": {
+            "Left": 0.00399983790966739,
+            "Right": 0.00399990789685764
+          },
+          "gpu": {
+            "boot_error_m": 1.12392694973096e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399934799933568,
+            "tunic_error_m": 1.39307928748167e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.298133191361838,
+          "phase_filter": "",
+          "position": "(0.027217, -0.606101, -1.423749)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399990380260028,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400228774143483,
+              "weight": 1.0
+            }
+          },
+          "frame": 142,
+          "gaps": {
+            "Left": 0.00291139712698385,
+            "Right": 0.00400221747413571
+          },
+          "gpu": {
+            "boot_error_m": 1.20894708288688e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00291188703731556,
+            "tunic_error_m": 1.39793223752349e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.439607088660016,
+          "phase_filter": "",
+          "position": "(0.027217, -1.055443, -2.393873)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399958011182274,
+              "weight": 1.0
+            }
+          },
+          "frame": 143,
+          "gaps": {
+            "Left": 0.319943220792298,
+            "Right": 0.00399948797371617
+          },
+          "gpu": {
+            "boot_error_m": 1.14894260150322e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399948797371617,
+            "tunic_error_m": 1.60460263032292e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.655621791774843,
+          "phase_filter": "",
+          "position": "(0.027217, -1.486469, -3.310925)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 177,
+          "gaps": {
+            "Left": 0.215006107432157,
+            "Right": 0.339630057510574
+          },
+          "gpu": {
+            "boot_error_m": 1.39411497457331e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.215005967457776,
+            "tunic_error_m": 1.59776311647875e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": false,
+          "label": "male-course3-rise",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0218181956898082,
+          "phase_filter": "rise",
+          "position": "(0.03154, -1.53043, -3.890136)",
+          "velocity_y": 5.19999980926514,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 179,
+          "gaps": {
+            "Left": 1.13994848522875,
+            "Right": 1.21274853063644
+          },
+          "gpu": {
+            "boot_error_m": 1.23455015454965e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 1.13994911511346,
+            "tunic_error_m": 1.47762125379813e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": false,
+          "label": "male-course3-apex",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.370909114317461,
+          "phase_filter": "apex",
+          "position": "(0.03154, -0.823763, -3.890136)",
+          "velocity_y": 0.399999678134918,
+          "wait_modifier_callbacks": 2,
+          "wait_physics_ticks": 16
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 180,
+          "gaps": {
+            "Left": 0.920578256561702,
+            "Right": 0.992963417905621
+          },
+          "gpu": {
+            "boot_error_m": 1.28841202240437e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.920578116587321,
+            "tunic_error_m": 1.56455098476727e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": false,
+          "label": "male-course3-fall",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.545454562794079,
+          "phase_filter": "fall",
+          "position": "(0.03154, -0.95043, -3.890136)",
+          "velocity_y": -2.00000023841858,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 8
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399998581884458,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399983928315475,
+              "weight": 1.0
+            }
+          },
+          "frame": 182,
+          "gaps": {
+            "Left": 0.00399976792247715,
+            "Right": 0.00399990789685764
+          },
+          "gpu": {
+            "boot_error_m": 1.28953172406909e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399948797371617,
+            "tunic_error_m": 1.41050338697823e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-landing",
+          "landing_compression": 0.0456088012257499,
+          "landing_elapsed": 0.19,
+          "phase": 0.0,
+          "phase_filter": "landing",
+          "position": "(0.03154, -1.74043, -3.890136)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 2,
+          "wait_physics_ticks": 16
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399806663872778,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00380914714093909,
+              "weight": 1.0
+            }
+          },
+          "frame": 210,
+          "gaps": {
+            "Left": 0.00399808822991128,
+            "Right": 0.00380898284187045
+          },
+          "gpu": {
+            "boot_error_m": 1.26756253848725e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00380856291872899,
+            "tunic_error_m": 1.42085525567381e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-recovered",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.566666666666667,
+          "phase_filter": "",
+          "position": "(0.03154, -1.74043, -3.890136)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Draw",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399759422516056,
+              "weight": 1.0
+            }
+          },
+          "frame": 223,
+          "gaps": {
+            "Left": 0.122065498351837,
+            "Right": 0.00250554141075559
+          },
+          "gpu": {
+            "boot_error_m": 1.35395725919807e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00250470156447265,
+            "tunic_error_m": 1.45146793784079e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-short_bow-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.15,
+          "phase_filter": "",
+          "position": "(0.038174, -1.875, -4.182577)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Shoot",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039994423245323,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399961291832046,
+              "weight": 1.0
+            }
+          },
+          "frame": 237,
+          "gaps": {
+            "Left": 0.00399962794809666,
+            "Right": 0.00399976792247715
+          },
+          "gpu": {
+            "boot_error_m": 1.29228385503666e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399920802495519,
+            "tunic_error_m": 1.52778693518485e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-short_bow-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.2,
+          "phase_filter": "",
+          "position": "(0.065595, -2.30594, -5.041604)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399790698043886,
+              "weight": 1.0
+            }
+          },
+          "frame": 294,
+          "gaps": {
+            "Left": 0.12445318133422,
+            "Right": 0.00242085691055966
+          },
+          "gpu": {
+            "boot_error_m": 1.33953062686487e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00242071693617917,
+            "tunic_error_m": 1.67424343544553e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-starter_axe-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0899999976158142,
+          "phase_filter": "",
+          "position": "(0.076144, -2.470378, -5.431147)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399942482773352,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00398631316414349,
+              "weight": 0.977080493988579
+            }
+          },
+          "frame": 308,
+          "gaps": {
+            "Left": 0.00399934799933568,
+            "Right": 0.00324292644717237
+          },
+          "gpu": {
+            "boot_error_m": 1.33579578687204e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.0032426464984114,
+            "tunic_error_m": 1.47756486512662e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-starter_axe-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.749999980131785,
+          "phase_filter": "",
+          "position": "(0.076144, -2.849187, -6.27999)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Cast_Left",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399834986815812,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400262018061175,
+              "weight": 1.0
+            }
+          },
+          "frame": 347,
+          "gaps": {
+            "Left": 0.00399822820429177,
+            "Right": 0.00400242743570644
+          },
+          "gpu": {
+            "boot_error_m": 1.36253993332502e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399822820429177,
+            "tunic_error_m": 1.46746174323198e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "male-course3-cast",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.133333333333333,
+          "phase_filter": "",
+          "position": "(0.080776, -2.889508, -6.371873)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 4
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399966910481453,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399828143417835,
+              "weight": 1.0
+            }
+          },
+          "frame": 381,
+          "gaps": {
+            "Left": 0.00399966910481453,
+            "Right": 0.00399828143417835
+          },
+          "grounded": true,
+          "label": "female-course0-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.516666666666667,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399980880320072,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400000996887684,
+              "weight": 1.0
+            }
+          },
+          "frame": 382,
+          "gaps": {
+            "Left": 0.00399980880320072,
+            "Right": 0.00400000996887684
+          },
+          "grounded": true,
+          "label": "female-course0-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.181111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400043837726116,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399988703429699,
+              "weight": 1.0
+            }
+          },
+          "frame": 383,
+          "gaps": {
+            "Left": 0.00400043837726116,
+            "Right": 0.00399988703429699
+          },
+          "grounded": true,
+          "label": "female-course0-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.109517596165339,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.421111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400002114474773,
+              "weight": 0.963424748951151
+            },
+            "Right": {
+              "gap": 0.00399923510849476,
+              "weight": 1.0
+            }
+          },
+          "frame": 384,
+          "gaps": {
+            "Left": 0.00302543491125107,
+            "Right": 0.00399923510849476
+          },
+          "grounded": true,
+          "label": "female-course0-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.234680563211441,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -0.661111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399955734610558,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399983488023281,
+              "weight": 1.0
+            }
+          },
+          "frame": 385,
+          "gaps": {
+            "Left": 0.00399955734610558,
+            "Right": 0.00399983488023281
+          },
+          "grounded": true,
+          "label": "female-course0-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.230299793633327,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -1.121111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039998572319746,
+              "weight": 1.0
+            }
+          },
+          "frame": 386,
+          "gaps": {
+            "Left": 0.00316676124930382,
+            "Right": 0.237161755561829
+          },
+          "grounded": true,
+          "label": "female-course0-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.336996510577704,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -1.972222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.0039997436106205,
+              "weight": 1.0
+            }
+          },
+          "frame": 387,
+          "gaps": {
+            "Left": 0.547437429428101,
+            "Right": 0.0039997436106205
+          },
+          "grounded": true,
+          "label": "female-course0-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.509815171313788,
+          "phase_filter": "",
+          "position": "(0.0, 0.025, -2.774445)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00384394381910727,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399985297149006,
+              "weight": 1.0
+            }
+          },
+          "frame": 423,
+          "gaps": {
+            "Left": 0.00384395672389164,
+            "Right": 0.00399984651909788
+          },
+          "grounded": true,
+          "label": "female-course1-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.533333333333333,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00396791793176569,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399979489996039,
+              "weight": 1.0
+            }
+          },
+          "frame": 424,
+          "gaps": {
+            "Left": 0.00396792008256309,
+            "Right": 0.00399981210633955
+          },
+          "grounded": true,
+          "label": "female-course1-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.181111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.0039997905983656,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399729567338713,
+              "weight": 1.0
+            }
+          },
+          "frame": 425,
+          "gaps": {
+            "Left": 0.00399978629677081,
+            "Right": 0.00399731718136109
+          },
+          "grounded": true,
+          "label": "female-course1-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.109517596165339,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.421111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400005729724261,
+              "weight": 0.963424769934653
+            },
+            "Right": {
+              "gap": 0.00399720103830174,
+              "weight": 1.0
+            }
+          },
+          "frame": 426,
+          "gaps": {
+            "Left": 0.00220369840796256,
+            "Right": 0.00399719673670695
+          },
+          "grounded": true,
+          "label": "female-course1-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.234680563211441,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -0.661111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.0040001949482759,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399828504018894,
+              "weight": 1.0
+            }
+          },
+          "frame": 427,
+          "gaps": {
+            "Left": 0.00400020785306027,
+            "Right": 0.00399826353221499
+          },
+          "grounded": true,
+          "label": "female-course1-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.230299793633327,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -1.121111)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400035625808055,
+              "weight": 1.0
+            }
+          },
+          "frame": 428,
+          "gaps": {
+            "Left": 0.00303838846429281,
+            "Right": 0.0913319251632627
+          },
+          "grounded": true,
+          "label": "female-course1-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.336996510577704,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -1.972222)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00399990459062755,
+              "weight": 1.0
+            }
+          },
+          "frame": 429,
+          "gaps": {
+            "Left": 0.600011012082664,
+            "Right": 0.00399989813823536
+          },
+          "grounded": true,
+          "label": "female-course1-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.509815171313788,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, -2.774445)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400013135204446,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400001934355743,
+              "weight": 1.0
+            }
+          },
+          "frame": 463,
+          "gaps": {
+            "Left": 0.00400016191699196,
+            "Right": 0.00399998105926333
+          },
+          "grounded": true,
+          "label": "female-course2-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.533333333333333,
+          "phase_filter": "",
+          "position": "(0.0, 0.07, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00379418165522451,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0039690618419039,
+              "weight": 1.0
+            }
+          },
+          "frame": 464,
+          "gaps": {
+            "Left": 0.00379418140569466,
+            "Right": 0.00396908727089107
+          },
+          "grounded": true,
+          "label": "female-course2-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.0, 0.159988, -0.139149)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399946957713027,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400143948786086,
+              "weight": 1.0
+            }
+          },
+          "frame": 465,
+          "gaps": {
+            "Left": 0.00399948781091252,
+            "Right": 0.00400142792109236
+          },
+          "grounded": true,
+          "label": "female-course2-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0899666368961334,
+          "phase_filter": "",
+          "position": "(0.0, 0.251912, -0.336284)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399965865567718,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400314222238386,
+              "weight": 1.0
+            }
+          },
+          "frame": 466,
+          "gaps": {
+            "Left": 0.00061215408657574,
+            "Right": 0.0040031378487085
+          },
+          "grounded": true,
+          "label": "female-course2-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.192774707078934,
+          "phase_filter": "",
+          "position": "(0.0, 0.343837, -0.533419)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399930516100252,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400413899515834,
+              "weight": 1.0
+            }
+          },
+          "frame": 467,
+          "gaps": {
+            "Left": 0.00350837686962499,
+            "Right": 0.00400412434541011
+          },
+          "grounded": true,
+          "label": "female-course2-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.189173147975845,
+          "phase_filter": "",
+          "position": "(0.0, 0.516875, -0.91273)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399939250707039,
+              "weight": 1.0
+            }
+          },
+          "frame": 468,
+          "gaps": {
+            "Left": 0.00399938916124236,
+            "Right": 0.586411718212873
+          },
+          "grounded": true,
+          "label": "female-course2-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.277073452770156,
+          "phase_filter": "",
+          "position": "(0.0, 0.825622, -1.61987)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.0223767719208296,
+              "weight": 0.836083487695786
+            },
+            "Right": {
+              "gap": 0.00399854062600849,
+              "weight": 1.0
+            }
+          },
+          "frame": 469,
+          "gaps": {
+            "Left": 0.0221997271744722,
+            "Right": 0.00399846843098752
+          },
+          "grounded": true,
+          "label": "female-course2-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.421423456966324,
+          "phase_filter": "",
+          "position": "(0.0, 1.149816, -2.270918)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399813006462338,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00398975565930457,
+              "weight": 1.0
+            }
+          },
+          "frame": 501,
+          "gaps": {
+            "Left": 0.00399809260411067,
+            "Right": 0.00398975975427218
+          },
+          "gpu": {
+            "boot_error_m": 1.51751635257824e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399029778079718,
+            "tunic_error_m": 1.67598318512319e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-idle",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.700000000000001,
+          "phase_filter": "",
+          "position": "(0.0, 0.11, 0.0)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399769920595328,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399970040231439,
+              "weight": 1.0
+            }
+          },
+          "frame": 502,
+          "gaps": {
+            "Left": 0.00399771204876371,
+            "Right": 0.003999654193293
+          },
+          "gpu": {
+            "boot_error_m": 1.44079660913121e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399773829396006,
+            "tunic_error_m": 1.71227247847128e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-walk-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0,
+          "phase_filter": "",
+          "position": "(0.00477, -0.030408, -0.243909)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399984037670468,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399973977011166,
+              "weight": 1.0
+            }
+          },
+          "frame": 503,
+          "gaps": {
+            "Left": 0.00346387600677448,
+            "Right": 0.00378102295936775
+          },
+          "gpu": {
+            "boot_error_m": 1.43577926792204e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00346373603239399,
+            "tunic_error_m": 1.57198417127802e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-walk-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.121183194716771,
+          "phase_filter": "",
+          "position": "(0.00477, -0.142029, -0.56184)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Walk",
+          "contacts": {
+            "Left": {
+              "gap": 0.00400007330283851,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399705838569775,
+              "weight": 1.0
+            }
+          },
+          "frame": 504,
+          "gaps": {
+            "Left": 0.00381041757927047,
+            "Right": 0.00399703842205761
+          },
+          "gpu": {
+            "boot_error_m": 1.49489540035574e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00380982268815339,
+            "tunic_error_m": 1.7691638731776e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-walk-late",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.285103740294774,
+          "phase_filter": "",
+          "position": "(0.00477, -0.302869, -0.872795)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399995191879694,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399994754459724,
+              "weight": 1.0
+            }
+          },
+          "frame": 505,
+          "gaps": {
+            "Left": 0.00399990789685764,
+            "Right": 0.00399994289045276
+          },
+          "gpu": {
+            "boot_error_m": 1.45398996664881e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399980291607227,
+            "tunic_error_m": 1.68613735240797e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-run-start",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.301806603912086,
+          "phase_filter": "",
+          "position": "(0.00477, -0.570935, -1.403152)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Left": {
+              "clearance_lift": 0.00522787749597084,
+              "gap": 0.0039998472113917,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.0040025633160157,
+              "weight": 0.713334966032681
+            }
+          },
+          "frame": 506,
+          "gaps": {
+            "Left": 0.00399983790966739,
+            "Right": 0.00180468968764647
+          },
+          "gpu": {
+            "boot_error_m": 1.52662380514812e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00180461970045623,
+            "tunic_error_m": 1.75606248831173e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-run-mid",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.41237751150486,
+          "phase_filter": "",
+          "position": "(0.00477, -1.022553, -2.373578)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Run",
+          "contacts": {
+            "Right": {
+              "gap": 0.00400013782228404,
+              "weight": 1.0
+            }
+          },
+          "frame": 507,
+          "gaps": {
+            "Left": 0.422212422460317,
+            "Right": 0.00345274804352559
+          },
+          "gpu": {
+            "boot_error_m": 1.44205102969863e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00345288801790608,
+            "tunic_error_m": 1.74972194599832e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-stop",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.605261559330991,
+          "phase_filter": "",
+          "position": "(0.00477, -1.41056, -3.294118)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 1
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 550,
+          "gaps": {
+            "Left": 0.239856739021057,
+            "Right": 0.403380969181211
+          },
+          "gpu": {
+            "boot_error_m": 1.58401519456675e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.239856739021057,
+            "tunic_error_m": 1.70915734543087e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": false,
+          "label": "female-course3-rise",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0218181956898082,
+          "phase_filter": "rise",
+          "position": "(0.01447, -1.498007, -3.866134)",
+          "velocity_y": 5.19999980926514,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 552,
+          "gaps": {
+            "Left": 1.20286367986068,
+            "Right": 1.30541115059711
+          },
+          "gpu": {
+            "boot_error_m": 1.46061790928798e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 1.20286381983506,
+            "tunic_error_m": 1.82328130904352e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": false,
+          "label": "female-course3-apex",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.370909114317461,
+          "phase_filter": "apex",
+          "position": "(0.01447, -0.791341, -3.866134)",
+          "velocity_y": 0.399999678134918,
+          "wait_modifier_callbacks": 2,
+          "wait_physics_ticks": 16
+        },
+        {
+          "clip": "Airborne",
+          "contacts": {},
+          "frame": 553,
+          "gaps": {
+            "Left": 0.969639836820667,
+            "Right": 1.07070973799665
+          },
+          "gpu": {
+            "boot_error_m": 1.48565777635667e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.969639906807857,
+            "tunic_error_m": 1.68492294960743e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": false,
+          "label": "female-course3-fall",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.545454562794079,
+          "phase_filter": "fall",
+          "position": "(0.01447, -0.918007, -3.866134)",
+          "velocity_y": -2.00000023841858,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 8
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399814865497209,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00400004268344064,
+              "weight": 1.0
+            }
+          },
+          "frame": 555,
+          "gaps": {
+            "Left": 0.00399808822991128,
+            "Right": 0.00399990789685764
+          },
+          "gpu": {
+            "boot_error_m": 1.49316770148289e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399822820429177,
+            "tunic_error_m": 1.73980231465976e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-landing",
+          "landing_compression": 0.055585728118609,
+          "landing_elapsed": 0.19,
+          "phase": 0.0,
+          "phase_filter": "landing",
+          "position": "(0.01447, -1.708007, -3.866134)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 2,
+          "wait_physics_ticks": 16
+        },
+        {
+          "clip": "Idle",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399811038072474,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00387618175128678,
+              "weight": 1.0
+            }
+          },
+          "frame": 584,
+          "gaps": {
+            "Left": 0.00399808822991128,
+            "Right": 0.00387617054450524
+          },
+          "gpu": {
+            "boot_error_m": 1.43051147460938e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00387687041640769,
+            "tunic_error_m": 1.73264049863064e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-recovered",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.566666666666667,
+          "phase_filter": "",
+          "position": "(0.01447, -1.708007, -3.866134)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Draw",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399998691239451,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399913394345371,
+              "weight": 1.0
+            }
+          },
+          "frame": 596,
+          "gaps": {
+            "Left": 0.00400004787123813,
+            "Right": 0.00375047355082599
+          },
+          "gpu": {
+            "boot_error_m": 1.55086661379755e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00374963370454306,
+            "tunic_error_m": 1.71308681728988e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-short_bow-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.15,
+          "phase_filter": "",
+          "position": "(0.021294, -1.84196, -4.158926)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Bow_Attack_Shoot",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399927173074414,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00359808544428711,
+              "weight": 0.928217117344149
+            }
+          },
+          "frame": 611,
+          "gaps": {
+            "Left": 0.00399934799933568,
+            "Right": 0.00359804145047332
+          },
+          "gpu": {
+            "boot_error_m": 1.46130651046406e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00359762152733185,
+            "tunic_error_m": 1.65999620094226e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-short_bow-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.2,
+          "phase_filter": "",
+          "position": "(0.021294, -2.218132, -5.008241)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399859154269135,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399902677556114,
+              "weight": 1.0
+            }
+          },
+          "frame": 669,
+          "gaps": {
+            "Left": 0.00399850815305275,
+            "Right": 0.00378042806825067
+          },
+          "gpu": {
+            "boot_error_m": 1.49160553064576e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00378014811948969,
+            "tunic_error_m": 1.88109083865129e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-starter_axe-action",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0899999976158142,
+          "phase_filter": "",
+          "position": "(0.035297, -2.437696, -5.380494)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Axe_Chop",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399889554957025,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399002685968575,
+              "weight": 0.983784949685617
+            }
+          },
+          "frame": 683,
+          "gaps": {
+            "Left": 0.00399878810181372,
+            "Right": 0.00398982974146242
+          },
+          "gpu": {
+            "boot_error_m": 1.60628712819744e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00398982974146242,
+            "tunic_error_m": 1.85158546628372e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-starter_axe-recovery",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.749999980131785,
+          "phase_filter": "",
+          "position": "(0.035297, -2.816505, -6.237084)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        },
+        {
+          "clip": "Cast_Left",
+          "contacts": {
+            "Left": {
+              "gap": 0.00399756141866284,
+              "weight": 1.0
+            },
+            "Right": {
+              "gap": 0.00399988630580149,
+              "weight": 1.0
+            }
+          },
+          "frame": 724,
+          "gaps": {
+            "Left": 0.00399738835800883,
+            "Right": 0.00399962794809666
+          },
+          "gpu": {
+            "boot_error_m": 1.45024364428537e-06,
+            "boot_vertices": 3530,
+            "minimum_gap_m": 0.00399766830676981,
+            "tunic_error_m": 1.74209810666071e-06,
+            "tunic_vertices": 3776
+          },
+          "grounded": true,
+          "label": "female-course3-cast",
+          "landing_compression": 0.0,
+          "landing_elapsed": 0.0,
+          "phase": 0.0666666666666667,
+          "phase_filter": "",
+          "position": "(0.044983, -2.83926, -6.323368)",
+          "velocity_y": 0.0,
+          "wait_modifier_callbacks": 1,
+          "wait_physics_ticks": 0
+        }
+      ],
+      "support_cost_usec": {
+        "median": 496,
+        "p95": 1250,
+        "samples": 2091
+      },
+      "walked_m": 21.9094160120003
+    }
+  },
+  "baseline_limit": "The original instrumented test also passed locally; the CI timing failure was not reproduced on this slower Windows CPU. No rerun-until-green claim. Fixed cadence was checked headless240cap and actualGPU, with original predicates retained.",
+  "actual_fa_packaged_gameplay": {
+    "result": {
+      "sha": "fa1383cb93673909c16af13fd882a29316a195a0",
+      "pck_sha256": "e6a1e5c382d0ddd3f54003a87efbd9ee5eb3dcee4ec757e79eaac8fd1139f531",
+      "actual_compiled_pck": true,
+      "engine": "Godot4.7.1 desktop debug engine with --main-pack; not exported EXE script execution",
+      "manual_play": false,
+      "returncode": 0,
+      "seconds": 271.92199999999866,
+      "stopped": false,
+      "errors": [],
+      "marker": "CITY_STREETSCAPE_NATIVE_OK ordinary_walk_m=288.017479456961 player_position_assignments=0 arcade=true paid_trade=true finite_visible_stock=true npc_seats=true player_rest=true actual_scene_reload=true jump_wake=true npc_return_work=true gpu_boot_coverage=3530_per_actor manual_play=false"
+    },
+    "proof": {
+      "exclusive_seats": true,
+      "foot_samples": [
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00400043129920959,
+          "label": "trader-public-rest",
+          "minimum_y": 0.0290004312992096,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "artisan-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "hero-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        }
+      ],
+      "jump_wake_and_land": true,
+      "manual_play": false,
+      "paid_trade_and_visible_stock": true,
+      "player_position_assignments": 0,
+      "real_scene_disk_restore": true,
+      "residents_return_to_work": true,
+      "street_foot_samples": [
+        {
+          "gap_m": 0.00399979203939438,
+          "label": "east-promenade-entry",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399959832429886,
+          "label": "east-promenade-north",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399822741746902,
+          "label": "west-promenade",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        }
+      ],
+      "streetscape": {
+        "actual_walked_m": 288.017479456961,
+        "details": {
+          "central_clear_width_m": 14.0,
+          "flowers": 12,
+          "lantern_posts": 4,
+          "panel_ramp_rise_m": 0.039,
+          "panel_ramp_run_m": 0.1,
+          "paving_panels": 28,
+          "planters": 6
+        },
+        "driver_position_assignments": 0,
+        "four_night_lights_bounded_and_low_disabled": true,
+        "manual_play": false,
+        "planter_physical_heights_m": [
+          0.340000038966537,
+          0.58999983035028
+        ]
+      },
+      "talk_to_visible_seated_resident": true,
+      "walked_m": 288.017479456961
+    }
+  },
+  "additional_ordinary_city_road_survey": {
+    "actual_scene_disk_reload": true,
+    "district": "canals",
+    "driver_position_assignments": 0,
+    "full_city_art_accepted": false,
+    "inventory_money_preserved": true,
+    "manual_play": false,
+    "ordinary_road_samples": [
+      {
+        "kind": "",
+        "local_xz": "(-0.001953, -0.120117)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 3.64607028663158
+      },
+      {
+        "kind": "",
+        "local_xz": "(160.0508, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 163.280022248626
+      },
+      {
+        "kind": "",
+        "local_xz": "(320.0674, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 322.798576936126
+      },
+      {
+        "kind": "",
+        "local_xz": "(480.084, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 482.317131623626
+      },
+      {
+        "kind": "",
+        "local_xz": "(640.0557, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 641.775139436126
+      },
+      {
+        "kind": "",
+        "local_xz": "(800.1045, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 801.348381623626
+      },
+      {
+        "kind": "",
+        "local_xz": "(960.0654, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 960.781975373626
+      },
+      {
+        "kind": "",
+        "local_xz": "(1120.082, -0.000977)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 1120.30053006113
+      },
+      {
+        "kind": "",
+        "local_xz": "(1120.002, -160.0654)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 1279.94599109702
+      },
+      {
+        "kind": "",
+        "local_xz": "(1180.107, -160.001)",
+        "on_floor": true,
+        "terrain_y": 0.0,
+        "walked_m": 1339.63251638226
+      }
+    ],
+    "physical_water_present": false,
+    "runtime": "fa1383cb93673909c16af13fd882a29316a195a0 source mirror",
+    "walked_m": 1339.63251638226
+  },
+  "source_mirror_code_audit": {
+    "runtime": "fa1383cb93673909c16af13fd882a29316a195a0",
+    "paths_checked": 228,
+    "scope": "All Git-tracked scripts/scenes of the named runtime; CRLF normalized on both mirror and Git blob. Does not fingerprint all production asset bytes or turn source gameplay into packaged gameplay.",
+    "mismatches": [],
+    "missing": [],
+    "newline_only": [
+      "scenes/boot_launcher.tscn",
+      "scenes/bootstrap.tscn",
+      "scenes/house.tscn",
+      "scenes/world_loading.tscn",
+      "scripts/ambient_vfx.gd",
+      "scripts/boot_launcher.gd",
+      "scripts/bootstrap.gd",
+      "scripts/capital_data.gd",
+      "scripts/capital_landmarks.gd",
+      "scripts/capital_perimeter.gd",
+      "scripts/capital_spawn_surface.gd",
+      "scripts/character_appearance.gd",
+      "scripts/city_district.gd",
+      "scripts/city_npc.gd",
+      "scripts/city_quest_system.gd",
+      "scripts/cottage_yard_assets.gd",
+      "scripts/dialogue_ui.gd",
+      "scripts/door_interactable.gd",
+      "scripts/embedded_ui_texture.gd",
+      "scripts/enterable_townhouse.gd",
+      "scripts/enterable_warehouse.gd",
+      "scripts/environment_exposure.gd",
+      "scripts/environment_mark_pool.gd",
+      "scripts/environment_state.gd",
+      "scripts/game_menu.gd",
+      "scripts/house_room_layout.gd",
+      "scripts/hud.gd",
+      "scripts/hud_runtime.gd",
+      "scripts/inventory_system.gd",
+      "scripts/landmark_vfx.gd",
+      "scripts/local_map_renderer.gd",
+      "scripts/magic_hud.gd",
+      "scripts/magic_projectile.gd",
+      "scripts/magic_system.gd",
+      "scripts/magic_zone.gd",
+      "scripts/map_system.gd",
+      "scripts/menu_music.gd",
+      "scripts/menu_runtime_assets.gd",
+      "scripts/minimap_view.gd",
+      "scripts/nature_vfx.gd",
+      "scripts/player_controller.gd",
+      "scripts/quest_npc.gd",
+      "scripts/resource_node.gd",
+      "scripts/screen_vfx.gd",
+      "scripts/settings_manager.gd",
+      "scripts/settlement_civic_spaces.gd",
+      "scripts/settlement_gate_network.gd",
+      "scripts/settlement_interior_visuals.gd",
+      "scripts/settlement_public_works.gd",
+      "scripts/settlement_road_gate_overlay.gd",
+      "scripts/start_civilization_signs.gd",
+      "scripts/start_spawn_surface.gd",
+      "scripts/startup_menu.gd",
+      "scripts/streamed_resource.gd",
+      "scripts/surface_track_emitter.gd",
+      "scripts/third_party_vfx.gd",
+      "scripts/ui_layout_guard.gd",
+      "scripts/underwater_bubble_field.gd",
+      "scripts/update_manager.gd",
+      "scripts/vfx_flipbook_3d.gd",
+      "scripts/vfx_library.gd",
+      "scripts/weapon_projectile.gd",
+      "scripts/weather_hail_vfx.gd",
+      "scripts/weather_vfx.gd",
+      "scripts/world_audio.gd",
+      "scripts/world_effect_emitter.gd",
+      "scripts/world_geography.gd",
+      "scripts/world_hydrology.gd",
+      "scripts/world_loading.gd",
+      "scripts/world_map_view.gd",
+      "scripts/world_roads.gd",
+      "scripts/world_settlements.gd",
+      "scripts/world_vfx.gd",
+      "scripts/world_water.gd"
+    ]
+  },
+  "delivery": "Old primary remains validated0ff. fa review PCK passed288m, but no new primary promotion until current validation head passes all8 workflows.",
+  "new_exact_sha_ci": "Starts after publication; not represented as already green",
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "next": "Inspect full exact-SHA CI, including new street rendering/PCK guards. Deliver runtime-equivalent tested artifact only after mandatory gates pass; continue coherent city water/terrain/bridge/architecture and human work."
+}

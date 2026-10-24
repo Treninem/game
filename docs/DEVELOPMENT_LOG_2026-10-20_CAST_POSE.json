@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-20",
+  "task": "Replace punching during spell casting with a free-hand reach and retain locomotion",
+  "spec_normalized_equal": true,
+  "baseline": {
+    "case": "cast_pose",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Missing free-hand cast clip: Cast_Left body=0",
+      "ERROR: Missing free-hand cast clip: Cast_Right body=0",
+      "ERROR: Missing free-hand cast clip: Cast_Left body=5",
+      "ERROR: Missing free-hand cast clip: Cast_Right body=5"
+    ],
+    "seconds": 15.36
+  },
+  "implementation": [
+    "Two nonlooping 0.45 second cast clips generated on the existing rig, separate from Punch",
+    "Use right free hand with bow; otherwise left free hand",
+    "Pin occupied arm to its relaxed pose: short Idle copies otherwise change loop-boundary interpolation",
+    "Apply lower-body gait during cast even without equipped weapon; preserve gait phase when returning to Walk/Run"
+  ],
+  "checks": {
+    "cast_pose": {
+      "case": "cast_pose",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.42
+    },
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.38
+    },
+    "magic_runtime": {
+      "case": "magic_runtime",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 85.69
+    },
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 91.09,
+      "marker": true
+    }
+  },
+  "export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 133.8,
+    "sha256": "c1cfaea26a8a1e0d268b57361660abdb2a63c13ffe49fe1623a12b7be32d7b04"
+  },
+  "export_first_attempt": {
+    "result": "timeout",
+    "bound_seconds": 300,
+    "accepted": false,
+    "incomplete_tmp_bytes": 281284720
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 93.34,
+    "marker": true
+  },
+  "native_scope": "Actual rendered world, ordinary action events, healing during forward travel, free-hand clip and gait asserted; mana/health, cooldown save/load and blocked recast retained; walk/run/jumps/axe/bow/menu checks retained. Explicit QA profiles/items and observer camera; no driver coordinate assignments on gameplay route.",
+  "failed_attempts": [
+    "Baseline lacks all four clips across two bodies",
+    "Initial occupied-arm interpolation check failed, prompting explicit constant arm tracks",
+    "First native attempt timed out after a mana assertion: extra capture frames allowed ordinary regeneration. Restored immediate post-action measurement without changing original bounds; repeated full scenario."
+  ],
+  "editor": "Root project opened in desktop Godot; mass import became unresponsive. Normal close did not end it; stopped only our editor window process, no unsaved scenes. Rendered QA uses prepared build/stability mirror.",
+  "limitations": [
+    "Models and forest remain owner-rejected; no asset replacement or AAA realism claimed",
+    "Hand gesture is an initial rig-based motion, not full natural combat animation",
+    "Complete city traversal and stable release gates not performed in this task"
+  ],
+  "percentages": {
+    "editor_functional": "32/55 = 58.2%, unchanged; not model/world/game quality",
+    "visual_acceptance": "Not accepted; no invented overall percent"
+  },
+  "review_launcher": "build/review-2026-10-20-cast-pose/ImPuls-editor.cmd"
+}

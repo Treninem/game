@@ -1,0 +1,27 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+JOURNEY_START position=(65.0, 4.737128, 48.0) speed=8.0 time_scale=1.0 test_supplies=10_berries_10_water no_position_assignments=true
+JOURNEY_PROGRESS waypoint=0 position=(45.80647, 4.789237, 164.9613) travelled=118.557933888398 grounded=true fps=154.0 seconds=15.0000000000003
+JOURNEY_PROGRESS waypoint=0 position=(42.6156, 4.729733, 278.9513) travelled=237.728440820239 grounded=true fps=46.0 seconds=29.9999999999996
+JOURNEY_PROGRESS waypoint=0 position=(19.4007, 4.637083, 378.9702) travelled=342.567843823694 grounded=true fps=135.0 seconds=44.9999999999987
+JOURNEY_WAYPOINT index=0 position=(13.32847, 4.617397, 382.9565) travelled=349.859532549046 seconds=45.9499999999987
+JOURNEY_WAYPOINT index=1 position=(86.17023, 4.794865, 365.8803) travelled=426.955690733157 seconds=55.8999999999981
+JOURNEY_PROGRESS waypoint=2 position=(105.9732, 4.46873, 357.2704) travelled=448.552161066793 grounded=true fps=36.0 seconds=59.9999999999979
+JOURNEY_PROGRESS waypoint=2 position=(208.6682, 2.445012, 311.6406) travelled=562.206259485334 grounded=true fps=99.0 seconds=74.999999999997
+JOURNEY_WAYPOINT index=2 position=(246.3376, 5.171786, 295.5533) travelled=603.167144533247 seconds=80.1499999999967
+JOURNEY_PROGRESS waypoint=3 position=(305.4421, 5.303728, 269.8526) travelled=667.620091024786 grounded=true fps=46.0 seconds=89.9999999999962
+JOURNEY_PROGRESS waypoint=3 position=(415.4761, 6.621534, 221.9897) travelled=787.613136280328 grounded=true fps=92.0 seconds=104.999999999995
+JOURNEY_PROGRESS waypoint=3 position=(512.3645, 7.22732, 179.8506) travelled=893.271009940654 grounded=true fps=70.0 seconds=119.999999999994
+JOURNEY_PROGRESS waypoint=3 position=(616.263, 9.724326, 134.6972) travelled=1006.55832506344 grounded=true fps=152.0 seconds=135.0
+JOURNEY_WAYPOINT index=3 position=(646.3497, 10.56196, 121.5826) travelled=1039.38033538684 seconds=140.06666666667
+JOURNEY_PROGRESS waypoint=4 position=(716.256, 11.45826, 83.8333) travelled=1118.82784582302 grounded=true fps=74.0 seconds=150.000000000012
+JOURNEY_PROGRESS waypoint=4 position=(809.212, 11.1422, 33.63599) travelled=1224.47363722697 grounded=true fps=111.0 seconds=165.000000000023
+JOURNEY_PROGRESS waypoint=4 position=(914.7788, 12.40355, -23.37288) travelled=1344.45016776398 grounded=true fps=48.0 seconds=180.000000000035
+JOURNEY_PROGRESS waypoint=4 position=(1007.717, 13.60462, -73.57043) travelled=1450.08031990752 grounded=true fps=84.0 seconds=195.000000000047
+JOURNEY_PROGRESS waypoint=4 position=(1111.491, 15.05853, -129.5674) travelled=1568.00008432195 grounded=true fps=39.0 seconds=210.000000000059
+JOURNEY_PROGRESS waypoint=4 position=(1206.254, 16.19083, -180.7684) travelled=1675.71148988977 grounded=true fps=63.0 seconds=225.000000000071
+JOURNEY_PROGRESS waypoint=4 position=(1299.221, 16.45777, -230.9718) travelled=1781.36980261281 grounded=true fps=135.0 seconds=240.000000000083
+JOURNEY_PROGRESS waypoint=4 position=(1404.8, 17.45213, -287.9955) travelled=1901.36353096738 grounded=true fps=44.0 seconds=255.000000000095
+JOURNEY_PROGRESS waypoint=4 position=(1497.766, 17.84831, -338.1883) travelled=2007.01656176522 grounded=true fps=86.0 seconds=270.000000000083
+JOURNEY_WAYPOINT index=4 position=(1549.513, 17.39365, -366.1214) travelled=2065.82170474902 seconds=277.350000000076
+VILLAGE_JOURNEY_OK {"distance_m":2065.82170474902,"engine_time_scale":1.0,"physics_step":0.0166666666666667,"position_assignments":0,"reason":"Village approach reached on foot","save_slot":4,"simulated_seconds":277.350000000076,"success":true}

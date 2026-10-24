@@ -1,0 +1,52 @@
+[
+  {
+    "sex": "male",
+    "lining": {
+      "lining_faces": 5780,
+      "lining_vertices": 5840,
+      "clearance_m": 0.006,
+      "new_textures": 0,
+      "morphs": 9,
+      "native_skin_weights": true
+    },
+    "coverage": {
+      "before_faces": 13378,
+      "removed_covered_faces": 5576,
+      "after_faces": 7802,
+      "vertices_unchanged": 13380,
+      "shape_coordinates_unchanged": true,
+      "build_profiles": [
+        0,
+        -0.5,
+        0.5
+      ],
+      "open_boundary_rings_preserved": 2,
+      "native_lining_face_correspondences": 5574
+    }
+  },
+  {
+    "sex": "female",
+    "lining": {
+      "lining_faces": 5682,
+      "lining_vertices": 5734,
+      "clearance_m": 0.006,
+      "new_textures": 0,
+      "morphs": 9,
+      "native_skin_weights": true
+    },
+    "coverage": {
+      "before_faces": 13378,
+      "removed_covered_faces": 5508,
+      "after_faces": 7870,
+      "vertices_unchanged": 13380,
+      "shape_coordinates_unchanged": true,
+      "build_profiles": [
+        0,
+        -0.5,
+        0.5
+      ],
+      "open_boundary_rings_preserved": 2,
+      "native_lining_face_correspondences": 5498
+    }
+  }
+]

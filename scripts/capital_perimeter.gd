@@ -122,7 +122,7 @@ func _build_gate(gate: Dictionary) -> void:
     _add_static_box("TowerL", Vector3(CAPITAL.GATE_TOWER_SIZE, 28.0, CAPITAL.GATE_TOWER_SIZE), Vector3(-tower_x, 14.0, 0), tower_material, root)
     _add_static_box("TowerR", Vector3(CAPITAL.GATE_TOWER_SIZE, 28.0, CAPITAL.GATE_TOWER_SIZE), Vector3(tower_x, 14.0, 0), tower_material, root)
     _add_static_box("GateLintel", Vector3(CAPITAL.GATE_OPENING + 3.0, 7.0, 8.0), Vector3(0, 24.5, 0), wall_material, root)
-    _add_static_box("Guardroom", Vector3(CAPITAL.GATE_OPENING + 12.0, 7.0, 14.0), Vector3(0, 3.5, -16.0), tower_material, root)
+    _add_static_box("Guardroom", Vector3(14.0, 7.0, 14.0), Vector3(tower_x + 16.0, 3.5, -16.0), tower_material, root)
 
     var left_pivot := Node3D.new()
     left_pivot.name = "DoorPivotL"
@@ -150,7 +150,9 @@ func _add_gate_door(node_name: String, size: Vector3, local_pos: Vector3, parent
     var body := AnimatableBody3D.new()
     body.name = node_name
     body.position = local_pos
-    body.sync_to_physics = true
+    # The hinge parent owns the transform. Synchronizing the child's transform
+    # separately counter-rotated it, leaving visually open doors physically shut.
+    body.sync_to_physics = false
     parent.add_child(body)
 
     var mesh_instance := MeshInstance3D.new()

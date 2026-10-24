@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7 unreleased home/life review",
+  "implemented": [
+    "One formerly sealed square home now uses the existing EnterableBuilding physical shell, interactive authored door, windows and existing authored bed/table decorator; floor matches paving. Other city homes remain sealed.",
+    "Marta and Marek walk into that home at night and back to their workplaces in the morning. A shared doorway queue prevents observed two-person deadlock; automatic closing waits for the threshold/swing area to clear and does not undo an independently player-opened door.",
+    "Home door target state persists in world state. Rest is an idle indoor activity, not a complete sleep animation or simulated household.",
+    "Native inspection exposed coplanar floor/plaza flicker and uniformly blank imported furniture materials. A three-centimetre threshold separates the surfaces; existing wood texture and named wood/cloth slots restore readable material differences. Related home, square, furniture and movement cases passed again.",
+    "Trader purse defaults to 100 on migration, pays for actual wood/stone and receives player purchase money. Empty buyer purse rejects trade without consuming goods. Finite stock and canonical arrow workshop remain.",
+    "Square shop closes outside 06-12 and 14-18. Dialogue remembers actual supplied units, current equipped weapon and last successful nearby visible spell; artisan reports actual workshop stock.",
+    "NPC spell observations use a 12 m radius and physical line of sight. Dangerous spells cause a six-second work interruption. No external model, free-form dialogue, generalized crime or full society is implemented.",
+    "Short merchant/action tests now release their world and allow bounded asynchronous AudioServer teardown. All behavioral assertions and strict error detection remain enabled.",
+    "Immediate post-load conversation could pause the reveal tween and leave an opaque black overlay. Reveal now uses TWEEN_PAUSE_PROCESS. The final graphical saved-dialogue probe opens immediately, pauses, then asserts visible sampled framebuffer luminance and a working close button; ordinary boot regression also passed."
+  ],
+  "tests": [
+    {
+      "name": "capital_square",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 45.61
+    },
+    {
+      "name": "citizen_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 37.75
+    },
+    {
+      "name": "merchant_dialogue",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 13.19
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.47
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 7.52
+    },
+    {
+      "name": "enterable_building",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.58
+    },
+    {
+      "name": "settlement_interior_assets",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.05
+    },
+    {
+      "name": "world_audio",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.11
+    },
+    {
+      "name": "square_home_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 101.3
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 13.45
+    },
+    {
+      "name": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.25
+    },
+    {
+      "name": "capital_gameplay",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.22
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.17
+    }
+  ],
+  "graphical_package": "Strengthened home/life fixture against exported PCK before the final sentence-only edit, in GL Compatibility: physical entry/exit, roof/material/floor regressions, both residents home/work, closed shop, coin conservation, equipment, genuine successful shield observation, occluded/distant witnesses excluded, dangerous-spell interruption and resumption, world-state memory/purse round trip. Initial fixture player placement is explicit; this is not the no-teleport world journey.",
+  "native": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610\n\nNATIVE_HOME_START earned_save=true position_assignments=0 clock_fixture=09:00 (13499.99, 0.03, -6996.027)\nNATIVE_HOME_INSIDE grounded=true walked_m=73.44228017563\nNATIVE_HOME_CAPTURE inside\nNATIVE_HOME_CAPTURE exterior\nNATIVE_HOME_CAPTURE trade\nNATIVE_HOME_CAPTURE axe-equipped\nNATIVE_HOME_CAPTURE axe-removed\nNATIVE_HOME_CAPTURE spell-memory\nNATIVE_HOME_REVIEW_OK walked_m=135.322043858003 player_position_assignments=0 real_ray_interactions=door_and_trader coins_spent=14 equipment=equip_unequip spell=shield save_slot=2\n",
+  "native_method": "Official graphical game loads the real arrival earned by the preceding 16.9 km run. External inspection driver uses ordinary movement Input, actual ray/reach interaction handler for door and trader, actual dialogue purchase actions (berries + axe, 14 coins), equip/unequip, actual shield and slot 2 save. No driver coordinate assignments. Only the inspection fixture freezes time/survival at 09:00. This is automated native inspection, not a manual full-world walk.",
+  "wording_followup": "Native world/door/money inspection and the full graphical home/life fixture precede only the final gender-neutral remembered-spell sentence edit. The final exported PCK separately loaded the real resulting slot 2 and verified actual ray interaction, restored spell memory, neutral wording, viewport bounds and the real close button. World geometry/physics/AI logic are unchanged by that sentence edit; the delivered remembered-spell image comes from the final package. A subsequent visual check exposed the immediate-pause loading overlay race. The final package additionally fixes only that transition tween pause mode and repeats the saved-dialogue probe with a nonblack-frame assertion. Its new boot scenario passed; world/door geometry, movement and NPC logic remain as in the full native and graphical home/life passes.",
+  "native_world_art_sha256": "6f0531cf9023f8e925a57c1bb489a795b6a2d8b517e69474192a6e972fd3a47f",
+  "previous_journey": "The earlier 16911.59 m full forest-to-capital proof belongs to the preceding square/UI PCK, SHA256 87b65d270bd5e0576e11f0b051590296190c4c51a9ea16d6ef4322fe0d023b27. It was not repeated end-to-end for this home revision.",
+  "known_issues": [
+    "Most city homes remain closed; furniture storage/use, complete sleeping and household actions remain unfinished",
+    "NPC positions still restart at authored spawn on streaming; far-away life is not continuously simulated",
+    "No external AI/LLM service connected; observations/dialogues are deterministic and limited to supported local events",
+    "Human materials, grip, forest density and repeated city architecture remain below requested realism",
+    "Known ObjectDB/UID warnings remain; complete performance/memory and remote stable release gates not certified"
+  ],
+  "artifact": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-19-home-life\\ImPuls-review.cmd",
+  "sha256": "422ec774370e0173e0171671fe1742601cf208661c256301057fcab82d2bbe55",
+  "git": {
+    "branch": "main",
+    "head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "commit_created": false,
+    "release_published": false
+  },
+  "final_saved_dialogue_probe": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610\n\nHOME_TEXT_REVIEW_OK frozen_package=true saved_spell_memory=restored grammar=neutral viewport=bounded close=resumes paused_loading_reveal=visible\n"
+}

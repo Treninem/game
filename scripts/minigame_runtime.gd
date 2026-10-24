@@ -140,7 +140,7 @@ func _spawn_arena_enemy(index: int, pos: Vector3) -> void:
     enemy.set("detection_range", 38.0)
     enemy.set("attack_damage", 5.0 + float(index))
     var xz := Vector2(pos.x, pos.z)
-    enemy.global_position = Vector3(pos.x, WorldData.elevation_at(xz) + 0.9, pos.z)
+    enemy.position = challenge_root.to_local(Vector3(pos.x, WorldData.elevation_at(xz) + 0.9, pos.z))
     var collision := CollisionShape3D.new()
     collision.name = "CollisionShape3D"
     var shape := CapsuleShape3D.new()
@@ -208,7 +208,7 @@ func _build_race_markers() -> void:
         material.emission_energy_multiplier = 2.0
         mesh.material = material
         marker.mesh = mesh
-        marker.global_position = race_points[i]
+        marker.position = challenge_root.to_local(race_points[i])
         challenge_root.add_child(marker)
 
 func _start_runes() -> void:

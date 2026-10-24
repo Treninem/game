@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Exact storage transfer quantity",
+  "spec_attachment": "43ae81f4-22d6-4ea1-b1a3-0f02805e4795; full content compared with canonical master, trailing Markdown spaces only",
+  "changes": [
+    "Storage dialogue includes bounded integer quantity field and explicit confirmation",
+    "Read pending typed text, not only previously committed SpinBox value",
+    "Validate integer/range in UI and manager; revalidate actual stock/capacity/ownership/reach in core transfer",
+    "Full chests no longer offer impossible deposit actions",
+    "Dialogue revisions reject callbacks from replaced rows and closed dialogues; standard choose(index) callers remain compatible",
+    "Single, half and full-stack shortcuts and atomic exchange retained"
+  ],
+  "checks": {
+    "storage_access": {
+      "case": "storage_access",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.98
+    },
+    "merchant_dialogue": {
+      "case": "merchant_dialogue",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.62
+    },
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 42.3,
+      "marker": true
+    },
+    "visible_storage_UI": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 3.48,
+      "mode": "visible automated storage UI; not manual playthrough"
+    }
+  },
+  "coverage": [
+    "Typed 7 withdrawn and 8 deposited through actual SpinBox/Button elements",
+    "Negative, zero, oversized, fractional and nonnumeric text does not change stock",
+    "Old quantity row cannot transfer twice after menu refresh",
+    "Stale 51-item request fails after stock falls to 1",
+    "Full chest contains no deposit choices",
+    "Normal close button works; stale close button cannot close a newer dialogue",
+    "Existing signal-time JSON saves, reentrancy, ownership, capacity, half and full transfers retained",
+    "Rendered 1280x720 isolated storage UI inspected; visible source-game regression repeated"
+  ],
+  "intermittent_open_issue": {
+    "description": "First visible gameplay regression failed assert(cast_counter.count == 1) at heal input and then watchdog expired. Repeat with diagnostic output passed unchanged assertions, cast count=1, expected mana and cooldown/save behavior. Root cause not established; do not claim fixed.",
+    "evidence": "build/acceptance/storage-quantity-native-first-failure.log",
+    "pending": true
+  },
+  "image": "build/acceptance/storage-visible/appdata/Godot/app_userdata/ImPuls/storage-quantity.png",
+  "limits": [
+    "Visible storage scene is isolated automated UI acceptance, not a manual house visit",
+    "Independent inventory-cell stacks, drag/drop and icons remain pending",
+    "No new exported package or stable release; previous launcher lacks these changes",
+    "Earlier editor functional count 32/55 (58.2%) unchanged; no overall completion percentage assigned"
+  ]
+}

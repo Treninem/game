@@ -1,0 +1,191 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased source review",
+  "parent": "800ecb1edd1e1e8813d0d236c3be4ef773e99e90",
+  "main_verified": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "request": "Inspect incorrect arm and leg motion in walking, running, jumping and attacks; fix and verify in the actual game.",
+  "findings": [
+    "Five-metre-per-second movement selected Walk and used an unrelated 3.8 reference speed; actual stance contact speed was much lower. Arm/leg opposite phase was already correct and was preserved.",
+    "Axe windup target exceeded arm reach. Key-pose interpolation also straightened the elbow between otherwise valid keys.",
+    "The 1.0417-second donor Punch was interrupted by the real 0.55-second attack cooldown; its hands were open.",
+    "Final SkeletonModifier bone positions must be sampled during modification_processed. Reads outside that signal omitted final pitch/elbow corrections and produced misleading acceptance data."
+  ],
+  "changes": [
+    "Select walk/jog from measured physical motion; use body-specific stance speed and uniform visual scale for rate. Preserve normalized foot phase through Walk/Run and moving combat transitions.",
+    "Use reachable axe windup, torso turn/lean and continuous minimum elbow bend during the active stroke, fading near rest. Preserve actual attack rate/damage contact and independent blade-position limits.",
+    "Fit complete punch and recovery to the existing attack cooldown, shorten entry blend and close both hands in palm space. Existing free-hand curl checks verify release after Punch.",
+    "Extend existing mandatory locomotion/grip tests; add reusable graphical phase and physical-input fixtures. Record final modified bone poses and reject missing snapshots.",
+    "World input fixture checks pending bow immediately after dispatch and samples early enough within the same draw window. Preserve total wait, arrow/mana/save assertions and minimum 20 distinct rendered final poses; repeat real shots if needed for coverage."
+  ],
+  "stance_reference_mps": {
+    "male": {
+      "Walk": 1.82,
+      "Run": 5.93
+    },
+    "female": {
+      "Walk": 1.77,
+      "Run": 5.46
+    }
+  },
+  "baseline_weapon_guard": {
+    "case": "weapon_grip",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Axe contact locks or folds elbow: body=0 height=160.0 bend=5.9317354144187",
+      "ERROR: Axe contact locks or folds elbow: body=0 height=180.0 bend=5.93175889319397",
+      "ERROR: Axe contact locks or folds elbow: body=0 height=195.0 bend=5.9317448059288",
+      "ERROR: Axe contact locks or folds elbow: body=5 height=160.0 bend=5.79063523211046",
+      "ERROR: Axe contact locks or folds elbow: body=5 height=180.0 bend=5.79066511418808",
+      "ERROR: Axe contact locks or folds elbow: body=5 height=195.0 bend=5.79062882880811"
+    ],
+    "seconds": 98.47
+  },
+  "axe_elbow_degrees": {
+    "before_raw_unmodified_axe": {
+      "male": {
+        "minimum": 4.14,
+        "maximum": 28.81,
+        "samples": 12
+      },
+      "female": {
+        "minimum": 2.6,
+        "maximum": 7.65,
+        "samples": 12
+      }
+    },
+    "after_final_modifier": {
+      "male": {
+        "minimum": 7.65,
+        "maximum": 99.76,
+        "samples": 12
+      },
+      "female": {
+        "minimum": 7.65,
+        "maximum": 97.86,
+        "samples": 12
+      }
+    }
+  },
+  "checks": {
+    "weapon_grip": {
+      "exit_code": 0,
+      "seconds": 38.31,
+      "errors": [],
+      "marker": true
+    },
+    "locomotion_facing": {
+      "exit_code": 0,
+      "seconds": 51.98,
+      "errors": [],
+      "marker": true
+    },
+    "gameplay_actions": {
+      "exit_code": 0,
+      "seconds": 66.34,
+      "errors": [],
+      "marker": true
+    },
+    "static_phases": {
+      "exit_code": 0,
+      "seconds": 17.01,
+      "errors": [],
+      "marker": true
+    },
+    "physical_actions": {
+      "exit_code": 0,
+      "seconds": 69.62,
+      "errors": [],
+      "marker": true
+    },
+    "source_world": {
+      "exit_code": 0,
+      "seconds": 139.84,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "native_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.7487340951338
+  },
+  "live_final_bow_frames": 20,
+  "coverage": {
+    "weapon_contact_poses": 180,
+    "bow_trajectory_samples": 900,
+    "axe_trajectory_samples": 150,
+    "punch_finger_samples": 240,
+    "stride_speed_cases": 30,
+    "physical_body_profiles": 2,
+    "visual_stride_heights_cm": [
+      160,
+      180,
+      195
+    ],
+    "static_samples": 120,
+    "static_captures": 40,
+    "physical_action_captures": 48
+  },
+  "verification_notes": [
+    "Graphical tests opened the real Godot source project and used normal action input for physical motion. Observer camera and isolated profiles were used; this was not a manual free-roam or city tour. Slow-walk fixture temporarily uses walk_speed=1.8; normal keyboard move speed remains 5 and sprint remains 8.",
+    "Stride guard measures median backward forefoot speed only near contact height; peak ankle speed included heel roll and was rejected as a proxy. The 15-percent physical-speed assertion was retained.",
+    "Axe candidates failing original blade z <= -0.9 were rejected, not accommodated by relaxing the guard. Intermediate raw-pose failures were traced to the Godot sampling lifecycle, then replaced by final modifier snapshots.",
+    "Earlier wrapper timeouts and stale result files were not accepted. The direct test runner uses bounded processes. A gameplay marker typo was corrected to the original success marker; a fresh gameplay run also passed.",
+    "A prior world observation missed the short draw window after eight physics frames; two early frames plus 51 remaining frames preserve the total wait and the gameplay assertions.",
+    "The source-world pass and locomotion/gameplay passes preceded only the final unarmed Punch finger branch. Weapon, static and physical-action fixtures were rerun after that branch.",
+    "Native UI inspection found an older review window unresponsive. Its profile files were backed up under build/acceptance/review-profile-backup-1792512037073640300. Closure of old review windows could not be confirmed; editor and unrelated applications were preserved. Current tests use separate profiles.",
+    "One elevated launch was not started because automatic approval review timed out. The same offline checks ran successfully without elevated permissions.",
+    "Committed log copies normalize Windows CRCRLF line endings to LF; original captured byte streams remain under build/acceptance. Test assertions, markers and warning text are unchanged."
+  ],
+  "api_reference": "https://docs.godotengine.org/en/4.6/classes/class_skeletonmodifier3d.html#signals",
+  "source_sha256": {
+    "scripts/humanoid_visual.gd": "3c3f1a3ac2849e6901634288d1fa0a3b48003f0d4fb9ec9287297f2831ff73ae",
+    "scripts/weapon_grip_modifier.gd": "26525c00c2d05c8db5119d2f4caa51054e74d35b2fdaa429a04e884510d4c83d",
+    "tests/smoke_weapon_grip.gd": "61aa288978dc9d7934caeda35200c5ab884e3a06b47a9e434a5d8bcefe9ecc1c",
+    "tests/smoke_locomotion_facing.gd": "b02d4829a1fc6215e8aa74df712ced75766d9b172b2d84a4f693c203c8e39173",
+    "tests/visual_bow_world.gd": "9cbf2efe40a0578786db0a749a6c73dd7573431ba4553022da5a4c80b9aa4a6b",
+    "tests/visual_motion_phases.gd": "2a1f2e7df7a9f8a5bc93d9c41077fb6010766c49c1b98b37fc13b5e9ec94ddba",
+    "tests/visual_motion_actions.gd": "ee6b768b8e8790fe5e2d6bda010befdfd1ba8c08d912ab8760b98c5ac2d03375"
+  },
+  "screenshots": [
+    "docs/review/2026-10-20-limb-motion/gait-female-axe-1.png",
+    "docs/review/2026-10-20-limb-motion/gait-female-jump-1.png",
+    "docs/review/2026-10-20-limb-motion/gait-female-normal-move-1.png",
+    "docs/review/2026-10-20-limb-motion/gait-female-punch-1.png",
+    "docs/review/2026-10-20-limb-motion/gait-male-punch-1.png",
+    "docs/review/2026-10-20-limb-motion/gait-male-run-2.png",
+    "docs/review/2026-10-20-limb-motion/gait-male-slow-walk-2.png"
+  ],
+  "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
+  "review_delivery": "Current source project build/stability. No new PCK, installer or stable release. Earlier frozen pack is a negative baseline and does not contain these changes.",
+  "limits": [
+    "Jump still has a simple held airborne pose, without distinct takeoff/apex/landing animation; graphical acceptance remains open.",
+    "Stride-rate matching is not full foot locking or terrain foot IK; visible foot contact/grounding needs further work.",
+    "No new human meshes or garment geometry. Existing owner-rejected models and overall visual acceptance are not declared resolved.",
+    "Unarmed fist correction covers Player/preview rigs using WeaponGrip; hostile NPC punch rigs do not gain that modifier in this change.",
+    "Bone torso guard is not exact skin/cloth collision. Shoulder/garment corrective shapes and finger transition polish remain open.",
+    "Existing 79 ObjectDB instances leaked at source-world exit; this is not fixed here.",
+    "No measured performance target, full-world stability, local installer/export acceptance or overall readiness percentage established. Latest remote gates pending after push."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "case": "locomotion_facing",
+  "exit_code": 0,
+  "seconds": 8.92,
+  "errors": [],
+  "markers": [
+    "LOCOMOTION_FACING_OK directions=5 camera=stable combat=aim furniture=stable rates=15,60 gait_phases=3 bodies=2"
+  ]
+}

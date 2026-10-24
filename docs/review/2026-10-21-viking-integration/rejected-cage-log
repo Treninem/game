@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "D:\Desktop\GitHub\game\tools\check_viking_material_maps.py", line 24, in <module>
+    assert stats['z_negative_fraction']<.001,(sex,label,'back-surface normal contamination',stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('male', 'VikingBoots', 'back-surface normal contamination', {'unit_length_error_p95': 0.003558812388263055, 'z_negative_fraction': 0.08449367088607596, 'xy_variation': 0.21593385988492295})

@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Selectable inventory cells",
+  "spec_attachment": "2756862a-2c09-4476-8c7d-deb2d3fb37d9; canonical master unchanged except Markdown trailing spaces",
+  "changes": [
+    "Compact selectable cells, 2–8 columns by panel width, at most 48 visible controls per page; unlimited storage retained",
+    "Selected item description and existing equipment/consumable actions",
+    "Selection clamps to displayed rows; no stale actions when search is empty",
+    "Rebuild detaches old UI controls immediately before deferred free, preventing duplicate names and stale lookup",
+    "Compact equipment header; insurance below items and still available for empty inventory"
+  ],
+  "checks": {
+    "final_visible_UI": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 35.53,
+      "mode": "visible automated UI; not manual playthrough"
+    },
+    "final_responsive_UI": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.77
+    },
+    "gameplay_after_rebuild_fix_before_header_compaction": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 39.61,
+      "marker": true
+    },
+    "coverage": "137 synthetic million-unit supply stacks; positive items exactly once across pages; JSON snapshot roundtrip; click selected cell; actual Equip and Unequip button signals; empty filter clears selection/actions; 800x600, 960x540, 1280x720, 1920x1080 at 100% and 150% UI scale"
+  },
+  "observed_and_fixed": [
+    "New selected-item test initially failed because old queued controls caused new controls to be renamed. Fixed production rebuild, then reran checks.",
+    "Inspected actual 1280x720 rendered UI image: top blocks hid grid. Reduced equipment header and moved insurance below items; repeated visible and responsive tests."
+  ],
+  "evidence_image": "build/acceptance/inventory-visible/appdata/Godot/app_userdata/ImPuls/inventory-cells.png",
+  "limits": [
+    "Text cells use existing UI styles; item icons, drag/drop and stack splitting are not implemented",
+    "Synthetic QA items in image are isolated test data, not production content",
+    "No manual complete world tour and no reference-art quality acceptance",
+    "No new exported package or stable release",
+    "32/55 (58.2%) remains earlier editor functional count; no overall-game completion percentage claimed"
+  ],
+  "next": "Item icons using reviewed existing assets; stack splitting/transfers and keyboard focus acceptance remain separate work"
+}

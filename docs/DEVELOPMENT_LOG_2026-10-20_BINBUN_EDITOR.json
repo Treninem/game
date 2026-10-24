@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-20",
+  "task": "Resolve duplicate global classes and broken references in library VFX scenes",
+  "spec_normalized_equal": true,
+  "baseline_core_script_checks": [
+    {
+      "script": "VFXControllerBB",
+      "exit_code": 1,
+      "seconds": 1.47,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Class \"VFXControllerBB\" hides a global script class.",
+        "ERROR: Failed to load script \"res://assets/vfx/third_party/binbun_godot4_core/shared/script/VFXControllerBB.gd\" with error \"Parse error\"."
+      ]
+    },
+    {
+      "script": "VFXEmitterBB",
+      "exit_code": 1,
+      "seconds": 0.41,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Class \"VFXEmitterBB\" hides a global script class.",
+        "ERROR: Failed to load script \"res://assets/vfx/third_party/binbun_godot4_core/shared/script/VFXEmitterBB.gd\" with error \"Parse error\"."
+      ]
+    },
+    {
+      "script": "VFXOmniLightBB",
+      "exit_code": 1,
+      "seconds": 0.48,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Class \"VFXOmniLightBB\" hides a global script class.",
+        "ERROR: Failed to load script \"res://assets/vfx/third_party/binbun_godot4_core/shared/script/VFXOmniLightBB.gd\" with error \"Parse error\"."
+      ]
+    }
+  ],
+  "baseline_smoke": {
+    "case": "binbun_classes",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Duplicate global class VFXControllerBB: res://assets/vfx/third_party/binbun_godot4_core/shared/script/VFXControllerBB.gd and res://assets/vfx/third_party/binbun_godot4_combat_magic/shared/script/VFXControllerBB.gd",
+      "ERROR: Duplicate global class VFXEmitterBB: res://assets/vfx/third_party/binbun_godot4_core/shared/script/VFXEmitterBB.gd and res://assets/vfx/third_party/binbun_godot4_combat_magic/shared/script/VFXEmitterBB.gd",
+      "ERROR: Duplicate global class VFXOmniLightBB: res://assets/vfx/third_party/binbun_godot4_core/shared/script/VFXOmniLightBB.gd and res://assets/vfx/third_party/binbun_godot4_combat_magic/shared/script/VFXOmniLightBB.gd"
+    ],
+    "seconds": 5.95
+  },
+  "dependency_failures": {
+    "case": "binbun_classes",
+    "exit_code": 0,
+    "errors": [
+      "ERROR: Resource file not found: res://assets/vfx/third_party/binbun_godot4_core/shared/suzanne.obj (expected type: ArrayMesh)",
+      "ERROR: res://assets/vfx/third_party/binbun_godot4_core/FlameFX/flame_fx_free_scene.tscn:219 - Parse Error: [ext_resource] referenced non-existent resource at: res://assets/vfx/third_party/binbun_godot4_core/shared/suzanne.obj.",
+      "ERROR: Cannot open file 'res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/shield/vfx_blank_shield_02.tscn'.",
+      "ERROR: Failed loading resource: res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/shield/vfx_blank_shield_02.tscn.",
+      "ERROR: res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/battle_fx_scene_free.tscn:170 - Parse Error: [ext_resource] referenced non-existent resource at: res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/shield/vfx_blank_shield_02.tscn.",
+      "ERROR: Cannot set object script. Parameter should be null or a reference to a valid script."
+    ],
+    "seconds": 5.34
+  },
+  "source_checks": {
+    "import": {
+      "case": "import",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.02
+    },
+    "binbun_classes": {
+      "case": "binbun_classes",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.69
+    },
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 63.33,
+      "marker": true
+    }
+  },
+  "coverage": {
+    "scripts": 26,
+    "scenes_loaded_and_instantiated": 33,
+    "unique_declared_classes": 21
+  },
+  "implementation": [
+    "Rename three combat global classes and update combat inheritance/type references while retaining distinct controller behavior and node/resource paths",
+    "Reuse existing combat Suzanne mesh for core flame showcase",
+    "Use the existing free shield variant at the second showcase location instead of absent shield02",
+    "Bind beam controller as actual Script instead of generic Resource placeholder",
+    "Add strict class/scene regression and trigger World Core for Binbun source-pack changes"
+  ],
+  "inventory_clarification": "docs/INVENTORY_CAPACITY_CLARIFICATION_2026-10-20.txt: grid cells represent unlimited inventory; no 48-item cap or paid capacity. Documentation only, no new inventory UI claimed.",
+  "remaining": [
+    "Foreign external-resource UID fallback warnings",
+    "Library-wide visual/playback compatibility is not established by script compilation and scene instantiation",
+    "Owner-rejected models/world and full natural animation remain unaccepted"
+  ],
+  "delivery": "Source review changes only; no new exported game pack or stable release published in this task",
+  "percentages": "Editor functional criterion count remains 32/55 (58.2%), not visual or overall game readiness",
+  "core_script_recheck_after_fix": [
+    {
+      "script": "VFXControllerBB",
+      "exit_code": 0,
+      "seconds": 0.83,
+      "errors": []
+    },
+    {
+      "script": "VFXEmitterBB",
+      "exit_code": 0,
+      "seconds": 0.45,
+      "errors": []
+    },
+    {
+      "script": "VFXOmniLightBB",
+      "exit_code": 0,
+      "seconds": 0.45,
+      "errors": []
+    }
+  ],
+  "desktop_editor_observation": "Main editor window opens on prepared project without the previous class-error popups; Windows intermittently reports Not Responding and mode-switch response is not yet confirmed. Do not claim full desktop editor responsiveness."
+}

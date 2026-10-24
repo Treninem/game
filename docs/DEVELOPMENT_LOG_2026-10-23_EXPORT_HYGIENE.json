@@ -1,0 +1,287 @@
+{
+  "date": "2026-10-23",
+  "status": "ACTIVE",
+  "parent": "f66f6e0f130201c8b420b274059f77674a77d2e4",
+  "problem": "The project exported all recognized resources while docs/review contained source-only native screenshots. The graphics probe also inherited the saved 70% render scale left by earlier CI gameplay tests.",
+  "changes": [
+    "docs/.gdignore prevents documentation screenshots from becoming editor resources; export_presets.cfg separately excludes docs/* from the PCK. No production asset path is removed.",
+    "A mandatory external PCK harness runs from the export directory, confirms docs/tests are absent and loads both actual dynamic human models, all 18 morphs/20 named clips, five eye mip chains, two shaders and boot. All prior workflow commands/deadlines are retained.",
+    "The color fixture sets its viewport to native 1.0 scale without changing settings.cfg. All contrast/hue thresholds, two MSAA cases and 32 iris sectors remain unchanged; failure diagnostics now identify the sector."
+  ],
+  "source_only_review_pngs": {
+    "count": 306,
+    "source_bytes": 126349089,
+    "note": "Source-file bytes, not a measured final installer saving."
+  },
+  "actual_pck_control": [
+    {
+      "case": "import",
+      "code": 0,
+      "timeout": false,
+      "seconds": 32.31,
+      "errors": []
+    },
+    {
+      "case": "before-export",
+      "code": 0,
+      "timeout": false,
+      "seconds": 18.86,
+      "errors": []
+    },
+    {
+      "case": "before-probe",
+      "code": 0,
+      "timeout": false,
+      "seconds": 2.19,
+      "errors": [],
+      "pack_bytes": 1545152
+    },
+    {
+      "case": "after-export",
+      "code": 0,
+      "timeout": false,
+      "seconds": 15.36,
+      "errors": []
+    },
+    {
+      "case": "after-probe",
+      "code": 0,
+      "timeout": false,
+      "seconds": 5.33,
+      "errors": [],
+      "pack_bytes": 773332
+    }
+  ],
+  "control_result": "Without docs exclusion the physical PCK contains the documentation image and production image (1545152 bytes). With exclusion only the production image remains (773332 bytes). Both are executed from an empty export folder; this is not a filter-string assertion.",
+  "calibration_regression": {
+    "ci_job": 120321950748,
+    "ci_run": 39925863585,
+    "ci_head": "f66f6e0f130201c8b420b274059f77674a77d2e4",
+    "ci_result": "World Core failed the new iris-sector fixture; seven other jobs passed. No full pass is claimed.",
+    "native_low_scale_control": {
+      "case": "final6",
+      "exit_code": 1,
+      "seconds": 35.06,
+      "timeout": false,
+      "bound": 300,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: An iris sector retains the red source crescent",
+        "ERROR: CHARACTER_SURFACES shader measurements did not finish"
+      ],
+      "command": [
+        "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+        "--path",
+        "D:\\Desktop\\GitHub\\game\\build\\body-response",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--script",
+        "res://tests/visual_character_surfaces.gd"
+      ],
+      "sources": {
+        "scripts/humanoid_visual.gd": "fae7134544caa3693de059e1007b15234291b4e1af2f2426d24aff3138fba0ba",
+        "assets/shaders/characters/hair_strands.gdshader": "3d93be97f50971ba90076ac13c421645761b81219c1d34cb83d5b004f12b4ab5",
+        "assets/shaders/characters/human_iris.gdshader": "4ade49e4728c00c19e10e2800f60d2c8b0fbf5129134b6f9049777c5548ce93e",
+        "tests/visual_character_surfaces.gd": "3dca24ba698b052e7181abd065469227d058c7fda411d34d6e3f0c9fa1d88262",
+        "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+        "tests/smoke_hair_rendering.gd": "315c28effef478c12b7fadab2c35028a0c8c83786bee2237ddf456cb96908bfd",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "sources_unchanged": true
+    },
+    "exact_reproduction": "Forced 0.70 scale produces the CI source/corrected pixel values (0.2784,0.0039,0) / (0.2078,0.1176,0.0196) and the same upper-iris sector failure. Atlas and import sidecar SHA256 match local/mirror/Git.",
+    "corrected_native_run": {
+      "case": "final7",
+      "exit_code": 0,
+      "seconds": 128.95,
+      "timeout": false,
+      "bound": 300,
+      "errors": [],
+      "command": [
+        "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+        "--path",
+        "D:\\Desktop\\GitHub\\game\\build\\body-response",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--script",
+        "res://tests/visual_character_surfaces.gd"
+      ],
+      "sources": {
+        "scripts/humanoid_visual.gd": "fae7134544caa3693de059e1007b15234291b4e1af2f2426d24aff3138fba0ba",
+        "assets/shaders/characters/hair_strands.gdshader": "3d93be97f50971ba90076ac13c421645761b81219c1d34cb83d5b004f12b4ab5",
+        "assets/shaders/characters/human_iris.gdshader": "4ade49e4728c00c19e10e2800f60d2c8b0fbf5129134b6f9049777c5548ce93e",
+        "tests/visual_character_surfaces.gd": "9c38aa42d6f0e4fe4840311bdaaf3f50605ebd90ed91bd1969b95ecd15f6dce2",
+        "tests/visual_bow_world.gd": "79258e7d6e1c1f4d76aff4915fa59eb11c761a3cb996ac193131af9d57590c93",
+        "tests/smoke_hair_rendering.gd": "315c28effef478c12b7fadab2c35028a0c8c83786bee2237ddf456cb96908bfd",
+        "assets/production/characters/realistic_contours/male.glb": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+        "assets/production/characters/realistic_contours/female.glb": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665"
+      },
+      "sources_unchanged": true
+    },
+    "saved_low_preset_untouched": true,
+    "report": [
+      {
+        "contrast_after": 0.296416446566582,
+        "contrast_before": 0.140789806842804,
+        "iris_corrected": "(0.2196, 0.1333, 0.0431, 1.0)",
+        "iris_perimeter_sectors": 32,
+        "iris_source": "(0.298, 0.051, 0.0, 1.0)",
+        "kind": "shader",
+        "mean_after": 0.314446665346622,
+        "mean_before": 0.313612937927246,
+        "msaa_modes": 2
+      },
+      {
+        "color": 0,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "male",
+        "skin": 0
+      },
+      {
+        "color": 1,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "male",
+        "skin": 1
+      },
+      {
+        "color": 2,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "male",
+        "skin": 2
+      },
+      {
+        "color": 3,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "male",
+        "skin": 0
+      },
+      {
+        "color": 4,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "male",
+        "skin": 1
+      },
+      {
+        "color": 0,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "female",
+        "skin": 0
+      },
+      {
+        "color": 1,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "female",
+        "skin": 1
+      },
+      {
+        "color": 2,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "female",
+        "skin": 2
+      },
+      {
+        "color": 3,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "female",
+        "skin": 0
+      },
+      {
+        "color": 4,
+        "kind": "portrait",
+        "saved": true,
+        "sex": "female",
+        "skin": 1
+      },
+      {
+        "kind": "cache",
+        "materials": 60,
+        "repeat_checks": 50,
+        "unrelated_profile_checks": 50
+      }
+    ],
+    "failed_ci_archive_sha256": "bc5200d7def69b5ac0ab94943ae12c235dfe3c3250f4434f15dd440d7f7a80f2"
+  },
+  "local_harness_compilation": {
+    "code": 0,
+    "errors": [],
+    "source_sha256": "757dd0a7d8ca2255a633fc6fc7e3b8bfc8316dde5cb4c925cf9d339c958d89b5"
+  },
+  "limitations": [
+    "The full production Windows export/PCK/installer gates require new exact-SHA CI; the small local PCK control is not a full-game export pass.",
+    "No frame-rate improvement is claimed. Prior 71.78 ms/1095 calls and 82-object exit warning remain open.",
+    "Hair geometry, expressions, clothing/age diversity and the broader world remain unaccepted."
+  ],
+  "ci": "New exact-SHA required after the narrow follow-up commit",
+  "stable_release_published": false,
+  "overall_percent": null,
+  "ci_sparse_checkout_note": "The candidate workflow already checks out runtime folders only and excludes docs physically. This follow-up protects a full local checkout/editor/export and adds an explicit PCK assertion. No CI artifact-size reduction is claimed.",
+  "prior_artifact_sizes": {
+    "head": "f66f6e0f130201c8b420b274059f77674a77d2e4",
+    "game_windows": 793530088,
+    "installer": 343300332
+  },
+  "pack_mount_followup": {
+    "failed_head": "6a5ada293496044303ee82f81ca75aff55e837b0",
+    "failed_job": 120346827521,
+    "failed_check": "OS.get_cmdline_args omitted the engine-consumed --main-pack argument, even though the exported PCK was mounted. Production checks did not run; no PCK pass is claimed for this SHA.",
+    "local_controls": [
+      {
+        "packed": false,
+        "code": 0,
+        "errors": [],
+        "log": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\r\n\r\nPCK_MOUNT_METADATA {\"args\":[\"--script\",\"D:\\\\Desktop\\\\GitHub\\\\game\\\\build\\\\asset_work\\\\export-hygiene-2026-10-23\\\\mount-probe.gd\"],\"binary\":false,\"expected\":false,\"root\":\"D:/Desktop/GitHub/game/build/asset_work/export-hygiene-2026-10-23/fixture/\",\"source\":true}\r\n"
+      },
+      {
+        "packed": true,
+        "code": 0,
+        "errors": [],
+        "log": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\r\n\r\nPCK_MOUNT_METADATA {\"args\":[\"--script\",\"D:\\\\Desktop\\\\GitHub\\\\game\\\\build\\\\asset_work\\\\export-hygiene-2026-10-23\\\\mount-probe.gd\"],\"binary\":true,\"expected\":true,\"root\":\"\",\"source\":false}\r\n"
+      }
+    ],
+    "fix": "Require the physical GODOT_SMOKE_PACK path plus mounted project.binary and absence of source project.godot. The unpacked control has the same environment path but binary=false/source=true and cannot satisfy the new contract. All actual folder/model/morph/clip/mip/shader/boot checks remain unchanged.",
+    "new_ci": "Required after narrow follow-up push",
+    "actual_harness_negative_controls": [
+      {
+        "case": "mount-contract-source",
+        "expected_rejection": "Resource hygiene requires the mounted compiled project",
+        "observed": true,
+        "mount_passed": false,
+        "full_production_pass": false,
+        "terminated_owned_negative_control": true,
+        "seconds": 3.27,
+        "source_sha256": "1bb01c802ffef244881f215b79ce3178e98aeeb5266d2f05f126713828bcfb98"
+      },
+      {
+        "case": "mount-contract-packed",
+        "expected_rejection": "Packaged autoload is unavailable: GameState",
+        "observed": true,
+        "mount_passed": true,
+        "full_production_pass": false,
+        "terminated_owned_negative_control": true,
+        "seconds": 3.59,
+        "source_sha256": "1bb01c802ffef244881f215b79ce3178e98aeeb5266d2f05f126713828bcfb98"
+      }
+    ],
+    "native_surface_ci_steps": {
+      "sha": "6a5ada293496044303ee82f81ca75aff55e837b0",
+      "job": 120346827431,
+      "surface_calibration": "success",
+      "refined_body_GPU": "success",
+      "outfit_coverage": "success",
+      "scope": "Named steps verified; does not claim the failed package job passed."
+    }
+  }
+}

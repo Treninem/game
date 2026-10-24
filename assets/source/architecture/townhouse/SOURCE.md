@@ -1,0 +1,7 @@
+Original Blender-authored city geometry and clay albedo/normal/ORM maps for ImPuls, 2026-10-23. CC0 1.0. Source models are editable and their map links are relative to this repository. Godot production uses external shared materials and mipmapped maps; Blender source does not establish gameplay integration by itself.
+
+Townhouse balcony: selected Balcony4 + Balcony4Handles geometry/UV from Daniel Andersson, Modular Medieval Building Pack, CC0 1.0, https://opengameart.org/content/modular-medieval-building-pack . Physical source already confirmed on main: assets/staging/sourcechat_b29/models/oga_modular_medieval_building_pack/74698_BalconyUpload_blend/BalconyUpload.blend . Other townhouse/fountain geometry is project authored; no new third-party download.
+
+Shared photographs: Daniel Andersson lime plaster (same staged pack); OpenGameArt Simple Textures cedar, https://opengameart.org/content/simple-textures ; musdasch rock1 stone, https://opengameart.org/content/ground-texture-set . All CC0 1.0; canonical maps and provenance remain in assets/production/interiors/materials/lime_plaster and assets/production/exteriors/family_home . Clay response maps are authored approximations, not scanned PBR data.
+
+User-supplied ImPULS_20_locations (2).zip is artistic reference only. Its pictures are not pasted into runtime textures or claimed as project-owned model assets. The current two townhouse shells repeat; new shells are exterior-only, not new enterable households. Complete visual acceptance is false.

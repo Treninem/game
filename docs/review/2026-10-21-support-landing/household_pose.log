@@ -1,0 +1,5 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SITTING_JOINTS Left hip=(-0.112761, 0.986761, 0.003991) knee=(-0.114152, 0.989417, -0.438379) foot=(-0.112351, 0.539201, -0.441087)
+SITTING_JOINTS Right hip=(0.11328, 0.98767, 0.003286) knee=(0.111889, 0.990325, -0.439084) foot=(0.11369, 0.540109, -0.441792)
+HOUSEHOLD_POSE_OK knees=forward shins=down

@@ -1,0 +1,73 @@
+name: Verify Inventory Layout Models and Keyboard
+
+on:
+  push:
+    branches: [codex/editor-handoff-validation-2026-10-24]
+    paths:
+      - scripts/gameplay_panels.gd
+      - scripts/inventory_item_preview.gd
+      - scripts/weapon_model_catalog.gd
+      - scripts/humanoid_visual.gd
+      - assets/production/ui/fonts/rubik/**
+      - tests/review_inventory_presentation.gd
+      - .github/workflows/verify-inventory-presentation.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: impuls-inventory-presentation-review-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  rendered-household:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/audio
+            assets/branding
+            assets/production
+            assets/registry
+            assets/shaders
+            assets/staging/nature/kenney_nature_kit
+            assets/ui
+            assets/vfx
+            scenes
+            scripts
+            story
+            tests
+            tools/run_godot_smoke.sh
+      - name: Install Godot and a software rendering display
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+      - name: Parse actual project and rendered diagnostic
+        run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Preserve existing inventory search keyboard actions quantities and JSON persistence
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-inventory-keyboard" bash tools/run_godot_smoke.sh tests/smoke_inventory_unlimited.tscn 90
+      - name: Preserve focused text input and remapped inventory shortcuts
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-inventory-input" bash tools/run_godot_smoke.sh tests/audit_editor_ui_inputs.gd 60
+      - name: Render actual inventory layout and held-weapon models at three viewport sizes
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-inventory-render" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/review_inventory_presentation.gd 180
+      - name: Upload actual inventory and production model evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventory-presentation-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/impuls-inventory-render/godot/app_userdata/ImPuls/inventory-presentation.json
+            ${{ runner.temp }}/impuls-inventory-render/godot/app_userdata/ImPuls/inventory-models-*.png
+            ${{ runner.temp }}/impuls-inventory-render/godot/app_userdata/ImPuls/item-model-*.png

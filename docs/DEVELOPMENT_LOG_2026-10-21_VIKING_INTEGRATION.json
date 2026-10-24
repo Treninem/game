@@ -1,0 +1,273 @@
+{
+  "date": "2026-10-21",
+  "parent": "a9888c2f8b1dea87b4fdec4436a35a793faabd2f",
+  "scope": "Default human outfit integration for both existing native bodies: authored fitted tunic/pants/boots, connected hem fix, per-body UV-matched normal/AO, palette and existing creator/save/action support.",
+  "state": "INTEGRATED in local review; exact-SHA CI still required. Not stable publication or overall human art acceptance.",
+  "changes": [
+    "Selected CC0 Rehman Polanski outfit replaces the generic modern shirt/trousers/shoes in the two review GLBs. Existing body, rig, morph controls, movement parameters and save schema retained.",
+    "Twelve 1024px maps are bound by exact body/material role. All actual wardrobe textures retain physical mip levels and anisotropic filtering.",
+    "Cage-projected normals were rejected by a new independent GLB-UV probe; same-topology multires baking removes almost all back-surface contamination without reducing geometric detail or weakening the gate.",
+    "Creator/texture acceptance retains legacy-map assertions and adds a strict new-atlas path/albedo/normal/AO/mip contract for the selected outfit."
+  ],
+  "validation": {
+    "regressions": {
+      "camera_obstruction": {
+        "exit_code": 0,
+        "seconds": 15.0,
+        "errors": [],
+        "marker": true
+      },
+      "character_creator": {
+        "exit_code": 0,
+        "seconds": 6.47,
+        "errors": [],
+        "marker": true
+      },
+      "character_dimensions": {
+        "exit_code": 0,
+        "seconds": 8.31,
+        "errors": [],
+        "marker": true
+      },
+      "character_texture_filtering": {
+        "exit_code": 0,
+        "seconds": 3.81,
+        "errors": [],
+        "marker": true
+      },
+      "gameplay_actions": {
+        "exit_code": 0,
+        "seconds": 22.25,
+        "errors": [],
+        "marker": true
+      },
+      "household_pose": {
+        "exit_code": 0,
+        "seconds": 3.52,
+        "errors": [],
+        "marker": true
+      },
+      "locomotion_facing": {
+        "exit_code": 0,
+        "seconds": 49.69,
+        "errors": [],
+        "marker": true
+      },
+      "step_grounding": {
+        "exit_code": 0,
+        "seconds": 15.5,
+        "errors": [],
+        "marker": true
+      },
+      "visual_grounding": {
+        "exit_code": 0,
+        "seconds": 18.78,
+        "errors": [],
+        "marker": true
+      },
+      "weapon_grip": {
+        "exit_code": 0,
+        "seconds": 13.25,
+        "errors": [],
+        "marker": true
+      }
+    },
+    "graphics": {
+      "physical_actions": {
+        "exit_code": 0,
+        "seconds": 35.09,
+        "errors": [],
+        "marker": true
+      },
+      "source_world": {
+        "exit_code": 0,
+        "seconds": 75.56,
+        "errors": [],
+        "marker": true
+      }
+    },
+    "action_frames": 48,
+    "world": {
+      "bow_arrow_consumed": true,
+      "captures": [
+        "user://head-size-walk.png",
+        "user://head-size-run.png",
+        "user://head-size-tall-jump.png",
+        "user://head-size-starter_axe.png",
+        "user://head-size-short_bow.png",
+        "user://head-size-bow-released.png",
+        "user://head-size-short-walk.png",
+        "user://head-size-short-jump.png",
+        "user://head-size-cast-free-hand.png",
+        "user://head-size-magic-after-load.png",
+        "user://head-size-inventory-lifecycle.png"
+      ],
+      "game_save_roundtrip": true,
+      "jump_both_heights": true,
+      "look_roundtrip": true,
+      "morphs": 9,
+      "physical_heights_cm": [
+        160,
+        195
+      ],
+      "player_position_assignments": 0,
+      "walked_m": 28.4799562348053
+    },
+    "uv_material_probes": [
+      {
+        "sex": "male",
+        "material": "VikingBoots",
+        "sampled_triangles": 6320,
+        "maps": {
+          "normal": {
+            "sha256": "ad165f9784674d5c0277b5109b7ca99e159a1ae224cb136cab51229346da3542",
+            "unit_length_error_p95": 0.0034542417195282393,
+            "z_negative_fraction": 0.0,
+            "xy_variation": 0.15520869051951117
+          },
+          "ao": {
+            "sha256": "bc691b883b226f9df9970dc51106d733df87f03c07a202395757cad19f0e1e4b",
+            "mean": 0.7139743112434849,
+            "p10": 0.06274509803921569,
+            "p90": 1.0
+          }
+        }
+      },
+      {
+        "sex": "male",
+        "material": "VikingTunic",
+        "sampled_triangles": 6568,
+        "maps": {
+          "normal": {
+            "sha256": "99306d69d06a6c24fff5e174492202eb47c89dbfc646fc05783052ef1dde25f9",
+            "unit_length_error_p95": 0.0034542417195282393,
+            "z_negative_fraction": 0.0,
+            "xy_variation": 0.17857916183564126
+          },
+          "ao": {
+            "sha256": "26af1425b85e663778f6d5e9ff0c3ec6090f16179370716c3af58634c89e73bf",
+            "mean": 0.7190101741061832,
+            "p10": 0.0,
+            "p90": 1.0
+          }
+        }
+      },
+      {
+        "sex": "male",
+        "material": "VikingPants",
+        "sampled_triangles": 2544,
+        "maps": {
+          "normal": {
+            "sha256": "8d0dd01f341951b25750dc846002123645df6edbcde5dc53b9a7027599507fca",
+            "unit_length_error_p95": 0.0028410238841094504,
+            "z_negative_fraction": 0.0,
+            "xy_variation": 0.03418488021077764
+          },
+          "ao": {
+            "sha256": "c1ccc044e4115d5b9cb4f95c2bbaff7e9846d20269ecdc8f3fa171629d7e687a",
+            "mean": 0.38455882352941173,
+            "p10": 0.0,
+            "p90": 1.0
+          }
+        }
+      },
+      {
+        "sex": "female",
+        "material": "VikingBoots",
+        "sampled_triangles": 6320,
+        "maps": {
+          "normal": {
+            "sha256": "fb6e9e59ad72578f30eca1ed946c6432f8ac0477279376feb1d1190e7a0ebe19",
+            "unit_length_error_p95": 0.003576840323106678,
+            "z_negative_fraction": 0.0,
+            "xy_variation": 0.16362157978955566
+          },
+          "ao": {
+            "sha256": "c1f5467f071acb5bc1dcc2df48be1a949077d2b339e8e280c16cf0c6b1ddd89f",
+            "mean": 0.6995333829734427,
+            "p10": 0.0,
+            "p90": 1.0
+          }
+        }
+      },
+      {
+        "sex": "female",
+        "material": "VikingTunic",
+        "sampled_triangles": 6568,
+        "maps": {
+          "normal": {
+            "sha256": "ca6503343a51752bf77049465ec26898319a8d192e0cf23ba6d23f827c243ac4",
+            "unit_length_error_p95": 0.0035155428935378374,
+            "z_negative_fraction": 0.0001522533495736906,
+            "xy_variation": 0.18357386974078158
+          },
+          "ao": {
+            "sha256": "09b993958b633e2b7176f4557a1f00bbda5af3763774685c5af5c056731ebd65",
+            "mean": 0.7128310764013279,
+            "p10": 0.0,
+            "p90": 1.0
+          }
+        }
+      },
+      {
+        "sex": "female",
+        "material": "VikingPants",
+        "sampled_triangles": 2544,
+        "maps": {
+          "normal": {
+            "sha256": "c28252150fbce262664c87579908054b3b0e83aa5a66aa093f24e854ecadbbde",
+            "unit_length_error_p95": 0.0029636974451896503,
+            "z_negative_fraction": 0.0,
+            "xy_variation": 0.04475076796833894
+          },
+          "ao": {
+            "sha256": "448b0450f5632064ef8b1a3f684cdb2766a252a7a611e2317930b54722ef0ac5",
+            "mean": 0.37003175484030093,
+            "p10": 0.0,
+            "p90": 1.0
+          }
+        }
+      }
+    ],
+    "negative_control": "Rejected wide-cage maps fail the new checker; original failure and one map retained.",
+    "instrumented_resource_sample": "WARDROBE_QA_RESOURCE_SAMPLE static_bytes=60032031.0 video_bytes=430569878.0 adapter=Intel(R) UHD Graphics 610 note=instrumented_fixture_not_steady_world_FPS"
+  },
+  "source_sha256": {
+    "scripts/humanoid_visual.gd": "82ca91a0b658f09926296b1274668a63747b29456eab10d2749c9a521faf7a9b",
+    "tests/smoke_character_creator.gd": "a123c6376af18ed1629f093ccbd5a7b58b359c1a81331dbcf730e16a6f71d87c",
+    "tests/smoke_character_texture_filtering.gd": "c354f564ff43feae3c0d8a247c4913369dc9e4ae19152ae6ac033e60aa94db8a",
+    "assets/production/characters/realistic/male.glb": "f1b7d1e44e4d45a5a6b7aa9c563096fd022035e2d60e7a83470dd233c3c34a4a",
+    "assets/production/characters/realistic/female.glb": "82c382df4a39f540912b37be80ddf3a6eb76344a5d2565bf0294346319d70579",
+    "assets/production/characters/realistic/wardrobe/female-vikingboots-ao.png": "c1f5467f071acb5bc1dcc2df48be1a949077d2b339e8e280c16cf0c6b1ddd89f",
+    "assets/production/characters/realistic/wardrobe/female-vikingboots-normal.png": "fb6e9e59ad72578f30eca1ed946c6432f8ac0477279376feb1d1190e7a0ebe19",
+    "assets/production/characters/realistic/wardrobe/female-vikingpants-ao.png": "448b0450f5632064ef8b1a3f684cdb2766a252a7a611e2317930b54722ef0ac5",
+    "assets/production/characters/realistic/wardrobe/female-vikingpants-normal.png": "c28252150fbce262664c87579908054b3b0e83aa5a66aa093f24e854ecadbbde",
+    "assets/production/characters/realistic/wardrobe/female-vikingtunic-ao.png": "09b993958b633e2b7176f4557a1f00bbda5af3763774685c5af5c056731ebd65",
+    "assets/production/characters/realistic/wardrobe/female-vikingtunic-normal.png": "ca6503343a51752bf77049465ec26898319a8d192e0cf23ba6d23f827c243ac4",
+    "assets/production/characters/realistic/wardrobe/male-vikingboots-ao.png": "bc691b883b226f9df9970dc51106d733df87f03c07a202395757cad19f0e1e4b",
+    "assets/production/characters/realistic/wardrobe/male-vikingboots-normal.png": "ad165f9784674d5c0277b5109b7ca99e159a1ae224cb136cab51229346da3542",
+    "assets/production/characters/realistic/wardrobe/male-vikingpants-ao.png": "c1ccc044e4115d5b9cb4f95c2bbaff7e9846d20269ecdc8f3fa171629d7e687a",
+    "assets/production/characters/realistic/wardrobe/male-vikingpants-normal.png": "8d0dd01f341951b25750dc846002123645df6edbcde5dc53b9a7027599507fca",
+    "assets/production/characters/realistic/wardrobe/male-vikingtunic-ao.png": "26af1425b85e663778f6d5e9ff0c3ec6090f16179370716c3af58634c89e73bf",
+    "assets/production/characters/realistic/wardrobe/male-vikingtunic-normal.png": "99306d69d06a6c24fff5e174492202eb47c89dbfc646fc05783052ef1dde25f9",
+    "tests/humanoid_wardrobe_material_probe.gd": "4a285c1dad2ec6ea058fe72f8d19881e792ec6bf440ef6d699bc9964bff33c74"
+  },
+  "limitations": [
+    "Existing body/face/hair silhouette remains a prototype; owner visual acceptance is false.",
+    "One default outfit is not equipment-driven armour swapping or a complete wardrobe.",
+    "48 graphical action views and a bounded source-world automated scenario are not a manual city/full-world tour.",
+    "Memory sample is from instrumented QA, not process RSS, steady world FPS or a whole-world performance guarantee.",
+    "One female tunic triangle of 6568 still samples a negative normal; coverage is triangle centroids, not every pixel.",
+    "Existing 79 ObjectDB exit leaks remain in the source-world runner.",
+    "No new stable package/release is published."
+  ],
+  "baseline_ci": {
+    "sha": "a9888c2f8b1dea87b4fdec4436a35a793faabd2f",
+    "all_eight_checks": "pass at start of turn"
+  },
+  "next": [
+    "Review face/hair and the remaining shoulder/hand/garment silhouettes together across views.",
+    "Check additional movement turns/start-stop and actual outfit changes.",
+    "Measure sustained gameplay performance and continue the coherent starting-region nature/building/NPC/fauna work."
+  ]
+}

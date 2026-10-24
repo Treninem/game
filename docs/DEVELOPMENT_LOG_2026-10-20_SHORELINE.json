@@ -1,0 +1,145 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased shoreline follow-up",
+  "parent": "ac18445c6b5496654452ce09db9a52a8c21e4d5c",
+  "changes": [
+    "Conform only opening-river crossed terrain triangles to the actual WorldData height-field water contour",
+    "Cache shared contour vertices, retain halo-based normal interpolation and build collision from the same rendered mesh",
+    "Retain the 4 m grid elsewhere; fast path avoids clipping arrays on cells wholly above or below river level",
+    "Add strict shoreline accuracy, shared-edge and bounded vertex-overhead regression to World Core"
+  ],
+  "reproduced_before": "Baseline test failed with maximum height-field contour error 0.08120293454491 m across 972 sampled edge intersections",
+  "after": "1458 sampled contour intersections; maximum height-field error 0.00006375382238 m; both terrain chunks stay within the 35 percent extra-vertex budget",
+  "initial_attempt": "Explicit boolean types corrected after an intermediate GDScript inference parse error; all final checks retain strict error scanning",
+  "initial_source_checks": [
+    {
+      "name": "river_shoreline",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.12
+    },
+    {
+      "name": "terrain_geometry",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.86
+    },
+    {
+      "name": "world_hydrology",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 1.33
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.25
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.83
+    }
+  ],
+  "physical_checks": [
+    {
+      "name": "terrain_surface",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 10.47
+    },
+    {
+      "name": "visual_grounding",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.28
+    },
+    {
+      "name": "bridge_traversal",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 31.78
+    }
+  ],
+  "final_source_checks": [
+    {
+      "name": "river_shoreline",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.97
+    },
+    {
+      "name": "terrain_geometry",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.77
+    },
+    {
+      "name": "terrain_surface",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.88
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.08
+    }
+  ],
+  "frozen_checks": {
+    "pack_sha256": "57055902484b338440d232f722bd169b4fc86d84010493982448624c5ace6942",
+    "results": [
+      {
+        "case": "boot",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 14.97
+      },
+      {
+        "case": "nature",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 3.91
+      },
+      {
+        "case": "shore",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 3.5
+      }
+    ]
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 40.22,
+    "marker": true
+  },
+  "native_markers": [
+    "SHORE_BANK_WALK_OK max_step=0.09820409864187 grounded=true",
+    "WORLD_SURFACE_NATIVE_OK walked=65.227690692991 player_position_assignments=0 cameras=inspection quality=high"
+  ],
+  "cleanup_warnings": [
+    "WARNING: 91 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+  ],
+  "visual_findings": [
+    "Actual same-camera frozen screenshot shows the staircase replaced by a smoother river outline",
+    "Ordinary-input native route reaches the bank and walks along it; no player coordinate assignments by the driver"
+  ],
+  "review_launcher": "build/review-2026-10-20-shoreline/ImPuls-world.cmd",
+  "evidence": "build/acceptance/shoreline-frozen-native/appdata/Godot/app_userdata/ImPuls",
+  "limitations": [
+    "Refinement targets the opening river, not every coast or lake in the continent",
+    "Additional contour solves cost CPU; bounded geometry and boot tests pass, but broad frame-time profiling remains open",
+    "Native automated input, not a manual full-world tour; current pass does not certify city, combat or all NPCs",
+    "Vegetation silhouettes, sparse distant terrain, character detail and simple water reflections remain crude",
+    "Existing ObjectDB cleanup warnings remain; no stable release publication",
+    "Remote checks for this new commit are pending after push"
+  ]
+}

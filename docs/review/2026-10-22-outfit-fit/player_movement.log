@@ -1,0 +1,11 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+Surface smoke [spawn]: collider=TerrainCollision:<StaticBody3D#216744856644> position=(65.0, 4.695675, 48.0) terrain_y=4.70712775564511
+Story world smoke: spawn=(65.0, 48.0) river=34 ford=11 real_trees=234 real_detail=9172 road=62 evidence=75 capital_distance=15171.470703125
+HUD runtime smoke: size=(1280.0, 720.0)
+Void recovery smoke: before=(65.0, 4.737128, 48.0) recovered=(65.0, 4.737128, 48.0) terrain_y=4.70712775564511
+Surface smoke [recovery]: collider=TerrainCollision:<StaticBody3D#216744856644> position=(65.0, 4.695675, 48.0) terrain_y=4.70712775564511
+Mapped-W movement smoke: start=(65.0, 48.0) finish=(65.01192, 44.69759) distance=3.30243158340454
+Movement actions smoke: strafe=ok sprint_speed=8.0 jump_height=0.88675498962402
+Input navigation smoke: four panels close directly, focused Enter rebinding works, Escape cancels safely
+Forest river story start + real nature + civilization signs + input + UI + recovery smoke passed

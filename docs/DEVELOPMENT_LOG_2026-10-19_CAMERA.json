@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-19",
+  "version_label": "0.10.7-stable",
+  "delivery": "Unreleased private camera review; existing project version label retained",
+  "engine": "Godot 4.7.1.stable.official.a13da4feb",
+  "renderer": "GL Compatibility",
+  "sha256": "fdd8e339b0cffe8f715b3c28b922c24cc91008b369ec852539d1dabe276877a5",
+  "bytes": 208238356,
+  "source_checks": [
+    {
+      "name": "camera_obstruction",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 21.44
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 16.95
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.84
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 21.27
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.75
+    },
+    {
+      "name": "visual_grounding",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 16.89
+    },
+    {
+      "name": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.77
+    },
+    {
+      "name": "startup_menu",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 6.73
+    },
+    {
+      "name": "save_recovery",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 6.33
+    },
+    {
+      "name": "capital_gameplay",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 26.38
+    },
+    {
+      "name": "capital_gate_traversal",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 54.53
+    }
+  ],
+  "source_checks_serialized_after_export": true,
+  "graphical": {
+    "passed": true,
+    "log": "validation-logs/camera-final-recapture.log",
+    "scope": "Both pointing modes, three UI scales, absolute-only motion, wheel, menu pause, stale recapture event, save/load"
+  },
+  "package": {
+    "passed": true,
+    "log": "validation-logs/package-camera-final.log",
+    "scope": "Packaged scene and resources, obstruction camera script, zoom setting propagation, boot, movement, equipment, magic, UI and saves"
+  },
+  "native": {
+    "date": "2026-10-19",
+    "method": "Windows Computer Use: actual Godot window, observed states before each input",
+    "fixture": "Real start-region scene at original spawn plus a temporary authored plaster wall; fixture excluded from export",
+    "observations": {
+      "wall_distance_m": 1.79,
+      "requested_distance_m": 5.5,
+      "turn_away_restores_distance_m": 5.5,
+      "wheel_changed_requested_distance_to_m": 5.0,
+      "menu_slider_changed_distance_to_m": 7.0,
+      "menu_return_yaw_before_deg": 0.0,
+      "menu_return_yaw_after_deg": 0.0,
+      "menu_return_no_snap": true,
+      "subsequent_mouse_turn_after_refocus_deg": 140.0
+    },
+    "found_and_fixed": "Before recapture filtering, returning by menu button produced a large yaw/pitch jump. After filtering, observed yaw stayed zero and subsequent pointing still rotated it.",
+    "not_claimed": [
+      "Physical user mouse hardware verification",
+      "Full new manual forest-to-capital traversal",
+      "FPS or memory acceptance benchmark"
+    ]
+  },
+  "failed_intermediate_checks": [
+    "Bad pause fixture was replaced by real GameMenu flow, because the stability guard legitimately unpauses a tree with no visible UI.",
+    "Native testing found a real menu-return snap; buffered recapture motion is now filtered and regression-tested.",
+    "A run concurrent with the editor/export timed out and briefly failed SVG resource reads; failure retained. All final checks run after export completion; timeouts unchanged."
+  ],
+  "known_issues": [
+    "67 ObjectDB instances warned at exit, unresolved",
+    "Duplicate UID in existing VFX scene_empty copies",
+    "Full master prompt and realistic living world are not complete",
+    "No fresh full forest-to-capital traversal in this camera stage",
+    "No acceptance FPS/memory benchmark claimed"
+  ],
+  "git": {
+    "branch": "main",
+    "base": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "commit_created": false,
+    "pr_created": false,
+    "remote_release_gates_claimed": false
+  },
+  "next": [
+    "Finished start-region resource/tool gameplay loop",
+    "Actual work sites and reactive citizens",
+    "Guild progression",
+    "Dedicated low-memory performance profiling"
+  ]
+}

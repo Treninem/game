@@ -26,13 +26,13 @@ func _run_test() -> void:
     for _i in range(5):
         await get_tree().physics_frame
 
-    if building.room_count != 1:
-        _fail(2, "building does not expose exactly one real starter room")
+    if building.room_count != 4 or not building.has_node("HouseRooms") or building.get_node("HouseRooms").room_doors.size() != 3:
+        _fail(2, "building lacks private rooms, common hall, separate kitchen and three physical doors")
         return
     if building.door_count != 1 or building.front_door == null:
         _fail(3, "building is missing its physical interactive front door")
         return
-    if building.window_count < 3:
+    if building.window_count < 6:
         _fail(4, "building does not have real window openings on multiple walls")
         return
     if building.structural_piece_count < 14:
@@ -94,13 +94,33 @@ func _run_test() -> void:
         return
 
     # Adjacent facade must still be solid, proving we did not simply remove the wall.
-    var wall_hit := _ray(Vector3(3.0, 1.25, 6.0), Vector3(3.0, 1.25, 2.6))
+    var wall_hit := _ray(Vector3(1.2, 1.25, 6.0), Vector3(1.2, 1.25, 2.6))
     if wall_hit.is_empty():
         _fail(12, "front wall beside the doorway has no collision")
         return
     var wall_collider := wall_hit.get("collider") as Node
     if wall_collider == building.front_door:
         _fail(13, "door collision incorrectly spans the facade")
+        return
+
+    # Independent front-facade matrix for the 9x8m fixture. The old x=3
+    # solid-wall probe now lies inside the new right window. Check both posts,
+    # sill/header strips and the two real openings instead of sealing the glass.
+    for sign_value in [-1.0,1.0]:
+        for x in [1.2,3.8]:
+            for y in [.7,1.55,2.7]:
+                if _ray(Vector3(sign_value*x,y,5),Vector3(sign_value*x,y,3.6)).is_empty():
+                    _fail(50,"front facade post/sill/header lost physical support")
+                    return
+        for y in [.7,2.7]:
+            if _ray(Vector3(sign_value*2.6125,y,5),Vector3(sign_value*2.6125,y,3.6)).is_empty():
+                _fail(51,"front window sill or header is missing")
+                return
+        if not _ray(Vector3(sign_value*2.6125,1.55,5),Vector3(sign_value*2.6125,1.55,3.6)).is_empty():
+            _fail(52,"front window is painted on a sealed wall")
+            return
+    if not building.has_node("FrontWindowLeft") or not building.has_node("FrontWindowRight"):
+        _fail(53,"family home lost its two front window assemblies")
         return
 
     # Back window must be a genuine opening rather than a wall painted as glass.

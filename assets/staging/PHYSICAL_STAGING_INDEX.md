@@ -14,6 +14,11 @@ This file lists third-party asset packs whose real files are physically present 
 
 ## Verified physical batches
 
+### Medieval Village MegaKit Standard (source chat B47)
+
+- `assets/staging/sourcechat_b47/models/quaternius_medieval_village_megakit_standard/` — STAGED_PHYSICAL on `main`; verified models, texture families and CC0 license files. No batch failure manifest is present in this pack folder; the six Brick/RockTrim textures were checked directly against `main`.
+- Selected models and their Brick/RockTrim dependencies are INTEGRATED under `assets/production/medieval/quaternius_city_core/`; see that folder's `SOURCE.md` for provenance.
+
 ### Fauna, characters, animation and general items
 Physical asset commit: `fef2efd7606e53c8755a7e7e45a02274dac8aa8b`
 
@@ -167,3 +172,24 @@ Before adding a model to gameplay:
 - `INTEGRATED` — asset is actually referenced by game scenes/resources/code.
 
 Never use `IMPORTED` ambiguously; state the exact status above.
+
+## Physically checked selections — 2026-10-18
+
+- STAGED_PHYSICAL selection checked 2026-10-19: `sourcechat_b89/models/oga_character_pack_2026/y2024/BRAVOS_GAME_BR_2024/homen_base.obj` plus pack SOURCE.md/LICENSE.txt, confirmed on main. Only this selected mesh is verified here, not every nested archive in B89. Its missing MTL is replaced by documented project materials. Geometry is INTEGRATED in `assets/production/characters/citizen/citizen.glb` on the existing animated human skeleton; no new download. No selected-pack batch failure manifest was found.
+
+- STAGED_PHYSICAL: `sourcechat_b04/audio/oga_100_cc0_sfx_2/` — source, CC0 license and three wood-hit OGG files verified directly on `main` for the 2026-10-19 contact-audio selection. Selected files are INTEGRATED under `assets/audio/world/oga_100_cc0_sfx_2/`; original staging filenames retained. No batch failure manifest was found for this selected pack.
+
+The following existing source folders were checked directly, including source/license metadata. No batch failure manifest was found in B36 or B44; selected files and all texture dependencies were checked individually.
+
+- STAGED_PHYSICAL: `sourcechat_b36/models/quaternius_rpg_characters/` — selected Ranger is INTEGRATED in `assets/production/characters/ranger/`.
+- STAGED_PHYSICAL: `sourcechat_b44/models/quaternius_stylized_nature_megakit_standard/` — six selected models are INTEGRATED in `assets/production/nature/woodland/`.
+- STAGED_PHYSICAL: `materials/oga_seamless_textures/` — two selected photographic diffuse images are INTEGRATED in `assets/production/materials/ground/`.
+- STAGED_PHYSICAL: `sourcechat_b36/models/quaternius_ultimate_rpg_items/` — selected axe, dagger, wooden bow and arrow are INTEGRATED in `assets/production/weapons/woodland/`. Source OBJ/MTL files and CC0 license were checked directly; no batch failure manifest was present in this source folder.
+
+- STAGED_PHYSICAL selection checked 2026-10-19: B46 `quaternius_fantasy_props_megakit_standard/Exports/glTF/Chest_Wood.gltf` and `.bin`, original texture dependencies and CC0 LICENSE.txt/License_Standard.txt confirmed on main fd61e21. No failure manifest found in B46. Selected animated chest is INTEGRATED under `assets/production/medieval/capital_square/`.
+
+- STAGED_PHYSICAL selection checked 2026-10-21/22 on main 0015b68c: B46 Fantasy Props MegaKit Standard glTF/bin pairs for Mug, Table_Plate, Book_Stack_1, Bookcase_2, Cabinet, Workbench_Drawers, Pot_1, FarmCrate_Apple, Bag, Peg_Rack, SmallBottles_1, Nightstand_Shelf, Shelf_Small_Bottles, Table_Knife, Table_Spoon, CandleStick_Triple, Vase_4, Barrel, Shelf_Simple, plus original OpenGL Cloth BaseColor/Normal/ORM maps. Existing CC0 licenses checked; no selected-pack failure manifest found. Geometry derivatives are INTEGRATED in the review; this does not claim the new production files are already on main. Detailed record: `assets/registry/HOUSEHOLD_DRESSING_2026-10-21.json`.
+
+- STAGED_PHYSICAL selection checked 2026-10-22 directly on main 0015b68c: materials/oga_ground_texture_set/ground/dirt1.png and gravel1.png plus source/license metadata; no selected-pack failure manifest found. Unmodified 512px selections are INTEGRATED as road_soil/road_gravel in the review, not yet merged into main. See assets/registry/TERRAIN_PATHS_2026-10-22.json.
+
+- STAGED_PHYSICAL selection checked 2026-10-22 on main 0015b68c: B47 quaternius_medieval_village_megakit_standard/OBJ/Prop_WoodenFence_Single.obj plus source/license; no selected-pack failure manifest found. Normalized geometry is INTEGRATED in the review CottageYardKit, not merged into main. No new source pack/download. Jan2020 crop-pack preview was inspected and rejected for this visual direction. See assets/registry/COTTAGE_YARDS_2026-10-22.json.

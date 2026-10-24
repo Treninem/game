@@ -1,0 +1,23 @@
+{
+  "case": "village_visual",
+  "exit_code": 4294967295,
+  "seconds": 115.31,
+  "errors": [
+    "SCRIPT ERROR: Compile Error: Identifier not found: WorldData",
+    "SCRIPT ERROR: Compile Error: Identifier not found: SettingsManager",
+    "SCRIPT ERROR: Compile Error: Identifier not found: GameState",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "ERROR: Failed to load script \"res://tests/visual_village_paths.gd\" with error \"Compilation failed\".",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.",
+    "SCRIPT ERROR: Invalid call. Nonexistent function 'build_village' in base 'GDScript'.",
+    "ERROR: Node not found: \"VillageLanes\" (relative to \"/root/Bootstrap/World/Settlements/Settlement_border_village_01\").",
+    "SCRIPT ERROR: Cannot call method 'get_meta' on a null value."
+  ],
+  "marker": false
+}

@@ -1,0 +1,165 @@
+{
+  "date": "2026-10-23",
+  "packet": "Post-pelvis swing-foot clearance across terrain and complete action phases",
+  "parent": "2d5caf22b76ff827e081b11a55e6b36fb138573f",
+  "branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "goal_status": "active",
+  "requirements": [
+    "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+    "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt",
+    "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json"
+  ],
+  "previous_exact_head_ci": {
+    "head": "2d5caf22b76ff827e081b11a55e6b36fb138573f",
+    "all_eight": "SUCCESS; freshly read from PR12 at start of this packet"
+  },
+  "reproduced_bug": {
+    "original_grounding_blob": "2c9e5394dec72602583848ad816191ebd41e97b2",
+    "standing_samples": 8,
+    "standing_result": "Both soles supported on flat, 30-degree cross slope, 25-degree incline and compound descent; initial suspicion about static support was rejected.",
+    "movement_samples_before_after": 56,
+    "before_minimum_gap_m": -0.170834392181199,
+    "after_minimum_gap_m": 0.00069173085506413,
+    "mechanism": "Stance hits/weights were queried before pelvis support and landing compression. Lowering the pelvis could push a swing sole into an uphill face even when that foot had no old hit or almost zero stance weight."
+  },
+  "changes": [
+    "Requery both final skinned soles against real collision after pelvis and stance-leg correction. Only actual penetrations are lifted through the existing length-preserving anatomical leg solver; authored swing clearance and foot rotation are retained.",
+    "The player collider, root movement, input timing, jump velocity, damage, economy, save schema, human meshes and textures are unchanged. NPCs retain their separate existing support path; no claim that all inhabitants or human art are complete.",
+    "Reuse the deformed sole sample points only while that exact leg pose is unchanged. Invalidate at each modifier update, pelvis move, leg solve and foot rotation. This avoids repeatedly skinning the same vertices for different directions/rays.",
+    "Add strict physical and native GPU regressions for both human rigs, extreme height/build profiles, four inclines, actual rise/apex/fall/compressed landing/recovery, walking/running/braking, bow/axe and magic. All prior gates retained."
+  ],
+  "local_final_checks": [
+    {
+      "case": "cached_headless",
+      "exit_code": 0,
+      "seconds": 252.72,
+      "native": false,
+      "errors": []
+    }
+  ],
+  "source_sha256": {
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+    "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+    "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+    "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+    "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+    "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+    "scripts/world_vfx.gd": "6317164bb7f5302979ce17874f82ab168a04a96377ff1df95c340c299a3f0e2d",
+    "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+    "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+    "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+    "scripts/humanoid_visual.gd": "cd50eb3fc5babe1446c9de788cfaf7752b935f4aa94ee03714d917fbec18000d",
+    "tests/visual_bow_world.gd": "9dde1ba71fcdd668af2ec878fe13e4ebada64cfd9369e2931bdaa42373f9880d",
+    "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+    "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+    "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+    "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f",
+    "tests/visual_wardrobe_coverage.gd": "411ded7208a1242ea7c8dd11de60666967c15c81034d2c23f214d3ea0093af8e",
+    "tests/smoke_action_start_render.gd": "7fc69793dbfa5e2d0bb7f27fd11433ba58bc68529e0ada1d08cfa66d4b186da0",
+    "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+    "tests/smoke_slope_motion.gd": "af12c6fc0a9c4d999b66b1576c4ef5a9c2e66c3c8383208efea87cbc7b3ed5f5"
+  },
+  "evidence_folder": "docs/review/2026-10-23-slope-support",
+  "failed_and_limited_attempts": [
+    "First cold native diagnostic hit its unchanged 260-second outer deadline before pose images. Retained as a failure; no performance acceptance inferred.",
+    "First new test failed GDScript inference for a Variant array key; explicit String typing fixed it.",
+    "Preliminary 76-pose headless run exited cleanly but an observer waiting two process boundaries mislabeled a late grounded pose as fall and missed compressed landing. It is retained as preliminary only. Final observer uses the completed modifier / exact rendered frame and asserts actual physical phase predicates.",
+    "Windows Computer Use helper initialization timed out. Verification here uses explicit automated game inputs and rendered screenshots; it is not a manual playthrough.",
+    "Final-cache local graphical attempts failed by outer deadline: 334.72s and 692.36s observed. Positive partial geometry is not a complete pass. No deadline or required gate was relaxed."
+  ],
+  "ci": "New exact-SHA checks follow push; previous green is not reused. World Core now includes two additional required inclined-motion gates and preserves native PNG/JSON artifacts.",
+  "remaining": [
+    "Full human appearance, material/cloth quality, foot planting/sliding and broader slope/edge artistic acceptance remain open.",
+    "A QA inclined floor isolates this defect; it is not the complete natural landscape, full start-to-city journey or all-household test. The existing real-world gameplay/UI/save gate is repeated by exact-SHA CI.",
+    "No new Blender mesh or third-party asset was introduced. Models/forest still below owner concept.",
+    "Local weak-PC cold full-world loading and sustained FPS remain unaccepted.",
+    "No stable release published."
+  ],
+  "native_control_before_cache": {
+    "samples": 76,
+    "gpu_poses": 34,
+    "boot_vertices_per_pose": 3530,
+    "tunic_vertices_per_pose": 3776,
+    "max_boot_gpu_cpu_error_m": 1.60994613906951e-06,
+    "max_tunic_gpu_cpu_error_m": 1.90973355529422e-06,
+    "walked_m": 21.9128890545107,
+    "player_position_writes_after_setup": 0,
+    "support_cost_usec": {
+      "median": 1277,
+      "p95": 3676,
+      "samples": 1977
+    },
+    "prior_uncached_support_cost_usec": {
+      "median": 1277,
+      "p95": 3676,
+      "samples": 1977
+    },
+    "timing_scope": "Self-time of the support script in separate instrumented fixture runs on the local UHD610 machine; not whole-world FPS, a controlled hardware benchmark or a claim of stable 30 FPS.",
+    "case": "packet_native",
+    "sources": {
+      "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+      "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+      "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+      "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+      "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+      "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+      "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+      "scripts/world_vfx.gd": "6317164bb7f5302979ce17874f82ab168a04a96377ff1df95c340c299a3f0e2d",
+      "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+      "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+      "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+      "scripts/humanoid_visual.gd": "cd50eb3fc5babe1446c9de788cfaf7752b935f4aa94ee03714d917fbec18000d",
+      "tests/visual_bow_world.gd": "9dde1ba71fcdd668af2ec878fe13e4ebada64cfd9369e2931bdaa42373f9880d",
+      "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+      "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+      "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+      "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f",
+      "tests/visual_wardrobe_coverage.gd": "411ded7208a1242ea7c8dd11de60666967c15c81034d2c23f214d3ea0093af8e",
+      "tests/smoke_action_start_render.gd": "7fc69793dbfa5e2d0bb7f27fd11433ba58bc68529e0ada1d08cfa66d4b186da0",
+      "scripts/humanoid_grounding.gd": "e2d2ab9f2f6887d4458dc7a1e854d395a7aab2cf63475c6b99a322a11750eb8b",
+      "tests/smoke_slope_motion.gd": "af12c6fc0a9c4d999b66b1576c4ef5a9c2e66c3c8383208efea87cbc7b3ed5f5"
+    },
+    "scope": "Full local Intel GPU control of the terrain fix BEFORE pose-point reuse. It differs from the final source only in humanoid_grounding.gd; it is not a complete final-cache native pass."
+  },
+  "local_final_cached_native": {
+    "checks": [
+      {
+        "case": "cached_native",
+        "exit_code": 1,
+        "seconds": 334.72,
+        "native": true,
+        "errors": []
+      },
+      {
+        "case": "cached_native_repeat",
+        "exit_code": 1,
+        "seconds": 692.36,
+        "native": true,
+        "errors": []
+      }
+    ],
+    "complete_pass": false,
+    "partial_positive_gpu_poses": 17,
+    "partial_samples": 38,
+    "sources_match_final_headless": true,
+    "scope": "Both attempts exceeded the unchanged 320s outer bound; the second observed 692.36s includes delayed observation/termination while local command channels also stalled. One own LocalAppData cache was reused, with new APPDATA/TEMP. No additional local native repetition is planned. All 34 final-cache native poses must still pass the required exact-SHA CI gate."
+  },
+  "final_cached_headless": {
+    "poses": 76,
+    "walked_m": 20.9163996162824,
+    "support_cost_usec": {
+      "median": 825,
+      "p95": 3276,
+      "samples": 2715
+    },
+    "prior_uncached_support_cost_usec": {
+      "median": 1364,
+      "p95": 6309,
+      "samples": 2591
+    },
+    "scope": "Separate instrumented physical fixture runs; not full-world FPS or cold-boot acceptance."
+  },
+  "review_frame_provenance": "Unprefixed images are the complete local pre-cache control; cached-* images are positive partial frames from the final-cache timeout. Final complete native images remain pending exact-SHA CI."
+}

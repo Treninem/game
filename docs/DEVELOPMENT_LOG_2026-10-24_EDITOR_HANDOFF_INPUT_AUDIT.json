@@ -1,0 +1,241 @@
+{
+  "date": "2026-10-24",
+  "recorded_at_utc": "2026-10-24T08:41:22.180376+00:00",
+  "goal": "ACTIVE",
+  "runtime_parent": "711edb0dc5ee39e6b4b0d3b3a1d2db46535a0df9",
+  "main_observed": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "scope": "User editor handoff; isolated input corrections and honest CI status. No live gameplay integration.",
+  "user_feedback": "Controls, menus, housing, interiors and streets rejected; visual acceptance remains false.",
+  "handoff_guard": {
+    "mode": "USER_EDITOR_HANDOFF",
+    "project": "D:/Desktop/GitHub/game/project.godot",
+    "opened_scene": "res://scenes/stage1.tscn",
+    "editor_process_id_observed": 15652,
+    "runtime_root_writes": "Do not change the user-opened runtime/scenes until the user asks to resume integration after manual edits. Re-read current files and reconcile their changes first.",
+    "isolated_proposals_allowed": true,
+    "goal_status": "ACTIVE; no completion or goal pause claimed",
+    "unsaved_windows_closed": false
+  },
+  "reference_comparison": [
+    {
+      "game": "Skyrim Legendary Edition",
+      "source": "https://assets.ctfassets.net/rporu91m20dc/hH1HljyrjqewisSugMOm2/ab667e857bd67d39a814dc064d96ef8f/manual_skyrim-le_ps3_en-int.pdf",
+      "viewed": "Rendered PDF pages6 and8 (printed4-5 and8-9); actual pixels inspected.",
+      "observed": "Four character-menu directions; dark translucent item/category lists; large selected-item preview; thin separators; compact contextual resource bars.",
+      "decision": "Separate primary character sections from secondary systems; use consistent unobtrusive frames and readable selected-item details. Preserve ImPuls unlimited cell inventory; do not copy Skyrim carrying limits or assets."
+    },
+    {
+      "game": "The Witcher 3",
+      "source": "https://cdn-l-thewitcher.cdprojektred.com/media/TW3/Pdf/Manuals/PC/The_Witcher_3_Wild_Hunt_Game_Manual_PC_EN.pdf",
+      "viewed": "Rendered PDF page5; actual pixels inspected.",
+      "observed": "Quick-access wheel with selected-action text; health at upper left, minimap/quest at upper right, short context-dependent input prompts.",
+      "decision": "Keep instant actions distinct from large panels; display only context-relevant prompts, and give map filters a clear home."
+    },
+    {
+      "game": "The Witcher 3 next-gen",
+      "source": "https://www.thewitcher.com/us/en/news/46681/the-witcher-3-wild-hunt-next-gen-update-trailer-and-redstreams-summary",
+      "viewed": "Official developer text only.",
+      "observed": "Optional close camera, Quick Sign Casting, map filters and dynamically hidden minimap.",
+      "decision": "Make camera/interface options understandable and preserve explicit control mappings; no silent RMB or quick-slot migration."
+    }
+  ],
+  "not_viewed": [
+    "No live Skyrim/Witcher gameplay or video this turn.",
+    "No Witcher inventory-screen pixels this turn; inspected HUD/wheel only.",
+    "No full rendered ImPuls gameplay pass this turn. Headless input checks do not prove mouse hardware behavior, animation quality or art acceptance."
+  ],
+  "confirmed_bugs": [
+    "Default Tab does not open inventory.",
+    "With actual RuntimeStabilityGuard, typing a printable rebound pause key closes inventory search. Existing inventory smoke removes World including that guard and misses this case."
+  ],
+  "isolated_changes": [
+    "Default I+Tab inventory shortcut, with explicit user Tab bindings taking priority and custom inventory bindings preserved.",
+    "Visible panel shortcuts processed before GUI focus traversal; search editors keep their text/navigation behavior.",
+    "Guard keeps Escape as back, but leaves printable/search-editing keys to focused text editors; function-key pause remains available."
+  ],
+  "proposal_sources_sha256": {
+    "scripts/gameplay_panels.gd": "8e5e11b983946365f31d4e09e320dde08bd5c0f85a845de1dfa97b954be7650e",
+    "scripts/runtime_stability_guard.gd": "568eb1096089510c8d27bb749d0d3f86bc524b684d73d18dda8e86dcefc24fa7",
+    "scripts/settings_manager.gd": "73b192b4835b121513ef245793ae1541b35d6909764e2ba8ab4c628aa7081b35"
+  },
+  "input_audit": {
+    "baseline_cases": 7,
+    "baseline_confirmed_failures": 2,
+    "candidate_cases_passed": 10,
+    "candidate_execution": {
+      "returncode": 0,
+      "seconds": 11.828000000001339,
+      "errors": [],
+      "marker": true
+    },
+    "existing_regressions": {
+      "suite_status": "NOT PASSED; proposal stays unintegrated",
+      "first": [
+        {
+          "case": "smoke_binding_conflicts",
+          "returncode": 99,
+          "seconds": 62.60899999999674,
+          "errors": [],
+          "marker": false,
+          "stopped": false
+        }
+      ],
+      "traced_retry": [
+        {
+          "case": "smoke_binding_conflicts",
+          "returncode": 0,
+          "seconds": 25.14100000000326,
+          "errors": [],
+          "marker": true,
+          "stopped": false
+        },
+        {
+          "case": "smoke_inventory_unlimited",
+          "returncode": 1,
+          "seconds": 65.38999999999942,
+          "errors": [],
+          "marker": false,
+          "stopped": true
+        }
+      ],
+      "not_run": [
+        "smoke_ui_lifecycle"
+      ],
+      "test_bounds_assertions_unchanged": true,
+      "timeout_cause": "Not established; no resource-contention-only claim."
+    },
+    "accepted_for_integration": false,
+    "profile": "Isolated APPDATA/LOCALAPPDATA/TEMP/TMP per check; no normal user saves/settings written.",
+    "integrated": false,
+    "patch": "docs/review/2026-10-24-editor-handoff-inputs/input-fixes-unintegrated.patch",
+    "patch_format": "Zero-context unified diff; requires git apply --unidiff-zero after reconciling user changes. Not applied to runtime.",
+    "failed_private_attempts": [
+      "A settings-only partial proposal restores opening Tab but still fails focus/guard cases.",
+      "First complete proposal failed GDScript type inference in the guard; explicit int annotation corrected it. Ten-case proof is from the final typed proposal only."
+    ]
+  },
+  "canal_recovery_proposal": {
+    "integrated": false,
+    "controlled_six_size_side_cases": "PASS",
+    "full_life_recheck": [
+      {
+        "case": "smoke_canal_household.gd",
+        "returncode": 1,
+        "seconds": 131.23399999999674,
+        "errors": [
+          "ERROR: Canal household real load timeout"
+        ],
+        "stopped": true,
+        "marker": false
+      }
+    ],
+    "other_followup_cases": "Not run after first full-life real-load timeout; no timeout/assertion weakened.",
+    "source": "build/asset_work/canal-perch-2026-10-24/proposal-sources"
+  },
+  "ci": {
+    "runtime_sha": "711edb0dc5ee39e6b4b0d3b3a1d2db46535a0df9",
+    "workflows": [
+      {
+        "id": 40073175337,
+        "name": "Validate Delta Updater",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 102,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175337/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175337/logs",
+        "workflow_id": 334468829
+      },
+      {
+        "id": 40073175169,
+        "name": "Diagnose UI Smoke",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 144,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175169/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175169/logs",
+        "workflow_id": 334664304
+      },
+      {
+        "id": 40073175173,
+        "name": "Validate Magic Runtime",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 201,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175173/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175173/logs",
+        "workflow_id": 334237115
+      },
+      {
+        "id": 40073175176,
+        "name": "Validate World VFX",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 207,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175176/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175176/logs",
+        "workflow_id": 334245633
+      },
+      {
+        "id": 40073175201,
+        "name": "Validate Player Movement",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 254,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175201/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175201/logs",
+        "workflow_id": 334245722
+      },
+      {
+        "id": 40073175233,
+        "name": "Build Windows Installer",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 228,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175233/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175233/logs",
+        "workflow_id": 335690677
+      },
+      {
+        "id": 40073175183,
+        "name": "Validate World Core",
+        "status": "completed",
+        "conclusion": "failure",
+        "run_number": 403,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175183/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175183/logs",
+        "workflow_id": 334776448
+      },
+      {
+        "id": 40073175199,
+        "name": "Build ImPuls Release Candidate",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 786,
+        "jobs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175199/jobs",
+        "logs_url": "https://api.github.com/repos/Treninem/game/actions/runs/40073175199/logs",
+        "workflow_id": 334116455
+      }
+    ],
+    "mandatory_world_core": "FAILED",
+    "failed_run": 40073175183,
+    "failed_job": 120810822360,
+    "failed_step": 24,
+    "failure": "Canal household could not complete sleep; CanalTrader remains at (36.51758,1.97715,-7.804199) while clock advances.",
+    "stable_release": false
+  },
+  "runtime_files_changed_in_open_project": [],
+  "manual_play": false,
+  "visual_acceptance": false,
+  "stable_release": false,
+  "limitations": [
+    "Published Q14 runtime still fails mandatory world-core family life.",
+    "Private input proposal is not installed in the user-opened editor/game.",
+    "Menus still lack final visual redesign; humans, buildings, streets, interiors and vegetation remain below supplied concepts.",
+    "No new Blender model, environment asset, save migration or control-scheme replacement was integrated."
+  ],
+  "next_connected_work": [
+    "Reconcile user editor changes before any integration; apply only reviewed compatible input changes.",
+    "Complete canal recovery full-lifecycle and old navigation/market checks, then exact-source CI; fixture success alone is insufficient.",
+    "Render-test a coherent menu/inventory/equipment redesign at required resolutions with actual gameplay mouse/focus roundtrips."
+  ]
+}

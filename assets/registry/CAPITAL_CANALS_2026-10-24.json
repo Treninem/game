@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-24",
+  "state": "INTEGRATED",
+  "review_branch": "codex/household-persistence-2026-10-19",
+  "main_integrated": false,
+  "source": "assets/source/architecture/capital_canal/CapitalCanalKit.blend",
+  "production": "assets/production/architecture/capital_canal/CapitalCanalKit.glb",
+  "exporter": "tools/export_capital_canal_kit.py",
+  "asset_sha256": {
+    "assets/production/architecture/capital_canal/CapitalCanalKit.glb": "2e7010f4332068872e9b6a8581eae2252e210611d3f85ca4c452511d733e87c8",
+    "assets/source/architecture/capital_canal/CapitalCanalKit.blend": "f0ac63baa8891139b775906ae0b67daf75789ebb3d3b88e9ab2ed209aae4273d"
+  },
+  "authoring": {
+    "original_project_geometry": true,
+    "parts": {
+      "DeckAndApproaches": 1408,
+      "MeasuredArchVaults": 14784,
+      "ParapetsAndCaps": 10736,
+      "PiersAndSpandrels": 13504,
+      "QuayWall6m": 2916
+    },
+    "total_triangles": 43348,
+    "relative_images_checked": {
+      "lichen_rock.jpg": {
+        "relative_path": "//..\\..\\..\\production\\materials\\ground\\lichen_rock.jpg",
+        "sha256": "8ceb0e44d54f0858919ff2a5cbcc55246a43b38ad145300c28e4e5e35d6e242e"
+      },
+      "stone_normal.png": {
+        "relative_path": "//..\\..\\..\\production\\architecture\\city_street\\stone_normal.png",
+        "sha256": "d8453450e1091be573f5687b10eb6b52f690a865474213fde5ef06b7983117c6"
+      },
+      "stone_orm.png": {
+        "relative_path": "//..\\..\\..\\production\\architecture\\city_street\\stone_orm.png",
+        "sha256": "6fc1dcca1504847e2215a8662091d5808937edb39980e0b68ab0aef86752ae28"
+      },
+      "stone_paving.jpg": {
+        "relative_path": "//..\\..\\..\\production\\materials\\ground\\stone_paving.jpg",
+        "sha256": "705b0a1168b1cada6e56053d14d0f8fcd052a2f05ba3ba5fa767c3b9ae805ee4"
+      }
+    },
+    "editable_source_reopened_and_exported": true,
+    "third_party_downloads": 0,
+    "editable_reexport_matches_production_GLB": true
+  },
+  "existing_materials": [
+    "assets/production/materials/ground/stone_paving.jpg",
+    "assets/production/materials/ground/lichen_rock.jpg",
+    "assets/production/architecture/city_street/stone_normal.png"
+  ],
+  "runtime": [
+    "scripts/capital_canals.gd",
+    "scripts/capital_canal_data.gd",
+    "scripts/canal_household.gd",
+    "scripts/world_hydrology.gd",
+    "scripts/world_water.gd",
+    "scripts/world_streamer.gd",
+    "scripts/city_streamer_fast.gd"
+  ],
+  "scope": {
+    "straight_channel_m": 600,
+    "water_width_m": 36,
+    "water_depth_m": 1.2,
+    "water_level": 0,
+    "bridges": 4,
+    "bridge_footprint_m": [
+      96,
+      16
+    ],
+    "clear_bridge_lane_m": 14,
+    "quay_module_m": 6,
+    "bank_lanterns": 8,
+    "functional_households": 1,
+    "adult_owners": 2,
+    "shops": 1,
+    "finite_workshops": 1,
+    "public_benches": 3
+  },
+  "shared_environment": {
+    "continuous_water": "ice_surface.gdshader including existing freeze/frost/wet parameters",
+    "foliage": "production_nature.gd shared wind and spatial quality bounds",
+    "terrain": "terrain_ground.gdshader opt-in freshwater distance; original defaults retained"
+  },
+  "visual_acceptance": false,
+  "main_city_composition_accepted": false,
+  "limitations": [
+    "One canal neighbourhood, not 20 completed city models",
+    "The canonical lake and sluice are not yet physically completed",
+    "Sparse/repeated distant legacy buildings and flat capital plateau remain",
+    "Existing humans and broad character/action art remain rejected/open",
+    "One two-adult home; no claim of complete household/age variety or full autonomous life simulation"
+  ]
+}

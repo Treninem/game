@@ -1,0 +1,38 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+LIVE_BOW_BLEND_SAMPLE 1
+LIVE_BOW_BLEND_SAMPLE 2
+AIRBORNE_WORLD_POSE Bow_Attack_Draw grounded=false
+LIVE_BOW_BLEND_SAMPLE 3
+LIVE_BOW_BLEND_SAMPLE 4
+LIVE_BOW_BLEND_SAMPLE 5
+LIVE_BOW_BLEND_SAMPLE 6
+LIVE_BOW_BLEND_SAMPLE 7
+LIVE_BOW_BLEND_SAMPLE 8
+LIVE_BOW_BLEND_SAMPLE 9
+LIVE_BOW_BLEND_SAMPLE 10
+LIVE_BOW_BLEND_SAMPLE 11
+LIVE_BOW_BLEND_SAMPLE 12
+LIVE_BOW_BLEND_SAMPLE 13
+LIVE_BOW_BLEND_SAMPLE 14
+LIVE_BOW_BLEND_SAMPLE 15
+LIVE_BOW_BLEND_SAMPLE 16
+LIVE_BOW_BLEND_SAMPLE 17
+LIVE_BOW_BLEND_SAMPLE 18
+LIVE_BOW_BLEND_SAMPLE 19
+LIVE_BOW_BLEND_SAMPLE 20
+LIVE_BOW_BLEND_SAMPLE 21
+LIVE_BOW_BLEND_SAMPLE 22
+CAST_BEFORE input_disabled=false player_unhandled=true focus=true
+CAST_INPUT_STAGE input paused=false handled=false
+CAST_INPUT_STAGE unhandled paused=false
+MAGIC_INPUT_DIAGNOSTIC {"casts":1,"cooldown":3.844632,"dialogue":false,"focus":"<Object#null>","mana":70.77684,"paused":false,"selected":"heal"}
+CAST_INPUT_STAGE input paused=false handled=false
+CAST_INPUT_STAGE unhandled paused=false
+MAGIC_NATIVE_SAVE_OK action=cast_magic selected=heal cooldown=restored blocked_cast=no_mana_cost
+UI_NATIVE_REOPEN_OK cycles=12 inventory+map gameplay_resumed=true
+LIVE_BOW_BLEND_OK samples=22
+FACE_CONTROLS_NATIVE_OK {"bow_arrow_consumed":true,"captures":["user://head-size-walk.png","user://head-size-run.png","user://head-size-tall-jump.png","user://head-size-starter_axe.png","user://head-size-short_bow.png","user://head-size-bow-released.png","user://head-size-short-walk.png","user://head-size-short-jump.png","user://head-size-cast-free-hand.png","user://head-size-magic-after-load.png","user://head-size-inventory-lifecycle.png"],"game_save_roundtrip":true,"jump_both_heights":true,"look_roundtrip":true,"morphs":9,"physical_heights_cm":[160,195],"player_position_assignments":0,"walked_m":25.2792808106169}
+WARNING: 79 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

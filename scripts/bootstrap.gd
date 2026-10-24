@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION := "0.10.7-stable"
+const VERSION := "0.10.7.3"
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const PLAYER_GROUND_CLEARANCE := 0.08
 const RESPAWN_POSITION := Vector3(GEOGRAPHY.START_SPAWN.x, PLAYER_GROUND_CLEARANCE, GEOGRAPHY.START_SPAWN.y)
@@ -16,12 +16,14 @@ func _ready() -> void:
     add_to_group("world_root")
     get_tree().paused = false
     if not bool(get_meta("loading_gate_active", false)):
-        Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+        SettingsManager.capture_gameplay_mouse()
     GameState.player_died.connect(_on_player_died)
 
     if SaveManager.consume_new_game_request():
         GameState.reset_new_game()
+        GameState.set_world_value("player_appearance", SaveManager.consume_character_profile())
         _place_player_safely(RESPAWN_POSITION)
+        GameState.set_location("Астэрн • пограничный лес")
         SaveManager.save_game(player)
     elif SaveManager.consume_load_request():
         if SaveManager.load_game(player):

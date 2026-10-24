@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "failed_parent": "c1bca99e43ec8b4ccfb7588ba31ebfeaef0bc764",
+  "failed_exact_sha_ci": {
+    "name": "Validate World Core",
+    "run_id": 40061500641,
+    "job_id": 120775797935,
+    "stage": "canal household evening social commute"
+  },
+  "parent_other_exact_sha_workflows": "7 of8 succeeded, including player movement and RC; World Core remained mandatory and failed",
+  "actual_failure_pose_local": [
+    47.18457,
+    0.047286,
+    -7.13916
+  ],
+  "cause": "A grazing CharacterBody capsule at the far-capital masonry bevel remained physically pinned with the default0.001m recovery margin. Whole-scene reproduction retained the exact same position indefinitely. A0.02m safety margin recovers contact and normal autonomous walking.",
+  "rejected_prototypes": [
+    "Additional grid anchor/capsule casts did not release the physical contact and are not integrated.",
+    "Lifting the shape query or disabling backface collision did not fix the reproduced actor and are not integrated."
+  ],
+  "runtime_change": "Only settlement_npc CharacterBody safe_margin changes to0.02m. Same0.34m radius,1.8m height, collision masks,1.45m/s speed, measured geometry and goal-based routes. No per-resident path or teleport recovery.",
+  "controlled_regression": {
+    "fixture": "Exact CI corner pose reconstructed once in isolated world; scene clock frozen explicitly for this diagnostic only. Escape1m within8s after grid readiness, then actual free public seat within60s. Independent required whole-life gate keeps its original bounds, unfrozen clock and zero actor position writes.",
+    "before": {
+      "returncode": 1,
+      "seconds": 31.68699999999808,
+      "stopped": true,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: Resident remains pinned to the actual CI bridge bevel"
+      ],
+      "marker": false
+    },
+    "after": {
+      "returncode": 0,
+      "seconds": 46.375,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "unchanged_required_lifecycle_and_related_regressions": [
+    {
+      "case": "smoke_canal_household.gd",
+      "returncode": 0,
+      "seconds": 163.85900000000402,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_player_movement.tscn",
+      "returncode": 0,
+      "seconds": 15.265999999995984,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_save_recovery.tscn",
+      "returncode": 0,
+      "seconds": 2.0310000000026776,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_house_navigation.tscn",
+      "returncode": 0,
+      "seconds": 4.046999999998661,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_household_furniture.tscn",
+      "returncode": 0,
+      "seconds": 77.7190000000046,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_household_aisle.tscn",
+      "returncode": 0,
+      "seconds": 9.23399999999674,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_square_home_life.tscn",
+      "returncode": 0,
+      "seconds": 146.61000000000058,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_public_market_life.gd",
+      "returncode": 0,
+      "seconds": 97.07800000000134,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_capital_square.tscn",
+      "returncode": 0,
+      "seconds": 44.875,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "all_existing_assertions_gates_retained": true,
+  "shared_workflow_head_index_preserved": true,
+  "assets_models_meshes_controls_inventory_capacity_unchanged": true,
+  "original_profiles_untouched": true,
+  "exact_followup_sha_ci": "pending after publication",
+  "actual_final_PCK": "pending; previous6d3 launcher remains selected",
+  "full_visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "open_art_limits": [
+    "The wider legacy city remains flat, repetitive and too empty relative to the20-image concepts.",
+    "Night lighting is sparse; complete house variety, regional landforms and character quality remain open."
+  ],
+  "next": "Prove all exact-SHA workflows, actual compiled Windows PCK gameplay/home reload and family lifecycle, then select a new review package while preserving the original user profile."
+}

@@ -1,0 +1,134 @@
+{
+  "actual_capital_square_life": true,
+  "controlled_isolated_household": true,
+  "disk_stream": {
+    "after": {
+      "artisan": {
+        "activity": "",
+        "crossing": true,
+        "grounded": false,
+        "height_m": 2.0,
+        "home_local": "(0.663086, 0.16, 7.385254)",
+        "phase": "",
+        "position": "(-44.33691, 0.01, -22.61475)",
+        "radius_m": 0.37777778506279,
+        "velocity": "(0.0, 0.0, 0.0)"
+      },
+      "trader": {
+        "activity": "",
+        "crossing": false,
+        "grounded": false,
+        "height_m": 2.0,
+        "home_local": "(7.223633, 0.16, 11.30713)",
+        "phase": "",
+        "position": "(-37.77637, 0.01, -18.69287)",
+        "radius_m": 0.37777778506279,
+        "velocity": "(0.0, 0.0, 0.0)"
+      }
+    },
+    "artisan_restore_error_m": 0.0,
+    "before": {
+      "artisan": {
+        "activity": "Идёт домой",
+        "crossing": true,
+        "grounded": true,
+        "height_m": 2.0,
+        "home_local": "(0.663086, 0.16, 7.385254)",
+        "phase": "home",
+        "position": "(-44.33691, 0.01, -22.61475)",
+        "radius_m": 0.37777778506279,
+        "velocity": "(-1.34697, 0.0, -0.634083)"
+      },
+      "trader": {
+        "activity": "Идёт домой",
+        "crossing": false,
+        "grounded": true,
+        "height_m": 2.0,
+        "home_local": "(7.223633, 0.16, 11.30713)",
+        "phase": "home",
+        "position": "(-37.77637, 0.01, -18.69287)",
+        "radius_m": 0.37777778506279,
+        "velocity": "(-1.245419, 0.0, -0.742584)"
+      }
+    },
+    "trader_restore_error_m": 0.0
+  },
+  "driver_position_assignments_after_setup": 0,
+  "errors": [],
+  "initial": {
+    "artisan": {
+      "activity": "Ждёт материалы у верстака",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 2.0,
+      "home_local": "(22.0, 0.16, 18.96387)",
+      "phase": "work",
+      "position": "(-23.0, 0.01, -11.03613)",
+      "radius_m": 0.37777778506279,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    "trader": {
+      "activity": "Торгует",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 2.0,
+      "home_local": "(29.0, 0.16, 21.5)",
+      "phase": "work",
+      "position": "(-16.0, 0.01, -8.5)",
+      "radius_m": 0.37777778506279,
+      "velocity": "(0.0, 0.0, 0.0)"
+    }
+  },
+  "manual_play": false,
+  "mode": "tallest",
+  "morning": {
+    "artisan": {
+      "activity": "Ждёт материалы у верстака",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 2.0,
+      "home_local": "(21.94922, 0.168751, 18.96289)",
+      "phase": "work",
+      "position": "(-23.05078, 0.018751, -11.03711)",
+      "radius_m": 0.37777778506279,
+      "velocity": "(1.349928, 0.0, 0.0)"
+    },
+    "frames": 2582,
+    "trader": {
+      "activity": "Торгует",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 2.0,
+      "home_local": "(28.92578, 0.166719, 22.08154)",
+      "phase": "work",
+      "position": "(-16.07422, 0.016719, -7.918457)",
+      "radius_m": 0.37777778506279,
+      "velocity": "(0.0, 0.0, 0.0)"
+    }
+  },
+  "night": {
+    "artisan": {
+      "activity": "Спит дома",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 2.0,
+      "home_local": "(-3.15625, 0.198957, -0.346191)",
+      "phase": "home",
+      "position": "(-48.15625, 0.048957, -30.34619)",
+      "radius_m": 0.37777778506279,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    "frames": 3724,
+    "trader": {
+      "activity": "Спит дома",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 2.0,
+      "home_local": "(-3.009766, 0.198974, -3.331543)",
+      "phase": "home",
+      "position": "(-48.00977, 0.048974, -33.33154)",
+      "radius_m": 0.37777778506279,
+      "velocity": "(-1.335849, 0.0, -0.102082)"
+    }
+  }
+}

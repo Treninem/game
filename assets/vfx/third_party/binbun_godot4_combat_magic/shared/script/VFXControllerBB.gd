@@ -1,7 +1,6 @@
 @tool
 extends Node3D
-class_name VFXControllerBB
-
+class_name VFXCombatControllerBB
 var materials : Array[ShaderMaterial]:
 	get():
 		if !materials.is_empty():

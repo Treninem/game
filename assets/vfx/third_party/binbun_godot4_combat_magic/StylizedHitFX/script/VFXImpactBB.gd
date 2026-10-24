@@ -1,5 +1,5 @@
 @tool
-extends VFXControllerBB
+extends VFXCombatControllerBB
 class_name VFXImpactBB
 
 var audio_stream_player : AudioStreamPlayer3D:
@@ -14,7 +14,7 @@ var audio_stream_player : AudioStreamPlayer3D:
 		
 		return result
 
-var light : VFXOmniLightBB:
+var light : VFXCombatOmniLightBB:
 	get():
 		if light:
 			return light

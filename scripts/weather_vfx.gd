@@ -86,7 +86,10 @@ func _sync_weather() -> void:
 
     rain_particles.emitting = rain > 0.03 and not underwater
     snow_particles.emitting = snow > 0.03 and not underwater
-    dust_particles.emitting = dust > 0.08 and EnvironmentState.rain_intensity < 0.10 and not underwater
+    var player := get_tree().get_first_node_in_group("player") as Node3D
+    var arid_biome := player != null and WorldData.biome_at(Vector2(player.global_position.x, player.global_position.z)) in ["drylands", "steppe"]
+    var dust_storm := dust > 0.40 and EnvironmentState.wind_strength > 0.55
+    dust_particles.emitting = (arid_biome or dust_storm) and dust > 0.08 and EnvironmentState.rain_intensity < 0.10 and not underwater
     bubble_particles.emitting = underwater
 
     rain_particles.amount_ratio = clampf(rain, 0.0, 1.0) if rain_particles.emitting else 0.0
@@ -236,7 +239,9 @@ func _spawn_rain_splash(player_position: Vector3, local_rain: float) -> void:
     elif local_rain > 0.55:
         VFXLibrary.spawn_collision("water", point, Vector3.UP, get_tree().current_scene, 0.18 + local_rain * 0.18)
 
-func _particle_material(color: Color, billboard: bool) -> StandardMaterial3D:
+func _particle_material(color: Color, billboard: bool) -> Material:
+    if billboard:
+        return preload("res://scripts/environment_particle_material.gd").soft(color)
     var material := StandardMaterial3D.new()
     material.albedo_color = color
     material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA

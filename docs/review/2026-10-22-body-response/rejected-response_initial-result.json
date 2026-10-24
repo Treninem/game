@@ -1,0 +1,8 @@
+{
+  "case": "response_initial",
+  "exit_code": 1,
+  "seconds": 9.42,
+  "errors": [
+    "SCRIPT ERROR: Compile Error: Identifier not found: SettingsManager"
+  ]
+}

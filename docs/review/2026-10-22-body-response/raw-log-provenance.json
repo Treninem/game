@@ -1,0 +1,37 @@
+{
+  "foot_contact-result.log": {
+    "original_sha256": "a536fa09ade4dd7da1df8ab03377d543a87d8644a5ea7d6f9db7499798a6d7fa",
+    "committed_sha256": "5ac8da8fe6b57fc7d6916088c6b2c70142b193d3ff8c41ac9a5b2487bef6ab91",
+    "normalization": "CRLF to LF; trailing whitespace/blank lines removed"
+  },
+  "rejected-arms-result.log": {
+    "original_sha256": "84c691c5042b6af88311b5676f38825cbaa8412972da1316e1d5582222e656ec",
+    "committed_sha256": "84f99c2ad26567ed6e4963d582a598bfc069dc2ff0bad25ee9c48f1ca34f4e63",
+    "normalization": "CRLF to LF; trailing whitespace/blank lines removed"
+  },
+  "rejected-response_initial-result.log": {
+    "original_sha256": "25a7de683a7cac834989b9491491ada1dafe7986af224d1a8df3f35e0dddc9d1",
+    "committed_sha256": "b635461eac581ff87adb222409abda3b73d66cf828cdef57145bffdac2728aec",
+    "normalization": "CRLF to LF; trailing whitespace/blank lines removed"
+  },
+  "rejected-response_native-result.log": {
+    "original_sha256": "96a2efa3aed0f8add80865b34b2f212769ea521f3076db76e912f319553714ec",
+    "committed_sha256": "314fb75cd32c5d3d232770d16ccdf020e540b19e8eade26983fc7ab8be65ef67",
+    "normalization": "CRLF to LF; trailing whitespace/blank lines removed"
+  },
+  "rejected-response_runtime_load-result.log": {
+    "original_sha256": "d294557695b7371e2ebe3891cb01f007fb7e0ed3c578179b95c9e86c68c57203",
+    "committed_sha256": "c0118fffaf55c1ba4229aff4a221fa7603ed889faa6d948085dace758740e290",
+    "normalization": "CRLF to LF; trailing whitespace/blank lines removed"
+  },
+  "rejected-world-result.log": {
+    "original_sha256": "621526a781356cf50bc3d7568860550a68d614ac0279d36d53fee9bedf4e8ab0",
+    "committed_sha256": "bfef95a23c0953980904c6c97cb038e862a4bb7d654cd17fdb9f672acb9e099b",
+    "normalization": "CRLF to LF; trailing whitespace/blank lines removed"
+  },
+  "response_native_final-result.log": {
+    "original_sha256": "a161694732e7827f9a8fc52977ca6a5d07657d27d8e0e019383ca9b1958d84c4",
+    "committed_sha256": "eae7ef9378216a1962cf7c3732812320bdb58d2bd942b735b822a6b950fc124c",
+    "normalization": "CRLF to LF; trailing whitespace/blank lines removed"
+  }
+}

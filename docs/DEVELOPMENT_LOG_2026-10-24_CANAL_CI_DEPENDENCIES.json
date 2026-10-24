@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "failed_parent": "1d53b19b7490f474cd43cbd4058f82472f8b9e01",
+  "failed_exact_sha_ci": {
+    "movement": {
+      "run_id": 40060410827,
+      "job_id": 120772468964,
+      "step": "Prove canonical geography and regional climates"
+    },
+    "world_core": {
+      "run_id": 40060410825,
+      "job_id": 120772469321,
+      "step": "Verify actual streamed canal basin open bridge vaults water paving and legacy disk load"
+    }
+  },
+  "causes": [
+    "The movement workflow copies a small canonical-geography project; it omitted capital_canal_data.gd, now a real dependency of world_hydrology.gd. The main runtime project contained it.",
+    "Photo import flags existed only in the local Godot cache and were absent from Git. A fresh image import lacked mipmaps, caught by the unchanged new canal material assertion."
+  ],
+  "fixes": [
+    "Copy the actual canal data dependency into the bounded geography fixture and include hydrology/canal-data changes in its trigger filters.",
+    "Track explicit existing import settings for grass_meadow.jpg, lichen_rock.jpg and stone_paving.jpg; source photograph bytes remain unchanged.",
+    "Add the new isolated canal PNG/proof paths to the existing required CI artifact preservation step. Existing paths and if-no-files-found:error remain."
+  ],
+  "before_after": {
+    "canonical-baseline": {
+      "returncode": 1,
+      "seconds": 0.5940000000045984,
+      "stopped": true,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Preload file \"res://scripts/capital_canal_data.gd\" does not exist.",
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"CAPITAL_CANAL\" constant because the value doesn't have a set type."
+      ],
+      "marker": false
+    },
+    "canonical-fixed": {
+      "returncode": 0,
+      "seconds": 2.139999999999418,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "texture-baseline": {
+      "returncode": 1,
+      "seconds": 0.5619999999980791,
+      "stopped": true,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: Selected 3D photograph has no mip chain after a fresh import"
+      ],
+      "marker": false
+    },
+    "texture-fixed": {
+      "returncode": 0,
+      "seconds": 1.0470000000059372,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "fresh_texture_import": "Independent new project and cache, with real selected images and metadata; all3Image.has_mipmaps checks pass. No shared QA cache reused.",
+  "runtime_scripts_tests_scenes_models_images_unchanged": true,
+  "all_assertions_and_release_gates_retained": true,
+  "main_and_shared_head_index_workflows_preserved": true,
+  "exact_followup_sha_ci": "pending after publication",
+  "final_PCK_gameplay": "pending; primary launcher remains the previously verified6d3 review package",
+  "full_visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "next": "Run all exact-SHA workflows again, then prove the actual final Windows PCK and preserve user profiles before selecting a new review launcher."
+}

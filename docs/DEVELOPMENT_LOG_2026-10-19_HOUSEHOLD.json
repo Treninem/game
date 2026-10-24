@@ -1,0 +1,241 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7.1",
+  "delivery": "Unreleased review; no stable installer, tag or updater promotion",
+  "upstream_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "scope": "One live capital home: Marta and Marek; usable beds, benches, private/shared-owner chest and separate player chest",
+  "implemented": [
+    "Two exclusive supported beds and benches using existing anatomical human and authored furniture",
+    "Finite personal belongings, saved storage/seating progress, morning wake and repeated evening cycle",
+    "Real chest opening clips through paused UI, actual inventory transfer including bulk, 200-unit capacity and owner access checks",
+    "Stable furniture identifiers, streamed recreation and actual disk save/load; player movement stands from rest",
+    "Measured mattress/seat support and matching collision; warm authored wall lantern; low preset disables its shadow",
+    "Removed floating name/activity labels; replaced the dungeon manager primitive with the existing human",
+    "Corrected seated rig axes by solving thigh/calf directions in skeleton space; joint regression passes",
+    "Current main runtime integrated without overwriting remote workflows; fixed pre-tree transforms in siege/arena/race/plot creation",
+    "Existing complete-resource export restored after package test found missing boot scene"
+  ],
+  "tests": {
+    "unique_cases": 19,
+    "all_passed": true,
+    "cases": [
+      {
+        "name": "boot_world",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 41.89
+      },
+      {
+        "name": "player_movement",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 18.53
+      },
+      {
+        "name": "ui_and_save",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 12.3
+      },
+      {
+        "name": "save_recovery",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 4.94
+      },
+      {
+        "name": "world_loading_readiness",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 3.47
+      },
+      {
+        "name": "citizen_persistence",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 14.39
+      },
+      {
+        "name": "household_furniture",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 78.48
+      },
+      {
+        "name": "settlement_interior_assets",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 10.14
+      },
+      {
+        "name": "square_home_life",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 155.11
+      },
+      {
+        "name": "tz_progression",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 5.47
+      },
+      {
+        "name": "offworld_streaming",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 23.42
+      },
+      {
+        "name": "magic_runtime",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 3.53
+      },
+      {
+        "name": "storage_access",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 6.44
+      },
+      {
+        "name": "runtime_spawn_transforms",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 3.47
+      },
+      {
+        "name": "household_pose",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 2.94
+      },
+      {
+        "name": "household_quality",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 14.88
+      },
+      {
+        "name": "capital_square",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 53.58
+      },
+      {
+        "name": "household_aisle",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 8.83
+      },
+      {
+        "name": "gameplay_actions",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 15.8
+      }
+    ],
+    "upstream_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+    "source_note": "Merged runtime plus corrected pre-tree spawn transforms. Final 0.10.7.1 metadata boot tested; same assets/scripts exported."
+  },
+  "exported_package": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 14.92,
+    "marker": true
+  },
+  "source_import_scope": "Complete runtime/scripts and production assets copied to isolated Godot mirror; raw staging/source-pack project import is not certified; generated build folder excluded from root scanner",
+  "pack_sha256": "e1574354d84782d7924a2b3014afe447ee67741336a31fab3b0c633ce6b3dbb4",
+  "native": {
+    "passed": true,
+    "walked_m": 38.0025667734444,
+    "driver_position_assignments": 0,
+    "source": "Previous earned slot3; ordinary Input movement, Engine.time_scale=1; saves and loads slot4",
+    "fixture": "Clock/survival held for bounded household inspection; medium graphics; not a manual full-world playthrough or performance certification",
+    "captures": [
+      "sleeping",
+      "chest-ui",
+      "player-seated",
+      "after-load",
+      "resident-seated",
+      "final",
+      "low-profile"
+    ],
+    "render_samples": [
+      {
+        "view": "sleeping",
+        "fps": 23.6357316649287,
+        "engine_static_memory_bytes": 94738443.0
+      },
+      {
+        "view": "player-seated",
+        "fps": 23.6787920384351,
+        "engine_static_memory_bytes": 95124611.0
+      },
+      {
+        "view": "after-load",
+        "fps": 21.6508795669824,
+        "engine_static_memory_bytes": 95140335.0
+      },
+      {
+        "view": "resident-seated",
+        "fps": 22.2755311857437,
+        "engine_static_memory_bytes": 95159303.0
+      },
+      {
+        "view": "final",
+        "fps": 22.7821884708319,
+        "engine_static_memory_bytes": 95149607.0
+      },
+      {
+        "view": "low-profile",
+        "fps": 43.7348143005901,
+        "engine_static_memory_bytes": 95153703.0
+      }
+    ]
+  },
+  "observed_and_fixed": [
+    "Indoor route/furniture approach deadlocks",
+    "Morning door_wait prevented next-evening seated timer reset",
+    "Aisle tolerance let residents collide with the stationary hero",
+    "Storage reservation was released before physical departure; now saved until the approach clears; evening companions wait for one another with a finite bound",
+    "Visual resting bodies floated above actual mesh support",
+    "Merged upstream siege and mini-game/plot creation accessed global transforms before tree entry",
+    "Filtered export omitted dynamically loaded boot scene"
+  ],
+  "readiness": {
+    "household_scope": "Local acceptance passed, limited to one live home and basic poses",
+    "global_percent": null,
+    "reason": "Full master-spec audit has not been completed; local test pass is not global game completion"
+  },
+  "remaining": [
+    "Most houses still sealed; no complete distant household simulation, kinship/property consent/crime system",
+    "Rest uses simple supported poses and visual alignment, not full root-motion/IK furniture transitions",
+    "Anatomical model still has simple materials; forest/capital realism remains below target",
+    "ObjectDB exit and existing VFX duplicate-UID warnings remain",
+    "Low-preset 30 FPS on target hardware, remote CI and stable installer/release gates remain unverified"
+  ],
+  "character_model_review": {
+    "contract": "docs/CHARACTER_MODEL_PLAN_2026-10-19.md",
+    "audition": "docs/CHARACTER_AUDITION_2026-10-19.json",
+    "replacement_family_ready": false,
+    "note": "Three existing B89 candidates rendered and rejected for the requested realistic medieval style; current anatomy/materials remain provisional"
+  },
+  "next": [
+    "Early character creation: five male and five female presets, visible anatomical customization and save/load",
+    "Extend tested home template and resource-backed household routines; bound distant schedule advancement",
+    "Keep local deterministic NPC context fast, no mandatory external AI dependency"
+  ],
+  "git": {
+    "branch": "codex/household-persistence-2026-10-19",
+    "base": "origin/main 0015b68",
+    "method": "Isolated index; prerequisite runtime commit then narrow household commit; shared working branch/index preserved",
+    "result_record": "build/acceptance/household-git-result.json",
+    "remote_release_certified": false,
+    "world_core_candidate": "Existing upstream and local checks retained; bounded household/ownership/pose/traffic scenarios added in isolated-index overlay. Shared local workflow preserved."
+  },
+  "launcher": "build/review-2026-10-19-household/ImPuls-review.cmd",
+  "runtime_mirror_match": {
+    "verified": true,
+    "runtime_files": 109
+  }
+}

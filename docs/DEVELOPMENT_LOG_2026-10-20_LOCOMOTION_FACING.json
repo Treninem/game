@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-20",
+  "task": "Align player locomotion visual with physical travel without changing camera/input basis",
+  "spec_attachment_normalized_equal": true,
+  "engine": "Godot 4.7.1.stable.a13da4feb",
+  "baseline": {
+    "case": "native",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Locomotion faces away from actual movement: [\"move_right\", \"move_back\", \"move_left\"]"
+    ],
+    "seconds": 83.39,
+    "marker": false
+  },
+  "baseline_alignment": {
+    "right": 0.0,
+    "back": -1.0,
+    "left": 0.0008253,
+    "forward": 1.0
+  },
+  "implementation": [
+    "Player visual turns exponentially along resolved physical velocity; actor/camera basis unchanged",
+    "Immediate visual alignment with actual aim during attack/cast",
+    "No turn for stationary, airborne, furniture poses or NPCs; reset visual yaw/speed on state revision",
+    "Existing models remain rejected; no asset substitution claimed"
+  ],
+  "source_checks": {
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 51.45,
+      "marker": true
+    },
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 26.08
+    },
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.75
+    },
+    "player_movement": {
+      "case": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 29.36
+    }
+  },
+  "export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 76.81,
+    "sha256": "2e34eab0d7aaf16e7e226d0c1b0d54df05e8b8792fb0d1f54f3f576677f53be1"
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 58.05,
+    "marker": true
+  },
+  "native_scope": "Visible rendered game; ordinary action input, four movement directions, walk/run, jumps at two heights, axe, bow arrow consumed, save/load, 12 UI reopen cycles. External observer camera and explicit QA profiles/items. No player coordinate assignments on this route. Not a manual city journey.",
+  "remaining": [
+    "Rejected current models/clothing/hair and coarse forest persist",
+    "Turn-in-place clips, directional lower-body combat locomotion and full natural animation remain unfinished",
+    "No complete world/city traversal or stable release gates claimed"
+  ],
+  "percentages": {
+    "editor_functional_count": "32/55 = 58.2%, unchanged; not visual/game readiness",
+    "overall_visual": "Not accepted; no defensible percent assigned"
+  },
+  "review_launcher": "build/review-2026-10-20-locomotion-facing/ImPuls-editor.cmd"
+}

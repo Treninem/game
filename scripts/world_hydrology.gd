@@ -1,6 +1,7 @@
 class_name WorldHydrology
 extends RefCounted
 
+const CAPITAL_CANAL := preload("res://scripts/capital_canal_data.gd")
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 
 # Stable implementation geometry for already-established world features. These
@@ -109,6 +110,7 @@ static func crossing_kind_at(pos: Vector2) -> String:
     return ""
 
 static func freshwater_kind_at(pos: Vector2) -> String:
+    if CAPITAL_CANAL.wet_at(pos):return "river"
     if GEOGRAPHY.in_start_region(pos) \
     and GEOGRAPHY.distance_to_start_river(pos) <= GEOGRAPHY.START_RIVER_HALF_WIDTH:
         return "river"
@@ -119,6 +121,7 @@ static func freshwater_kind_at(pos: Vector2) -> String:
     return ""
 
 static func freshwater_level_at(pos: Vector2) -> float:
+    if CAPITAL_CANAL.wet_at(pos):return CAPITAL_CANAL.WATER_LEVEL
     var kind := freshwater_kind_at(pos)
     if kind == "river":
         return GEOGRAPHY.START_RIVER_WATER_LEVEL
@@ -137,17 +140,16 @@ static func water_depth_at(pos: Vector2, terrain_height: float) -> float:
 static func carve_height(pos: Vector2, terrain_height: float) -> float:
     var height := terrain_height
 
-    # Preserve the canonical opening river profile already locked by smoke tests.
+    # Keep the canonical river center and depth, with banks meeting the water edge.
     if GEOGRAPHY.in_start_region(pos):
         var river_distance := GEOGRAPHY.distance_to_start_river(pos)
         if river_distance < GEOGRAPHY.START_RIVER_BANK_WIDTH:
             var riverbed_y := GEOGRAPHY.START_RIVER_WATER_LEVEL - 1.55
-            var bank_blend := smoothstep(
-                GEOGRAPHY.START_RIVER_HALF_WIDTH,
-                GEOGRAPHY.START_RIVER_BANK_WIDTH,
-                river_distance
-            )
-            height = lerpf(riverbed_y, height, bank_blend)
+            var shore_y := GEOGRAPHY.START_RIVER_WATER_LEVEL + 0.08
+            if river_distance <= GEOGRAPHY.START_RIVER_HALF_WIDTH:
+                height = lerpf(riverbed_y, shore_y, smoothstep(GEOGRAPHY.START_RIVER_HALF_WIDTH * 0.55, GEOGRAPHY.START_RIVER_HALF_WIDTH, river_distance))
+            else:
+                height = lerpf(shore_y, height, smoothstep(GEOGRAPHY.START_RIVER_HALF_WIDTH, GEOGRAPHY.START_RIVER_BANK_WIDTH, river_distance))
 
             # Raise the existing Old Ford riverbed into a broad shallow shelf.
             # The blend extends onto both approaches so the player does not meet
@@ -186,4 +188,4 @@ static func carve_height(pos: Vector2, terrain_height: float) -> float:
             var marsh_bed := WHISPER_MARSH_WATER_LEVEL - marsh_depth
             height = minf(height, lerpf(height, marsh_bed, marsh_edge_weight))
 
-    return height
+    return CAPITAL_CANAL.carve_height(pos,height)

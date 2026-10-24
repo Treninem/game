@@ -1,0 +1,8 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+BOW_RIGHT_ARM_DIAGNOSTIC shoulder=(0.107748, 1.307276, 0.165176) elbow=(0.291383, 1.353323, 0.029854) wrist=(0.086823, 1.419159, -0.077422)
+BOW_HOLD_ALIGNMENT_MIN 0.93825298547745
+BOW_BODY_SWEEP_CHECKED 900
+AXE_SWEEP_CHECKED 150
+PUNCH_FINGERS_CHECKED 240 final_modifier=true free_hand_recovery=checked
+WEAPON_GRIP_OK poses=180 bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged

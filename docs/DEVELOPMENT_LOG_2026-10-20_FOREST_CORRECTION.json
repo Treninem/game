@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 forest correction review",
+  "parent": "befb834067f9675d6c2973990594f1c1bdb4fd26",
+  "changes": [
+    "Remove visually incompatible layered pine from near forest; retain two coherent temperate models; pine remains in taiga",
+    "Reject crowded candidates with 5.5 m trunk clearance without relocating candidates; use actual declared palette in production and tests",
+    "Add existing authored photographic shrub with correct individual-leaf texture; four shrubs and sixteen ferns per eligible cell; 25 cells and 164 detail cap",
+    "Reduce grass ground texture span from approximately 4.5 m to 1.5 m; mute bright fern material",
+    "Correct near-black cutoff for linear source-color sampling: .1 to .006; retain alpha discard"
+  ],
+  "local_checks": [
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.08
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 17.45
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 15.28
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 20.44
+    }
+  ],
+  "final_nature_check": [
+    {
+      "name": "start_region_nature_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 6.62
+    }
+  ],
+  "native": {
+    "exit_code": 0,
+    "walked_m": 18.7248644083738,
+    "player_position_assignments": 0,
+    "input": "ordinary automated Input actions, including right/forward passage; inspection camera moves separately",
+    "quality": "high",
+    "views": 4,
+    "clock": "inspection sets noon, then normal clock advances",
+    "log": "build/acceptance/layout-reviewed-native/stdout.log",
+    "warnings": [
+      "91 ObjectDB instances leaked at exit"
+    ],
+    "shader_errors": []
+  },
+  "rejected_iteration": "Initial shrub used branch atlas on individual leaves, appeared as gray mosaic. Rebuilt with leaf_small, reimported, repeated nature and native inspections. Earlier frames retained in layout-native.",
+  "leaf_audit": {
+    "method": "Godot Image raw pixels converted with srgb_to_linear; not edited images",
+    "log": "build/acceptance/leaf-pixel-audit.log",
+    "branches_small": {
+      "visible": 102232,
+      "old_kept": 100000,
+      "corrected_kept": 102232
+    },
+    "branches_large": {
+      "visible": 198282,
+      "old_kept": 195301,
+      "corrected_kept": 198282
+    },
+    "single_leaf": {
+      "visible": 29096,
+      "old_kept": 28609,
+      "corrected_kept": 29096
+    },
+    "scope": "About 2 percent of visible pixels affected; secondary defect, not main cause of poor graphics"
+  },
+  "asset": {
+    "source_pack": "assets/staging/sourcechat_b44/models/oga_free_vegetation_lod_pack",
+    "source_object": "bush_higher",
+    "source_leaf_texture": "textures/leaf_small.png",
+    "license": "CC0; same family LICENSE.txt",
+    "height_m": 1.8,
+    "blender_output_vertices": 902,
+    "sha256": "22f30a28f7405ddcfdfdabda297819e31c87889df0b330ad43736fd8a849e604",
+    "status": "INTEGRATED in near-start source review",
+    "reproduce": "tools/prepare_temperate_tree.py"
+  },
+  "frozen_package": {
+    "pack_sha256": "e50847e0ed0f72dbc13cbe95aed00128836551e76af0716ea52cce6100734f76",
+    "results": [
+      {
+        "case": "boot",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 14.05
+      },
+      {
+        "case": "nature",
+        "exit_code": 0,
+        "errors": [],
+        "marker": true,
+        "seconds": 3.91
+      }
+    ]
+  },
+  "previous_ci": "befb8340 build-game, installer, movement, magic, VFX, UI and build passed; world-core in progress at last read. New commit checks pending.",
+  "limits": [
+    "Lighting, large canopy silhouettes, terrain composition and animation quality still below requested goal",
+    "No full world/city run or performance certification",
+    "Near trunk spacing checked; no claim all far/near canopy overlaps globally solved",
+    "Review only; no stable publication"
+  ]
+}

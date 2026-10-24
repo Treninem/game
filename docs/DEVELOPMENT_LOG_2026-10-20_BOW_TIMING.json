@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "db0689b59d34816dc20a9f071bac031721d88d4a",
+  "spec_attachment": "2efe9b1d-c577-4153-84d6-90af368257ef",
+  "spec_comparison": "Full normalized line comparison matches the already read 2579-line master specification.",
+  "change": "Bow arms reach the drawn pose at clip time 0.24 rather than 0.4; draw/release crossfades use 0.06 rather than 0.18 seconds. Gameplay release remains 0.22 seconds, draw playback 1.8.",
+  "regression": "Both bodies and camera pitch signs are checked against the aim line at clip time 0.396 (0.22 * 1.8). Original 60 pose/grip/string/arrow checks remain.",
+  "diagnostic_limit": "An initial new assertion incorrectly included late paused preview time 0.75, which is outside the actual draw/release window; female aim dot was 0.898228. The release-specific assertion now checks the actual release frame. Late held-pose alignment remains an open animation-quality issue; it is not reported fixed.",
+  "grip": {
+    "case": "weapon_grip",
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 5.03
+  },
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 52.22,
+    "sha256": "66b6ba7636c0bfa23b9f1c9ee74ecdc1835c1ec8a16d7da175bcc4cffbe63b5a"
+  },
+  "frozen_native": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 46.17,
+    "marker": true
+  },
+  "native": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://face-0-extreme--0.5.png",
+      "user://face-0-extreme-0.5.png",
+      "user://face-0-motion-1.png",
+      "user://face-0-motion-2.png",
+      "user://face-0-motion-4.png",
+      "user://face-0-motion-5.png",
+      "user://face-5-extreme--0.5.png",
+      "user://face-5-extreme-0.5.png",
+      "user://face-5-motion-1.png",
+      "user://face-5-motion-2.png",
+      "user://face-5-motion-4.png",
+      "user://face-5-motion-5.png",
+      "user://face-walk.png",
+      "user://face-run.png",
+      "user://face-starter_axe.png",
+      "user://face-short_bow.png",
+      "user://face-bow-released.png"
+    ],
+    "game_save_roundtrip": true,
+    "look_roundtrip": true,
+    "morphs": 8,
+    "player_position_assignments": 0,
+    "walked_m": 18.7126697301865
+  },
+  "limitations": [
+    "Natural animation quality is still unaccepted.",
+    "79 ObjectDB cleanup warnings remain in graphical review.",
+    "Automated graphical inspection with explicit test equipment; no manual full-world tour.",
+    "No stable installer, tag or updater publication. New-commit CI pending."
+  ],
+  "editor_criterion_coverage": {
+    "accepted": 29,
+    "total": 55,
+    "percent": 52.7
+  }
+}

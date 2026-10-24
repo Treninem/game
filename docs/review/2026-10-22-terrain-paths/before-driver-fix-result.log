@@ -1,0 +1,78 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+SCRIPT ERROR: Compile Error: Identifier not found: WorldData
+   at: GDScript::reload (res://scripts/settlement_paths.gd:102)
+SCRIPT ERROR: Compile Error: Identifier not found: SettingsManager
+   at: GDScript::reload (res://scripts/enterable_building.gd:51)
+SCRIPT ERROR: Compile Error: Identifier not found: GameState
+   at: GDScript::reload (res://scripts/door_interactable.gd:35)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://tests/visual_village_paths.gd:0)
+ERROR: Failed to load script "res://tests/visual_village_paths.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.
+   at: WorldSettlements._add_enterable_building (res://scripts/world_settlements.gd:328)
+   GDScript backtrace (most recent call first):
+       [0] _add_enterable_building (res://scripts/world_settlements.gd:328)
+       [1] _build_village (res://scripts/world_settlements.gd:168)
+       [2] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [3] _update_streaming (res://scripts/world_settlements.gd:98)
+SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.
+   at: WorldSettlements._add_enterable_building (res://scripts/world_settlements.gd:328)
+   GDScript backtrace (most recent call first):
+       [0] _add_enterable_building (res://scripts/world_settlements.gd:328)
+       [1] _build_village (res://scripts/world_settlements.gd:168)
+       [2] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [3] _update_streaming (res://scripts/world_settlements.gd:98)
+SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.
+   at: WorldSettlements._add_enterable_building (res://scripts/world_settlements.gd:328)
+   GDScript backtrace (most recent call first):
+       [0] _add_enterable_building (res://scripts/world_settlements.gd:328)
+       [1] _build_village (res://scripts/world_settlements.gd:168)
+       [2] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [3] _update_streaming (res://scripts/world_settlements.gd:98)
+SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.
+   at: WorldSettlements._add_enterable_building (res://scripts/world_settlements.gd:328)
+   GDScript backtrace (most recent call first):
+       [0] _add_enterable_building (res://scripts/world_settlements.gd:328)
+       [1] _build_village (res://scripts/world_settlements.gd:168)
+       [2] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [3] _update_streaming (res://scripts/world_settlements.gd:98)
+SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.
+   at: WorldSettlements._add_enterable_building (res://scripts/world_settlements.gd:328)
+   GDScript backtrace (most recent call first):
+       [0] _add_enterable_building (res://scripts/world_settlements.gd:328)
+       [1] _build_village (res://scripts/world_settlements.gd:168)
+       [2] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [3] _update_streaming (res://scripts/world_settlements.gd:98)
+SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.
+   at: WorldSettlements._add_enterable_building (res://scripts/world_settlements.gd:328)
+   GDScript backtrace (most recent call first):
+       [0] _add_enterable_building (res://scripts/world_settlements.gd:328)
+       [1] _build_village (res://scripts/world_settlements.gd:168)
+       [2] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [3] _update_streaming (res://scripts/world_settlements.gd:98)
+SCRIPT ERROR: Invalid call. Nonexistent function 'configure (via call)' in base 'Node3D'.
+   at: WorldSettlements._add_enterable_building (res://scripts/world_settlements.gd:328)
+   GDScript backtrace (most recent call first):
+       [0] _add_enterable_building (res://scripts/world_settlements.gd:328)
+       [1] _build_village (res://scripts/world_settlements.gd:168)
+       [2] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [3] _update_streaming (res://scripts/world_settlements.gd:98)
+SCRIPT ERROR: Invalid call. Nonexistent function 'build_village' in base 'GDScript'.
+   at: WorldSettlements._build_village (res://scripts/world_settlements.gd:173)
+   GDScript backtrace (most recent call first):
+       [0] _build_village (res://scripts/world_settlements.gd:173)
+       [1] _materialize_settlement (res://scripts/world_settlements.gd:141)
+       [2] _update_streaming (res://scripts/world_settlements.gd:98)
+ERROR: Node not found: "VillageLanes" (relative to "/root/Bootstrap/World/Settlements/Settlement_border_village_01").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/visual_village_paths.gd:62)
+       [1] _capture (res://tests/visual_village_paths.gd:14)
+SCRIPT ERROR: Cannot call method 'get_meta' on a null value.
+   at: _run (res://tests/visual_village_paths.gd:62)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/visual_village_paths.gd:62)
+       [1] _capture (res://tests/visual_village_paths.gd:14)

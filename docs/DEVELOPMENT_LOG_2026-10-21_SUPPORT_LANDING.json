@@ -1,0 +1,429 @@
+{
+  "date": "2026-10-21",
+  "version": "0.10.7.3 unreleased source review",
+  "parent": "3977b3698ee2a18291c16fbab5b005faa3069a6e",
+  "main_verified": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "scope": "Connected whole-character support and landing batch: visible soles, pelvis/knees, slope orientation, impact recovery, ground gait continuity, actions, camera and save/UI regressions. Full project goal remains active.",
+  "findings": [
+    "Collider grounding did not guarantee visible sole contact: baseline normal-input snapshots show several centimetres of hovering and occasional penetration during gait blending.",
+    "A tilted standing foot can lift its sole beyond a straight leg reach if pelvis height is calculated before the tilt.",
+    "Temporal settling initially left the very first support frame about 3.1 cm above the floor for all six body/height profiles.",
+    "Ground gait phase was not restored when leaving Airborne."
+  ],
+  "changes": [
+    "Compose a bounded player visual-support solver into the existing final SkeletonModifier after moving-leg overlay and before weapon placement.",
+    "Select sparse sole samples from the existing skinned boot mesh, including skin binds and active morphs. Match pelvis height, two-bone leg reach and foot tilt to physical surface rays; retain authored swing lift.",
+    "Account for tilted soles before pelvis reach; fit new support immediately and avoid lagging downward pelvis reach. Keep collider, jump/move speed, input mappings and world position authoritative and unchanged.",
+    "Use the actual existing impact detection to drive a transient 0.24-second landing compression. Preserve foot contact during compression, recover to idle and reset transient state on jump/world-load mode/ground guard/furniture/death.",
+    "Restore normalized ground gait phase when leaving Airborne.",
+    "Cache morphed sole vertices and skip settled sub-millimetre IK work to reduce isolated modifier cost.",
+    "Extend existing mandatory locomotion smoke and graphical normal-input fixture with independent all-vertex skin/morph acceptance; add reproducible slope/stair views. No workflow gate or timeout was relaxed."
+  ],
+  "parent_remote_ci": {
+    "headRefOid": "3977b3698ee2a18291c16fbab5b005faa3069a6e",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:07:59Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099584/job/119066521128",
+        "name": "build-game",
+        "startedAt": "2026-10-21T06:03:32Z",
+        "status": "COMPLETED",
+        "workflowName": "Build ImPuls Release Candidate"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:09:52Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099544/job/119066520979",
+        "name": "build",
+        "startedAt": "2026-10-21T06:03:32Z",
+        "status": "COMPLETED",
+        "workflowName": "Build Windows Installer"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:05:54Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099614/job/119066521307",
+        "name": "diagnose-ui",
+        "startedAt": "2026-10-21T06:03:33Z",
+        "status": "COMPLETED",
+        "workflowName": "Diagnose UI Smoke"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:06:06Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099493/job/119066521035",
+        "name": "validate-magic",
+        "startedAt": "2026-10-21T06:03:33Z",
+        "status": "COMPLETED",
+        "workflowName": "Validate Magic Runtime"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:07:02Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099510/job/119066522187",
+        "name": "movement-smoke",
+        "startedAt": "2026-10-21T06:03:33Z",
+        "status": "COMPLETED",
+        "workflowName": "Validate Player Movement"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:15:50Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099537/job/119066521192",
+        "name": "world-core",
+        "startedAt": "2026-10-21T06:03:33Z",
+        "status": "COMPLETED",
+        "workflowName": "Validate World Core"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:06:01Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099490/job/119066520739",
+        "name": "validate-world-vfx",
+        "startedAt": "2026-10-21T06:03:32Z",
+        "status": "COMPLETED",
+        "workflowName": "Validate World VFX"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-21T06:10:32Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/Treninem/game/actions/runs/39553099584/job/119067966065",
+        "name": "build-installer",
+        "startedAt": "2026-10-21T06:08:01Z",
+        "status": "COMPLETED",
+        "workflowName": "Build ImPuls Release Candidate"
+      }
+    ]
+  },
+  "checks": {
+    "locomotion": {
+      "exit_code": 0,
+      "seconds": 45.01,
+      "errors": [],
+      "marker": true
+    },
+    "visual_grounding": {
+      "exit_code": 0,
+      "seconds": 20.95,
+      "errors": [],
+      "markers": [
+        "VISUAL_GROUNDING_SMOKE_OK human=skinned animations=responsive feet=grounded spawn_support=retired water=curved shore=joined"
+      ]
+    },
+    "weapon_grip": {
+      "exit_code": 0,
+      "seconds": 12.91,
+      "errors": [],
+      "markers": [
+        "WEAPON_GRIP_OK poses=180 bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged"
+      ]
+    },
+    "gameplay_actions": {
+      "exit_code": 0,
+      "seconds": 20.25,
+      "errors": [],
+      "markers": [
+        "GAMEPLAY_ACTIONS_SMOKE_OK quality=4 persisted=true equip=visible unequip=retained melee=hit projectile=hit bow=hit ammo=consumed spells=10"
+      ]
+    },
+    "character_dimensions": {
+      "exit_code": 0,
+      "seconds": 7.42,
+      "errors": [],
+      "markers": [
+        "CHARACTER_DIMENSIONS_OK heights=160,195,180 grounded_root=stable low_roof=physical camera=scaled shared_shape=isolated"
+      ]
+    },
+    "player_movement": {
+      "exit_code": 0,
+      "seconds": 18.56,
+      "errors": [],
+      "markers": []
+    },
+    "step_grounding": {
+      "exit_code": 0,
+      "seconds": 15.31,
+      "errors": [],
+      "markers": [
+        "STEP_GROUNDING_OK stairs=22cm wall=no_air_climb maximum_y=5.6276798248291"
+      ]
+    },
+    "camera_obstruction": {
+      "exit_code": 0,
+      "seconds": 14.3,
+      "errors": [],
+      "markers": [
+        "CAMERA_OBSTRUCTION_OK walls=solid thin_wall=safe overlapping_origin=safe recovery=smooth zoom=persisted reach=bounded melee=no_back_hits no_wall_reach=true"
+      ]
+    },
+    "household_pose": {
+      "exit_code": 0,
+      "seconds": 3.16,
+      "errors": [],
+      "markers": [
+        "HOUSEHOLD_POSE_OK knees=forward shins=down"
+      ]
+    },
+    "graphical_actions": {
+      "exit_code": 0,
+      "seconds": 20.66,
+      "errors": [],
+      "marker": true
+    },
+    "graphical_world": {
+      "exit_code": 0,
+      "seconds": 38.09,
+      "errors": [],
+      "marker": true
+    },
+    "graphical_surfaces": {
+      "exit_code": 0,
+      "seconds": 14.3,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "support_coverage": {
+    "poses": 336,
+    "bodies": [
+      "male",
+      "female"
+    ],
+    "heights_cm": [
+      160,
+      180,
+      195
+    ],
+    "build_morph": [
+      -0.5,
+      0,
+      0.5
+    ],
+    "surfaces": [
+      "flat",
+      "12-degree cross slope",
+      "20-degree ramp",
+      "22-cm split step"
+    ],
+    "actions": [
+      "Idle",
+      "Walk",
+      "Run",
+      "Punch",
+      "Axe_Chop",
+      "Bow_Attack_Draw",
+      "Cast_Left"
+    ],
+    "clip_phases": [
+      0.25,
+      0.65
+    ],
+    "first_support_frame_profiles": 6,
+    "oracle": "Every boot vertex with actual skin and morph influences, sampled during final modification_processed; analytic fixture surface equations are independent of runtime sparse samples/rays.",
+    "summary": "HUMANOID_SUPPORT_CHECKED poses=336 bodies=2 heights=3 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=-0.00010078764171 max_gap=0.00448320154101 modifier_p95_usec=1352"
+  },
+  "landing_coverage": {
+    "bodies": 2,
+    "action": "actual controller jump input and physical impact",
+    "checks": [
+      "visible pelvis compression",
+      "grounded full-skinned soles at peak",
+      "return to idle",
+      "retained stride phase",
+      "transient reset on world/load mode"
+    ]
+  },
+  "graphical_actions": {
+    "frames": 48,
+    "grounded_samples": 42,
+    "min_sole_gap_m": 0.000210460275411606,
+    "max_sole_gap_m": 0.00400081649422646,
+    "floor": "isolated physical flat floor; ordinary action input, slow-walk fixture speed 1.8; normal speed 5 and sprint 8 unchanged"
+  },
+  "baseline_diagnostic": {
+    "grounded_samples": 42,
+    "min_sole_gap_m": -0.0208430979400873,
+    "max_sole_gap_m": 0.05557856336236,
+    "method_limit": "Initial diagnostic evaluates full skinned base boot geometry; final oracle additionally applies morphs. Before/after action images are not identical frozen phases; compare scoped geometry distances, not pixels."
+  },
+  "graphical_surfaces": {
+    "frames": 16,
+    "profiles": "both bodies at 180 cm",
+    "surfaces": 4,
+    "poses": [
+      "Idle",
+      "Walk"
+    ],
+    "placement": "isolated pose fixtures; not a travelled world route"
+  },
+  "native_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.5683805681765
+  },
+  "performance_scope": {
+    "metric": "isolated support modifier CPU timing, excluding cold setup in acceptance capture",
+    "p95_usec_before_cache_optimization": 5405,
+    "p95_usec_final": 1352,
+    "not_world_fps": true,
+    "renderer": "GL Compatibility",
+    "gpu_reported": "Intel UHD Graphics 610"
+  },
+  "rejected_attempts": {
+    "tilt-reach-failure": {
+      "exit_code": 1,
+      "seconds": 70.91,
+      "errors": [
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Idle/0.25 gap=0.03343",
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Idle/0.65 gap=0.03304",
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Axe_Chop/0.25 gap=0.03316",
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Axe_Chop/0.65 gap=0.03356",
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Bow_Attack_Draw/0.25 gap=0.03301",
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Bow_Attack_Draw/0.65 gap=0.03360",
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Cast_Left/0.25 gap=0.03290",
+        "ERROR: Skinned sole misses physical surface: male/160.0/ramp/Cast_Left/0.65 gap=0.03329",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Idle/0.25 gap=0.03710",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Idle/0.65 gap=0.03667",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Axe_Chop/0.25 gap=0.03683",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Axe_Chop/0.65 gap=0.03725",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Bow_Attack_Draw/0.25 gap=0.03663",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Bow_Attack_Draw/0.65 gap=0.03730",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Cast_Left/0.25 gap=0.03651",
+        "ERROR: Skinned sole misses physical surface: male/180.0/ramp/Cast_Left/0.65 gap=0.03695",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Idle/0.25 gap=0.03986",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Idle/0.65 gap=0.03939",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Axe_Chop/0.25 gap=0.03957",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Axe_Chop/0.65 gap=0.04003",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Bow_Attack_Draw/0.25 gap=0.03935",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Bow_Attack_Draw/0.65 gap=0.04007",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Cast_Left/0.25 gap=0.03922",
+        "ERROR: Skinned sole misses physical surface: male/195.0/ramp/Cast_Left/0.65 gap=0.03970",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Idle/0.25 gap=0.03653",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Idle/0.65 gap=0.03630",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Axe_Chop/0.25 gap=0.03628",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Axe_Chop/0.65 gap=0.03631",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Bow_Attack_Draw/0.25 gap=0.03612",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Bow_Attack_Draw/0.65 gap=0.03635",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Cast_Left/0.25 gap=0.03602",
+        "ERROR: Skinned sole misses physical surface: female/160.0/ramp/Cast_Left/0.65 gap=0.03637",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Idle/0.25 gap=0.04059",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Idle/0.65 gap=0.04033",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Axe_Chop/0.25 gap=0.04031",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Axe_Chop/0.65 gap=0.04035",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Bow_Attack_Draw/0.25 gap=0.04013",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Bow_Attack_Draw/0.65 gap=0.04039",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Cast_Left/0.25 gap=0.04002",
+        "ERROR: Skinned sole misses physical surface: female/180.0/ramp/Cast_Left/0.65 gap=0.04041",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Idle/0.25 gap=0.04364",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Idle/0.65 gap=0.04336",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Axe_Chop/0.25 gap=0.04334",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Axe_Chop/0.65 gap=0.04338",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Bow_Attack_Draw/0.25 gap=0.04314",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Bow_Attack_Draw/0.65 gap=0.04342",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Cast_Left/0.25 gap=0.04302",
+        "ERROR: Skinned sole misses physical surface: female/195.0/ramp/Cast_Left/0.65 gap=0.04345"
+      ],
+      "marker": false
+    },
+    "first-frame-failure": {
+      "exit_code": 1,
+      "seconds": 42.3,
+      "errors": [
+        "ERROR: First rendered support frame floats: male/160.0 gap=0.03111831098795",
+        "ERROR: First rendered support frame floats: male/180.0 gap=0.03109114989638",
+        "ERROR: First rendered support frame floats: male/195.0 gap=0.03107191622257",
+        "ERROR: First rendered support frame floats: female/160.0 gap=0.03126188740134",
+        "ERROR: First rendered support frame floats: female/180.0 gap=0.03123030439019",
+        "ERROR: First rendered support frame floats: female/195.0 gap=0.0312072634697"
+      ],
+      "marker": false
+    },
+    "surface-driver-compile-failure": {
+      "exit_code": 1,
+      "seconds": 2.73,
+      "errors": [
+        "SCRIPT ERROR: Compile Error: Identifier not found: GameState",
+        "ERROR: Failed to load script \"D:/Desktop/GitHub/game/tests/visual_support_surfaces.gd\" with error \"Compilation failed\"."
+      ],
+      "marker": false
+    }
+  },
+  "verification_notes": [
+    "Slope and first-frame candidate failures were corrected in runtime while keeping the independent -1.5 cm/+2 cm acceptance bounds.",
+    "Static pose fixtures explicitly disable controller physics after node readiness; physical jump and normal-input graphical scenarios remain separate.",
+    "A new standalone SceneTree view initially referenced autoload names too early; the driver now accesses them after startup. This was a QA compilation error, not an in-game failure.",
+    "Existing source-world exit warning of 79 ObjectDB instances remains; the current change does not declare it resolved.",
+    "Logs committed here normalize CRCRLF to LF. Original captured streams remain under build/acceptance."
+  ],
+  "api_references": [
+    "https://docs.godotengine.org/en/stable/classes/class_skeletonmodifier3d.html#signals",
+    "https://docs.godotengine.org/en/stable/classes/class_skin.html",
+    "https://docs.godotengine.org/en/stable/classes/class_arraymesh.html"
+  ],
+  "source_sha256": {
+    "scripts/humanoid_grounding.gd": "4243d5462a4124e91798742e31f283bd235bfc96a3549edaf5a660de115c0f29",
+    "scripts/weapon_grip_modifier.gd": "3affdffed76bc8243ade166607e85133a765723836ad2e325e6780b54c80ac81",
+    "scripts/humanoid_visual.gd": "31b319124db20be69080d962553ba566dac1162afe1854b184495d3f48a683c9",
+    "scripts/player_controller.gd": "74c50c3d9049f7011150f13c0426bf3b7abf11849f35f4c5d8bce106d04ee9e0",
+    "tests/humanoid_skin_probe.gd": "1243219f3f931cfd5fb37f36676a5a9319a6a9bc89123c8a8e61d0fb9c1b44e7",
+    "tests/humanoid_support_cases.gd": "21a21968476f077b28337a7667ae8d68acfcda1a9774ebbdc22d5803d8b42b94",
+    "tests/humanoid_landing_cases.gd": "fe3a3383539a2536f089ba6779827a13f04c6facf40319f8d255351d867c0024",
+    "tests/smoke_locomotion_facing.gd": "6d45d73fb266bc82c28b12ef3aa1901dc82b30f92df10fb1cdb097c1f26a213a",
+    "tests/visual_motion_actions.gd": "4b8e0f8709cabb32649fde56448760bb1bbefb1434124b71f8a14c12dfb5cdd1",
+    "tests/visual_support_surfaces.gd": "5565b9db4a32dc7e6451333a07e9c50aedbf43c768fa245502565e747876dc7c"
+  },
+  "screenshots": [
+    "docs/review/2026-10-21-support-landing/after-gait-female-axe-1.png",
+    "docs/review/2026-10-21-support-landing/after-gait-female-normal-move-1.png",
+    "docs/review/2026-10-21-support-landing/after-gait-male-jump-3.png",
+    "docs/review/2026-10-21-support-landing/after-gait-male-slow-walk-2.png",
+    "docs/review/2026-10-21-support-landing/before-gait-male-jump-3.png",
+    "docs/review/2026-10-21-support-landing/before-gait-male-slow-walk-2.png",
+    "docs/review/2026-10-21-support-landing/surface-support-female-cross_slope-Idle.png",
+    "docs/review/2026-10-21-support-landing/surface-support-female-ramp-Idle.png",
+    "docs/review/2026-10-21-support-landing/surface-support-female-step-Walk.png",
+    "docs/review/2026-10-21-support-landing/surface-support-male-ramp-Idle.png",
+    "docs/review/2026-10-21-support-landing/surface-support-male-step-Walk.png"
+  ],
+  "review_launcher": "build/review-2026-10-20-airborne-actions/ImPuls-editor.cmd",
+  "delivery": "Current source project build/stability. No new local PCK/installer or stable publication; latest-commit remote gates pending after push.",
+  "remaining": [
+    "No new human or wardrobe meshes; owner-rejected overall models, shoulder/garment deformation and artistic acceptance remain open.",
+    "Height/normal support is not complete X/Z foot-plant locking or turn/start/stop animation; moving-platform, uneven rock/edge and full-terrain acceptance remain open.",
+    "Procedural impact compression is not a complete authored takeoff/landing animation set.",
+    "The solver currently covers Player rigs using WeaponGrip; it is not claimed integrated into all NPC rigs or animals.",
+    "Graphical checks use automated action input and observer cameras, not manual free roam or a new full city journey.",
+    "No world FPS, RAM budget, global percentage or full project readiness established.",
+    "Nature/buildings/fauna art and full living-world acceptance continue under the existing comprehensive programme."
+  ]
+}

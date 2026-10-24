@@ -7,6 +7,7 @@ extends Node3D
 @export var uses: int = 4
 
 func _ready() -> void:
+    add_to_group("map_resource")
     if persistent_id.is_empty():
         persistent_id = String(name)
     var saved_uses = GameState.get_world_value("resource:" + persistent_id, uses)

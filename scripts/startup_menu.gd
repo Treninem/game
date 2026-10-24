@@ -10,6 +10,7 @@ const MENU_ASSETS := preload("res://scripts/menu_runtime_assets.gd")
 
 var frame: PanelContainer
 var menu_column: VBoxContainer
+var menu_scroll: ScrollContainer
 var content_frame: PanelContainer
 var content: VBoxContainer
 var content_title: Label
@@ -143,25 +144,31 @@ func _build_ui() -> void:
     margin.add_theme_constant_override("margin_top", 20)
     margin.add_theme_constant_override("margin_bottom", 20)
     frame.add_child(margin)
+    menu_scroll = ScrollContainer.new()
+    menu_scroll.name = "MenuScroll"
+    menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+    menu_scroll.follow_focus = true
+    margin.add_child(menu_scroll)
     menu_column = VBoxContainer.new()
+    menu_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     menu_column.add_theme_constant_override("separation", 8)
-    margin.add_child(menu_column)
+    menu_scroll.add_child(menu_column)
 
-    var brand := _label("ImPuls", 42, Color(0.95, 0.84, 0.62))
+    var brand := _label("ImPuls", 48, Color(0.95, 0.89, 0.75))
     brand.add_theme_color_override("font_shadow_color", Color(0,0,0,0.95))
     brand.add_theme_constant_override("shadow_offset_x", 2)
     brand.add_theme_constant_override("shadow_offset_y", 2)
     menu_column.add_child(brand)
-    menu_column.add_child(_label("OPEN WORLD  •  SURVIVAL  •  RPG", 11, Color(0.72,0.61,0.44)))
+    menu_column.add_child(_label("ЗА ГРАНЬЮ ЗНАКОМЫХ ЗЕМЕЛЬ", 11, Color(0.72,0.69,0.59)))
     menu_column.add_child(_label("Версия %s" % String(ProjectSettings.get_setting("application/config/version", "development")), 10, Color(0.58,0.55,0.50)))
     menu_column.add_child(HSeparator.new())
 
-    continue_button = _menu_button("▶  ПРОДОЛЖИТЬ", Callable(self, "_continue_game"), true)
+    continue_button = _menu_button("Продолжить путешествие", Callable(self, "_continue_game"), true)
     continue_button.name = "ContinueButton"
-    _menu_button("⚔  НОВАЯ ИГРА", Callable(self, "_new_game")).name = "NewGameButton"
-    _menu_button("▣  ЗАГРУЗИТЬ ИГРУ", Callable(self, "show_page").bind("saves")).name = "SavesButton"
-    _menu_button("⚙  НАСТРОЙКИ", Callable(self, "open_settings")).name = "SettingsButton"
-    update_button = _menu_button("↻  ОБНОВЛЕНИЯ", Callable(self, "_show_updates_and_check"))
+    _menu_button("Начать путешествие", Callable(self, "_new_game"), true).name = "NewGameButton"
+    _menu_button("Сохранения", Callable(self, "show_page").bind("saves")).name = "SavesButton"
+    _menu_button("Настройки", Callable(self, "open_settings")).name = "SettingsButton"
+    update_button = _menu_button("Обновления", Callable(self, "_show_updates_and_check"))
     update_button.name = "CheckUpdatesButton"
     var spacer := Control.new()
     spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -169,7 +176,7 @@ func _build_ui() -> void:
     status_label = _label("", 11, Color(0.78,0.72,0.63))
     status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     menu_column.add_child(status_label)
-    _menu_button("⏻  ВЫХОД", Callable(get_tree(), "quit"), false, true)
+    _menu_button("Выйти из игры", _quit_game, false, true)
 
     content_frame = PanelContainer.new()
     content_frame.name = "ContentFrame"
@@ -223,6 +230,7 @@ func _layout_ui() -> void:
         height = maxf(320.0, size.y - 16.0)
     frame.position = Vector2(edge, maxf(8.0, (size.y - height) * 0.5))
     frame.size = Vector2(minf(width, maxf(280.0, size.x - edge * 2.0)), height)
+    menu_column.custom_minimum_size.y = maxf(0.0, height - 44.0)
     var x := frame.position.x + frame.size.x + clampf(size.x * 0.025, 16.0, 38.0)
     if size.x < 900.0:
         x = edge
@@ -240,18 +248,23 @@ func _show_saves() -> void:
         save_row_count += 1
         var slot := int(info.get("slot", save_row_count))
         var exists := bool(info.get("exists", false))
-        var row := HBoxContainer.new()
+        var row := VBoxContainer.new()
         row.add_theme_constant_override("separation", 8)
         content.add_child(row)
         var text := "Слот %02d — %s" % [slot, String(info.get("location", "мир ImPuls")) if exists else "Пустой"]
         var label := _label(text, 13, Color(0.84,0.80,0.72))
         label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
         row.add_child(label)
+        var actions := HFlowContainer.new()
+        actions.add_theme_constant_override("h_separation", 8)
+        actions.add_theme_constant_override("v_separation", 8)
+        row.add_child(actions)
         if exists:
-            _content_button("Загрузить", Callable(self, "_load_slot").bind(slot), false, true, row)
-            _content_button("Удалить", Callable(self, "_delete_slot").bind(slot), true, false, row)
+            _content_button("Загрузить", Callable(self, "_load_slot").bind(slot), false, true, actions)
+            _content_button("Удалить", Callable(self, "_delete_slot").bind(slot), true, false, actions)
         else:
-            _content_button("Новая игра", Callable(self, "_start_new_game_in_slot").bind(slot), false, true, row)
+            _content_button("Новая игра", Callable(self, "_start_new_game_in_slot").bind(slot), false, true, actions)
     _content_button("Назад", Callable(self, "show_page").bind("home"))
 
 func _show_updates() -> void:
@@ -278,7 +291,7 @@ func _show_updates_and_check() -> void:
 
 func _check_updates() -> void:
     update_button.disabled = true
-    update_button.text = "↻  ПРОВЕРКА..."
+    update_button.text = "Проверка…"
     if is_instance_valid(update_progress_bar):
         update_progress_bar.value = 0
     UpdateManager.check_for_updates()
@@ -303,7 +316,7 @@ func _on_update_status_changed(text: String, available: bool) -> void:
     if is_instance_valid(install_update_button):
         install_update_button.visible = available
     update_button.disabled = UpdateManager.checking
-    update_button.text = "↻  ПРОВЕРКА..." if UpdateManager.checking else "↻  ОБНОВЛЕНИЯ"
+    update_button.text = "Проверка…" if UpdateManager.checking else "Обновления"
     status_label.text = text
 
 func _refresh_continue_state() -> void:
@@ -328,8 +341,10 @@ func _new_game() -> void:
     _start_new_game_in_slot(slot)
 
 func _start_new_game_in_slot(slot: int) -> void:
-    SaveManager.prepare_new_game(slot)
-    _enter_loading_screen()
+    SaveManager.current_slot = clampi(slot, 1, SaveManager.SLOT_COUNT)
+    var error := get_tree().change_scene_to_file("res://scenes/character_creator.tscn")
+    if error != OK:
+        status_label.text = "Не удалось открыть создание персонажа. Код: %d" % error
 
 func _load_slot(slot: int) -> void:
     if SaveManager.prepare_load(slot):
@@ -377,12 +392,16 @@ func _content_button(text: String, callback: Callable, danger: bool = false, pri
 func _make_button(text: String, callback: Callable, primary: bool, danger: bool) -> Button:
     var button := Button.new()
     button.text = text
-    button.add_theme_font_size_override("font_size", 15)
+    button.add_theme_font_size_override("font_size", 17)
     button.add_theme_color_override("font_color", Color(0.91,0.85,0.74))
     button.add_theme_color_override("font_hover_color", Color(1.0,0.92,0.68))
-    button.add_theme_stylebox_override("normal", _button_style(Color(0.72,0.64,0.53,0.96 if primary else 0.78)))
-    button.add_theme_stylebox_override("hover", _button_style(Color(1.0,0.84,0.52,1.0)))
-    button.add_theme_stylebox_override("pressed", _button_style(Color(0.88,0.64,0.31,1.0)))
+    button.add_theme_stylebox_override("normal", _button_style(Color(0.24,0.31,0.27,0.96) if primary else Color(0.12,0.15,0.14,0.68)))
+    button.add_theme_stylebox_override("hover", _button_style(Color(0.32,0.37,0.29,0.98)))
+    button.add_theme_stylebox_override("pressed", _button_style(Color(0.18,0.24,0.20,1.0)))
+    var focus := _button_style(Color(0,0,0,0))
+    focus.border_color = Color(0.91,0.80,0.54)
+    focus.set_border_width_all(2)
+    button.add_theme_stylebox_override("focus", focus)
     if danger:
         button.modulate = Color(0.90,0.70,0.65)
     button.mouse_entered.connect(_play_hover)
@@ -414,24 +433,24 @@ func _label(text: String, font_size: int, color: Color) -> Label:
 
 func _panel_style(alpha: float) -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.035,0.027,0.022,alpha)
-    style.border_color = Color(0.56,0.40,0.21,0.90)
+    style.bg_color = Color(0.035,0.048,0.043,alpha * 0.88)
+    style.border_color = Color(0.55,0.56,0.44,0.30)
     style.set_border_width_all(1)
-    style.set_corner_radius_all(8)
+    style.set_corner_radius_all(18)
+    style.shadow_color = Color(0,0,0,0.35)
+    style.shadow_size = 24
     return style
 
-func _button_style(color: Color) -> StyleBoxTexture:
-    var style := StyleBoxTexture.new()
-    style.texture = button_texture
-    style.modulate_color = color
-    style.texture_margin_left = 8
-    style.texture_margin_right = 8
-    style.texture_margin_top = 8
-    style.texture_margin_bottom = 8
-    style.content_margin_left = 14
-    style.content_margin_right = 12
-    style.content_margin_top = 9
-    style.content_margin_bottom = 9
+func _button_style(color: Color) -> StyleBoxFlat:
+    var style := StyleBoxFlat.new()
+    style.bg_color = color
+    style.border_color = Color(0.75,0.74,0.59,0.25)
+    style.set_border_width_all(1)
+    style.set_corner_radius_all(9)
+    style.content_margin_left = 18
+    style.content_margin_right = 18
+    style.content_margin_top = 10
+    style.content_margin_bottom = 10
     return style
 
 func _fallback_button_texture() -> Texture2D:
@@ -460,3 +479,8 @@ func _format_bytes(value: int) -> String:
     if value >= 1024:
         return "%.0f КБ" % (float(value) / 1024.0)
     return "%d Б" % value
+
+func _quit_game() -> void:
+    get_tree().call_group("world_audio", "shutdown")
+    await get_tree().create_timer(0.15, true).timeout
+    get_tree().quit()

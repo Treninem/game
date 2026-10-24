@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-23",
+  "state": "INTEGRATED",
+  "scope": "Review branch only; shared native skin/hair/eyes source assets unchanged",
+  "runtime": [
+    "scripts/humanoid_visual.gd",
+    "assets/shaders/characters/hair_strands.gdshader",
+    "assets/shaders/characters/human_iris.gdshader"
+  ],
+  "provenance": "Existing MakeHuman CC0 body/hair/brow/eye atlases and retained Rehman Polanski default outfit. Existing source licenses remain authoritative. No download or new physical staging claim.",
+  "geometry_changed": false,
+  "new_runtime_textures": 0,
+  "experimental_bake": "tools/bake_human_skin_detail.py reproduces the non-selected skin-detail trial in a fresh isolated directory; output not referenced by gameplay",
+  "evidence": "docs/DEVELOPMENT_LOG_2026-10-23_CHARACTER_SURFACES.json",
+  "full_visual_acceptance": false
+}

@@ -73,21 +73,53 @@ const SPELLS := {
     }
 }
 
+const STATE_KEY := "magic_runtime_v1"
+
+var state_revision := -1
 var selected_index := 0
 var cooldowns: Dictionary = {}
 
 func _ready() -> void:
     set_process(true)
 
+func _persist_runtime() -> void:
+    GameState.set_world_value(STATE_KEY, {"selected_spell": String(SPELL_ORDER[posmod(selected_index, SPELL_ORDER.size())]), "cooldowns": cooldowns.duplicate()})
+
+func _sync_state_revision() -> void:
+    if state_revision == GameState.state_revision:
+        return
+    state_revision = GameState.state_revision
+    selected_index = 0
+    cooldowns.clear()
+    var saved = GameState.get_world_value(STATE_KEY, {})
+    if typeof(saved) == TYPE_DICTIONARY:
+        var selected = saved.get("selected_spell", "fireball")
+        if typeof(selected) == TYPE_STRING and selected in SPELL_ORDER:
+            selected_index = SPELL_ORDER.find(selected)
+        var saved_cooldowns = saved.get("cooldowns", {})
+        if typeof(saved_cooldowns) == TYPE_DICTIONARY:
+            for spell_id: String in SPELL_ORDER:
+                var value = saved_cooldowns.get(spell_id, 0.0)
+                if typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)):
+                    var remaining := clampf(float(value), 0.0, float(SPELLS[spell_id].cooldown))
+                    if remaining > 0.0:
+                        cooldowns[spell_id] = remaining
+    _persist_runtime()
+
 func _process(delta: float) -> void:
+    _sync_state_revision()
+    if cooldowns.is_empty():
+        return
     for spell_id in cooldowns.keys():
         var left := maxf(0.0, float(cooldowns[spell_id]) - delta)
         if left <= 0.0:
             cooldowns.erase(spell_id)
         else:
             cooldowns[spell_id] = left
+    _persist_runtime()
 
 func selected_spell_id() -> String:
+    _sync_state_revision()
     if SPELL_ORDER.is_empty():
         return ""
     selected_index = posmod(selected_index, SPELL_ORDER.size())
@@ -98,15 +130,19 @@ func selected_spell_label() -> String:
     return String(SPELLS.get(spell_id, {}).get("label", spell_id))
 
 func select_next() -> void:
+    _sync_state_revision()
     if SPELL_ORDER.is_empty():
         return
     selected_index = (selected_index + 1) % SPELL_ORDER.size()
+    _persist_runtime()
     _announce_selection()
 
 func select_previous() -> void:
+    _sync_state_revision()
     if SPELL_ORDER.is_empty():
         return
     selected_index = posmod(selected_index - 1, SPELL_ORDER.size())
+    _persist_runtime()
     _announce_selection()
 
 func _announce_selection() -> void:
@@ -116,6 +152,7 @@ func _announce_selection() -> void:
     GameState.notify("Магия: %s • ПКМ — применить • Q — следующая" % label)
 
 func cooldown_left(spell_id: String) -> float:
+    _sync_state_revision()
     return maxf(0.0, float(cooldowns.get(spell_id, 0.0)))
 
 func cast_selected(caster: CharacterBody3D, camera: Camera3D) -> bool:
@@ -151,6 +188,7 @@ func cast_selected(caster: CharacterBody3D, camera: Camera3D) -> bool:
         return false
 
     cooldowns[spell_id] = float(data.get("cooldown", 0.5))
+    _persist_runtime()
     spell_cast.emit(spell_id)
     return true
 
@@ -159,16 +197,25 @@ func _cast_projectile(data: Dictionary, caster: CharacterBody3D, camera: Camera3
     if host == null:
         return false
     var direction := -camera.global_transform.basis.z.normalized()
+    var origin := caster.global_position + Vector3.UP * 1.35 + direction * 0.30
+    if caster.has_method("projectile_aim"):
+        var aim: Dictionary = caster.call("projectile_aim", float(data.get("speed", 19.0)) * float(data.get("lifetime", 3.0)))
+        origin = aim["origin"]
+        direction = aim["direction"]
     var projectile = PROJECTILE_SCRIPT.new()
     host.add_child(projectile)
-    projectile.global_position = camera.global_position + direction * 0.85
+    projectile.global_position = origin
     projectile.setup(data, caster, direction)
     VFXLibrary.spawn_magic(String(data.get("element", "arcane")), projectile.global_position, host, 0.65)
     return true
 
 func _cast_instant(data: Dictionary, caster: CharacterBody3D, camera: Camera3D) -> bool:
     var direction := -camera.global_transform.basis.z.normalized()
-    var from := camera.global_position
+    var from := caster.global_position + Vector3.UP * 1.35 + direction * 0.30
+    if caster.has_method("projectile_aim"):
+        var aim: Dictionary = caster.call("projectile_aim", float(data.get("range", 30.0)))
+        from = aim["origin"]
+        direction = aim["direction"]
     var to := from + direction * float(data.get("range", 30.0))
     var query := PhysicsRayQueryParameters3D.create(from, to)
     query.collide_with_areas = false
@@ -276,7 +323,13 @@ func resolve_projectile_hit(
         caster: Node3D
     ) -> void:
     if explosion_radius > 0.0:
-        _apply_area_damage(hit_position, explosion_radius, damage, status_name, status_duration, caster)
+        # A direct hit also damages destructible targets outside the hostile
+        # group. Exclude it from splash so an enemy is never damaged twice.
+        if collider != null and collider != caster and collider.has_method("take_damage"):
+            collider.take_damage(damage, caster)
+            if not status_name.is_empty() and collider.has_method("apply_status"):
+                collider.apply_status(status_name, status_duration, caster)
+        _apply_area_damage(hit_position, explosion_radius, damage, status_name, status_duration, caster, collider as Node)
         if element == "fire":
             VFXLibrary.spawn_explosion(hit_position, "small", get_tree().current_scene, 0.85)
         else:
@@ -290,8 +343,10 @@ func resolve_projectile_hit(
     else:
         VFXLibrary.spawn_collision(_surface_from_element(element), hit_position, hit_normal, get_tree().current_scene, 0.8)
 
-func _apply_area_damage(center: Vector3, radius: float, damage: float, status_name: String, status_duration: float, caster: Node3D) -> void:
+func _apply_area_damage(center: Vector3, radius: float, damage: float, status_name: String, status_duration: float, caster: Node3D, direct_target: Node = null) -> void:
     for hostile in get_tree().get_nodes_in_group("hostile"):
+        if hostile == caster or hostile == direct_target:
+            continue
         if not is_instance_valid(hostile) or not (hostile is Node3D):
             continue
         var body := hostile as Node3D
