@@ -57,7 +57,7 @@ func _run() -> void:
         if not layout.vertical:
             assert(scroll.get_global_rect().end.x <= details.get_global_rect().position.x, "Grid overlaps selected item")
         var preview: TextureRect = panels.find_child("SelectedItemModel", true, false)
-        assert(preview != null and preview.get_meta("production_model").ends_with("Bow_Wooden.glb"))
+        assert(preview != null and preview.get_meta("production_model") == "res://assets/production/weapons/settler_equipment/Bow_Wooden.gltf", "Inventory must display the authored production bow")
         var texture_pixels := _verify_preview(preview)
         assert(texture_pixels > 100, "Actual bow model preview is blank")
         records.append({"size":str(size),"columns":grid.columns,"compact":layout.vertical,"grid_scroll_size":str(scroll.size),"frame":str(bounds),"bow_nontransparent_pixels":texture_pixels,"file":filename})
@@ -67,6 +67,7 @@ func _run() -> void:
         await _frames(6)
         var preview: TextureRect = panels.find_child("SelectedItemModel", true, false)
         assert(preview != null and _verify_preview(preview)>30)
+        assert(preview.get_meta("production_model") == load("res://scripts/weapon_model_catalog.gd").scene_for(item).resource_path, "Item preview differs from its live catalog model")
         assert(preview.texture.get_image().save_png("user://item-model-"+item+".png") == OK)
     var catalog: Script = load("res://scripts/weapon_model_catalog.gd")
     var humanoid: Script = load("res://scripts/humanoid_visual.gd")
