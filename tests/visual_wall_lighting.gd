@@ -72,6 +72,10 @@ func _run() -> void:
     for preset in [0,1,2,3,0,2]:
         root.get_node("SettingsManager").set_quality_preset(preset)
         assert(candidate.shadow_enabled==(preset>0))
+        # A user changes one preset per event/frame. Exercise its actual GPU
+        # image, not six immediate property changes followed by destruction.
+        for frame in range(2):await RenderingServer.frame_post_draw
+        assert(root.get_texture().get_image().save_png("user://wall-light-quality-%d.png"%preset)==OK)
         for label:String in details.FABRIC_LABELS:
             if not details.materials.has(label):continue
             var material:StandardMaterial3D=details.materials[label]
@@ -81,4 +85,10 @@ func _run() -> void:
             assert(material.normal_texture.get_image().has_mipmaps())
     FileAccess.open("user://wall-light-rooms.json",FileAccess.WRITE).store_string(JSON.stringify({"fixture_initial_player_position":true,"manual_play":false,"controlled_night_lighting":true,"records":records},"  "))
     print("WALL_LIGHT_ROOMS_OK rooms=4 before_after=true player_grounded=true quality_modes=4")
+    # Drain deferred node frees and the final GPU frame before engine teardown.
+    # Intel GL reported0xc0000005 on one immediate-quit root run.
+    world.queue_free()
+    await process_frame
+    await RenderingServer.frame_post_draw
+    root.get_texture().get_image()
     quit(0)
