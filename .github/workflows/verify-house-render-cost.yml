@@ -1,5 +1,12 @@
 name: Diagnose Household Rendering Cost
 on:
+  push:
+    branches: [codex/editor-handoff-validation-2026-10-24]
+    paths:
+      - tests/profile_house_render_cost.gd
+      - scripts/capital_square_life.gd
+      - scripts/interior_light_budget.gd
+      - .github/workflows/verify-house-render-cost.yml
   workflow_dispatch:
 permissions:
   contents: read
