@@ -14,6 +14,13 @@ func _run() -> void:
     var artisan := square.get_node("SquareArtisan") as SettlementNPC
     assert(trader.visual.current_profile.sex == "female", "Marta did not get her authored female body")
     assert(artisan.visual.current_profile.sex == "male", "Marek did not get his authored male body")
+    assert(trader.display_name == "Марта" and artisan.display_name == "Марек", "Citizen names have corrupt text encoding")
+    assert(trader.citizen_id == "capital:square:provisions" and artisan.citizen_id == "capital:square:fletcher", "Display name repair changed saved citizen identities")
+    assert(square.get_node("SquareHome").building_label == "Дом Марты и Марека", "Home name has corrupt text encoding")
+    for citizen: SettlementNPC in [trader, artisan]:
+        citizen.interact(null)
+        assert(DialogueManager.speaker == citizen.display_name, "Actual dialogue lost the citizen name")
+        DialogueManager.close_dialogue()
     for resident in get_tree().get_nodes_in_group("settlement_npc"):
         assert(resident.find_children("*", "Label3D", true, false).is_empty(), "Resident has floating labels")
     var manager := preload("res://scripts/dungeon_manager_npc.gd").new()

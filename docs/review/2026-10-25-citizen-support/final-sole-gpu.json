@@ -1,0 +1,1321 @@
+{
+  "errors": [],
+  "fixture_positions_assigned": true,
+  "gpu": [
+    {
+      "cpu_gap": 0.00370770961139,
+      "gap": 0.00370722466622592,
+      "height_cm": 200.0,
+      "sex": "male",
+      "terrain": "ramp",
+      "vertices": 3530
+    },
+    {
+      "cpu_gap": 0.00372037172317505,
+      "gap": 0.00372031211853027,
+      "height_cm": 200.0,
+      "sex": "male",
+      "terrain": "step",
+      "vertices": 3530
+    },
+    {
+      "cpu_gap": 0.00399951481160943,
+      "gap": 0.00399899173721446,
+      "height_cm": 200.0,
+      "sex": "female",
+      "terrain": "ramp",
+      "vertices": 3530
+    },
+    {
+      "cpu_gap": 0.00399885952472687,
+      "gap": 0.00399911284446716,
+      "height_cm": 200.0,
+      "sex": "female",
+      "terrain": "step",
+      "vertices": 3530
+    }
+  ],
+  "independent_all_boot_vertices": true,
+  "rows": [
+    {
+      "capture": "user://npc-support-male-160.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00354342279024422,
+      "support_usec": 731,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00372509146109223,
+      "support_usec": 956,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00375784980133176,
+      "support_usec": 731,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399827677756548,
+      "support_usec": 963,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00365151721052825,
+      "support_usec": 852,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00350159523077309,
+      "support_usec": 620,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399231724441051,
+      "support_usec": 675,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399231724441051,
+      "support_usec": 682,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399975865588101,
+      "support_usec": 892,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399971069072688,
+      "support_usec": 960,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00374947158954192,
+      "support_usec": 1007,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00397421793550351,
+      "support_usec": 1264,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00364345476492293,
+      "support_usec": 820,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00391626947737007,
+      "support_usec": 1036,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00400000423521332,
+      "support_usec": 1003,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00400000423521332,
+      "support_usec": 734,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00356585130455496,
+      "support_usec": 991,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00400008678026602,
+      "support_usec": 1028,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00376627774844383,
+      "support_usec": 1226,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399984402460613,
+      "support_usec": 1017,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00362902593907155,
+      "support_usec": 1002,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00391165639956909,
+      "support_usec": 767,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399211125875959,
+      "support_usec": 1212,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399211125875959,
+      "support_usec": 612,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399966418743133,
+      "support_usec": 1119,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00388599812984466,
+      "support_usec": 956,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00377222776412964,
+      "support_usec": 566,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.0039980548620224,
+      "support_usec": 996,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00365059077739716,
+      "support_usec": 716,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00391748428344726,
+      "support_usec": 928,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00395189106464386,
+      "support_usec": 606,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-160.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00395189106464386,
+      "support_usec": 555,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.0039998572319746,
+      "support_usec": 876,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00365283153951168,
+      "support_usec": 800,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00369738298468292,
+      "support_usec": 766,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399740599095821,
+      "support_usec": 1034,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00356435542926192,
+      "support_usec": 845,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00389700778760016,
+      "support_usec": 770,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399044016376138,
+      "support_usec": 843,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399044016376138,
+      "support_usec": 766,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399852399405365,
+      "support_usec": 1076,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.0039989240620823,
+      "support_usec": 1100,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00368689663928048,
+      "support_usec": 980,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00396864663577775,
+      "support_usec": 1072,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00355425468364571,
+      "support_usec": 785,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00389450429185957,
+      "support_usec": 929,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399862017072956,
+      "support_usec": 914,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399862017072956,
+      "support_usec": 1167,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00389475710609516,
+      "support_usec": 1016,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00400011921431015,
+      "support_usec": 1232,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00370770961139,
+      "support_usec": 1209,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399988416446048,
+      "support_usec": 1326,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00353615024589096,
+      "support_usec": 730,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00388935433812485,
+      "support_usec": 528,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00398993408798386,
+      "support_usec": 585,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00398993408798386,
+      "support_usec": 754,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399979829788208,
+      "support_usec": 1106,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00388365864753723,
+      "support_usec": 1322,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00372037172317505,
+      "support_usec": 878,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00399835288524628,
+      "support_usec": 946,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00355292856693268,
+      "support_usec": 754,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00389696538448334,
+      "support_usec": 533,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "male",
+      "skinned_sole_gap": 0.00396700084209442,
+      "support_usec": 630,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-male-200.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "male",
+      "skinned_sole_gap": 0.00396700084209442,
+      "support_usec": 950,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399999879300594,
+      "support_usec": 870,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399237452074885,
+      "support_usec": 548,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399934081360698,
+      "support_usec": 822,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00356472446583211,
+      "support_usec": 891,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00187551567796618,
+      "support_usec": 808,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00400010077282786,
+      "support_usec": 693,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00396374939009547,
+      "support_usec": 707,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00396374613046646,
+      "support_usec": 821,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00398923540906929,
+      "support_usec": 847,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399985168233194,
+      "support_usec": 647,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00397121678258091,
+      "support_usec": 599,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00339136901033062,
+      "support_usec": 661,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00182857098023175,
+      "support_usec": 990,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00400028592963659,
+      "support_usec": 769,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.0040003228575206,
+      "support_usec": 867,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.0040003228575206,
+      "support_usec": 1085,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00388927685951254,
+      "support_usec": 551,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399997300076119,
+      "support_usec": 994,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00400006161131408,
+      "support_usec": 1113,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00353684584161074,
+      "support_usec": 1088,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00173893368817268,
+      "support_usec": 677,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399917913307757,
+      "support_usec": 550,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00396155457488666,
+      "support_usec": 586,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00396155457488666,
+      "support_usec": 663,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.0039970874786377,
+      "support_usec": 2706,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00400002300739288,
+      "support_usec": 1027,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399903833866119,
+      "support_usec": 568,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00339972853660583,
+      "support_usec": 705,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00185589492321014,
+      "support_usec": 606,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399987280368805,
+      "support_usec": 858,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.0039999932050705,
+      "support_usec": 618,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-160.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 160.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.0039999932050705,
+      "support_usec": 1252,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00400002812966704,
+      "support_usec": 541,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00397619232535362,
+      "support_usec": 932,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399922393262386,
+      "support_usec": 721,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00345593504607677,
+      "support_usec": 517,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00134416716173291,
+      "support_usec": 780,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00400009518489242,
+      "support_usec": 419,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00395471602678299,
+      "support_usec": 746,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-flat-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00395471230149269,
+      "support_usec": 873,
+      "surface": "flat"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399005583619261,
+      "support_usec": 643,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.0039996872471502,
+      "support_usec": 669,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00396487566129071,
+      "support_usec": 1279,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00325762446462442,
+      "support_usec": 670,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00128504569594476,
+      "support_usec": 637,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399983001240958,
+      "support_usec": 843,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399973228292681,
+      "support_usec": 607,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-cross_slope-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399973228292681,
+      "support_usec": 639,
+      "surface": "cross_slope"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00386151978947807,
+      "support_usec": 946,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.0040000208579497,
+      "support_usec": 864,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399951481160943,
+      "support_usec": 707,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00342096581458981,
+      "support_usec": 739,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00117379205938645,
+      "support_usec": 562,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399896434426569,
+      "support_usec": 913,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00395185440193004,
+      "support_usec": 618,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-ramp-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00395186185251063,
+      "support_usec": 991,
+      "surface": "ramp"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399637222290039,
+      "support_usec": 596,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-Idle.png",
+      "clip": "Idle",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399991750717163,
+      "support_usec": 1292,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399885952472687,
+      "support_usec": 1446,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-Walk.png",
+      "clip": "Walk",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00330036759376526,
+      "support_usec": 863,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00130705535411835,
+      "support_usec": 494,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-Run.png",
+      "clip": "Run",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399987280368805,
+      "support_usec": 819,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.25,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399994730949402,
+      "support_usec": 955,
+      "surface": "step"
+    },
+    {
+      "capture": "user://npc-support-female-200.0-step-WorkStanding.png",
+      "clip": "WorkStanding",
+      "height_cm": 200.0,
+      "phase": 0.65,
+      "sex": "female",
+      "skinned_sole_gap": 0.00399996340274811,
+      "support_usec": 954,
+      "surface": "step"
+    }
+  ]
+}

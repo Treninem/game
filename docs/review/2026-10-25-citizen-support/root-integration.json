@@ -1,0 +1,22 @@
+{
+  "files": [
+    {
+      "path": "scripts/humanoid_arm_clearance_modifier.gd",
+      "sha256": "cc8bb69d9633738e81db4949f105c2ccbee5a0405efc6fc6143142abfe02856e"
+    },
+    {
+      "path": "scripts/capital_square_life.gd",
+      "sha256": "f607221a70617fe9d62a11ebd0bc75c0af740f9c0de526e65a9f7a7faecc3692"
+    },
+    {
+      "path": "tests/smoke_household_quality.gd",
+      "sha256": "5ffa67152d0dbb6096d3bfca6a0732ea7d2de839dd814cbd5df7181002cc39f4"
+    },
+    {
+      "path": "tests/visual_citizen_support.gd",
+      "sha256": "58cacbcdecb0a5515a7cda04a4617b916cd8d7c0bd9020a57512669455cc37ab"
+    }
+  ],
+  "head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+  "index": "dbfb092d48be354063de27697f18139afb58c8ea1cb23565c148c7e9e1120c91"
+}

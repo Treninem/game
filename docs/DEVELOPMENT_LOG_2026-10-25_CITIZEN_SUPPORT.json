@@ -1,0 +1,295 @@
+{
+  "date": "2026-10-25",
+  "version": "0.10.7.3",
+  "scope": "Citizen whole-body ground support across locomotion, work, household rest and the actual market; no new human models or art acceptance.",
+  "runtime_support_sha": "44ded2a9c7888d80f943329e14e4c6a3fdad8bc6",
+  "parent_review_sha": "405c7c0350e5abf686b9e184e57c5bcd6822ef31",
+  "main_sha": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "status": "Unreleased review; goal active; no stable publication",
+  "requirements": [
+    "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+    "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt"
+  ],
+  "changes": [
+    "Citizen final skeleton modifier now runs the same existing sole fitting used by the player for all supported activities. Previously it only fitted seated feet. Authored motions, finite leg lengths, physical bodies, furniture anchoring, routes and saves stay authoritative.",
+    "Repaired UTF-8 display names Марта, Марек and Дом Марты и Марека. Stable citizen, shop and door keys remain unchanged; actual dialogue speaker text is checked.",
+    "Added an independent rendered citizen test: all boot vertices, both rigs,160/200cm,flat/12-degree cross-slope/20-degree ramp/22cm step,Idle/Walk/Run/WorkStanding,two phases and four raw packed GPU samples. Added to World Core and the existing rendered-household workflow; original household limits remain240s."
+  ],
+  "baseline": {
+    "poses": 64,
+    "failures": 36,
+    "min_gap_m": -0.12832169929839,
+    "max_gap_m": 0.237679749727249,
+    "fixture_positions_assigned": true
+  },
+  "final_pose_test": {
+    "rows": 128,
+    "min_gap_m": 0.00117379205938645,
+    "max_gap_m": 0.0040003228575206,
+    "gpu": [
+      {
+        "cpu_gap": 0.00370770961139,
+        "gap": 0.00370722466622592,
+        "height_cm": 200.0,
+        "sex": "male",
+        "terrain": "ramp",
+        "vertices": 3530
+      },
+      {
+        "cpu_gap": 0.00372037172317505,
+        "gap": 0.00372031211853027,
+        "height_cm": 200.0,
+        "sex": "male",
+        "terrain": "step",
+        "vertices": 3530
+      },
+      {
+        "cpu_gap": 0.00399951481160943,
+        "gap": 0.00399899173721446,
+        "height_cm": 200.0,
+        "sex": "female",
+        "terrain": "ramp",
+        "vertices": 3530
+      },
+      {
+        "cpu_gap": 0.00399885952472687,
+        "gap": 0.00399911284446716,
+        "height_cm": 200.0,
+        "sex": "female",
+        "terrain": "step",
+        "vertices": 3530
+      }
+    ],
+    "body_transform_unchanged_assertion": true,
+    "fixture_positions_assigned": true,
+    "standing_cost_median_usec": 843.0
+  },
+  "household": {
+    "seconds": 173.875,
+    "rows": 170,
+    "standing_rows": 138,
+    "standing_gap_min_m": -0.014461413025856,
+    "standing_gap_max_m": 0.00400013476610184,
+    "standing_support_cost_median_usec": 763.5,
+    "coverage": "Unchanged full household entry, chest, seats, beds, disk restoration during doorway crossing, morning return to work. Passive sole observer assigns no actor positions. Isolated production-home fixture is not the complete city."
+  },
+  "actual_city": {
+    "walked_m": 287.94208416203,
+    "seconds": 407.43700000000536,
+    "manual_play": false,
+    "driver_position_assignments": 0,
+    "saved_start": "Previously earned capital arrival slot1, copied to a private profile; source hash in receipts.",
+    "proof": {
+      "exclusive_seats": true,
+      "foot_samples": [
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399953722953796,
+          "label": "trader-public-rest",
+          "minimum_y": 0.028999537229538,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00400001406669617,
+          "label": "artisan-public-rest",
+          "minimum_y": 0.0290000140666962,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "hero-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        }
+      ],
+      "jump_wake_and_land": true,
+      "manual_play": false,
+      "paid_trade_and_visible_stock": true,
+      "player_position_assignments": 0,
+      "real_scene_disk_restore": true,
+      "residents_return_to_work": true,
+      "street_foot_samples": [
+        {
+          "gap_m": 0.00398886948823929,
+          "label": "east-promenade-entry",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399933755397797,
+          "label": "east-promenade-north",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399345904588699,
+          "label": "west-promenade",
+          "surface": "MeasuredWalkablePaving",
+          "vertices": 3530
+        }
+      ],
+      "streetscape": {
+        "actual_walked_m": 287.94208416203,
+        "details": {
+          "central_clear_width_m": 14.0,
+          "flowers": 12,
+          "lantern_posts": 4,
+          "panel_ramp_rise_m": 0.039,
+          "panel_ramp_run_m": 0.1,
+          "paving_panels": 28,
+          "planters": 6
+        },
+        "driver_position_assignments": 0,
+        "four_night_lights_bounded_and_low_disabled": true,
+        "manual_play": false,
+        "planter_physical_heights_m": [
+          0.340000038966537,
+          0.58999983035028
+        ]
+      },
+      "talk_to_visible_seated_resident": true,
+      "walked_m": 287.94208416203
+    },
+    "clock_limitation": "Existing scenario deliberately controls world time for market/rest/night stages; no claim of a real-time full day or new forest-to-capital journey."
+  },
+  "root_verification": {
+    "quality_and_names": {
+      "label": "root-quality",
+      "exit_code": 0,
+      "seconds": 11.922000000005937,
+      "script": "res://tests/smoke_household_quality.tscn",
+      "private_profile": true
+    },
+    "native_pose_gpu": {
+      "label": "root-pose-gpu",
+      "exit_code": 0,
+      "seconds": 39.29700000000594,
+      "script": "res://tests/visual_citizen_support.gd",
+      "private_profile": true
+    },
+    "city_name_change_timing": "The city process had already loaded the earlier display-name strings. After correcting text, a separate working-root test verified actual dialogue headers and stable IDs; the movement/grounding code is the same."
+  },
+  "exact_support_sha_CI": {
+    "conclusion": "failure",
+    "headSha": "44ded2a9c7888d80f943329e14e4c6a3fdad8bc6",
+    "jobs": [
+      {
+        "completedAt": "2026-10-25T10:47:14Z",
+        "conclusion": "failure",
+        "databaseId": 121145531425,
+        "name": "rendered-household",
+        "startedAt": "2026-10-25T10:38:04Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-25T10:38:05Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-25T10:38:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:38:26Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v5",
+            "number": 2,
+            "startedAt": "2026-10-25T10:38:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:38:36Z",
+            "conclusion": "success",
+            "name": "Install Godot and a software rendering display",
+            "number": 3,
+            "startedAt": "2026-10-25T10:38:26Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:40:34Z",
+            "conclusion": "success",
+            "name": "Parse actual project and rendered diagnostic",
+            "number": 4,
+            "startedAt": "2026-10-25T10:38:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:40:35Z",
+            "conclusion": "success",
+            "name": "Verify metric box geometry and retained texture objects",
+            "number": 5,
+            "startedAt": "2026-10-25T10:40:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:43:09Z",
+            "conclusion": "success",
+            "name": "Verify grounded citizen work and locomotion with actual GPU vertices",
+            "number": 6,
+            "startedAt": "2026-10-25T10:40:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:47:09Z",
+            "conclusion": "failure",
+            "name": "Render actual entry exit and full saved household lifecycle",
+            "number": 7,
+            "startedAt": "2026-10-25T10:43:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:47:11Z",
+            "conclusion": "success",
+            "name": "Upload actual rendered doorway and disk restoration evidence",
+            "number": 8,
+            "startedAt": "2026-10-25T10:47:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:47:12Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v5",
+            "number": 16,
+            "startedAt": "2026-10-25T10:47:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T10:47:12Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 17,
+            "startedAt": "2026-10-25T10:47:12Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Treninem/game/actions/runs/40185574613/job/121145531425"
+      }
+    ],
+    "status": "completed"
+  },
+  "previous_review_world_core": {
+    "conclusion": "success",
+    "headSha": "405c7c0350e5abf686b9e184e57c5bcd6822ef31",
+    "status": "completed"
+  },
+  "failures_and_limits": [
+    "Initial diagnostic preloaded SettlementNPC before SceneTree autoloads were available and failed compilation. Changed the diagnostic to load it after startup; baseline-r2 then measured the actual pre-fix failures. No failing baseline is counted as a pass.",
+    "An obsolete standalone measure_city_walk route hit the now-existing stone planter at x=-8.35,z=24 and failed its unchanged300s deadline at player offset approximately(-8.01,22.875). Kept the failure and all collisions. Ran the already-existing current visual_city_streetscape scenario unchanged; it passed287.94m including real trade/rest/reload and street furniture. No production obstruction was removed to green a test.",
+    "The failed profiler also recorded a509.417ms frame and about450MB available system RAM was observed during loading. These are real concerns, but do not establish that memory caused the planter-route failure or that this change improves totalFPS.",
+    "The new GPU citizen check passed on server run40185574613 at44ded2a9, but its original full rendered household step still failed240s. Overall focused workflow is FAILURE. No deadline, settings or assertions weakened.",
+    "The successful city run still printed107 ObjectDB leaks at exit and import UID fallback warnings. This package does not fix global shutdown or promise stableFPS.",
+    "Current faces, hair, clothes, houses and street composition remain visibly below the user concept. No new character geometry, cloth textures or world art are claimed. Static slope tests do not establish every terrain/action transition.",
+    "Only selected runtime/test/document files are synchronized. The shared checkout contains unrelated edits; its HEAD and index are preserved. No force push or stable release."
+  ],
+  "next_connected_work": [
+    "Resolve continuous software-rendered household cost while preserving240s gate.",
+    "Continue human garment and motion quality in furnished surroundings, including dynamic slope transitions and crowd support budget.",
+    "Rework street composition/house detail toward the supplied concepts with physical human scale and measured performance."
+  ],
+  "overall_percent": null,
+  "visual_acceptance": false,
+  "goal_status": "active",
+  "evidence": "docs/review/2026-10-25-citizen-support"
+}

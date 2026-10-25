@@ -1,0 +1,22 @@
+{
+  "actual_production_home_and_people": true,
+  "captures": {
+    "entry": {
+      "activity": "Идёт домой",
+      "door_open": true,
+      "file": "door-entry.png",
+      "grounded": true,
+      "home_local": "(-0.045898, 0.156999, 5.479004)"
+    },
+    "exit": {
+      "activity": "Выходит из дома",
+      "door_open": true,
+      "file": "door-exit.png",
+      "grounded": true,
+      "home_local": "(-0.037109, 0.19897, 4.710449)"
+    }
+  },
+  "controlled_diagnostic_lighting": true,
+  "full_world_visual_acceptance": false,
+  "manual_play": false
+}
