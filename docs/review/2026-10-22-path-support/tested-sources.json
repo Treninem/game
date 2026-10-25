@@ -1,0 +1,11 @@
+{
+  "scripts/terrain_paths.gd": "e078f724d1ee131b12d5f70a13dcad844eb2daa4bf4b315aa28a15d0654eabb7",
+  "scripts/settlement_paths.gd": "5fa173f57f01802b2206eab1882a234e17695cf411067b449f7ca5e233ff4c1f",
+  "scripts/settlement_road_gate_overlay.gd": "8dc243810f8e3a89f178ef5665116624a5d62acc0c1d9e4e5f4982ef1ab7b3de",
+  "scripts/settlement_public_works.gd": "49e94089a2d17cda684a851a534739d2f55417431281b4cd5cd86902424d59ef",
+  "scripts/world_settlements.gd": "18dbee90fca6dc877b5a898bc656a3fc8f528a15a33e988fd03803787938421e",
+  "scripts/start_civilization_signs.gd": "78f10eb58561a773c73b665be20dde6cc6a39c70ae6326c7c344b4b03f8bce9f",
+  "scripts/village_house_yards.gd": "3e08de4ee9d9e757ec0fd57d65c6749949fe3344a673f7d0c56b47b33aceef61",
+  "tests/smoke_terrain_paths.gd": "ab3315fdcb05b643965d1f70b3ecb583b3186f05290f9a83ad7299f9f87988d7",
+  "tests/visual_village_paths.gd": "02b26ab6ac00044c209e01d975ffcd460a2cc07829d5fa28dfb19c392b9e47b3"
+}

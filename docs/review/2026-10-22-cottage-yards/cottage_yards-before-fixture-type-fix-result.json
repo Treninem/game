@@ -1,0 +1,10 @@
+{
+  "case": "cottage_yards",
+  "exit_code": -1,
+  "seconds": 200.08,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"closed_basis\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"opening\" variable because the value doesn't have a set type.",
+    "ERROR: Failed to load script \"res://tests/smoke_cottage_yards.gd\" with error \"Parse error\"."
+  ]
+}

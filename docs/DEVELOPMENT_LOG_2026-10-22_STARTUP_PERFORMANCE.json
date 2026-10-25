@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-22",
+  "version": "0.10.7.3",
+  "parent_commit": "b8d03d105d5aa1a4f457dd62b234379b6edd17b5",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; no full visual, cold-start or stable acceptance",
+  "changes": [
+    "Bound road proximity queries from the first segment when only the graded shoulder/vegetation exclusion radius is needed; unbounded default remains exact and inclusive road membership retains its boundary.",
+    "Reuse the selected sovereign region within each elevation sample. Base and live biome queries reuse one elevation for water classification and altitude temperature; one-argument temperature API remains compatible.",
+    "Required independent road-distance geometry gate added to the canonical parent workflow; all parent gates retained. No assets, terrain sampling density, seed, geographic anchors, save schema, default graphics settings, readiness requirements or smoke deadlines changed."
+  ],
+  "measurement": {
+    "hardware": "Windows; Intel UHD 610; 8 GB target PC",
+    "renderer": "Godot 4.7.1 GL Compatibility",
+    "before_after": {
+      "biome_water_temperature_points": 5948,
+      "changed_heights": 0,
+      "height_points": 101113,
+      "maximum_height_error_m": 0.0,
+      "timings": [
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 10601.299,
+          "kind": "old",
+          "pass": 0
+        },
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 5994.322,
+          "kind": "new",
+          "pass": 0
+        },
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 4930.08,
+          "kind": "new",
+          "pass": 1
+        },
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 6792.237,
+          "kind": "old",
+          "pass": 1
+        },
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 6750.558,
+          "kind": "old",
+          "pass": 2
+        },
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 5620.874,
+          "kind": "new",
+          "pass": 2
+        },
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 4133.906,
+          "kind": "new",
+          "pass": 3
+        },
+        {
+          "checksum": 347155.279128238,
+          "elevation_ms": 5912.657,
+          "kind": "old",
+          "pass": 3
+        }
+      ]
+    },
+    "baseline_source_provenance": "docs/review/2026-10-22-startup-performance/baseline-provenance.json",
+    "median_elevation_ms": {
+      "old": 6771.3975,
+      "new": 5275.477
+    },
+    "median_reduction_percent": 22.091754323978176,
+    "interpretation": "CPU height-query microbenchmark, four alternating-order paired passes in one process; not whole startup time or FPS gain. Cache/thermal/scheduling variance remains visible in raw timings.",
+    "native_medium_120_frames_mean_ms": 45.902875,
+    "gpu_memory_interpretation": "490652502 bytes is RenderingServer accounting, not dedicated GPU VRAM or measured process peak"
+  },
+  "local_checks": {
+    "camera_clean_high_1": {
+      "case": "camera_clean_high_1",
+      "exit_code": 1,
+      "seconds": 30.84,
+      "errors": [
+        "ERROR: Boot/world smoke: new game bypassed the character creator"
+      ]
+    },
+    "camera_clean_high_2": {
+      "case": "camera_clean_high_2",
+      "exit_code": 1,
+      "seconds": 24.47,
+      "errors": [
+        "ERROR: Boot/world smoke: new game bypassed the character creator"
+      ]
+    },
+    "camera_low_diagnostic": {
+      "case": "camera_low_diagnostic",
+      "exit_code": 1,
+      "seconds": 28.11,
+      "errors": [
+        "ERROR: Boot/world smoke: new game bypassed the character creator"
+      ]
+    },
+    "camera_warm_high": {
+      "case": "camera_warm_high",
+      "exit_code": 1,
+      "seconds": 51.74,
+      "errors": [
+        "ERROR: Boot/world smoke: world did not become playable within 35 seconds"
+      ]
+    },
+    "canonical_regions": {
+      "case": "canonical_regions",
+      "exit_code": 0,
+      "seconds": 11.83,
+      "errors": []
+    },
+    "compare": {
+      "case": "compare",
+      "exit_code": 0,
+      "seconds": 74.67,
+      "errors": []
+    },
+    "geography": {
+      "case": "geography",
+      "exit_code": 1,
+      "seconds": 12.8,
+      "errors": [
+        "ERROR: Cannot open file 'res://tests/smoke_geography.tscn'.",
+        "ERROR: Failed loading resource: res://tests/smoke_geography.tscn."
+      ]
+    },
+    "nature_clearings": {
+      "case": "nature_clearings",
+      "exit_code": 0,
+      "seconds": 21.39,
+      "errors": []
+    },
+    "player_movement": {
+      "case": "player_movement",
+      "exit_code": 0,
+      "seconds": 66.05,
+      "errors": []
+    },
+    "river_shoreline": {
+      "case": "river_shoreline",
+      "exit_code": 0,
+      "seconds": 20.83,
+      "errors": []
+    },
+    "roads": {
+      "case": "roads",
+      "exit_code": 0,
+      "seconds": 12.66,
+      "errors": []
+    },
+    "save_recovery": {
+      "case": "save_recovery",
+      "exit_code": 0,
+      "seconds": 9.53,
+      "errors": []
+    },
+    "terrain_geometry": {
+      "case": "terrain_geometry",
+      "exit_code": 0,
+      "seconds": 15.05,
+      "errors": []
+    },
+    "terrain_paths": {
+      "case": "terrain_paths",
+      "exit_code": 0,
+      "seconds": 28.73,
+      "errors": []
+    },
+    "terrain_surface": {
+      "case": "terrain_surface",
+      "exit_code": 0,
+      "seconds": 13.91,
+      "errors": []
+    },
+    "world": {
+      "case": "world",
+      "exit_code": 0,
+      "seconds": 148.92,
+      "errors": []
+    },
+    "world_crossings": {
+      "case": "world_crossings",
+      "exit_code": 0,
+      "seconds": 8.34,
+      "errors": []
+    },
+    "world_hydrology": {
+      "case": "world_hydrology",
+      "exit_code": 0,
+      "seconds": 8.94,
+      "errors": []
+    }
+  },
+  "native_gameplay": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png",
+      "user://head-size-outfit-quality-0.png",
+      "user://head-size-outfit-quality-1.png",
+      "user://head-size-outfit-quality-2.png",
+      "user://head-size-outfit-quality-3.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 28.5022018309683,
+    "control": "Ordinary automated input, not manual play; observer camera used for inspection. New forest-start run, not a full journey to city.",
+    "bow_blend_samples": 23,
+    "ui_reopen_cycles": 12,
+    "graphics": "Starts at explicitly selected Low; exercises all four presets. The timing sample is Medium.",
+    "exit_objectdb_leftovers": 82
+  },
+  "screenshots": [
+    "docs/review/2026-10-22-startup-performance/head-size-run.png",
+    "docs/review/2026-10-22-startup-performance/head-size-outfit-quality-2.png"
+  ],
+  "cold_start_failures": {
+    "fresh_high": 2,
+    "fresh_low_diagnostic": 1,
+    "failure": "Character creator arrived outside existing 8-second bound. These runs did not reach gameplay and cannot validate camera responsiveness.",
+    "reused_failed_high_profile": "Reached WorldLoading but missed unchanged 35-second playable-world bound; a filesystem inventory overlapped part of this diagnostic, so it is not an unloaded performance measurement.",
+    "acceptance": false,
+    "resource_diagnostic": "Separate headless synchronous scene load 55.216s; dependency-attributed repeat 22.483s, instance creation 12.663ms. First resource timing strongly varies; cannot ascribe it solely to terrain or arm correction. These are process/resource-cache tests, not machine reboot tests."
+  },
+  "tooling_correction": "One invocation used nonexistent smoke_geography.tscn. Retained its failed receipt, corrected to existing smoke_canonical_regions.tscn, which passed. No game test was weakened.",
+  "remaining": [
+    "Cold creator/world loading exceeds target bounds on this PC. Next isolate the creator/static asset dependency chain and resource-loading stages without moving deadlines or hiding incomplete world readiness.",
+    "No measured FPS gain from this CPU package; 45.903ms sample is above 33.3ms target. Longer unloaded traversal and memory measurements remain open.",
+    "Full accepted human/face/hair/wardrobe/weapon/environment/building/animal art and natural animations remain unfinished; screenshots still show the known stiff silhouette and coarse vegetation.",
+    "82 native ObjectDB exit leftovers remain.",
+    "No fresh full forest-to-capital run or full world interaction acceptance in this package."
+  ],
+  "prior_exact_sha_ci": {
+    "sha": "b8d03d105d5aa1a4f457dd62b234379b6edd17b5",
+    "all_eight_success": true,
+    "world_core": "https://github.com/Treninem/game/actions/runs/39813008310",
+    "movement": "https://github.com/Treninem/game/actions/runs/39813008189"
+  },
+  "new_exact_sha_ci": "Verification follows push; no green claim before exact-head completion",
+  "goal": "ACTIVE; full RPG objective unfinished"
+}

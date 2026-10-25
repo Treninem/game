@@ -1,0 +1,6 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+VILLAGE_PATH_BUILD border_village_01 milliseconds=397.823
+VILLAGE_PATH_BUILD border_village_02 milliseconds=384.715
+PATH_SUPPORT_OK surfaces=52 ray_samples=156 max_gap_m=0.01004123687744 materials=3
+TERRAIN_PATHS_OK physical_triangle_samples=539 max_gap_m=0.00604343414307 chunk_seam=true entrances=15 materials=3

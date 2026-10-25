@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://mvwi25cb826n" path="res://assets/vfx/third_party/binbun_godot4_core/shared/shader/checker.gdshader" id="2_044iu"]
 [ext_resource type="PackedScene" uid="uid://dra0ivq7stx8c" path="res://assets/vfx/third_party/binbun_godot4_core/FlameFX/effects/fire/vfx_basic_fire_01.tscn" id="3_8lycc"]
 [ext_resource type="Material" uid="uid://d4ee6oko8e4m8" path="res://assets/vfx/third_party/binbun_godot4_core/FlameFX/effects/overlay/basic_fire_overlay_material.tres" id="21_6y5g1"]
-[ext_resource type="ArrayMesh" uid="uid://c3bryjvm78j4b" path="res://assets/vfx/third_party/binbun_godot4_core/shared/suzanne.obj" id="22_255vk"]
+[ext_resource type="ArrayMesh" uid="uid://c3bryjvm78j4b" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/shared/suzanne.obj" id="22_255vk"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ip3vt"]
 

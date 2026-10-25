@@ -1,0 +1,189 @@
+{
+  "date_utc": "2026-10-25T07:59:33.542239+00:00",
+  "runtime_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+  "files": [
+    {
+      "path": "scripts/humanoid_visual.gd",
+      "sha256": "db4231a27da1b72dcc78fa29525237ce4c4a0f1ac3044369bdb706bc38d3882f",
+      "prior_exists": true
+    },
+    {
+      "path": "scripts/weapon_model_catalog.gd",
+      "sha256": "3cec731df309a02087c24d4046185a9c58380b56467b5a0f336083e39f05935e",
+      "prior_exists": true
+    },
+    {
+      "path": "scripts/weapon_projectile.gd",
+      "sha256": "bc05ce4b853940bacd6ec15140444fa82d1dda3f0435216b9c2de7d5b2ede026",
+      "prior_exists": true
+    },
+    {
+      "path": "scripts/capital_square_life.gd",
+      "sha256": "e037bddaa71964299bc392dc525f6ed8b9c8a52bc653c75c7254fbf4fb94cedc",
+      "prior_exists": true
+    },
+    {
+      "path": "scripts/market_goods_display.gd",
+      "sha256": "334f2689cd4a000191e32ba2cb254c05c1c25ba3fd8f9af15784c7f7ac2a0403",
+      "prior_exists": true
+    },
+    {
+      "path": "tests/smoke_weapon_grip.gd",
+      "sha256": "4f9534b6e82384b198d11327f44e28eae083f496790b882914a1bc2839648ae1",
+      "prior_exists": true
+    },
+    {
+      "path": "scripts/bow_visual_rig.gd",
+      "sha256": "fb6aed30e4da4e8162eca133cca76be9a8affe9ee5466f6fd65a83ea565bc4e7",
+      "prior_exists": false
+    },
+    {
+      "path": "tests/smoke_authored_bow.gd",
+      "sha256": "1c8f623a2456c3711bbd0c41153732b7c8762e48f2cc6378f78ea3c6307c699b",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/Arrow.bin",
+      "sha256": "e69067f9dd066d913e0a75f30b4bd1a2888d1bd8169173edcfaf64dfebabec8c",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/Arrow.gltf",
+      "sha256": "64e62412a939deefef8155433470dae1b22bc414c928cbb5cdfa5ff5b548dd4b",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/Arrow.gltf.import",
+      "sha256": "be603bcec776bf462966e9047b6cd10529cecb9c346d737a62d80154762f71b7",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/Bow_Wooden.bin",
+      "sha256": "4f1f08f7b57661f7a2cabd811fe2c19e80efc8b335c1fb455efff12bdf511998",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/Bow_Wooden.gltf",
+      "sha256": "157862b9cce883ecdb6958292e43193d8d64c06b1d7767cab38cf413b0c4beb3",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/Bow_Wooden.gltf.import",
+      "sha256": "9d31bb2bca0f3ed8f2f2fb58c742968bf49d6b7fae2345fcf167dd3c4753fe23",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/cedar.png",
+      "sha256": "87bb6b1a3145aa07f5f24cf523633e3fcd2800e9b8d480ff813a7784222a858c",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/cedar.png.import",
+      "sha256": "0d9c725af897b61a2898e84825679f8a06dc1c26355c7cd8296290a126edbb45",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/leather.png",
+      "sha256": "6225fd067963b221cabeb0355e3e53a8d70fa72887e511a7dc0ca4fc0e07addc",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/leather.png.import",
+      "sha256": "7e0b816fe271b6dcefbe8c4a8c1b51db8eee18fc18540e87a65a9a0eec6ff32d",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/scratchy_metal_dark.jpg",
+      "sha256": "49c265ff2015eb7a2e2c3a866c12af2b737e56b6f3ebb3711a8833dd29db95a3",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/scratchy_metal_dark.jpg.import",
+      "sha256": "5a3a1d50d6812e3d8e8241e9b64c90ffefd3b05685a4dbb98a53888edc355811",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/scratchy_metal_norm.jpg",
+      "sha256": "8a45715ef92ca08d3bba04a53200b9e3d66342788f82b43daf9e23c90c9bc87b",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/scratchy_metal_norm.jpg.import",
+      "sha256": "ff638fea0f6dc2a3fa3a5655c1ab5be36f9b472d683bda303f03c1dfd3fca4c0",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/scratchy_metal_roughness.png",
+      "sha256": "7953a90edb3946e2f5afe92faf6c40253e4a0a08e5c831090358b6074f4f2456",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/scratchy_metal_roughness.png.import",
+      "sha256": "d98f6960c5e548a4b93f6257efa78aa877b73449191aae03250cd5d89e24e43d",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/licenses/industrial_pbr/LICENSE.txt",
+      "sha256": "73da244b6b388c045767dd079d953e90bd81083bb6edb27662a96f5ec774123e",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/licenses/industrial_pbr/SOURCE.md",
+      "sha256": "14f4d9db4a8baba2b4b9f99c65d7f21ac1624f02704fa1811557f1fe159478d3",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/licenses/simple_textures/LICENSE.txt",
+      "sha256": "902d4e10e9fd008ddb48456c4fd444627cc21084b5bc6c76f85aa305d9999216",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/licenses/simple_textures/SOURCE.md",
+      "sha256": "0c26c92455dcca931b20022f9f6d9bbe09f76473a6d55342ad82b6f2aca5fae8",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/LICENSE_GEOMETRY.txt",
+      "sha256": "d069dc3a5be5a1f32a254644c9ad921c2be72f1d796c734826a61125c3a820e0",
+      "prior_exists": false
+    },
+    {
+      "path": "assets/production/weapons/settler_equipment/SOURCE.md",
+      "sha256": "7a484798e7b6e8ab820ece5590aa040ce8517bd49e709834aee4ba1358c25dce",
+      "prior_exists": false
+    },
+    {
+      "path": "tests/review_inventory_presentation.gd",
+      "sha256": "a8e5bd6b966bd8dbce19d6833dffbb99ab59bba5eef2e9c2f37c361f473e5326",
+      "prior_exists": false
+    },
+    {
+      "path": "tests/smoke_arrow_tip_contact.gd",
+      "sha256": "30884938130395294f5d8cb7c91375283afb0dafa2b291ab0c59cb8a4f8e5ebc",
+      "prior_exists": false
+    }
+  ],
+  "new_cache_files": [
+    "Arrow.gltf-aa54a164dd9253c1db746fed3693fa44.md5",
+    "Arrow.gltf-aa54a164dd9253c1db746fed3693fa44.scn",
+    "Bow_Wooden.gltf-7031f5eb896816a0e3b7514cfce99720.md5",
+    "Bow_Wooden.gltf-7031f5eb896816a0e3b7514cfce99720.scn",
+    "cedar.png-1b95cd517d663929c40300ed4bc5546d.ctex",
+    "cedar.png-1b95cd517d663929c40300ed4bc5546d.md5",
+    "leather.png-1fcaa1595357d4900e2673d1643e42d6.ctex",
+    "leather.png-1fcaa1595357d4900e2673d1643e42d6.md5",
+    "scratchy_metal_dark.jpg-b3f230f0bb80cbc49fd81f8468f669e9.ctex",
+    "scratchy_metal_dark.jpg-b3f230f0bb80cbc49fd81f8468f669e9.md5",
+    "scratchy_metal_norm.jpg-9253f0400b70cbed551a3ba02a956556.ctex",
+    "scratchy_metal_norm.jpg-9253f0400b70cbed551a3ba02a956556.md5",
+    "scratchy_metal_roughness.png-a9832609ded873d4e51aec6d9e4f7403.ctex",
+    "scratchy_metal_roughness.png-a9832609ded873d4e51aec6d9e4f7403.md5"
+  ],
+  "shared_head_unchanged": true,
+  "shared_index_unchanged": true,
+  "normal_profiles_untouched": true,
+  "full_visual_acceptance": false,
+  "stable_release": false,
+  "graphical_world_gate": "40173982239 FAILED external240s despite gameplay/UI/disk markers; unresolved",
+  "full_core": "40173982420 pending at integration"
+}

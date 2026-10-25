@@ -1,0 +1,12 @@
+[
+  {
+    "case": "smoke_canal_household.gd",
+    "returncode": 1,
+    "seconds": 131.23399999999674,
+    "errors": [
+      "ERROR: Canal household real load timeout"
+    ],
+    "stopped": true,
+    "marker": false
+  }
+]

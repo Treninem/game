@@ -174,7 +174,7 @@ func _finish_into_world() -> void:
 
     prepared.reparent(tree.root)
     tree.current_scene = prepared
-    Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+    SettingsManager.capture_gameplay_mouse()
 
     var fade_layer := CanvasLayer.new()
     fade_layer.layer = 4095
@@ -185,6 +185,9 @@ func _finish_into_world() -> void:
     world_fade.mouse_filter = Control.MOUSE_FILTER_STOP
     fade_layer.add_child(world_fade)
     var reveal := prepared.create_tween()
+    # A conversation/menu can pause the world in the first revealed frame.
+    # The loading overlay must finish fading even while gameplay is paused.
+    reveal.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
     reveal.tween_property(world_fade, "color:a", 0.0, 0.22)
     reveal.finished.connect(fade_layer.queue_free)
     queue_free()

@@ -1,0 +1,138 @@
+{
+  "actual_capital_square_life": true,
+  "controlled_isolated_household": true,
+  "disk_stream": {
+    "after": {
+      "artisan": {
+        "activity": "",
+        "crossing": true,
+        "grounded": false,
+        "height_m": 1.88999998569489,
+        "home_local": "(0.666016, 0.16, 7.382324)",
+        "phase": "",
+        "position": "(-44.33398, 0.01, -22.61768)",
+        "radius_m": 0.35699999332428,
+        "velocity": "(0.0, 0.0, 0.0)"
+      },
+      "trader": {
+        "activity": "",
+        "crossing": false,
+        "grounded": false,
+        "height_m": 1.66999995708466,
+        "home_local": "(7.223633, 0.16, 11.30713)",
+        "phase": "",
+        "position": "(-37.77637, 0.01, -18.69287)",
+        "radius_m": 0.315444439649582,
+        "velocity": "(0.0, 0.0, 0.0)"
+      }
+    },
+    "artisan_restore_error_m": 0.0,
+    "before": {
+      "artisan": {
+        "activity": "Идёт домой",
+        "crossing": true,
+        "grounded": true,
+        "height_m": 1.88999998569489,
+        "home_local": "(0.666016, 0.16, 7.382324)",
+        "phase": "home",
+        "position": "(-44.33398, 0.01, -22.61768)",
+        "radius_m": 0.35699999332428,
+        "velocity": "(-1.163637, 0.0, -0.817416)"
+      },
+      "trader": {
+        "activity": "Идёт домой",
+        "crossing": false,
+        "grounded": true,
+        "height_m": 1.66999995708466,
+        "home_local": "(7.223633, 0.16, 11.30713)",
+        "phase": "home",
+        "position": "(-37.77637, 0.01, -18.69287)",
+        "radius_m": 0.315444439649582,
+        "velocity": "(-1.245419, 0.0, -0.742584)"
+      }
+    },
+    "trader_restore_error_m": 0.0
+  },
+  "driver_position_assignments_after_setup": 0,
+  "errors": [
+    "Streamed resident failed to enter and sleep: {\"activity\":\"Пропускает соседа в дверях\",\"crossing\":false,\"grounded\":true,\"height_m\":1.66999995708466,\"home_local\":\"(-1.947266, 0.15749, 8.217285)\",\"phase\":\"door_wait\",\"position\":\"(-46.94727, 0.00749, -21.78271)\",\"radius_m\":0.315444439649582,\"velocity\":\"(0.0, 0.0, 0.0)\"}",
+    "Streamed resident failed to enter and sleep: {\"activity\":\"Идёт домой\",\"crossing\":true,\"grounded\":true,\"height_m\":1.88999998569489,\"home_local\":\"(0.262695, 0.168993, 5.148926)\",\"phase\":\"home\",\"position\":\"(-44.7373, 0.018993, -24.85107)\",\"radius_m\":0.35699999332428,\"velocity\":\"(-0.193713, 0.0, -1.437002)\"}",
+    "Streamed residents failed to leave for their real workplaces"
+  ],
+  "initial": {
+    "artisan": {
+      "activity": "Ждёт материалы у верстака",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 1.88999998569489,
+      "home_local": "(22.0, 0.16, 18.96387)",
+      "phase": "work",
+      "position": "(-23.0, 0.01, -11.03613)",
+      "radius_m": 0.35699999332428,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    "trader": {
+      "activity": "Торгует",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 1.66999995708466,
+      "home_local": "(29.0, 0.16, 21.5)",
+      "phase": "work",
+      "position": "(-16.0, 0.01, -8.5)",
+      "radius_m": 0.315444439649582,
+      "velocity": "(0.0, 0.0, 0.0)"
+    }
+  },
+  "manual_play": false,
+  "mode": "default",
+  "morning": {
+    "artisan": {
+      "activity": "Выходит из дома",
+      "crossing": true,
+      "grounded": true,
+      "height_m": 1.88999998569489,
+      "home_local": "(0.262695, 0.168993, 5.148926)",
+      "phase": "work",
+      "position": "(-44.7373, 0.018993, -24.85107)",
+      "radius_m": 0.35699999332428,
+      "velocity": "(-0.175945, 0.0, -1.439286)"
+    },
+    "frames": 5400,
+    "trader": {
+      "activity": "Торгует",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 1.66999995708466,
+      "home_local": "(28.92578, 0.15749, 22.08203)",
+      "phase": "work",
+      "position": "(-16.07422, 0.00749, -7.917969)",
+      "radius_m": 0.315444439649582,
+      "velocity": "(0.0, 0.0, 0.0)"
+    }
+  },
+  "night": {
+    "artisan": {
+      "activity": "Идёт домой",
+      "crossing": true,
+      "grounded": true,
+      "height_m": 1.88999998569489,
+      "home_local": "(0.262695, 0.168993, 5.148926)",
+      "phase": "home",
+      "position": "(-44.7373, 0.018993, -24.85107)",
+      "radius_m": 0.35699999332428,
+      "velocity": "(-0.193713, 0.0, -1.437002)"
+    },
+    "frames": 5400,
+    "trader": {
+      "activity": "Пропускает соседа в дверях",
+      "crossing": false,
+      "grounded": true,
+      "height_m": 1.66999995708466,
+      "home_local": "(-1.947266, 0.15749, 8.217285)",
+      "phase": "door_wait",
+      "position": "(-46.94727, 0.00749, -21.78271)",
+      "radius_m": 0.315444439649582,
+      "velocity": "(0.0, 0.0, 0.0)"
+    }
+  }
+}

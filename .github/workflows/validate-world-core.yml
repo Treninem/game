@@ -9,12 +9,15 @@ on:
       - "export_presets.cfg"
       - "assets/audio/**"
       - "assets/production/**"
+      - "assets/vfx/third_party/binbun_godot4_*/**"
       - "assets/staging/nature/kenney_nature_kit/**"
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
       - "tools/run_godot_smoke.sh"
       - "tools/check_version_sync.py"
+      - "tools/validate_human_contours.py"
+      - "assets/shaders/characters/**"
       - ".github/workflows/validate-world-core.yml"
   pull_request:
     paths:
@@ -23,12 +26,15 @@ on:
       - "export_presets.cfg"
       - "assets/audio/**"
       - "assets/production/**"
+      - "assets/vfx/third_party/binbun_godot4_*/**"
       - "assets/staging/nature/kenney_nature_kit/**"
       - "scripts/**"
       - "scenes/**"
       - "tests/**"
       - "tools/run_godot_smoke.sh"
       - "tools/check_version_sync.py"
+      - "tools/validate_human_contours.py"
+      - "assets/shaders/characters/**"
       - ".github/workflows/validate-world-core.yml"
   workflow_dispatch:
 
@@ -76,6 +82,11 @@ jobs:
           unzip -q godot.zip
           chmod +x Godot_v4.7.1-stable_linux.x86_64
 
+      - name: Verify production model dependencies
+        run: python3 tests/test_production_asset_dependencies.py
+
+      - name: Verify strict smoke error detection including interleaved output
+        run: python3 tests/test_smoke_error_detection.py
       - name: Parse project and scripts
         shell: bash
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
@@ -142,18 +153,59 @@ jobs:
         run: |
           set -euo pipefail
           grep -Fq 'res://assets/production/medieval/building_shell/Door_1_Flat.gltf' scripts/enterable_building.gd
-          grep -Fq 'res://assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf' scripts/enterable_building.gd
+          grep -Fq 'res://assets/production/exteriors/family_home/CottageShingleRoof.tscn' scripts/enterable_building.gd
           ! grep -E 'DOOR_SCENE.*assets/staging|ROOF_SCENE.*assets/staging' scripts/enterable_building.gd
           test -s assets/production/medieval/building_shell/Door_1_Flat.gltf
           test -s assets/production/medieval/building_shell/Door_1_Flat.bin
           test -s assets/production/medieval/building_shell/Roof_RoundTiles_8x8.gltf
           test -s assets/production/medieval/building_shell/Roof_RoundTiles_8x8.bin
           test -s assets/production/medieval/building_shell/QUATERNIUS_CC0_LICENSE.txt
+          roof_root='assets/production/exteriors/family_home'
+          for asset in CottageShingleRoof.tscn CottageShingleRoof.glb RoofShingle.tres Timber.tres Stone.tres Plaster.tres roof_shingles.jpg cedar.png stone.png SOURCE.md LICENSE.txt; do
+            test -s "$roof_root/$asset"
+          done
+          plaster_root='assets/production/interiors/materials/lime_plaster'
+          for asset in albedo.jpg normal.png orm.png SOURCE.md LICENSE.txt; do
+            test -s "$plaster_root/$asset"
+          done
+          test -s assets/production/nature/meadow/MeadowGrass.glb
+          test -s assets/production/nature/meadow/SOURCE.md
+          test -s assets/production/nature/meadow/LICENSE.txt
 
       - name: Verify startup main menu flow
         run: bash tools/run_godot_smoke.sh tests/smoke_startup_menu.tscn 180
+      - name: Verify menu music releases real mixer playback across repeated exits
+        run: bash tools/run_godot_smoke.sh tests/smoke_menu_music_lifetime.gd 120
       - name: Verify canonical regions and climate
         run: bash tools/run_godot_smoke.sh tests/smoke_canonical_regions.tscn 90
+      - name: Verify exact and bounded road distances against independent geometry
+        run: bash tools/run_godot_smoke.sh tests/smoke_road_distance.gd 90
+      - name: Verify terrain seam normals and matching physical triangles
+        run: bash tools/run_godot_smoke.sh tests/smoke_terrain_geometry.tscn 90
+      - name: Verify conforming river shore and shared physical edges
+        run: bash tools/run_godot_smoke.sh tests/smoke_river_shoreline.tscn 90
+      - name: Verify forest avoids inhabited clearings
+        run: bash tools/run_godot_smoke.sh tests/smoke_nature_clearings.tscn 90
+      - name: Verify configurable day duration real menu midnight survival and save state
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-day-duration" bash tools/run_godot_smoke.sh tests/smoke_day_length.gd 60
+      - name: Verify canal geometry revision migration preserves underarch saves and inventories
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-revision" bash tools/run_godot_smoke.sh tests/smoke_canal_save_revision.gd 60
+      - name: Verify old airborne road save acquires the actual new bridge deck
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-airborne" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_legacy_airborne.gd 120
+      - name: Verify actual streamed canal basin open bridge vaults water paving and legacy disk load
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-core" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_capital_canals.gd 200
+      - name: Verify actual far-capital bridge corner releases a grazing citizen capsule
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-corner" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_corner.gd 120
+      - name: Verify citizen bridge anchors and walking links retain actual surface elevation
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-links" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_walkable_links.gd 150
+      - name: Verify citizens physically descend bridge parapets at all supported adult heights
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-perch" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_perch.gd 120
+      - name: Verify canal citizens choose physical crossings work sleep dine and restore without a frozen clock
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-household" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_canal_household.gd 420
+      - name: Verify new household interiors markets and civic rooms survive actual world load transfer
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-loaded-settlement" IMPULS_CANAL_CONTROLLED_FIXTURE=1 bash tools/run_godot_smoke.sh tests/smoke_loaded_settlement_services.gd 180
+      - name: Verify human-scale residential lanes and old-save open plots retain disk state
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-city-street-scale" bash tools/run_godot_smoke.sh tests/smoke_city_street_scale.gd 120
       - name: Verify physical hydrology
         run: bash tools/run_godot_smoke.sh tests/smoke_world_hydrology.tscn 180
       - name: Verify bounded start-region production nature streaming
@@ -170,6 +222,10 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements_fixture.tscn 60
       - name: Verify streamed physical settlements and gates
         run: bash tools/run_godot_smoke.sh tests/smoke_world_settlements.tscn 300
+      - name: Verify roads meet physical terrain and village entrances
+        run: bash tools/run_godot_smoke.sh tests/smoke_terrain_paths.tscn 90
+      - name: Verify connected cottage yards harvest storage and saved lifecycle
+        run: bash tools/run_godot_smoke.sh tests/smoke_cottage_yards.tscn 180
       - name: Verify physical settlement markets water and warehouses
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_public_works.tscn 300
       - name: Verify physical civic hall and council interior
@@ -182,11 +238,203 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_road_gate_overlay.tscn 240
       - name: Verify fortified town gate hinges and clearance
         run: bash tools/run_godot_smoke.sh tests/smoke_settlement_gate_overlay.tscn 240
+      - name: Verify continuous sunrise, sunset and midnight lighting
+        run: bash tools/run_godot_smoke.sh tests/smoke_world_lighting.tscn 60
       - name: Verify world boot, streamed roads and river water
         run: bash tools/run_godot_smoke.sh tests/smoke_boot_world.tscn 300
+      - name: Verify terrain faces upward and produces collision
+        run: bash tools/run_godot_smoke.sh tests/smoke_terrain_surface.tscn 60
+      - name: Verify skinned human, ground contact and joined river banks
+        run: bash tools/run_godot_smoke.sh tests/smoke_visual_grounding.tscn 120
+      - name: Verify graphics presets, equipment, physical arrows and magic
+        run: bash tools/run_godot_smoke.sh tests/smoke_gameplay_actions.tscn 120
+      - name: Verify canonical capital residents, dialogue and walking
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_gameplay.tscn 120
+      - name: Verify terrain map and persistent discovered features
+        run: bash tools/run_godot_smoke.sh tests/smoke_cartography.tscn 90
+      - name: Verify citizen routines and finite paid trading
+        run: bash tools/run_godot_smoke.sh tests/smoke_citizen_life.tscn 90
+      - name: Verify player traverses bridge approaches
+        run: bash tools/run_godot_smoke.sh tests/smoke_bridge_traversal.tscn 120
+      - name: Verify capital road stays above the sea
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_road.tscn 90
+      - name: Verify supported steps and tall wall grounding
+        run: bash tools/run_godot_smoke.sh tests/smoke_step_grounding.tscn 120
+      - name: Verify authored resources and persistent encounters
+        run: bash tools/run_godot_smoke.sh tests/smoke_living_world.tscn 90
+      - name: Verify axe contact, tree fall, forest batches and persistent wood
+        run: bash tools/run_godot_smoke.sh tests/smoke_chopping.tscn 90
+      - name: Verify capital gate collisions and physical street access
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_gate_traversal.tscn 180
       - name: Verify player movement and physical terrain
         run: bash tools/run_godot_smoke.sh tests/smoke_player_movement.tscn 240
       - name: Verify South Gate repair quest progression
         run: bash tools/run_godot_smoke.sh tests/smoke_city_quest.tscn 90
       - name: Verify HUD menus and save slots
         run: bash tools/run_godot_smoke.sh tests/smoke_ui_and_save.tscn 180
+      - name: Verify corrupt save recovery and backup preservation
+        run: bash tools/run_godot_smoke.sh tests/smoke_save_recovery.tscn 60
+      - name: Verify loading readiness conversions
+        run: bash tools/run_godot_smoke.sh tests/test_world_loading_readiness.tscn 60
+      - name: Verify rapid UI teardown and streamed-node bursts
+        run: bash tools/run_godot_smoke.sh tests/smoke_ui_lifecycle.tscn 60
+      - name: Verify menus across resolutions and UI scales
+        run: bash tools/run_godot_smoke.sh tests/smoke_ui_responsive.tscn 180
+      - name: Install virtual display for camera validation
+        # Geometry obstruction is also checked with the normal physics backend.
+        run: sudo apt-get update && sudo apt-get install -y xvfb libgl1-mesa-dri
+      - name: Verify third-person camera obstruction and persistent zoom
+        run: bash tools/run_godot_smoke.sh tests/smoke_camera_obstruction.tscn 120
+      - name: Verify combat clicks through passive HUD
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_magic_input.tscn 90
+      - name: Verify captured mouse and gameplay camera
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_camera_input.tscn 180
+      - name: Verify rendered hair strand highlight detail
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_hair_rendering.tscn 60
+      - name: Verify arm sleeves clear torso and trousers across supported poses
+        run: bash tools/run_godot_smoke.sh tests/smoke_arm_clearance.gd 300
+      - name: Verify arm clearance through actual runtime crossfades
+        run: bash tools/run_godot_smoke.sh tests/smoke_arm_blends.gd 210
+      - name: Verify actual arrow release follows physics transforms between rendered poses
+        run: bash tools/run_godot_smoke.sh tests/smoke_projectile_release.gd 180
+      - name: Verify authored bow morph nock cord and release coupling
+        run: bash tools/run_godot_smoke.sh tests/smoke_authored_bow.gd 90
+      - name: Verify rendered arrow tips hit thin nearby walls exactly once
+        run: bash tools/run_godot_smoke.sh tests/smoke_arrow_tip_contact.gd 90
+      - name: Verify real raised airborne bow pose before release at low render rate
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_action_start_render.gd 180
+      - name: Verify real world input equipment magic UI and disk in rendered gameplay
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_bow_world.gd 240
+      - name: Verify physical foot contacts and bounded non-emissive dust
+        run: bash tools/run_godot_smoke.sh tests/smoke_foot_contact.gd 120
+      - name: Verify both soles and actual jump action phases on inclined terrain
+        run: bash tools/run_godot_smoke.sh tests/smoke_slope_motion.gd 180
+      - name: Verify inclined terrain poses with complete GPU boots and clothing
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_slope_motion.gd 300
+      - name: Verify final citizen soles across slopes steps stature and work including GPU vertices
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_citizen_support.gd 180
+      - name: Verify whole-body acceleration turn landing and pause response
+        run: bash tools/run_godot_smoke.sh tests/smoke_motion_response.gd 180
+      - name: Verify live GPU clothing and boot vertices during physical actions
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_motion_response.gd 240
+      - name: Verify actual GPU arm vertices and native color poses
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_arm_clearance.gd 180
+      - name: Verify first rendered bow frame uses final corrected hands
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_bow_transition.gd 90
+      - name: Verify fitted outfit coverage in final rendered poses
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_wardrobe_coverage.gd 300
+      - name: Verify dense map rendering symbols and save transitions
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_map_batch.tscn 90
+      - name: Verify map cache across load and new game
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_map_state_transition.tscn 90
+      - name: Verify chopping removes real rendered forest instances
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_chopping.tscn 90
+      - name: Verify saved spell selection and remaining cooldowns
+        run: bash tools/run_godot_smoke.sh tests/smoke_magic_state.tscn 90
+      - name: Verify playable character creator and saved appearance
+        run: bash tools/run_godot_smoke.sh tests/smoke_character_creator.tscn 120
+      - name: Verify detached human visual node lifetime
+        run: bash tools/run_godot_smoke.sh tests/smoke_human_detail_lifetime.gd 90
+      - name: Preserve accepted humans and verify the refined near/far family
+        run: |
+          mkdir -p build
+          python3 tools/validate_human_contours.py --baseline assets/production/characters/realistic --candidate assets/production/characters/realistic_contours --report build/human-contour-preservation.json
+      - name: Verify refined body GPU weights morph extremes distance selection and creator frames
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_human_contours.gd 300
+      - name: Verify rendered strands iris colors cutout coverage and shared appearance materials
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_character_surfaces.gd 300
+      - name: Verify steel cloth response saved palettes and actual preview reflections
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_wardrobe_response.gd 300
+      - name: Verify capital market trees fountain physics drinking and disk restore
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_market_court.gd 180
+      - name: Verify measured market arcade obstacle navigation and persistent public rest
+        run: bash tools/run_godot_smoke.sh tests/smoke_public_market_life.gd 240
+      - name: Verify actual rendered seated citizen soles and final pose modifiers
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_public_rest.gd 240
+      - name: Verify authored canal materials four quality modes and rendered freshwater bank moisture
+        run: xvfb-run -a env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-canal-materials" GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_capital_canal_materials.gd 180
+      - name: Verify fifteen metre-scaled street materials render with physical mip levels and bounded cache
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_street_surface_palette.gd 90
+      - name: Verify authored street meshes materials lantern marker four quality modes and physical support
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_city_streetscape_fixture.gd 180
+      - name: Verify spatial house bounds conserve meshes materials transforms and actual rendered views
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_city_facade_batches.gd 180
+      - name: Verify authored townhouse materials tangents mip chains and four quality levels
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_townhouse_surfaces.gd 180
+      - name: Verify family roof plaster quality front windows and compatible meadow rendering
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_region_surfaces.gd 300
+      - name: Verify physical mip levels on character materials
+        run: bash tools/run_godot_smoke.sh tests/smoke_character_texture_filtering.tscn 90
+      - name: Verify character height and physical low passages
+        run: bash tools/run_godot_smoke.sh tests/smoke_character_dimensions.tscn 90
+      - name: Verify inventory aliases text-entry pause ownership and focused panel shortcuts
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-input-audit" bash tools/run_godot_smoke.sh tests/audit_editor_ui_inputs.gd 60
+      - name: Verify conflicting control assignments are rejected safely
+        run: bash tools/run_godot_smoke.sh tests/smoke_binding_conflicts.tscn 60
+      - name: Verify unlimited inventory browsing and persistence
+        run: bash tools/run_godot_smoke.sh tests/smoke_inventory_unlimited.tscn 90
+      - name: Verify library class uniqueness and complete effect scenes
+        run: bash tools/run_godot_smoke.sh tests/smoke_binbun_classes.tscn 90
+      - name: Verify soft bounded healing VFX and alpha fade
+        run: bash tools/run_godot_smoke.sh tests/smoke_heal_vfx.tscn 60
+      - name: Verify independent free-hand casting poses
+        run: bash tools/run_godot_smoke.sh tests/smoke_cast_pose.tscn 90
+      - name: Verify locomotion facing and camera independence
+        run: bash tools/run_godot_smoke.sh tests/smoke_locomotion_facing.tscn 90
+      - name: Verify measured weapon grip and draw cancellation
+        run: bash tools/run_godot_smoke.sh tests/smoke_weapon_grip.tscn 90
+      - name: Verify saved household furniture
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_furniture.tscn 180
+      - name: Verify private storage and bulk capacity
+        run: bash tools/run_godot_smoke.sh tests/smoke_storage_access.tscn 60
+      - name: Verify anatomical seated joint directions
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_pose.tscn 45
+      - name: Verify graphics presets and absent NPC nameplates
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_quality.tscn 60
+      - name: Verify household clearance past a stationary hero
+        run: bash tools/run_godot_smoke.sh tests/smoke_household_aisle.tscn 60
+      - name: Verify live home and workplace routes
+        run: bash tools/run_godot_smoke.sh tests/smoke_square_home_life.tscn 300
+      - name: Verify streamed citizen persistence
+        run: bash tools/run_godot_smoke.sh tests/smoke_citizen_persistence.tscn 90
+      - name: Verify runtime transforms before tree entry
+        run: bash tools/run_godot_smoke.sh tests/smoke_runtime_spawn_transforms.tscn 60
+      - name: Verify capital square recipe and production assets
+        run: bash tools/run_godot_smoke.sh tests/smoke_capital_square.tscn 180
+      - name: Verify complete supported standing work poses on both human rigs
+        run: bash tools/run_godot_smoke.sh tests/smoke_working_pose.tscn 90
+
+      - name: Preserve actual native human and world review frames
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-human-world-${{ github.run_id }}
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: error
+          path: |
+            ~/.local/share/godot/app_userdata/ImPuls/*.png
+            ~/.local/share/godot/app_userdata/ImPuls/motion-response.json
+            ~/.local/share/godot/app_userdata/ImPuls/slope-motion.json
+            ~/.local/share/godot/app_userdata/ImPuls/contour-review.json
+            build/human-contour-preservation.json
+            ${{ runner.temp }}/impuls-canal-materials/godot/app_userdata/ImPuls/*.png
+            ${{ runner.temp }}/impuls-canal-household/godot/app_userdata/ImPuls/canal-household-proof.json
+            ~/.local/share/godot/app_userdata/ImPuls/character-surfaces.json
+            ~/.local/share/godot/app_userdata/ImPuls/wardrobe-response.json
+            ~/.local/share/godot/app_userdata/ImPuls/public-rest-gpu.json
+            ~/.local/share/godot/app_userdata/ImPuls/city-facade-batches.json
+            ~/.local/share/godot/app_userdata/ImPuls/city-street-fixture.json
+            ~/.local/share/godot/app_userdata/ImPuls/map-batch*.png
+            ~/.local/share/godot/app_userdata/ImPuls/map-batch.json
+
+      - name: Upload isolated keyboard and physical recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: isolated-input-canal-recovery-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/impuls-canal-perch/godot/app_userdata/ImPuls/canal-perch.json
+            ${{ runner.temp }}/impuls-input-audit/godot/app_userdata/ImPuls/editor-ui-input-audit.json

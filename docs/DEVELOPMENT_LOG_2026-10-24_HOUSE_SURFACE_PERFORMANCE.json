@@ -1,0 +1,214 @@
+{
+  "date": "2026-10-24",
+  "recorded_at_utc": "2026-10-24T12:09:00.073654+00:00",
+  "goal_status": "ACTIVE",
+  "requirements": [
+    "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+    "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt",
+    "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json"
+  ],
+  "scope": "Connected household doorway rendering, retained PBR appearance, all graphics presets and render cost. Isolated source candidate during user editor handoff.",
+  "package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOUSE_SURFACE_PERFORMANCE.json",
+    "isolated_runtime_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+    "branch": "codex/editor-handoff-validation-2026-10-24",
+    "root_runtime_integrated": false,
+    "PR12_runtime_integrated": false,
+    "material_review": {
+      "id": 40091621762,
+      "name": "Verify Metric House Surface Appearance and Cost",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40091621762",
+      "updated_at": "2026-10-24T11:55:45Z"
+    },
+    "continuous_graphical_lifecycle": {
+      "id": 40091621698,
+      "name": "Verify Rendered Household Doorway",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40091621698",
+      "updated_at": "2026-10-24T11:58:38Z"
+    },
+    "new_world_core": {
+      "id": 40092376914,
+      "name": "Validate World Core",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092376914",
+      "updated_at": "2026-10-24T12:37:40Z"
+    },
+    "new_player_movement": {
+      "id": 40092380209,
+      "name": "Validate Player Movement",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092380209",
+      "updated_at": "2026-10-24T12:08:03Z"
+    },
+    "stationary_frame_time_reduction_percent": 11.245,
+    "target_PC_FPS_verified": false,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "implementation": [
+    "Replace repeated world-triplanar sampling on static axis-aligned architecture with mathematically equivalent metre-scaled UVs.",
+    "Preserve original mesh positions, normals, indices, colliders, source textures, normal/AO/roughness maps and authored interior parts.",
+    "Retain the existing triplanar path for non-axis-aligned frames; synchronize projected material copies on every quality preset change."
+  ],
+  "measurement": {
+    "renderer": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "resolution": "(1280, 720)",
+    "preset": "High",
+    "render_scale": 1.0,
+    "clock_scale": 1.0,
+    "frames_per_case": 32,
+    "source_median_ms": 352.519,
+    "candidate_median_ms": 313.34,
+    "restored_source_median_ms": 353.558,
+    "baseline_drift_fraction": 0.00294735886576314,
+    "draw_calls_unchanged": 258,
+    "primitives_unchanged": 459670,
+    "texture_video_memory_unchanged_bytes": 886474026,
+    "claim_limit": "Same-process stationary software-renderer comparison only; not a target-PC FPS or whole-world performance claim."
+  },
+  "appearance": {
+    "sampled_faces": [
+      "front Z",
+      "side X",
+      "floor Y"
+    ],
+    "patches": 3,
+    "pixels_per_patch": 289,
+    "mean_absolute_RGB_error": 0,
+    "presets_verified": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "viewed_frames": [
+      "projection-world-source.png",
+      "projection-metric-uv-candidate.png",
+      "projection-side-X-metric.png",
+      "projection-floor-Y-metric.png",
+      "door-entry.png",
+      "door-exit.png"
+    ],
+    "all_surfaces_or_lighting_conditions_accepted": false
+  },
+  "geometry": {
+    "cases_passed": 24,
+    "vertices_checked": 576,
+    "heights_and_scales": "Three box sizes, four quarter-turn yaw angles, two scales; rotated fallback tested.",
+    "normal_tangent_tolerance": "Untouched BoxMesh to ArrayMesh packing control plus two16bit quantization units. Initial failures retained; actual Gram-Schmidt orthogonalization fixed the candidate."
+  },
+  "profiling": {
+    "source_run": "https://github.com/Treninem/game/actions/runs/40087999970",
+    "continuous_frame_median_ms": 497.551,
+    "frame_samples": 415,
+    "draw_signal_interval_median_ms": 488.08,
+    "warm_physics_median_ms": 0.97,
+    "finding": "Rendering dominates on llvmpipe; eight physics steps per rendered frame hit the existing engine cap. Draw signal intervals do not isolate GPU execution.",
+    "full_source_profile_artifact_retained_in_CI": true
+  },
+  "previous_required_gates": {
+    "world_core": {
+      "id": 40086445556,
+      "name": "Validate World Core",
+      "head_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40086445556",
+      "updated_at": "2026-10-24T11:08:47Z"
+    },
+    "player_movement": {
+      "id": 40088445363,
+      "name": "Validate Player Movement",
+      "head_sha": "599fd11bb4bd0ba8c7b085d11e611f7d08162fc7",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40088445363",
+      "updated_at": "2026-10-24T11:09:40Z"
+    },
+    "runtime_trees_proven_equal": true,
+    "note": "Both completed successfully for the doorway/input package, at different exact SHAs with equal scripts/assets/scenes/project trees. They precede the metric surface change and do not certify that new change."
+  },
+  "continuous_graphics": {
+    "run": {
+      "id": 40091621698,
+      "name": "Verify Rendered Household Doorway",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40091621698",
+      "updated_at": "2026-10-24T11:58:38Z"
+    },
+    "result": "FAIL: original240s wall timeout. Entry, disk restore, seating, sleep and partial morning departure occurred. Entry and exit PNGs viewed. Full workplace return and final lifecycle assertions were not completed.",
+    "required_original_test_graphics_clock_and_deadline_unchanged": true,
+    "new_unit_check_additive_only": true
+  },
+  "rejected_approach": {
+    "run": "https://github.com/Treninem/game/actions/runs/40089173890",
+    "reason": "Simply disabling triplanar projection stretches wall textures on the old BoxMesh UV layout. Real screenshots reviewed and rejected; no such shortcut integrated."
+  },
+  "artifact_metadata_caveat": "The raw metric JSON inherits production_runtime_changed=false from the original temporary A/B/A observer. This field describes no file writes by the diagnostic; it must not be read as evidence that the committed candidate runtime is unchanged. The isolated candidate DOES change enterable_building.gd and adds box_surface_projection.gd. It is NOT integrated into the user-opened root or PR12.",
+  "publication_preflight": "The first documentation diff-check rejected CRLF auxiliary JSON and one trailing log space before any branch/root writes. Auxiliary JSON line endings were normalized and the complete raw log embedded losslessly in JSON; the required whitespace check was rerun.",
+  "handoff": {
+    "root_runtime_scenes_and_workflows_untouched": true,
+    "shared_HEAD_and_index_preserved": true,
+    "no_user_processes_closed": true,
+    "normal_save_profiles_untouched": true,
+    "root_editor_work_must_be_reconciled_before_integration": true
+  },
+  "acceptance": {
+    "complete_TZ": false,
+    "all_required_exact_sha_gates": false,
+    "full_visual_quality": false,
+    "full_animation_quality": false,
+    "manual_play": false,
+    "stable_release": false,
+    "overall_percent": null
+  },
+  "remaining": [
+    "Full continuous graphical lifecycle still fails its unchanged wall limit.",
+    "New exact4f2 World Core and movement runs must finish; fix any actual regressions.",
+    "Hardware mouse, prolonged weak-PC gameplay and save/physics/UI checks across the complete world remain open.",
+    "Character anatomy, clothes and all animations, complete interiors, city composition, vegetation and landscape are not visually accepted.",
+    "Reconcile manual editor changes before root integration."
+  ],
+  "next_connected_work": [
+    "Inspect new full-gate results.",
+    "Profile remaining material, shadow and overdraw costs in the ordinary continuous scene; preserve fidelity and original acceptance bounds.",
+    "Continue household interior and complete character/environment quality with actual game evidence after reconciliation."
+  ],
+  "verification_follow_up": {
+    "recorded_at_utc": "2026-10-24T13:31:47.802603+00:00",
+    "exact_runtime_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+    "world_core_successful_steps": 124,
+    "core": {
+      "id": 40092376914,
+      "name": "Validate World Core",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092376914",
+      "updated_at": "2026-10-24T12:37:40Z"
+    },
+    "movement": {
+      "id": 40092380209,
+      "name": "Validate Player Movement",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092380209",
+      "updated_at": "2026-10-24T12:08:03Z"
+    },
+    "continuous_rendered_household_still_failed": true,
+    "not_full_art_or_release_acceptance": true
+  }
+}

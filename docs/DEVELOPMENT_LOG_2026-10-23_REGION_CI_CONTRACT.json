@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-23",
+  "parent": "fa6f8fa20a6054fe7cf8cbff91c6d36518b26061",
+  "failed_run": 39995752683,
+  "failure": "Static production-shell check still demanded the old roof path in enterable_building.gd after deliberate selected-roof replacement. Native-frame upload also failed because the early stop produced no frames.",
+  "fix": "Retarget the expected live roof reference to the actual production wrapper. Preserve all original old door/roof/license existence and staging-ban assertions. Require new roof geometry/wrapper/four shared materials/three maps/provenance/licenses, lime maps/provenance/licenses and meadow/provenance/license. Keep the new native visual/physical gate mandatory.",
+  "local_positive_shell": "PASS in Git Bash on actual project files",
+  "local_negative_shell": "PASS: deliberately nonexistent timber material makes the guard fail",
+  "runtime_changed": false,
+  "tests_removed_or_weakened": false,
+  "ci": "Pending exact follow-up SHA, no prior green substituted",
+  "stable_release": false
+}

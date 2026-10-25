@@ -2,9 +2,8 @@ extends Node
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
 const HYDROLOGY := preload("res://scripts/world_hydrology.gd")
+const PATHS := preload("res://scripts/terrain_paths.gd")
 const CHUNK_SIZE := 192.0
-const PATCH_SPACING := 9.0
-const CHUNK_MARGIN := 8.0
 const BRIDGE_DECK_THICKNESS := 0.34
 const BRIDGE_RAIL_HEIGHT := 0.16
 const BRIDGE_RAIL_THICKNESS := 0.18
@@ -19,9 +18,7 @@ var materialized_patches := 0
 var materialized_bridge_chunks := 0
 
 func _ready() -> void:
-    road_material = StandardMaterial3D.new()
-    road_material.albedo_color = Color(0.29, 0.20, 0.105, 1.0)
-    road_material.roughness = 0.98
+    road_material = PATHS.material("gravel")
     bridge_material = StandardMaterial3D.new()
     bridge_material.albedo_color = Color(0.30, 0.19, 0.09, 1.0)
     bridge_material.roughness = 0.91
@@ -39,29 +36,23 @@ func _materialize_chunk(chunk: Node3D) -> void:
         return
     var origin := Vector2(chunk.global_position.x, chunk.global_position.z)
     _materialize_bridge_if_owned(chunk, origin)
-    var transforms: Array[Transform3D] = []
+    var footprints: Array[PackedVector2Array] = []
     for road in WorldData.road_catalog():
         var points: Array = road.get("points", [])
         for i in range(points.size() - 1):
-            _append_segment_patches(transforms, origin, points[i], points[i + 1])
-    if transforms.is_empty():
+            footprints.append(PATHS.strip(points[i], points[i+1], GEOGRAPHY.PRIMARY_ROAD_HALF_WIDTH*2.0))
+    var mesh := PATHS.build(footprints, chunk.global_transform, Rect2(origin, Vector2.ONE*CHUNK_SIZE), true)
+    if mesh == null:
         return
-    var patch_mesh := BoxMesh.new()
-    patch_mesh.size = Vector3(PATCH_SPACING + 0.8, 0.055, GEOGRAPHY.PRIMARY_ROAD_HALF_WIDTH * 2.0)
-    patch_mesh.material = road_material
-    var multimesh := MultiMesh.new()
-    multimesh.transform_format = MultiMesh.TRANSFORM_3D
-    multimesh.mesh = patch_mesh
-    multimesh.instance_count = transforms.size()
-    for i in range(transforms.size()):
-        multimesh.set_instance_transform(i, transforms[i])
-    var surface := MultiMeshInstance3D.new()
+    var surface := MeshInstance3D.new()
     surface.name = "RoadSurface"
-    surface.multimesh = multimesh
+    surface.mesh = mesh
+    surface.material_override = road_material
+    surface.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
     surface.visibility_range_end = CHUNK_SIZE * 3.5
     chunk.add_child(surface)
     materialized_road_chunks += 1
-    materialized_patches += transforms.size()
+    materialized_patches += mesh.surface_get_arrays(0)[Mesh.ARRAY_INDEX].size()/3
 
 func _materialize_bridge_if_owned(chunk: Node3D, origin: Vector2) -> void:
     if chunk.get_node_or_null("RoadBridge") != null:
@@ -146,8 +137,8 @@ func _add_bridge_approach(bridge: Node3D, origin: Vector2, center: Vector2, dire
     var terrain_y := WorldData.elevation_at(outer_world) + 0.08
     var rise := deck_y - terrain_y
     var length := sqrt(BRIDGE_APPROACH_LENGTH * BRIDGE_APPROACH_LENGTH + rise * rise)
-    var pitch := atan2(rise * end_sign, BRIDGE_APPROACH_LENGTH)
-    var approach_basis := bridge_basis.rotated(Vector3(0.0, 0.0, 1.0), pitch)
+    var pitch := atan2(-rise * end_sign, BRIDGE_APPROACH_LENGTH)
+    var approach_basis := bridge_basis * Basis(Vector3(0.0, 0.0, 1.0), pitch)
     var midpoint := (end_world + outer_world) * 0.5 - origin
     var midpoint_y := (deck_y + terrain_y) * 0.5
     var mesh := BoxMesh.new()
@@ -168,37 +159,6 @@ func _add_bridge_approach(bridge: Node3D, origin: Vector2, center: Vector2, dire
     collision.name = "Shape"
     collision.shape = shape
     body.add_child(collision)
-
-func _append_segment_patches(transforms: Array[Transform3D], origin: Vector2, a: Vector2, b: Vector2) -> void:
-    var segment := b - a
-    var length := segment.length()
-    if length < 0.01:
-        return
-    var chunk_center := origin + Vector2(CHUNK_SIZE * 0.5, CHUNK_SIZE * 0.5)
-    var closest_t := clampf((chunk_center - a).dot(segment) / (length * length), 0.0, 1.0)
-    var closest := a + segment * closest_t
-    if closest.distance_to(chunk_center) > CHUNK_SIZE * 0.78 + CHUNK_MARGIN:
-        return
-    var half_window := (CHUNK_SIZE * 0.82 + CHUNK_MARGIN) / length
-    var t0 := maxf(0.0, closest_t - half_window)
-    var t1 := minf(1.0, closest_t + half_window)
-    var first_distance := floorf(t0 * length / PATCH_SPACING) * PATCH_SPACING
-    var last_distance := t1 * length
-    var direction := segment / length
-    var angle := atan2(direction.y, direction.x)
-    var distance := first_distance
-    while distance <= last_distance + PATCH_SPACING:
-        var t := clampf(distance / length, 0.0, 1.0)
-        var world_pos := a.lerp(b, t)
-        if world_pos.x >= origin.x - CHUNK_MARGIN and world_pos.x < origin.x + CHUNK_SIZE + CHUNK_MARGIN and world_pos.y >= origin.y - CHUNK_MARGIN and world_pos.y < origin.y + CHUNK_SIZE + CHUNK_MARGIN:
-            if not WorldData.water_kind_at(world_pos).is_empty():
-                distance += PATCH_SPACING
-                continue
-            var local := world_pos - origin
-            var height := WorldData.elevation_at(world_pos) + 0.035
-            var basis := Basis(Vector3.UP, -angle)
-            transforms.append(Transform3D(basis, Vector3(local.x, height, local.y)))
-        distance += PATCH_SPACING
 
 func road_chunk_count() -> int:
     return materialized_road_chunks

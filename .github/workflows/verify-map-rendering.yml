@@ -1,0 +1,80 @@
+name: Verify Dense Cartography and World Rendering
+
+on:
+  push:
+    branches: [codex/editor-handoff-validation-2026-10-24]
+    paths:
+      - scripts/local_map_renderer.gd
+      - scripts/map_marker_batch.gd
+      - tests/visual_map_batch.*
+      - .github/workflows/verify-map-rendering.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: impuls-map-render-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  map-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/audio
+            assets/branding
+            assets/production
+            assets/registry
+            assets/shaders
+            assets/staging/nature/kenney_nature_kit
+            assets/ui
+            assets/vfx
+            scenes
+            scripts
+            story
+            tests
+            tools/run_godot_smoke.sh
+      - name: Install Godot and a software rendering display
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb libgl1-mesa-dri
+      - name: Parse actual project and rendered diagnostic
+        run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Preserve cartography discovered features and felled trees
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-map-state" bash tools/run_godot_smoke.sh tests/smoke_cartography.tscn 90
+      - name: Verify 1011 rendered markers colors ordering save transitions and bounded drawing
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-map-batch" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/visual_map_batch.tscn 90
+      - name: Preserve terrain fog and same-cell save restoration
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-map-restore" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/smoke_map_state_transition.tscn 90
+      - name: Render ordinary world input equipment magic UI and disk save
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-map-world" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/visual_bow_world.gd 240
+      - name: Render entry exit and full saved household lifecycle
+        if: success() || failure()
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-map-home" GODOT_SMOKE_GRAPHICAL=1 IMPULS_DOOR_HEIGHT_MODE=default bash tools/run_godot_smoke.sh tests/profile_continuous_home_door.gd 240
+      - name: Upload actual map and world evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-render-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/impuls-map-batch/godot/app_userdata/ImPuls/map-batch*.png
+            ${{ runner.temp }}/impuls-map-batch/godot/app_userdata/ImPuls/map-batch.json
+            ${{ runner.temp }}/impuls-map-world/godot/app_userdata/ImPuls/head-size-*.png
+            ${{ runner.temp }}/impuls-map-home/godot/app_userdata/ImPuls/household-render-profile.json
+            ${{ runner.temp }}/impuls-map-home/godot/app_userdata/ImPuls/door-entry.png
+            ${{ runner.temp }}/impuls-map-home/godot/app_userdata/ImPuls/door-exit.png
+            ${{ runner.temp }}/impuls-map-home/godot/app_userdata/ImPuls/home-door-rendered.json
+            ${{ runner.temp }}/impuls-map-home/godot/app_userdata/ImPuls/streamed-home-door.json

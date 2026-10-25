@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-24",
+  "scope": "Fast-forward the reviewed runtime package into the existing draft PR, preserving the manually handed-off root checkout.",
+  "integration": {
+    "recorded_at_utc": "2026-10-24T14:40:36.214373+00:00",
+    "validated_runtime_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "review_branch": "codex/household-persistence-2026-10-19",
+    "prior_review_sha": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+    "private_documentation_parent": "709c0a2fd335c755d6ce10f257d7afa68f174bac",
+    "PR12_runtime_integrated": true,
+    "root_runtime_integrated": false,
+    "atomic_fast_forward_required": true,
+    "source_trees_unchanged_from_validated_runtime": true,
+    "core": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    },
+    "movement": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "native_inventory": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
+    "stable_release": false
+  },
+  "proof": {
+    "full_core_successful_steps": 124,
+    "runtime_source_and_asset_trees_equal_to": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "no_old_active_review_job_cancelled": true,
+    "root_runtime_sources_written": false,
+    "normal_profiles_touched": false,
+    "new_Blend_weapon_candidates_included": false
+  },
+  "limits": [
+    "Only the validated source runtime is promoted; new PR-head CI must be observed independently.",
+    "No stable installer, merge or release publication.",
+    "Continuous graphical household cycle still exceeds240s; normal graphics, clock and assertions unchanged.",
+    "Characters, animations, UI and whole-world art are not fully accepted.",
+    "New standalone Blender weapon candidates are still being reviewed and are not integrated."
+  ],
+  "goal_status": "ACTIVE",
+  "overall_percent": null
+}

@@ -1,0 +1,390 @@
+{
+  "runtime": [
+    {
+      "conclusion": "failure",
+      "databaseId": 40180089104,
+      "headSha": "ef0d2ff6b417f1b7f27a4df45f88bec5073c29a5",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:26:53Z",
+          "conclusion": "failure",
+          "databaseId": 121129105535,
+          "name": "house-cost",
+          "startedAt": "2026-10-25T09:18:26Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:18:27Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:18:26Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:18:50Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:18:27Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:19:00Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:18:50Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:20:57Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:19:00Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:22:51Z",
+              "conclusion": "success",
+              "name": "Measure reversible diagnostic ablations without changing production settings",
+              "number": 5,
+              "startedAt": "2026-10-25T09:20:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:51Z",
+              "conclusion": "failure",
+              "name": "Render the unchanged full household lifecycle",
+              "number": 6,
+              "startedAt": "2026-10-25T09:22:51Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:52Z",
+              "conclusion": "success",
+              "name": "Upload measured and acceptance evidence separately including failures",
+              "number": 7,
+              "startedAt": "2026-10-25T09:26:51Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:52Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 14,
+              "startedAt": "2026-10-25T09:26:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:52Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 15,
+              "startedAt": "2026-10-25T09:26:52Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40180089104/job/121129105535"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40180089104"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 40181877449,
+      "headSha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:54:16Z",
+          "conclusion": "failure",
+          "databaseId": 121134456385,
+          "name": "house-cost",
+          "startedAt": "2026-10-25T09:44:18Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:44:19Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:41Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:52Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:44:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:51Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:44:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:48:52Z",
+              "conclusion": "success",
+              "name": "Measure reversible diagnostic ablations without changing production settings",
+              "number": 5,
+              "startedAt": "2026-10-25T09:46:51Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:48:56Z",
+              "conclusion": "success",
+              "name": "Verify live shadow quality switching",
+              "number": 6,
+              "startedAt": "2026-10-25T09:48:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:13Z",
+              "conclusion": "success",
+              "name": "Render furnished rooms with a grounded player and all cloth quality modes",
+              "number": 7,
+              "startedAt": "2026-10-25T09:48:56Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:13Z",
+              "conclusion": "failure",
+              "name": "Render the unchanged full household lifecycle",
+              "number": 8,
+              "startedAt": "2026-10-25T09:50:13Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:15Z",
+              "conclusion": "success",
+              "name": "Upload measured and acceptance evidence separately including failures",
+              "number": 9,
+              "startedAt": "2026-10-25T09:54:13Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:15Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 18,
+              "startedAt": "2026-10-25T09:54:15Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:15Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 19,
+              "startedAt": "2026-10-25T09:54:15Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40181877449/job/121134456385"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40181877449"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 40181877417,
+      "headSha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:50:47Z",
+          "conclusion": "failure",
+          "databaseId": 121134456306,
+          "name": "rendered-household",
+          "startedAt": "2026-10-25T09:44:18Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:44:19Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:37Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:48Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:44:37Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:43Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:44:48Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:44Z",
+              "conclusion": "success",
+              "name": "Verify metric box geometry and retained texture objects",
+              "number": 5,
+              "startedAt": "2026-10-25T09:46:43Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:45Z",
+              "conclusion": "failure",
+              "name": "Render actual entry exit and full saved household lifecycle",
+              "number": 6,
+              "startedAt": "2026-10-25T09:46:44Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:45Z",
+              "conclusion": "success",
+              "name": "Upload actual rendered doorway and disk restoration evidence",
+              "number": 7,
+              "startedAt": "2026-10-25T09:50:45Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:46Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 14,
+              "startedAt": "2026-10-25T09:50:45Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:46Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 15,
+              "startedAt": "2026-10-25T09:50:46Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40181877417/job/121134456306"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40181877417"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 40181877363,
+      "headSha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:47:01Z",
+          "conclusion": "success",
+          "databaseId": 121134456008,
+          "name": "rendered-household",
+          "startedAt": "2026-10-25T09:44:18Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:44:19Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:44:18Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:38Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:48Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:44:38Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:04Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:44:48Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:57Z",
+              "conclusion": "success",
+              "name": "Compare source and metric PBR on actual walls floor and ceiling",
+              "number": 5,
+              "startedAt": "2026-10-25T09:46:04Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:58Z",
+              "conclusion": "success",
+              "name": "Upload actual rendered doorway and disk restoration evidence",
+              "number": 6,
+              "startedAt": "2026-10-25T09:46:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:59Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 12,
+              "startedAt": "2026-10-25T09:46:58Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:59Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 13,
+              "startedAt": "2026-10-25T09:46:59Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40181877363/job/121134456008"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40181877363"
+    }
+  ],
+  "test_sha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+  "test_sha_runs": [
+    {
+      "conclusion": "failure",
+      "databaseId": 40183115202,
+      "headSha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+      "name": "Diagnose Household Rendering Cost",
+      "status": "completed"
+    }
+  ]
+}

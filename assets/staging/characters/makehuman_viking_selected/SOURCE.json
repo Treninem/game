@@ -1,0 +1,14 @@
+{
+  "author": "Rehman Polanski (RehmanPolanski)",
+  "license": "CC0-1.0",
+  "license_evidence": [
+    "All three retained .mhclo files explicitly state author and CC0.",
+    "Official suits02 pack page lists tunic, pants and boots individually as CC0."
+  ],
+  "page": "https://static.makehumancommunity.org/assets/assetpacks/suits02.html",
+  "download": "https://files2.makehumancommunity.org/asset_packs/suits02/suits02_cc0.zip",
+  "selection": "Only Viking tunic/pants/boots: authored OBJ, fitted MHCLO, material, texture and thumbnail. No duplicate archive or executable code retained under assets.",
+  "state": "APPROVED",
+  "physical_location": "Local review checkout; not confirmed on canonical main. Do not label STAGED_PHYSICAL on main.",
+  "integration": "Selected garments are INTEGRATED in the review human family; production paths assets/production/characters/realistic/{male,female}.glb and wardrobe/. Physical confirmation on main remains pending."
+}

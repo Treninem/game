@@ -1,0 +1,616 @@
+{
+  "date": "2026-10-25",
+  "scope": "Room-facing wall lanterns, close warm bounce, existing household-cloth material channels, ordinary-world final-skeleton sole observations, actual furnished-room and resident/save regressions.",
+  "package": {
+    "runtime_sha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+    "test_sha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+    "root_selected_files_integrated": true,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
+    "native_complete_household_seconds": 178.2190000000046,
+    "hall_draw_calls_before": 315,
+    "hall_draw_calls_after": 205,
+    "manual_play": false,
+    "full_art_acceptance": false,
+    "stable_release": false
+  },
+  "changes": [
+    "Reuse the same fixtures, original colors/energy/ranges and shadow preset policy. Replace six-direction room-lantern shadow rendering with one broad room-facing projection and a1.65m shadowless warm bounce. The initial spot-only trial darkened the mounting wall and was rejected before live integration.",
+    "Activate existing licensed512px OpenGL fabric normals and ORM maps on bedding/pillow/curtains/rug/border for High/Ultra. Low/Medium retain the original cheap material response; cloth stays nonmetallic. No new source pack, geometry replacement or bitmap generation.",
+    "Strengthen the new room review to actually render every graphics preset and drain queued scene destruction before engine exit. The previous full household assertions, normal simulation speed and240s continuous-render limit remain intact."
+  ],
+  "local_checks": {
+    "world-support-final": {
+      "exit_code": 0,
+      "seconds": 104.82799999999406,
+      "actor_positions_assigned": false,
+      "private_profile": true
+    },
+    "quality-final": {
+      "exit_code": 0,
+      "seconds": 23.81300000000192,
+      "scene": "tests/smoke_household_quality.tscn",
+      "headless": true,
+      "private_profile": true
+    },
+    "furniture-final-gate": {
+      "exit_code": 0,
+      "seconds": 100.65600000000268,
+      "scene": "tests/smoke_household_furniture.tscn",
+      "headless": true,
+      "private_profile": true
+    },
+    "poses-final": {
+      "exit_code": 0,
+      "seconds": 27.531999999999243,
+      "scene": "tests/smoke_household_pose.tscn",
+      "headless": true,
+      "private_profile": true
+    },
+    "house-complete-before": {
+      "exit_code": 0,
+      "seconds": 189.88999999999942,
+      "actor_positions_assigned": false,
+      "private_profile": true
+    },
+    "house-complete-final": {
+      "exit_code": 0,
+      "seconds": 178.2190000000046,
+      "scene": "tests/profile_continuous_home_door.gd",
+      "headless": false,
+      "private_profile": true
+    },
+    "wall-light-rooms-final": {
+      "exit_code": 0,
+      "seconds": 75.20300000000134,
+      "private_profile": true,
+      "fixture_initial_player_position": true,
+      "driver_position_assignments_after_setup": 0,
+      "initial_fixture_position": true
+    },
+    "root-wall-light-rooms-r2": {
+      "exit_code": 0,
+      "seconds": 78.5,
+      "private_profile": true,
+      "initial_fixture_position": true,
+      "driver_position_assignments_after_setup": 0
+    },
+    "root-wall-light-rooms-r3": {
+      "exit_code": 0,
+      "seconds": 99.31299999999464,
+      "private_profile": true,
+      "initial_fixture_position": true,
+      "driver_position_assignments_after_setup": 0
+    }
+  },
+  "sole_observation": {
+    "base_sha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+    "samples": 49,
+    "grounded_samples": 44,
+    "minimum_support_gap_m": 0.00248861312866211,
+    "maximum_support_gap_m": 0.0109014511108398,
+    "method": "Independent evaluation of all boot vertices with morphs/skin in modification_processed, and actual collision rays at each lowest-Y point. Uses final skeleton transforms, not the grounding helper gap output. This is CPU geometry validation correlated with actual frames, not independent GPU vertex readback.",
+    "coverage": "Ordinary automated world input,160cm and195cm bodies, walk/run/jumps/axe/bow/magic/UI/save;Ordinary world traversal and no driver position assignment. Repeated after the house graphical changes with an idempotent observer subscription; this is not full terrain, slope, wardrobe or animation acceptance."
+  },
+  "ordinary_world_markers": [
+    "MAGIC_NATIVE_SAVE_OK action=cast_magic selected=heal cooldown=restored blocked_cast=no_mana_cost",
+    "UI_NATIVE_REOPEN_OK cycles=12 inventory+map gameplay_resumed=true",
+    "LIVE_BOW_BLEND_OK samples=25",
+    "OUTFIT_WORLD_FRAME_SAMPLE frames=120 mean_ms=42.5860916666667 video_bytes=504599336 draw_calls=277",
+    "FACE_CONTROLS_NATIVE_OK {\"bow_arrow_consumed\":true,\"captures\":[\"user://head-size-walk.png\",\"user://head-size-run.png\",\"user://head-size-tall-jump.png\",\"user://head-size-starter_axe.png\",\"user://head-size-short_bow.png\",\"user://head-size-bow-released.png\",\"user://head-size-short-walk.png\",\"user://head-size-short-jump.png\",\"user://head-size-cast-free-hand.png\",\"user://head-size-magic-after-load.png\",\"user://head-size-inventory-lifecycle.png\",\"user://head-size-outfit-quality-0.png\",\"user://head-size-outfit-quality-1.png\",\"user://head-size-outfit-quality-2.png\",\"user://head-size-outfit-quality-3.png\"],\"game_save_roundtrip\":true,\"jump_both_heights\":true,\"look_roundtrip\":true,\"morphs\":9,\"physical_heights_cm\":[160,195],\"player_position_assignments\":0,\"walked_m\":28.577483676374}"
+  ],
+  "room_evidence": {
+    "controlled_night_lighting": true,
+    "fixture_initial_player_position": true,
+    "manual_play": false,
+    "records": [
+      {
+        "draw_calls": 315,
+        "mode": "before",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "hall",
+        "room_count": 4,
+        "window_count": 6
+      },
+      {
+        "draw_calls": 181,
+        "mode": "before",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "dining",
+        "room_count": 4,
+        "window_count": 6
+      },
+      {
+        "draw_calls": 182,
+        "mode": "before",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "bedroom",
+        "room_count": 4,
+        "window_count": 6
+      },
+      {
+        "draw_calls": 151,
+        "mode": "before",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "kitchen",
+        "room_count": 4,
+        "window_count": 6
+      },
+      {
+        "draw_calls": 205,
+        "mode": "after",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "hall",
+        "room_count": 4,
+        "window_count": 6
+      },
+      {
+        "draw_calls": 123,
+        "mode": "after",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "dining",
+        "room_count": 4,
+        "window_count": 6
+      },
+      {
+        "draw_calls": 93,
+        "mode": "after",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "bedroom",
+        "room_count": 4,
+        "window_count": 6
+      },
+      {
+        "draw_calls": 93,
+        "mode": "after",
+        "player_grounded": true,
+        "real_furniture": true,
+        "room": "kitchen",
+        "room_count": 4,
+        "window_count": 6
+      }
+    ]
+  },
+  "CI": [
+    {
+      "conclusion": "failure",
+      "databaseId": 40180089104,
+      "headSha": "ef0d2ff6b417f1b7f27a4df45f88bec5073c29a5",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:26:53Z",
+          "conclusion": "failure",
+          "databaseId": 121129105535,
+          "name": "house-cost",
+          "startedAt": "2026-10-25T09:18:26Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:18:27Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:18:26Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:18:50Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:18:27Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:19:00Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:18:50Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:20:57Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:19:00Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:22:51Z",
+              "conclusion": "success",
+              "name": "Measure reversible diagnostic ablations without changing production settings",
+              "number": 5,
+              "startedAt": "2026-10-25T09:20:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:51Z",
+              "conclusion": "failure",
+              "name": "Render the unchanged full household lifecycle",
+              "number": 6,
+              "startedAt": "2026-10-25T09:22:51Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:52Z",
+              "conclusion": "success",
+              "name": "Upload measured and acceptance evidence separately including failures",
+              "number": 7,
+              "startedAt": "2026-10-25T09:26:51Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:52Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 14,
+              "startedAt": "2026-10-25T09:26:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:26:52Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 15,
+              "startedAt": "2026-10-25T09:26:52Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40180089104/job/121129105535"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40180089104"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 40181877449,
+      "headSha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:54:16Z",
+          "conclusion": "failure",
+          "databaseId": 121134456385,
+          "name": "house-cost",
+          "startedAt": "2026-10-25T09:44:18Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:44:19Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:41Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:52Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:44:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:51Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:44:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:48:52Z",
+              "conclusion": "success",
+              "name": "Measure reversible diagnostic ablations without changing production settings",
+              "number": 5,
+              "startedAt": "2026-10-25T09:46:51Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:48:56Z",
+              "conclusion": "success",
+              "name": "Verify live shadow quality switching",
+              "number": 6,
+              "startedAt": "2026-10-25T09:48:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:13Z",
+              "conclusion": "success",
+              "name": "Render furnished rooms with a grounded player and all cloth quality modes",
+              "number": 7,
+              "startedAt": "2026-10-25T09:48:56Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:13Z",
+              "conclusion": "failure",
+              "name": "Render the unchanged full household lifecycle",
+              "number": 8,
+              "startedAt": "2026-10-25T09:50:13Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:15Z",
+              "conclusion": "success",
+              "name": "Upload measured and acceptance evidence separately including failures",
+              "number": 9,
+              "startedAt": "2026-10-25T09:54:13Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:15Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 18,
+              "startedAt": "2026-10-25T09:54:15Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:54:15Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 19,
+              "startedAt": "2026-10-25T09:54:15Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40181877449/job/121134456385"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40181877449"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 40181877417,
+      "headSha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:50:47Z",
+          "conclusion": "failure",
+          "databaseId": 121134456306,
+          "name": "rendered-household",
+          "startedAt": "2026-10-25T09:44:18Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:44:19Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:37Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:48Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:44:37Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:43Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:44:48Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:44Z",
+              "conclusion": "success",
+              "name": "Verify metric box geometry and retained texture objects",
+              "number": 5,
+              "startedAt": "2026-10-25T09:46:43Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:45Z",
+              "conclusion": "failure",
+              "name": "Render actual entry exit and full saved household lifecycle",
+              "number": 6,
+              "startedAt": "2026-10-25T09:46:44Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:45Z",
+              "conclusion": "success",
+              "name": "Upload actual rendered doorway and disk restoration evidence",
+              "number": 7,
+              "startedAt": "2026-10-25T09:50:45Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:46Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 14,
+              "startedAt": "2026-10-25T09:50:45Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:50:46Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 15,
+              "startedAt": "2026-10-25T09:50:46Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40181877417/job/121134456306"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40181877417"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 40181877363,
+      "headSha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+      "jobs": [
+        {
+          "completedAt": "2026-10-25T09:47:01Z",
+          "conclusion": "success",
+          "databaseId": 121134456008,
+          "name": "rendered-household",
+          "startedAt": "2026-10-25T09:44:18Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-25T09:44:19Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-25T09:44:18Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:38Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-25T09:44:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:44:48Z",
+              "conclusion": "success",
+              "name": "Install Godot and a software rendering display",
+              "number": 3,
+              "startedAt": "2026-10-25T09:44:38Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:04Z",
+              "conclusion": "success",
+              "name": "Parse actual project and rendered diagnostic",
+              "number": 4,
+              "startedAt": "2026-10-25T09:44:48Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:57Z",
+              "conclusion": "success",
+              "name": "Compare source and metric PBR on actual walls floor and ceiling",
+              "number": 5,
+              "startedAt": "2026-10-25T09:46:04Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:58Z",
+              "conclusion": "success",
+              "name": "Upload actual rendered doorway and disk restoration evidence",
+              "number": 6,
+              "startedAt": "2026-10-25T09:46:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:59Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 12,
+              "startedAt": "2026-10-25T09:46:58Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-25T09:46:59Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 13,
+              "startedAt": "2026-10-25T09:46:59Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Treninem/game/actions/runs/40181877363/job/121134456008"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Treninem/game/actions/runs/40181877363"
+    }
+  ],
+  "exact_test_sha_CI_at_recording": [
+    {
+      "conclusion": "failure",
+      "databaseId": 40183115202,
+      "headSha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+      "name": "Diagnose Household Rendering Cost",
+      "status": "completed"
+    }
+  ],
+  "previous_review_World_Core": {
+    "conclusion": "success",
+    "headSha": "7d764a0443122b27ba6a1c46d2a1a43db34d7eaf",
+    "status": "completed",
+    "url": "https://github.com/Treninem/game/actions/runs/40178527702"
+  },
+  "performance_interpretation": [
+    "Fewer draw submissions do not prove improved FPS. The controlled furnished hall reduced315 to205 calls; the unchanged native household peak reduced281 to185. Native full lifecycle completed178.219s versus189.89s before, but loading/cache noise and vsync prevent treating that as a guaranteed speedup.",
+    "The matched short software-renderer baseline sample was408.053ms before and431.371ms after, despite237 to157 calls. The additional warm bounce and different runner conditions require further isolation. Continuous software rendering still fails240s; do not report the total CI run as green.",
+    "The final ordinary world120-frame medium sample is42.586ms (about23.5fps), compared with the earlier roughly19fps sample. Short windows and background/cache variation do not establish a lighting-caused speedup or stable30fps game."
+  ],
+  "failures_and_retries": [
+    "The first independent sole observer reconnected the same modifier callback when the loaded world reentered the tree. Game actions reached their success marker, but the diagnostic emitted an ERROR and is not treated as a clean pass. Added an idempotent connection guard and repeated the whole ordinary-input scenario.",
+    "First profiling helper attempted an ArrayMesh-only method on BoxMesh; own failed process was stopped, the diagnostic switched to general surface arrays and was rerun.",
+    "The first new room fixture had GDScript inference errors, then placed the player before Player._ready restored its saved starting position. Fixed fixture setup order; only initial fixture placement is used afterward.",
+    "An invented75s local wrapper deadline stopped furniture validation near its final stage. The original repository gate is180s with a130s simulation watchdog; rerun with those unchanged project limits passed100.656s. The75s result remains recorded under build.",
+    "First working-root room review completed its assertions but exited3221225477. A matching Windows Application event at2026-10-25 12:52:19 named Intel ig9icd64.dll31.0.101.2140, exception0xc0000005. It is a failed run. After actual per-preset frames and deferred destruction/readback, two working-root repeats exited0; this does not prove all Intel driver crashes fixed.",
+    "The source-only diagnostic workflow needed a branch push trigger because GitHub had not registered workflow_dispatch for the new off-default workflow. No mandatory gate was skipped."
+  ],
+  "limits": [
+    "Human models, garment seams, hair, arm/leg naturalness and full concept art acceptance remain open; this package changes no human geometry.",
+    "Rooms still require richer architectural/furniture/art work; the existing atlas fabric response is subtle, not a new photorealistic textile set.",
+    "The local household doorway fixture uses the production square/home/people and real physics/save state, but its isolated background and dressing coverage are not the full city. The separate room review includes the production decorator and a grounded player.",
+    "Native own profiles preserve user settings/saves; this is automated testing, not manual play or a new complete world traversal.",
+    "The earlier ordinary-world run still printed89 ObjectDB leaks at exit. No global shutdown or leak fix is claimed.",
+    "Main remains unchanged; no stable installer publication, force push or shared-index reset. Shared checkout remains dirty because unrelated work is preserved."
+  ],
+  "references": [
+    {
+      "source": "User-supplied house/world concept boards",
+      "decision": "Keep warm fixture-local light, physically separated rooms, furniture and supported human scale; no change of visual direction."
+    },
+    {
+      "source": "https://docs.godotengine.org/en/4.7/classes/class_omnilight3d.html",
+      "decision": "Cubemap versus projected shadow topology informed the lighting experiment; final quality assessed from actual game-engine frames."
+    },
+    {
+      "source": "assets/production/interiors/materials/household_cloth.SOURCE.md",
+      "decision": "Reuse physically confirmed B46 CC0 cloth channels and existing UVs."
+    }
+  ],
+  "next_connected_work": [
+    "Profile actual room visibility and fragment/shadow cost; resolve the continuous software-render timeout without lowering its settings or coverage.",
+    "Continue people/garments and furnished-world presentation together, with actual action frames and collision/save checks.",
+    "Track the final PR SHA gates and retain any failure; no stable release until all required gates pass."
+  ],
+  "overall_percent": null,
+  "goal_status": "active",
+  "evidence": "docs/review/2026-10-25-room-lighting/"
+}

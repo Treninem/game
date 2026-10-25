@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-22",
+  "state": "INTEGRATED",
+  "scope": "Review branch, fixed default outfit, both native human bodies; canonical main and full artistic acceptance unconfirmed",
+  "sources": [
+    "assets/staging/characters/makehuman_mpfb_core",
+    "assets/staging/characters/makehuman_system_selected",
+    "assets/staging/characters/makehuman_viking_selected"
+  ],
+  "licenses": "Existing retained MakeHuman/selected Rehman Polanski CC0 source licenses; no new third-party download or bitmap",
+  "production": "assets/production/characters/realistic/{male,female}.glb",
+  "editable": "assets/source/characters/fitted_outfit/{male,female}.blend",
+  "reproducer": "tools/export_fitted_outfit.py (portable accepted .blend sources)",
+  "journal": "docs/DEVELOPMENT_LOG_2026-10-22_WORK_WARDROBE.json",
+  "models": {
+    "male": {
+      "sha256": "615a5a5661035e60d5e5a743b4889748646e7b378ff42029f48114f93afb49a0",
+      "bytes": 21497988
+    },
+    "female": {
+      "sha256": "76bf774548eace4c4a4db3a227fdba0dcd16ab8de24ae9d11eb1779b4587e861",
+      "bytes": 22207168
+    }
+  },
+  "full_wardrobe_accepted": false,
+  "shell_free": true,
+  "covered_skin_views": 810,
+  "covered_skin_failures": 0,
+  "material_roles": [
+    "VikingTunic",
+    "VikingPants",
+    "VikingBoots"
+  ],
+  "removed_redundant_material": "OutfitLining"
+}

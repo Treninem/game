@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7.2",
+  "runtime_commit": "048ecfc2f69dec97d46b6d7c28e88d21dc35d0f3",
+  "delivery": "Unreleased review; no stable installer or tag",
+  "implemented": [
+    "Actual axe/bow meshes in seven editor motion choices without changing real inventory",
+    "Preview weapon survives body rebuild; Idle removes it; UI selector reflects the inspected clip and camera reframes raised weapons",
+    "Actor-space native bow arm directions replace the broken behind-back source pose; generated animation libraries belong to individual actors",
+    "Explicit world audio retirement before menu exit; owned smoke fixtures are freed while audio stop processing can still run"
+  ],
+  "local_checks": {
+    "character_creator": 8.39,
+    "world_audio": 3.03,
+    "offworld_streaming": 28.42,
+    "capital_gameplay": 39.75,
+    "chopping": 24.33,
+    "gameplay_actions": 22.55,
+    "household_pose": 3.64,
+    "household_quality": 6.97,
+    "bridge_traversal": 44.78,
+    "capital_gate_traversal": 52.94
+  },
+  "packaged_smoke": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 14.66,
+    "marker": true
+  },
+  "native_review": {
+    "status": "pass",
+    "bodies": [
+      "male",
+      "female"
+    ],
+    "motions": [
+      "axe",
+      "bow_draw",
+      "bow_shoot"
+    ],
+    "captures": 6,
+    "inventory_unchanged": true,
+    "driver": "graphical Godot SceneTree inspection of actual editor; Windows window independently observed",
+    "stderr": "empty",
+    "scope": "Combat preview; previous full forest/home traversal was not repeated in this follow-up"
+  },
+  "failed_attempts_preserved": [
+    "weapon-preview-before-bow-fix contains behind-back bow pose",
+    "chopping-cleanup-failed.log: initial fixture teardown referenced already-freed world; corrected to release its extracted player and audio, then strict test passed",
+    "traversal-cleanup-attempt.json, step-cleanup-failed.log and camera-cleanup-failed.log: adding world cleanup to extracted-player fixtures double-freed their original world. Those two unnecessary edits were reverted; original assertions retained."
+  ],
+  "linux_diagnosis": {
+    "failed_commit": "04e16f1d206cf7317b3f97b5eee0abbd98c2db11",
+    "resources": [
+      "AudioStreamOggVorbis water loop",
+      "OggPacketSequence",
+      "AudioStreamPlaybackOggVorbis",
+      "OggPacketSequencePlayback"
+    ],
+    "strict_error_gates_preserved": true,
+    "fix_remote_status": "048ecfc2: build-game and its installer passed, as did movement/magic/vfx/UI/build. World-core then exposed the same missing owned-world teardown in bridge_traversal. Bridge and capital-gate fixtures corrected and passed locally; final remote suite must rerun."
+  },
+  "remaining": [
+    "Finger grip and bowstring contact need further work",
+    "Native window-manager close path has not been certified",
+    "Full wardrobe/age/advanced face and performance work remain open"
+  ],
+  "launcher": "build/review-2026-10-19-characters-combat/ImPuls-review.cmd",
+  "pack_sha256": "43b1d93d4c04ea320ab196614e6b9260bbad5be7829e174a4c09371709cbfa77"
+}

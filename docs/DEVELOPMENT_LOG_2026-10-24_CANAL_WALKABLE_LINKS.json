@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "failed_parent": "275b5ad7220fd71d6aa90fec6fdcdc68dc9f6c8d",
+  "failed_exact_sha_ci": {
+    "run_id": 40064268166,
+    "job_id": 120784086459,
+    "stage": "unfrozen household meal commute"
+  },
+  "previous_physical_contact_regression": "Passed on server; capsule margin fix retained unchanged.",
+  "cause": "At a blocked bridge-edge grid cell, nearest free-cell selection could choose ground below the parapet instead of the connected deck. The actor then oscillated between levels and missed the meal before returning to work. A free endpoint alone did not prove a traversable connection.",
+  "runtime_fix": [
+    "Choose the nearest grid anchor only if the standing capsule can physically reach it from the actual position.",
+    "Reach a snapped anchor before following its path, rather than skipping that first corner.",
+    "Sample support every20cm along links; reject unsupported level changes and steep steps/drops.",
+    "Sweep the standing capsule through the link, lifted12cm for the obstacle-only query so initial floor overlap cannot suppress the joined bridge collider; support is checked separately.",
+    "Validate the actual next and final links too; use the already free current cell directly to bound routine sampling work.",
+    "Build a bounded AStar2D connection graph from the same measured free raster nodes; lazily remove only physically blocked edges so thin pillars trigger a real alternative route. Rebuild links on geometry invalidation.",
+    "Keep an intermediate public waypoint pending until it is crossed, and clamp steering to the actual nearby corner instead of inspecting beyond it.",
+    "Honor the existing0.24m seat interaction radius and0.3m departure radius. Choose a clear point inside the same volume when an exact authoring point lies under a table edge; do not widen interaction tests."
+  ],
+  "deterministic_world_regression": {
+    "before": {
+      "returncode": 1,
+      "seconds": 29.67199999999866,
+      "stopped": true,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: Planner snapped a deck citizen to the ground below the parapet"
+      ],
+      "marker": false
+    },
+    "after": {
+      "returncode": 0,
+      "seconds": 54.0,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "fixture": "Three actual/mirrored bridge-edge/adjacent-bank planning poses,24successive planned links with independent elevation/drop assertions; no avatar/citizen coordinate assignments. This is a static planning fixture, distinct from real full-life walking.",
+    "thin_edge": "A real15cm-wide,1.6m-high,1cm-thick collider lies between two free raster endpoints. Path repair keeps the obstacle, finds a physically clear alternative, and reconnects after removal."
+  },
+  "unchanged_required_movement_lifecycle_checks": [
+    {
+      "case": "smoke_public_market_life.gd",
+      "returncode": 0,
+      "seconds": 99.81199999999808,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_canal_corner.gd",
+      "returncode": 0,
+      "seconds": 56.57800000000134,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_canal_household.gd",
+      "returncode": 0,
+      "seconds": 178.01599999999598,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "all_original_bounds_assertions_gates_retained": true,
+  "capsules_masks_speeds_geometry_assets_saves_controls_unchanged": true,
+  "goal_based_navigation_no_authored_citizen_routes": true,
+  "original_profiles_untouched": true,
+  "shared_workflow_head_index_preserved": true,
+  "additional_graphical_player_source_review": {
+    "runtime_sha": "275b5ad7220fd71d6aa90fec6fdcdc68dc9f6c8d",
+    "walked_m": 2691.9961119839,
+    "four_crossings": true,
+    "dry_canal_ends": true,
+    "actual_supported_deck_samples": 2175,
+    "GPU_sole_captures": 26,
+    "ordinary_automated_input": true,
+    "manual_play": false,
+    "driver_position_assignments": 0,
+    "geometry_player_and_assets_unchanged_in_this_followup": true
+  },
+  "exact_followup_sha_ci": "pending after publication",
+  "actual_final_PCK": "pending; primary launcher remains verified6d3",
+  "full_visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "open_art_limits": [
+    "Wider capital is still flat empty and repetitive relative to concepts.",
+    "Architectural/interior/night-light/population/human/animal/item variety remains open."
+  ],
+  "next": "Require all exact-SHA workflows and the actual compiled Windows PCK before selecting the canal review package; then continue coherent denser streets/homes/light and the full work programme.",
+  "additional_market_regression_fixes": {
+    "initial_link_guard_market_failure": {
+      "case": "smoke_public_market_life.gd",
+      "returncode": 1,
+      "seconds": 122.76600000000326,
+      "stopped": true,
+      "errors": [
+        "ERROR: Public residents did not reach seats: (13490.02, 0.035, -6987.133) / (13477.37, 0.035, -7008.096)"
+      ],
+      "marker": false
+    },
+    "initial_graph_market_failure": {
+      "case": "smoke_public_market_life.gd",
+      "returncode": 1,
+      "seconds": 129.01599999999598,
+      "stopped": true,
+      "errors": [
+        "ERROR: Public residents did not reach seats: (13490.02, 0.035465, -6987.133) / (13490.03, 0.035, -6984.875)"
+      ],
+      "marker": false
+    },
+    "corrected_unchanged_market_test": {
+      "case": "smoke_public_market_life.gd",
+      "returncode": 0,
+      "seconds": 99.81199999999808,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "official_navigation_API_reference": "https://docs.godotengine.org/en/stable/classes/class_astar2d.html",
+  "loaded_world_listener_fix": {
+    "cause": "WorldLoading reparents the prepared world. _exit_tree disconnected the geometry signal, but _ready did not run again, so loaded navigation missed new/removed colliders.",
+    "fix": "Connect on every _enter_tree and rescan existing geometry; retain symmetric exit disconnection. Register already-initialized new collision shapes immediately as well as in the deferred setup pass.",
+    "before": {
+      "returncode": 1,
+      "seconds": 28.593000000000757,
+      "stopped": true,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: Removed obstacle leaves a stale forbidden edge"
+      ],
+      "marker": false
+    },
+    "after": {
+      "returncode": 0,
+      "seconds": 54.0,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "actual_loaded_world_subscription_assertion": true,
+    "thin_obstacle_kept_then_removed_link_reconnected": true
+  }
+}

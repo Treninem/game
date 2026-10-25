@@ -1,0 +1,8 @@
+world-core	Verify arm sleeves clear torso and trousers across supported poses	2026-10-22T20:34:42.7254710Z ARM_CLEARANCE_OK poses=1344 shared_profiles=2 cold_usec=[39732, 40073]
+world-core	Verify arm clearance through actual runtime crossfades	2026-10-22T20:34:59.4957147Z ARM_BLEND_CONTACT_OK poses=504 bodies=2 builds=3 transitions=6 runtime_play=true
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T20:35:38.3913876Z LIVE_BOW_BLEND_SAMPLE 1
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T20:35:38.5786158Z LIVE_BOW_BLEND_SAMPLE 2
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T20:35:39.2422587Z AIRBORNE_WORLD_POSE Bow_Attack_Shoot grounded=false
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T20:35:39.2423898Z ERROR: AIRBORNE_WORLD lost bow draw during jump
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T20:35:39.2522499Z LIVE_BOW_BLEND_SAMPLE 3
+world-core	Verify real world input equipment magic UI and disk in rendered gameplay	2026-10-22T20:35:39.7054728Z ##[error]tests/visual_bow_world.gd exited with code 1

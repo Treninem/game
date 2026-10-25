@@ -1,0 +1,16 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+REST_PHYSICS_CASE male-160.0-Bed ascent=0.92397825419903 landing_error=0.00564487278461
+REST_PHYSICS_CASE male-160.0-Bench ascent=0.92351911962032 landing_error=0.00518573820591
+REST_PHYSICS_CASE male-180.0-Bed ascent=0.92397813498974 landing_error=0.00564475357533
+REST_PHYSICS_CASE male-180.0-Bench ascent=0.92351923882961 landing_error=0.0051858574152
+REST_PHYSICS_CASE male-195.0-Bed ascent=0.88731150329113 landing_error=0.01486225426197
+REST_PHYSICS_CASE male-195.0-Bench ascent=0.87562283873558 landing_error=0.00147008895874
+REST_PHYSICS_CASE female-160.0-Bed ascent=0.92397825419903 landing_error=0.00564487278461
+REST_PHYSICS_CASE female-160.0-Bench ascent=0.92351911962032 landing_error=0.00518573820591
+REST_PHYSICS_CASE female-180.0-Bed ascent=0.92397813498974 landing_error=0.00564475357533
+REST_PHYSICS_CASE female-180.0-Bench ascent=0.92351923882961 landing_error=0.0051858574152
+REST_PHYSICS_CASE female-195.0-Bed ascent=0.88731150329113 landing_error=0.01486225426197
+REST_PHYSICS_CASE female-195.0-Bench ascent=0.87562283873558 landing_error=0.00147008895874
+REST_PHYSICS_OK cases=12 native_jump=true disk_rest_and_wake=true physical_ascent_and_landing=true

@@ -1,0 +1,120 @@
+extends Node3D
+
+func _ready() -> void:
+    get_tree().create_timer(90).timeout.connect(func(): get_tree().quit(1))
+    await run(self)
+    print("REST_RENDER_OK")
+    get_tree().quit()
+
+func run(parent: Node3D) -> Array[String]:
+    var failures: Array[String] = []
+    var home := Node3D.new()
+    parent.add_child(home)
+    home.position.x = 60.0
+    var furniture_group := Node3D.new()
+    home.add_child(furniture_group)
+    var bed := preload("res://scripts/household_furniture.gd").new()
+    bed.name = "Bed"
+    furniture_group.add_child(bed)
+    var bench := preload("res://scripts/household_furniture.gd").new()
+    bench.name = "Bench"
+    furniture_group.add_child(bench)
+    var stage := load("res://scenes/stage1.tscn").instantiate() as Node
+    var actor := stage.get_node("World/Player") as CharacterBody3D
+    actor.get_parent().remove_child(actor)
+    stage.free()
+    parent.add_child(actor)
+    actor.set_physics_process(false)
+    actor.set_process_input(false)
+    actor.call("_set_instanced_world_mode", true)
+    actor.position = Vector3(60, 1, 0)
+    var visual := actor.get_node("Avatar") as Node3D
+    visual.set_process(false)
+    var sun := DirectionalLight3D.new()
+    sun.rotation_degrees = Vector3(-45, -30, 0)
+    sun.light_energy = 1.4
+    parent.add_child(sun)
+    var env := WorldEnvironment.new()
+    env.environment = Environment.new()
+    env.environment.background_mode = Environment.BG_COLOR
+    env.environment.background_color = Color(0.22,0.26,0.29)
+    env.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+    env.environment.ambient_light_color = Color.WHITE
+    env.environment.ambient_light_energy = 0.6
+    parent.add_child(env)
+    var camera := Camera3D.new()
+    parent.add_child(camera)
+    camera.position = Vector3(63,2.3,-3)
+    camera.look_at(Vector3(60,0.6,0))
+    camera.make_current()
+    var decorator := SettlementInteriorVisuals.new()
+    decorator._replace_proxy_visual(bed, SettlementInteriorVisuals.BED_SCENE, "RealBedModel", SettlementInteriorVisuals.BED_TARGET_SIZE, -0.17)
+    decorator._replace_proxy_visual(bench, load("res://assets/production/medieval/capital_square/Bench.gltf"), "RealBenchModel", Vector3(1.8,0.58,0.48), -0.53)
+    decorator.free()
+    var checked := 0
+    for sex: String in ["male", "female"]:
+        for height: float in [160.0, 180.0, 195.0]:
+            var profile := {"sex": sex, "height_cm": height}
+            GameState.set_world_value("player_appearance", profile)
+            visual.call("apply_appearance", profile)
+            visual.set("appearance_revision", GameState.state_revision)
+            var expected := Vector3.ONE * height / 180.0
+            var skeleton := visual.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+            var processed := {"count": 0}
+            visual.get("grip_modifier").modification_processed.connect(func(): processed.count += 1)
+            for furniture: HouseholdFurniture in [bed, bench]:
+                for item: String in ["", "starter_axe", "short_bow", "stone_knife"]:
+                    InventorySystem.unequip(InventorySystem.SLOT_WEAPON)
+                    if not item.is_empty():
+                        if int(GameState.inventory.get(item, 0)) == 0:
+                            GameState.add_item(item, 1)
+                        InventorySystem.equip(item)
+                    var inventory := GameState.inventory.duplicate(true)
+                    var original_position := actor.global_position
+                    var before_count: int = processed.count
+                    for iteration in range(24):
+                        furniture.apply_rest_pose(actor, visual)
+                        visual.call("_process", 1.0 / 60.0)
+                        skeleton.advance(1.0 / 60.0)
+                        await parent.get_tree().process_frame
+                    bed.visible = furniture == bed
+                    bench.visible = furniture == bench
+                    if item == "short_bow":
+                        await RenderingServer.frame_post_draw
+                        get_viewport().get_texture().get_image().save_png("user://rest-%s-%s-%s.png" % [sex,height,furniture.kind])
+                    var label := "%s/%s/%s/%s" % [sex, height, furniture.kind, item]
+                    if processed.count == before_count:
+                        failures.append("Rest fixture did not process final skeleton: " + label)
+                    if visual.scale.distance_to(expected) > 0.0001:
+                        failures.append("Rest changes body scale: " + label)
+                    if furniture.kind == "bed":
+                        var face_up := (visual.global_basis * Vector3.FORWARD).normalized()
+                        var head := furniture.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Head")).origin))
+                        var hips := furniture.to_local(skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Hips")).origin))
+                        if face_up.dot(Vector3.UP) < 0.99 or head.z < hips.z + 0.3 * expected.y:
+                            failures.append("Sleeper is not supine with head toward the pillow: " + label)
+                    if furniture.kind == "bench":
+                        var hip := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("Hips")).origin)
+                        if absf(hip.y - (bench.global_position.y + float(bench.get_meta("rest_support_y", 0.11)) + 0.09 * expected.y)) > 0.025:
+                            failures.append("Seated pelvis misses seat for selected height: " + label)
+                    var weapon: Node3D = visual.get("held_weapon")
+                    if is_instance_valid(weapon) and weapon.visible:
+                        failures.append("Rest keeps weapon active in the hand: " + label)
+                    if inventory != GameState.inventory or InventorySystem.equipped_item(InventorySystem.SLOT_WEAPON) != item:
+                        failures.append("Rest changes equipment ownership: " + label)
+                    HouseholdFurniture.clear_pose(actor, visual)
+                    visual.call("_process", 1.0 / 60.0)
+                    skeleton.advance(1.0 / 60.0)
+                    await parent.get_tree().process_frame
+                    if visual.top_level or visual.scale.distance_to(expected) > 0.0001 or actor.global_position.distance_to(original_position) > 0.0001:
+                        failures.append("Wake changes dimensions or physical actor: " + label)
+                    if is_instance_valid(weapon) and not weapon.visible:
+                        failures.append("Wake fails to restore held equipment: " + label)
+                    checked += 1
+    InventorySystem.unequip(InventorySystem.SLOT_WEAPON)
+    actor.queue_free()
+    home.queue_free()
+    await parent.get_tree().process_frame
+    print("HUMANOID_REST_CHECKED poses=", checked, " bodies=2 heights=3 furniture=2 equipment=4 repeated_pose=true collider_unchanged=true")
+    assert(failures.is_empty(), str(failures))
+    return failures

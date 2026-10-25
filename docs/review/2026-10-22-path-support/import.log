@@ -1,0 +1,121 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Инициализация проекта (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Сканирование структуры файлов…[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Загрузка глобальных имен классов…[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Проверка GDExtensions…[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Создание скриптов автозагрузки…[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Инициализация плагинов…[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Начало сканирование файлов…[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+WARNING: UID duplicate detected between res://assets/vfx/third_party/binbun_godot4_electric/shared/scene_empty.tscn and res://assets/vfx/third_party/binbun_godot4_core/shared/scene_empty.tscn.
+   at: _process_file_system (editor/file_system/editor_file_system.cpp:1405)
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (11 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   8% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  16% ] [90m[1mupdate_scripts_classes[22m | SettlementPublicWorks[39m[0m
+[  25% ] [90m[1mupdate_scripts_classes[22m | SettlementRoadGateOverlay[39m[0m
+[  33% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  41% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  50% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  58% ] [90m[1mupdate_scripts_classes[22m | WorldSettlements[39m[0m
+[  66% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  75% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  83% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Started Сканирование действий… (8 steps)[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | female-vikingboots-ao.png[39m[0m
+[  11% ] [90m[1m_update_scan_actions[22m | female-vikingpants-ao.png[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | female-vikingtunic-ao.png[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | male-vikingboots-ao.png[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | male-vikingpants-ao.png[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | male-vikingtunic-ao.png[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | female.glb[39m[0m
+[  77% ] [90m[1m_update_scan_actions[22m | male.glb[39m[0m
+[92m[ DONE ][39m [1m_update_scan_actions[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started Импорт или повторный импорт ассетов (24 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[   4% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[   8% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  12% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  16% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  20% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  24% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  28% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  32% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  36% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  40% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  44% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  48% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  52% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  56% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  60% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  64% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  68% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  72% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  76% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  80% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  84% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  88% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  92% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[   0% ] [90m[1mreimport[22m | Выполнение предимпортных операций…[39m[0m
+[   0% ] [90m[1mpreload_reimporting_scene[22m | Started Подготовка сцен к перезагрузке (1 steps)[39m[0m
+[   0% ] [90m[1mpreload_reimporting_scene[22m | Анализ сцены [пусто][39m[0m
+[  50% ] [90m[1mpreload_reimporting_scene[22m | Подготовка завершена.[39m[0m
+[92m[ DONE ][39m [1mpreload_reimporting_scene[22m
+[0m
+[   0% ] [90m[1mreimport[22m | male_young_lightskinned_male_diffuse.png[39m[0m
+[   4% ] [90m[1mreimport[22m | male_short01_diffuse.png[39m[0m
+[   8% ] [90m[1mreimport[22m | male_ponytail01_diffuse.png[39m[0m
+[  12% ] [90m[1mreimport[22m | male_brown_eye.png[39m[0m
+[  16% ] [90m[1mreimport[22m | male_PantsViking.png[39m[0m
+[  20% ] [90m[1mreimport[22m | male_TUNIC_Viking.png[39m[0m
+[  24% ] [90m[1mreimport[22m | male_eyebrow001.png[39m[0m
+[  28% ] [90m[1mreimport[22m | male_BootsViking.png[39m[0m
+[  32% ] [90m[1mreimport[22m | female_young_lightskinned_female_diffuse.png[39m[0m
+[  36% ] [90m[1mreimport[22m | female_short01_diffuse.png[39m[0m
+[  40% ] [90m[1mreimport[22m | female_ponytail01_diffuse.png[39m[0m
+[  44% ] [90m[1mreimport[22m | female_brown_eye.png[39m[0m
+[  48% ] [90m[1mreimport[22m | female_PantsViking.png[39m[0m
+[  52% ] [90m[1mreimport[22m | female_TUNIC_Viking.png[39m[0m
+[  56% ] [90m[1mreimport[22m | female_eyebrow001.png[39m[0m
+[  60% ] [90m[1mreimport[22m | female_BootsViking.png[39m[0m
+[  64% ] [90m[1mreimport[22m | male-vikingtunic-ao.png[39m[0m
+[  68% ] [90m[1mreimport[22m | male-vikingpants-ao.png[39m[0m
+[  72% ] [90m[1mreimport[22m | male-vikingboots-ao.png[39m[0m
+[  76% ] [90m[1mreimport[22m | female-vikingtunic-ao.png[39m[0m
+[  80% ] [90m[1mreimport[22m | female-vikingpants-ao.png[39m[0m
+[  84% ] [90m[1mreimport[22m | female-vikingboots-ao.png[39m[0m
+[  88% ] [90m[1mreimport[22m | male.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started Импортировать сцену (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | Импорт сцены…[39m[0m
+[   1% ] [90m[1mimport[22m | Запуск пользовательского скрипта…[39m[0m
+[  99% ] [90m[1mimport[22m | Сохранение…[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  92% ] [90m[1mreimport[22m | female.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started Импортировать сцену (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | Импорт сцены…[39m[0m
+[   1% ] [90m[1mimport[22m | Запуск пользовательского скрипта…[39m[0m
+[  99% ] [90m[1mimport[22m | Сохранение…[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  96% ] [90m[1mreimport[22m | Завершение импорта активов…[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started Импорт или повторный импорт ассетов (24 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Выполнение операций после реимпорта…[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Загрузка редактора (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Загрузка макета редактора…[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Загрузка док-панели…[39m[0m
+[  33% ] [90m[1mloading_editor_layout[22m | Повторное открытие сцен…[39m[0m
+[  50% ] [90m[1mloading_editor_layout[22m | Загрузка макета центрального редактора…[39m[0m
+[  66% ] [90m[1mloading_editor_layout[22m | Загрузка макета окна плагина…[39m[0m
+[  83% ] [90m[1mloading_editor_layout[22m | Макет редактора готов.[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m

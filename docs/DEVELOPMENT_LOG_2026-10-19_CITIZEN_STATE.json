@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7 unreleased citizen-state review",
+  "task": "Continue the supplied ImPuls master specification by fixing loss of live resident state before expanding regions or adding heavier AI.",
+  "audit": {
+    "engine": "Godot 4.7.1.stable / GL Compatibility / Intel UHD 610",
+    "project_label": "0.10.7-stable (existing label, not certification)",
+    "entry": "scenes/boot_launcher.tscn",
+    "repository": "Treninem/game",
+    "default_branch": "main",
+    "local_head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "recent_commits": [
+      "fd61e21f chore: ignore Godot and local build outputs",
+      "8140daa2 fix: clean generated Godot files before source update",
+      "61761d28 fix: publish updater-compatible stable release"
+    ],
+    "remote_open_issue_query": "repo:Treninem/game is:open",
+    "remote_issue_result": "https://github.com/Treninem/game/issues/6",
+    "assets": "Existing library policy reviewed; this stage introduces no new visual pack or duplicate assets. Existing system map continues in docs/DEVELOPMENT_STATUS.json. No complete FPS/CI/release certification was performed."
+  },
+  "implemented": [
+    "Stable-ID residents store compact JSON-safe local transforms, parent anchor, role, doorway transit, route index and bounded activity/reaction timers. No Node references or transient doorway owner IDs are saved.",
+    "GameState snapshots capture live residents at the actual save boundary; unloading captures the last grounded state. A load updates already loaded residents, restores physical doors before their transit and revalidates ground before showing the model.",
+    "State revisions prevent old-scene teardown from repopulating a new game. Legacy phase-only data uses the authored spawn; malformed/nonfinite/out-of-range coordinates and wrong anchors are rejected, optional timers are bounded.",
+    "The actual working-square regression now destroys/recreates its nodes during doorway transit and requires both residents to finish going home and return to their real workplaces."
+  ],
+  "components": [
+    "scripts/citizen_runtime_state.gd",
+    "scripts/settlement_npc.gd",
+    "scripts/game_state.gd",
+    "scripts/door_interactable.gd",
+    "tests/smoke_citizen_persistence.gd",
+    "tests/smoke_citizen_persistence.tscn",
+    "tests/smoke_square_home_life.gd"
+  ],
+  "tests": [
+    {
+      "name": "citizen_persistence",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 7.7
+    },
+    {
+      "name": "citizen_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 36.72
+    },
+    {
+      "name": "save_recovery",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.14
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 9.05
+    },
+    {
+      "name": "square_home_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 104.86
+    },
+    {
+      "name": "capital_square",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 52.09
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.62
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 14.02
+    },
+    {
+      "name": "enterable_building",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.81
+    }
+  ],
+  "before_fix": [
+    {
+      "name": "citizen_persistence",
+      "exit_code": 1,
+      "errors": [
+        "ERROR: Streamed resident returns to spawn instead of its last physical position",
+        "ERROR: Streaming loses doorway transit or a pending witnessed-event reaction",
+        "ERROR: Loading a real save does not restore an already loaded resident immediately",
+        "ERROR: Restored resident is visible before revalidating physical ground",
+        "ERROR: JSON save round trip loses the resident transform"
+      ],
+      "seconds": 8.97
+    }
+  ],
+  "native": {
+    "walked_m": 1368.68276016833,
+    "driver_position_assignments": 0,
+    "actual_unload": "Original square nodes confirmed freed beyond the real 520 m unload radius",
+    "return": "Both real residents remained indoors at their saved physical positions and regained floor collision",
+    "save_slot": 3,
+    "saved_positions": {
+      "capital:square:provisions": [
+        -46.1064453125,
+        0.0550000332295895,
+        -28.4638671875
+      ],
+      "capital:square:fletcher": [
+        -43.8828125,
+        0.0555028952658176,
+        -28.4716796875
+      ]
+    },
+    "log": "Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org\nOpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610\n\nCITIZEN_STREAM_NATIVE_START earned_save=true driver_position_assignments=0 ordinary_walk_speed=5.0 clock_fixture=22:00\nCITIZEN_STREAM_WALK distance=0.0068359375 position=(13483.79, 0.036577, -7006.292) grounded=true\nCITIZEN_STREAM_CAPTURE before-unload\nCITIZEN_STREAM_WALK distance=45.8841630034149 position=(13464.86, 0.036577, -7020.963) grounded=true\nCITIZEN_STREAM_WALK distance=134.830580960959 position=(13533.65, 0.036577, -6999.875) grounded=true\nCITIZEN_STREAM_WALK distance=225.309096585959 position=(13624.13, 0.036577, -6999.875) grounded=true\nCITIZEN_STREAM_WALK distance=319.688979398459 position=(13718.51, 0.036577, -6999.875) grounded=true\nCITIZEN_STREAM_WALK distance=414.151870023459 position=(13812.97, 0.036577, -6999.875) grounded=true\nCITIZEN_STREAM_WALK distance=507.120620023459 position=(13905.94, 0.036577, -6999.875) grounded=true\nCITIZEN_STREAM_WALK distance=601.085463773459 position=(13999.9, 0.036577, -6999.875) grounded=true\nCITIZEN_STREAM_WALK distance=692.560367930681 position=(14091.38, 0.036577, -6999.975) grounded=true\nCITIZEN_STREAM_UNLOADED original_nodes_freed=true distance=700.778213266283\nCITIZEN_STREAM_WALK distance=784.508682016283 position=(14016.39, 0.04266, -6999.999) grounded=true\nCITIZEN_STREAM_WALK distance=877.311416391283 position=(13923.59, 0.04266, -6999.999) grounded=true\nCITIZEN_STREAM_WALK distance=964.386611703783 position=(13836.51, 0.04266, -6999.999) grounded=true\nCITIZEN_STREAM_WALK distance=1057.18934607878 position=(13743.71, 0.04266, -6999.999) grounded=true\nCITIZEN_STREAM_WALK distance=1150.40711951628 position=(13650.49, 0.04266, -6999.999) grounded=true\nCITIZEN_STREAM_WALK distance=1241.79872107878 position=(13559.1, 0.04266, -6999.999) grounded=true\nCITIZEN_STREAM_WALK distance=1330.60346221039 position=(13490.45, 0.04266, -7021.111) grounded=true\nCITIZEN_STREAM_RETURN_OK position=retained residents=indoors ground=physical\nCITIZEN_STREAM_CAPTURE after-return\nCITIZEN_STREAM_CAPTURE inside-return\nCITIZEN_STREAM_CAPTURE after-save-load\nCITIZEN_STREAM_NATIVE_OK walked_m=1368.68276016833 driver_position_assignments=0 actual_unload=freed actual_return=restored save_slot=3 resident_positions=persistent door=ray_opened\n"
+  },
+  "native_method": "Official graphical game against the frozen exported PCK, external input driver from the prior earned slot 2. Ordinary move_forward, unchanged walk speed 5, no driver coordinate assignment. Walk east to +600 m and back, enter the home through the actual ray/reach interaction, save/load normal slot 3. Only the inspection fixture holds clock/survival at 22:00. This is automated native inspection, not a manual full-world playthrough or FPS benchmark.",
+  "known_issues": [
+    "No continuous simulation of distant residents; on return they resume the latest schedule from retained positions. Pending short reactions retain active-state time.",
+    "Only explicitly stable-ID residents get transform persistence; anonymous/background actors, animals and other planned systems are not certified by this stage.",
+    "Most city houses remain closed; sleeping, household/storage interactions, full social relationships and external LLM behavior remain unfinished.",
+    "Human materials/grip, sparse forests, repeated architecture and large empty city spaces remain below requested realism.",
+    "Existing ObjectDB/UID warnings remain; full performance/memory, Windows updater and remote stable release gates not certified."
+  ],
+  "next_stage": [
+    "Add a usable household interaction with saved consequences in the existing region.",
+    "Add bounded distant schedule progression using a reliable game-time basis, then extend the verified residence template.",
+    "Finish starting-region tools/quest/guild/wildlife loops in the order defined by the master specification; do not add mass new regions."
+  ],
+  "git": {
+    "branch": "main",
+    "head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "new_commit": false,
+    "release_published": false,
+    "commit_candidate": "citizen-runtime-change.patch",
+    "candidate_files": 7,
+    "candidate_base": "Prior home-life integration working tree, not bare main",
+    "candidate_validation": "git apply --reverse --check passed; index unchanged; pre-existing working-tree changes excluded from the candidate"
+  },
+  "artifact": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-19-citizen-state\\ImPuls-review.cmd",
+  "sha256": "4f9abd282a6a359ddca1cff7a71c5c4d636f36409000f56a8aef46704c42c2dc"
+}

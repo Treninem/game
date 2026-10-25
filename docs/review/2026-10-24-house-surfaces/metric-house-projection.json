@@ -1,0 +1,103 @@
+{
+  "adapter": "llvmpipe (LLVM 20.1.2, 256 bits)",
+  "animations_paused_for_comparison": true,
+  "baseline_median_drift_fraction": 0.00294735886576314,
+  "cases": [
+    {
+      "draw_calls": 258.0,
+      "frames": 32.0,
+      "label": "world-source",
+      "max_ms": 360.484,
+      "mean_ms": 353.01465625,
+      "median_ms": 352.519,
+      "p95_ms": 358.352,
+      "primitives": 459670.0,
+      "video_memory_bytes": 886474026.0
+    },
+    {
+      "draw_calls": 258.0,
+      "frames": 32.0,
+      "label": "metric-uv-candidate",
+      "max_ms": 359.877,
+      "mean_ms": 324.462,
+      "median_ms": 313.34,
+      "p95_ms": 359.421,
+      "primitives": 459670.0,
+      "video_memory_bytes": 886474026.0
+    },
+    {
+      "draw_calls": 258.0,
+      "frames": 32.0,
+      "label": "restored-world-source",
+      "max_ms": 359.992,
+      "mean_ms": 353.361875,
+      "median_ms": 353.558,
+      "p95_ms": 358.429,
+      "primitives": 459670.0,
+      "video_memory_bytes": 886474026.0
+    }
+  ],
+  "clock_scale": 1.0,
+  "full_graphical_gameplay_pass": false,
+  "manual_play": false,
+  "msaa_3d": 1.0,
+  "physics_ticks_per_second": 60.0,
+  "pixel_checks": [
+    {
+      "center": "(790, 209)",
+      "face": "front-Z",
+      "max_absolute_rgb_error": 0.0,
+      "mean_absolute_rgb_error": 0.0,
+      "metric_file": "projection-metric-uv-candidate.png",
+      "pixels": 289,
+      "source_file": "projection-world-source.png"
+    },
+    {
+      "center": "(600, 229)",
+      "face": "side-X",
+      "max_absolute_rgb_error": 0.0,
+      "mean_absolute_rgb_error": 0.0,
+      "metric_file": "projection-side-X-metric.png",
+      "pixels": 289,
+      "source_file": "projection-side-X-source.png"
+    },
+    {
+      "center": "(640, 377)",
+      "face": "floor-Y",
+      "max_absolute_rgb_error": 0.0,
+      "mean_absolute_rgb_error": 0.0,
+      "metric_file": "projection-floor-Y-metric.png",
+      "pixels": 289,
+      "source_file": "projection-floor-Y-source.png"
+    }
+  ],
+  "preset_checks": [
+    {
+      "mapped_materials_checked": 3,
+      "maps_and_flags_match_source": true,
+      "preset": 0
+    },
+    {
+      "mapped_materials_checked": 3,
+      "maps_and_flags_match_source": true,
+      "preset": 1
+    },
+    {
+      "mapped_materials_checked": 3,
+      "maps_and_flags_match_source": true,
+      "preset": 2
+    },
+    {
+      "mapped_materials_checked": 3,
+      "maps_and_flags_match_source": true,
+      "preset": 3
+    }
+  ],
+  "production_runtime_changed": false,
+  "restored_materials_verified": true,
+  "scale_3d": 1.0,
+  "scope": "Stationary production house, unchanged high1280x720, normal maps and texture objects; source world triplanar versus properly baked metric UVs and restored source. No gameplay/FPS acceptance.",
+  "source_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+  "unwarped_metric_uv_candidate": true,
+  "viewport": "(1280, 720)"
+}

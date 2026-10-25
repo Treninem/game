@@ -1,0 +1,84 @@
+[
+  {
+    "candidate": "textured_source",
+    "source": "build/asset_work/human-audition/pintar8.blend",
+    "meshes": [
+      {
+        "name": "sapato",
+        "vertices": 92
+      },
+      {
+        "name": "pestana",
+        "vertices": 84
+      },
+      {
+        "name": "olho",
+        "vertices": 386
+      },
+      {
+        "name": "face",
+        "vertices": 1556
+      },
+      {
+        "name": "corpo",
+        "vertices": 3043
+      },
+      {
+        "name": "cabelo",
+        "vertices": 1285
+      }
+    ],
+    "missing_images": [
+      "FACE3.png",
+      "FACE3.png.001"
+    ],
+    "preview": "build/asset_work/human-audition/textured_source.png",
+    "status": "AUDITIONED_NOT_SELECTED"
+  },
+  {
+    "candidate": "male_homen5",
+    "source": "build/asset_work/human-audition/HOMEN5.fbx",
+    "meshes": [
+      {
+        "name": "homen5.001",
+        "vertices": 7472
+      },
+      {
+        "name": "homen5",
+        "vertices": 3665
+      }
+    ],
+    "missing_images": [],
+    "preview": "build/asset_work/human-audition/male_homen5.png",
+    "status": "AUDITIONED_NOT_SELECTED"
+  },
+  {
+    "candidate": "female_outfit",
+    "source": "assets/staging/sourcechat_b89/models/oga_character_pack_2026/part3/BRAVOS_GAME_BR_PART_3/Woman in Action Outfit/mulher_update3.blend",
+    "meshes": [
+      {
+        "name": "CORPO5_corpo.015_Cube.006_Cube.007",
+        "vertices": 3219
+      },
+      {
+        "name": "CORPO5_corpo.015_Cube.006_Cube.002",
+        "vertices": 210
+      },
+      {
+        "name": "CORPO5_corpo.015_Cube.006_Cube.005",
+        "vertices": 729
+      },
+      {
+        "name": "CORPO5_corpo.015_Cube.006_Cube.004",
+        "vertices": 737
+      },
+      {
+        "name": "bone.001",
+        "vertices": 176
+      }
+    ],
+    "missing_images": [],
+    "preview": "build/asset_work/human-audition/female_outfit.png",
+    "status": "AUDITIONED_NOT_SELECTED"
+  }
+]

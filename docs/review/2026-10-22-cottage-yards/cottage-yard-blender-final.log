@@ -1,0 +1,27 @@
+COTTAGE_STAGE fence_import
+Warning: No mesh data to join
+COTTAGE_STAGE save_source
+Info: Saved as "CottageYardKit.blend"
+COTTAGE_STAGE export
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+01:56:05 | INFO: Starting glTF 2.0 export
+01:56:05 | INFO: Extracting primitive: Prop_WoodenFence_Single
+01:56:05 | INFO: Primitives created: 1
+01:56:05 | INFO: Extracting primitive: Cylinder
+01:56:05 | INFO: Primitives created: 3
+01:56:05 | INFO: Extracting primitive: Cube.002
+01:56:05 | INFO: Primitives created: 1
+01:56:05 | INFO: Extracting primitive: Cube.001
+01:56:05 | INFO: Primitives created: 1
+01:56:05 | INFO: Extracting primitive: Cube.017
+01:56:05 | INFO: Primitives created: 2
+01:56:05 | INFO: Extracting primitive: Cube.010
+01:56:05 | INFO: Primitives created: 1
+01:56:05 | INFO: Finished glTF 2.0 export in 0.3015906810760498 s
+
+COTTAGE_YARD_KIT_BUILT {"GardenFence": {"triangles": 264, "vertices": 160}, "MeadowFlowers": {"triangles": 336, "vertices": 330}, "StoneCourse": {"triangles": 864, "vertices": 448}, "TimberBeam": {"triangles": 108, "vertices": 56}, "TimberStore": {"triangles": 3564, "vertices": 1848}, "WindowPlanter": {"triangles": 756, "vertices": 392}, "fence_source_sha256": "eddf77f93e9f65e284165dce448c173bf4d59eb1800f453b214220ccff9a911c"}
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:35:40)
+OBJ import of 'fence.obj' took 77.54 ms
+
+Blender quit

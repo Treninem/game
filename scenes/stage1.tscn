@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3]
+[gd_scene load_steps=33 format=3]
 
 [ext_resource type="Script" path="res://scripts/bootstrap.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player_controller.gd" id="2"]
@@ -21,6 +21,7 @@
 [ext_resource type="Script" path="res://scripts/settlement_public_works.gd" id="20"]
 [ext_resource type="Script" path="res://scripts/settlement_civic_spaces.gd" id="21"]
 [ext_resource type="Script" path="res://scripts/world_audio.gd" id="22"]
+[ext_resource type="Script" path="res://scripts/third_person_camera.gd" id="33"]
 [ext_resource type="Script" path="res://scripts/dungeon_runtime.gd" id="23"]
 [ext_resource type="Script" path="res://scripts/dungeon_portal.gd" id="24"]
 [ext_resource type="Script" path="res://scripts/dungeon_manager_npc.gd" id="25"]
@@ -49,6 +50,8 @@ rotation_degrees = Vector3(-55, -30, 0)
 light_color = Color(1, 0.91, 0.78, 1)
 light_energy = 1.25
 shadow_enabled = true
+directional_shadow_mode = 1
+directional_shadow_max_distance = 65.0
 
 [node name="WorldStreamer" type="Node3D" parent="World"]
 script = ExtResource("9")
@@ -142,6 +145,7 @@ hair_color = Color(0.08, 0.055, 0.035, 1)
 
 [node name="CameraPivot" type="Node3D" parent="World/Player"]
 position = Vector3(0, 1.35, 0)
+script = ExtResource("33")
 
 [node name="Camera3D" type="Camera3D" parent="World/Player/CameraPivot"]
 position = Vector3(0, 0.55, 5.5)

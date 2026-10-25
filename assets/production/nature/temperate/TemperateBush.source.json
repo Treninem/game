@@ -1,0 +1,11 @@
+{
+  "source_pack": "assets/staging/sourcechat_b44/models/oga_free_vegetation_lod_pack",
+  "source_object": "bush_higher",
+  "source_leaf_texture": "textures/leaf_small.png",
+  "license": "CC0; same family LICENSE.txt",
+  "height_m": 1.8,
+  "blender_output_vertices": 902,
+  "sha256": "22f30a28f7405ddcfdfdabda297819e31c87889df0b330ad43736fd8a849e604",
+  "status": "INTEGRATED in near-start source review",
+  "reproduce": "tools/prepare_temperate_tree.py"
+}

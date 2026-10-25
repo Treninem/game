@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-21",
+  "status": "INTEGRATED",
+  "asset": "assets/production/interiors/architecture/TimberWindow.glb",
+  "authoring": "Project-authored in Blender 5.2, tools/build_interior_window.py",
+  "triangles": 866,
+  "meshes": 2,
+  "bytes": 62416,
+  "sha256": "204a1e458e62cb8734cc13bba798849c472905b6ff48b5bb13af9dd3d14e3e85",
+  "reuse": "Existing CC0 photographic plank texture; existing rounded city-pack wall/window modules do not fit these rectangular physical openings. No third-party download.",
+  "runtime": "scripts/enterable_building.gd",
+  "features": [
+    "Bevelled jambs/rails, cross mullions, protruding sill and apron",
+    "Single two-sided glass plane; transparent, no pane shadow",
+    "Shadow-free local daylight; daytime curve; disabled on Low and beyond 20 metres"
+  ],
+  "remaining": [
+    "Occupation/wealth/household-specific plans across all settlements",
+    "Cooking and hearth fuel/state interaction",
+    "Whole-region artistic acceptance and broader measured lighting/performance budget"
+  ],
+  "room_timberwork": {
+    "status": "INTEGRATED",
+    "asset": "assets/production/interiors/architecture/RoomTimberwork.glb",
+    "authoring": "Project-authored in Blender 5.2, tools/build_house_timberwork.py",
+    "triangles": 1620,
+    "bytes": 114648,
+    "sha256": "342c93a23f02e0a1c1585ddd49728ad02454cbd2216dd4956a116abf01113cf5",
+    "collision": "Mesh triangle collision on exposed timber, not a whole-room box",
+    "editable_source": "assets/source/interiors/RoomTimberwork.blend"
+  },
+  "owner_concepts": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
+  "editable_source": "assets/source/interiors/TimberWindow.blend",
+  "warm_lighting": {
+    "source": "Existing INTEGRATED CC0 Lantern_Wall.gltf from capital_square",
+    "behavior": "One local warm point light; brighter at night; beyond 20m culled; shadow only for occupied room and preset > 0; capital retains its existing lantern without duplication",
+    "quality": "Settings signal updates lights and shadow budget immediately"
+  },
+  "activation": "Packed scenes loaded on house activation, retained per house; avoids three additional exit leftovers observed with preload. Existing exact parent still reports 83.",
+  "last_updated": "2026-10-22",
+  "room_layout_followup": "assets/registry/HOUSEHOLD_DRESSING_2026-10-21.json",
+  "bedroom_window": "Fourth real rear opening added for the enclosed rear bedroom in qualifying >=8.5x7.5m houses; other shells retain three windows."
+}

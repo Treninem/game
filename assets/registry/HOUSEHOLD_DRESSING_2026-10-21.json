@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-22",
+  "status": "INTEGRATED",
+  "review_only": true,
+  "source_pack": "quaternius_fantasy_props_megakit_standard",
+  "source_license": "CC0 1.0",
+  "source_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "selected": [
+    "Mug",
+    "Table_Plate",
+    "Book_Stack_1",
+    "Bookcase_2",
+    "Cabinet",
+    "Workbench_Drawers",
+    "Pot_1",
+    "FarmCrate_Apple",
+    "Bag",
+    "Peg_Rack",
+    "SmallBottles_1",
+    "Nightstand_Shelf",
+    "Shelf_Small_Bottles",
+    "Table_Knife",
+    "Table_Spoon",
+    "CandleStick_Triple",
+    "Vase_4",
+    "Barrel",
+    "Shelf_Simple"
+  ],
+  "props": {
+    "asset": "assets/production/interiors/architecture/HouseholdProps.glb",
+    "bytes": 1137412,
+    "sha256": "11596a74bf9fbbc5ccdd293b46ae9dc59467a2854ab0aa1b4c4a5abebaca3068",
+    "triangles": 26016,
+    "embedded_images": 0
+  },
+  "project_authored_kits": [
+    {
+      "asset": "assets/production/interiors/architecture/HousePartition.glb",
+      "bytes": 39908,
+      "sha256": "285c76ee1106df9b44f564557dfdf1fb3face0121a80782f5a3701562731d320",
+      "triangles": 540,
+      "embedded_images": 0
+    },
+    {
+      "asset": "assets/production/interiors/architecture/HouseLivingDetails.glb",
+      "bytes": 590088,
+      "sha256": "eaa7c8d6d25871ac0c7ece8ca37270b2cfdceeb4ba067adc7f4f9034495379ff",
+      "triangles": 12736,
+      "embedded_images": 0
+    }
+  ],
+  "editable_sources": [
+    "assets/source/interiors/HouseholdProps.blend",
+    "assets/source/interiors/HousePartition.blend",
+    "assets/source/interiors/HouseLivingDetails.blend"
+  ],
+  "builders": [
+    "tools/build_household_props.py",
+    "tools/build_house_partition.py",
+    "tools/build_house_living_details.py"
+  ],
+  "runtime": [
+    "scripts/settlement_interior_visuals.gd",
+    "scripts/house_room_layout.gd",
+    "scripts/house_living_details.gd",
+    "scripts/house_navigation.gd"
+  ],
+  "materials": "Existing shared photographed planks/stone paving; original metal/props trim UVs; derived 512px cloth maps from B46 with mip levels. No duplicated full-resolution texture families.",
+  "layout": "Two bounded private/living spaces, common dining/hall, separate kitchen for EnterableBuilding >=8.5x7.5m. Small home has one bed and one place setting; larger home two beds and two settings unless explicit owners constrain settings. Larger city-townhouse floor plans are unchanged.",
+  "navigation": "Local cached A* derived from actual collision shapes, capsule clearance, oriented door leaves and locked-door state; geometric detour test, not prescribed room-center route. Goals still use existing local routine/needs state. Stationary nearby people are temporary collision-aware obstacles; their occupied cells are restored after each solve.",
+  "persistence": "Existing furniture IDs and chest inventories unchanged; new room doors use stable home-coordinate/name keys. Benches moved to dining zone; old resting positions safely wake in place when unreachable.",
+  "scope": "Decorative cupboards, shelving, tableware, rugs and hearth. Existing beds/benches/chests remain functional. Cooking, hearth fuel/state interaction, child models/school/family graph, full professional work and full artistic acceptance are unfinished.",
+  "acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json",
+  "material_channels_2026_10_25": {
+    "status": "INTEGRATED",
+    "review_only": true,
+    "existing_source": "CC0 B46 cloth512px derivatives already present in review",
+    "labels": [
+      "Sheets",
+      "Pillow",
+      "Curtain",
+      "Rug",
+      "Border"
+    ],
+    "high_ultra": [
+      "OpenGL normal0.35",
+      "ORM red AO",
+      "ORM green roughness"
+    ],
+    "low_medium": "Original albedo response; extra channels disabled",
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
+    "full_art_acceptance": false
+  }
+}

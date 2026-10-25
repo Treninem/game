@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 3.16,
+  "errors": [],
+  "markers": [
+    "HOUSEHOLD_POSE_OK knees=forward shins=down"
+  ]
+}

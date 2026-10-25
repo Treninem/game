@@ -1,0 +1,11 @@
+{
+  "source": "assets/production/nature/woodland/Grass_Wispy_Tall.glb",
+  "source_sha256": "0f42962d269fb17883ece6b57160769bfceeafb96d49f18f27b14f5d160fbb7d",
+  "license": "CC0; existing woodland/LICENSE.txt",
+  "height_m": 0.38,
+  "decimate_ratio": 0.25,
+  "horizontal_spread": 1.8,
+  "vertices": 233,
+  "reproducer": "tools/prepare_ground_cover.py",
+  "output_sha256": "b09627066ebd20a8b7f5cc75e7de79035bf23762ddd0a57dceda1f141f59b8a1"
+}

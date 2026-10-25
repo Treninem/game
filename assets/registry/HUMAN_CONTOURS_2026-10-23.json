@@ -1,0 +1,288 @@
+{
+  "date": "2026-10-23",
+  "state": "INTEGRATED",
+  "scope": "Review branch only; full artistic/weak-PC acceptance false, main physical staging not newly claimed",
+  "production": "assets/production/characters/realistic_contours/{male,female}.glb",
+  "editable": "assets/source/characters/refined_contours/{male,female}.blend",
+  "source_inputs": "Existing CC0 MakeHuman fitted_outfit sources and original accepted GLBs; retained Rehman Polanski costume and animation licenses, no download/bitmap",
+  "reproducer": "tools/refine_human_contours.py",
+  "parts": 8,
+  "near_layout": 8,
+  "near_maximum_nonzero_influences": 5,
+  "far_layout": 4,
+  "distance_enter_near_m": 7,
+  "distance_enter_far_m": 9,
+  "interval_s": 0.12,
+  "automatic_distance_survives_animation_driver_stop": true,
+  "preservation": [
+    {
+      "sex": "male",
+      "unchanged_parts": 5,
+      "far_body_exact": true,
+      "unchanged_images": true,
+      "unchanged_clips": 10,
+      "morphs": 9,
+      "near": {
+        "HumanBody": {
+          "vertices_before": 8518,
+          "vertices_after": 41822,
+          "maximum_influences": 5
+        },
+        "Eyes": {
+          "vertices_before": 96,
+          "vertices_after": 1720,
+          "maximum_influences": 1
+        }
+      }
+    },
+    {
+      "sex": "female",
+      "unchanged_parts": 5,
+      "far_body_exact": true,
+      "unchanged_images": true,
+      "unchanged_clips": 10,
+      "morphs": 9,
+      "near": {
+        "HumanBody": {
+          "vertices_before": 8590,
+          "vertices_after": 42157,
+          "maximum_influences": 5
+        },
+        "Eyes": {
+          "vertices_before": 96,
+          "vertices_after": 1720,
+          "maximum_influences": 1
+        }
+      }
+    }
+  ],
+  "construction": [
+    {
+      "sex": "male",
+      "source_sha256": "3dd3829793939fb1f31d02528a9c5eaaaaa9549b2a36ab58025a8195a475d87d",
+      "far_weights": {
+        "accepted_exported_weights_restored": 7858,
+        "maximum_influences": 4
+      },
+      "body": {
+        "source_vertices": 13380,
+        "rendered_control_vertices": 7858,
+        "vertices": 31319,
+        "faces": 31208,
+        "levels": 1,
+        "maximum_influences": 5,
+        "all_morphs": [
+          "FaceWidth",
+          "FaceHeight",
+          "FaceDepth",
+          "Nose",
+          "NoseWidth",
+          "NoseHeight",
+          "Jaw",
+          "HeadSize",
+          "Build"
+        ],
+        "eye_bounds_preserved": false,
+        "open_boundaries_preserved": true
+      },
+      "eyes": {
+        "source_vertices": 96,
+        "rendered_control_vertices": 96,
+        "vertices": 1410,
+        "faces": 1376,
+        "levels": 2,
+        "maximum_influences": 1,
+        "all_morphs": [
+          "FaceWidth",
+          "FaceHeight",
+          "FaceDepth",
+          "Nose",
+          "NoseWidth",
+          "NoseHeight",
+          "Jaw",
+          "HeadSize",
+          "Build"
+        ],
+        "eye_bounds_preserved": true,
+        "open_boundaries_preserved": true
+      },
+      "far_body_vertices": 13380,
+      "far_body_faces": 7802,
+      "unchanged_parts": [
+        "Clothing",
+        "Boots",
+        "Brows",
+        "HairShort",
+        "HairPonytail"
+      ],
+      "runtime_lod_required": true,
+      "glb_sha256": "19bce22c6683c543bc9df46adfe41d9d485bca4f3c46e6692f9265fe05194741",
+      "glb_bytes": 28737624
+    },
+    {
+      "sex": "female",
+      "source_sha256": "873831aa33c0448f7f12d067b06a6b3577d8b5f7e146430ac4b25d9bd60a4229",
+      "far_weights": {
+        "accepted_exported_weights_restored": 7927,
+        "maximum_influences": 4
+      },
+      "body": {
+        "source_vertices": 13380,
+        "rendered_control_vertices": 7927,
+        "vertices": 31594,
+        "faces": 31480,
+        "levels": 1,
+        "maximum_influences": 5,
+        "all_morphs": [
+          "FaceWidth",
+          "FaceHeight",
+          "FaceDepth",
+          "Nose",
+          "NoseWidth",
+          "NoseHeight",
+          "Jaw",
+          "HeadSize",
+          "Build"
+        ],
+        "eye_bounds_preserved": false,
+        "open_boundaries_preserved": true
+      },
+      "eyes": {
+        "source_vertices": 96,
+        "rendered_control_vertices": 96,
+        "vertices": 1410,
+        "faces": 1376,
+        "levels": 2,
+        "maximum_influences": 1,
+        "all_morphs": [
+          "FaceWidth",
+          "FaceHeight",
+          "FaceDepth",
+          "Nose",
+          "NoseWidth",
+          "NoseHeight",
+          "Jaw",
+          "HeadSize",
+          "Build"
+        ],
+        "eye_bounds_preserved": true,
+        "open_boundaries_preserved": true
+      },
+      "far_body_vertices": 13380,
+      "far_body_faces": 7870,
+      "unchanged_parts": [
+        "Clothing",
+        "Boots",
+        "Brows",
+        "HairShort",
+        "HairPonytail"
+      ],
+      "runtime_lod_required": true,
+      "glb_sha256": "8d42a5650e60c856bf29555f15b313c03d806464b6f8b6a162c7ce57f1160665",
+      "glb_bytes": 29537888
+    }
+  ],
+  "portable_sources": [
+    {
+      "sex": "male",
+      "images": [
+        {
+          "name": "BootsViking.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_viking_selected\\clothes\\rehmanpolanski_viking_boots\\BootsViking.png",
+          "exists": true
+        },
+        {
+          "name": "brown_eye.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\eyes\\materials\\brown_eye.png",
+          "exists": true
+        },
+        {
+          "name": "eyebrow001.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\eyebrows\\eyebrow001\\eyebrow001.png",
+          "exists": true
+        },
+        {
+          "name": "PantsViking.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_viking_selected\\clothes\\rehmanpolanski_viking_pants\\PantsViking.png",
+          "exists": true
+        },
+        {
+          "name": "ponytail01_diffuse.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\hair\\ponytail01\\ponytail01_diffuse.png",
+          "exists": true
+        },
+        {
+          "name": "short01_diffuse.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\hair\\short01\\short01_diffuse.png",
+          "exists": true
+        },
+        {
+          "name": "TUNIC_Viking.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_viking_selected\\clothes\\rehmanpolanski_viking_tunic\\TUNIC_Viking.png",
+          "exists": true
+        },
+        {
+          "name": "young_lightskinned_male_diffuse.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\skins\\young_caucasian_male\\young_lightskinned_male_diffuse.png",
+          "exists": true
+        }
+      ],
+      "distance_body_hidden_in_editable_view": true,
+      "sha256": "740b953620a2ff79f05591aaeb4bc90469574155844df65f5e371312a65a51f0"
+    },
+    {
+      "sex": "female",
+      "images": [
+        {
+          "name": "BootsViking.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_viking_selected\\clothes\\rehmanpolanski_viking_boots\\BootsViking.png",
+          "exists": true
+        },
+        {
+          "name": "brown_eye.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\eyes\\materials\\brown_eye.png",
+          "exists": true
+        },
+        {
+          "name": "eyebrow001.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\eyebrows\\eyebrow001\\eyebrow001.png",
+          "exists": true
+        },
+        {
+          "name": "PantsViking.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_viking_selected\\clothes\\rehmanpolanski_viking_pants\\PantsViking.png",
+          "exists": true
+        },
+        {
+          "name": "ponytail01_diffuse.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\hair\\ponytail01\\ponytail01_diffuse.png",
+          "exists": true
+        },
+        {
+          "name": "short01_diffuse.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\hair\\short01\\short01_diffuse.png",
+          "exists": true
+        },
+        {
+          "name": "TUNIC_Viking.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_viking_selected\\clothes\\rehmanpolanski_viking_tunic\\TUNIC_Viking.png",
+          "exists": true
+        },
+        {
+          "name": "young_lightskinned_female_diffuse.png",
+          "path": "//..\\..\\..\\staging\\characters\\makehuman_system_selected\\skins\\young_caucasian_female\\young_lightskinned_female_diffuse.png",
+          "exists": true
+        }
+      ],
+      "distance_body_hidden_in_editable_view": true,
+      "sha256": "fe646e0465292c2a1a4740045773e959708eed7c3b0db10966fbe6d9e8e5318f"
+    }
+  ],
+  "journal": "docs/DEVELOPMENT_LOG_2026-10-23_HUMAN_CONTOURS.json",
+  "art_accepted": false,
+  "remaining": [
+    "Hair/brows/skin response and expressions",
+    "Full wardrobe and age diversity",
+    "Full-world performance and concept-quality environment"
+  ]
+}

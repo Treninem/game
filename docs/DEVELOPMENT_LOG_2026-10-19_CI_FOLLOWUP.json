@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7.1",
+  "request": "Continue Unified Development Specification; stabilization before character creator",
+  "runtime_commit": "c72a9237b1a1c8467e2359bbe108b015bf980366",
+  "pull_request": "https://github.com/Treninem/game/pull/12",
+  "fixes": [
+    "Synchronize VERSION, project, bootstrap, Windows file/product metadata and installer fallback at 0.10.7.1.",
+    "Movement CI now checks out all production and audio dependencies instead of an obsolete partial list.",
+    "Source-only staging and source_packs contain documented .gdignore boundaries; raw .blend files cannot interrupt production imports. Empty control files were replaced with descriptive comments without weakening source integrity checks."
+  ],
+  "verification": {
+    "version_sync": "pass in workspace and separate Git candidate snapshot",
+    "production_dependencies": "20 glTF dependencies pass",
+    "literal_runtime_references": "No missing candidate resources and no production references excluded by movement checkout",
+    "boot_world_seconds": 32.19,
+    "movement_existing_mirror_seconds": 18.28,
+    "candidate_snapshot": [
+      {
+        "name": "import-retry",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 8.09
+      },
+      {
+        "name": "magic",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 1.44
+      },
+      {
+        "name": "movement",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 13.78
+      }
+    ],
+    "source_integrity_remote": "pass on c72a9237b1a1c8467e2359bbe108b015bf980366; run 39278019552"
+  },
+  "unsuccessful_checks_preserved": {
+    "initial_candidate_import": "240 second timeout; not claimed as passing.",
+    "sandbox_import_retry": "Completed with safe-save ERROR; failed strict scan.",
+    "ordinary_windows_permissions_retry": "Import completed in 8.09 seconds without errors, then magic and movement passed; this reused files already prepared by the earlier bounded attempts."
+  },
+  "limitations": [
+    "Remote World Core, movement and export/installer gates were still queued or in progress at journal creation.",
+    "No stable release or updater promotion.",
+    "Existing native household review package remains the previously tested frozen package; no newly rebuilt package is claimed.",
+    "Current human models remain provisional. Character editor and realistic male/female model family are unfinished."
+  ],
+  "next": "Finish mandatory remote gates, then create compatible male/female character foundations following docs/CHARACTER_MODEL_PLAN_2026-10-19.md.",
+  "readiness": "No percentage assigned; scope and unresolved gates are stated explicitly."
+}

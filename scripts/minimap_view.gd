@@ -3,15 +3,21 @@ extends Control
 const CAPITAL := preload("res://scripts/capital_data.gd")
 const VIEW_RADIUS := 260.0
 const SAMPLE_GRID := 13
+const CARTOGRAPHY := preload("res://scripts/local_map_renderer.gd")
 
 var player: Node3D
 var redraw_elapsed := 0.0
+var cartography := CARTOGRAPHY.new()
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_IGNORE
     custom_minimum_size = Vector2(250, 250)
-    if not MapSystem.explored_changed.is_connected(queue_redraw):
-        MapSystem.explored_changed.connect(queue_redraw)
+    texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+    MapSystem.explored_changed.connect(_on_explored_changed)
+    queue_redraw()
+
+func _on_explored_changed() -> void:
+    cartography.invalidate()
     queue_redraw()
 
 func _process(delta: float) -> void:
@@ -34,6 +40,7 @@ func _draw() -> void:
     _draw_terrain(map_rect, center)
     _draw_capital_features(map_rect, center)
     _draw_world_pois(map_rect, center)
+    cartography.draw_features(self, map_rect, center, VIEW_RADIUS)
     _draw_player(map_rect)
 
     draw_string(ThemeDB.fallback_font, Vector2(14, 21), "МИНИ-КАРТА", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.62, 0.78, 0.92))
@@ -41,25 +48,12 @@ func _draw() -> void:
     draw_string(ThemeDB.fallback_font, Vector2(14, size.y - 13), "M — карта мира", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.62, 0.68, 0.76))
 
 func _draw_terrain(rect: Rect2, center: Vector2) -> void:
-    var cell_w := rect.size.x / float(SAMPLE_GRID)
-    var cell_h := rect.size.y / float(SAMPLE_GRID)
-    for gy in range(SAMPLE_GRID):
-        for gx in range(SAMPLE_GRID):
-            var nx := (float(gx) + 0.5) / float(SAMPLE_GRID)
-            var ny := (float(gy) + 0.5) / float(SAMPLE_GRID)
-            var world := center + Vector2((nx - 0.5) * VIEW_RADIUS * 2.0, (0.5 - ny) * VIEW_RADIUS * 2.0)
-            var cell_rect := Rect2(rect.position + Vector2(gx * cell_w, gy * cell_h), Vector2(cell_w + 1.0, cell_h + 1.0))
-            if not MapSystem.is_world_explored(world):
-                draw_rect(cell_rect, Color(0.004, 0.006, 0.010, 1.0), true)
-                continue
-            var biome := WorldData.biome_at(world)
-            var color := WorldData.biome_color(biome).darkened(0.12)
-            draw_rect(cell_rect, color, true)
+    cartography.draw_terrain(self, rect, center, VIEW_RADIUS)
 
 func _draw_capital_features(rect: Rect2, center: Vector2) -> void:
     # District anchors and the exact 32 perimeter gates are only shown after discovery.
     for district in CAPITAL.DISTRICTS:
-        var pos: Vector2 = district.get("center", Vector2.ZERO)
+        var pos := CAPITAL.to_world(district.get("center", Vector2.ZERO))
         if pos.distance_to(center) <= VIEW_RADIUS and MapSystem.is_world_explored(pos):
             _draw_marker(rect, center, pos, "district")
 
@@ -103,7 +97,7 @@ func _draw_player(rect: Rect2) -> void:
 func _world_to_screen(rect: Rect2, center: Vector2, world: Vector2) -> Vector2:
     var offset := world - center
     var nx := offset.x / (VIEW_RADIUS * 2.0) + 0.5
-    var ny := 0.5 - offset.y / (VIEW_RADIUS * 2.0)
+    var ny := 0.5 + offset.y / (VIEW_RADIUS * 2.0)
     return rect.position + Vector2(nx * rect.size.x, ny * rect.size.y)
 
 func _panel_style() -> StyleBoxFlat:

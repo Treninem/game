@@ -1,0 +1,40 @@
+{
+  "case": "cached_native",
+  "exit_code": 1,
+  "seconds": 334.72,
+  "native": true,
+  "errors": [],
+  "sources": {
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+    "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+    "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+    "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+    "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+    "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+    "scripts/world_vfx.gd": "6317164bb7f5302979ce17874f82ab168a04a96377ff1df95c340c299a3f0e2d",
+    "scripts/player_controller.gd": "7ed8edbac96da0321e196bca55c6a8a0c3004f890d48fb77943110d2f75fe393",
+    "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+    "tests/smoke_foot_contact.gd": "09d378827507a93f305b24e9735ae9db8ad848168c77369bca9ee5e67ae566ae",
+    "scripts/humanoid_visual.gd": "cd50eb3fc5babe1446c9de788cfaf7752b935f4aa94ee03714d917fbec18000d",
+    "tests/visual_bow_world.gd": "9dde1ba71fcdd668af2ec878fe13e4ebada64cfd9369e2931bdaa42373f9880d",
+    "tests/smoke_projectile_release.gd": "a369d67b5526d3f8456b830697d826cbb3e4dbd2d3acfbaf345427408c4d2e7c",
+    "scripts/menu_music.gd": "55a4cbc427a7cc0512afa396eeff90e19fd2960396636777507eec8123547691",
+    "tests/smoke_menu_music_lifetime.gd": "fbf41f600a472247652e9cc639b7ef10ac071ef6f99734e2516e24eacf7e55cb",
+    "tests/audio_retirement_probe.gd": "5c7c0674864cb5e4cfe53630d2719b40ae03078fba8f2e415cd6fceb8767c60f",
+    "tests/visual_wardrobe_coverage.gd": "411ded7208a1242ea7c8dd11de60666967c15c81034d2c23f214d3ea0093af8e",
+    "tests/smoke_action_start_render.gd": "7fc69793dbfa5e2d0bb7f27fd11433ba58bc68529e0ada1d08cfa66d4b186da0",
+    "scripts/humanoid_grounding.gd": "3176152d521469a28e558a9f2fca819949552c6384583fc36a09851d1bfa0fc2",
+    "tests/smoke_slope_motion.gd": "af12c6fc0a9c4d999b66b1576c4ef5a9c2e66c3c8383208efea87cbc7b3ed5f5"
+  },
+  "command": [
+    "C:/Users/Dexp/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64.exe",
+    "--path",
+    "D:\\Desktop\\GitHub\\game\\build\\body-response",
+    "--verbose",
+    "--audio-driver",
+    "Dummy",
+    "--script",
+    "D:\\Desktop\\GitHub\\game\\build\\body-response\\tests\\smoke_slope_motion.gd"
+  ]
+}

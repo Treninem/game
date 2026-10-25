@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "db67bb94b7f04e6fb42add62406dbc4c55934792",
+  "spec_attachment": "29acdc12-e852-42f6-9b99-16e5619b1930",
+  "spec_comparison": "Same complete normalized 2579-line specification",
+  "problem": "Selected spell and cooldown timers were process-only variables: saves lost them, reloading bypassed recovery and New Game could inherit the previous magic state.",
+  "changes": [
+    "Persist selected spell ID and remaining cooldown seconds under optional world_state.magic_runtime_v1, using the existing save path.",
+    "Synchronize runtime on GameState revision changes, including direct UI/cast queries before the next process frame.",
+    "Default legacy/new profiles to fireball with no cooldown; reject unknown IDs, invalid types and nonfinite times; clamp finite remaining times to each spell recovery duration.",
+    "Keep the existing paused simulation clock; update saved remaining timers only while recovery timers are active.",
+    "Add strict bounded save/cooldown/pause/reset regression to Validate World Core; retain existing magic runtime and release checks."
+  ],
+  "baseline": {
+    "case": "magic_state",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Save load loses the selected spell",
+      "ERROR: Save load loses the remaining spell cooldown",
+      "ERROR: Reload permits a cooldown bypass or spends blocked-cast mana",
+      "ERROR: New Game inherits the previous spell or cooldown",
+      "ERROR: Malformed saved magic state is not bounded",
+      "ERROR: Legacy save lacks clean magic defaults"
+    ],
+    "seconds": 3.14
+  },
+  "source_checks": [
+    {
+      "case": "magic_state",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.16
+    },
+    {
+      "case": "magic_runtime",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.17
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 107.33,
+      "marker": true
+    },
+    {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.05
+    }
+  ],
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 261.81,
+    "sha256": "4183f604a26baa1139a59b5d644f81b384d58052581d09d96c1691d5319e0a4d"
+  },
+  "frozen_magic_probe": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 1.92,
+    "marker": true
+  },
+  "frozen_world": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 46.8,
+    "marker": true
+  },
+  "input_probe_correction": {
+    "diagnostic": {
+      "exit_code": 4294967295,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed."
+      ],
+      "seconds": 112.73,
+      "marker": false
+    },
+    "initial_full_probe": "240-second timeout after the early selected-spell assertion",
+    "resolution": "InputEventAction was read before the render loop dispatched buffered input. The driver now waits for process/frame_post_draw after each action; original selection, spell-count and mana assertions remain."
+  },
+  "graphical_magic": "Actual cast_magic input heals the player with the normal mana cost. Slot reload restores heal selection and active recovery; another cast_magic emits no extra spell and does not spend mana. Normal world mana regeneration remains enabled. Native HUD screenshot captured.",
+  "editor_acceptance": {
+    "accepted": 32,
+    "total": 55,
+    "percent": 58.2,
+    "visual_acceptance": false
+  },
+  "limitations": [
+    "Cooldowns persist as remaining simulation seconds; no offline elapsed-time progression added.",
+    "Graphical QA uses explicit test health/equipment/profiles and save restoration; ordinary movement/input, not a manual full-world/city tour.",
+    "This fixes magic state persistence, not broad combat balance or natural animation quality. Overall readiness remains unmeasured.",
+    "Existing ObjectDB cleanup warning unresolved. No stable publication; current-commit remote checks pending."
+  ]
+}

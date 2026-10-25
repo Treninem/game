@@ -1,0 +1,73 @@
+{
+  "exclusive_seats": true,
+  "foot_samples": [
+    {
+      "boot_vertices": 3530,
+      "gap": 0.00399953722953796,
+      "label": "trader-public-rest",
+      "minimum_y": 0.028999537229538,
+      "paving_y": 0.025
+    },
+    {
+      "boot_vertices": 3530,
+      "gap": 0.00400001406669617,
+      "label": "artisan-public-rest",
+      "minimum_y": 0.0290000140666962,
+      "paving_y": 0.025
+    },
+    {
+      "boot_vertices": 3530,
+      "gap": 0.00399971604347229,
+      "label": "hero-public-rest",
+      "minimum_y": 0.0289997160434723,
+      "paving_y": 0.025
+    }
+  ],
+  "jump_wake_and_land": true,
+  "manual_play": false,
+  "paid_trade_and_visible_stock": true,
+  "player_position_assignments": 0,
+  "real_scene_disk_restore": true,
+  "residents_return_to_work": true,
+  "street_foot_samples": [
+    {
+      "gap_m": 0.00398886948823929,
+      "label": "east-promenade-entry",
+      "surface": "MeasuredWalkablePaving",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399933755397797,
+      "label": "east-promenade-north",
+      "surface": "MeasuredWalkablePaving",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399345904588699,
+      "label": "west-promenade",
+      "surface": "MeasuredWalkablePaving",
+      "vertices": 3530
+    }
+  ],
+  "streetscape": {
+    "actual_walked_m": 287.94208416203,
+    "details": {
+      "central_clear_width_m": 14.0,
+      "flowers": 12,
+      "lantern_posts": 4,
+      "panel_ramp_rise_m": 0.039,
+      "panel_ramp_run_m": 0.1,
+      "paving_panels": 28,
+      "planters": 6
+    },
+    "driver_position_assignments": 0,
+    "four_night_lights_bounded_and_low_disabled": true,
+    "manual_play": false,
+    "planter_physical_heights_m": [
+      0.340000038966537,
+      0.58999983035028
+    ]
+  },
+  "talk_to_visible_seated_resident": true,
+  "walked_m": 287.94208416203
+}

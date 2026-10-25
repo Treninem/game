@@ -1,0 +1,1108 @@
+{
+  "date": "2026-10-25",
+  "project_version_label": "0.10.7.3",
+  "engine_verified": "Godot 4.7.1.stable.official.a13da4feb",
+  "renderer": "GL Compatibility",
+  "branch": "codex/household-persistence-2026-10-19",
+  "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "delivery": "Unreleased review; no stable publication",
+  "current_stage": "Жители: общая опора подошв при стоянии, ходьбе, беге и работе; 128 поз двух моделей160/200см и4 GPU-проверки прошли. Полный домашний цикл173.875с и городской проход287.94м с торговлей, отдыхом и загрузкой прошли локально. Исправлены русские имена и название дома с сохранениемID. Серверный полный домашний рендер всё ещё не укладывается в240с; производительность города, утечки при выходе и художественная приёмка остаются открыты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-25_CITIZEN_SUPPORT.json",
+  "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
+  "systems": [
+    {
+      "system": "Модели людей и редактор",
+      "status": "Технический прототип; внешность забракована владельцем",
+      "scope": "Обе текущие модели сохраняют геометрию/девять форм/десять клипов и прежнюю одежду; подключена общая карта металла/шероховатости и отражения предпросмотра. Десять сохранённых цветовых образов, реальные контрольные пиксели и два кадра редактора проверены. Неудачные сетки волос не подключены; полный гардероб, формы/мимика/возраст/волосы, естественность всех действий и художественная приёмка остаются открыты.",
+      "previous_status": "Начальная версия проверена",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Рубка деревьев",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Ресурсные деревья и обычные деревья стартового леса: топор, три удара, перенос существующей анимации, задержанный контакт, управляемое падение, модели пня/бревна, сбор E и сохранение вырубки. Не свободная физика разрушаемого дерева; дальние групповые леса вне стартового региона пока не все доступны для рубки.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Запуск, новая игра, загрузка",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Существующие boot/startup/save сценарии; новые проверки записаны в журнале сборки. Исправлена остановка чёрного затемнения при разговоре/меню сразу после загрузки: завершающий переход не зависит от паузы. Окончательный пакет проверен немедленным открытием диалога, яркостью реального кадра и закрытием окна; boot_world повторён.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Потоковый мир и физическая опора",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Мост, дорога, ступени и столичные ворота. Предыдущий пакет площади/интерфейса прошёл непрерывные 16911.59 м от леса до площади, все 16 точек, обычными действиями движения автопилота без присваивания координат драйвером. Физический шаг 1/60 с, Engine.time_scale=1 и обычная скорость бега; стенд без изображения исполняется быстрее реального времени. Отдельно в открытой игре пройдены 28.83 м от настоящего сохранения к лавкам и сделаны дневной/вечерний осмотры с управляемыми часами. Это не ручной полный пробег и не проверка всех 64 км мира. На этапе дома выполнен новый автоматизированный графический проход 135.32 м от того настоящего прибытия без присваивания координат: вход/выход через проверку наведения, торговля, экипировка и щит. Только осмотровый стенд держит часы/выживание на 09:00. Полные 16.9 км на этой ревизии заново не повторялись; последняя правка одной реплики проверена отдельно на окончательном пакете. Новый этап состояния жителей: 1368.68 м автоматизированной ходьбы в открытой игре на замороженном пакете, обычная скорость 5, без присваивания координат драйвером. За радиусом 520 м прежние узлы площади реально удалены; после возвращения жители восстановлены дома с физической опорой. Вход проверен наведением, обычный слот 3 сохранён и загружен. Только этот осмотр держит часы/выживание на 22:00; это не ручной полный обход мира.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Камера от третьего лица",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Физическая и графическая проверки; ручной осмотр у временной стены. Проверка сферой, плавный возврат, колёсико 2–9 м, сохранение настройки, абсолютная мышь Windows и возврат из меню без рывка. Это не проверка каждого помещения мира.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Движение",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Ходьба, бег, прыжок и низкие ступени. Анимация использует фактическую физическую скорость, не перемещение между кадрами изображения. Анатомическая модель: 10 клипов, 50 проверенных поз; исправлены стойка лучника и сплющивание стоп. Приседание, плавание и полноценное карабканье не реализованы. При обычной ходьбе/беге тело разворачивается по физическому движению назад/вбок независимо от камеры; при атаке/магии смотрит по прицелу. Это не полный набор направленных боевых анимаций.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Инвентарь и экипировка",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Предметы, расходники, экипировка/снятие оружия. Полный интерфейс перетаскивания и все слоты ТЗ не завершены.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Ближний бой и лук",
+      "status": "В разработке",
+      "scope": "Ограниченная дальность, направление и линия видимости; физические стрелы. Полные комбо, парирование, уклонение и боевые анимации ещё отсутствуют.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Магия",
+      "status": "В разработке",
+      "scope": "Десять существующих заклинаний, расход маны, эффекты и попадания. Полная общая система стихий и воздействие на окружение не завершены.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Ресурсы и крафт",
+      "status": "В разработке",
+      "scope": "Сбор, истощение, рубка и управляемое падение деревьев, проверка материалов крафта. Кирка, лопата и редактируемая земля не реализованы.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Карта",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Исследованный рельеф, вода, дороги, дома, деревья, камни, пни, настоящие следы размещения уличной мебели и живые маркеры; сохранение открытия. Карта реального прибытия осмотрена в игре. Собственные метки ещё отсутствуют.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Распорядок NPC и торговля",
+      "status": "В разработке",
+      "scope": "Распорядок работы/еды/общения/дома и обход препятствий. На площади два именованных жителя привязаны к настоящим лавке, верстаку, скамьям и крыльцу. Ремесленник за 8 секунд расходует существующий рецепт 1 древесина + 1 камень на 5 стрел в конечный запас торговки; игрок может продать сырьё. Без материалов ожидает, а не изображает изготовление. Запас и прогресс сохраняются в состоянии мира. Большинство домов закрыто; массовой бытовой симуляции и общей экономики нет. Новый этап: Марта и Марек физически входят в один доступный дом и утром выходят к работе; исправлены очередь в узком проёме и автоматическое закрытие. Лавка работает 6–12 и 14–18. Конечный кошелёк торговки передаёт монеты обеим сторонам сделки; неудача не забирает предмет. Сохраняются поставки и память о видимой магии. Позиции жителей со стабильными ID теперь сохраняются при выгрузке; дальний распорядок ещё не моделируется непрерывно. Новый этап: два жителя используют индивидуальные кровати и скамьи, хранят конечные личные вещи. Прогресс и содержимое переживают сохранение и пересоздание квартала. Пакет25октября: исправлена опора жителей во всех наземных занятиях; проверены128 поз/GPU и полный городской проход с торговлей/отдыхом/диском. Имена Марты/Марека восстановлены, сохранённыеID прежние. См. docs/DEVELOPMENT_LOG_2026-10-25_CITIZEN_SUPPORT.json",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Визуальные эффекты",
+      "status": "В разработке",
+      "scope": "Исправлено удаление составных эффектов после раннего удаления родителя через слабые ссылки; проверено естественное завершение. Каменная мостовая не порождает грязные следы и осколки при обычной ходьбе. Боевые и инструментальные попадания сохранены. Полная реалистичная система эффектов ещё не завершена.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Социальная память, характер, слухи",
+      "status": "В разработке",
+      "scope": "Ограниченная локальная память поставок и последнего успешного видимого заклинания в радиусе 12 м; физическая преграда мешает наблюдению. Опасная магия прерывает занятие на 6 секунд, затем распорядок продолжается. Реплики учитывают экипированное оружие и настоящие запасы. Это текстовые шаблоны по событиям, без внешней языковой модели, общей репутации, характера, слухов или системы преступлений.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Враги",
+      "status": "В разработке",
+      "scope": "Разбойники в существующей опасной области, опора на землю, атака с задержкой и без урона через стену, сохранение поражения. Полного тактического ИИ нет.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Гильдия и контракты",
+      "status": "В разработке",
+      "scope": "Из актуального main сохранён каркас гильдий, согласованных войн и участков. Сценарий tz_progression прошёл; полноценный гильдейский игровой цикл и баланс не сертифицированы.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Сюжет и задания",
+      "status": "Требует исправления",
+      "scope": "Канон хранится в story; старые прототипные цепочки приостановлены. Законченной игровой первой главы нет; новый караванный пролог требует сверки с каноном.",
+      "previous_status": "Требует исправления",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Животные и приручение",
+      "status": "Не начато",
+      "scope": "Наличие исходных моделей не означает игровую интеграцию животных.",
+      "previous_status": "Не начато",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Столица",
+      "status": "В разработке",
+      "scope": "Фасады, шесть ключевых зданий, 32 ворот и ближние жители. На центральной площади добавлены существующие авторские скамьи, лавки, верстак, бочки и фонари; каменная фотографическая текстура с мип-копиями, опора, свободный проход и читаемый вечерний свет проверены. Дневной пересвет снижен после осмотра. Полное ТЗ районов и доступные дома не завершены. Один дом слева за лавками теперь физически доступен: дверь, окна, существующие модели кровати/стола, отделённый от мостовой деревянный пол и закрытые торцы крыши. Большинство домов остаётся закрытым.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Сохранения",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Слоты, резервные копии, восстановление повреждённого файла и существующие мировые флаги. Не заявлена сохранность ещё не реализованных систем. Жители со стабильными ID сохраняют компактные координаты относительно родительского квартала, направление, проход через дверь и ограниченные таймеры. Снимок записывает актуальное положение перед сохранением; выгрузка сохраняет последнюю физически подтверждённую позицию. Загрузка обновляет уже существующих жителей, сначала восстанавливает двери и заново проверяет опору. Смена ревизии состояния защищает чистую новую игру от записи старой сцены. Старые и повреждённые записи проверены. Добавлены стабильные ID мебели, занятые места, содержимое сундуков, владельцы и бытовые таймеры. Проверены JSON, реальный слот и пересоздание дома.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Настройки и интерфейс",
+      "status": "В разработке",
+      "scope": "Четыре качества, разрешение, масштаб, звук, управление, меню. Исправлен выход длинного торгового диалога за экран: ограниченная панель, прокрутка текста/вариантов и следование за фокусом клавиатуры. Семь настоящих вариантов магазина и кнопка выхода проверены на 1280×720 и 800×450, включая графический режим и экспортный пакет. Полное меню навыков/репутации/бестиария отсутствует.",
+      "previous_status": "В разработке",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Производительность и выпуск",
+      "status": "Требует исправления",
+      "scope": "Есть ограниченная потоковая загрузка и пакетные проверки. Полного профилирования FPS/памяти и зелёных удалённых release gates для этой рабочей копии нет.",
+      "previous_status": "Требует исправления",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Состояние жителей при выгрузке",
+      "status": "Частичная реализация; ограниченный сценарий проверен",
+      "scope": "Ограниченный компонент: жители со стабильными ID, родительским якорем и проверенными координатами. Регрессия воспроизвела пять исходных сбоев; девять связанных сценариев прошли. Реальная площадь пересоздана прямо во время прохода через дверь, оба жителя завершили вечерний и утренний путь. Отдельный графический проход 1.37 км подтвердил фактическую выгрузку квартала, возвращение, вход в дом и обычное сохранение/загрузку. Непрерывной дальней симуляции этот компонент не добавляет.",
+      "previous_status": "Проверено",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Домашняя мебель",
+      "status": "Проверено в ограниченном компоненте",
+      "scope": "One live capital home: Marta and Marek; usable beds, benches, private/shared-owner chest and separate player chest. Кровати и скамьи поддерживают реальные модели, сундук показывает авторскую анимацию. Доступ к личному сундуку закрыт; игрок использует отдельный сундук, переносит стопки. Полный бытовой мир не завершён.",
+      "previous_status": "Проверено в ограниченном компоненте",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Каркас прогрессии из актуального main",
+      "status": "Интегрировано; локальные сценарии пройдены",
+      "scope": "Сохранены подземелья, другие миры, события, мини-игры и их ограничения из main. Исправлены реальные ошибки размещения объектов; это не подтверждает полноту всех систем ТЗ.",
+      "previous_status": "Интегрировано; локальные сценарии пройдены",
+      "full_spec_acceptance": "Не подтверждена"
+    },
+    {
+      "system": "Хват и контакт оружия 0.10.7.3",
+      "status": "Проверено в ограниченном сценарии",
+      "scope": "Обе основы тела, 60 измеренных поз, лук/топор, движение, отмена при снятии/загрузке; реальный графический проход 4.849 м без телепортации. Полный боевой цикл и очистка ObjectDB ещё открыты.",
+      "previous_status": "Проверено в ограниченном сценарии",
+      "full_spec_acceptance": "Не подтверждена"
+    }
+  ],
+  "known_issues": [
+    "Модели людей, волосы, одежда и естественность движений не достигли запрошенного качества. Плотность подлеска доработана, но кроны и общий вид леса остаются грубыми; город повторяется, большинство домов закрыто. Это ещё не реализм Ведьмака 3.",
+    "Остаются предупреждения ObjectDB при завершении и дублирующийся UID существующих VFX.",
+    "Новый этап проверяется отдельно; не все механики мастер-промпта реализованы.",
+    "Один живой домашний интерьер: сон, скамьи, конечные вещи и сундуки работают и сохраняются. Остальные дома и непрерывная дальняя симуляция не завершены. Переходы в позы пока простые; согласие владельцев и криминальная система не реализованы."
+  ],
+  "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
+  "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
+  "ci_followup_status": "Runtime6d3 passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
+  "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
+  "readiness_report": "docs/READINESS_2026-10-20.json",
+  "readiness_percent": null,
+  "readiness_status": "Полный процентный аудит отсутствует; см. реестр 55 направлений. Ограниченные проверки не равны готовности системы.",
+  "visual_acceptance": false,
+  "character_acceptance": {
+    "percent": 58.2,
+    "accepted": 32,
+    "total": 55,
+    "report": "docs/CHARACTER_ACCEPTANCE_2026-10-20.json",
+    "visual_acceptance": false,
+    "audit_date": "2026-10-20",
+    "scope": "Historical bounded acceptance ledger; 58.2 is not overall game readiness or visual acceptance. No new percentage audit in this package."
+  },
+  "editor_library_parse_errors_pending": [],
+  "editor_library_uid_warnings_pending": true,
+  "inventory_requirement_clarification": "docs/INVENTORY_CAPACITY_CLARIFICATION_2026-10-20.txt: ячейки с бесконечной вместимостью; уточнение требований, не новая реализация интерфейса.",
+  "review_launcher_scope": "Актуальный исходный проект build/stability с отдельным профилем. Прежние PCK не содержат текущие правки; новый установщик не собран.",
+  "editor_ui_responsiveness_pending": true,
+  "inventory_browsing": {
+    "storage_limit": null,
+    "display_page_size": 48,
+    "search": "name/id/category; case-insensitive",
+    "compact_cell_grid": "implemented, selectable text cells",
+    "source_verified": true,
+    "exported_package": "not rebuilt",
+    "columns": "2–8 responsive",
+    "item_icons": "pending",
+    "drag_drop": "pending",
+    "stack_splitting": "pending",
+    "selection_focus": "restored after selection/search/page/equip/unequip/use; empty results return to search; stale/close guards retained",
+    "keyboard_entry": "real I/Escape default bindings tested; early mapped Escape closes search/cell without also opening pause menu; Ctrl+F and Enter retained",
+    "keyboard_rebind": "F10 inventory, F8 pause, P text-edit priority tested; Escape remains independent UI cancel; tab captions live"
+  },
+  "storage_transfer": {
+    "atomic_notification": true,
+    "reentrant_request": "rejected",
+    "half_stack": "chest dialogue deposit/withdrawal; floor for odd counts",
+    "player_storage_limit": null,
+    "chest_capacity": 200,
+    "independent_inventory_stacks": "pending",
+    "exported_package": "not rebuilt",
+    "exact_quantity": "implemented; bounded integer field + confirm, pending edit text included",
+    "stale_dialogue_callbacks": "revision-guarded",
+    "full_chest_deposit_options": "hidden"
+  },
+  "native_heal_input_intermittent_pending": true,
+  "magic_hud_mouse_input": {
+    "status": "fixed and graphical regression tested",
+    "passive_children": "mouse IGNORE, focus NONE",
+    "original_action_event_failure": "still unconfirmed; not declared resolved"
+  },
+  "control_binding_conflicts": {
+    "new_assignments": "reject duplicate encoded type/code across supported actions",
+    "rejected_mutation": "none; config/InputMap/signals verified",
+    "capture": "retry/cancel; rejected events consumed",
+    "old_duplicate_profiles": "read-only grouped audit shown in controls; preserved until explicit rebind; resolved warning and persistence tested"
+  },
+  "human_gait_phase": {
+    "status": "12 phase transitions passed; graphical source game checked",
+    "full_visual_acceptance": false,
+    "new_models": false,
+    "manual_free_roam": false,
+    "reference_study": "incomplete; see HUMAN_VISUAL_REVIEW_2026-10-20.md"
+  },
+  "human_deformation_refinement": {
+    "model_sha256": {
+      "male": "ff5091022a06d29607c65cf230fe4819edef3967a7bff075ae436a3e5b0a5212",
+      "female": "360b04caea6a8707f1885d5501d21d044a8fe32db36664f22f6ff447ddf90a91"
+    },
+    "geometry_poses": 100,
+    "free_finger_samples": 576,
+    "weapon_poses": 180,
+    "shoulder_metric_cases_improved": 6,
+    "full_visual_acceptance": false,
+    "manual_free_roam": false,
+    "native_heal_input_intermittent_pending": true
+  },
+  "bow_body_clearance": {
+    "trajectory_samples": 900,
+    "bodies": 2,
+    "heights_cm": [
+      160,
+      180,
+      195
+    ],
+    "pitch_radians": [
+      -0.55,
+      0,
+      0.55
+    ],
+    "views": 3,
+    "holding_arm_checks_retained": true,
+    "exact_skinned_collision_acceptance": false
+  },
+  "review_delivery_mode": "Imported Godot source project build/stability; current change not yet locally re-exported",
+  "limb_motion": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-20_LIMB_MOTION.json",
+    "local_checks": {
+      "weapon_grip": {
+        "exit_code": 0,
+        "seconds": 38.31,
+        "errors": [],
+        "marker": true
+      },
+      "locomotion_facing": {
+        "exit_code": 0,
+        "seconds": 51.98,
+        "errors": [],
+        "marker": true
+      },
+      "gameplay_actions": {
+        "exit_code": 0,
+        "seconds": 66.34,
+        "errors": [],
+        "marker": true
+      },
+      "static_phases": {
+        "exit_code": 0,
+        "seconds": 17.01,
+        "errors": [],
+        "marker": true
+      },
+      "physical_actions": {
+        "exit_code": 0,
+        "seconds": 69.62,
+        "errors": [],
+        "marker": true
+      },
+      "source_world": {
+        "exit_code": 0,
+        "seconds": 139.84,
+        "errors": [],
+        "marker": true
+      }
+    },
+    "final_pose_signal": "modification_processed",
+    "full_visual_acceptance": false,
+    "manual_free_roam": false,
+    "jump_phase_animation_pending": true,
+    "terrain_foot_ik_pending": true,
+    "npc_punch_fist_modifier_pending": true
+  },
+  "comprehensive_program": "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json",
+  "comprehensive_goal_status": "ACTIVE",
+  "jump_phases": {
+    "physical_velocity_driven": true,
+    "bodies_checked": 2,
+    "landing_animation_pending": true,
+    "terrain_foot_ik_pending": true,
+    "impact_compression_implemented": true
+  },
+  "human_surface_support": {
+    "poses": 336,
+    "first_frame_profiles": 6,
+    "height_normal_ik": true,
+    "full_xz_plant_locking": false,
+    "npc_integration": false,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_SUPPORT_LANDING.json"
+  },
+  "last_visual_audit": "docs/HUMAN_REFERENCE_AUDIT_2026-10-21.json",
+  "last_asset_candidate_journal": "docs/DEVELOPMENT_LOG_2026-10-21_VIKING_CANDIDATE.json",
+  "wardrobe_candidate": "Кандидат подключён к проверочной версии после material/morph/action/save проверок. Полный гардероб, смена брони и художественная приёмка остаются открытыми.",
+  "rest_transitions": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_BED_ALIGNMENT.json",
+    "scale_and_weapon_regressions_fixed": true,
+    "lying_alignment_accepted": false,
+    "lying_axis_and_face_direction_fixed": true,
+    "remaining": "Dedicated sleeping and enter/exit animations; full artistic acceptance pending",
+    "action_release_before_execution": true,
+    "action_order_journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_ACTION_ORDER.json",
+    "physical_jump_and_disk_roundtrip": {
+      "cases": 12,
+      "journal": "docs/DEVELOPMENT_LOG_2026-10-21_REST_PLAYER_PHYSICS.json"
+    }
+  },
+  "last_verified_runtime_commit": "3558a4dfe59734538fe922e9bb1aac660156141b",
+  "last_verified_runtime_ci": "b8d03d10: все восемь exact-SHA CI SUCCESS перепроверены, включая прежние руки/переходы/GPU и движение. Новый пакет CPU-выборок проверяется собственным exact-SHA CI после push. Холодный запуск локально не принят; стабильного выпуска нет.",
+  "world_regression": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_WORLD_REGRESSION.json",
+    "exit_object_leaks": 82,
+    "artistic_acceptance": false,
+    "lifecycle_diagnostic": "docs/DEVELOPMENT_LOG_2026-10-21_LOADER_LIFECYCLE.json",
+    "exit_leak_fixed": false,
+    "current_exit_probe": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json"
+  },
+  "interior_surfaces": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_SURFACES.json",
+    "plaster_and_plank_textures_integrated": true,
+    "live_quality_presets": 4,
+    "full_artistic_acceptance": false
+  },
+  "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
+  "blender_house_kit": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_WINDOWS.json",
+    "windows": "INTEGRATED with single-pane glass, corrected UVs and day/night local lighting; graphical quality/distance checks passed",
+    "timberwork": "INTEGRATED with physical collision; 12 real-player rest/save/jump cases, passage/stair and household save/streaming regressions passed",
+    "whole_concept_implemented": false,
+    "full_artistic_acceptance": false,
+    "activation_regression_journal": "docs/DEVELOPMENT_LOG_2026-10-21_INTERIOR_ACTIVATION.json",
+    "instant_quality_signal_checked": true,
+    "furnishing_and_layout_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json",
+    "room_navigation": "Local geometry A*, door/locked-leaf states and occupied-person detours; outdoor approach waypoints remain outside this package",
+    "family_population": "Children, guardians/ages and schooling remain unimplemented"
+  },
+  "terrain_paths": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_TERRAIN_PATHS.json",
+    "connected_home_entrances": 15,
+    "graphical_walk_m": 173.302463488653,
+    "forest_journey_m": 2065.82170474902,
+    "artistic_acceptance": false,
+    "landscape_complete": false,
+    "support_journal": "docs/DEVELOPMENT_LOG_2026-10-22_PATH_SUPPORT.json",
+    "overlay_clearance_m": [
+      0.006,
+      0.012
+    ],
+    "last_graphical_walk_m": 173.302463488653,
+    "raised_embankments_and_shoulders_complete": false
+  },
+  "cottage_yards": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_COTTAGE_YARDS.json",
+    "plots": 15,
+    "graphical_walk_m": 292.521000537323,
+    "artistic_acceptance": false,
+    "full_agriculture": false
+  },
+  "outfit_fit": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_OUTFIT_FIT.json",
+    "render_views": 756,
+    "failed_views": 0,
+    "full_artistic_acceptance": false,
+    "undressing_and_full_wardrobe_complete": false,
+    "visible_cloth_layers_accepted": false,
+    "remaining_visible_defects": "Лишняя оболочка снята предыдущим 8df014f. Этот пакет устранил проверенные пересечения предплечий с одеждой; контакт туники/пояса/подола остаётся открытым. Забракованные модели/проекционные шейдеры не включены."
+  },
+  "latest_character_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_ARM_CLEARANCE.json",
+    "review_folder": "docs/review/2026-10-22-arm-clearance",
+    "full_art_acceptance": false,
+    "arm_geometry_poses": 1344,
+    "failed_arm_poses": 0,
+    "covered_skin_views": 810,
+    "native_gpu_poses": 34,
+    "native_color_frames": 62,
+    "remote_ci": "b8d03d10: все восемь exact-SHA CI SUCCESS; локальная и CI геометрия/переходы/GPU подтверждены.",
+    "ordinary_citizen_poses": 384,
+    "cold_boot_timing_accepted": false,
+    "runtime_crossfade_samples": 504,
+    "failed_runtime_crossfade_samples": 0,
+    "first_draw_gpu_samples": 4,
+    "first_draw_color_frames": 4
+  },
+  "latest_startup_performance_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_STARTUP_PERFORMANCE.json",
+    "height_points": 101113,
+    "changed_heights": 0,
+    "biome_water_temperature_points": 5948,
+    "road_oracle_points": 3240,
+    "median_elevation_ms": {
+      "old": 6771.3975,
+      "new": 5275.477
+    },
+    "native_walk_m": 28.5022018309683,
+    "cold_start_accepted": false,
+    "fps_gain_confirmed": false,
+    "full_art_accepted": false,
+    "remote_ci": "Exact new SHA verification follows push"
+  },
+  "latest_tested_source_mirror": "build/body-response",
+  "latest_motion_contact_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-22_BODY_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-22-body-response",
+    "metrics": {
+      "poses": 30,
+      "tunic_vertices_per_pose": 3776,
+      "boot_vertices_per_pose": 3530,
+      "walked_m": 26.3948098011315,
+      "maximum_tunic_gpu_cpu_error_m": 2.31941726269724e-06,
+      "maximum_boot_gpu_cpu_error_m": 2.11608289646392e-06,
+      "ground_gpu_min_y_m": 0.00283039873465896,
+      "ground_gpu_max_y_m": 0.00400019250810146,
+      "response_self_timing_usec": {
+        "median": 68,
+        "p95": 218,
+        "samples": 433
+      }
+    },
+    "artistic_acceptance": false,
+    "cold_boot_timing_accepted": false,
+    "local_arm_scan": "timeout; not a full pass",
+    "local_world_gameplay": "timeout before successful gameplay capture; not accepted",
+    "candidate_ci": "Pending exact-SHA verification after push; previous 3558a4df all eight SUCCESS."
+  },
+  "latest_bow_release_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_BOW_RELEASE.json",
+    "review_folder": "docs/review/2026-10-23-bow-release",
+    "local_unit": "three transformed releases PASS; old parent reproduced displacement",
+    "ci": "18ab50ee World Core failed on temporal frame observation; followup exact-SHA pending",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
+  },
+  "latest_action_audio_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_ACTION_AUDIO.json",
+    "review_folder": "docs/review/2026-10-23-action-audio",
+    "local_checks": "5 PASS, strict audio cleanup and 30 live GPU poses",
+    "ci": "bf3fa194: 7/8. True low-render-rate action delay fixed using the player physics animation clock; four final local checks PASS, full new exact-SHA pending.",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false,
+    "render_observers": "810 wardrobe views, 30 live GPU poses and nine 5 FPS dispatch phases PASS"
+  },
+  "latest_slope_support_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_SLOPE_SUPPORT.json",
+    "review_folder": "docs/review/2026-10-23-slope-support",
+    "local": "Final cache: 76 physical poses PASS; complete pre-cache Intel control: 76 poses /34 GPU poses PASS. Final-cache native attempts TIMEOUT, with 17 partial positive GPU phases. Complete new native CI remains required.",
+    "before_swing_penetration_m": -0.170834392181199,
+    "player_position_writes_after_setup": 0,
+    "ci": "Pending new exact-SHA verification after push; parent 2d5caf22 all eight SUCCESS",
+    "full_artistic_acceptance": false,
+    "stable_release_published": false
+  },
+  "latest_human_contour_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_HUMAN_CONTOURS.json",
+    "scope": "Both Blender human near/far bodies, skin/eye contours, original morphs/clips/clothing, stopped-driver LOD and creator lighting",
+    "local_native_frames": 18,
+    "local_complete_gpu_body_poses": 10,
+    "local_world_walked_m": 28.5044221002609,
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
+    "visual_acceptance": false,
+    "stable_release": false,
+    "lifecycle_followup": "Deferred owned node construction and selected-body scene loading; 32 detached cycles leave zero orphans. Final exact-SHA CI required; local UI warmup deadline remains a recorded failure."
+  },
+  "latest_character_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_CHARACTER_SURFACES.json",
+    "review_folder": "docs/review/2026-10-23-character-surfaces",
+    "native_portraits": 10,
+    "iris_perimeter_sectors": 32,
+    "cache_materials": 60,
+    "extra_runtime_textures": 0,
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks.",
+    "visual_acceptance": false
+  },
+  "latest_export_hygiene_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_EXPORT_HYGIENE.json",
+    "source_review_png_bytes": 126349089,
+    "local_control": "physical PCK before/after PASS; production texture retained",
+    "new_gate": "actual exported human resources and source-only folder absence",
+    "ci": "Verified at a515de90: all eight workflows SUCCESS, including full World Core and actual exported-PCK checks. New packet results: current exact-SHA PR checks."
+  },
+  "latest_wardrobe_response_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WARDROBE_RESPONSE.json",
+    "review_folder": "docs/review/2026-10-23-wardrobe-response",
+    "native_saved_palettes": 10,
+    "shared_runtime_maps": 1,
+    "new_models_integrated": 0,
+    "rejected_groom_trials": 2,
+    "local_world_walked_m": 28.5468827933073,
+    "ci": "Current exact-SHA checks on PR12; committed journal contains local evidence and the previous verified head.",
+    "visual_acceptance": false,
+    "stable_release": false,
+    "next_linked_stage": "Actual final world frames retain conspicuously saturated purple woodland bow/axe surfaces. This packet preserves those existing source materials. Audit source palette/material regions and weapon readability together with human costume/hairstyles; no cause or correction is yet claimed."
+  },
+  "latest_experiment": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_WEAPON_TRIAL.json",
+    "decision": "REJECTED_NOT_INTEGRATED",
+    "runtime_unchanged_from": "0506245d9be5b2b8a8553eedd73150c1e30fbe54",
+    "next": "Complete weapon shape replacement and final-pose/string review, then real-world regression checks."
+  },
+  "latest_region_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+    "local_checked": true,
+    "exact_sha_ci": "pending publication",
+    "performance": {
+      "draw_calls": 1278.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "max_frame_ms": 268.203,
+      "mean_frame_ms": 54.894675,
+      "median_frame_ms": 46.19,
+      "p95_frame_ms": 91.313,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Stationary exterior view in the real capital after loading the checkpoint earned by the preceding ordinary 99.71m walk; warm cache, no sustained traversal/whole-world FPS claim",
+      "video_memory_bytes": 963462607.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 30
+    },
+    "visual_acceptance": false
+  },
+  "equipment_diversity_requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
+  "equipment_diversity_status": "OPEN: distinct item forms/rarities/stats and persistent instances, upgrades/progression/condition/repair",
+  "city_concept_registry": "assets/registry/CITY_CONCEPT_MODELS_2026-10-23.json",
+  "overall_percent": null,
+  "capital_preview_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-capital-preview.cmd",
+  "last_delivery_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_STREETSCAPE_DELIVERY.json",
+  "packed_gameplay": "Actual compiled Windows PCK through Godot4.7.1 desktop --main-pack:288m ordinary automated input, paid/visible finite trade, seated dialogue, support/camera, real scene/disk restore, jump/landing, NPC return to work and3530 rendered boot vertices per actor. Zero driver position assignments. No manual or exported-EXE-script claim.",
+  "launcher_fix": "Old20October primary launcher now runs verifiedb28 EXE with its same existing profile; old launcher is backed up and profile JSON/CFG hashes are unchanged.",
+  "public_market_registry": "assets/registry/PUBLIC_MARKET_2026-10-24.json",
+  "review_launcher_runtime": "6d3b2cc92c151d7671b7cde6a39068a88b4fd16c",
+  "next_coherent_region": "Canal district: terrain basin, water, clipped paving, authored bridge, goal-based crossings and old-save support. Current private bridge is not integrated.",
+  "latest_far_path_coverage": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_FAR_PATH_COVERAGE.json",
+    "full_footprint_m2": 800,
+    "clean_parent_regression": true,
+    "current_ci": "all eight exact5af9de3 workflows succeeded",
+    "original_assertions_retained": 27
+  },
+  "latest_capital_canals": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CAPITAL_CANALS.json",
+    "local_regressions_passed": 18,
+    "native_walk_m": 919.530722988537,
+    "gpu_sole_samples": 23,
+    "citizens_clock_unfrozen": true,
+    "current_ci": "1d53failed: isolated fixture dependency and fresh photo mip settings; followup pending",
+    "actual_final_PCK": "pending",
+    "visual_acceptance": false,
+    "additional_legacy_jump_case_passed": true,
+    "supplemental_migration_regressions_passed": 3
+  },
+  "latest_canal_ci_followup": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CI_DEPENDENCIES.json",
+    "failed_parent": "1d53b19b7490f474cd43cbd4058f82472f8b9e01",
+    "clean_dependency_fixture_passed": true,
+    "fresh_three_photo_mips_passed": true,
+    "current_ci": "pending exact followupSHA"
+  },
+  "latest_canal_contact_fix": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_CONTACTS.json",
+    "failed_parent": "c1bca99e43ec8b4ccfb7588ba31ebfeaef0bc764",
+    "controlled_corner_before_failed_after_passed": true,
+    "related_regressions_passed": 9,
+    "runtime_change": "NPC capsule recovery margin0.02m",
+    "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
+  },
+  "latest_canal_walkable_links": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_CANAL_WALKABLE_LINKS.json",
+    "failed_parent": "275b5ad7220fd71d6aa90fec6fdcdc68dc9f6c8d",
+    "actual_level_snap_reproduced_and_fixed": true,
+    "required_lifecycle_market_old_corner_passed": true,
+    "current_ci": "pending exact followup SHA",
+    "actual_final_PCK": "pending"
+  },
+  "latest_loaded_settlement_services": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_LOADED_SETTLEMENT_SERVICES.json",
+    "actual_load_new_home_and_town_passed": true,
+    "home_meshes": 132,
+    "town_meshes": 2125,
+    "duplicate_models": false,
+    "exact_sha_ci": "8266796d: all8 workflows succeeded, World Core40069695447; later711edb0d fails canal family life.",
+    "actual_final_PCK": "pending"
+  },
+  "latest_human_street_scale": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HUMAN_STREET_SCALE.json",
+    "adult_height_cm": [
+      160,
+      200
+    ],
+    "ordinary_door_clear_m": [
+      1.2,
+      2.2
+    ],
+    "street_surfaces": 15,
+    "ordinary_carriageway_m": 6,
+    "promenade_m": 3,
+    "canal_quarter_possible_houses_per_cell": 12,
+    "old_saved_position_keeps_a_persisted_open_plot": true,
+    "local_checks": 15,
+    "actual_automated_walk_m": 148.006318959408,
+    "GPU_sole_samples": 5,
+    "manual_play": false,
+    "exact_sha_ci": "711edb0d: 7 workflows succeeded; mandatory Validate World Core FAILED, run40073175183 step24 canal household sleep.",
+    "actual_final_PCK": "pending",
+    "full_visual_acceptance": false
+  },
+  "manual_editor_handoff": {
+    "mode": "USER_EDITOR_HANDOFF",
+    "project": "D:/Desktop/GitHub/game/project.godot",
+    "opened_scene": "res://scenes/stage1.tscn",
+    "editor_process_id_observed": 15652,
+    "runtime_root_writes": "Do not change the user-opened runtime/scenes until the user asks to resume integration after manual edits. Re-read current files and reconcile their changes first.",
+    "isolated_proposals_allowed": true,
+    "goal_status": "ACTIVE; no completion or goal pause claimed",
+    "unsaved_windows_closed": false
+  },
+  "latest_input_audit": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_EDITOR_HANDOFF_INPUT_AUDIT.json",
+    "integrated": false,
+    "confirmed_default_failures": 2,
+    "isolated_candidate_cases_passed": 10,
+    "existing_regressions_passed": 1,
+    "regression_suite": "NOT PASSED: binding first timeout; traced binding retry pass; unlimited inventory timeout; lifecycle not run",
+    "visual_acceptance": false,
+    "remote_followup": {
+      "journal": "docs/DEVELOPMENT_LOG_2026-10-24_INPUT_RECOVERY_VERIFIED.json",
+      "branch": "codex/editor-handoff-validation-2026-10-24",
+      "exact_runtime_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+      "world_core_run": "https://github.com/Treninem/game/actions/runs/40080419924",
+      "world_core": "SUCCESS; all124 steps",
+      "input_cases_passed": 11,
+      "physical_perch_cases_passed": 6,
+      "downloaded_native_frames": 321,
+      "actually_viewed_native_frames": 4,
+      "root_runtime_integrated": false,
+      "PR12_runtime_integrated": false,
+      "all_eight_exact_sha_gates": false,
+      "visual_acceptance": false,
+      "intermittent_home_door_issue": "OPEN; failed on parent74, passed repeat112; no doorway fix claimed"
+    },
+    "previous_local_failures_retained": true
+  },
+  "latest_isolated_validation": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_INPUT_RECOVERY_VERIFIED.json",
+    "branch": "codex/editor-handoff-validation-2026-10-24",
+    "exact_runtime_sha": "1127512c6dddc5797a4b0ca6d60944592a30fa40",
+    "world_core_run": "https://github.com/Treninem/game/actions/runs/40080419924",
+    "world_core": "SUCCESS; all124 steps",
+    "input_cases_passed": 11,
+    "physical_perch_cases_passed": 6,
+    "downloaded_native_frames": 321,
+    "actually_viewed_native_frames": 4,
+    "root_runtime_integrated": false,
+    "PR12_runtime_integrated": false,
+    "all_eight_exact_sha_gates": false,
+    "visual_acceptance": false,
+    "intermittent_home_door_issue": "OPEN; failed on parent74, passed repeat112; no doorway fix claimed"
+  },
+  "latest_household_door_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOME_PORTAL_ALIGNMENT.json",
+    "runtime_fix_sha": "39a7a2ae4405bc98395ab9bced32ecaac8e0be6c",
+    "exact_render_and_core_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+    "focused_run": "https://github.com/Treninem/game/actions/runs/40085783795",
+    "focused_result": "SUCCESS;12 single crossings plus2 complete streamed disk household cycles",
+    "rendered_run": "https://github.com/Treninem/game/actions/runs/40086370281",
+    "rendered_result": "FAILED full graphical lifecycle:240s timeout. One actual entry frame was produced and viewed; exit and complete rendered lifecycle are not verified.",
+    "full_world_core": {
+      "id": 40086445556,
+      "name": "Validate World Core",
+      "head_sha": "481850ecdc2715a4b9cb0e876d993293c72d8794",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40086445556",
+      "updated_at": "2026-10-24T11:08:47Z"
+    },
+    "root_runtime_integrated": true,
+    "PR12_runtime_integrated": true,
+    "manual_play": false,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "latest_house_surface_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOUSE_SURFACE_PERFORMANCE.json",
+    "isolated_runtime_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+    "branch": "codex/editor-handoff-validation-2026-10-24",
+    "root_runtime_integrated": true,
+    "PR12_runtime_integrated": true,
+    "material_review": {
+      "id": 40091621762,
+      "name": "Verify Metric House Surface Appearance and Cost",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40091621762",
+      "updated_at": "2026-10-24T11:55:45Z"
+    },
+    "continuous_graphical_lifecycle": {
+      "id": 40091621698,
+      "name": "Verify Rendered Household Doorway",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40091621698",
+      "updated_at": "2026-10-24T11:58:38Z"
+    },
+    "new_world_core": {
+      "id": 40092376914,
+      "name": "Validate World Core",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092376914",
+      "updated_at": "2026-10-24T12:37:40Z"
+    },
+    "new_player_movement": {
+      "id": 40092380209,
+      "name": "Validate Player Movement",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092380209",
+      "updated_at": "2026-10-24T12:08:03Z"
+    },
+    "stationary_frame_time_reduction_percent": 11.245,
+    "target_PC_FPS_verified": false,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "latest_inventory_presentation_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_INVENTORY_PRESENTATION.json",
+    "runtime_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "branch": "codex/editor-handoff-validation-2026-10-24",
+    "native_UI": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
+    "player_movement": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "full_world_core": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    },
+    "root_runtime_integrated": true,
+    "PR12_runtime_integrated": true,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "review_integration_follow_up": {
+    "recorded_at_utc": "2026-10-24T14:40:36.214373+00:00",
+    "validated_runtime_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "review_branch": "codex/household-persistence-2026-10-19",
+    "prior_review_sha": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+    "private_documentation_parent": "709c0a2fd335c755d6ce10f257d7afa68f174bac",
+    "PR12_runtime_integrated": true,
+    "root_runtime_integrated": false,
+    "atomic_fast_forward_required": true,
+    "source_trees_unchanged_from_validated_runtime": true,
+    "core": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    },
+    "movement": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "native_inventory": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
+    "stable_release": false
+  },
+  "latest_authored_bow_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
+    "runtime_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+    "test_contract_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+    "root_runtime_integrated": true,
+    "PR12_runtime_integrated": true,
+    "metrics": {
+      "bow_poses": 120,
+      "body_variants": 2,
+      "heights_cm": [
+        160,
+        180,
+        195,
+        200
+      ],
+      "pitch_radians": [
+        -0.55,
+        0,
+        0.55
+      ],
+      "max_cord_to_nearest_horn_vertex_m": 0.00136019545607269,
+      "before_max_cord_to_horn_vertex_m": 0.193774104118347,
+      "max_arrow_release_vertex_bounds_jump_m": 1.06624031559477e-06,
+      "existing_grip_poses": 180,
+      "existing_bow_body_sweeps": 900,
+      "existing_axe_sweeps": 150,
+      "existing_punch_fingers": 240,
+      "tip_contact_cases": 10,
+      "controller_release_transforms": 3,
+      "additional_arrow_centerline_triangle_probes": 24,
+      "centerline_bow_intersections": 0,
+      "native_studio_frames": 36,
+      "UI_sizes": [
+        "960x540",
+        "1280x720",
+        "1920x1080"
+      ],
+      "manual_play": false
+    },
+    "CI": {
+      "full_core": {
+        "id": 40173982420,
+        "name": "Validate World Core",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173982420",
+        "updated_at": "2026-10-25T07:45:34Z"
+      },
+      "movement": {
+        "id": 40173984655,
+        "name": "Validate Player Movement",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173984655",
+        "updated_at": "2026-10-25T07:49:15Z"
+      },
+      "inventory": {
+        "id": 40174468923,
+        "name": "Verify Inventory Layout Models and Keyboard",
+        "head_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40174468923",
+        "updated_at": "2026-10-25T07:55:29Z"
+      },
+      "focused_graphical_world": {
+        "id": 40173982239,
+        "name": "Verify Arrow Contact and Combat",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173982239",
+        "updated_at": "2026-10-25T07:52:35Z"
+      }
+    },
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "root_integration_reconciliation": {
+    "previous_890_package_receipt": "build/asset_work/settler-weapons-2026-10-24/root-runtime-integration.json",
+    "current": "docs/review/2026-10-25-authored-bow/root-integration.json",
+    "shared_HEAD_index_unchanged": true,
+    "normal_saves_profiles_untouched": true
+  },
+  "latest_map_render_package": {
+    "runtime_sha": "a97c4be6c5186923939bdb78c0ec5fc0fffdba0f",
+    "root_runtime_integrated": true,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_MAP_RENDER.json",
+    "dense_features": 1011,
+    "marker_draw_calls_before": 1017,
+    "marker_draw_calls_after": 3,
+    "world_draw_calls_before": 1104,
+    "world_draw_calls_after": 287,
+    "local_gameplay_seconds": 110.9690000000046,
+    "local_gameplay_120_frame_mean_ms": 52.135075,
+    "renderer": "Godot4.7.1 GL Compatibility, Intel UHD610, Windows8GB",
+    "manual_play": false,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "latest_map_render_CI": {
+    "conclusion": "failure",
+    "databaseId": 40177529922,
+    "headSha": "a97c4be6c5186923939bdb78c0ec5fc0fffdba0f",
+    "jobs": [
+      {
+        "completedAt": "2026-10-25T08:49:49Z",
+        "conclusion": "failure",
+        "databaseId": 121121356486,
+        "name": "map-render",
+        "startedAt": "2026-10-25T08:40:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-25T08:40:11Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-25T08:40:10Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:40:31Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v5",
+            "number": 2,
+            "startedAt": "2026-10-25T08:40:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:40:43Z",
+            "conclusion": "success",
+            "name": "Install Godot and a software rendering display",
+            "number": 3,
+            "startedAt": "2026-10-25T08:40:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:23Z",
+            "conclusion": "success",
+            "name": "Parse actual project and rendered diagnostic",
+            "number": 4,
+            "startedAt": "2026-10-25T08:40:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:24Z",
+            "conclusion": "success",
+            "name": "Preserve cartography discovered features and felled trees",
+            "number": 5,
+            "startedAt": "2026-10-25T08:42:23Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:32Z",
+            "conclusion": "success",
+            "name": "Verify 1011 rendered markers colors ordering save transitions and bounded drawing",
+            "number": 6,
+            "startedAt": "2026-10-25T08:42:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:33Z",
+            "conclusion": "success",
+            "name": "Preserve terrain fog and same-cell save restoration",
+            "number": 7,
+            "startedAt": "2026-10-25T08:42:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:45:45Z",
+            "conclusion": "success",
+            "name": "Render ordinary world input equipment magic UI and disk save",
+            "number": 8,
+            "startedAt": "2026-10-25T08:42:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:45Z",
+            "conclusion": "failure",
+            "name": "Render entry exit and full saved household lifecycle",
+            "number": 9,
+            "startedAt": "2026-10-25T08:45:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:47Z",
+            "conclusion": "success",
+            "name": "Upload actual map and world evidence including failures",
+            "number": 10,
+            "startedAt": "2026-10-25T08:49:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:47Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v5",
+            "number": 20,
+            "startedAt": "2026-10-25T08:49:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:47Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 21,
+            "startedAt": "2026-10-25T08:49:47Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Treninem/game/actions/runs/40177529922/job/121121356486"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Treninem/game/actions/runs/40177529922"
+  },
+  "latest_room_lighting_package": {
+    "runtime_sha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+    "test_sha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+    "root_selected_files_integrated": true,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
+    "native_complete_household_seconds": 178.2190000000046,
+    "hall_draw_calls_before": 315,
+    "hall_draw_calls_after": 205,
+    "manual_play": false,
+    "full_art_acceptance": false,
+    "stable_release": false
+  }
+}

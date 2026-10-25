@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3 unreleased",
+  "parent": "dbd099913c56231ecca4d402ca6bdf881c636f87",
+  "spec_attachment": "f27e730d-ce36-4a53-b8ba-48c725402a74",
+  "spec_comparison": "Same complete normalized 2579-line specification",
+  "problem": "Standalone clothing normal/AO, footwear and five eye atlases had no physical mip chain despite runtime mipmapped filtering. Embedded body/hair textures already had mip levels.",
+  "changes": [
+    "Preserve explicit texture import sidecars with mip generation enabled for the eight affected images.",
+    "Keep source pixels, license, compression mode, UVs, colors, normal intensity and geometry unchanged.",
+    "Add regression checking actual texture image mip chains, including all 16 distinct textures referenced by both live visual models; source and exported-pack checks pass.",
+    "Add strict texture filtering check to Validate World Core; all existing release gates retained."
+  ],
+  "baseline": {
+    "case": "character_texture_filtering",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Actual character texture lacks mip levels: garment normal",
+      "ERROR: Actual character texture lacks mip levels: garment AO",
+      "ERROR: Actual character texture lacks mip levels: shoe albedo",
+      "ERROR: Actual character texture lacks mip levels: res://assets/production/characters/realistic/eyes/brown_eye.png",
+      "ERROR: Actual character texture lacks mip levels: res://assets/production/characters/realistic/eyes/blue_eye.png",
+      "ERROR: Actual character texture lacks mip levels: res://assets/production/characters/realistic/eyes/green_eye.png",
+      "ERROR: Actual character texture lacks mip levels: res://assets/production/characters/realistic/eyes/grey_eye.png",
+      "ERROR: Actual character texture lacks mip levels: res://assets/production/characters/realistic/eyes/lightblue_eye.png"
+    ],
+    "seconds": 8.69
+  },
+  "source_checks": [
+    {
+      "case": "import",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 23.92
+    },
+    {
+      "case": "character_texture_filtering",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.69
+    },
+    {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.19
+    },
+    {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 82.59,
+      "marker": true
+    }
+  ],
+  "import_files": [
+    "assets/production/characters/realistic/details/garment_normal.png.import",
+    "assets/production/characters/realistic/details/garment_ao.png.import",
+    "assets/production/characters/realistic/details/shoes_albedo.png.import",
+    "assets/production/characters/realistic/eyes/brown_eye.png.import",
+    "assets/production/characters/realistic/eyes/blue_eye.png.import",
+    "assets/production/characters/realistic/eyes/green_eye.png.import",
+    "assets/production/characters/realistic/eyes/grey_eye.png.import",
+    "assets/production/characters/realistic/eyes/lightblue_eye.png.import"
+  ],
+  "source_pixel_sha256": {
+    "assets/production/characters/realistic/details/garment_normal.png": "ff029fc5a3350ebc72813cdf050afcffd23064c7701d99e664572713cfa98a5f",
+    "assets/production/characters/realistic/details/garment_ao.png": "9402d75d71318ef3ad90ee59f8b8688effefd13b3ec56423330e005bed5cd6c0",
+    "assets/production/characters/realistic/details/shoes_albedo.png": "fe8216fbd0c34ecd3ac0e1a01970a4ccf844417be5fd1d72c527c9209256db93",
+    "assets/production/characters/realistic/eyes/brown_eye.png": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b",
+    "assets/production/characters/realistic/eyes/blue_eye.png": "572ddc93ab3e177100619ec7c00b2574540cfb382805afc2e450788117f6140c",
+    "assets/production/characters/realistic/eyes/green_eye.png": "b9864ac4f4fa484b24e18f6aba030d70dbc8820cbbacfbe63a974c76772c2009",
+    "assets/production/characters/realistic/eyes/grey_eye.png": "ecb05613126036a3d017880fabbd570501c5f14032c186462d8f6e2d719f6c4f",
+    "assets/production/characters/realistic/eyes/lightblue_eye.png": "687c8f6d95a8550bcd4a34158f415d6bb376c0bb32e67d127bbb51e5fa469eef"
+  },
+  "frozen_export": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 45.72,
+    "sha256": "728741476dc0518db322ecca30b91d882d0b670d81246f60f8e40c34a003528b"
+  },
+  "frozen_texture_probe": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 5.27,
+    "marker": true
+  },
+  "frozen_world": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 57.28,
+    "marker": true
+  },
+  "actual_material_textures_checked": 16,
+  "probe_initialization_correction": {
+    "failed_attempt": {
+      "exit_code": 4294967295,
+      "errors": [
+        "SCRIPT ERROR: Compile Error: Identifier not found: GameState",
+        "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+        "ERROR: Failed to load script \"D:/Desktop/GitHub/game/build/acceptance/mip_probe_native.gd\" with error \"Compilation failed\".",
+        "SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'."
+      ],
+      "seconds": 114.97,
+      "marker": false
+    },
+    "resolution": "Standalone SceneTree probe now loads the visual script after autoload initialization; all original mip assertions retained."
+  },
+  "technical_reference": "https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/importing_images.html#mipmaps-generate",
+  "editor_acceptance": {
+    "accepted": 32,
+    "total": 55,
+    "percent": 58.2,
+    "visual_acceptance": false
+  },
+  "limitations": [
+    "Mip chains increase texture memory; no broad performance or quantitative temporal-shimmer benchmark claimed.",
+    "This fixes texture preparation, not skin anatomy, clothing geometry, hair silhouettes or natural animation.",
+    "Graphical world run is automated bounded movement/weapon/save validation with explicit test profiles/equipment; not a manual whole-city tour.",
+    "79 ObjectDB exit warning remains unresolved. No stable publication; new-commit remote checks pending."
+  ]
+}

@@ -1,0 +1,3 @@
+Project-authored geometry and author_equipment.py are dedicated under CC0 1.0 Universal.
+Texture rights and original authors are preserved separately under licenses/.
+https://creativecommons.org/publicdomain/zero/1.0/

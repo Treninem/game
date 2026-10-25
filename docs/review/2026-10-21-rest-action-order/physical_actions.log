@@ -1,0 +1,5 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+WARDROBE_QA_RESOURCE_SAMPLE static_bytes=60048770.0 video_bytes=430569878.0 adapter=Intel(R) UHD Graphics 610 note=instrumented_fixture_not_steady_world_FPS
+MOTION_ACTIONS_OK walked_m=27.2334358077496 bodies=2 normal_input=true

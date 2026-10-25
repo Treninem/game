@@ -1,35 +1,28 @@
 extends Node3D
 
 const GEOGRAPHY := preload("res://scripts/world_geography.gd")
+const PATHS := preload("res://scripts/terrain_paths.gd")
 const NATURE_ROOT := "res://assets/production/nature/kenney_nature_kit/Models/GLTF format/"
 const LOG_LARGE: PackedScene = preload(NATURE_ROOT + "log_large.glb")
 const STUMP_DETAIL: PackedScene = preload(NATURE_ROOT + "stump_roundDetailed.glb")
 
 const TRACK_WIDTH := 6.4
-const TRACK_STEP := 24.0
+const TRACK_STEP := 6.0
 const RUT_OFFSET := 1.65
 const TRACK_POINTS: Array[Vector2] = [
     Vector2(285.0, 138.0),
     Vector2(470.0, 150.0),
-    Vector2(650.0, 120.0),
-    Vector2(880.0, 35.0),
-    Vector2(1120.0, -100.0),
-    Vector2(1370.0, -275.0),
-    Vector2(1650.0, -420.0)
+    Vector2(650.0, 120.0)
 ]
 
 var road_segment_count: int = 0
 var civilization_sign_count: int = 0
 var logging_sign_count: int = 0
 var fishing_sign_count: int = 0
-var road_material: StandardMaterial3D
-var rut_material: StandardMaterial3D
 var timber_material: StandardMaterial3D
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_DISABLED
-    road_material = _material(Color(0.29, 0.215, 0.135, 1.0), 0.995)
-    rut_material = _material(Color(0.19, 0.135, 0.085, 1.0), 1.0)
     timber_material = _material(Color(0.29, 0.17, 0.075, 1.0), 0.97)
     _build_old_cart_track()
     _build_logging_signs()
@@ -40,41 +33,30 @@ func _build_old_cart_track() -> void:
     road_root.name = "OldCartTrack"
     add_child(road_root)
 
-    var road_mesh := BoxMesh.new()
-    road_mesh.size = Vector3(TRACK_WIDTH, 0.045, TRACK_STEP + 2.0)
-    road_mesh.material = road_material
-    var rut_mesh := BoxMesh.new()
-    rut_mesh.size = Vector3(0.28, 0.055, TRACK_STEP + 1.0)
-    rut_mesh.material = rut_material
-
-    var road_transforms: Array[Transform3D] = []
-    var left_rut_transforms: Array[Transform3D] = []
-    var right_rut_transforms: Array[Transform3D] = []
-
-    for point_index in range(TRACK_POINTS.size() - 1):
-        var start := TRACK_POINTS[point_index]
-        var finish := TRACK_POINTS[point_index + 1]
-        var length := start.distance_to(finish)
-        var steps := maxi(1, ceili(length / TRACK_STEP))
-        for step_index in range(steps):
-            var t0 := float(step_index) / float(steps)
-            var t1 := float(step_index + 1) / float(steps)
-            var p0 := start.lerp(finish, t0)
-            var p1 := start.lerp(finish, t1)
-            var delta := p1 - p0
-            var center := (p0 + p1) * 0.5
-            var yaw := atan2(delta.x, delta.y)
-            var y := (WorldData.elevation_at(p0) + WorldData.elevation_at(p1)) * 0.5 + 0.035
-            var basis := Basis(Vector3.UP, yaw)
-            var base_transform := Transform3D(basis, Vector3(center.x, y, center.y))
-            road_transforms.append(base_transform)
-            left_rut_transforms.append(Transform3D(basis, base_transform.origin + basis * Vector3(-RUT_OFFSET, 0.035, 0.0)))
-            right_rut_transforms.append(Transform3D(basis, base_transform.origin + basis * Vector3(RUT_OFFSET, 0.035, 0.0)))
+    # This forest spur joins the canonical road at 650,120. The old second
+    # overlay continued all the way through the village as floating flat boxes.
+    var footprints: Array[PackedVector2Array] = []
+    var left: Array[PackedVector2Array] = []
+    var right: Array[PackedVector2Array] = []
+    for i in range(TRACK_POINTS.size()-1):
+        var a := TRACK_POINTS[i]
+        var b := TRACK_POINTS[i+1]
+        var side := Vector2(-(b-a).y,(b-a).x).normalized()*RUT_OFFSET
+        var count := ceili(a.distance_to(b)/TRACK_STEP)
+        for index in range(count):
+            var start := a.lerp(b,float(index)/count)
+            var finish := a.lerp(b,float(index+1)/count)
+            footprints.append(PATHS.strip(start,finish,TRACK_WIDTH))
+            left.append(PATHS.strip(start-side,finish-side,0.28))
+            right.append(PATHS.strip(start+side,finish+side,0.28))
             road_segment_count += 1
-
-    _add_multimesh(road_root, "TrackBed", road_mesh, road_transforms, 1000.0)
-    _add_multimesh(road_root, "WheelRutLeft", rut_mesh, left_rut_transforms, 900.0)
-    _add_multimesh(road_root, "WheelRutRight", rut_mesh, right_rut_transforms, 900.0)
+    PATHS.add(road_root,"TrackBed",footprints,"soil",0.007)
+    var left_visual := PATHS.add(road_root,"WheelRutLeft",left,"soil",0.009)
+    var right_visual := PATHS.add(road_root,"WheelRutRight",right,"soil",0.009)
+    var rut := PATHS.material("soil").duplicate() as StandardMaterial3D
+    rut.albedo_color = Color(0.55,0.49,0.38)
+    if left_visual!=null: left_visual.material_override = rut
+    if right_visual!=null: right_visual.material_override = rut
     civilization_sign_count += road_segment_count
 
 func _build_logging_signs() -> void:
@@ -185,19 +167,6 @@ func _build_fishing_signs() -> void:
         root.add_child(pole)
         fishing_sign_count += 1
         civilization_sign_count += 1
-
-func _add_multimesh(parent: Node3D, node_name: String, mesh: Mesh, transforms: Array[Transform3D], visibility_end: float) -> void:
-    var multi := MultiMesh.new()
-    multi.transform_format = MultiMesh.TRANSFORM_3D
-    multi.mesh = mesh
-    multi.instance_count = transforms.size()
-    for i in range(transforms.size()):
-        multi.set_instance_transform(i, transforms[i])
-    var instance := MultiMeshInstance3D.new()
-    instance.name = node_name
-    instance.multimesh = multi
-    instance.visibility_range_end = visibility_end
-    parent.add_child(instance)
 
 func _material(color: Color, roughness_value: float) -> StandardMaterial3D:
     var material := StandardMaterial3D.new()

@@ -1,0 +1,192 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7.2",
+  "delivery": "Unreleased character review; no stable installer/tag/updater promotion",
+  "upstream_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "implemented": [
+    "Native MakeHuman male/female skinned mesh with authored weights, UV skin, separate eyes/brows/two hairstyles/clothing/boots, CC0 provenance and selected source manifests",
+    "Working 3D New Game creator: ten geometric presets, sex, name, skin/hair/cloth colors, four morphs, rotation/zoom and animation preview; local look save/load and normal game save persistence",
+    "Marta uses a female base; Marek male; stable NPC appearance records and legacy fallback",
+    "Corrected shirt underarm stretch, cuffs, hidden-body masks, shirt/trouser UV materials, forward knee bend, combat-Idle backward torso lean, shoe floor contact, skeleton-space sitting and jump, hair tint, repeated Working clip, bounded material cache and clipped editor controls"
+  ],
+  "local_cases": [
+    {
+      "name": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.56
+    },
+    {
+      "name": "household_pose",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.11
+    },
+    {
+      "name": "visual_grounding",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 50.3
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 36.25
+    },
+    {
+      "name": "household_quality",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.62
+    },
+    {
+      "name": "citizen_persistence",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 10.75
+    },
+    {
+      "name": "boot_world",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.72
+    },
+    {
+      "name": "player_movement",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 22.75
+    },
+    {
+      "name": "chopping",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.08
+    },
+    {
+      "name": "offworld_streaming",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 19.28
+    },
+    {
+      "name": "household_furniture",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 78.64
+    },
+    {
+      "name": "square_home_life",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 162.55
+    },
+    {
+      "name": "ui_and_save",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 13.64
+    },
+    {
+      "name": "save_recovery",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 3.06
+    },
+    {
+      "name": "storage_access",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.0
+    },
+    {
+      "name": "household_aisle",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 9.78
+    }
+  ],
+  "latest_gait_cases": "build/acceptance/stability-results/character-gait-final.json",
+  "geometry_validation": {
+    "clips": 20,
+    "deformed_poses": 100,
+    "gait_samples_per_sex_clip": 25,
+    "checks": [
+      "finite vertices",
+      "maximum edge below 0.35 m",
+      "knees do not bend backwards",
+      "torso does not lean backwards beyond 8 degrees"
+    ]
+  },
+  "packaged_smoke": {
+    "exit_code": 0,
+    "errors": [],
+    "seconds": 29.58,
+    "marker": true
+  },
+  "native_forest": {
+    "captures": [
+      "user://character-editor-initial.png",
+      "user://character-standing.png",
+      "user://character-walking.png",
+      "user://character-running.png",
+      "user://character-jump.png",
+      "user://character-axe.png",
+      "user://character-magic.png",
+      "user://character-after-load.png",
+      "user://character-actual-camera.png",
+      "user://character-actual-camera-turned.png"
+    ],
+    "equipment": "explicit test axe",
+    "fps_sample": 32.0,
+    "mouse_delta_rad": -0.439999882374899,
+    "player_position_assignments": 0,
+    "preset": 5,
+    "quality": 0,
+    "sex": "female",
+    "start": "visible creator controls",
+    "status": "pass",
+    "time_scale": 1.0,
+    "version": "0.10.7.2",
+    "walked_m": 15.4069111030549
+  },
+  "native_home": {
+    "walked_m": 38.0025667734444,
+    "position_assignments": 0,
+    "start": "previous earned town save copied to isolated slot 8; full 16.9 km route not rerun",
+    "checks": [
+      "real chest UI transfer and access",
+      "hero bench",
+      "two resident beds",
+      "two resident seats",
+      "disk save/load",
+      "no floating labels"
+    ],
+    "fps_samples_low": [
+      26.9896,
+      31.7351,
+      31.6369
+    ],
+    "fixture": "Only inspection clock/survival held; ordinary Input movement, observer camera for close inspection"
+  },
+  "hardware": "Intel UHD Graphics 610, Godot 4.7.1 GL Compatibility",
+  "preserved_failed_attempts": [
+    "character-native-first-ui: operator start exceeded bounded inspection deadline",
+    "character-native-before-mouse-retry: 40 s operator mouse window expired; replaced with event-driven wait under same global bound",
+    "character-native-before-gait-fix: previous pass retained; visual walking review exposed backwards torso lean, fixed and rerun"
+  ],
+  "warnings": [
+    "75 ObjectDB instances at forest exit; 85 at home exit; no SCRIPT ERROR/ERROR in final native logs",
+    "Previous remote 6e47 world-core/build-game failed resource-cleanup ERRORs on Linux; new remote gates not yet verified"
+  ],
+  "unfinished": [
+    "Complete medieval wardrobe and armor swaps",
+    "Age and advanced facial controls",
+    "Dedicated LOD/performance optimization; samples are not a benchmark",
+    "Full weapon grip/fingers and transitions to furniture",
+    "World graphics remain below Witcher 3 reference"
+  ],
+  "review_launcher": "build/review-2026-10-19-characters/ImPuls-review.cmd",
+  "pack_sha256": "e4628d0c4144f4da9e599e7dc362d2e98f0f09ed6d31cb884e25a3f6ab2da35b"
+}

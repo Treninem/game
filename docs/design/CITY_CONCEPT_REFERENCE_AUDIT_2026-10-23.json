@@ -1,0 +1,108 @@
+{
+  "archive_sha256": "70ee83623dc3349c07cd610ebece53718033224dd38414af161c9a8100434a67",
+  "source": "C:\\Users\\Dexp\\Downloads\\ImPULS_20_locations (2).zip",
+  "reference_only_not_runtime_assets": true,
+  "images": [
+    {
+      "index": 1,
+      "archive_name": "01_Столица/01_Столица_Общий_вид.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\01.jpg"
+    },
+    {
+      "index": 2,
+      "archive_name": "01_Столица/02_Столица_Рыночная_площадь.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\02.jpg"
+    },
+    {
+      "index": 3,
+      "archive_name": "01_Столица/03_Столица_Вид_с_террасы.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\03.jpg"
+    },
+    {
+      "index": 4,
+      "archive_name": "01_Столица/04_Столица_Жилая_улица.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\04.jpg"
+    },
+    {
+      "index": 5,
+      "archive_name": "02_Торговый_город/05_Торговый_город_Набережная.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\05.jpg"
+    },
+    {
+      "index": 6,
+      "archive_name": "02_Торговый_город/06_Торговый_город_Гавань.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\06.jpg"
+    },
+    {
+      "index": 7,
+      "archive_name": "02_Торговый_город/07_Торговый_город_Торговая_улица.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\07.jpg"
+    },
+    {
+      "index": 8,
+      "archive_name": "03_Пограничный_город/08_Пограничный_город_Ворота.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\08.jpg"
+    },
+    {
+      "index": 9,
+      "archive_name": "03_Пограничный_город/09_Пограничный_город_Общий_вид.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\09.jpg"
+    },
+    {
+      "index": 10,
+      "archive_name": "03_Пограничный_город/10_Пограничный_город_Внутри_стен.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\10.jpg"
+    },
+    {
+      "index": 11,
+      "archive_name": "04_Новые_места/11_Лесная_деревня.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\11.jpg"
+    },
+    {
+      "index": 12,
+      "archive_name": "04_Новые_места/12_Шахтёрский_посёлок.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\12.jpg"
+    },
+    {
+      "index": 13,
+      "archive_name": "04_Новые_места/13_Рыбацкая_деревня.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\13.jpg"
+    },
+    {
+      "index": 14,
+      "archive_name": "04_Новые_места/14_Гильдия_искателей.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\14.jpg"
+    },
+    {
+      "index": 15,
+      "archive_name": "04_Новые_места/15_Кузнечный_двор.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\15.jpg"
+    },
+    {
+      "index": 16,
+      "archive_name": "04_Новые_места/16_Караванный_двор.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\16.jpg"
+    },
+    {
+      "index": 17,
+      "archive_name": "04_Новые_места/17_Горная_застава.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\17.jpg"
+    },
+    {
+      "index": 18,
+      "archive_name": "04_Новые_места/18_Древние_руины.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\18.jpg"
+    },
+    {
+      "index": 19,
+      "archive_name": "04_Новые_места/19_Фермерская_долина.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\19.jpg"
+    },
+    {
+      "index": 20,
+      "archive_name": "04_Новые_места/20_Подземный_рынок.jpg",
+      "path": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\city-concepts-2026-10-23\\20.jpg"
+    }
+  ],
+  "decision": "20 user images reviewed as references. Apply dense human-scale timber/plaster/stone street walls, steep roofs, balconies, window boxes, leafy market courts, muted linen/goods and actual water. Keep canonical capital geography and existing working home/workplace anchors. River/terraces/citadel/harbor/border skyline and distinct city identities remain OPEN."
+}

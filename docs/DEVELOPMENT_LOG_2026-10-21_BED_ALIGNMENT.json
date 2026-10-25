@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-21",
+  "parent_commit": "a08bbf3e8c9ffa81b1219aab96752d9379169b57",
+  "parent_ci": "8/8 passed, exact SHA verified",
+  "fixed": [
+    "Authored bed long axis X normalized to gameplay Z before bounds, scale and mattress measurements",
+    "Supine sleep transform with head toward pillow; height-scaled offsets retained"
+  ],
+  "validation": {
+    "interior-checked-household_pose": {
+      "exit_code": 0,
+      "seconds": 5.55,
+      "errors": [],
+      "marker": true
+    },
+    "supine-checked-household_furniture": {
+      "exit_code": 0,
+      "seconds": 83.66,
+      "errors": [],
+      "marker": true
+    },
+    "supine-checked-household_pose": {
+      "exit_code": 0,
+      "seconds": 32.5,
+      "errors": [],
+      "marker": true
+    },
+    "supine-render-checked-household_pose": {
+      "exit_code": 0,
+      "seconds": 60.31,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "rendered_captures": 12,
+  "manual_play": false,
+  "visual_review": "Actual Godot frames inspected for male 160cm and female 195cm. Longitudinal placement and face direction corrected. Automated rendered fixture covers both bodies at 160/180/195cm.",
+  "remaining": [
+    "Dedicated sleeping clip, relaxed hands and enter/exit transitions",
+    "Full human/furniture artistic acceptance",
+    "Exact-SHA CI for new commit"
+  ],
+  "release": false
+}

@@ -1,0 +1,9 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WORKING_POSE_BODY_OK sex=male build=0.0 hand_span_m=0.0484664849937
+WORKING_POSE_BODY_OK sex=male build=-0.5 hand_span_m=0.0484664849937
+WORKING_POSE_BODY_OK sex=male build=0.5 hand_span_m=0.0484664849937
+WORKING_POSE_BODY_OK sex=female build=0.0 hand_span_m=0.03701937198639
+WORKING_POSE_BODY_OK sex=female build=-0.5 hand_span_m=0.03701937198639
+WORKING_POSE_BODY_OK sex=female build=0.5 hand_span_m=0.03701937198639
+WORKING_POSE_OK final_poses=198 bodies=2 builds=3 supported_feet=true open_palms=true gaze=hand_task legacy_ground_work_retained=true

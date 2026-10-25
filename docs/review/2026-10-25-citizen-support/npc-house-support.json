@@ -1,0 +1,4257 @@
+{
+  "actor_positions_assigned_by_observer": false,
+  "independent_all_boot_vertices": true,
+  "rays": true,
+  "samples": [
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.086461216211319,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0864233076572418,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 0,
+      "grounded": false,
+      "position": "(13484.0, 0.105, -7008.5)",
+      "routine": "",
+      "support_usec": 0,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0861578956246376,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0861487686634064,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 0,
+      "grounded": false,
+      "position": "(13477.0, 0.105, -7011.036)",
+      "routine": "",
+      "support_usec": 0,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0038642380386591,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399931706488132,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 60,
+      "grounded": true,
+      "position": "(13483.52, 0.035, -7008.779)",
+      "routine": "Идёт домой",
+      "support_usec": 894,
+      "velocity": "(-1.289062, 0.0, -0.644531)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399995967745781,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00358795188367367,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 60,
+      "grounded": true,
+      "position": "(13476.49, 0.035, -7010.939)",
+      "routine": "Идёт домой",
+      "support_usec": 737,
+      "velocity": "(-1.40625, 0.0, 0.205078)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399925373494625,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400058925151825,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 120,
+      "grounded": true,
+      "position": "(13481.86, 0.035, -7009.606)",
+      "routine": "Идёт домой",
+      "support_usec": 356,
+      "velocity": "(-1.289062, 0.0, -0.644531)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039999857544899,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00376317091286182,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 120,
+      "grounded": true,
+      "position": "(13474.8, 0.035, -7011.227)",
+      "routine": "Идёт домой",
+      "support_usec": 715,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00267476588487625,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399944186210632,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 180,
+      "grounded": true,
+      "position": "(13480.42, 0.035, -7010.326)",
+      "routine": "Идёт домой",
+      "support_usec": 845,
+      "velocity": "(-1.289062, 0.0, -0.644531)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00377586483955383,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00368167273700237,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 180,
+      "grounded": true,
+      "position": "(13473.42, 0.035, -7012.045)",
+      "routine": "Идёт домой",
+      "support_usec": 645,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00396476313471794,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399944372475147,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 240,
+      "grounded": true,
+      "position": "(13478.87, 0.035, -7010.621)",
+      "routine": "Идёт домой",
+      "support_usec": 815,
+      "velocity": "(-1.40625, 0.0, 0.263672)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0036263857036829,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00393069721758366,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 240,
+      "grounded": true,
+      "position": "(13472.01, 0.035, -7012.887)",
+      "routine": "Идёт домой",
+      "support_usec": 740,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00113854557275772,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399929098784924,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 300,
+      "grounded": true,
+      "position": "(13477.31, 0.035, -7010.603)",
+      "routine": "Идёт домой",
+      "support_usec": 771,
+      "velocity": "(-1.40625, 0.0, 0.205078)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399952754378319,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.000226631760597229,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 300,
+      "grounded": true,
+      "position": "(13470.62, 0.035, -7013.717)",
+      "routine": "Идёт домой",
+      "support_usec": 717,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400001183152199,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00374026410281658,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 360,
+      "grounded": true,
+      "position": "(13475.76, 0.035, -7010.636)",
+      "routine": "Идёт домой",
+      "support_usec": 827,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039994902908802,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.002629105001688,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 360,
+      "grounded": true,
+      "position": "(13469.2, 0.035, -7014.56)",
+      "routine": "Идёт домой",
+      "support_usec": 653,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400002300739288,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00382275506854057,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 420,
+      "grounded": true,
+      "position": "(13474.36, 0.035, -7011.466)",
+      "routine": "Идёт домой",
+      "support_usec": 1610,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400000996887684,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00366912037134171,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 420,
+      "grounded": true,
+      "position": "(13467.81, 0.035, -7015.39)",
+      "routine": "Идёт домой",
+      "support_usec": 694,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399988330900669,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039992667734623,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 480,
+      "grounded": true,
+      "position": "(13472.97, 0.035, -7012.296)",
+      "routine": "Идёт домой",
+      "support_usec": 1328,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00353430397808552,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00359484739601612,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 480,
+      "grounded": true,
+      "position": "(13466.41, 0.035, -7016.22)",
+      "routine": "Идёт домой",
+      "support_usec": 720,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00321297533810139,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399893522262573,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 540,
+      "grounded": true,
+      "position": "(13471.6, 0.035, -7013.114)",
+      "routine": "Идёт домой",
+      "support_usec": 991,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399979017674923,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00388452038168907,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 540,
+      "grounded": true,
+      "position": "(13465.04, 0.035, -7017.038)",
+      "routine": "Идёт домой",
+      "support_usec": 710,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00360829941928387,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399912893772125,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 600,
+      "grounded": true,
+      "position": "(13470.16, 0.035, -7013.969)",
+      "routine": "Идёт домой",
+      "support_usec": 589,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399927422404289,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00346951000392437,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 600,
+      "grounded": true,
+      "position": "(13463.6, 0.035, -7017.892)",
+      "routine": "Идёт домой",
+      "support_usec": 705,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00395861081779003,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399917550384998,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 660,
+      "grounded": true,
+      "position": "(13468.77, 0.035, -7014.799)",
+      "routine": "Идёт домой",
+      "support_usec": 703,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399912148714066,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400002673268318,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 660,
+      "grounded": true,
+      "position": "(13462.21, 0.035, -7018.722)",
+      "routine": "Идёт домой",
+      "support_usec": 622,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399979390203953,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039997324347496,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 720,
+      "grounded": true,
+      "position": "(13467.37, 0.035, -7015.629)",
+      "routine": "Идёт домой",
+      "support_usec": 740,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400017201900482,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0033866073936224,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 720,
+      "grounded": true,
+      "position": "(13460.81, 0.035, -7019.552)",
+      "routine": "Идёт домой",
+      "support_usec": 670,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399914383888245,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400019995868206,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 780,
+      "grounded": true,
+      "position": "(13464.54, 0.035, -7017.313)",
+      "routine": "Идёт домой",
+      "support_usec": 502,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00338114053010941,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00363886170089245,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 780,
+      "grounded": true,
+      "position": "(13457.98, 0.035, -7021.237)",
+      "routine": "Идёт домой",
+      "support_usec": 617,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399963371455669,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399940088391304,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 840,
+      "grounded": true,
+      "position": "(13462.74, 0.035, -7018.388)",
+      "routine": "Идёт домой",
+      "support_usec": 845,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039763692766428,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00359474495053291,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 840,
+      "grounded": true,
+      "position": "(13456.18, 0.035, -7022.311)",
+      "routine": "Идёт домой",
+      "support_usec": 776,
+      "velocity": "(-1.230469, 0.0, -0.732422)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039996225386858,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400002114474773,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 900,
+      "grounded": true,
+      "position": "(13460.78, 0.03249, -7019.231)",
+      "routine": "Освобождает проход",
+      "support_usec": 1082,
+      "velocity": "(-1.347656, 0.0, -0.46875)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399931520223618,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039999932050705,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 900,
+      "grounded": true,
+      "position": "(13454.93, 0.031999, -7023.396)",
+      "routine": "Идёт домой",
+      "support_usec": 636,
+      "velocity": "(0.058594, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00101441144943237,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399933196604252,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 960,
+      "grounded": true,
+      "position": "(13458.6, 0.03249, -7019.989)",
+      "routine": "Освобождает проход",
+      "support_usec": 915,
+      "velocity": "(-1.40625, 0.0, -0.46875)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400066748261452,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00347533822059631,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 960,
+      "grounded": true,
+      "position": "(13454.94, 0.067817, -7025.708)",
+      "routine": "Идёт домой",
+      "support_usec": 652,
+      "velocity": "(-0.117187, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00335321761667728,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399974547326565,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1020,
+      "grounded": true,
+      "position": "(13457.09, 0.03249, -7021.142)",
+      "routine": "Идёт домой",
+      "support_usec": 1223,
+      "velocity": "(-1.113281, 0.0, -0.966797)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399964675307274,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399999693036079,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1020,
+      "grounded": true,
+      "position": "(13455.88, 0.067817, -7027.229)",
+      "routine": "Идёт к сундуку",
+      "support_usec": 736,
+      "velocity": "(0.292969, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399929285049438,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400073826313019,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1080,
+      "grounded": true,
+      "position": "(13455.35, 0.03249, -7022.556)",
+      "routine": "Идёт домой",
+      "support_usec": 1495,
+      "velocity": "(-1.464844, 0.0, -0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00364620238542557,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00364354252815247,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1080,
+      "grounded": true,
+      "position": "(13456.54, 0.067817, -7029.208)",
+      "routine": "Идёт к сундуку",
+      "support_usec": 666,
+      "velocity": "(0.9375, 0.0, -1.083984)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399922765791416,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400001741945744,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1140,
+      "grounded": true,
+      "position": "(13454.95, 0.03249, -7024.127)",
+      "routine": "Идёт домой",
+      "support_usec": 1043,
+      "velocity": "(0.058594, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.003423772752285,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00366078317165375,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1140,
+      "grounded": true,
+      "position": "(13457.8, 0.067817, -7030.747)",
+      "routine": "Идёт к сундуку",
+      "support_usec": 760,
+      "velocity": "(0.9375, 0.0, -1.113281)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400002673268318,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399980694055557,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1200,
+      "grounded": true,
+      "position": "(13454.92, 0.072236, -7025.959)",
+      "routine": "Идёт домой",
+      "support_usec": 1063,
+      "velocity": "(-0.117187, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399995595216751,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00372723117470741,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1200,
+      "grounded": true,
+      "position": "(13458.09, 0.067817, -7032.401)",
+      "routine": "Идёт к сундуку",
+      "support_usec": 761,
+      "velocity": "(1.40625, 0.0, -0.087891)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399992614984512,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00398994609713554,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1260,
+      "grounded": true,
+      "position": "(13454.91, 0.072236, -7028.017)",
+      "routine": "Идёт домой",
+      "support_usec": 2269,
+      "velocity": "(0.0, 0.0, -1.435547)"
+    },
+    {
+      "activity": "work",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400083139538765,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00340219587087631,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1260,
+      "grounded": true,
+      "position": "(13459.92, 0.067817, -7032.839)",
+      "routine": "Убирает вещи в сундук",
+      "support_usec": 677,
+      "velocity": "(0.644531, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00369604304432869,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400002673268318,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1320,
+      "grounded": true,
+      "position": "(13454.91, 0.072236, -7029.137)",
+      "routine": "Ждёт свободное место",
+      "support_usec": 732,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "work",
+      "actor": "SquareArtisan",
+      "clip": "Working",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": -0.014461413025856,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0035514235496521,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1320,
+      "grounded": true,
+      "position": "(13459.95, 0.067817, -7032.839)",
+      "routine": "Убирает вещи в сундук",
+      "support_usec": 668,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399991497397423,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399430841207504,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1380,
+      "grounded": true,
+      "position": "(13454.91, 0.072236, -7029.137)",
+      "routine": "Ждёт свободное место",
+      "support_usec": 993,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "work",
+      "actor": "SquareArtisan",
+      "clip": "Working",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": -0.014373704791069,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00350208580493927,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1380,
+      "grounded": true,
+      "position": "(13459.95, 0.067817, -7032.839)",
+      "routine": "Убирает вещи в сундук",
+      "support_usec": 737,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399992242455482,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400000810623169,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1440,
+      "grounded": true,
+      "position": "(13454.91, 0.072236, -7029.137)",
+      "routine": "Ждёт свободное место",
+      "support_usec": 864,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399906933307648,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00358429551124573,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1440,
+      "grounded": true,
+      "position": "(13459.1, 0.067817, -7032.355)",
+      "routine": "Освобождает место у сундука",
+      "support_usec": 705,
+      "velocity": "(-1.464844, 0.0, 0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399989634752274,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400000065565109,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1500,
+      "grounded": true,
+      "position": "(13454.91, 0.072236, -7029.137)",
+      "routine": "Ждёт свободное место",
+      "support_usec": 851,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399964302778244,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0029674619436264,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1500,
+      "grounded": true,
+      "position": "(13457.89, 0.067817, -7031.856)",
+      "routine": "Идёт к скамье",
+      "support_usec": 764,
+      "velocity": "(0.117187, 0.0, 1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00385895371437073,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399918854236603,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1560,
+      "grounded": true,
+      "position": "(13456.1, 0.072236, -7030.333)",
+      "routine": "Идёт к сундуку",
+      "support_usec": 1590,
+      "velocity": "(0.585937, 0.0, -1.40625)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1560,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 504,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00371213257312775,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399910658597946,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1620,
+      "grounded": true,
+      "position": "(13456.91, 0.072236, -7031.854)",
+      "routine": "Идёт к сундуку",
+      "support_usec": 1803,
+      "velocity": "(1.054688, 0.0, -1.025391)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399988889694214,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400012731552124,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1620,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 517,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399992242455482,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00381152331829071,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1680,
+      "grounded": true,
+      "position": "(13458.43, 0.072236, -7032.594)",
+      "routine": "Идёт к сундуку",
+      "support_usec": 1688,
+      "velocity": "(1.464844, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400009751319885,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400012731552124,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1680,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 528,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "work",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399953871965408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1740,
+      "grounded": true,
+      "position": "(13459.96, 0.072236, -7032.832)",
+      "routine": "Убирает вещи в сундук",
+      "support_usec": 1075,
+      "velocity": "(0.234375, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399991869926453,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1740,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 516,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "work",
+      "actor": "SquareTrader",
+      "clip": "Working",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": -0.0133436247706413,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039995014667511,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1800,
+      "grounded": true,
+      "position": "(13459.96, 0.072236, -7032.832)",
+      "routine": "Убирает вещи в сундук",
+      "support_usec": 997,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399976968765259,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1800,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 539,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "work",
+      "actor": "SquareTrader",
+      "clip": "Working",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": -0.0136103853583336,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399931520223618,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1860,
+      "grounded": true,
+      "position": "(13459.96, 0.072236, -7032.832)",
+      "routine": "Убирает вещи в сундук",
+      "support_usec": 1784,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400009751319885,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399979948997498,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1860,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 512,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039992518723011,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00311450287699699,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1920,
+      "grounded": true,
+      "position": "(13459.03, 0.072236, -7032.352)",
+      "routine": "Освобождает место у сундука",
+      "support_usec": 542,
+      "velocity": "(-1.464844, 0.0, 0.087891)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399985909461975,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400009751319885,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1920,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 534,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399927049875259,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00319036841392517,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1980,
+      "grounded": true,
+      "position": "(13457.35, 0.072236, -7032.346)",
+      "routine": "Освобождает место у сундука",
+      "support_usec": 533,
+      "velocity": "(-1.464844, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 1980,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 587,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399908423423767,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994105100632,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2040,
+      "grounded": true,
+      "position": "(13457.19, 0.072236, -7030.849)",
+      "routine": "Освобождает место у сундука",
+      "support_usec": 2329,
+      "velocity": "(0.585937, 0.0, 1.113281)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399991869926453,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2040,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 550,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400009751319885,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400018692016602,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2100,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.296)",
+      "routine": "Сидит дома",
+      "support_usec": 3364,
+      "velocity": "(0.0, 0.0, 0.234375)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400009751319885,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2100,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 547,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0040002316236496,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400011241436005,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2160,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 825,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399991869926453,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2160,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 535,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400039553642273,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039999932050705,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2220,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 972,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2220,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 644,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400017201900482,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2280,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 898,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400012731552124,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400015711784363,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2280,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 536,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400020182132721,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0040002316236496,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2340,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 895,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399985909461975,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2340,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 539,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400012731552124,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400011241436005,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2400,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 525,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0040002167224884,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039999783039093,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2400,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 501,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400012731552124,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2460,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 1457,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400012731552124,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400009751319885,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2460,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 519,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400036573410034,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400017201900482,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2520,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 505,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399985909461975,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400015711784363,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2520,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 557,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400029122829437,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400033593177795,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2580,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 1028,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399988889694214,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400018692016602,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2580,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 512,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareTrader",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400026142597198,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399990379810333,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2640,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.293)",
+      "routine": "Сидит дома",
+      "support_usec": 465,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "sit",
+      "actor": "SquareArtisan",
+      "clip": "Sitting",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400003790855408,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2640,
+      "grounded": true,
+      "position": "(13457.9, 0.067817, -7031.55)",
+      "routine": "Сидит дома",
+      "support_usec": 534,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00349938869476318,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00330972671508789,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2700,
+      "grounded": true,
+      "position": "(13457.89, 0.072236, -7029.297)",
+      "routine": "Идёт к кровати",
+      "support_usec": 1858,
+      "velocity": "(-0.175781, 0.0, -0.175781)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400011986494064,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400009006261826,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2700,
+      "grounded": true,
+      "position": "(13457.89, 0.067817, -7031.554)",
+      "routine": "Идёт к кровати",
+      "support_usec": 722,
+      "velocity": "(-0.175781, 0.0, -0.175781)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00382211059331894,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399906188249588,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2760,
+      "grounded": true,
+      "position": "(13456.74, 0.072236, -7030.512)",
+      "routine": "Идёт к кровати",
+      "support_usec": 1304,
+      "velocity": "(-1.054688, 0.0, -1.025391)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399957597255707,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400037318468094,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2760,
+      "grounded": true,
+      "position": "(13456.25, 0.067817, -7031.594)",
+      "routine": "Идёт к кровати",
+      "support_usec": 775,
+      "velocity": "(-1.464844, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399906933307648,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00395232439041138,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2820,
+      "grounded": true,
+      "position": "(13455.73, 0.07397, -7031.284)",
+      "routine": "Идёт к кровати",
+      "support_usec": 569,
+      "velocity": "(-1.054688, 0.0, -0.996094)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399947911500931,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399995222687721,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2820,
+      "grounded": true,
+      "position": "(13454.97, 0.073896, -7030.663)",
+      "routine": "Идёт к кровати",
+      "support_usec": 749,
+      "velocity": "(-1.054688, 0.0, 1.025391)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399911403656006,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039549395442009,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2880,
+      "grounded": true,
+      "position": "(13454.91, 0.07397, -7032.709)",
+      "routine": "Идёт к кровати",
+      "support_usec": 507,
+      "velocity": "(0.0, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399934127926826,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00390740111470222,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2880,
+      "grounded": true,
+      "position": "(13453.32, 0.073896, -7030.346)",
+      "routine": "Идёт к кровати",
+      "support_usec": 789,
+      "velocity": "(-1.464844, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399911403656006,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00397423282265663,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2940,
+      "grounded": true,
+      "position": "(13453.38, 0.07397, -7033.094)",
+      "routine": "Идёт к кровати",
+      "support_usec": 485,
+      "velocity": "(-1.464844, 0.0, 0.0)"
+    },
+    {
+      "activity": "sleep",
+      "actor": "SquareArtisan",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.669161111116409,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.36517396569252,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 2940,
+      "grounded": true,
+      "position": "(13451.87, 0.073896, -7030.346)",
+      "routine": "Спит дома",
+      "support_usec": 520,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00332685559988022,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039997287094593,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3000,
+      "grounded": true,
+      "position": "(13451.86, 0.07397, -7033.341)",
+      "routine": "Выходит из дома",
+      "support_usec": 1358,
+      "velocity": "(-0.058594, 0.0, -0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399972498416901,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399994477629662,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3000,
+      "grounded": true,
+      "position": "(13452.03, 0.073896, -7030.346)",
+      "routine": "Освобождает проход",
+      "support_usec": 752,
+      "velocity": "(1.289062, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399909168481827,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00370800495147705,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3060,
+      "grounded": true,
+      "position": "(13454.32, 0.07397, -7033.343)",
+      "routine": "Выходит из дома",
+      "support_usec": 987,
+      "velocity": "(1.347656, 0.0, 0.087891)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399951636791229,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00187761709094048,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3060,
+      "grounded": true,
+      "position": "(13454.59, 0.073896, -7030.092)",
+      "routine": "Освобождает проход",
+      "support_usec": 689,
+      "velocity": "(1.289062, 0.0, 0.205078)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399897247552872,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00395618379116058,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3120,
+      "grounded": true,
+      "position": "(13454.96, 0.07397, -7031.773)",
+      "routine": "Выходит из дома",
+      "support_usec": 890,
+      "velocity": "(0.0, 0.0, 1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399946793913841,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00319037586450577,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3120,
+      "grounded": true,
+      "position": "(13456.27, 0.073896, -7029.116)",
+      "routine": "Освобождает проход",
+      "support_usec": 677,
+      "velocity": "(1.40625, 0.0, 0.205078)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400072336196899,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399954617023468,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3180,
+      "grounded": true,
+      "position": "(13454.96, 0.07397, -7029.812)",
+      "routine": "Выходит из дома",
+      "support_usec": 771,
+      "velocity": "(0.0, 0.0, 1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0040002278983593,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.003574188798666,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3180,
+      "grounded": true,
+      "position": "(13457.47, 0.073896, -7028.596)",
+      "routine": "Пропускает соседа в дверях",
+      "support_usec": 862,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00324511528015137,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039992481470108,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3240,
+      "grounded": true,
+      "position": "(13454.96, 0.07397, -7027.921)",
+      "routine": "Выходит из дома",
+      "support_usec": 885,
+      "velocity": "(0.0, 0.0, 1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400013476610184,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400036200881004,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3240,
+      "grounded": true,
+      "position": "(13457.47, 0.073896, -7028.596)",
+      "routine": "Пропускает соседа в дверях",
+      "support_usec": 707,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00399969145655632,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00384752824902534,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3300,
+      "grounded": true,
+      "position": "(13454.96, 0.07397, -7026.031)",
+      "routine": "Выходит из дома",
+      "support_usec": 493,
+      "velocity": "(0.0, 0.0, 1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0039999857544899,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00394495576620102,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3300,
+      "grounded": true,
+      "position": "(13457.47, 0.073896, -7028.596)",
+      "routine": "Пропускает соседа в дверях",
+      "support_usec": 676,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00359459407627583,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399941578507423,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3360,
+      "grounded": true,
+      "position": "(13454.98, 0.042214, -7023.964)",
+      "routine": "Идёт на работу",
+      "support_usec": 469,
+      "velocity": "(0.117187, 0.0, 1.347656)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00400013104081154,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00390623509883881,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3360,
+      "grounded": true,
+      "position": "(13457.47, 0.073896, -7028.596)",
+      "routine": "Выходит из дома",
+      "support_usec": 700,
+      "velocity": "(-0.117187, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399890169501305,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399995595216751,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3420,
+      "grounded": true,
+      "position": "(13455.92, 0.042214, -7022.052)",
+      "routine": "Идёт на работу",
+      "support_usec": 1079,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.0032804012298584,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00363887473940849,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3420,
+      "grounded": true,
+      "position": "(13455.46, 0.073896, -7028.596)",
+      "routine": "Выходит из дома",
+      "support_usec": 674,
+      "velocity": "(-1.464844, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399928167462349,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039998646825552,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3480,
+      "grounded": true,
+      "position": "(13456.87, 0.042214, -7020.14)",
+      "routine": "Идёт на работу",
+      "support_usec": 505,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00355436652898788,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00360631570219994,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3480,
+      "grounded": true,
+      "position": "(13454.98, 0.073896, -7026.928)",
+      "routine": "Выходит из дома",
+      "support_usec": 858,
+      "velocity": "(0.0, 0.0, 1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399981066584587,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399955734610558,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3540,
+      "grounded": true,
+      "position": "(13457.69, 0.042214, -7018.507)",
+      "routine": "Идёт на работу",
+      "support_usec": 459,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/CapitalSquareLife/SquareHome/PhysicalShell/Floor",
+          "gap": 0.00360032171010971,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00362765043973923,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3540,
+      "grounded": true,
+      "position": "(13454.98, 0.073896, -7025.11)",
+      "routine": "Выходит из дома",
+      "support_usec": 652,
+      "velocity": "(0.0, 0.0, 1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00369061902165413,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399912893772125,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3600,
+      "grounded": true,
+      "position": "(13458.56, 0.042214, -7016.767)",
+      "routine": "Идёт на работу",
+      "support_usec": 617,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00355560891330242,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00360931269824505,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3600,
+      "grounded": true,
+      "position": "(13455.33, 0.028095, -7023.245)",
+      "routine": "Идёт на работу",
+      "support_usec": 683,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.000952776521444321,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399930775165558,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3660,
+      "grounded": true,
+      "position": "(13459.48, 0.042214, -7014.919)",
+      "routine": "Идёт на работу",
+      "support_usec": 1137,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00378179177641869,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00367601588368416,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3660,
+      "grounded": true,
+      "position": "(13456.25, 0.028095, -7021.397)",
+      "routine": "Идёт на работу",
+      "support_usec": 672,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399955175817013,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399992242455482,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3720,
+      "grounded": true,
+      "position": "(13460.35, 0.042214, -7013.179)",
+      "routine": "Идёт на работу",
+      "support_usec": 817,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0036682803183794,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00365091301500797,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3720,
+      "grounded": true,
+      "position": "(13457.12, 0.028095, -7019.657)",
+      "routine": "Идёт на работу",
+      "support_usec": 627,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00233863107860088,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399929285049438,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3780,
+      "grounded": true,
+      "position": "(13461.08, 0.042214, -7011.718)",
+      "routine": "Идёт на работу",
+      "support_usec": 751,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399949960410595,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00385197997093201,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3780,
+      "grounded": true,
+      "position": "(13457.85, 0.028095, -7018.196)",
+      "routine": "Идёт на работу",
+      "support_usec": 871,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039861798286438,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399935431778431,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3840,
+      "grounded": true,
+      "position": "(13461.83, 0.042214, -7010.236)",
+      "routine": "Идёт на работу",
+      "support_usec": 816,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399939715862274,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.000511668622493744,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3840,
+      "grounded": true,
+      "position": "(13458.6, 0.028095, -7016.713)",
+      "routine": "Идёт на работу",
+      "support_usec": 761,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00336270406842232,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399979948997498,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3900,
+      "grounded": true,
+      "position": "(13462.64, 0.042214, -7008.603)",
+      "routine": "Идёт на работу",
+      "support_usec": 1716,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399923697113991,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00385778583586216,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3900,
+      "grounded": true,
+      "position": "(13459.41, 0.028095, -7015.081)",
+      "routine": "Идёт на работу",
+      "support_usec": 763,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.000980651006102562,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399960577487946,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3960,
+      "grounded": true,
+      "position": "(13463.39, 0.042214, -7007.099)",
+      "routine": "Идёт на работу",
+      "support_usec": 480,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400001555681229,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00174369849264622,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 3960,
+      "grounded": true,
+      "position": "(13460.16, 0.028095, -7013.577)",
+      "routine": "Идёт на работу",
+      "support_usec": 731,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00396635942161083,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399930030107498,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4020,
+      "grounded": true,
+      "position": "(13464.14, 0.042214, -7005.638)",
+      "routine": "Идёт на работу",
+      "support_usec": 1605,
+      "velocity": "(0.703125, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400083884596825,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399918109178543,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4020,
+      "grounded": true,
+      "position": "(13460.89, 0.028095, -7012.116)",
+      "routine": "Идёт на работу",
+      "support_usec": 632,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399308651685715,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399930775165558,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4080,
+      "grounded": true,
+      "position": "(13465.14, 0.042214, -7004.421)",
+      "routine": "Идёт на работу",
+      "support_usec": 1202,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00356498174369335,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00360069610178471,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4080,
+      "grounded": true,
+      "position": "(13461.65, 0.028095, -7010.612)",
+      "routine": "Идёт на работу",
+      "support_usec": 846,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00396106392145157,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399925746023655,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4140,
+      "grounded": true,
+      "position": "(13466.83, 0.042214, -7004.388)",
+      "routine": "Идёт на работу",
+      "support_usec": 1466,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399980694055557,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00379760377109051,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4140,
+      "grounded": true,
+      "position": "(13462.39, 0.028095, -7009.129)",
+      "routine": "Идёт на работу",
+      "support_usec": 801,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00293594598770142,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399937108159065,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4200,
+      "grounded": true,
+      "position": "(13468.49, 0.042214, -7004.354)",
+      "routine": "Идёт на работу",
+      "support_usec": 895,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399946607649326,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039643831551075,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4200,
+      "grounded": true,
+      "position": "(13463.12, 0.028095, -7007.668)",
+      "routine": "Идёт на работу",
+      "support_usec": 700,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0019444078207016,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039992555975914,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4260,
+      "grounded": true,
+      "position": "(13470.17, 0.042214, -7004.321)",
+      "routine": "Идёт на работу",
+      "support_usec": 1238,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399914942681789,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00393417850136757,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4260,
+      "grounded": true,
+      "position": "(13463.86, 0.028095, -7006.186)",
+      "routine": "Идёт на работу",
+      "support_usec": 761,
+      "velocity": "(0.644531, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00316883437335491,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399920158088207,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4320,
+      "grounded": true,
+      "position": "(13471.9, 0.042214, -7004.286)",
+      "routine": "Идёт на работу",
+      "support_usec": 800,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399968214333057,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.000757990404963493,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4320,
+      "grounded": true,
+      "position": "(13464.65, 0.028095, -7004.661)",
+      "routine": "Идёт на работу",
+      "support_usec": 792,
+      "velocity": "(0.703125, 0.0, 1.289062)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00395514257252216,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399915687739849,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4380,
+      "grounded": true,
+      "position": "(13473.66, 0.042214, -7004.251)",
+      "routine": "Идёт на работу",
+      "support_usec": 708,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00390417873859406,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00321444123983383,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4380,
+      "grounded": true,
+      "position": "(13466.31, 0.028095, -7004.382)",
+      "routine": "Идёт на работу",
+      "support_usec": 769,
+      "velocity": "(1.464844, 0.0, 0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00397124886512756,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.003999263048172,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4440,
+      "grounded": true,
+      "position": "(13475.4, 0.042214, -7004.216)",
+      "routine": "Идёт на работу",
+      "support_usec": 932,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399797968566418,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00371805019676685,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4440,
+      "grounded": true,
+      "position": "(13468.04, 0.028095, -7004.313)",
+      "routine": "Идёт на работу",
+      "support_usec": 802,
+      "velocity": "(1.464844, 0.0, 0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00398248061537743,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399926118552685,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4500,
+      "grounded": true,
+      "position": "(13477.1, 0.042214, -7004.182)",
+      "routine": "Идёт на работу",
+      "support_usec": 940,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00355417095124722,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00363263674080372,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4500,
+      "grounded": true,
+      "position": "(13469.75, 0.028095, -7004.244)",
+      "routine": "Идёт на работу",
+      "support_usec": 724,
+      "velocity": "(1.464844, 0.0, 0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00297199934720993,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399938598275185,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4560,
+      "grounded": true,
+      "position": "(13478.86, 0.042214, -7004.147)",
+      "routine": "Идёт на работу",
+      "support_usec": 1341,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399991869926453,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0036508422344923,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4560,
+      "grounded": true,
+      "position": "(13471.51, 0.028095, -7004.174)",
+      "routine": "Идёт на работу",
+      "support_usec": 834,
+      "velocity": "(1.464844, 0.0, 0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399130024015903,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399937853217125,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4620,
+      "grounded": true,
+      "position": "(13480.55, 0.042214, -7004.104)",
+      "routine": "Идёт на работу",
+      "support_usec": 944,
+      "velocity": "(1.464844, 0.0, 0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399945862591267,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399969890713692,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4620,
+      "grounded": true,
+      "position": "(13473.19, 0.028095, -7004.115)",
+      "routine": "Идёт на работу",
+      "support_usec": 733,
+      "velocity": "(1.464844, 0.0, 0.058594)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00343107432126999,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039995051920414,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4680,
+      "grounded": true,
+      "position": "(13482.28, 0.042214, -7004.052)",
+      "routine": "Идёт на работу",
+      "support_usec": 2728,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399942137300968,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00111913681030273,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4680,
+      "grounded": true,
+      "position": "(13474.93, 0.028095, -7004.063)",
+      "routine": "Идёт на работу",
+      "support_usec": 739,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00187101401388645,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399931706488132,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4740,
+      "grounded": true,
+      "position": "(13483.56, 0.042214, -7004.407)",
+      "routine": "Идёт на работу",
+      "support_usec": 654,
+      "velocity": "(0.175781, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039996188133955,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00324185751378536,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4740,
+      "grounded": true,
+      "position": "(13476.51, 0.028095, -7004.082)",
+      "routine": "Идёт на работу",
+      "support_usec": 672,
+      "velocity": "(0.644531, 0.0, -0.791016)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00352831557393074,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0037839263677597,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4800,
+      "grounded": true,
+      "position": "(13483.74, 0.042214, -7005.962)",
+      "routine": "Идёт на работу",
+      "support_usec": 2752,
+      "velocity": "(0.117187, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00359922088682652,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00391598604619503,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4800,
+      "grounded": true,
+      "position": "(13476.66, 0.028095, -7005.603)",
+      "routine": "Идёт на работу",
+      "support_usec": 666,
+      "velocity": "(0.117187, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400076061487198,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00366977788507938,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4860,
+      "grounded": true,
+      "position": "(13483.92, 0.042214, -7007.733)",
+      "routine": "Идёт на работу",
+      "support_usec": 1872,
+      "velocity": "(0.117187, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00366652011871338,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00359484553337097,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4860,
+      "grounded": true,
+      "position": "(13476.78, 0.028095, -7007.374)",
+      "routine": "Идёт на работу",
+      "support_usec": 763,
+      "velocity": "(0.058594, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400019437074661,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400000065565109,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4920,
+      "grounded": true,
+      "position": "(13483.93, 0.042214, -7007.918)",
+      "routine": "Торгует",
+      "support_usec": 1600,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00361055880784988,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00363075919449329,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4920,
+      "grounded": true,
+      "position": "(13476.88, 0.028095, -7009.12)",
+      "routine": "Идёт на работу",
+      "support_usec": 644,
+      "velocity": "(0.117187, 0.0, -1.435547)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.003999974578619,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00395667366683483,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4980,
+      "grounded": true,
+      "position": "(13483.93, 0.042214, -7007.918)",
+      "routine": "Торгует",
+      "support_usec": 770,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399933010339737,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00381357781589031,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 4980,
+      "grounded": true,
+      "position": "(13476.36, 0.028095, -7010.595)",
+      "routine": "Идёт на работу",
+      "support_usec": 819,
+      "velocity": "(-0.820312, 0.0, -1.201172)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareTrader",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00400015711784363,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.0039999783039093,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 5040,
+      "grounded": true,
+      "position": "(13483.93, 0.042214, -7007.918)",
+      "routine": "Торгует",
+      "support_usec": 1378,
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "activity": "idle",
+      "actor": "SquareArtisan",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00399919226765633,
+          "hit": true,
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/@Node3D@16/@StaticBody3D@18",
+          "gap": 0.00397467613220215,
+          "hit": true,
+          "vertices": 1765
+        }
+      },
+      "frame": 5040,
+      "grounded": true,
+      "position": "(13476.88, 0.041939, -7011.04)",
+      "routine": "Идёт на работу",
+      "support_usec": 783,
+      "velocity": "(1.464844, 0.0, 0.029297)"
+    }
+  ]
+}

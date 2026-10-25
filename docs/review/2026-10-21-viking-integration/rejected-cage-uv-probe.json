@@ -1,0 +1,116 @@
+[
+  {
+    "sex": "male",
+    "material": "VikingBoots",
+    "sampled_triangles": 6320,
+    "maps": {
+      "normal": {
+        "sha256": "dbf17d6caccffda7191358516224ac132de9b8d87b8543a6f1b2877a6e3be8d4",
+        "unit_length_error_p95": 0.003558812388263055,
+        "z_negative_fraction": 0.08449367088607596,
+        "xy_variation": 0.21593385988492295
+      },
+      "ao": {
+        "sha256": "bc691b883b226f9df9970dc51106d733df87f03c07a202395757cad19f0e1e4b",
+        "mean": 0.7139743112434849,
+        "p10": 0.06274509803921569,
+        "p90": 1.0
+      }
+    }
+  },
+  {
+    "sex": "male",
+    "material": "VikingTunic",
+    "sampled_triangles": 6568,
+    "maps": {
+      "normal": {
+        "sha256": "fabd1aa12780b1ee439aa524f4160ee28e7daec0e1586dea211bcdc20d192dda",
+        "unit_length_error_p95": 0.003558812388263055,
+        "z_negative_fraction": 0.055724725943970765,
+        "xy_variation": 0.1938202546165031
+      },
+      "ao": {
+        "sha256": "26af1425b85e663778f6d5e9ff0c3ec6090f16179370716c3af58634c89e73bf",
+        "mean": 0.7190101741061832,
+        "p10": 0.0,
+        "p90": 1.0
+      }
+    }
+  },
+  {
+    "sex": "male",
+    "material": "VikingPants",
+    "sampled_triangles": 2544,
+    "maps": {
+      "normal": {
+        "sha256": "248bfe862ec02ff3b682d3915fad219b65c6116218245edf60049093f202bd4c",
+        "unit_length_error_p95": 0.003497079797009639,
+        "z_negative_fraction": 0.026729559748427674,
+        "xy_variation": 0.11800258780806465
+      },
+      "ao": {
+        "sha256": "c1ccc044e4115d5b9cb4f95c2bbaff7e9846d20269ecdc8f3fa171629d7e687a",
+        "mean": 0.38455882352941173,
+        "p10": 0.0,
+        "p90": 1.0
+      }
+    }
+  },
+  {
+    "sex": "female",
+    "material": "VikingBoots",
+    "sampled_triangles": 6320,
+    "maps": {
+      "normal": {
+        "sha256": "fbdb428456920411d389d501e1403471ed8d69ef593afba4f1048a27d521f9c6",
+        "unit_length_error_p95": 0.003682289045762288,
+        "z_negative_fraction": 0.08022151898734177,
+        "xy_variation": 0.21579900021759055
+      },
+      "ao": {
+        "sha256": "c1f5467f071acb5bc1dcc2df48be1a949077d2b339e8e280c16cf0c6b1ddd89f",
+        "mean": 0.6995333829734427,
+        "p10": 0.0,
+        "p90": 1.0
+      }
+    }
+  },
+  {
+    "sex": "female",
+    "material": "VikingTunic",
+    "sampled_triangles": 6568,
+    "maps": {
+      "normal": {
+        "sha256": "4177dbdae346a9dd0e082fd5a67a2ffa21c0aedc310674f84b2348a2f9290ccd",
+        "unit_length_error_p95": 0.003682289045762288,
+        "z_negative_fraction": 0.04933008526187576,
+        "xy_variation": 0.19640916642420636
+      },
+      "ao": {
+        "sha256": "09b993958b633e2b7176f4557a1f00bbda5af3763774685c5af5c056731ebd65",
+        "mean": 0.7128310764013279,
+        "p10": 0.0,
+        "p90": 1.0
+      }
+    }
+  },
+  {
+    "sex": "female",
+    "material": "VikingPants",
+    "sampled_triangles": 2544,
+    "maps": {
+      "normal": {
+        "sha256": "4d735c58b35c63634cc866e22a506f536434704962f078042d866fe612a5e66d",
+        "unit_length_error_p95": 0.0035155428935378374,
+        "z_negative_fraction": 0.020440251572327043,
+        "xy_variation": 0.11330239060685886
+      },
+      "ao": {
+        "sha256": "448b0450f5632064ef8b1a3f684cdb2766a252a7a611e2317930b54722ef0ac5",
+        "mean": 0.37003175484030093,
+        "p10": 0.0,
+        "p90": 1.0
+      }
+    }
+  }
+]

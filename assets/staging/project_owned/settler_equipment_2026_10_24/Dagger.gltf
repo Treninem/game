@@ -1,0 +1,426 @@
+{
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v5.2.39",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        5
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "BladeTangLashing"
+    },
+    {
+      "mesh": 1,
+      "name": "FlakedStoneBlade"
+    },
+    {
+      "name": "GripAnchor.001",
+      "translation": [
+        0.0006000000284984708,
+        -0.11999999731779099,
+        0
+      ]
+    },
+    {
+      "mesh": 2,
+      "name": "LeatherKnifeBinding"
+    },
+    {
+      "mesh": 3,
+      "name": "RoundedKnifeHaft"
+    },
+    {
+      "children": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "name": "Dagger"
+    }
+  ],
+  "materials": [
+    {
+      "name": "GripLeather",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.800000011920929,
+        "baseColorFactor": [
+          0.20000000298023224,
+          0.18000000715255737,
+          0.15000000596046448,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "Flint",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.02199999988079071,
+          0.027000000700354576,
+          0.029999999329447746,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5799999833106995
+      }
+    },
+    {
+      "name": "AshWood",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.7599999904632568,
+        "baseColorFactor": [
+          0.3199999928474426,
+          0.3799999952316284,
+          0.47999998927116394,
+          1.0
+        ]
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "BladeTangLashing",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "FlakedStoneBlade",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "LeatherKnifeBinding",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 8,
+            "NORMAL": 9,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "RoundedKnifeHaft",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 12,
+            "NORMAL": 13,
+            "TEXCOORD_0": 14
+          },
+          "indices": 15,
+          "material": 2
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/png",
+      "name": "leather",
+      "uri": "leather.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "cedar",
+      "uri": "cedar.png"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 1540,
+      "max": [
+        0.014600000344216824,
+        -0.03143833205103874,
+        0.011500000022351742
+      ],
+      "min": [
+        -0.013399999588727951,
+        -0.06556166708469391,
+        -0.011500000022351742
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 1540,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1540,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 9228,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 2450,
+      "max": [
+        0.024397358298301697,
+        0.17000000178813934,
+        0.0053952657617628574
+      ],
+      "min": [
+        -0.024867534637451172,
+        -0.04699999839067459,
+        -0.0053952657617628574
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 2450,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 2450,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5123,
+      "count": 14688,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 3588,
+      "max": [
+        0.01360000018030405,
+        -0.04426785558462143,
+        0.01080000028014183
+      ],
+      "min": [
+        -0.012400000356137753,
+        -0.17873214185237885,
+        -0.01080000028014183
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5126,
+      "count": 3588,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5126,
+      "count": 3588,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5123,
+      "count": 21516,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 12,
+      "componentType": 5126,
+      "count": 1640,
+      "max": [
+        0.013592052273452282,
+        -0.0399208590388298,
+        0.010498637333512306
+      ],
+      "min": [
+        -0.011946270242333412,
+        -0.1801503598690033,
+        -0.010498637333512306
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 13,
+      "componentType": 5126,
+      "count": 1640,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 14,
+      "componentType": 5126,
+      "count": 1640,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 15,
+      "componentType": 5123,
+      "count": 9588,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 18480,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 18480,
+      "byteOffset": 18480,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12320,
+      "byteOffset": 36960,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 18456,
+      "byteOffset": 49280,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 29400,
+      "byteOffset": 67736,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 29400,
+      "byteOffset": 97136,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19600,
+      "byteOffset": 126536,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 29376,
+      "byteOffset": 146136,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 43056,
+      "byteOffset": 175512,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 43056,
+      "byteOffset": 218568,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 28704,
+      "byteOffset": 261624,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 43032,
+      "byteOffset": 290328,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19680,
+      "byteOffset": 333360,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19680,
+      "byteOffset": 353040,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 13120,
+      "byteOffset": 372720,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19176,
+      "byteOffset": 385840,
+      "target": 34963
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 405016,
+      "uri": "Dagger.bin"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Real I/Escape inventory flow",
+  "spec_attachment": "d511f171-c968-49c8-8e20-a2d8c70edfa1; full canonical master comparison differs only in trailing Markdown spaces",
+  "reproduced": "Real I key opens inventory. Escape while search owns focus is consumed by LineEdit before the old unhandled-input close handler. Strengthened smoke failed Escape in search does not close/resume inventory before production fix.",
+  "fix": "Handle the mapped Escape pause key in the early gameplay-panel key handler, before focused GUI controls. Preserve dialogue/upper-menu priority, ignore key echoes, and mark the close event handled to prevent also opening pause menu. Other custom pause bindings retain the existing unhandled-input path.",
+  "checks": {
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 12.41
+    },
+    "ui_responsive": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 20.25
+    },
+    "visible_inventory": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 28.17,
+      "mode": "visible automated UI; not manual playthrough"
+    }
+  },
+  "coverage": [
+    "Real key events include keycode and physical_keycode",
+    "I opens inventory, sets pause and initial cell focus",
+    "Ctrl+F/Enter search, Space page/equipment/consumption and arrows retained",
+    "Escape closes from search; world resumes and pause menu stays closed",
+    "I reopens after search-close",
+    "Escape closes from selected-cell context even with pending focus callback; no hidden focus restored",
+    "Previous ownership/count/JSON invariants and four-resolution/two-scale UI checks retained"
+  ],
+  "limits": [
+    "Default I/Escape bindings tested; all custom keyboard layouts/rebindings not exhaustively accepted",
+    "Visible tests are isolated automated UI, not a new full-world gameplay route",
+    "Independent inventory stacks, icons and drag/drop remain pending",
+    "Historical intermittent native heal action observation remains open",
+    "No new exported package or stable release; earlier editor 32/55 functional count unchanged"
+  ]
+}

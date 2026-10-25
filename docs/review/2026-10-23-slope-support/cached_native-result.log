@@ -1,0 +1,318 @@
+WorkerThreadPool: 4 threads, 1 max low-priority.
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Accessibility: AccessKit driver loaded.
+Native OpenGL API detected: 3.3: Intel - Intel(R) UHD Graphics 610
+Accessibility: window 0 adapter created.
+SDL: Init OK!
+Using "winink" pen tablet driver...
+Shader 'CanvasSdfShaderGLES3' SHA256: 24631812170f0b1920923bcc3b64fc955e119ab7eaa2bf792807ca56a3af82e1
+Shader 'SkeletonShaderGLES3' SHA256: 254a74e0be4f289242fb24c4457ddccf1e4f714c8289269df050b419eec170b4
+Shader 'ParticlesShaderGLES3' SHA256: 81c4deb09da9bdf3834f915e1c7da17227257948994fb0d056a677b8d91dc07a
+Shader 'ParticlesCopyShaderGLES3' SHA256: 7706eea8e3d0c34c792e67389efd7b5b338d2101797bf29be098521e6f42d1df
+Shader 'CopyShaderGLES3' SHA256: 393bd17a420632c50bb0b293a33c78a3ef68bf43b4a33f8362c2a89ecda34cd9
+Shader 'CubemapFilterShaderGLES3' SHA256: 8bf8febb298b22dc0fe3f24f118a3a66347775079c848123455585a0f13546da
+Shader 'GlowShaderGLES3' SHA256: 497afffb48591e1d066853b1ccee50e27453c119cd31edc5249907c6669b1341
+Shader 'PostShaderGLES3' SHA256: 1884476fecc10d3cd7c5885cf0754bc0a3aae99ebdf73e263541ab6395ebbc3c
+Shader 'FeedShaderGLES3' SHA256: 0d429cadf348c656ecaf8ad7ca9501770db7fec334f2a96d0736f8f79391ca03
+Shader 'CanvasShaderGLES3' SHA256: 0fd90c3d4c88b4c30e4776710321cba25c8d3cc1c2c4a253fd422c6cde7897d5
+Shader 'CanvasOcclusionShaderGLES3' SHA256: 21ebdcd75e875c4f21152c5e6ca2f5c14b8d13e3cd240f372f84866c4f6bd16c
+Shader 'SceneShaderGLES3' SHA256: 88f203acf8bbe6f7a7c5d55797c26d1590e2706f00a8dfc4215b6e0ec5b8543c
+Shader 'SkyShaderGLES3' SHA256: ec401bef4efa940908210dd2f731e1793b0de5fa02a6a0bff186245c925b5966
+Shader 'TexBlitShaderGLES3' SHA256: fc5813e23149f142b6351debd212ef6adbc444a1cadc05ae871777d3f7950f10
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3769296884
+EDITOR API HASH: 3146738256
+Loading resource: res://tests/smoke_slope_motion.gd remapped: res://tests/smoke_slope_motion.gd
+Completed load for: 'res://tests/smoke_slope_motion.gd' remapped 'res://tests/smoke_slope_motion.gd' at thread -1
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/game_state.gd remapped: res://scripts/game_state.gd
+Completed load for: 'res://scripts/game_state.gd' remapped 'res://scripts/game_state.gd' at thread -1
+Loading resource: res://scripts/progression_system.gd remapped: res://scripts/progression_system.gd
+Completed load for: 'res://scripts/progression_system.gd' remapped 'res://scripts/progression_system.gd' at thread -1
+Loading resource: res://scripts/save_manager.gd remapped: res://scripts/save_manager.gd
+Completed load for: 'res://scripts/save_manager.gd' remapped 'res://scripts/save_manager.gd' at thread -1
+Loading resource: res://scripts/settings_manager.gd remapped: res://scripts/settings_manager.gd
+Completed load for: 'res://scripts/settings_manager.gd' remapped 'res://scripts/settings_manager.gd' at thread -1
+Loading resource: res://scripts/ui_layout_guard.gd remapped: res://scripts/ui_layout_guard.gd
+Completed load for: 'res://scripts/ui_layout_guard.gd' remapped 'res://scripts/ui_layout_guard.gd' at thread -1
+Loading resource: res://scripts/update_manager.gd remapped: res://scripts/update_manager.gd
+Completed load for: 'res://scripts/update_manager.gd' remapped 'res://scripts/update_manager.gd' at thread -1
+Loading resource: res://scripts/inventory_system.gd remapped: res://scripts/inventory_system.gd
+Completed load for: 'res://scripts/inventory_system.gd' remapped 'res://scripts/inventory_system.gd' at thread -1
+Loading resource: res://scripts/dialogue_manager.gd remapped: res://scripts/dialogue_manager.gd
+Completed load for: 'res://scripts/dialogue_manager.gd' remapped 'res://scripts/dialogue_manager.gd' at thread -1
+Loading resource: res://scripts/world_data_runtime.gd remapped: res://scripts/world_data_runtime.gd
+Completed load for: 'res://scripts/world_data_runtime.gd' remapped 'res://scripts/world_data_runtime.gd' at thread -1
+Loading resource: res://scripts/world_roads.gd remapped: res://scripts/world_roads.gd
+Completed load for: 'res://scripts/world_roads.gd' remapped 'res://scripts/world_roads.gd' at thread -1
+Loading resource: res://scripts/world_water.gd remapped: res://scripts/world_water.gd
+Completed load for: 'res://scripts/world_water.gd' remapped 'res://scripts/world_water.gd' at thread -1
+Loading resource: res://scripts/map_system.gd remapped: res://scripts/map_system.gd
+Completed load for: 'res://scripts/map_system.gd' remapped 'res://scripts/map_system.gd' at thread -1
+Loading resource: res://scripts/vfx_library.gd remapped: res://scripts/vfx_library.gd
+Loading resource: res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png remapped: res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png
+Loading resource: res://.godot/imported/light_01.png-a3efbe94607ba9911a4c137a7fff78cb.ctex remapped: res://.godot/imported/light_01.png-a3efbe94607ba9911a4c137a7fff78cb.ctex
+Completed load for: 'res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png' remapped 'res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/light_01.png' at thread -1
+Completed load for: 'res://scripts/vfx_library.gd' remapped 'res://scripts/vfx_library.gd' at thread -1
+Loading resource: res://scripts/third_party_vfx.gd remapped: res://scripts/third_party_vfx.gd
+Completed load for: 'res://scripts/third_party_vfx.gd' remapped 'res://scripts/third_party_vfx.gd' at thread -1
+Loading resource: res://scripts/magic_system.gd remapped: res://scripts/magic_system.gd
+Completed load for: 'res://scripts/magic_system.gd' remapped 'res://scripts/magic_system.gd' at thread -1
+Loading resource: res://scripts/magic_hud.gd remapped: res://scripts/magic_hud.gd
+Completed load for: 'res://scripts/magic_hud.gd' remapped 'res://scripts/magic_hud.gd' at thread -1
+Loading resource: res://scripts/environment_state.gd remapped: res://scripts/environment_state.gd
+Completed load for: 'res://scripts/environment_state.gd' remapped 'res://scripts/environment_state.gd' at thread -1
+Loading resource: res://scripts/environment_exposure.gd remapped: res://scripts/environment_exposure.gd
+Completed load for: 'res://scripts/environment_exposure.gd' remapped 'res://scripts/environment_exposure.gd' at thread -1
+Loading resource: res://scripts/environment_mark_pool.gd remapped: res://scripts/environment_mark_pool.gd
+Loading resource: res://assets/shaders/environment/track_mark.gdshader remapped: res://assets/shaders/environment/track_mark.gdshader
+Completed load for: 'res://assets/shaders/environment/track_mark.gdshader' remapped 'res://assets/shaders/environment/track_mark.gdshader' at thread -1
+Completed load for: 'res://scripts/environment_mark_pool.gd' remapped 'res://scripts/environment_mark_pool.gd' at thread -1
+Loading resource: res://scripts/world_vfx.gd remapped: res://scripts/world_vfx.gd
+Completed load for: 'res://scripts/world_vfx.gd' remapped 'res://scripts/world_vfx.gd' at thread -1
+Loading resource: res://scripts/weather_vfx.gd remapped: res://scripts/weather_vfx.gd
+Loading resource: res://assets/shaders/environment/soft_particle.gdshader remapped: res://assets/shaders/environment/soft_particle.gdshader
+Completed load for: 'res://assets/shaders/environment/soft_particle.gdshader' remapped 'res://assets/shaders/environment/soft_particle.gdshader' at thread -1
+Completed load for: 'res://scripts/weather_vfx.gd' remapped 'res://scripts/weather_vfx.gd' at thread -1
+Loading resource: res://scripts/weather_hail_vfx.gd remapped: res://scripts/weather_hail_vfx.gd
+Completed load for: 'res://scripts/weather_hail_vfx.gd' remapped 'res://scripts/weather_hail_vfx.gd' at thread -1
+Loading resource: res://scripts/ambient_vfx.gd remapped: res://scripts/ambient_vfx.gd
+Completed load for: 'res://scripts/ambient_vfx.gd' remapped 'res://scripts/ambient_vfx.gd' at thread -1
+Loading resource: res://scripts/nature_vfx.gd remapped: res://scripts/nature_vfx.gd
+Loading resource: res://assets/shaders/environment/leaf_particle.gdshader remapped: res://assets/shaders/environment/leaf_particle.gdshader
+Completed load for: 'res://assets/shaders/environment/leaf_particle.gdshader' remapped 'res://assets/shaders/environment/leaf_particle.gdshader' at thread -1
+Loading resource: res://assets/production/nature/woodland/wind_leaf_mask.png remapped: res://assets/production/nature/woodland/wind_leaf_mask.png
+Loading resource: res://.godot/imported/wind_leaf_mask.png-f776c4ae06e42a7836440e8a06b63d9a.ctex remapped: res://.godot/imported/wind_leaf_mask.png-f776c4ae06e42a7836440e8a06b63d9a.ctex
+Completed load for: 'res://assets/production/nature/woodland/wind_leaf_mask.png' remapped 'res://assets/production/nature/woodland/wind_leaf_mask.png' at thread -1
+Completed load for: 'res://scripts/nature_vfx.gd' remapped 'res://scripts/nature_vfx.gd' at thread -1
+Loading resource: res://scripts/landmark_vfx.gd remapped: res://scripts/landmark_vfx.gd
+Completed load for: 'res://scripts/landmark_vfx.gd' remapped 'res://scripts/landmark_vfx.gd' at thread -1
+MbedTLS: Some X509 certificates could not be parsed (1 certificates skipped).
+Loaded system CA certificates
+Loading resource: res://assets/production/materials/ground/road_gravel.png remapped: res://assets/production/materials/ground/road_gravel.png
+Loading resource: res://.godot/imported/road_gravel.png-2f761f9383eaba4b831fc7f0017b5dd7.ctex remapped: res://.godot/imported/road_gravel.png-2f761f9383eaba4b831fc7f0017b5dd7.ctex
+Completed load for: 'res://assets/production/materials/ground/road_gravel.png' remapped 'res://assets/production/materials/ground/road_gravel.png' at thread -1
+Loading resource: res://scripts/player_controller.gd remapped: res://scripts/player_controller.gd
+Loading resource: res://assets/production/weapons/woodland/Arrow.glb remapped: res://assets/production/weapons/woodland/Arrow.glb
+Loading resource: res://.godot/imported/Arrow.glb-527fe4db32fc67a8e8f7627390982d39.scn remapped: res://.godot/imported/Arrow.glb-527fe4db32fc67a8e8f7627390982d39.scn
+Completed load for: 'res://assets/production/weapons/woodland/Arrow.glb' remapped 'res://assets/production/weapons/woodland/Arrow.glb' at thread -1
+Loading resource: res://assets/production/nature/temperate/TemperateTree.glb remapped: res://assets/production/nature/temperate/TemperateTree.glb
+Loading resource: res://.godot/imported/TemperateTree.glb-4c02fa1739694e79f16522cca0cb7efa.scn remapped: res://.godot/imported/TemperateTree.glb-4c02fa1739694e79f16522cca0cb7efa.scn
+Loading resource: res://assets/production/nature/temperate/TemperateTree_Bark_NormalTree.png remapped: res://assets/production/nature/temperate/TemperateTree_Bark_NormalTree.png
+Loading resource: res://.godot/imported/TemperateTree_Bark_NormalTree.png-6a82d48c95a96e2566cf1fb510e8c936.s3tc.ctex remapped: res://.godot/imported/TemperateTree_Bark_NormalTree.png-6a82d48c95a96e2566cf1fb510e8c936.s3tc.ctex
+Completed load for: 'res://assets/production/nature/temperate/TemperateTree_Bark_NormalTree.png' remapped 'res://assets/production/nature/temperate/TemperateTree_Bark_NormalTree.png' at thread -1
+Loading resource: res://assets/production/nature/temperate/TemperateTree_branches_small_leaves.png remapped: res://assets/production/nature/temperate/TemperateTree_branches_small_leaves.png
+Loading resource: res://.godot/imported/TemperateTree_branches_small_leaves.png-84ea775246585b3007b151072ab31557.s3tc.ctex remapped: res://.godot/imported/TemperateTree_branches_small_leaves.png-84ea775246585b3007b151072ab31557.s3tc.ctex
+Completed load for: 'res://assets/production/nature/temperate/TemperateTree_branches_small_leaves.png' remapped 'res://assets/production/nature/temperate/TemperateTree_branches_small_leaves.png' at thread -1
+Completed load for: 'res://assets/production/nature/temperate/TemperateTree.glb' remapped 'res://assets/production/nature/temperate/TemperateTree.glb' at thread -1
+Loading resource: res://assets/production/nature/woodland/Bush_Common.glb remapped: res://assets/production/nature/woodland/Bush_Common.glb
+Loading resource: res://.godot/imported/Bush_Common.glb-74c651a9d3407bf7bb7c2b74c4e126d3.scn remapped: res://.godot/imported/Bush_Common.glb-74c651a9d3407bf7bb7c2b74c4e126d3.scn
+Loading resource: res://assets/production/nature/woodland/Bush_Common_Leaves_TwistedTree_C.png remapped: res://assets/production/nature/woodland/Bush_Common_Leaves_TwistedTree_C.png
+Loading resource: res://.godot/imported/Bush_Common_Leaves_TwistedTree_C.png-7d2656b341f5153f5480df3a2339521c.s3tc.ctex remapped: res://.godot/imported/Bush_Common_Leaves_TwistedTree_C.png-7d2656b341f5153f5480df3a2339521c.s3tc.ctex
+Completed load for: 'res://assets/production/nature/woodland/Bush_Common_Leaves_TwistedTree_C.png' remapped 'res://assets/production/nature/woodland/Bush_Common_Leaves_TwistedTree_C.png' at thread -1
+Completed load for: 'res://assets/production/nature/woodland/Bush_Common.glb' remapped 'res://assets/production/nature/woodland/Bush_Common.glb' at thread -1
+Loading resource: res://assets/production/nature/kenney_nature_kit/Models/GLTF format/rock_largeA.glb remapped: res://assets/production/nature/kenney_nature_kit/Models/GLTF format/rock_largeA.glb
+Loading resource: res://.godot/imported/rock_largeA.glb-057b23a816b75b86984840456a74e1fb.scn remapped: res://.godot/imported/rock_largeA.glb-057b23a816b75b86984840456a74e1fb.scn
+Completed load for: 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/rock_largeA.glb' remapped 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/rock_largeA.glb' at thread -1
+Loading resource: res://assets/production/materials/ground/lichen_rock.jpg remapped: res://assets/production/materials/ground/lichen_rock.jpg
+Loading resource: res://.godot/imported/lichen_rock.jpg-f6de8a635a648e23402ff550e0b07a29.ctex remapped: res://.godot/imported/lichen_rock.jpg-f6de8a635a648e23402ff550e0b07a29.ctex
+Completed load for: 'res://assets/production/materials/ground/lichen_rock.jpg' remapped 'res://assets/production/materials/ground/lichen_rock.jpg' at thread -1
+Loading resource: res://assets/production/nature/kenney_nature_kit/Models/GLTF format/stump_roundDetailed.glb remapped: res://assets/production/nature/kenney_nature_kit/Models/GLTF format/stump_roundDetailed.glb
+Loading resource: res://.godot/imported/stump_roundDetailed.glb-deb2d82dbc1a752bc7583f0d9e2b3db1.scn remapped: res://.godot/imported/stump_roundDetailed.glb-deb2d82dbc1a752bc7583f0d9e2b3db1.scn
+Completed load for: 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/stump_roundDetailed.glb' remapped 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/stump_roundDetailed.glb' at thread -1
+Loading resource: res://assets/production/nature/kenney_nature_kit/Models/GLTF format/log_large.glb remapped: res://assets/production/nature/kenney_nature_kit/Models/GLTF format/log_large.glb
+Loading resource: res://.godot/imported/log_large.glb-58630c6e138abc22245ec5568209141e.scn remapped: res://.godot/imported/log_large.glb-58630c6e138abc22245ec5568209141e.scn
+Completed load for: 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/log_large.glb' remapped 'res://assets/production/nature/kenney_nature_kit/Models/GLTF format/log_large.glb' at thread -1
+Loading resource: res://assets/production/nature/temperate/TemperateTree_LOD.glb remapped: res://assets/production/nature/temperate/TemperateTree_LOD.glb
+Loading resource: res://.godot/imported/TemperateTree_LOD.glb-14c8dcab2b035e8fde8c85ee1a30c483.scn remapped: res://.godot/imported/TemperateTree_LOD.glb-14c8dcab2b035e8fde8c85ee1a30c483.scn
+Loading resource: res://assets/production/nature/temperate/TemperateTree_LOD_Bark_NormalTree.png remapped: res://assets/production/nature/temperate/TemperateTree_LOD_Bark_NormalTree.png
+Loading resource: res://.godot/imported/TemperateTree_LOD_Bark_NormalTree.png-b0f092536470abc2c640df3d5aa1d0e0.s3tc.ctex remapped: res://.godot/imported/TemperateTree_LOD_Bark_NormalTree.png-b0f092536470abc2c640df3d5aa1d0e0.s3tc.ctex
+Completed load for: 'res://assets/production/nature/temperate/TemperateTree_LOD_Bark_NormalTree.png' remapped 'res://assets/production/nature/temperate/TemperateTree_LOD_Bark_NormalTree.png' at thread -1
+Loading resource: res://assets/production/nature/temperate/TemperateTree_LOD_branches_small_leaves.png remapped: res://assets/production/nature/temperate/TemperateTree_LOD_branches_small_leaves.png
+Loading resource: res://.godot/imported/TemperateTree_LOD_branches_small_leaves.png-9ca8f5bdd00f252900f7d08f46f1f6da.s3tc.ctex remapped: res://.godot/imported/TemperateTree_LOD_branches_small_leaves.png-9ca8f5bdd00f252900f7d08f46f1f6da.s3tc.ctex
+Completed load for: 'res://assets/production/nature/temperate/TemperateTree_LOD_branches_small_leaves.png' remapped 'res://assets/production/nature/temperate/TemperateTree_LOD_branches_small_leaves.png' at thread -1
+Completed load for: 'res://assets/production/nature/temperate/TemperateTree_LOD.glb' remapped 'res://assets/production/nature/temperate/TemperateTree_LOD.glb' at thread -1
+Loading resource: res://assets/production/nature/woodland/Pine_1.glb remapped: res://assets/production/nature/woodland/Pine_1.glb
+Loading resource: res://.godot/imported/Pine_1.glb-3a3cf606a119ee6e8cd3a2212b3ee597.scn remapped: res://.godot/imported/Pine_1.glb-3a3cf606a119ee6e8cd3a2212b3ee597.scn
+Loading resource: res://assets/production/nature/woodland/Pine_1_Bark_NormalTree.png remapped: res://assets/production/nature/woodland/Pine_1_Bark_NormalTree.png
+Loading resource: res://.godot/imported/Pine_1_Bark_NormalTree.png-a8dbc829a4b0c5d567cc62759a668b4f.s3tc.ctex remapped: res://.godot/imported/Pine_1_Bark_NormalTree.png-a8dbc829a4b0c5d567cc62759a668b4f.s3tc.ctex
+Completed load for: 'res://assets/production/nature/woodland/Pine_1_Bark_NormalTree.png' remapped 'res://assets/production/nature/woodland/Pine_1_Bark_NormalTree.png' at thread -1
+Loading resource: res://assets/production/nature/woodland/Pine_1_Bark_NormalTree_Normal.png remapped: res://assets/production/nature/woodland/Pine_1_Bark_NormalTree_Normal.png
+Loading resource: res://.godot/imported/Pine_1_Bark_NormalTree_Normal.png-03f74c341b87452bb82a6fddb5d2c6e2.s3tc.ctex remapped: res://.godot/imported/Pine_1_Bark_NormalTree_Normal.png-03f74c341b87452bb82a6fddb5d2c6e2.s3tc.ctex
+Completed load for: 'res://assets/production/nature/woodland/Pine_1_Bark_NormalTree_Normal.png' remapped 'res://assets/production/nature/woodland/Pine_1_Bark_NormalTree_Normal.png' at thread -1
+Loading resource: res://assets/production/nature/woodland/Pine_1_Leaf_Pine_C.png remapped: res://assets/production/nature/woodland/Pine_1_Leaf_Pine_C.png
+Loading resource: res://.godot/imported/Pine_1_Leaf_Pine_C.png-f46d099c2c9f69dbec0772feaa0ba7aa.s3tc.ctex remapped: res://.godot/imported/Pine_1_Leaf_Pine_C.png-f46d099c2c9f69dbec0772feaa0ba7aa.s3tc.ctex
+Completed load for: 'res://assets/production/nature/woodland/Pine_1_Leaf_Pine_C.png' remapped 'res://assets/production/nature/woodland/Pine_1_Leaf_Pine_C.png' at thread -1
+Completed load for: 'res://assets/production/nature/woodland/Pine_1.glb' remapped 'res://assets/production/nature/woodland/Pine_1.glb' at thread -1
+Loading resource: res://assets/production/nature/temperate/bark_albedo.jpg remapped: res://assets/production/nature/temperate/bark_albedo.jpg
+Loading resource: res://.godot/imported/bark_albedo.jpg-c05c861b80a69ffb55253d51d8b90128.ctex remapped: res://.godot/imported/bark_albedo.jpg-c05c861b80a69ffb55253d51d8b90128.ctex
+Completed load for: 'res://assets/production/nature/temperate/bark_albedo.jpg' remapped 'res://assets/production/nature/temperate/bark_albedo.jpg' at thread -1
+Loading resource: res://assets/shaders/environment/foliage_wind.gdshader remapped: res://assets/shaders/environment/foliage_wind.gdshader
+Loading resource: res://assets/shaders/environment/wind_motion.gdshaderinc remapped: res://assets/shaders/environment/wind_motion.gdshaderinc
+Completed load for: 'res://assets/shaders/environment/wind_motion.gdshaderinc' remapped 'res://assets/shaders/environment/wind_motion.gdshaderinc' at thread -1
+Completed load for: 'res://assets/shaders/environment/foliage_wind.gdshader' remapped 'res://assets/shaders/environment/foliage_wind.gdshader' at thread -1
+Completed load for: 'res://scripts/player_controller.gd' remapped 'res://scripts/player_controller.gd' at thread -1
+Loading resource: res://scripts/humanoid_visual.gd remapped: res://scripts/humanoid_visual.gd
+Loading resource: res://assets/production/characters/realistic/details/garment_normal.png remapped: res://assets/production/characters/realistic/details/garment_normal.png
+Loading resource: res://.godot/imported/garment_normal.png-609f6bc38a3cfb4fd784025bd6b112fe.ctex remapped: res://.godot/imported/garment_normal.png-609f6bc38a3cfb4fd784025bd6b112fe.ctex
+Completed load for: 'res://assets/production/characters/realistic/details/garment_normal.png' remapped 'res://assets/production/characters/realistic/details/garment_normal.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/details/garment_ao.png remapped: res://assets/production/characters/realistic/details/garment_ao.png
+Loading resource: res://.godot/imported/garment_ao.png-386671cad170f82721ee7d436f70cb32.ctex remapped: res://.godot/imported/garment_ao.png-386671cad170f82721ee7d436f70cb32.ctex
+Completed load for: 'res://assets/production/characters/realistic/details/garment_ao.png' remapped 'res://assets/production/characters/realistic/details/garment_ao.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/details/shoes_albedo.png remapped: res://assets/production/characters/realistic/details/shoes_albedo.png
+Loading resource: res://.godot/imported/shoes_albedo.png-cb157178ede91c6c0e1e711a1040cdd2.ctex remapped: res://.godot/imported/shoes_albedo.png-cb157178ede91c6c0e1e711a1040cdd2.ctex
+Completed load for: 'res://assets/production/characters/realistic/details/shoes_albedo.png' remapped 'res://assets/production/characters/realistic/details/shoes_albedo.png' at thread -1
+Loading resource: res://assets/shaders/characters/hair_tint.gdshader remapped: res://assets/shaders/characters/hair_tint.gdshader
+Completed load for: 'res://assets/shaders/characters/hair_tint.gdshader' remapped 'res://assets/shaders/characters/hair_tint.gdshader' at thread -1
+Loading resource: res://assets/production/characters/realistic/eyes/brown_eye.png remapped: res://assets/production/characters/realistic/eyes/brown_eye.png
+Loading resource: res://.godot/imported/brown_eye.png-117673987b2cd43702f7530d7e362d64.ctex remapped: res://.godot/imported/brown_eye.png-117673987b2cd43702f7530d7e362d64.ctex
+Completed load for: 'res://assets/production/characters/realistic/eyes/brown_eye.png' remapped 'res://assets/production/characters/realistic/eyes/brown_eye.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/eyes/blue_eye.png remapped: res://assets/production/characters/realistic/eyes/blue_eye.png
+Loading resource: res://.godot/imported/blue_eye.png-f161dfadfad52e4676c9b1d2a6e72b86.ctex remapped: res://.godot/imported/blue_eye.png-f161dfadfad52e4676c9b1d2a6e72b86.ctex
+Completed load for: 'res://assets/production/characters/realistic/eyes/blue_eye.png' remapped 'res://assets/production/characters/realistic/eyes/blue_eye.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/eyes/green_eye.png remapped: res://assets/production/characters/realistic/eyes/green_eye.png
+Loading resource: res://.godot/imported/green_eye.png-901cc78967e814832465c5d483d815a7.ctex remapped: res://.godot/imported/green_eye.png-901cc78967e814832465c5d483d815a7.ctex
+Completed load for: 'res://assets/production/characters/realistic/eyes/green_eye.png' remapped 'res://assets/production/characters/realistic/eyes/green_eye.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/eyes/grey_eye.png remapped: res://assets/production/characters/realistic/eyes/grey_eye.png
+Loading resource: res://.godot/imported/grey_eye.png-7a18839e47e7b42e6c5c7490967ee89c.ctex remapped: res://.godot/imported/grey_eye.png-7a18839e47e7b42e6c5c7490967ee89c.ctex
+Completed load for: 'res://assets/production/characters/realistic/eyes/grey_eye.png' remapped 'res://assets/production/characters/realistic/eyes/grey_eye.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/eyes/lightblue_eye.png remapped: res://assets/production/characters/realistic/eyes/lightblue_eye.png
+Loading resource: res://.godot/imported/lightblue_eye.png-2c7d19e9ac4de6e9c2116fca133b1f25.ctex remapped: res://.godot/imported/lightblue_eye.png-2c7d19e9ac4de6e9c2116fca133b1f25.ctex
+Completed load for: 'res://assets/production/characters/realistic/eyes/lightblue_eye.png' remapped 'res://assets/production/characters/realistic/eyes/lightblue_eye.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male.glb remapped: res://assets/production/characters/realistic/male.glb
+Loading resource: res://.godot/imported/male.glb-3e94167c863174a6e761e6ad7c319d44.scn remapped: res://.godot/imported/male.glb-3e94167c863174a6e761e6ad7c319d44.scn
+Loading resource: res://assets/production/characters/realistic/male_BootsViking.png remapped: res://assets/production/characters/realistic/male_BootsViking.png
+Loading resource: res://.godot/imported/male_BootsViking.png-1e92d0e00dfd3c27f3858220ce219874.ctex remapped: res://.godot/imported/male_BootsViking.png-1e92d0e00dfd3c27f3858220ce219874.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_BootsViking.png' remapped 'res://assets/production/characters/realistic/male_BootsViking.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male_eyebrow001.png remapped: res://assets/production/characters/realistic/male_eyebrow001.png
+Loading resource: res://.godot/imported/male_eyebrow001.png-4f08b91cdd26f50e5c2736f05d61daa2.s3tc.ctex remapped: res://.godot/imported/male_eyebrow001.png-4f08b91cdd26f50e5c2736f05d61daa2.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_eyebrow001.png' remapped 'res://assets/production/characters/realistic/male_eyebrow001.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male_TUNIC_Viking.png remapped: res://assets/production/characters/realistic/male_TUNIC_Viking.png
+Loading resource: res://.godot/imported/male_TUNIC_Viking.png-1e02ec7efc8fb18b4eb90634f76041a8.ctex remapped: res://.godot/imported/male_TUNIC_Viking.png-1e02ec7efc8fb18b4eb90634f76041a8.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_TUNIC_Viking.png' remapped 'res://assets/production/characters/realistic/male_TUNIC_Viking.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male_PantsViking.png remapped: res://assets/production/characters/realistic/male_PantsViking.png
+Loading resource: res://.godot/imported/male_PantsViking.png-fa3a788fa432aec4d5401e4840772a82.ctex remapped: res://.godot/imported/male_PantsViking.png-fa3a788fa432aec4d5401e4840772a82.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_PantsViking.png' remapped 'res://assets/production/characters/realistic/male_PantsViking.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male_brown_eye.png remapped: res://assets/production/characters/realistic/male_brown_eye.png
+Loading resource: res://.godot/imported/male_brown_eye.png-29362cd27646174b24aeded1a7a7810d.s3tc.ctex remapped: res://.godot/imported/male_brown_eye.png-29362cd27646174b24aeded1a7a7810d.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_brown_eye.png' remapped 'res://assets/production/characters/realistic/male_brown_eye.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male_ponytail01_diffuse.png remapped: res://assets/production/characters/realistic/male_ponytail01_diffuse.png
+Loading resource: res://.godot/imported/male_ponytail01_diffuse.png-1edaa7e5fc773e4751bbbd1759c41552.s3tc.ctex remapped: res://.godot/imported/male_ponytail01_diffuse.png-1edaa7e5fc773e4751bbbd1759c41552.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_ponytail01_diffuse.png' remapped 'res://assets/production/characters/realistic/male_ponytail01_diffuse.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male_short01_diffuse.png remapped: res://assets/production/characters/realistic/male_short01_diffuse.png
+Loading resource: res://.godot/imported/male_short01_diffuse.png-0a8418d00db82a72711225a4f0843d31.s3tc.ctex remapped: res://.godot/imported/male_short01_diffuse.png-0a8418d00db82a72711225a4f0843d31.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_short01_diffuse.png' remapped 'res://assets/production/characters/realistic/male_short01_diffuse.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/male_young_lightskinned_male_diffuse.png remapped: res://assets/production/characters/realistic/male_young_lightskinned_male_diffuse.png
+Loading resource: res://.godot/imported/male_young_lightskinned_male_diffuse.png-93931b8c6338e9de39550cc348ad4b01.s3tc.ctex remapped: res://.godot/imported/male_young_lightskinned_male_diffuse.png-93931b8c6338e9de39550cc348ad4b01.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/male_young_lightskinned_male_diffuse.png' remapped 'res://assets/production/characters/realistic/male_young_lightskinned_male_diffuse.png' at thread -1
+Completed load for: 'res://assets/production/characters/realistic/male.glb' remapped 'res://assets/production/characters/realistic/male.glb' at thread -1
+Loading resource: res://assets/production/characters/realistic/female.glb remapped: res://assets/production/characters/realistic/female.glb
+Loading resource: res://.godot/imported/female.glb-e7c68c0ba6a42cdca343de434d79f660.scn remapped: res://.godot/imported/female.glb-e7c68c0ba6a42cdca343de434d79f660.scn
+Loading resource: res://assets/production/characters/realistic/female_BootsViking.png remapped: res://assets/production/characters/realistic/female_BootsViking.png
+Loading resource: res://.godot/imported/female_BootsViking.png-45eadb5331f98e329a38c4c65816837a.ctex remapped: res://.godot/imported/female_BootsViking.png-45eadb5331f98e329a38c4c65816837a.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_BootsViking.png' remapped 'res://assets/production/characters/realistic/female_BootsViking.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/female_eyebrow001.png remapped: res://assets/production/characters/realistic/female_eyebrow001.png
+Loading resource: res://.godot/imported/female_eyebrow001.png-b4623bbde85467ac50c92acf9cd2bdf5.s3tc.ctex remapped: res://.godot/imported/female_eyebrow001.png-b4623bbde85467ac50c92acf9cd2bdf5.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_eyebrow001.png' remapped 'res://assets/production/characters/realistic/female_eyebrow001.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/female_TUNIC_Viking.png remapped: res://assets/production/characters/realistic/female_TUNIC_Viking.png
+Loading resource: res://.godot/imported/female_TUNIC_Viking.png-d8dd9dc5352a8628ea8ef86074db2232.ctex remapped: res://.godot/imported/female_TUNIC_Viking.png-d8dd9dc5352a8628ea8ef86074db2232.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_TUNIC_Viking.png' remapped 'res://assets/production/characters/realistic/female_TUNIC_Viking.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/female_PantsViking.png remapped: res://assets/production/characters/realistic/female_PantsViking.png
+Loading resource: res://.godot/imported/female_PantsViking.png-1241c7fbd137b6e81e09e144ea9340e5.ctex remapped: res://.godot/imported/female_PantsViking.png-1241c7fbd137b6e81e09e144ea9340e5.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_PantsViking.png' remapped 'res://assets/production/characters/realistic/female_PantsViking.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/female_brown_eye.png remapped: res://assets/production/characters/realistic/female_brown_eye.png
+Loading resource: res://.godot/imported/female_brown_eye.png-e34b650f6764b4ce0ea6d05a16901cda.s3tc.ctex remapped: res://.godot/imported/female_brown_eye.png-e34b650f6764b4ce0ea6d05a16901cda.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_brown_eye.png' remapped 'res://assets/production/characters/realistic/female_brown_eye.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/female_ponytail01_diffuse.png remapped: res://assets/production/characters/realistic/female_ponytail01_diffuse.png
+Loading resource: res://.godot/imported/female_ponytail01_diffuse.png-95f0553b2bc228665cbdce11ab4fe525.s3tc.ctex remapped: res://.godot/imported/female_ponytail01_diffuse.png-95f0553b2bc228665cbdce11ab4fe525.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_ponytail01_diffuse.png' remapped 'res://assets/production/characters/realistic/female_ponytail01_diffuse.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/female_short01_diffuse.png remapped: res://assets/production/characters/realistic/female_short01_diffuse.png
+Loading resource: res://.godot/imported/female_short01_diffuse.png-e84c532f7d964557b056945c373abf3a.s3tc.ctex remapped: res://.godot/imported/female_short01_diffuse.png-e84c532f7d964557b056945c373abf3a.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_short01_diffuse.png' remapped 'res://assets/production/characters/realistic/female_short01_diffuse.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/female_young_lightskinned_female_diffuse.png remapped: res://assets/production/characters/realistic/female_young_lightskinned_female_diffuse.png
+Loading resource: res://.godot/imported/female_young_lightskinned_female_diffuse.png-1e348ed91cf3b9eaa724de41c5bd1aff.s3tc.ctex remapped: res://.godot/imported/female_young_lightskinned_female_diffuse.png-1e348ed91cf3b9eaa724de41c5bd1aff.s3tc.ctex
+Completed load for: 'res://assets/production/characters/realistic/female_young_lightskinned_female_diffuse.png' remapped 'res://assets/production/characters/realistic/female_young_lightskinned_female_diffuse.png' at thread -1
+Completed load for: 'res://assets/production/characters/realistic/female.glb' remapped 'res://assets/production/characters/realistic/female.glb' at thread -1
+Loading resource: res://assets/production/characters/citizen/citizen_dark.png remapped: res://assets/production/characters/citizen/citizen_dark.png
+Loading resource: res://.godot/imported/citizen_dark.png-f469320ce4b2061734ba54ad19e3f6f3.ctex remapped: res://.godot/imported/citizen_dark.png-f469320ce4b2061734ba54ad19e3f6f3.ctex
+Completed load for: 'res://assets/production/characters/citizen/citizen_dark.png' remapped 'res://assets/production/characters/citizen/citizen_dark.png' at thread -1
+Loading resource: res://assets/production/characters/citizen/citizen_light.png remapped: res://assets/production/characters/citizen/citizen_light.png
+Loading resource: res://.godot/imported/citizen_light.png-f4b1376886d45905a30e2c90e88c398e.ctex remapped: res://.godot/imported/citizen_light.png-f4b1376886d45905a30e2c90e88c398e.ctex
+Completed load for: 'res://assets/production/characters/citizen/citizen_light.png' remapped 'res://assets/production/characters/citizen/citizen_light.png' at thread -1
+Loading resource: res://assets/production/weapons/woodland/Axe_small.glb remapped: res://assets/production/weapons/woodland/Axe_small.glb
+Loading resource: res://.godot/imported/Axe_small.glb-91dd23563847a15d8c9fb1bbb3d01401.scn remapped: res://.godot/imported/Axe_small.glb-91dd23563847a15d8c9fb1bbb3d01401.scn
+Completed load for: 'res://assets/production/weapons/woodland/Axe_small.glb' remapped 'res://assets/production/weapons/woodland/Axe_small.glb' at thread -1
+Loading resource: res://assets/production/weapons/woodland/Dagger.glb remapped: res://assets/production/weapons/woodland/Dagger.glb
+Loading resource: res://.godot/imported/Dagger.glb-03ee1f1367706c8ea213a8cae43ca897.scn remapped: res://.godot/imported/Dagger.glb-03ee1f1367706c8ea213a8cae43ca897.scn
+Completed load for: 'res://assets/production/weapons/woodland/Dagger.glb' remapped 'res://assets/production/weapons/woodland/Dagger.glb' at thread -1
+Loading resource: res://assets/production/weapons/woodland/Bow_Wooden.glb remapped: res://assets/production/weapons/woodland/Bow_Wooden.glb
+Loading resource: res://.godot/imported/Bow_Wooden.glb-efbf59c8074f9ebb0d1719dfe3d25535.scn remapped: res://.godot/imported/Bow_Wooden.glb-efbf59c8074f9ebb0d1719dfe3d25535.scn
+Completed load for: 'res://assets/production/weapons/woodland/Bow_Wooden.glb' remapped 'res://assets/production/weapons/woodland/Bow_Wooden.glb' at thread -1
+Completed load for: 'res://scripts/humanoid_visual.gd' remapped 'res://scripts/humanoid_visual.gd' at thread -1
+Loading resource: res://scripts/third_person_camera.gd remapped: res://scripts/third_person_camera.gd
+Completed load for: 'res://scripts/third_person_camera.gd' remapped 'res://scripts/third_person_camera.gd' at thread -1
+Loading resource: res://assets/production/characters/realistic/wardrobe/male-vikingboots-normal.png remapped: res://assets/production/characters/realistic/wardrobe/male-vikingboots-normal.png
+Loading resource: res://.godot/imported/male-vikingboots-normal.png-1f99d75d07c328016df2d075d9e80143.ctex remapped: res://.godot/imported/male-vikingboots-normal.png-1f99d75d07c328016df2d075d9e80143.ctex
+Completed load for: 'res://assets/production/characters/realistic/wardrobe/male-vikingboots-normal.png' remapped 'res://assets/production/characters/realistic/wardrobe/male-vikingboots-normal.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/wardrobe/male-vikingboots-ao.png remapped: res://assets/production/characters/realistic/wardrobe/male-vikingboots-ao.png
+Loading resource: res://.godot/imported/male-vikingboots-ao.png-e11e61601ae4f15d8b4ad2ccc4d3add1.ctex remapped: res://.godot/imported/male-vikingboots-ao.png-e11e61601ae4f15d8b4ad2ccc4d3add1.ctex
+Completed load for: 'res://assets/production/characters/realistic/wardrobe/male-vikingboots-ao.png' remapped 'res://assets/production/characters/realistic/wardrobe/male-vikingboots-ao.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/wardrobe/male-vikingtunic-normal.png remapped: res://assets/production/characters/realistic/wardrobe/male-vikingtunic-normal.png
+Loading resource: res://.godot/imported/male-vikingtunic-normal.png-dc39da0300af36450e7cc47e005f030e.ctex remapped: res://.godot/imported/male-vikingtunic-normal.png-dc39da0300af36450e7cc47e005f030e.ctex
+Completed load for: 'res://assets/production/characters/realistic/wardrobe/male-vikingtunic-normal.png' remapped 'res://assets/production/characters/realistic/wardrobe/male-vikingtunic-normal.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/wardrobe/male-vikingtunic-ao.png remapped: res://assets/production/characters/realistic/wardrobe/male-vikingtunic-ao.png
+Loading resource: res://.godot/imported/male-vikingtunic-ao.png-69a3e734dc47a4ffc18d177330378bd7.ctex remapped: res://.godot/imported/male-vikingtunic-ao.png-69a3e734dc47a4ffc18d177330378bd7.ctex
+Completed load for: 'res://assets/production/characters/realistic/wardrobe/male-vikingtunic-ao.png' remapped 'res://assets/production/characters/realistic/wardrobe/male-vikingtunic-ao.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/wardrobe/male-vikingpants-normal.png remapped: res://assets/production/characters/realistic/wardrobe/male-vikingpants-normal.png
+Loading resource: res://.godot/imported/male-vikingpants-normal.png-71e4af24ceccf418399e38b50b7dde04.ctex remapped: res://.godot/imported/male-vikingpants-normal.png-71e4af24ceccf418399e38b50b7dde04.ctex
+Completed load for: 'res://assets/production/characters/realistic/wardrobe/male-vikingpants-normal.png' remapped 'res://assets/production/characters/realistic/wardrobe/male-vikingpants-normal.png' at thread -1
+Loading resource: res://assets/production/characters/realistic/wardrobe/male-vikingpants-ao.png remapped: res://assets/production/characters/realistic/wardrobe/male-vikingpants-ao.png
+Loading resource: res://.godot/imported/male-vikingpants-ao.png-c07aa0563ad0587dce7d5853da8dcb19.ctex remapped: res://.godot/imported/male-vikingpants-ao.png-c07aa0563ad0587dce7d5853da8dcb19.ctex
+Completed load for: 'res://assets/production/characters/realistic/wardrobe/male-vikingpants-ao.png' remapped 'res://assets/production/characters/realistic/wardrobe/male-vikingpants-ao.png' at thread -1
+SLOPE_MOTION_SAMPLE {"clip":"Idle","contacts":{"Left":{"gap":0.00400000438094139,"weight":1.0},"Right":{"gap":0.0039890930056572,"weight":1.0}},"frame":7,"gaps":{"Left":0.00400000438094139,"Right":0.0039890930056572},"grounded":true,"label":"male-course0-idle","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.483333333333333,"position":"(0.0, 0.025, 0.0)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00399990566074848,"weight":1.0},"Right":{"gap":0.00399840995669365,"weight":1.0}},"frame":8,"gaps":{"Left":0.00399990566074848,"Right":0.00399840995669365},"grounded":true,"label":"male-course0-walk-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.0,"position":"(0.0, 0.025, -0.181111)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00400066003203392,"weight":1.0},"Right":{"gap":0.00399963557720184,"weight":1.0}},"frame":9,"gaps":{"Left":0.00400066003203392,"Right":0.00393256731331348},"grounded":true,"label":"male-course0-walk-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.129807682832082,"position":"(0.0, 0.025, -0.421111)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00395789369940758,"weight":0.962048154931322},"Right":{"gap":0.00398746505379677,"weight":1.0}},"frame":10,"gaps":{"Left":0.00395789369940758,"Right":0.00398746505379677},"grounded":true,"label":"male-course0-walk-late","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.278159320354462,"position":"(0.0, 0.025, -0.661111)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399923697113991,"weight":1.0},"Right":{"gap":0.00400002673268318,"weight":0.949725684826171}},"frame":11,"gaps":{"Left":0.00399923697113991,"Right":0.00399325974285603},"grounded":true,"label":"male-course0-run-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.272966940036355,"position":"(0.0, 0.025, -1.121111)","velocity_y":0.0}
+Loading resource: res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/smoke_03.png remapped: res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/smoke_03.png
+Loading resource: res://.godot/imported/smoke_03.png-d33ed62872fa1a0af53889158a735a61.ctex remapped: res://.godot/imported/smoke_03.png-d33ed62872fa1a0af53889158a735a61.ctex
+Completed load for: 'res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/smoke_03.png' remapped 'res://assets/vfx/third_party/kenney_particle_pack/PNG (Transparent)/smoke_03.png' at thread -1
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399982929229736,"weight":1.0},"Right":{"gap":0.0752375423908234,"weight":0.125604688879543}},"frame":12,"gaps":{"Left":0.00399982929229736,"Right":0.0747358351945877},"grounded":true,"label":"male-course0-run-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.392697118551471,"position":"(0.0, 0.025, -1.972222)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Right":{"gap":0.00399989821016788,"weight":1.0}},"frame":13,"gaps":{"Left":0.55044412612915,"Right":0.00376140512526035},"grounded":true,"label":"male-course0-stop","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.586626329850096,"position":"(0.0, 0.025, -2.774445)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Idle","contacts":{"Left":{"gap":0.00381228408144949,"weight":1.0},"Right":{"gap":0.00399993685258848,"weight":1.0}},"frame":25,"gaps":{"Left":0.0038122797798547,"Right":0.00399989813823536},"grounded":true,"label":"male-course1-idle","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.55,"position":"(0.0, 0.11, 0.0)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00396307003443685,"weight":1.0},"Right":{"gap":0.00399988523345099,"weight":1.0}},"frame":26,"gaps":{"Left":0.00396305928044987,"Right":0.00399993255099369},"grounded":true,"label":"male-course1-walk-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.0,"position":"(0.0, 0.11, -0.181111)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00400008740840614,"weight":1.0},"Right":{"gap":0.00399766345974172,"weight":1.0}},"frame":27,"gaps":{"Left":0.00400009171000093,"Right":0.00392050790478265},"grounded":true,"label":"male-course1-walk-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.129807682832082,"position":"(0.0, 0.11, -0.421111)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00395167726063432,"weight":0.96204818093695},"Right":{"gap":0.0039976742137287,"weight":1.0}},"frame":28,"gaps":{"Left":0.00384755285713647,"Right":0.00399766130894432},"grounded":true,"label":"male-course1-walk-late","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.278159320354462,"position":"(0.0, 0.11, -0.661111)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399963574095314,"weight":1.0},"Right":{"gap":0.00385895208333118,"weight":0.949725729075715}},"frame":29,"gaps":{"Left":0.00399961423297919,"Right":0.0038589434801416},"grounded":true,"label":"male-course1-run-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.272966940036355,"position":"(0.0, 0.11, -1.121111)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399979920155518,"weight":1.0},"Right":{"clearance_lift":0.00387198296794566,"gap":0.00399977097233937,"weight":0.125604645498214}},"frame":30,"gaps":{"Left":0.00399980350314997,"Right":0.000698957534312101},"grounded":true,"label":"male-course1-run-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.392697118551471,"position":"(0.0, 0.11, -1.972222)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Right":{"gap":0.00400008310681135,"weight":1.0}},"frame":31,"gaps":{"Left":0.620914560347762,"Right":0.00372466489716263},"grounded":true,"label":"male-course1-stop","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.586626329850096,"position":"(0.0, 0.11, -2.774445)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Idle","contacts":{"Left":{"gap":0.00365133178543222,"weight":1.0},"Right":{"gap":0.00400084450699857,"weight":1.0}},"frame":60,"gaps":{"Left":0.00351983667297542,"Right":0.00400086890629478},"grounded":true,"label":"male-course2-idle","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.516666666666667,"position":"(0.0, 0.07, 0.0)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00390576779832534,"weight":1.0},"Right":{"gap":0.00394041027644204,"weight":1.0}},"frame":61,"gaps":{"Left":0.00379580912525233,"Right":0.00394042954170915},"grounded":true,"label":"male-course2-walk-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.0,"position":"(0.0, 0.152559, -0.142613)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.0039901469257867,"weight":1.0},"Right":{"gap":0.00400152683392873,"weight":1.0}},"frame":62,"gaps":{"Left":0.00321821530645652,"Right":0.00395927162871},"grounded":true,"label":"male-course2-walk-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.106635632117589,"position":"(0.0, 0.244482, -0.339749)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00399988267265124,"weight":1.0},"Right":{"gap":0.00400317510560941,"weight":1.0}},"frame":63,"gaps":{"Left":0.00399991529281655,"Right":0.00355724133957834},"grounded":true,"label":"male-course2-walk-late","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.22849073211352,"position":"(0.0, 0.336407, -0.536883)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399791995512624,"weight":1.0},"Right":{"gap":0.00400426025205255,"weight":1.0}},"frame":64,"gaps":{"Left":0.00399794229941332,"Right":0.00168950713440991},"grounded":true,"label":"male-course2-run-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.224221159593986,"position":"(0.0, 0.509444, -0.916194)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399949732235183,"weight":1.0}},"frame":65,"gaps":{"Left":0.00399958646058268,"Right":0.309936941815504},"grounded":true,"label":"male-course2-run-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.322858867622144,"position":"(0.0, 0.817551, -1.623633)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Right":{"gap":0.00399911608245561,"weight":1.0}},"frame":66,"gaps":{"Left":0.774137963010583,"Right":0.00399912609545526},"grounded":true,"label":"male-course2-stop","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.484027506487297,"position":"(0.0, 1.142386, -2.274383)","velocity_y":0.0}
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3530 shapes=9 original_primitive=3 data_bytes=635400
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=253 first=(0.9255, 0.4235, 0.8314, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=251 first=(0.9255, 0.4235, 0.8314, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.9255, 0.4235, 0.8314, 1.0)
+RAW_GPU_SURFACE original_format=34359745559 point_format=34359741463 vertices=3776 shapes=9 original_primitive=3 data_bytes=679680
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=false max_error=255 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=true flip_y=false max_error=253 first=(0.502, 0.7529, 0.502, 1.0)
+GPU_BYTE_CALIBRATION decode=false flip_x=false flip_y=true max_error=0 first=(0.502, 0.7529, 0.502, 1.0)
+SLOPE_MOTION_SAMPLE {"clip":"Idle","contacts":{"Left":{"gap":0.00399815084207193,"weight":1.0},"Right":{"gap":0.0039844082001757,"weight":1.0}},"frame":92,"gaps":{"Left":0.00399813634610457,"Right":0.00398441010841786},"gpu":{"boot_error_m":0.00000112194959456247,"boot_vertices":3530,"minimum_gap_m":0.00398497875433859,"tunic_error_m":0.00000143765316806821,"tunic_vertices":3776},"grounded":true,"label":"male-course3-idle","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.700000000000001,"position":"(0.0, 0.11, 0.0)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00399792885143734,"weight":1.0},"Right":{"gap":0.00379700654968167,"weight":1.0}},"frame":93,"gaps":{"Left":0.00399365716592892,"Right":0.00379700628393985},"gpu":{"boot_error_m":0.00000112334032564831,"boot_vertices":3530,"minimum_gap_m":0.00379715063251973,"tunic_error_m":0.00000147948082940275,"tunic_vertices":3776},"grounded":true,"label":"male-course3-walk-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.0,"position":"(0.009777, -0.011208, -0.249785)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00400293731008975,"weight":0.962011557021075},"Right":{"gap":0.00399678499821673,"weight":1.0}},"frame":94,"gaps":{"Left":0.00400295233963328,"Right":0.00399678471849297},"gpu":{"boot_error_m":0.00000116353169232752,"boot_vertices":3530,"minimum_gap_m":0.00399637354375029,"tunic_error_m":0.00000155115287725494,"tunic_vertices":3776},"grounded":true,"label":"male-course3-walk-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.10638342117928,"position":"(0.009777, -0.179958, -0.563877)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Walk","contacts":{"Left":{"gap":0.00399998035109496,"weight":1.0},"Right":{"gap":0.00399994754459724,"weight":1.0}},"frame":95,"gaps":{"Left":0.00399994289045276,"Right":0.00392146975339104},"gpu":{"boot_error_m":0.000001296657956118,"boot_vertices":3530,"minimum_gap_m":0.00392114606263616,"tunic_error_m":0.00000137511153752712,"tunic_vertices":3776},"grounded":true,"label":"male-course3-walk-late","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.275359125966989,"position":"(0.027217, -0.315829, -0.887386)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399981194440665,"weight":1.0},"Right":{"gap":0.00399989068000119,"weight":1.0}},"frame":96,"gaps":{"Left":0.00399983790966739,"Right":0.00399983790966739},"gpu":{"boot_error_m":0.00000117332456284203,"boot_vertices":3530,"minimum_gap_m":0.00399934799933568,"tunic_error_m":0.00000149458446685458,"tunic_vertices":3776},"grounded":true,"label":"male-course3-run-start","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.298133191361838,"position":"(0.027217, -0.606101, -1.423749)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Left":{"gap":0.00399990380260028,"weight":1.0},"Right":{"gap":0.00400228774143483,"weight":1.0}},"frame":97,"gaps":{"Left":0.00291139712698385,"Right":0.00400221747413571},"gpu":{"boot_error_m":0.00000120894708288688,"boot_vertices":3530,"minimum_gap_m":0.00291188703731556,"tunic_error_m":0.00000139793223752349,"tunic_vertices":3776},"grounded":true,"label":"male-course3-run-mid","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.439607088660016,"position":"(0.027217, -1.055443, -2.393873)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Run","contacts":{"Right":{"gap":0.00399944451163215,"weight":1.0}},"frame":98,"gaps":{"Left":0.316986961876368,"Right":0.00399934799933568},"gpu":{"boot_error_m":0.00000117617742034781,"boot_vertices":3530,"minimum_gap_m":0.00399948797371617,"tunic_error_m":0.00000147453749832493,"tunic_vertices":3776},"grounded":true,"label":"male-course3-stop","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.655621791774843,"position":"(0.027217, -1.486469, -3.310925)","velocity_y":0.0}
+SLOPE_MOTION_SAMPLE {"clip":"Airborne","contacts":{},"frame":132,"gaps":{"Left":0.761380004617755,"Right":0.845896535557097},"gpu":{"boot_error_m":0.00000120579773010832,"boot_vertices":3530,"minimum_gap_m":0.761379724668994,"tunic_error_m":0.00000145805029205803,"tunic_vertices":3776},"grounded":false,"label":"male-course3-rise","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.174545496160334,"position":"(0.03154, -1.063763, -3.890136)","velocity_y":3.09999942779541}
+SLOPE_MOTION_SAMPLE {"clip":"Airborne","contacts":{},"frame":133,"gaps":{"Left":1.12452729776869,"Right":1.19728682059323},"gpu":{"boot_error_m":0.00000121020912047243,"boot_vertices":3530,"minimum_gap_m":1.12452708780712,"tunic_error_m":0.00000159553792400402,"tunic_vertices":3776},"grounded":false,"label":"male-course3-apex","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.349090931632302,"position":"(0.03154, -0.83043, -3.890136)","velocity_y":0.699999690055847}
+SLOPE_MOTION_SAMPLE {"clip":"Airborne","contacts":{},"frame":134,"gaps":{"Left":0.967157461169882,"Right":1.03957229708247},"gpu":{"boot_error_m":0.00000137141284994868,"boot_vertices":3530,"minimum_gap_m":0.967158091054594,"tunic_error_m":0.00000158604643729632,"tunic_vertices":3776},"grounded":false,"label":"male-course3-fall","landing_compression":0.0,"landing_elapsed":0.0,"phase":0.523636375774037,"position":"(0.03154, -0.917097, -3.890136)","velocity_y":-1.70000016689301}
+SLOPE_MOTION_SAMPLE {"clip":"Idle","contacts":{"Left":{"gap":0.00399998581884458,"weight":1.0},"Right":{"gap":0.00399995191879694,"weight":1.0}},"frame":136,"gaps":{"Left":0.00399976792247715,"Right":0.00400004787123813},"gpu":{"boot_error_m":0.0000012716069477392,"boot_vertices":3530,"minimum_gap_m":0.00399948797371617,"tunic_error_m":0.00000135952166147035,"tunic_vertices":3776},"grounded":true,"label":"male-course3-landing","landing_compression":0.0316628343643424,"landing_elapsed":0.206666666666667,"phase":0.0,"position":"(0.03154, -1.74043, -3.890136)","velocity_y":0.0}

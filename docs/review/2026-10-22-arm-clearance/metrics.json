@@ -1,0 +1,62 @@
+{
+  "after_pairs": 0,
+  "before_pairs": 42438,
+  "failed_poses": 0,
+  "regressions": 0,
+  "poses": 1344,
+  "bodies": 2,
+  "build_values": [
+    0,
+    -0.5,
+    0.5,
+    -0.35,
+    -0.2,
+    0.05,
+    0.12,
+    0.4
+  ],
+  "clips": [
+    "Airborne",
+    "Axe_Chop",
+    "Bow_Attack_Draw",
+    "Bow_Attack_Shoot",
+    "Cast_Left",
+    "Cast_Right",
+    "Death",
+    "Idle",
+    "Jump",
+    "Punch",
+    "Run",
+    "Sitting",
+    "Walk",
+    "WorkStanding",
+    "Working"
+  ],
+  "phases": [
+    0.15,
+    0.4,
+    0.5,
+    0.7
+  ],
+  "max_bone_length_error_m": 1.19209289550781e-07,
+  "max_global_wrist_angle_error_rad": 0.0009765625,
+  "max_wrist_shift_m": 0.0999999418854713,
+  "mean_helper_usec": 171.10044642857142,
+  "max_helper_usec": 20569,
+  "cold_shared_profile_usec": [
+    82629,
+    73859
+  ],
+  "shared_profiles": 2,
+  "gpu_native_poses": 34,
+  "native_color_frames": 62,
+  "max_gpu_cpu_error_m": 1.67934172168316e-06,
+  "scope": "Proper forearm sleeve crossings with trousers and non-arm tunic torso >0.5mm; not whole garment contact, visible defect counts or artistic acceptance",
+  "player_preview_poses": 960,
+  "ordinary_citizen_poses": 384,
+  "runtime_crossfade_samples": 504,
+  "failed_runtime_crossfade_samples": 0,
+  "first_draw_gpu_samples": 4,
+  "first_draw_color_frames": 4,
+  "first_draw_gpu_max_error_m": 1.56740895818075e-06
+}

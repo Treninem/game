@@ -1,5 +1,5 @@
 @tool
-extends VFXControllerBB
+extends VFXCombatControllerBB
 class_name VFXBattleChargeBB
 
 

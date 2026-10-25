@@ -3,8 +3,10 @@ extends "res://scripts/world_data.gd"
 const GEOGRAPHY_RUNTIME := preload("res://scripts/world_geography.gd")
 
 func biome_at(pos: Vector2) -> String:
-    var water_kind := water_kind_at(pos)
     var elevation := elevation_at(pos)
+    var water_kind := WORLD_HYDROLOGY.freshwater_kind_at(pos)
+    if water_kind.is_empty() and elevation < SEA_LEVEL - 0.35:
+        water_kind = "sea"
     if water_kind == "sea":
         return "underwater" if elevation < SEA_LEVEL - 8.0 else "ocean"
     if water_kind in ["river", "lake"]:
@@ -16,7 +18,7 @@ func biome_at(pos: Vector2) -> String:
         return "forest"
 
     var state_id := GEOGRAPHY_RUNTIME.state_id_at(pos)
-    var temperature := temperature_at(pos)
+    var temperature := temperature_at(pos, elevation)
     var moisture := moisture_at(pos)
 
     # Canonical political macro-regions keep their tested identities first.

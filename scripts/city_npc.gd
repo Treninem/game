@@ -16,6 +16,8 @@ var footstep_distance_accum := 0.0
 
 func _ready() -> void:
     add_to_group("city_npc")
+    if role == "guard":
+        add_to_group("ally")
     _build_collision()
     _build_visual()
     if work_position == Vector3.ZERO:

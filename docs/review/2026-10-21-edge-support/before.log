@@ -1,0 +1,44 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+STRIDE_PROFILE_CHECKED male forefoot_supports={ "Walk": 1.81501408824974, "Run": 5.92899951550366 }
+STRIDE_PROFILE_CHECKED female forefoot_supports={ "Walk": 1.72875647463823, "Run": 5.45938308658054 }
+STRIDE_SPEED_CHECKED bodies=2 visual_heights=3 speeds=5 physical_motion=true combat_phase=retained
+AIRBORNE_ACTIONS_CHECKED bodies=2 actions=6 legs=6 idle=retained landing=reset gait=frozen
+JUMP_PHASE_PROFILE male knee_bends=[59.219768670194, 89.713510219742, 17.0467468569301]
+JUMP_PHASE_PROFILE female knee_bends=[59.2197959909507, 89.7135238801203, 17.0467485644774]
+JUMP_PHASES_CHECKED bodies=2 physical_velocity=rise,apex,fall combat_legs=matched
+HUMANOID_SUPPORT_CHECKED poses=336 bodies=2 heights=3 surfaces=4 actions=7 phases=2 all_boot_vertices=true min_gap=-0.00010078764171 max_gap=0.00448277732357 modifier_p95_usec=1575
+HUMANOID_EDGE_CHECKED poses=24 bodies=2 heights=3 ledge_sides=2 actions=1 phases=2 all_boot_vertices=true min_gap=0.0 max_gap=0.05463937669992 modifier_p95_usec=1012
+HUMANOID_LANDING_PROFILE male compression=0.08300523965538 peak_sole_gap=0.00337998382747 neutral_hip=1.04181063175201 peak_hip=0.95296359062195
+HUMANOID_LANDING_PROFILE female compression=0.07476235494661 peak_sole_gap=0.0023211799562 neutral_hip=0.99975621700287 peak_hip=0.90525984764099
+HUMANOID_LANDING_CHECKED bodies=2 input=jump impact=physical soles=skinned recovery=idle gait_phase=retained transient_reset=true
+ERROR: Skinned sole misses physical surface: male/160.0/ledge_right/Walk/0.75 gap=0.02272
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_locomotion_facing.gd:99)
+       [1] run (res://tests/humanoid_landing_cases.gd:84)
+ERROR: Skinned sole misses physical surface: male/180.0/ledge_right/Walk/0.75 gap=0.02552
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_locomotion_facing.gd:99)
+       [1] run (res://tests/humanoid_landing_cases.gd:84)
+ERROR: Skinned sole misses physical surface: male/195.0/ledge_right/Walk/0.75 gap=0.02763
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_locomotion_facing.gd:99)
+       [1] run (res://tests/humanoid_landing_cases.gd:84)
+ERROR: Skinned sole misses physical surface: female/160.0/ledge_right/Walk/0.75 gap=0.04488
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_locomotion_facing.gd:99)
+       [1] run (res://tests/humanoid_landing_cases.gd:84)
+ERROR: Skinned sole misses physical surface: female/180.0/ledge_right/Walk/0.75 gap=0.05046
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_locomotion_facing.gd:99)
+       [1] run (res://tests/humanoid_landing_cases.gd:84)
+ERROR: Skinned sole misses physical surface: female/195.0/ledge_right/Walk/0.75 gap=0.05464
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/smoke_locomotion_facing.gd:99)
+       [1] run (res://tests/humanoid_landing_cases.gd:84)

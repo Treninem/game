@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 20.25,
+  "errors": [],
+  "markers": [
+    "GAMEPLAY_ACTIONS_SMOKE_OK quality=4 persisted=true equip=visible unequip=retained melee=hit projectile=hit bow=hit ammo=consumed spells=10"
+  ]
+}

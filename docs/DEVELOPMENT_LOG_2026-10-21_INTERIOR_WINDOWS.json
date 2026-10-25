@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-21",
+  "parent": "76f74546995532cb13667a13d63a8e6c61c76bf7",
+  "parent_ci": "8/8 exact SHA passed, verified this turn",
+  "changes": [
+    "Blender-authored bevelled rectangular window assembly, 866 triangles / 2 meshes, fitted to existing physical openings",
+    "Single two-sided transparent pane replaces closed glass box; pane does not cast an opaque shadow",
+    "Existing CC0 wood texture reused with authored member UVs",
+    "Three shadow-free daylight sources per house: daytime curve, Low disabled, beyond 20 metres disabled",
+    "Blender-authored posts, knee braces and ceiling ties, 1620 triangles, actual triangle collision",
+    "Corrected wood grain direction and end-face UVs in Blender",
+    "Editable .blend sources tracked under assets/source/interiors with .gdignore",
+    "Existing authored wall lantern reused in ordinary homes; local warm light day/night and occupied-room shadow budget; capital lantern not duplicated",
+    "Owner concept boards preserved with visual implementation requirements"
+  ],
+  "validation": {
+    "windows-blender": {
+      "exit_code": 0,
+      "seconds": 112.69,
+      "errors": [],
+      "marker": true
+    },
+    "windows-debug": {
+      "exit_code": 0,
+      "seconds": 104.7,
+      "errors": [],
+      "marker": true
+    },
+    "windows-passages": {
+      "exit_code": 0,
+      "seconds": 31.27,
+      "errors": [],
+      "marker": true
+    },
+    "timber-windows-final": {
+      "exit_code": 0,
+      "seconds": 99.22,
+      "errors": [],
+      "marker": true
+    },
+    "timber-physics-final": {
+      "exit_code": 0,
+      "seconds": 99.75,
+      "errors": [],
+      "marker": true
+    },
+    "warm-timber-final": {
+      "exit_code": 0,
+      "seconds": 64.88,
+      "errors": [],
+      "marker": true
+    },
+    "warm-physics-final": {
+      "exit_code": 0,
+      "seconds": 41.0,
+      "errors": [],
+      "marker": true
+    },
+    "warm-passages-final": {
+      "exit_code": 0,
+      "seconds": 4.38,
+      "errors": [],
+      "marker": true
+    },
+    "warm-quality-final": {
+      "exit_code": 0,
+      "seconds": 6.55,
+      "errors": [],
+      "marker": true
+    },
+    "warm-household-final": {
+      "exit_code": 0,
+      "seconds": 77.3,
+      "errors": [],
+      "marker": true
+    },
+    "warm-bench-final": {
+      "exit_code": 0,
+      "seconds": 77.39,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "evidence": "docs/review/2026-10-21-interior-windows",
+  "limits": [
+    "Automated actual-engine fixtures/input, not manual play or a journey to the capital",
+    "Whole family-home dressing, hearths, multiroom plans, inhabitants and exterior/world artistic acceptance remain open",
+    "Two initial graphical lighting runs timed out at 150s and a third at 240s; revised fixture isolates room at X60 and yields renderer frames between graphics presets; subsequent rendered runs passed. Single-factor cause not established",
+    "An import editor process timed out after importing the mesh; final bounded reimport exited 0. Existing third-party duplicate UID warning remains",
+    "Standalone --check-only without full autoload context crashed in Godot; normal bounded scenes subsequently passed; diagnostic mode not used as acceptance",
+    "Warm room screenshots are fixture evidence, not the real outdoor sky/terrain or a furnished production-region tour",
+    "No stable publication; new exact-SHA CI required"
+  ],
+  "next": "Complete a family-home layout, hearth and occupation-specific dressing against supplied boards; verify NPC routes, interactions, saves and region performance.",
+  "owner_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
+  "performance": {
+    "scene": "One static furnished-room fixture with actual player, 30 warmup + 120 process frames per preset",
+    "hardware": "Intel UHD 610 / GL Compatibility",
+    "low_ms_per_frame": 16.6912083333333,
+    "ultra_ms_per_frame": 31.3466666666667,
+    "low_draw_calls": 58,
+    "ultra_draw_calls": 267,
+    "low_godot_video_bytes": 440923914,
+    "ultra_godot_video_bytes": 466802442,
+    "limits": "Short fixed-room sample, includes all preset differences and presentation timing; not steady world FPS or process RSS. No before/after cost attribution."
+  },
+  "editable_sources": [
+    "assets/source/interiors/TimberWindow.blend",
+    "assets/source/interiors/RoomTimberwork.blend"
+  ]
+}

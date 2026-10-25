@@ -1,0 +1,13 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+CAMERA_MOTION_CHECK scale=0.75 compatible=false paused=false mode=2 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=0.75 compatible=true paused=false mode=4 yaw_delta=-0.08000004291534 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.0 compatible=false paused=false mode=2 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.0 compatible=true paused=false mode=4 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.5 compatible=false paused=false mode=2 yaw_delta=-0.07999999076128 pitch_delta=-0.02999999932945
+CAMERA_MOTION_CHECK scale=1.5 compatible=true paused=false mode=4 yaw_delta=-0.08000004291534 pitch_delta=-0.02999999932945
+CAMERA_INPUT_SMOKE_OK mouse=confined_or_captured yaw=responsive pitch=responsive scales=3 modes=2 warp=no_drift
+BOOT_WORLD_SMOKE_PASS: boot -> menu -> new game -> physical world -> save -> loading screen -> restored world
+WARNING: 84 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

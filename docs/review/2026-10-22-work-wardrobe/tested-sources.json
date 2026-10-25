@@ -1,0 +1,15 @@
+{
+  "scripts/humanoid_work_poses.gd": "1e5a7a54cdab7b39ed0206e63b281ef1a0232ad31fbefd568a32ea01140495d3",
+  "scripts/humanoid_visual.gd": "b80edaaec255c6d456721f8ef47ba99fc5dc0317b370b7025f5b8dd373226434",
+  "scripts/settlement_npc.gd": "d7586a578a8d3605bb369662cf893dbb59d4221d4effdd2ac32c26369f65ccb4",
+  "scripts/capital_square_life.gd": "1e96523523344aa9d874d28087c446d08fc7cebb71e16065999770fe087c2a98",
+  "tests/smoke_working_pose.gd": "8a6cd38bbd91244a5cd93aa303972bf68205ef64e1115fba98fef7d7d8cf0d3f",
+  "tests/smoke_working_pose.tscn": "a9cbb331af3057aab7f6ac28af837a9d4eeba8cc6a154c68a5f9fea19705ed60",
+  "tests/smoke_capital_square.gd": "5e7df7f455f1ade19bb327a776879dec649cf44e2ea9aa4bdee623e48d1739a1",
+  "tests/smoke_character_creator.gd": "0acdb2e9b57944b96ef82823101077338171e10b1b4aad7164a91b0f7d3e01e1",
+  "tests/visual_human_surfaces.gd": "b2f93f5fa001a298db149a2cebd62017f16a22a9195191ef1c9abcd106a40037",
+  "tests/visual_wardrobe_coverage.gd": "b3d6c59d4bd047df7366e2aa28959428726f0fd78f2e913d60c437e8b979de06",
+  "tests/visual_workshop_world.gd": "c02e4869158e7e1f6e211e182eb8e8f3605002d8084ea9cfe551db0ee315d307",
+  "assets/production/characters/realistic/male.glb": "615a5a5661035e60d5e5a743b4889748646e7b378ff42029f48114f93afb49a0",
+  "assets/production/characters/realistic/female.glb": "76bf774548eace4c4a4db3a227fdba0dcd16ab8de24ae9d11eb1779b4587e861"
+}

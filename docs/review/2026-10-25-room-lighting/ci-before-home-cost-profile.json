@@ -1,0 +1,858 @@
+{
+  "diagnostic_ablation_only": true,
+  "geometry": [
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/Floor/@MeshInstance3D@18",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/Ceiling/@MeshInstance3D@20",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallLeft-1/@MeshInstance3D@22",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallLeft1/@MeshInstance3D@24",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallLeftSill/@MeshInstance3D@26",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallLeftHeader/@MeshInstance3D@28",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallRight-1/@MeshInstance3D@30",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallRight1/@MeshInstance3D@32",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallRightSill/@MeshInstance3D@34",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/FrontWallRightHeader/@MeshInstance3D@36",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/DoorLintel/@MeshInstance3D@38",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/BackWallPier0/@MeshInstance3D@40",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/BackWallSill0/@MeshInstance3D@42",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/BackWallHeader0/@MeshInstance3D@44",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/BackWallPier1/@MeshInstance3D@46",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/BackWallSill1/@MeshInstance3D@48",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/BackWallHeader1/@MeshInstance3D@50",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/BackWallEndPier/@MeshInstance3D@52",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/LeftWallFront/@MeshInstance3D@54",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/LeftWallBack/@MeshInstance3D@56",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/LeftWallSillWall/@MeshInstance3D@58",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/LeftWallTop/@MeshInstance3D@60",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/RightWallFront/@MeshInstance3D@62",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/RightWallBack/@MeshInstance3D@64",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/RightWallSillWall/@MeshInstance3D@66",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/PhysicalShell/RightWallTop/@MeshInstance3D@68",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/FrontWindowLeft/TimberWindow/Glass",
+      "surfaces": 1,
+      "triangles": 2
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/FrontWindowLeft/TimberWindow/TimberFrame",
+      "surfaces": 1,
+      "triangles": 864
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/FrontWindowRight/TimberWindow/Glass",
+      "surfaces": 1,
+      "triangles": 2
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/FrontWindowRight/TimberWindow/TimberFrame",
+      "surfaces": 1,
+      "triangles": 864
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/BackWallWindow0/TimberWindow/Glass",
+      "surfaces": 1,
+      "triangles": 2
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/BackWallWindow0/TimberWindow/TimberFrame",
+      "surfaces": 1,
+      "triangles": 864
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/BackWallWindow1/TimberWindow/Glass",
+      "surfaces": 1,
+      "triangles": 2
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/BackWallWindow1/TimberWindow/TimberFrame",
+      "surfaces": 1,
+      "triangles": 864
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/LeftWallWindow/TimberWindow/Glass",
+      "surfaces": 1,
+      "triangles": 2
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/LeftWallWindow/TimberWindow/TimberFrame",
+      "surfaces": 1,
+      "triangles": 864
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/RightWallWindow/TimberWindow/Glass",
+      "surfaces": 1,
+      "triangles": 2
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/RightWallWindow/TimberWindow/TimberFrame",
+      "surfaces": 1,
+      "triangles": 864
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/RealPackRoof/CottageShingleRoof",
+      "surfaces": 4,
+      "triangles": 26888
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/FrontDoor/RealDoorModel/Door_1_Flat",
+      "surfaces": 2,
+      "triangles": 314
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Bed/Mesh",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Bed/Mattress",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Bed/Pillow",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/BedSecond/Mesh",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/BedSecond/Mattress",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Table/Mesh",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Table/Leg",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Table/@MeshInstance3D@71",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Table/@MeshInstance3D@72",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Table/@MeshInstance3D@73",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/StorageChest/Mesh",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/StorageChest/IronBandA",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/StorageChest/IronBandB",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/GuestChest/Mesh",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Bench/Mesh",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Bench/BenchLegA",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/Bench/BenchLegB",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/InteriorFurniture/BenchSecond/Mesh",
+      "surfaces": 1,
+      "triangles": 12
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/RoomTimberwork/RoomTimberwork",
+      "surfaces": 1,
+      "triangles": 1620
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@74/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@76/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/RoomDoor0/Door_1_Flat2/Door_1_Flat",
+      "surfaces": 2,
+      "triangles": 314
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@79/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@81/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/RoomDoor1/Door_1_Flat2/Door_1_Flat",
+      "surfaces": 2,
+      "triangles": 314
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@84/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@86/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@88/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@90/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/RoomDoor2/Door_1_Flat2/Door_1_Flat",
+      "surfaces": 2,
+      "triangles": 314
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@93/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@StaticBody3D@95/HousePartition/PartitionPanel",
+      "surfaces": 2,
+      "triangles": 540
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/Lantern_Wall2/Lantern_Wall",
+      "surfaces": 1,
+      "triangles": 2822
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@Node3D@98/Lantern_Wall",
+      "surfaces": 1,
+      "triangles": 2822
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@Node3D@100/Lantern_Wall",
+      "surfaces": 1,
+      "triangles": 2822
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/HomeWallLantern/Lantern_Wall2/Lantern_Wall",
+      "surfaces": 1,
+      "triangles": 2822
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/PublicFurniture/BenchPublic_-1000_1200/Bench2/Bench",
+      "surfaces": 2,
+      "triangles": 404
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/PublicFurniture/BenchPublic_-3000_-800/Bench2/Bench",
+      "surfaces": 2,
+      "triangles": 404
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/PublicFurniture/BenchPublic_1000_1200/Bench2/Bench",
+      "surfaces": 2,
+      "triangles": 404
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/PublicFurniture/BenchPublic_3000_-800/Bench2/Bench",
+      "surfaces": 2,
+      "triangles": 404
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/PublicFurniture/BenchPublic_-1000_1580/Bench2/Bench",
+      "surfaces": 2,
+      "triangles": 404
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/PublicFurniture/BenchPublic_1000_1580/Bench2/Bench",
+      "surfaces": 2,
+      "triangles": 404
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareBarrel/Barrel2/Barrel",
+      "surfaces": 2,
+      "triangles": 824
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareBarrel_Apples/Barrel_Apples2/Barrel_Apples",
+      "surfaces": 3,
+      "triangles": 2480
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@StaticBody3D@156/Barrel_Apples2/Barrel_Apples",
+      "surfaces": 3,
+      "triangles": 2480
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareMarketStall/Stall_Empty2/Stall_Empty",
+      "surfaces": 3,
+      "triangles": 1496
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareLantern_Wall/Lantern_Wall2/Lantern_Wall",
+      "surfaces": 1,
+      "triangles": 2822
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@StaticBody3D@160/Barrel2/Barrel",
+      "surfaces": 2,
+      "triangles": 824
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@StaticBody3D@162/Barrel_Apples2/Barrel_Apples",
+      "surfaces": 3,
+      "triangles": 2480
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@StaticBody3D@164/Barrel_Apples2/Barrel_Apples",
+      "surfaces": 3,
+      "triangles": 2480
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@StaticBody3D@166/Stall_Empty2/Stall_Empty",
+      "surfaces": 3,
+      "triangles": 1496
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@Node3D@167/Lantern_Wall2/Lantern_Wall",
+      "surfaces": 1,
+      "triangles": 2822
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/PublicMealTable/Table/Table",
+      "surfaces": 2,
+      "triangles": 144
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@StaticBody3D@172/Table/Table",
+      "surfaces": 2,
+      "triangles": 144
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/Workbench2/Workbench",
+      "surfaces": 2,
+      "triangles": 1368
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@177/Arrow2/Arrow/CurvedFeather0",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@177/Arrow2/Arrow/CurvedFeather1",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@177/Arrow2/Arrow/CurvedFeather2",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@177/Arrow2/Arrow/ForgedArrowhead",
+      "surfaces": 1,
+      "triangles": 28
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@177/Arrow2/Arrow/HornTailNock",
+      "surfaces": 1,
+      "triangles": 108
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@177/Arrow2/Arrow/StraightAshShaft",
+      "surfaces": 1,
+      "triangles": 1964
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@178/Arrow2/Arrow/CurvedFeather0",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@178/Arrow2/Arrow/CurvedFeather1",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@178/Arrow2/Arrow/CurvedFeather2",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@178/Arrow2/Arrow/ForgedArrowhead",
+      "surfaces": 1,
+      "triangles": 28
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@178/Arrow2/Arrow/HornTailNock",
+      "surfaces": 1,
+      "triangles": 108
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@178/Arrow2/Arrow/StraightAshShaft",
+      "surfaces": 1,
+      "triangles": 1964
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@179/Arrow2/Arrow/CurvedFeather0",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@179/Arrow2/Arrow/CurvedFeather1",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@179/Arrow2/Arrow/CurvedFeather2",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@179/Arrow2/Arrow/ForgedArrowhead",
+      "surfaces": 1,
+      "triangles": 28
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@179/Arrow2/Arrow/HornTailNock",
+      "surfaces": 1,
+      "triangles": 108
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@179/Arrow2/Arrow/StraightAshShaft",
+      "surfaces": 1,
+      "triangles": 1964
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@180/Arrow2/Arrow/CurvedFeather0",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@180/Arrow2/Arrow/CurvedFeather1",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@180/Arrow2/Arrow/CurvedFeather2",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@180/Arrow2/Arrow/ForgedArrowhead",
+      "surfaces": 1,
+      "triangles": 28
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@180/Arrow2/Arrow/HornTailNock",
+      "surfaces": 1,
+      "triangles": 108
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@180/Arrow2/Arrow/StraightAshShaft",
+      "surfaces": 1,
+      "triangles": 1964
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@181/Arrow2/Arrow/CurvedFeather0",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@181/Arrow2/Arrow/CurvedFeather1",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@181/Arrow2/Arrow/CurvedFeather2",
+      "surfaces": 1,
+      "triangles": 544
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@181/Arrow2/Arrow/ForgedArrowhead",
+      "surfaces": 1,
+      "triangles": 28
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@181/Arrow2/Arrow/HornTailNock",
+      "surfaces": 1,
+      "triangles": 108
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareWorkbench/ArrowWorkpieces/@Node3D@181/Arrow2/Arrow/StraightAshShaft",
+      "surfaces": 1,
+      "triangles": 1964
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/Boots",
+      "surfaces": 1,
+      "triangles": 6320
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/Brows",
+      "surfaces": 1,
+      "triangles": 192
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/Clothing",
+      "surfaces": 2,
+      "triangles": 9112
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/Eyes",
+      "surfaces": 1,
+      "triangles": 2752
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/HairPonytail",
+      "surfaces": 1,
+      "triangles": 5352
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/HairShort",
+      "surfaces": 1,
+      "triangles": 3678
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/HumanBody",
+      "surfaces": 1,
+      "triangles": 62960
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareTrader/Visual/HumanModel/HumanRig/Skeleton3D/HumanBodyFar",
+      "surfaces": 1,
+      "triangles": 15740
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/Boots",
+      "surfaces": 1,
+      "triangles": 6320
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/Brows",
+      "surfaces": 1,
+      "triangles": 192
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/Clothing",
+      "surfaces": 2,
+      "triangles": 9112
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/Eyes",
+      "surfaces": 1,
+      "triangles": 2752
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/HairPonytail",
+      "surfaces": 1,
+      "triangles": 5352
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/HairShort",
+      "surfaces": 1,
+      "triangles": 3678
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/HumanBody",
+      "surfaces": 1,
+      "triangles": 62416
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareArtisan/Visual/HumanModel/HumanRig/Skeleton3D/HumanBodyFar",
+      "surfaces": 1,
+      "triangles": 15604
+    }
+  ],
+  "lights": [
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/FrontWindowLeft/WindowDaylight",
+      "state": {
+        "energy": 0.0,
+        "shadow": false,
+        "visible": false
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/FrontWindowRight/WindowDaylight",
+      "state": {
+        "energy": 0.0,
+        "shadow": false,
+        "visible": false
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/BackWallWindow0/WindowDaylight",
+      "state": {
+        "energy": 0.0,
+        "shadow": false,
+        "visible": false
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/BackWallWindow1/WindowDaylight",
+      "state": {
+        "energy": 0.0,
+        "shadow": false,
+        "visible": false
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/LeftWallWindow/WindowDaylight",
+      "state": {
+        "energy": 0.0,
+        "shadow": false,
+        "visible": false
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/RightWallWindow/WindowDaylight",
+      "state": {
+        "energy": 0.0,
+        "shadow": false,
+        "visible": false
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@OmniLight3D@97",
+      "state": {
+        "energy": 0.850000023841858,
+        "shadow": false,
+        "visible": true
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@OmniLight3D@99",
+      "state": {
+        "energy": 0.850000023841858,
+        "shadow": false,
+        "visible": true
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareHome/HouseRooms/@OmniLight3D@101",
+      "state": {
+        "energy": 0.850000023841858,
+        "shadow": false,
+        "visible": true
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/HomeLanternLight",
+      "state": {
+        "energy": 2.5,
+        "shadow": true,
+        "visible": true
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/SquareLanternLight",
+      "state": {
+        "energy": 1.39999997615814,
+        "shadow": false,
+        "visible": true
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/CapitalSquareLife/@OmniLight3D@168",
+      "state": {
+        "energy": 1.39999997615814,
+        "shadow": false,
+        "visible": true
+      }
+    },
+    {
+      "path": "/root/@Node3D@15/@DirectionalLight3D@183",
+      "state": {
+        "energy": 0.899999976158142,
+        "shadow": false,
+        "visible": true
+      }
+    }
+  ],
+  "samples": [
+    {
+      "draw_calls": 237,
+      "mean_ms": 408.053033333333,
+      "mode": "baseline",
+      "p50_ms": 407.697,
+      "p95_ms": 414.639,
+      "primitives": 410574
+    },
+    {
+      "draw_calls": 88,
+      "mean_ms": 346.809933333333,
+      "mode": "without-shadow-maps",
+      "p50_ms": 346.361,
+      "p95_ms": 351.472,
+      "primitives": 91570
+    },
+    {
+      "draw_calls": 95,
+      "mean_ms": 443.520766666667,
+      "mode": "without-local-lights",
+      "p50_ms": 324.043,
+      "p95_ms": 985.335,
+      "primitives": 142156
+    },
+    {
+      "draw_calls": 254,
+      "mean_ms": 477.8778,
+      "mode": "without-normal-ao",
+      "p50_ms": 408.197,
+      "p95_ms": 1103.628,
+      "primitives": 461342
+    },
+    {
+      "draw_calls": 272,
+      "mean_ms": 554.1975,
+      "mode": "restored",
+      "p50_ms": 489.706,
+      "p95_ms": 1159.504,
+      "primitives": 472906
+    }
+  ]
+}

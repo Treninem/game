@@ -1,0 +1,21 @@
+{
+  "case": "projectile_release_parent_verified",
+  "parent": "18ab50ee130aa1d5be7b6c9f65be53b9d3bdfe53",
+  "exit_code": 1,
+  "seconds": 104.94,
+  "expected_regression_reproduced": true,
+  "samples": [
+    {
+      "actual": "(-0.289715, 0.856675, 0.155721)",
+      "error": 1.1401754617691,
+      "expected": "(-0.289715, 1.756675, -0.544279)",
+      "hand_radius": 0.906404554843903,
+      "local": "(-0.289715, 0.826675, 0.155721)",
+      "predicted": "(-0.289715, 0.856675, 0.155721)",
+      "scenario": "(0.0, 0.9, -0.7, 0.0)"
+    }
+  ],
+  "old_visual_sha256": "8fd6e8afe219d3796511d08ee4afb843ceee1580b6e0ff0c6a58c8969dedb6d6",
+  "test_sha256": "a10b3aaac977a66437d99c6d3cf7a164c6472675250688838d43d56ddc33f9c3",
+  "scope": "All nonvisual mirror sources are identical to the candidate; only humanoid_visual.gd is restored byte-for-byte from parent. This is a rejected parent control, not a passing production smoke."
+}

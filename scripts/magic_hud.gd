@@ -8,6 +8,7 @@ var shield_label: Label
 var cooldown_label: Label
 
 func _ready() -> void:
+    process_mode = Node.PROCESS_MODE_ALWAYS
     layer = 12
     _build()
     GameState.survival_changed.connect(_refresh)
@@ -17,7 +18,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
     if not is_instance_valid(root):
         return
-    root.visible = get_tree().get_first_node_in_group("player") != null
+    root.visible = not get_tree().paused and get_tree().get_first_node_in_group("player") != null
     if not root.visible:
         return
     var spell_id := MagicSystem.selected_spell_id()
@@ -88,6 +89,11 @@ func _build() -> void:
     hint.add_theme_font_size_override("font_size", 9)
     hint.modulate = Color(0.55, 0.61, 0.70)
     stack.add_child(hint)
+    # Passive HUD descendants must not intercept mouse attacks or spells.
+    # IGNORE on the root alone does not propagate to its children.
+    for control: Control in root.find_children("*", "Control", true, false):
+        control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+        control.focus_mode = Control.FOCUS_NONE
 
 func _refresh() -> void:
     if not is_instance_valid(root):

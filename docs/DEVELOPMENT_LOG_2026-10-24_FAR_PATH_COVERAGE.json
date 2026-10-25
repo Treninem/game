@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent": "a92ecef73b08e8c7578c4cd5c598abc3c43dbe27",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "problem": "Far-world ear clipping used large global polygon coordinates. Small clipped pieces could cancel to zero and disappear despite surviving triangles passing physical support checks.",
+  "observed": {
+    "actual_far_strip_area_m2_before": 748,
+    "expected_area_m2": 800,
+    "small_far_quads_failed": 80,
+    "small_far_quads_checked": 160,
+    "full_existing_scenario_with_new_regression": {
+      "mode": "baseline",
+      "returncode": 1,
+      "seconds": 9.921999999998661,
+      "stopped": true,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: Far path has unmeshed holes: 748.0m2 instead of800"
+      ],
+      "markers": []
+    }
+  },
+  "change": "Translate each clipped polygon near zero only for triangulation. Keep original world vertices, UVs, normals, material families, 6mm nominal path lift and existing collision/support geometry. The output now covers the missing pieces.",
+  "fixed_full_existing_scenario_clean_parent_plus_two_changes": {
+    "mode": "fixed",
+    "returncode": 0,
+    "seconds": 8.76600000000326,
+    "stopped": false,
+    "errors": [],
+    "markers": [
+      "FAR_PATH_COVERAGE_OK actual_area_m2=800.0 expected_m2=800 original_assertions_retained=true",
+      "PATH_SUPPORT_OK surfaces=52 ray_samples=156 max_gap_m=0.01004219055176 materials=3",
+      "TERRAIN_PATHS_OK physical_triangle_samples=539 max_gap_m=0.00604343414307 chunk_seam=true entrances=15 materials=3"
+    ]
+  },
+  "clean_source_parent": "a92ecef73b08e8c7578c4cd5c598abc3c43dbe27",
+  "original_assertions_retained": 27,
+  "physical_checks": {
+    "primary_road_triangles": 539,
+    "village_surface_ray_samples": 156,
+    "surfaces": 52,
+    "home_entrances": 15,
+    "material_families": 3,
+    "shared_chunk_seam": true,
+    "maximum_existing_overlay_clearance_m": 0.012
+  },
+  "graphical_diagnostic": {
+    "result": {
+      "returncode": 0,
+      "seconds": 64.57800000000134,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "scope": "Actual private canal prototype after ordinary physics/bootstrap; the canal is not in this narrow commit. Compare the real paving before/after; no manual-play claim.",
+    "alignment_and_material_hypotheses": "Neither aligning draw origins nor changing texture projection fixed coverage; both experimental changes were removed.",
+    "private_canal_runtime_published": false
+  },
+  "parent_ci": {
+    "Build ImPuls Release Candidate": {
+      "run_id": 40050733500,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733500"
+    },
+    "Build Windows Installer": {
+      "run_id": 40050733464,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733464"
+    },
+    "Diagnose UI Smoke": {
+      "run_id": 40050733490,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733490"
+    },
+    "Validate Delta Updater": {
+      "run_id": 40050733504,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733504"
+    },
+    "Validate Magic Runtime": {
+      "run_id": 40050733482,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733482"
+    },
+    "Validate Player Movement": {
+      "run_id": 40050733491,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733491"
+    },
+    "Validate World Core": {
+      "run_id": 40050733527,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733527"
+    },
+    "Validate World VFX": {
+      "run_id": 40050733472,
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40050733472"
+    }
+  },
+  "current_exact_sha_ci": "Required after publication; primary launcher remains the verified6d3 review build",
+  "shared_head_index_preserved": true,
+  "save_version_changed": false,
+  "controls_or_inventory_changed": false,
+  "assets_or_human_models_changed": false,
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "next": "Continue the coherent canal/bridge/bank/household package, actual citizen crossings and day timing, graphically verify actions/support/save/performance and deliver only after the full exact-SHA gates and packaged gameplay pass."
+}

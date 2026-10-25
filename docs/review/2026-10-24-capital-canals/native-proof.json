@@ -1,0 +1,243 @@
+{
+  "clock_frozen_fixture": true,
+  "driver_position_assignments": 0,
+  "floor_samples": [
+    {
+      "xz": "(1125.0, -160.0)",
+      "y": 0.0420399345457554
+    },
+    {
+      "xz": "(1125.0, -80.0)",
+      "y": 0.0420399345457554
+    },
+    {
+      "xz": "(1130.0, 0.0)",
+      "y": 0.0420399345457554
+    },
+    {
+      "xz": "(1235.0, 0.0)",
+      "y": 0.0419395789504051
+    },
+    {
+      "xz": "(1240.0, -80.0)",
+      "y": 0.0427418351173401
+    },
+    {
+      "xz": "(1240.0, -160.0)",
+      "y": 0.0427418351173401
+    },
+    {
+      "xz": "(1180.0, -160.0)",
+      "y": 2.24051356315613
+    },
+    {
+      "xz": "(1240.0, -160.0)",
+      "y": 0.0420645289123058
+    },
+    {
+      "xz": "(1240.0, -177.5)",
+      "y": 0.0420645289123058
+    },
+    {
+      "xz": "(1232.8, -177.5)",
+      "y": 0.0420645289123058
+    },
+    {
+      "xz": "(1232.8, -180.5)",
+      "y": 0.0420645289123058
+    },
+    {
+      "xz": "(1232.8, -177.5)",
+      "y": 0.0420645289123058
+    },
+    {
+      "xz": "(1240.0, -177.5)",
+      "y": 0.0420645289123058
+    },
+    {
+      "xz": "(1240.0, -160.0)",
+      "y": 0.0420645289123058
+    },
+    {
+      "xz": "(1125.0, -160.0)",
+      "y": 0.041974738240242
+    },
+    {
+      "xz": "(1125.0, -178.0)",
+      "y": 0.041974738240242
+    },
+    {
+      "xz": "(1135.0, -183.0)",
+      "y": 0.041974738240242
+    },
+    {
+      "xz": "(1135.0, -189.0)",
+      "y": 0.077664278447628
+    },
+    {
+      "xz": "(1135.0, -183.0)",
+      "y": 0.0395796000957489
+    },
+    {
+      "xz": "(1125.0, -178.0)",
+      "y": 0.0395796000957489
+    },
+    {
+      "xz": "(1125.0, -160.0)",
+      "y": 0.0395796000957489
+    },
+    {
+      "xz": "(1180.0, -160.0)",
+      "y": 2.24254131317139
+    }
+  ],
+  "full_art_acceptance": false,
+  "gpu_sole_samples": [
+    {
+      "gap_m": 0.00399976968765259,
+      "label": "(1125.0, -160.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399524718523026,
+      "label": "(1125.0, -80.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399185717105865,
+      "label": "(1130.0, 0.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399435684084892,
+      "label": "(1235.0, 0.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00398959219455719,
+      "label": "(1240.0, -80.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399411097168922,
+      "label": "(1240.0, -160.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399351119995117,
+      "label": "(1180.0, -160.0)",
+      "surface": "CapitalCanalBridge_-160",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.0039927139878273,
+      "label": "(1240.0, -160.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.0039927139878273,
+      "label": "(1240.0, -177.5)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399158522486687,
+      "label": "(1232.8, -177.5)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399045273661613,
+      "label": "(1232.8, -180.5)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.0039994977414608,
+      "label": "(1232.8, -177.5)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399045273661613,
+      "label": "(1240.0, -177.5)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399045273661613,
+      "label": "(1240.0, -160.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00400012731552124,
+      "label": "(1125.0, -160.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399447605013847,
+      "label": "(1125.0, -178.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399334728717804,
+      "label": "(1135.0, -183.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00400045141577721,
+      "label": "(1135.0, -189.0)",
+      "surface": "Floor",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00400001183152199,
+      "label": "home-dining",
+      "surface": "Floor",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.0039944052696228,
+      "label": "(1135.0, -183.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00398988276720047,
+      "label": "(1125.0, -178.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399327278137207,
+      "label": "(1125.0, -160.0)",
+      "surface": "TerrainCollision",
+      "vertices": 3530
+    },
+    {
+      "gap_m": 0.00399017333984375,
+      "label": "(1180.0, -160.0)",
+      "surface": "CapitalCanalBridge_-160",
+      "vertices": 3530
+    }
+  ],
+  "live_private_world": true,
+  "manual_play": false,
+  "new_household_saved_slot": 8,
+  "paid_trade_and_finite_stock": true,
+  "published": false,
+  "real_front_door_and_rooms": true,
+  "source_checkpoint": "Previously earned1.34km actual city road survey; old geometry revision is migrated vertically by SaveManager",
+  "walked_m": 919.530722988537
+}

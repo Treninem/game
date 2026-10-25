@@ -1,0 +1,8 @@
+{
+  "exit_code": 1,
+  "seconds": 9.88,
+  "errors": [
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"key\" variable because the value doesn't have a set type.",
+    "ERROR: Failed to load script \"res://tests/smoke_slope_motion.gd\" with error \"Parse error\"."
+  ]
+}

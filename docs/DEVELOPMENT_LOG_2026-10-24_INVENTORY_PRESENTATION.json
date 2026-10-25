@@ -1,0 +1,261 @@
+{
+  "date": "2026-10-24",
+  "recorded_at_utc": "2026-10-24T13:31:47.802603+00:00",
+  "goal_status": "ACTIVE",
+  "requirements": [
+    "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+    "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt",
+    "docs/COMPREHENSIVE_WORK_PROGRAM_2026-10-21.json"
+  ],
+  "scope": "Inventory interaction and common panel chrome, actual equipped-item source models, retained quantities/equipment/keyboard ownership, all captured production window scales. Existing game preserved; no complete-character or complete-world claim.",
+  "package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-24_INVENTORY_PRESENTATION.json",
+    "runtime_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "branch": "codex/editor-handoff-validation-2026-10-24",
+    "native_UI": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
+    "player_movement": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "full_world_core": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    },
+    "root_runtime_integrated": false,
+    "PR12_runtime_integrated": true,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "implementation": [
+    "Place the item grid and selected-item inspector side by side; independently scroll the bounded48-item page. Stored capacity remains unlimited.",
+    "Keep search, pagination, current weapon attack bonus, coins and inventory capacity above the grid. Compact insurance controls preserve room for items.",
+    "Use the same production weapon catalogue for the held axe/knife/bow and inventory, plus the same arrow scene. No substitute weapon drawings or newly generated model duplicates.",
+    "Render static item previews at256x192 once, then explicitly disable both the rendering-server update and the cached SubViewport state after the completed draw.",
+    "Select the existing physically staged Rubik Roman variable font, explicit weight450, for readable Cyrillic panel text; preserve SIL OFL license and unchanged font bytes.",
+    "Restore current bow ammunition and remapped crafting caption; preserve equip, unequip, consume, insurance and save/inventory interfaces."
+  ],
+  "verified": {
+    "native_UI_run": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
+    "physical_window_resolutions": [
+      "960x540",
+      "1280x720",
+      "1920x1080"
+    ],
+    "logical_layout": "Production canvas stretch; all three cases remained eight columns and compact=false. These captures do not prove every compact logical layout or UI-scale setting.",
+    "actual_model_ids": [
+      "starter_axe",
+      "stone_knife",
+      "short_bow",
+      "arrow"
+    ],
+    "source_model_authority_matches_humanoid": true,
+    "static_viewport_update_disabled_after_draw": true,
+    "bow_nontransparent_pixels_per_case": 1278,
+    "original_unlimited_inventory_test": "Unmodified test passed:144 dictionary entries including zero-count defaults;137 QA stacks of1million, JSON roundtrip, every positive item visible across pages, Russian search, keyboard navigation, equip/unequip, exactly one last berry consumed, pause-key typing and close/resume/focus restoration. This case is JSON serialization proof, not by itself a separate large-inventory disk/restart proof.",
+    "focused_input_cases_passed": 11,
+    "preview_inventory_and_currency_unchanged": true,
+    "runtime_errors_after_first_gameplay_test": 0,
+    "player_movement_run": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "full_world_core_run": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    }
+  },
+  "evidence_folder": "docs/review/2026-10-24-inventory-presentation",
+  "visual_review": {
+    "source_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "actually_viewed": [
+      "inventory-models-1280x720.png",
+      "inventory-models-960x540.png",
+      "inventory-models-1920x1080.png",
+      "item-model-starter_axe.png",
+      "item-model-stone_knife.png",
+      "item-model-short_bow.png",
+      "item-model-arrow.png"
+    ],
+    "also_viewed_failed_candidate": [
+      "candidate-before-caption-fix.png",
+      "intermediate1280 and960 frames at38ca9959 retained in prior CI artifact"
+    ],
+    "sha256": {
+      "inventory-models-1280x720.png": "8f6c0bbc945fd6c1543a588c7d38c9ec231fe6282b18b2a253868bddad975693",
+      "inventory-models-960x540.png": "5d5cc9022b0a76908824ac0cd4cb6edb90bdf44d9c9c81dba5251a0dc02b329a",
+      "inventory-models-1920x1080.png": "49bf60a9adc37e5488f577f6ac4f6908cb2cb211d5672980198ceca519349843",
+      "item-model-starter_axe.png": "0be9c59b41c0179f1a882d591213a9886d481e01fea41f2be9463f3d5f056dc1",
+      "item-model-stone_knife.png": "872cbe045149e709303b57acc6d9732ea9b0316c51dde6a53c13b99a180463ce",
+      "item-model-short_bow.png": "b00c1298c9c4873523dcdb597dc3b05ac257404c554e8fd806676588df8d1afb",
+      "item-model-arrow.png": "81bd0232ef5551e765b88b5cbd6b62ae6935ad60874085336c182f379202c6db"
+    },
+    "observations": [
+      "Search, quantities, pagination and owned item names remain visible at all three captured physical resolutions.",
+      "Selected model and equipment action are beside the grid; current attack bonus, coins, bow ammunition and current crafting binding are shown.",
+      "Long item names use two lines and full tooltips.",
+      "Existing weapon meshes retain flat colors and faceted handles. These are honest previews of current production geometry, not new realistic weapon art.",
+      "The world is pruned from this controlled UI fixture. This is not a city walkthrough, manual mouse test or combat animation review."
+    ],
+    "full_visual_acceptance": false,
+    "manual_play": false
+  },
+  "retained_development_failures": [
+    {
+      "run": 40094096707,
+      "sha": "8a56e12710c537931568c66991f61554e7a93e82",
+      "result": "FAIL: new observer incorrectly assumed the SubViewport cached getter changed from ONCE to DISABLED automatically. Its failed return then triggered the blank-preview assertion; neither perpetual rendering nor blank pixels were proven. Actual engine source inspected, explicit post-draw disable added, original assertions retained."
+    },
+    {
+      "run": 40094685595,
+      "sha": "ceb368f7d42a82a3e0dfce16d4feadd14085c9fb",
+      "result": "FAIL: new bounds observer compared logical canvas coordinates to physical window size. First actual1280 frame exposed genuine clipped cell captions, hidden search/summary and oversized insurance/body layout; those UI defects were fixed."
+    },
+    {
+      "run": 40095732868,
+      "sha": "38ca995916e196fb043021e6b176aa8bd544eaf7",
+      "result": "FAIL: canvas mapping still omitted the final window stretch. Actual1280 and960 PNGs were viewed and were inside the viewport; final viewport/window transform added, same1pixel containment bound retained, no runtime frame-escape fix falsely claimed."
+    },
+    {
+      "publication": "An original trailing space in the copied OFL text was rejected before branch/root writes. Only line endings/trailing whitespace were normalized; font bytes and license wording preserved."
+    }
+  ],
+  "mandatory_checks": {
+    "original_unlimited_inventory_test_unchanged": true,
+    "original_input_audit_unchanged": true,
+    "original_core_and_movement_workflows_unchanged": true,
+    "graphics_diagnostic180s_bound_unchanged": true,
+    "no_required_assertion_skip_or_warning_conversion": true,
+    "new_observer_coordinate_corrections": "Calibrated against actual captured frames and the exact Godot4.7.1 CanvasItem/Viewport/Window implementations; not a weakened containment criterion."
+  },
+  "read_only_root_reconciliation": {
+    "script_scene_project_files_checked": 234,
+    "semantic_changes_from_runtime711": 0,
+    "line_ending_only_differences": 64,
+    "missing_or_unstable_files": 0,
+    "root_target_scripts_match_previous_runtime_exactly": true,
+    "Godot_or_Blender_processes_returned_by_current_inventory": 0,
+    "root_writes_done": false,
+    "remaining": "Recheck files, processes and fresh main/review heads immediately before any eventual integration; this audit is not a substitute for the new full gate result."
+  },
+  "other_package_completion": {
+    "metric_house_materials_exact_runtime": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+    "world_core": {
+      "id": 40092376914,
+      "name": "Validate World Core",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092376914",
+      "updated_at": "2026-10-24T12:37:40Z"
+    },
+    "world_core_successful_steps": 124,
+    "movement": {
+      "id": 40092380209,
+      "name": "Validate Player Movement",
+      "head_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40092380209",
+      "updated_at": "2026-10-24T12:08:03Z"
+    },
+    "continuous_rendered_household_cycle": "Still FAILED240s; retained in the separate house-surface journal. Not hidden by successful Core/Movement."
+  },
+  "limits": [
+    "Automated actual Godot UI/production models with world pruned; not manual gameplay or hardware mouse verification.",
+    "Three physical resolutions use the existing production canvas stretch. Compact layouts, all UI scales, pause menu, dialogue and trading art remain open.",
+    "Weapon and human meshes, clothing, animation, complete interiors, streets and region art remain below the requested visual target. No realistic new weapon model, rarity variety or new combat animation is claimed.",
+    "No new save schema, inventory cap or controls migration introduced. JSON large-stack proof and existing movement/save suite are kept distinct.",
+    "Weak host currently has about0.79GiB available of7.85GiB; heavy local runs avoided, no applications or normal user save profiles closed or modified.",
+    "New full World Core result is timestamped above; no installer/export/stable-release acceptance."
+  ],
+  "acceptance": {
+    "complete_TZ": false,
+    "full_character_quality": false,
+    "full_world_quality": false,
+    "full_visual_acceptance": false,
+    "all_release_gates": false,
+    "stable_release": false,
+    "overall_percent": null
+  },
+  "next_connected_work": [
+    "Inspect exact56d6b895 full World Core result and repair any genuine regression.",
+    "Use the read-only reconciliation as a starting point; revalidate shared-tree ownership and integrate only exact reviewed changes while preserving user edits.",
+    "Replace the visibly faceted, flat weapon surfaces/handles as a complete axe/knife/bow/arrow package with grip, draw, impact and equipped-state reviews; keep the newly unified source catalogue.",
+    "Continue complete human clothing/anatomy/locomotion/support and consistent house/region art; complete the still failing continuous household render case without weakening its graphics, clock or deadline."
+  ],
+  "review_integration_follow_up": {
+    "recorded_at_utc": "2026-10-24T14:40:36.214373+00:00",
+    "validated_runtime_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+    "review_branch": "codex/household-persistence-2026-10-19",
+    "prior_review_sha": "74a0222d3c014aeede30d7257dbd43cc2692bfbc",
+    "private_documentation_parent": "709c0a2fd335c755d6ce10f257d7afa68f174bac",
+    "PR12_runtime_integrated": true,
+    "root_runtime_integrated": false,
+    "atomic_fast_forward_required": true,
+    "source_trees_unchanged_from_validated_runtime": true,
+    "core": {
+      "id": 40096743716,
+      "name": "Validate World Core",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
+      "updated_at": "2026-10-24T13:40:36Z"
+    },
+    "movement": {
+      "id": 40096746846,
+      "name": "Validate Player Movement",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096746846",
+      "updated_at": "2026-10-24T13:11:21Z"
+    },
+    "native_inventory": {
+      "id": 40096588173,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "56d6b8956e299c7b9bbfb4f5aeee439e9a3e7af6",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40096588173",
+      "updated_at": "2026-10-24T13:07:46Z"
+    },
+    "stable_release": false
+  }
+}

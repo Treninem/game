@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-21",
+  "scope": "Rest transitions, appearance scale and logical actor ownership",
+  "fixed": [
+    "Repeated sit/sleep/wake preserves selected human scale and actor capsule position",
+    "Furniture offsets scale with the selected body height",
+    "Logical actor lookup survives top_level rest visuals",
+    "Held weapons are hidden during rest and restored on wake without changing inventory"
+  ],
+  "validation": {
+    "matrix": 48,
+    "bodies": 2,
+    "heights_cm": [
+      160,
+      180,
+      195
+    ],
+    "equipment": [
+      "none",
+      "axe",
+      "bow",
+      "knife"
+    ],
+    "household_disk_save_and_streaming": true,
+    "weapon_grip": true,
+    "rendered_fixture": "12 screenshots; actual integrated furniture; automated fixture, not manual free roam"
+  },
+  "remaining": [
+    "Rendered lying alignment relative to the bed is visibly wrong and is NOT accepted",
+    "No complete rest transition animation or full artistic acceptance",
+    "Existing broader world and character work remains active"
+  ],
+  "evidence": "docs/review/2026-10-21-rest-transitions",
+  "source_semantics": "https://docs.godotengine.org/en/4.5/classes/class_node3d.html#get-parent-node-3d",
+  "release": false
+}

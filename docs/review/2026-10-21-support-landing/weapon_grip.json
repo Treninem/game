@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 12.91,
+  "errors": [],
+  "markers": [
+    "WEAPON_GRIP_OK poses=180 bodies=2 heights=3 shaft_contact=measured fingers=closed string=contact unequip=released inventory=unchanged"
+  ]
+}

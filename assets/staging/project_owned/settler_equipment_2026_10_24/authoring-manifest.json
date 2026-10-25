@@ -1,0 +1,171 @@
+{
+  "generator": "assets/staging/project_owned/settler_equipment_2026_10_24/author_equipment.py",
+  "coordinate_system": "Godot Y-up metres, exported with Blender glTF conversion",
+  "geometry_reused_from_rejected_pack": false,
+  "grips": {
+    "Axe_small": [
+      -0.09865,
+      -0.18,
+      0
+    ],
+    "Dagger": [
+      0.0006,
+      -0.12,
+      0
+    ],
+    "Bow_Wooden": [
+      -0.070708,
+      0,
+      0
+    ]
+  },
+  "textures": [
+    {
+      "label": "Cedar",
+      "source": "assets/staging/ui/materials/cedar/cedar.png",
+      "source_sha256": "87bb6b1a3145aa07f5f24cf523633e3fcd2800e9b8d480ff813a7784222a858c"
+    },
+    {
+      "label": "Leather",
+      "source": "assets/staging/ui/materials/leather/leather.png",
+      "source_sha256": "6225fd067963b221cabeb0355e3e53a8d70fa72887e511a7dc0ca4fc0e07addc"
+    },
+    {
+      "label": "ForgedSteelColor",
+      "source": "assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52/OGA_industrial_a52_version/scratchy_metal/scratchy_metal_dark.jpg",
+      "source_sha256": "49c265ff2015eb7a2e2c3a866c12af2b737e56b6f3ebb3711a8833dd29db95a3"
+    },
+    {
+      "label": "ForgedSteelNormal",
+      "source": "assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52/OGA_industrial_a52_version/scratchy_metal/scratchy_metal_norm.jpg",
+      "source_sha256": "8a45715ef92ca08d3bba04a53200b9e3d66342788f82b43daf9e23c90c9bc87b"
+    },
+    {
+      "label": "ForgedSteelRoughness",
+      "source": "assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52/OGA_industrial_a52_version/scratchy_metal/scratchy_metal_roughness.png",
+      "source_sha256": "a46d5c8cca8ab1ff9da9e4e410bf7a2026925cffdad3c67a78e683180d6cfd6a"
+    }
+  ],
+  "items": [
+    {
+      "name": "Axe_small",
+      "triangles": 12380,
+      "bounds_min": [
+        -0.11700934916734695,
+        -0.33527010679244995,
+        -0.01874465122818947
+      ],
+      "bounds_max": [
+        0.146860733628273,
+        0.3149999976158142,
+        0.02125534787774086
+      ],
+      "length_m": 0.6502701044082642,
+      "anchors": {
+        "GripAnchor": [
+          -0.0986500009894371,
+          -0.18000000715255737,
+          -0.0
+        ]
+      },
+      "morphs": [],
+      "gltf_sha256": "eb6f5ecde5c55c3bf60b6eaa4d13d6f4ba3b9b1d0bf69f607386e441c600f485"
+    },
+    {
+      "name": "Dagger",
+      "triangles": 18340,
+      "bounds_min": [
+        -0.024867534637451172,
+        -0.1801503598690033,
+        -0.011500000022351742
+      ],
+      "bounds_max": [
+        0.024397358298301697,
+        0.17000000178813934,
+        0.011500000022351742
+      ],
+      "length_m": 0.35015036165714264,
+      "anchors": {
+        "GripAnchor.001": [
+          0.0006000000284984708,
+          -0.11999999731779099,
+          -0.0
+        ]
+      },
+      "morphs": [],
+      "gltf_sha256": "92d0c342a53a8f6a6a5265608615e9a299d0756fc1cc7b02c26da5b2ef2f34cd"
+    },
+    {
+      "name": "Bow_Wooden",
+      "triangles": 14012,
+      "bounds_min": [
+        -0.08470799773931503,
+        -0.5526016354560852,
+        -0.010300000198185444
+      ],
+      "bounds_max": [
+        0.16985727846622467,
+        0.5526016354560852,
+        0.010300000198185444
+      ],
+      "length_m": 1.1052032709121704,
+      "anchors": {
+        "GripAnchor.002": [
+          -0.07070799916982651,
+          0.0,
+          -0.0
+        ],
+        "TopStringNock": [
+          0.1347920000553131,
+          0.5156999826431274,
+          -0.0
+        ],
+        "BottomStringNock": [
+          0.1347920000553131,
+          -0.5156999826431274,
+          -0.0
+        ]
+      },
+      "morphs": [
+        "Draw"
+      ],
+      "gltf_sha256": "d32ab16aea0fc40a0179d4b7907c993aca620ddd54792750e72a9525ee9030f8"
+    },
+    {
+      "name": "Arrow",
+      "triangles": 3732,
+      "bounds_min": [
+        -0.012000000104308128,
+        -0.3499999940395355,
+        -0.014534641057252884
+      ],
+      "bounds_max": [
+        0.01600000075995922,
+        0.3499999940395355,
+        0.013256406411528587
+      ],
+      "length_m": 0.699999988079071,
+      "anchors": {
+        "ArrowNockSeat": [
+          0.0,
+          -0.34299999475479126,
+          -0.0
+        ],
+        "ArrowTip": [
+          0.0,
+          0.3499999940395355,
+          -0.0
+        ]
+      },
+      "morphs": [],
+      "gltf_sha256": "c0e2de2f99f6dd109e891e072ad767490c6b785921364ab386bdb67c5f82aef0"
+    }
+  ],
+  "master_source": "SettlerEquipment.blend",
+  "integration": {
+    "runtime_referenced": false,
+    "production_ready": false,
+    "physically_confirmed_on_main": false,
+    "geometry_created_in_Blender": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 11.72,
+  "errors": [],
+  "marker": true,
+  "exit_objects": 64,
+  "case": "thread-false-probe"
+}

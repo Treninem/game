@@ -1,0 +1,8 @@
+{
+  "case": "response_runtime_load",
+  "exit_code": 1,
+  "seconds": 52.8,
+  "errors": [
+    "SCRIPT ERROR: Assertion failed: Torso did not respond to actual acceleration"
+  ]
+}

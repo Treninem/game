@@ -44,9 +44,13 @@ var world_day: int = 0
 var enemies_defeated: int = 0
 var is_dead: bool = false
 var world_state: Dictionary = {}
+var state_revision := 0
+var state_transition_kind := "initial"
 var _survival_signal_elapsed := 0.0
 
 func reset_new_game() -> void:
+    state_revision += 1
+    state_transition_kind = "reset"
     inventory = DEFAULT_INVENTORY.duplicate(true)
     quest_stage = 0
     city_quest_stage = 0
@@ -110,6 +114,18 @@ func remove_item(item_id: String, amount: int = 1) -> bool:
     if amount < 0 or current < amount:
         return false
     inventory[item_id] = current - amount
+    inventory_changed.emit()
+    return true
+
+# Commit both sides before notifying observers (including save callbacks).
+func commit_inventory_exchange(item_id: String, delta: int, world_key: String, world_value: Dictionary) -> bool:
+    if item_id.is_empty() or item_id == "building_kit" or delta == 0 or world_key.is_empty():
+        return false
+    var current := int(inventory.get(item_id, 0))
+    if current < 0 or (delta < 0 and current < -delta) or (delta > 0 and current > 9223372036854775807 - delta):
+        return false
+    inventory[item_id] = current + delta
+    world_state[world_key] = world_value.duplicate(true)
     inventory_changed.emit()
     return true
 
@@ -199,11 +215,15 @@ func revive() -> void:
     thirst = maxf(thirst, 55.0)
     survival_changed.emit()
 
-func register_enemy_defeat(enemy_id: String = "") -> void:
+func register_enemy_defeat(enemy_id: String = "", loot_id: String = "raw_meat", loot_count: int = 1) -> void:
     if not enemy_id.is_empty():
         set_world_value("enemy:" + enemy_id, true)
     enemies_defeated += 1
-    add_item("raw_meat", 1)
+    if loot_id == "coins":
+        coins += maxi(0, loot_count)
+        inventory_changed.emit()
+    else:
+        add_item(loot_id, maxi(0, loot_count))
     notify("Противник побеждён.")
 
 # Prototype quest/building entry points remain as safe no-ops so older NPC
@@ -233,7 +253,7 @@ func complete_city_quest() -> bool:
     return false
 
 func advance_survival(real_seconds: float) -> void:
-    var elapsed_minutes := maxf(0.0, real_seconds) * 4.0
+    var elapsed_minutes := maxf(0.0, real_seconds) * SettingsManager.world_minutes_per_second()
     var total_minutes := world_minutes + elapsed_minutes
     if total_minutes >= 1440.0:
         world_day += int(floor(total_minutes / 1440.0))
@@ -258,6 +278,12 @@ func quest_text() -> String:
     return ""
 
 func snapshot() -> Dictionary:
+    # Capture live transforms at the save boundary, not at an earlier timer
+    # tick. Streamed-out residents already wrote their last state on exit.
+    if is_inside_tree():
+        for citizen in get_tree().get_nodes_in_group("settlement_npc"):
+            if citizen.has_method("capture_runtime_state"):
+                citizen.call("capture_runtime_state")
     return {
         "inventory": inventory.duplicate(true),
         "quest_stage": 0,
@@ -281,6 +307,8 @@ func snapshot() -> Dictionary:
     }
 
 func load_snapshot(data: Dictionary) -> void:
+    state_revision += 1
+    state_transition_kind = "load"
     inventory = DEFAULT_INVENTORY.duplicate(true)
     var saved_inventory = data.get("inventory", {})
     if typeof(saved_inventory) == TYPE_DICTIONARY:
@@ -309,6 +337,17 @@ func load_snapshot(data: Dictionary) -> void:
     var saved_world_state = data.get("world_state", {})
     world_state = saved_world_state.duplicate(true) if typeof(saved_world_state) == TYPE_DICTIONARY else {}
     is_dead = health <= 0.0
+    if is_inside_tree():
+        # Restore physical openings before resuming resident transit through
+        # them, including loads performed without recreating the whole scene.
+        for door in get_tree().get_nodes_in_group("world_state_door"):
+            if door.has_method("restore_saved_state"):
+                door.call("restore_saved_state")
+        for furniture in get_tree().get_nodes_in_group("household_furniture"):
+            furniture.call("restore_saved_state")
+        for citizen in get_tree().get_nodes_in_group("settlement_npc"):
+            if citizen.has_method("restore_runtime_state"):
+                citizen.call("restore_runtime_state")
     migrate_to_world_foundation()
     location_changed.emit(current_location)
 

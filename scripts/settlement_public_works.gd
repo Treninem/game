@@ -1,5 +1,6 @@
 class_name SettlementPublicWorks
 extends Node3D
+const PATHS := preload("res://scripts/terrain_paths.gd")
 
 const ENTERABLE_WAREHOUSE := preload("res://scripts/enterable_warehouse.gd")
 const STALL_SCENE: PackedScene = preload("res://assets/production/medieval/quaternius_market/Stall_Empty.gltf")
@@ -19,11 +20,15 @@ var stone_material: StandardMaterial3D
 var timber_material: StandardMaterial3D
 var water_material: StandardMaterial3D
 
+func _enter_tree() -> void:
+    # The loading scene transfers this same prepared world to the game root.
+    # Reentering does not call _ready again; keep streamed dressing subscribed.
+    if not get_tree().node_added.is_connected(_on_node_added):get_tree().node_added.connect(_on_node_added)
+    call_deferred("_decorate_existing")
+
 func _ready() -> void:
     process_priority = 45
     _prepare_materials()
-    get_tree().node_added.connect(_on_node_added)
-    call_deferred("_decorate_existing")
 
 func _exit_tree() -> void:
     if get_tree().node_added.is_connected(_on_node_added):
@@ -50,7 +55,11 @@ func _prepare_materials() -> void:
 
 func _on_node_added(node: Node) -> void:
     if node is Node3D and node.name.begins_with("Settlement_"):
-        call_deferred("_decorate_candidate", node)
+        call_deferred("_decorate_candidate_ref",weakref(node))
+
+func _decorate_candidate_ref(reference:WeakRef) -> void:
+    var node:=reference.get_ref() as Node
+    if is_instance_valid(node):_decorate_candidate(node)
 
 func _decorate_existing() -> void:
     for candidate in get_tree().get_nodes_in_group("streamed_settlement"):
@@ -160,17 +169,11 @@ func _build_town_public_works(settlement: Node3D, public_works: Node3D) -> void:
     _add_warehouse(settlement, public_works, "DryGoodsWarehouse", Vector2(61.0, 43.0), -PI * 0.5, "dry_goods", 3)
 
 func _add_market_square(settlement: Node3D, market: Node3D) -> void:
-    var surface := MeshInstance3D.new()
-    surface.name = "MarketSquareSurface"
-    var mesh := BoxMesh.new()
-    mesh.size = Vector3(MARKET_SIZE.x, 0.05, MARKET_SIZE.y)
-    mesh.material = market_ground_material
-    surface.mesh = mesh
-    surface.position = _terrain_local_position(settlement, MARKET_CENTER, 0.055)
-    surface.set_meta("physical_support", "streamed_world_terrain")
+    var polygons: Array[PackedVector2Array] = [PATHS.rectangle(settlement,MARKET_CENTER,MARKET_SIZE)]
+    var surface := PATHS.add(market,"MarketSquareSurface",polygons,"paving",0.012)
+    if surface == null: return
     surface.set_meta("cart_clear_width", MARKET_CART_CLEAR_WIDTH)
     surface.visibility_range_end = 620.0
-    market.add_child(surface)
 
 func _add_market_stall(settlement: Node3D, parent: Node3D, local_pos: Vector2, yaw: float, cart_variant: bool, node_name: String) -> StaticBody3D:
     var stall := StaticBody3D.new()

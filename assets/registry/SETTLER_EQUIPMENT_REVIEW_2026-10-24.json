@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-24",
+  "asset_status": "INTEGRATED",
+  "status_scope": "Bow/arrow are INTEGRATED in validation/local runtime after selected model coupling/native checks. Axe/knife stay APPROVED source candidates. Whole art and performance acceptance are false.",
+  "physical_source_on_main": false,
+  "physical_source_on_validation_branch": true,
+  "production_ready": false,
+  "runtime_referenced": true,
+  "source_path": "assets/staging/project_owned/settler_equipment_2026_10_24/",
+  "recommended_runtime_target": "assets/production/weapons/settler_equipment/",
+  "geometry_reused_from_rejected_pack": false,
+  "authoring": {
+    "generator": "assets/staging/project_owned/settler_equipment_2026_10_24/author_equipment.py",
+    "coordinate_system": "Godot Y-up metres, exported with Blender glTF conversion",
+    "geometry_reused_from_rejected_pack": false,
+    "grips": {
+      "Axe_small": [
+        -0.09865,
+        -0.18,
+        0
+      ],
+      "Dagger": [
+        0.0006,
+        -0.12,
+        0
+      ],
+      "Bow_Wooden": [
+        -0.070708,
+        0,
+        0
+      ]
+    },
+    "textures": [
+      {
+        "label": "Cedar",
+        "source": "assets/staging/ui/materials/cedar/cedar.png",
+        "source_sha256": "87bb6b1a3145aa07f5f24cf523633e3fcd2800e9b8d480ff813a7784222a858c"
+      },
+      {
+        "label": "Leather",
+        "source": "assets/staging/ui/materials/leather/leather.png",
+        "source_sha256": "6225fd067963b221cabeb0355e3e53a8d70fa72887e511a7dc0ca4fc0e07addc"
+      },
+      {
+        "label": "ForgedSteelColor",
+        "source": "assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52/OGA_industrial_a52_version/scratchy_metal/scratchy_metal_dark.jpg",
+        "source_sha256": "49c265ff2015eb7a2e2c3a866c12af2b737e56b6f3ebb3711a8833dd29db95a3"
+      },
+      {
+        "label": "ForgedSteelNormal",
+        "source": "assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52/OGA_industrial_a52_version/scratchy_metal/scratchy_metal_norm.jpg",
+        "source_sha256": "8a45715ef92ca08d3bba04a53200b9e3d66342788f82b43daf9e23c90c9bc87b"
+      },
+      {
+        "label": "ForgedSteelRoughness",
+        "source": "assets/staging/sourcechat_b24/models/oga_pbr_industrial_a52/OGA_industrial_a52_version/scratchy_metal/scratchy_metal_roughness.png",
+        "source_sha256": "a46d5c8cca8ab1ff9da9e4e410bf7a2026925cffdad3c67a78e683180d6cfd6a"
+      }
+    ],
+    "items": [
+      {
+        "name": "Axe_small",
+        "triangles": 12380,
+        "bounds_min": [
+          -0.11700934916734695,
+          -0.33527010679244995,
+          -0.01874465122818947
+        ],
+        "bounds_max": [
+          0.146860733628273,
+          0.3149999976158142,
+          0.02125534787774086
+        ],
+        "length_m": 0.6502701044082642,
+        "anchors": {
+          "GripAnchor": [
+            -0.0986500009894371,
+            -0.18000000715255737,
+            -0.0
+          ]
+        },
+        "morphs": [],
+        "gltf_sha256": "eb6f5ecde5c55c3bf60b6eaa4d13d6f4ba3b9b1d0bf69f607386e441c600f485"
+      },
+      {
+        "name": "Dagger",
+        "triangles": 18340,
+        "bounds_min": [
+          -0.024867534637451172,
+          -0.1801503598690033,
+          -0.011500000022351742
+        ],
+        "bounds_max": [
+          0.024397358298301697,
+          0.17000000178813934,
+          0.011500000022351742
+        ],
+        "length_m": 0.35015036165714264,
+        "anchors": {
+          "GripAnchor.001": [
+            0.0006000000284984708,
+            -0.11999999731779099,
+            -0.0
+          ]
+        },
+        "morphs": [],
+        "gltf_sha256": "92d0c342a53a8f6a6a5265608615e9a299d0756fc1cc7b02c26da5b2ef2f34cd"
+      },
+      {
+        "name": "Bow_Wooden",
+        "triangles": 14012,
+        "bounds_min": [
+          -0.08470799773931503,
+          -0.5526016354560852,
+          -0.010300000198185444
+        ],
+        "bounds_max": [
+          0.16985727846622467,
+          0.5526016354560852,
+          0.010300000198185444
+        ],
+        "length_m": 1.1052032709121704,
+        "anchors": {
+          "GripAnchor.002": [
+            -0.07070799916982651,
+            0.0,
+            -0.0
+          ],
+          "TopStringNock": [
+            0.1347920000553131,
+            0.5156999826431274,
+            -0.0
+          ],
+          "BottomStringNock": [
+            0.1347920000553131,
+            -0.5156999826431274,
+            -0.0
+          ]
+        },
+        "morphs": [
+          "Draw"
+        ],
+        "gltf_sha256": "d32ab16aea0fc40a0179d4b7907c993aca620ddd54792750e72a9525ee9030f8"
+      },
+      {
+        "name": "Arrow",
+        "triangles": 3732,
+        "bounds_min": [
+          -0.012000000104308128,
+          -0.3499999940395355,
+          -0.014534641057252884
+        ],
+        "bounds_max": [
+          0.01600000075995922,
+          0.3499999940395355,
+          0.013256406411528587
+        ],
+        "length_m": 0.699999988079071,
+        "anchors": {
+          "ArrowNockSeat": [
+            0.0,
+            -0.34299999475479126,
+            -0.0
+          ],
+          "ArrowTip": [
+            0.0,
+            0.3499999940395355,
+            -0.0
+          ]
+        },
+        "morphs": [],
+        "gltf_sha256": "c0e2de2f99f6dd109e891e072ad767490c6b785921364ab386bdb67c5f82aef0"
+      }
+    ],
+    "master_source": "SettlerEquipment.blend",
+    "integration": {
+      "runtime_referenced": false,
+      "production_ready": false,
+      "physically_confirmed_on_main": false,
+      "geometry_created_in_Blender": true
+    }
+  },
+  "evidence_path": "docs/review/2026-10-24-starter-equipment-source/",
+  "native": {
+    "Godot": "4.7.1",
+    "Blender": "5.2.0 LTS",
+    "adapter": "Intel UHD610",
+    "captures": 13,
+    "viewport": "640x640",
+    "forced_offscreen_render": true,
+    "manual_gameplay": false,
+    "production_character_validation": false,
+    "performance_acceptance": false
+  },
+  "remaining": [
+    "Whole character art is still rejected/open: hair, fingers, garment neck/back transitions and broader wardrobe need work. Native frames make these limits visible.",
+    "Axe and knife Blender candidates remain source-only; the original live axe/knife are retained until their geometry and actions pass review.",
+    "Rare/epic variants, upgrades and repairs are not implemented by this visual package.",
+    "Focused full graphical run failed external240s after bow/magic/save/UI markers and a medium-quality120-frame sample. Do not count it as passed or raise/skip its deadline.",
+    "World Core may pass on a different runner but does not erase the focused graphical timeout. Continuous household graphical cycle40091621698 remains FAILED240s.",
+    "Software-renderer medium mean526.375325ms,1101drawcalls,1121546250reported video bytes are CI observations, not target-PC FPS or a bow-caused performance regression.",
+    "Local studio/UI first attempts exposed diagnostic preload/font-cache setup errors; recovered by late-loading autoload-dependent scripts and matching existing font cache. They are not claimed as successful initial runs.",
+    "Native verification is automated. World input driver performs ordinary actions without assigning player position; local studio/UI probes are fixtures. No manual whole-world journey or full art acceptance.",
+    "Main is unchanged; no merge, stable installer or release publication."
+  ],
+  "selected_items": {
+    "Bow_Wooden": "INTEGRATED",
+    "Arrow": "INTEGRATED",
+    "Axe_small": "APPROVED",
+    "Dagger": "APPROVED"
+  },
+  "integration_2026_10_25": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
+    "runtime_path": "assets/production/weapons/settler_equipment/",
+    "runtime_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+    "full_visual_acceptance": false,
+    "stable_release": false
+  }
+}

@@ -1,0 +1,107 @@
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cylinder.068
+23:58:51 | INFO: glTF import finished in 0.02s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cylinder.084
+23:58:51 | INFO: glTF import finished in 0.01s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.153
+23:58:51 | INFO: glTF import finished in 0.02s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.168
+23:58:51 | INFO: glTF import finished in 0.03s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.098
+23:58:51 | INFO: glTF import finished in 0.03s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.028
+23:58:51 | INFO: glTF import finished in 0.03s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.049
+23:58:51 | INFO: glTF import finished in 0.02s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cylinder.057
+23:58:51 | INFO: glTF import finished in 0.04s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube_Retopology.002
+23:58:51 | INFO: glTF import finished in 0.02s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.201
+23:58:51 | INFO: glTF import finished in 0.02s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.159
+23:58:51 | INFO: glTF import finished in 0.02s
+23:58:51 | INFO: Data are loaded, start creating Blender stuff
+23:58:51 | INFO: Blender create Mesh node Cube.131
+23:58:51 | INFO: glTF import finished in 0.02s
+23:58:52 | INFO: Data are loaded, start creating Blender stuff
+23:58:52 | INFO: Blender create Mesh node Cube.166
+23:58:52 | INFO: glTF import finished in 0.05s
+23:58:52 | INFO: Data are loaded, start creating Blender stuff
+23:58:52 | INFO: Blender create Mesh node Cube.147
+23:58:52 | INFO: glTF import finished in 0.01s
+23:58:52 | INFO: Data are loaded, start creating Blender stuff
+23:58:52 | INFO: Blender create Mesh node Cube.202
+23:58:52 | INFO: glTF import finished in 0.01s
+23:58:52 | INFO: Data are loaded, start creating Blender stuff
+23:58:52 | INFO: Blender create Mesh node Cylinder.091
+23:58:52 | INFO: glTF import finished in 0.03s
+23:58:52 | INFO: Data are loaded, start creating Blender stuff
+23:58:52 | INFO: Blender create Mesh node Cylinder.055
+23:58:52 | INFO: glTF import finished in 0.02s
+23:58:52 | INFO: Data are loaded, start creating Blender stuff
+23:58:52 | INFO: Blender create Mesh node Cylinder
+23:58:52 | INFO: glTF import finished in 0.02s
+23:58:52 | INFO: Data are loaded, start creating Blender stuff
+23:58:52 | INFO: Blender create Mesh node Cube.103
+23:58:52 | INFO: glTF import finished in 0.02s
+00:06.844  reports          | WARNING Путь "C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend" не может быть сделан относительным для Material "Dots Stroke"
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:35:40)
+00:06.844  reports          | WARNING Путь "C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend" не может быть сделан относительным для Material "Material"
+Информация: Сохранено как "HouseholdProps.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+23:58:52 | INFO: Starting glTF 2.0 export
+23:58:52 | INFO: Extracting primitive: Cube_Retopology.002
+23:58:52 | INFO: Primitives created: 2
+23:58:52 | INFO: Extracting primitive: Cylinder
+23:58:53 | INFO: Primitives created: 2
+23:58:53 | INFO: Extracting primitive: Cube.153
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cube.168
+23:58:53 | INFO: Primitives created: 2
+23:58:53 | INFO: Extracting primitive: Cube.098
+23:58:53 | INFO: Primitives created: 2
+23:58:53 | INFO: Extracting primitive: Cylinder.091
+23:58:53 | INFO: Primitives created: 2
+23:58:53 | INFO: Extracting primitive: Cylinder.057
+23:58:53 | INFO: Primitives created: 3
+23:58:53 | INFO: Extracting primitive: Cylinder.068
+23:58:53 | INFO: Primitives created: 2
+23:58:53 | INFO: Extracting primitive: Cube.131
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cube.201
+23:58:53 | INFO: Primitives created: 2
+23:58:53 | INFO: Extracting primitive: Cube.049
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cube.103
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cube.166
+23:58:53 | INFO: Primitives created: 3
+23:58:53 | INFO: Extracting primitive: Cube.159
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cube.147
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cylinder.084
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cube.202
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cylinder.055
+23:58:53 | INFO: Primitives created: 1
+23:58:53 | INFO: Extracting primitive: Cube.028
+23:58:53 | INFO: Primitives created: 2
+23:58:53 | INFO: Finished glTF 2.0 export in 0.4247303009033203 s
+
+HOUSEHOLD_PROPS_BUILT D:\Desktop\GitHub\game\assets\production\interiors\architecture\HouseholdProps.glb
+
+Blender quit

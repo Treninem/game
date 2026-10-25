@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Atomic storage transfer and half stacks",
+  "spec_attachment": "a73321da-b5aa-4db7-b559-a00f8505824e; canonical master content unchanged except trailing Markdown spaces",
+  "reproduced": "Old inventory_changed callback ran before chest state commit. A callback could withdraw the same chest contents again; strengthened test failed resource conservation before the production fix. A snapshot inside that callback could also capture inconsistent ownership.",
+  "changes": [
+    "Core commit_inventory_exchange writes inventory and world state before its single inventory_changed notification",
+    "Furniture rejects reentrant transfer while its commit notification is running",
+    "Existing range, owner, occupied-chest, equipped-item and capacity checks retained",
+    "Chest menu offers half-stack transfer when distinct from single/full amounts and within chest capacity; odd counts round down"
+  ],
+  "checks": {
+    "storage_access": {
+      "case": "storage_access",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 1.56
+    },
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.8
+    },
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 34.42,
+      "marker": true
+    }
+  },
+  "coverage": [
+    "Signal callback attempts nested withdrawal: rejected, exactly one notification",
+    "JSON save/load from both deposit and withdrawal inventory_changed callbacks preserves both sides",
+    "Actual dialogue menu half-withdrawal and half-deposit options exercised",
+    "Existing full capacity, invalid amounts, private ownership and JSON rights tests retained",
+    "Unlimited inventory browsing and visible automated source-game movement/weapon/magic/UI/save regression repeated"
+  ],
+  "baseline_evidence": "build/acceptance/storage-atomic-before.log",
+  "limits": [
+    "Half stacks transfer between chest and inventory; independent player-cell stacks, arbitrary quantity picker and drag/drop remain pending",
+    "Storage choice tests exercise dialogue options/handler, not a manual rendered chest interaction",
+    "Visible gameplay regression covers existing bounded route, not full world/city tour",
+    "No save schema change, new exported package or stable release",
+    "Earlier 32/55 editor functional count is unchanged; no overall-game percentage assigned"
+  ]
+}

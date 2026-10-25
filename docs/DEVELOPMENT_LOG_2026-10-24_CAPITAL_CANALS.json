@@ -1,0 +1,798 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent": "5af9de3f17c3729361d5ca9621500f4340dda127",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "reference_archive": {
+    "sha256": "70ee83623dc3349c07cd610ebece53718033224dd38414af161c9a8100434a67",
+    "images_locations": 20,
+    "ready_models": false,
+    "all_reviewed": true,
+    "pixels_used_as_assets": false
+  },
+  "problem": "The canonical canal district had no continuous physical canal; flat city paving covered the future basin. A bridge-only fixture did not solve the living region.",
+  "implemented": {
+    "straight_channel_m": 600,
+    "water_width_m": 36,
+    "water_depth_m": 1.2,
+    "water_level": 0,
+    "bridges": 4,
+    "bridge_footprint_m": [
+      96,
+      16
+    ],
+    "clear_bridge_lane_m": 14,
+    "quay_module_m": 6,
+    "bank_lanterns": 8,
+    "functional_households": 1,
+    "adult_owners": 2,
+    "shops": 1,
+    "finite_workshops": 1,
+    "public_benches": 3
+  },
+  "blender": {
+    "original_project_geometry": true,
+    "parts": {
+      "DeckAndApproaches": 1408,
+      "MeasuredArchVaults": 14784,
+      "ParapetsAndCaps": 10736,
+      "PiersAndSpandrels": 13504,
+      "QuayWall6m": 2916
+    },
+    "total_triangles": 43348,
+    "relative_images_checked": {
+      "lichen_rock.jpg": {
+        "relative_path": "//..\\..\\..\\production\\materials\\ground\\lichen_rock.jpg",
+        "sha256": "8ceb0e44d54f0858919ff2a5cbcc55246a43b38ad145300c28e4e5e35d6e242e"
+      },
+      "stone_normal.png": {
+        "relative_path": "//..\\..\\..\\production\\architecture\\city_street\\stone_normal.png",
+        "sha256": "d8453450e1091be573f5687b10eb6b52f690a865474213fde5ef06b7983117c6"
+      },
+      "stone_orm.png": {
+        "relative_path": "//..\\..\\..\\production\\architecture\\city_street\\stone_orm.png",
+        "sha256": "6fc1dcca1504847e2215a8662091d5808937edb39980e0b68ab0aef86752ae28"
+      },
+      "stone_paving.jpg": {
+        "relative_path": "//..\\..\\..\\production\\materials\\ground\\stone_paving.jpg",
+        "sha256": "705b0a1168b1cada6e56053d14d0f8fcd052a2f05ba3ba5fa767c3b9ae805ee4"
+      }
+    },
+    "editable_source_reopened_and_exported": true,
+    "third_party_downloads": 0,
+    "editable_reexport_matches_production_GLB": true
+  },
+  "asset_registry": "assets/registry/CAPITAL_CANALS_2026-10-24.json",
+  "native_gameplay": {
+    "result": {
+      "returncode": 0,
+      "seconds": 320.29699999999866,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "proof": {
+      "clock_frozen_fixture": true,
+      "driver_position_assignments": 0,
+      "floor_samples": [
+        {
+          "xz": "(1125.0, -160.0)",
+          "y": 0.0420399345457554
+        },
+        {
+          "xz": "(1125.0, -80.0)",
+          "y": 0.0420399345457554
+        },
+        {
+          "xz": "(1130.0, 0.0)",
+          "y": 0.0420399345457554
+        },
+        {
+          "xz": "(1235.0, 0.0)",
+          "y": 0.0419395789504051
+        },
+        {
+          "xz": "(1240.0, -80.0)",
+          "y": 0.0427418351173401
+        },
+        {
+          "xz": "(1240.0, -160.0)",
+          "y": 0.0427418351173401
+        },
+        {
+          "xz": "(1180.0, -160.0)",
+          "y": 2.24051356315613
+        },
+        {
+          "xz": "(1240.0, -160.0)",
+          "y": 0.0420645289123058
+        },
+        {
+          "xz": "(1240.0, -177.5)",
+          "y": 0.0420645289123058
+        },
+        {
+          "xz": "(1232.8, -177.5)",
+          "y": 0.0420645289123058
+        },
+        {
+          "xz": "(1232.8, -180.5)",
+          "y": 0.0420645289123058
+        },
+        {
+          "xz": "(1232.8, -177.5)",
+          "y": 0.0420645289123058
+        },
+        {
+          "xz": "(1240.0, -177.5)",
+          "y": 0.0420645289123058
+        },
+        {
+          "xz": "(1240.0, -160.0)",
+          "y": 0.0420645289123058
+        },
+        {
+          "xz": "(1125.0, -160.0)",
+          "y": 0.041974738240242
+        },
+        {
+          "xz": "(1125.0, -178.0)",
+          "y": 0.041974738240242
+        },
+        {
+          "xz": "(1135.0, -183.0)",
+          "y": 0.041974738240242
+        },
+        {
+          "xz": "(1135.0, -189.0)",
+          "y": 0.077664278447628
+        },
+        {
+          "xz": "(1135.0, -183.0)",
+          "y": 0.0395796000957489
+        },
+        {
+          "xz": "(1125.0, -178.0)",
+          "y": 0.0395796000957489
+        },
+        {
+          "xz": "(1125.0, -160.0)",
+          "y": 0.0395796000957489
+        },
+        {
+          "xz": "(1180.0, -160.0)",
+          "y": 2.24254131317139
+        }
+      ],
+      "full_art_acceptance": false,
+      "gpu_sole_samples": [
+        {
+          "gap_m": 0.00399976968765259,
+          "label": "(1125.0, -160.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399524718523026,
+          "label": "(1125.0, -80.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399185717105865,
+          "label": "(1130.0, 0.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399435684084892,
+          "label": "(1235.0, 0.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00398959219455719,
+          "label": "(1240.0, -80.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399411097168922,
+          "label": "(1240.0, -160.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399351119995117,
+          "label": "(1180.0, -160.0)",
+          "surface": "CapitalCanalBridge_-160",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.0039927139878273,
+          "label": "(1240.0, -160.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.0039927139878273,
+          "label": "(1240.0, -177.5)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399158522486687,
+          "label": "(1232.8, -177.5)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399045273661613,
+          "label": "(1232.8, -180.5)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.0039994977414608,
+          "label": "(1232.8, -177.5)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399045273661613,
+          "label": "(1240.0, -177.5)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399045273661613,
+          "label": "(1240.0, -160.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00400012731552124,
+          "label": "(1125.0, -160.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399447605013847,
+          "label": "(1125.0, -178.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399334728717804,
+          "label": "(1135.0, -183.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00400045141577721,
+          "label": "(1135.0, -189.0)",
+          "surface": "Floor",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00400001183152199,
+          "label": "home-dining",
+          "surface": "Floor",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.0039944052696228,
+          "label": "(1135.0, -183.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00398988276720047,
+          "label": "(1125.0, -178.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399327278137207,
+          "label": "(1125.0, -160.0)",
+          "surface": "TerrainCollision",
+          "vertices": 3530
+        },
+        {
+          "gap_m": 0.00399017333984375,
+          "label": "(1180.0, -160.0)",
+          "surface": "CapitalCanalBridge_-160",
+          "vertices": 3530
+        }
+      ],
+      "live_private_world": true,
+      "manual_play": false,
+      "new_household_saved_slot": 8,
+      "paid_trade_and_finite_stock": true,
+      "published": false,
+      "real_front_door_and_rooms": true,
+      "source_checkpoint": "Previously earned1.34km actual city road survey; old geometry revision is migrated vertically by SaveManager",
+      "walked_m": 919.530722988537
+    },
+    "new_process_saved_home_restore": {
+      "returncode": 0,
+      "seconds": 18.32800000000134,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "scope": "Ordinary automated movement and aim from the unchanged previously earned1.34km road checkpoint. Clock/camera review fixtures are explicit; this is not manual play. The native pass precedes only the additional NPC intermediate-goal/work-surface guard, which is covered by the following full local lifecycle regressions. Actual packaged final-head gameplay remains required before launcher delivery. The final legacy mid-jump migration extension is independently reproduced and tested through the real scene boundary, with supplementary revision/core/movement checks."
+  },
+  "unfrozen_citizen_lifecycle": {
+    "arrivals": {
+      "home_arrival": 1328.37178732495,
+      "meal_arrival": 750.972170000001,
+      "public": 1116.06457866666,
+      "sleep": 1328.37178732495,
+      "social_arrival": 1116.06457866666,
+      "work": 415.088687500003,
+      "work_arrival": 415.088687500003
+    },
+    "clock_advances_during_commutes": true,
+    "exclusive_beds_and_public_seats": true,
+    "finite_recipe_consumption": true,
+    "full_life_simulation_acceptance": false,
+    "no_crafting_at_home_or_in_transit": true,
+    "npc_position_assignments_by_driver": 0,
+    "ordinary_npc_move_speed": 1.45,
+    "personal_storage_did_not_duplicate": true,
+    "phase_entry_clock_controlled": true,
+    "physical_bridge_samples": 8868,
+    "physics_step_s": 0.0166666666666667,
+    "real_scene_disk_restore": true,
+    "recipe_supply_is_controlled_fixture": true,
+    "shop_closed_at_night": true,
+    "simulation_time_scale": 4,
+    "walked_by_citizen_m": {
+      "capital:canal:fletcher": 358.286414326518,
+      "capital:canal:provisions": 495.842498275102
+    }
+  },
+  "local_regressions": [
+    {
+      "case": "smoke_day_length.gd",
+      "returncode": 0,
+      "seconds": 2.047000000005937,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_canal_save_revision.gd",
+      "returncode": 0,
+      "seconds": 2.0309999999954016,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_capital_canals.gd",
+      "returncode": 0,
+      "seconds": 22.81300000000192,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_canal_household.gd",
+      "returncode": 0,
+      "seconds": 141.01499999999942,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_tz_progression.tscn",
+      "returncode": 0,
+      "seconds": 3.0939999999973224,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_world_hydrology.tscn",
+      "returncode": 0,
+      "seconds": 2.061999999998079,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_river_shoreline.tscn",
+      "returncode": 0,
+      "seconds": 4.109000000004016,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_terrain_paths.tscn",
+      "returncode": 0,
+      "seconds": 12.812999999994645,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_player_movement.tscn",
+      "returncode": 0,
+      "seconds": 18.375,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_save_recovery.tscn",
+      "returncode": 0,
+      "seconds": 2.0310000000026776,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_ui_and_save.tscn",
+      "returncode": 0,
+      "seconds": 8.203000000001339,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_ui_responsive.tscn",
+      "returncode": 0,
+      "seconds": 10.719000000004598,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_house_navigation.tscn",
+      "returncode": 0,
+      "seconds": 4.063000000001921,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_household_furniture.tscn",
+      "returncode": 0,
+      "seconds": 78.32799999999406,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_household_aisle.tscn",
+      "returncode": 0,
+      "seconds": 8.687000000005355,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_square_home_life.tscn",
+      "returncode": 0,
+      "seconds": 147.125,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_public_market_life.gd",
+      "returncode": 0,
+      "seconds": 92.61000000000058,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_capital_square.tscn",
+      "returncode": 0,
+      "seconds": 45.34399999999732,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "local_regression_total_s": 605.4690000000046,
+  "material_fixture": {
+    "result": {
+      "returncode": 0,
+      "seconds": 11.671999999998661,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "scope": "Actual rendered bridge geometry across four qualities plus identical camera/location dry-bank pixel comparison; not a world journey"
+  },
+  "editable_export": {
+    "result": {
+      "returncode": 0,
+      "seconds": 5.406999999999243,
+      "marker": true
+    },
+    "proof": {
+      "source_sha256": "f0ac63baa8891139b775906ae0b67daf75789ebb3d3b88e9ab2ed209aae4273d",
+      "source_modified": false,
+      "parts": {
+        "DeckAndApproaches": 1408,
+        "MeasuredArchVaults": 14784,
+        "ParapetsAndCaps": 10736,
+        "PiersAndSpandrels": 13504,
+        "QuayWall6m": 2916
+      },
+      "triangles": 43348,
+      "relative_images": {
+        "lichen_rock.jpg": {
+          "relative_path": "//..\\..\\..\\production\\materials\\ground\\lichen_rock.jpg",
+          "sha256": "8ceb0e44d54f0858919ff2a5cbcc55246a43b38ad145300c28e4e5e35d6e242e"
+        },
+        "stone_normal.png": {
+          "relative_path": "//..\\..\\..\\production\\architecture\\city_street\\stone_normal.png",
+          "sha256": "d8453450e1091be573f5687b10eb6b52f690a865474213fde5ef06b7983117c6"
+        },
+        "stone_orm.png": {
+          "relative_path": "//..\\..\\..\\production\\architecture\\city_street\\stone_orm.png",
+          "sha256": "6fc1dcca1504847e2215a8662091d5808937edb39980e0b68ab0aef86752ae28"
+        },
+        "stone_paving.jpg": {
+          "relative_path": "//..\\..\\..\\production\\materials\\ground\\stone_paving.jpg",
+          "sha256": "705b0a1168b1cada6e56053d14d0f8fcd052a2f05ba3ba5fa767c3b9ae805ee4"
+        }
+      },
+      "output_sha256": "2e7010f4332068872e9b6a8581eae2252e210611d3f85ca4c452511d733e87c8",
+      "third_party_downloads": 0
+    }
+  },
+  "bounded_actual_world_performance": {
+    "bounded_night_lights": true,
+    "driver_position_assignments": 0,
+    "full_performance_acceptance": false,
+    "grass_instances_in_loaded_cells": 20427,
+    "manual_play": false,
+    "physical_tree_instances_in_loaded_cells": 29,
+    "quality_invariant_world_geometry": true,
+    "samples": [
+      {
+        "draw_calls": 709.0,
+        "max_frame_ms": 29.453,
+        "mean_frame_ms": 20.9360916666667,
+        "p95_frame_ms": 26.712,
+        "park_rendering": false,
+        "quality": "Low",
+        "samples": 120,
+        "scale_3d": 0.699999988079071,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 995024109.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 719.0,
+        "max_frame_ms": 33.455,
+        "mean_frame_ms": 22.8307083333333,
+        "p95_frame_ms": 30.351,
+        "park_rendering": true,
+        "quality": "Low",
+        "samples": 120,
+        "scale_3d": 0.699999988079071,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 995024109.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 712.0,
+        "max_frame_ms": 44.291,
+        "mean_frame_ms": 28.8908583333333,
+        "p95_frame_ms": 36.044,
+        "park_rendering": false,
+        "quality": "Medium",
+        "samples": 120,
+        "scale_3d": 0.850000023841858,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 996738285.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 736.0,
+        "max_frame_ms": 36.63,
+        "mean_frame_ms": 31.0453,
+        "p95_frame_ms": 33.21,
+        "park_rendering": true,
+        "quality": "Medium",
+        "samples": 120,
+        "scale_3d": 0.850000023841858,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 996738285.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 773.0,
+        "max_frame_ms": 56.31,
+        "mean_frame_ms": 34.9496333333333,
+        "p95_frame_ms": 46.017,
+        "park_rendering": false,
+        "quality": "High",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1006157037.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 801.0,
+        "max_frame_ms": 53.57,
+        "mean_frame_ms": 36.0920083333333,
+        "p95_frame_ms": 40.638,
+        "park_rendering": true,
+        "quality": "High",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1006157037.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 846.0,
+        "max_frame_ms": 44.486,
+        "mean_frame_ms": 37.7913666666667,
+        "p95_frame_ms": 41.132,
+        "park_rendering": false,
+        "quality": "Ultra",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1020902637.0,
+        "viewport": "(1280, 720)"
+      },
+      {
+        "draw_calls": 880.0,
+        "max_frame_ms": 43.861,
+        "mean_frame_ms": 39.8003666666667,
+        "p95_frame_ms": 42.952,
+        "park_rendering": true,
+        "quality": "Ultra",
+        "samples": 120,
+        "scale_3d": 1.0,
+        "scope": "Same loaded actual canal world and camera; only park visibility toggled. Both cases retain loaded assets, physical geometry and active NPCs. Warm stationary samples, not sustained whole-world FPS.",
+        "video_memory_bytes": 1020902637.0,
+        "viewport": "(1280, 720)"
+      }
+    ]
+  },
+  "new_clock_setting": {
+    "default_real_minutes_per_day": 48,
+    "previous_real_minutes_per_day": 6,
+    "range": [
+      6,
+      120
+    ],
+    "reason": "At4 game minutes per real second an ordinary cross-bank commute consumed several game hours. Keep walking speed1.45m/s; let users select the day length.",
+    "saved_world_clock_day_preserved": true,
+    "survival_rates_unchanged": true,
+    "original_fast_option_available": true,
+    "real_menu_and_invalid_value_fallback_checked": true
+  },
+  "save_safety": {
+    "save_version": 6,
+    "geometry_revision": 1,
+    "legacy_migration": "Vertical support adjustment only for old low road checkpoints within the actual bridge footprint; no horizontal relocation",
+    "current_underarch_save_not_raised": true,
+    "original_user_profiles_modified": false,
+    "original_earned_checkpoint_modified": false,
+    "inventory_money_yaw_preserved": true,
+    "revision_safety_cases": 17,
+    "legacy_jump_checkpoints_supported": true
+  },
+  "fixed_failures": [
+    {
+      "case": "household-cycle-second",
+      "problem": "Residents leave the bridge diagonally into its parapet",
+      "fix": "Goal-directed measured exterior obstacle grid covers the entire commute and bridge exit; no authored NPC route."
+    },
+    {
+      "case": "household-cycle-third",
+      "problem": "Chest reservation released while the previous user still occupied the narrow table-side aisle",
+      "fix": "Hold ownership until the next measured seat approach is reached; queue waits in the common hall."
+    },
+    {
+      "problem": "An intermediate local waypoint could be mistaken for a workplace arrival",
+      "fix": "Pending navigation cannot trigger arrived actions; recipe progress also requires the actual supported work surface."
+    },
+    {
+      "problem": "Zero-height dry capital banks inherited the low-altitude wet-soil palette",
+      "fix": "Opt-in distance to the real freshwater capsule; legacy biome defaults unchanged."
+    },
+    {
+      "case": "legacy-airborne-baseline",
+      "problem": "An old mid-jump road save remains inside the new bridge; the physical support guard cannot complete.",
+      "fix": "Legacy states within the actual footprint acquire deck clearance when needed, including airborne states; existing higher states and current-revision underarch saves keep their height."
+    }
+  ],
+  "test_fixture_corrections": [
+    "Direct HouseholdFurniture type preload from a SceneTree driver compiled before DialogueManager; resolve the actual furniture node after loading instead.",
+    "The shop uses a0.75m arrival radius; the new test originally demanded0.25m and was corrected to the actual existing contract.",
+    "A native input segment initially walked directly through a solid citizen; the input route now approaches around the citizen. No game collision was removed.",
+    "JSON numeric inventory values are normalized to integer item counts before comparing a real loaded state.",
+    "The material observer uses actual render-image dimensions; fixed sampling was invalid after viewport aspect scaling."
+  ],
+  "mirror_audit": {
+    "parent": "5af9de3f17c3729361d5ca9621500f4340dda127",
+    "tracked_source_files_checked": 486,
+    "differences": [],
+    "shared_head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "shared_index_sha256": "dbfb092d48be354063de27697f18139afb58c8ea1cb23565c148c7e9e1120c91"
+  },
+  "parent_ci": {
+    "sha": "5af9de3f17c3729361d5ca9621500f4340dda127",
+    "all_eight_workflows_success": true,
+    "world_core_run": 40055221495,
+    "verified": "2026-10-24"
+  },
+  "current_exact_sha_ci": "Required after publication; no green claim for a future commit",
+  "actual_final_PCK_gameplay": "Pending; primary launcher still selects verified6d3 review package",
+  "shared_head_index_preserved": true,
+  "humans_rigs_morphs_source_clips_changed": false,
+  "controls_or_inventory_capacity_changed": false,
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "remaining": [
+    "Full composition from20concepts is not met: flat plateau, sparse repeated distant facades and weak skyline remain",
+    "Household and age variety, schools/guilds/professions and wider economic simulation remain incomplete",
+    "Current human appearance/actions and wardrobe still need broad work",
+    "Evening street coverage, vegetation richness, architectural/material variety and cold preparation pauses remain open",
+    "105RefCounted exit warnings and local copied-resource UID fallbacks persist",
+    "Warm stationary samples are not sustained whole-world performance acceptance"
+  ],
+  "next": "Deliver only after exact-SHA CI and actual packaged gameplay. Then expand the connected neighbourhood with coherent street frontage/height/composition, distinct occupied architecture and interiors, usable night lighting and public activity while retaining the whole-character and living-region programme.",
+  "supplemental_migration_regressions": [
+    {
+      "case": "smoke_canal_save_revision.gd",
+      "returncode": 0,
+      "seconds": 2.062000000005355,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_capital_canals.gd",
+      "returncode": 0,
+      "seconds": 21.312999999994645,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    {
+      "case": "smoke_player_movement.tscn",
+      "returncode": 0,
+      "seconds": 14.781000000002678,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    }
+  ],
+  "legacy_airborne_save": {
+    "baseline": {
+      "returncode": 1,
+      "seconds": 16.32800000000134,
+      "stopped": true,
+      "errors": [
+        "SCRIPT ERROR: Assertion failed: Old mid-jump save remains embedded below the new bridge and cannot acquire support"
+      ],
+      "marker": false
+    },
+    "fixed": {
+      "returncode": 0,
+      "seconds": 16.25,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "fixture": "Actual scene loading of an isolated old road save at0.8m jump height; new current-revision underarch states remain unraised."
+  }
+}

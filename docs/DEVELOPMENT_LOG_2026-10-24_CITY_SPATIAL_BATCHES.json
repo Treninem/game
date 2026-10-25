@@ -1,0 +1,1861 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "parent": "18e22e586a25b360126013367ef5af1d813504f7",
+  "main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "delivery": "Unreleased review; no stable promotion",
+  "problem": "All authored townhouses of the same mesh shared one broad MultiMesh bound. Normal frustum/LOD/shadow decisions could cover many houses together. Existing far-shadow suppression and structural merging did not provide a useful weak-PC gain.",
+  "implemented": [
+    "Tag the two existing authored townhouse families explicitly when collecting cached scene parts",
+    "Partition their original instance lists into16m spatial groups, preserving shared meshes, material resources, all transform values and original distance ranges",
+    "Keep legacy modules, small detail groups, shaders, physics, world anchors, NPCs, inventory and saves unchanged",
+    "Mandatory native render gate verifies exact source arrays/material references and complete nonduplicated transform coverage,22 houses and12 before/after view pairs across4 quality levels"
+  ],
+  "local_checks": {
+    "visual-final": {
+      "returncode": 0,
+      "seconds": 22.39100000000326,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "native-city-final": {
+      "returncode": 0,
+      "seconds": 165.56200000000172,
+      "stopped": false,
+      "errors": [],
+      "marker": "CAPITAL_CONCEPT_NATIVE_OK edge_houses=22 market_canopies=6 earned_checkpoint=true walked_m=189.609389984747 player_position_assignments=0 physical_rooms=3 reach_checked_front_door=true save_slot=4 disk_reload=true release_checks=true fountain_interaction=true fountain_disk_reload=true quality=Medium clock_fixture=09:00",
+      "source_qa_proposal": true,
+      "manual_play": false,
+      "driver_position_assignments": 0
+    },
+    "native-market-final": {
+      "returncode": 0,
+      "seconds": 213.81299999999828,
+      "stopped": false,
+      "errors": [],
+      "marker": "PUBLIC_MARKET_NATIVE_OK ordinary_walk_m=125.163575056707 player_position_assignments=0 arcade=true paid_trade=true finite_visible_stock=true npc_seats=true player_rest=true actual_scene_reload=true jump_wake=true npc_return_work=true gpu_boot_coverage=3530_per_actor manual_play=false",
+      "manual_play": false
+    },
+    "performance-four-presets": {
+      "returncode": 0,
+      "seconds": 111.56200000000172,
+      "errors": [],
+      "marker": true
+    },
+    "traversal-baseline": {
+      "case": "baseline",
+      "returncode": 0,
+      "seconds": 166.06299999999828,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "traversal-candidate": {
+      "case": "candidate",
+      "returncode": 0,
+      "seconds": 157.53099999999904,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "traversal-candidate-profile": {
+      "case": "candidate-profile",
+      "returncode": 0,
+      "seconds": 151.56199999999808,
+      "stopped": false,
+      "errors": [],
+      "marker": true
+    },
+    "traversal-candidate-profile-warm2": {
+      "returncode": 0,
+      "seconds": 87.90700000000288,
+      "stopped": false,
+      "errors": [],
+      "marker": true,
+      "same_appdata_localdata_temp_profile": true
+    }
+  },
+  "render_evidence": {
+    "actual_render_pairs": [
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 4.45715323166304e-05,
+        "quality": 0,
+        "view": 0
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 0.00035171568627451,
+        "quality": 0,
+        "view": 1
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 4.85657225853304e-06,
+        "quality": 0,
+        "view": 2
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 3.7967501815541e-05,
+        "quality": 1,
+        "view": 0
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 0.000371732026143791,
+        "quality": 1,
+        "view": 1
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 9.03231663035585e-06,
+        "quality": 1,
+        "view": 2
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 2.59395424836601e-05,
+        "quality": 2,
+        "view": 0
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 0.000263049201161946,
+        "quality": 2,
+        "view": 1
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 7.03522149600581e-06,
+        "quality": 2,
+        "view": 2
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 1.92220406681191e-05,
+        "quality": 3,
+        "view": 0
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 0.000268790849673203,
+        "quality": 3,
+        "view": 1
+      },
+      {
+        "gross_pixel_fraction": 0.0,
+        "mean_rgb_error": 4.87926652142338e-06,
+        "quality": 3,
+        "view": 2
+      }
+    ],
+    "all_instance_transforms_conserved": true,
+    "house_batches": 21,
+    "houses": 22,
+    "quality_levels": 4,
+    "source_meshes": 4,
+    "unchanged_geometry_uv_normal_material_arrays": true
+  },
+  "stationary_same_view_before": [
+    {
+      "draw_calls": 863.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 35.238,
+      "mean_frame_ms": 31.4548083333333,
+      "p95_frame_ms": 33.052,
+      "preset": 0,
+      "quality": "Low",
+      "scale_3d": 0.699999988079071,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 982985037.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1414.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 78.145,
+      "mean_frame_ms": 71.0502833333333,
+      "p95_frame_ms": 74.08,
+      "preset": 1,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 984699213.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1542.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 88.698,
+      "mean_frame_ms": 78.9514833333333,
+      "p95_frame_ms": 81.614,
+      "preset": 2,
+      "quality": "High",
+      "scale_3d": 1.0,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 994380108.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1561.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 83.79,
+      "mean_frame_ms": 81.4047083333333,
+      "p95_frame_ms": 83.103,
+      "preset": 3,
+      "quality": "Ultra",
+      "scale_3d": 1.0,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 1009125708.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    }
+  ],
+  "stationary_same_view_after": [
+    {
+      "draw_calls": 875.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 31.279,
+      "mean_frame_ms": 26.0349833333333,
+      "p95_frame_ms": 28.089,
+      "preset": 0,
+      "quality": "Low",
+      "scale_3d": 0.699999988079071,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 980842269.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1330.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 55.954,
+      "mean_frame_ms": 49.679775,
+      "p95_frame_ms": 51.849,
+      "preset": 1,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 982556445.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1476.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 66.934,
+      "mean_frame_ms": 58.0987833333333,
+      "p95_frame_ms": 63.951,
+      "preset": 2,
+      "quality": "High",
+      "scale_3d": 1.0,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 992237340.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1501.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 71.821,
+      "mean_frame_ms": 60.5453833333333,
+      "p95_frame_ms": 63.568,
+      "preset": 3,
+      "quality": "Ultra",
+      "scale_3d": 1.0,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 1006982940.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    }
+  ],
+  "ordinary_traversal_frames": {
+    "baseline": {
+      "driver_position_assignments": 0,
+      "max_ms": 10059.309,
+      "mean_ms": 82.8423512705531,
+      "moving_frames": 669,
+      "p95_ms": 81.233,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Complete ordinary capital/home test route; only complete rendered frame intervals while movement input is held, excluding loading dialogue and stationary captures. Not a whole-world FPS guarantee.",
+      "viewport": "(1280, 720)",
+      "walked_m": 189.609389984747
+    },
+    "candidate": {
+      "driver_position_assignments": 0,
+      "max_ms": 8039.134,
+      "mean_ms": 64.9281605839416,
+      "moving_frames": 822,
+      "p95_ms": 62.795,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Complete ordinary capital/home test route; only complete rendered frame intervals while movement input is held, excluding loading dialogue and stationary captures. Not a whole-world FPS guarantee.",
+      "viewport": "(1280, 720)",
+      "walked_m": 189.609389984747
+    }
+  },
+  "native_market_gpu_and_disk": {
+    "exclusive_seats": true,
+    "foot_samples": [
+      {
+        "boot_vertices": 3530,
+        "gap": 0.00400043129920959,
+        "label": "trader-public-rest",
+        "minimum_y": 0.0290004312992096,
+        "paving_y": 0.025
+      },
+      {
+        "boot_vertices": 3530,
+        "gap": 0.00399971604347229,
+        "label": "artisan-public-rest",
+        "minimum_y": 0.0289997160434723,
+        "paving_y": 0.025
+      },
+      {
+        "boot_vertices": 3530,
+        "gap": 0.00399971604347229,
+        "label": "hero-public-rest",
+        "minimum_y": 0.0289997160434723,
+        "paving_y": 0.025
+      }
+    ],
+    "jump_wake_and_land": true,
+    "manual_play": false,
+    "paid_trade_and_visible_stock": true,
+    "player_position_assignments": 0,
+    "real_scene_disk_restore": true,
+    "residents_return_to_work": true,
+    "talk_to_visible_seated_resident": true,
+    "walked_m": 125.163575056707
+  },
+  "frames": {
+    "fixture-medium-before.png": "docs/review/2026-10-24-city-spatial-batches/fixture-medium-before.png",
+    "fixture-medium-after.png": "docs/review/2026-10-24-city-spatial-batches/fixture-medium-after.png",
+    "native-residential-street.png": "docs/review/2026-10-24-city-spatial-batches/native-residential-street.png",
+    "native-residents-rest.png": "docs/review/2026-10-24-city-spatial-batches/native-residents-rest.png"
+  },
+  "native_scope": "Actual graphical Bootstrap world from unchanged earned capital checkpoint;189.609m city/home/fountain/disk route and125.164m public market/trade/seating/camera/real reload/jump/work route. Ordinary automated input/aim, zero driver position assignments; observer cameras and clock fixture. No manual play or fresh forest-to-city run.",
+  "preservation": "Geometry/UV/normal arrays and material Resource IDs fingerprinted before/after; shared source Mesh identities and complete instance transforms are independently conserved. No source asset or human rig/morph/clip bytes change. Save version6 and unlimited inventory retained.",
+  "ci": "Previous runtimeb28 all8green and actual PCK gameplay confirmed. Parent18e is documentation-only with identical runtime. Current new exact-SHA gates follow publication; earlier green is not substituted. New exported package must be tested separately.",
+  "warnings": [
+    "Copied local QA human UID fallback warnings persist",
+    "101 ObjectDB exit instances in native gameplay; no leak-free claim",
+    "Stationary and bounded route samples do not establish sustained whole-world FPS",
+    "Full concept/city/human art, distinct inhabited architecture and whole character/action acceptance remain false",
+    "Cold walk still has 8-10second stalls; warm repeat improvement does not establish a cold-start fix or smooth gameplay."
+  ],
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false,
+  "next": "Verify exact-SHA CI and actual exported PCK; then continue coherent dense streets, inhabited building/household diversity, terrain/river/skyline and whole human appearance/actions. Rendering efficiency is a supporting change, not visual completion.",
+  "phase_diagnostics": {
+    "cold": {
+      "driver_position_assignments": 0,
+      "hitches_over250ms": [
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 285.529,
+          "frame": 839,
+          "idle_callbacks_ms": 270.01,
+          "physics_monitor_ms": 4.49,
+          "player": "(13491.91, 0.0187, -6987.349)",
+          "render_phase_ms": 6.64
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 294.0,
+          "frame": 946,
+          "idle_callbacks_ms": 274.721,
+          "physics_monitor_ms": 4.869,
+          "player": "(13487.04, 0.0187, -6974.52)",
+          "render_phase_ms": 7.962
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 290.79,
+          "frame": 999,
+          "idle_callbacks_ms": 278.602,
+          "physics_monitor_ms": 4.747,
+          "player": "(13488.23, 0.0187, -6974.592)",
+          "render_phase_ms": 7.477
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 279.546,
+          "frame": 1088,
+          "idle_callbacks_ms": 260.309,
+          "physics_monitor_ms": 5.208,
+          "player": "(13492.09, 0.0187, -6987.514)",
+          "render_phase_ms": 10.003
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 278.592,
+          "frame": 1258,
+          "idle_callbacks_ms": 262.482,
+          "physics_monitor_ms": 4.439,
+          "player": "(13487.29, 0.064351, -7018.583)",
+          "render_phase_ms": 9.082
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 1100.575,
+          "frame": 1298,
+          "idle_callbacks_ms": 9.942,
+          "physics_monitor_ms": 6.43,
+          "player": "(13476.5, 0.064351, -7019.408)",
+          "render_phase_ms": 1079.601
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 8440.913,
+          "frame": 1315,
+          "idle_callbacks_ms": 4.435,
+          "physics_monitor_ms": 3.8,
+          "player": "(13471.52, 0.064351, -7019.787)",
+          "render_phase_ms": 8426.237
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 308.701,
+          "frame": 1324,
+          "idle_callbacks_ms": 3.495,
+          "physics_monitor_ms": 4.131,
+          "player": "(13468.78, 0.064351, -7019.988)",
+          "render_phase_ms": 293.547
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 337.966,
+          "frame": 1325,
+          "idle_callbacks_ms": 243.764,
+          "physics_monitor_ms": 4.131,
+          "player": "(13468.12, 0.064351, -7020.037)",
+          "render_phase_ms": 12.186
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 509.097,
+          "frame": 1332,
+          "idle_callbacks_ms": 8.871,
+          "physics_monitor_ms": 4.131,
+          "player": "(13466.46, 0.064351, -7020.158)",
+          "render_phase_ms": 487.408
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 520.566,
+          "frame": 1391,
+          "idle_callbacks_ms": 10.116,
+          "physics_monitor_ms": 5.849,
+          "player": "(13454.88, 0.064351, -7021.379)",
+          "render_phase_ms": 498.315
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 799.195,
+          "frame": 1392,
+          "idle_callbacks_ms": 6.767,
+          "physics_monitor_ms": 5.849,
+          "player": "(13454.93, 0.064351, -7022.03)",
+          "render_phase_ms": 747.977
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 1167.341,
+          "frame": 1393,
+          "idle_callbacks_ms": 11.157,
+          "physics_monitor_ms": 4.745,
+          "player": "(13454.98, 0.064351, -7022.694)",
+          "render_phase_ms": 1095.493
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 1398.145,
+          "frame": 1432,
+          "idle_callbacks_ms": 3.834,
+          "physics_monitor_ms": 4.681,
+          "player": "(13454.99, 0.092369, -7025.056)",
+          "render_phase_ms": 1381.298
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 667.092,
+          "frame": 1584,
+          "idle_callbacks_ms": 9.518,
+          "physics_monitor_ms": 3.806,
+          "player": "(13453.91, 0.092369, -7033.345)",
+          "render_phase_ms": 642.542
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 290.513,
+          "frame": 1591,
+          "idle_callbacks_ms": 267.532,
+          "physics_monitor_ms": 5.944,
+          "player": "(13455.25, 0.092369, -7032.574)",
+          "render_phase_ms": 7.671
+        }
+      ],
+      "max_ms": 8440.913,
+      "mean_ms": 66.5523679706602,
+      "moving_frames": 818,
+      "p95_ms": 64.349,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Complete ordinary capital/home test route; only complete rendered frame intervals while movement input is held, excluding loading dialogue and stationary captures. Not a whole-world FPS guarantee.",
+      "viewport": "(1280, 720)",
+      "walked_m": 189.609389984747
+    },
+    "reused_profile": {
+      "driver_position_assignments": 0,
+      "hitches_over250ms": [
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 283.128,
+          "frame": 704,
+          "idle_callbacks_ms": 270.209,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 82,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 50,
+              "support_usec": 514
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 346,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 33,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 172,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 48,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 78,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 26,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 183,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 24,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 78,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 22,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 125,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 74,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 174,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 89,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 127,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 18,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 96,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 18,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 126,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 125,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 4.307,
+          "player": "(13491.91, 0.0187, -6987.015)",
+          "render_phase_ms": 6.683
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 286.561,
+          "frame": 810,
+          "idle_callbacks_ms": 270.378,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 71,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 61,
+              "support_usec": 716
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 147,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 29,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 129,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 21,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 155,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 32,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 130,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 25,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 89,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 101,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 125,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 87,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 86,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 189,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 402,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 4.868,
+          "player": "(13486.79, 0.0187, -6974.526)",
+          "render_phase_ms": 8.007
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 291.545,
+          "frame": 861,
+          "idle_callbacks_ms": 279.061,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 91,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 35,
+              "support_usec": 543
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 152,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 31,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 129,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 89,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 125,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 77,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 78,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 88,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 87,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 138,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 4.733,
+          "player": "(13488.23, 0.0187, -6974.592)",
+          "render_phase_ms": 7.495
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 285.144,
+          "frame": 952,
+          "idle_callbacks_ms": 266.551,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 102,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 143,
+              "support_usec": 410
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 266,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 63,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 142,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 40,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 77,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 21,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 126,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 78,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 146,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 78,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 128,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 75,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 123,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 75,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 122,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 123,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 4.881,
+          "player": "(13492.08, 0.0187, -6988.098)",
+          "render_phase_ms": 9.764
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 281.945,
+          "frame": 1120,
+          "idle_callbacks_ms": 265.014,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 57,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 35,
+              "support_usec": 530
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 255,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 50,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 350,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 216,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 290,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 75,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 242,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 46,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 98,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 29,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 127,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 105,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 21,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 148,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 31,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 90,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 131,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 91,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 126,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 134,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 5.047,
+          "player": "(13487.29, 0.064351, -7018.583)",
+          "render_phase_ms": 9.516
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 309.833,
+          "frame": 1179,
+          "idle_callbacks_ms": 10.743,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 61,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 46,
+              "support_usec": 452
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 154,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 29,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 128,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 21,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 79,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 132,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 93,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 125,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 247,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 36,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 133,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 26,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 89,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 125,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 20,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 109,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 129,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 5.594,
+          "player": "(13471.36, 0.064351, -7019.799)",
+          "render_phase_ms": 290.727
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 284.967,
+          "frame": 1192,
+          "idle_callbacks_ms": 264.686,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 63,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 235,
+              "support_usec": 584
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 171,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 49,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 145,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 44,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 81,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 23,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 136,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 22,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 98,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 21,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 156,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 34,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 78,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 21,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 127,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 89,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 126,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 87,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 126,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 210,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 4.863,
+          "player": "(13467.95, 0.064351, -7020.049)",
+          "render_phase_ms": 10.747
+        },
+        {
+          "after": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "before": {
+            "city_loaded": 25,
+            "city_queue": 0,
+            "terrain_collision_queue": 0,
+            "terrain_loaded": 25,
+            "terrain_visual_queue": 0
+          },
+          "elapsed_ms": 287.322,
+          "frame": 1469,
+          "idle_callbacks_ms": 263.607,
+          "modifier_self_costs": [
+            {
+              "actor": "Player",
+              "clearance_usec": 356,
+              "cold_geometry_usec": 71103,
+              "modifier": "WeaponGrip",
+              "response_usec": 45,
+              "support_usec": 852
+            },
+            {
+              "actor": "SquareTrader",
+              "clearance_usec": 144,
+              "cold_geometry_usec": 89826,
+              "modifier": "ClothingClearance",
+              "response_usec": 28,
+              "support_usec": 0
+            },
+            {
+              "actor": "SquareArtisan",
+              "clearance_usec": 195,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 26,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 48,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 22,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 126,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 46,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 47,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 18,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 75,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 124,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 19,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 77,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 21,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 232,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 18,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 72,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 31,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 197,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 27,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_0",
+              "clearance_usec": 71,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 32,
+              "support_usec": 0
+            },
+            {
+              "actor": "CityResident_1",
+              "clearance_usec": 147,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 30,
+              "support_usec": 0
+            },
+            {
+              "actor": "DungeonManagerNPC",
+              "clearance_usec": 125,
+              "cold_geometry_usec": 71103,
+              "modifier": "ClothingClearance",
+              "response_usec": 0,
+              "support_usec": 0
+            }
+          ],
+          "physics_monitor_ms": 5.268,
+          "player": "(13455.27, 0.092369, -7032.498)",
+          "render_phase_ms": 7.633
+        }
+      ],
+      "max_ms": 309.833,
+      "mean_ms": 48.6916493975904,
+      "moving_frames": 830,
+      "p95_ms": 62.041,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Complete ordinary capital/home test route; only complete rendered frame intervals while movement input is held, excluding loading dialogue and stationary captures. Not a whole-world FPS guarantee.",
+      "viewport": "(1280, 720)",
+      "walked_m": 189.609389984747
+    }
+  },
+  "diagnostic_limits": "The longest 8.441s cold event was in render/preparation phase with empty city/terrain queues. Reused same-profile run max309.833ms; this does not isolate shader cache causally because initial quality/settings and prior failed diagnostic run differ. Modifier self costs are bounded observations, not a full CPU/GPU profiler. No streamer or shader workaround was applied.",
+  "diagnostic_repair": "Initial reused-profile instrument failed on duplicate observer signal connection after loading reparented existing nodes. Fixed idempotent connection and reran full189.609m route successfully; mandatory checks retained."
+}

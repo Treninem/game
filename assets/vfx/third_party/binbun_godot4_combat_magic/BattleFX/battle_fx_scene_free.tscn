@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ed44j8f3a8us" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/shared/story_studio_02_1k.hdr" id="1_knvvm"]
 [ext_resource type="Shader" uid="uid://dk6o1116pgtbn" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/shared/shader/checker.gdshader" id="2_a7ri0"]
 [ext_resource type="PackedScene" uid="uid://b43hdstkltshd" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/shield/vfx_blank_shield_01.tscn" id="4_74w3d"]
-[ext_resource type="PackedScene" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/shield/vfx_blank_shield_02.tscn" id="5_1xatj"]
+[ext_resource type="PackedScene" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/shield/vfx_blank_shield_01.tscn" id="5_1xatj"]
 [ext_resource type="PackedScene" uid="uid://1u2olgyaltw5" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/charge/vfx_blank_charge.tscn" id="9_2yv60"]
 [ext_resource type="PackedScene" uid="uid://dx6gyig48g23b" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/slash/vfx_blank_slash.tscn" id="11_1xatj"]
 [ext_resource type="PackedScene" uid="uid://brji7ckctpjtk" path="res://assets/vfx/third_party/binbun_godot4_combat_magic/BattleFX/effects/swing/vfx_blank_swing.tscn" id="12_ykvge"]

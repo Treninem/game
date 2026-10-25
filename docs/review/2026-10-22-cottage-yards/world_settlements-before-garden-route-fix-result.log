@@ -1,0 +1,149 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WORLD_SETTLEMENTS_STAGE create settlement streamer
+WORLD_SETTLEMENTS_STAGE validate settlement catalog
+WORLD_SETTLEMENTS_STAGE materialize three settlements
+WORLD_SETTLEMENTS_STAGE settle physics
+WORLD_SETTLEMENTS_STAGE validate building counts
+WORLD_SETTLEMENTS_STAGE validate enterable interiors
+WORLD_SETTLEMENTS_STAGE validate village fences and wells
+WORLD_SETTLEMENTS_STAGE validate fortified town gate
+WORLD_SETTLEMENTS_STAGE validate materialization counters
+WORLD_SETTLEMENTS_STAGE validate streamed population
+WORLD_SETTLEMENTS_STAGE complete
+WORLD_SETTLEMENTS_SMOKE_OK settlements=3 enterable_buildings=30 physical_furniture=156 npcs=20 walls=5 gates=3
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_00
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:62)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_01
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:62)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_02
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:62)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_03
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:62)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_04
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:62)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_05
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:62)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_06
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:62)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_00
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_01
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_02
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_03
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_04
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_05
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_06
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)
+SCRIPT ERROR: Assertion failed: New garden has no clear access: Enterable_07
+   at: _connect (res://scripts/village_house_yards.gd:185)
+   GDScript backtrace (most recent call first):
+       [0] _connect (res://scripts/village_house_yards.gd:185)
+       [1] build (res://scripts/village_house_yards.gd:38)
+       [2] _build_village (res://scripts/world_settlements.gd:176)
+       [3] _materialize_settlement (res://scripts/world_settlements.gd:143)
+       [4] materialize_settlement_for_test (res://scripts/world_settlements.gd:81)
+       [5] _run_test (res://tests/smoke_world_settlements.gd:63)

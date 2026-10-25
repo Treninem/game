@@ -1,0 +1,69 @@
+name: Investigate Physical Home Door Clearance
+
+on:
+  push:
+    branches: [codex/editor-handoff-validation-2026-10-24]
+    paths:
+      - tests/audit_home_door_clearance.gd
+      - tests/audit_streamed_home_door.gd
+      - scripts/settlement_npc.gd
+      - .github/workflows/validate-house-door-clearance.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: impuls-home-door-investigation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  physical-door:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            assets/audio
+            assets/branding
+            assets/production
+            assets/registry
+            assets/shaders
+            assets/staging/nature/kenney_nature_kit
+            assets/ui
+            assets/vfx
+            scenes
+            scripts
+            story
+            tests
+            tools/run_godot_smoke.sh
+      - name: Install Godot 4.7.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.1-stable_linux.x86_64
+      - name: Parse actual project and diagnostic
+        run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Verify actual far-capital doorway with all supported adult heights
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-home-door" bash tools/run_godot_smoke.sh tests/audit_home_door_clearance.gd 240
+      - name: Verify actual household returns sleeps restores from disk and leaves for work
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-home-door-default" IMPULS_DOOR_HEIGHT_MODE=default bash tools/run_godot_smoke.sh tests/audit_streamed_home_door.gd 240
+      - name: Verify two tallest adults share their home through streaming and morning departure
+        if: ${{ !cancelled() }}
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-home-door-tallest" IMPULS_DOOR_HEIGHT_MODE=tallest bash tools/run_godot_smoke.sh tests/audit_streamed_home_door.gd 240
+      - name: Upload physical doorway evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-door-clearance-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/impuls-home-door/godot/app_userdata/ImPuls/home-door-clearance.json
+            ${{ runner.temp }}/impuls-home-door-default/godot/app_userdata/ImPuls/streamed-home-door.json
+            ${{ runner.temp }}/impuls-home-door-tallest/godot/app_userdata/ImPuls/streamed-home-door.json

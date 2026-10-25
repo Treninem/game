@@ -1,0 +1,54 @@
+{
+  "head": "18ab50ee130aa1d5be7b6c9f65be53b9d3bdfe53",
+  "checked_epoch": 1792701360.9810555,
+  "checks": [
+    {
+      "name": "world-core",
+      "status": "COMPLETED",
+      "conclusion": "FAILURE",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610298/job/120068463059"
+    },
+    {
+      "name": "build-game",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610246/job/120068462351"
+    },
+    {
+      "name": "build",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610336/job/120068462477"
+    },
+    {
+      "name": "diagnose-ui",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610277/job/120068462186"
+    },
+    {
+      "name": "validate-magic",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610272/job/120068462018"
+    },
+    {
+      "name": "movement-smoke",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610319/job/120068464175"
+    },
+    {
+      "name": "validate-world-vfx",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610349/job/120068463291"
+    },
+    {
+      "name": "build-installer",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/Treninem/game/actions/runs/39848610246/job/120071067574"
+    }
+  ]
+}

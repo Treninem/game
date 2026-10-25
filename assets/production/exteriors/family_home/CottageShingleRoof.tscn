@@ -1,0 +1,15 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/production/exteriors/family_home/CottageShingleRoof.glb" id="1_scene"]
+[ext_resource type="Material" path="res://assets/production/exteriors/family_home/RoofShingle.tres" id="RoofShingle"]
+[ext_resource type="Material" path="res://assets/production/exteriors/family_home/Timber.tres" id="Timber"]
+[ext_resource type="Material" path="res://assets/production/exteriors/family_home/Stone.tres" id="Stone"]
+[ext_resource type="Material" path="res://assets/production/exteriors/family_home/Plaster.tres" id="Plaster"]
+
+[node name="CottageShingleRoof2" instance=ExtResource("1_scene")]
+
+[node name="CottageShingleRoof" parent="." index="0"]
+surface_material_override/0 = ExtResource("RoofShingle")
+surface_material_override/1 = ExtResource("Timber")
+surface_material_override/2 = ExtResource("Stone")
+surface_material_override/3 = ExtResource("Plaster")

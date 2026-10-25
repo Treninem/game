@@ -1,0 +1,152 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Drawing arm crossing the torso",
+  "trigger": "Owner observed drawing arm behind the back and through the body; previous acceptance checked bow-holding arm and string contact but omitted the drawing arm/torso relationship",
+  "reproduced": {
+    "case": "weapon_grip",
+    "exit_code": 1,
+    "errors": [
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.164726, 1.347661, -0.021376)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.164697, 1.34103, -0.01805)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.1648, 1.337839, -0.017236)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.185317, 1.516119, -0.024048)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.185284, 1.508658, -0.020306)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.1854, 1.505069, -0.019391)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.20076, 1.642462, -0.026052)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.200724, 1.63438, -0.021998)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.20085, 1.630491, -0.021006)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.14696, 1.331793, 0.013361)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.147017, 1.32505, 0.01643)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.147185, 1.321774, 0.017142)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.16533, 1.498268, 0.015031)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.165394, 1.490681, 0.018483)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.165584, 1.486996, 0.019284)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.179107, 1.623124, 0.016283)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.179177, 1.614905, 0.020024)",
+      "ERROR: Drawing elbow folds into the torso",
+      "ERROR: Drawing wrist crosses torso center or goes behind body: (-0.179382, 1.610912, 0.020891)",
+      "ERROR: Drawing elbow folds into the torso"
+    ],
+    "seconds": 19.2
+  },
+  "changes": [
+    "Anchor the drawing wrist at the right cheek instead of an offset behind the left-side bow grip",
+    "Turn upper torso side-on across two spine bones and counter-turn the head toward aim",
+    "Use a bow-specific elbow pole while retaining the original default IK pole for axe animation",
+    "Raise/lower arms outside the chest through an intermediate pose in both draw and release clips",
+    "Bring the bow-holding arm toward the central aim line; retain physical arrow/shaft and cord contact"
+  ],
+  "checks": {
+    "weapon_grip": {
+      "case": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 11.06
+    },
+    "gameplay_actions": {
+      "case": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 21.2
+    },
+    "native": {
+      "case": "native",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 32.86,
+      "marker": true
+    },
+    "character_creator": {
+      "case": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.94
+    },
+    "cast_pose": {
+      "case": "cast_pose",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 2.3
+    },
+    "locomotion_facing": {
+      "case": "locomotion_facing",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.8
+    }
+  },
+  "graphical": {
+    "exit_code": 0,
+    "seconds": 16.48,
+    "errors": [],
+    "marker": true
+  },
+  "coverage": [
+    "900 right-arm trajectory samples: 25 times x draw/release x 3 pitch angles x 2 bodies x 3 heights",
+    "Central torso ellipse derived from actual shoulder span, spine and neck; volume rotates with torso",
+    "Existing 180 weapon poses and all free-finger/shaft/string/ammunition checks retained",
+    "Explicit full-draw right-wrist side/depth, elbow lateral clearance and elbow height assertions",
+    "36 graphical frames per variant, six animation times and front/side/back views; selected contact, intermediate and late release views inspected",
+    "Full graphical automatic normal-input game pass, physical arrow, jumps, axe, magic and save/load; no driver coordinate assignment"
+  ],
+  "native_world": {
+    "bow_arrow_consumed": true,
+    "captures": [
+      "user://head-size-walk.png",
+      "user://head-size-run.png",
+      "user://head-size-tall-jump.png",
+      "user://head-size-starter_axe.png",
+      "user://head-size-short_bow.png",
+      "user://head-size-bow-released.png",
+      "user://head-size-short-walk.png",
+      "user://head-size-short-jump.png",
+      "user://head-size-cast-free-hand.png",
+      "user://head-size-magic-after-load.png",
+      "user://head-size-inventory-lifecycle.png"
+    ],
+    "game_save_roundtrip": true,
+    "jump_both_heights": true,
+    "look_roundtrip": true,
+    "morphs": 9,
+    "physical_heights_cm": [
+      160,
+      195
+    ],
+    "player_position_assignments": 0,
+    "walked_m": 24.3005974250846
+  },
+  "screenshots": [
+    "docs/review/2026-10-20-bow-clearance/before-female-side.png",
+    "docs/review/2026-10-20-bow-clearance/before-male-back.png",
+    "docs/review/2026-10-20-bow-clearance/after-female-side.png",
+    "docs/review/2026-10-20-bow-clearance/after-male-back.png",
+    "docs/review/2026-10-20-bow-clearance/world-bow.png"
+  ],
+  "runtime_sha256": "d4d491dc0c9f1dd63bea5b67498d08916c0007bf72b209f03aa77343a3fd297f",
+  "rejected_intermediate": "First cheek-anchor-only correction avoided central torso penetration but lifted the elbow unnaturally high; rejected after side-view inspection. Final pose adds torso turn and a lower bow-specific elbow pole.",
+  "limits": [
+    "Central bone-segment volume is a regression guard, not exact skinned cloth/body collision",
+    "Fine finger-hook realism, garment corrective shapes and full human visual acceptance remain unfinished",
+    "No claim of all extreme head/body morphs or every animation blend being collision-free",
+    "Visible game run uses automated input and observer camera; no manual full-world/city tour",
+    "Existing intermittent heal-action observation remains open; this run passed without gameplay assertion changes",
+    "ObjectDB exit warning remains; no installer/export/stable release and no overall completion percentage increase"
+  ]
+}

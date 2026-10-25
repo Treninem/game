@@ -1,0 +1,67 @@
+{
+  "passed": {
+    "candidate": {
+      "label": "candidate",
+      "exit_code": 0,
+      "seconds": 31.577999999994063,
+      "script": "D:\\Desktop\\GitHub\\game\\build\\npc_support_probe.gd",
+      "private_profile": true
+    },
+    "final-pose-gpu": {
+      "label": "final-pose-gpu",
+      "exit_code": 0,
+      "seconds": 41.79700000000594,
+      "script": "res://tests/visual_citizen_support.gd",
+      "private_profile": true
+    },
+    "house-candidate": {
+      "label": "house-candidate",
+      "exit_code": 0,
+      "seconds": 173.875,
+      "script": "D:/Desktop/GitHub/game/build/npc_house_support_capture.gd",
+      "private_profile": true
+    },
+    "city-market-r2": {
+      "exit_code": 0,
+      "seconds": 407.43700000000536,
+      "source_checkpoint": "D:\\Desktop\\GitHub\\game\\build\\acceptance\\house-concept-native-2026-10-22\\appdata\\Godot\\app_userdata\\ImPuls\\save_slot_01.json",
+      "source_sha256": "cc960d236f554f116be273dfc275eccc73c514dc115df991999f817d254123c7",
+      "actor_positions_assigned_by_driver": false,
+      "manual_play": false,
+      "private_profile": true,
+      "script": "res://tests/visual_city_streetscape.gd",
+      "external_timeout_seconds": 540
+    },
+    "root-quality": {
+      "label": "root-quality",
+      "exit_code": 0,
+      "seconds": 11.922000000005937,
+      "script": "res://tests/smoke_household_quality.tscn",
+      "private_profile": true
+    },
+    "root-pose-gpu": {
+      "label": "root-pose-gpu",
+      "exit_code": 0,
+      "seconds": 39.29700000000594,
+      "script": "res://tests/visual_citizen_support.gd",
+      "private_profile": true
+    }
+  },
+  "obsolete_city_profiler_failed": {
+    "exit_code": 1,
+    "seconds": 305.6869999999908,
+    "source_checkpoint": "D:\\Desktop\\GitHub\\game\\build\\acceptance\\house-concept-native-2026-10-22\\appdata\\Godot\\app_userdata\\ImPuls\\save_slot_01.json",
+    "source_sha256": "cc960d236f554f116be273dfc275eccc73c514dc115df991999f817d254123c7",
+    "actor_positions_assigned_by_driver": false,
+    "manual_play": false,
+    "private_profile": true,
+    "existing_simulation_deadline_ms": 300000
+  },
+  "baseline_expected_fail": {
+    "label": "baseline-r2",
+    "exit_code": 1,
+    "seconds": 37.187999999994645,
+    "script": "D:\\Desktop\\GitHub\\game\\build\\npc_support_probe.gd",
+    "private_profile": true
+  }
+}

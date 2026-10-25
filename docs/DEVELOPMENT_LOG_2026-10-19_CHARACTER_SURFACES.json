@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-19",
+  "version": "0.10.7.3 surface follow-up",
+  "parent": "8c07aa6a8188f81f9247dbdbad2481cbeea05b9d",
+  "changes": [
+    "Existing CC0 authored garment normal/AO and shoe diffuse connected",
+    "Anisotropic mipmaps and cloth/skin/eye roughness",
+    "4x MSAA in editor"
+  ],
+  "checks": [
+    {
+      "name": "character_creator",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 8.7
+    },
+    {
+      "name": "weapon_grip",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 5.0
+    },
+    {
+      "name": "gameplay_actions",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 35.64
+    }
+  ],
+  "native_editor": {
+    "exit": 0,
+    "bodies": 2,
+    "motion_captures": 6,
+    "errors": [],
+    "log": "build/acceptance/surface-native/stdout.log"
+  },
+  "native_world": {
+    "arrow_damage_per_hit": 20,
+    "axe_damage_per_hit": 32,
+    "bodies": 2,
+    "equipment": "explicit inspection gear",
+    "fps_sample": 20.0,
+    "input": "ordinary Input actions",
+    "position_assignments": 0,
+    "save_load": true,
+    "status": "pass",
+    "target": "authored practice barrel with test damage receiver",
+    "version": "0.10.7.3",
+    "walked_m": 4.84881866816431
+  },
+  "corrected_attempts": [
+    "Editor fixture now waits for current_scene, not one frame",
+    "Initial import safe-save error; image import subsequently completed and runtime checks passed"
+  ],
+  "limits": [
+    "No new body topology, face sculpt or hair geometry; quality remains below requested goal",
+    "No new frozen export; previous weapon PCK lacks these surface changes",
+    "Face captures caught bow-to-idle transition and are not evidence of final face quality",
+    "88 ObjectDB leaked-at-exit warning in native world test",
+    "Explicit inspection gear, practice target and automated ordinary Input; no full city route repeated",
+    "Single 20 FPS native sample is not a benchmark"
+  ],
+  "prior_commit_ci": "All eight PR checks passed for 8c07aa6a; new commit gates pending",
+  "release": "Unreleased source review; no stable publication"
+}

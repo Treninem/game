@@ -1,0 +1,27 @@
+{
+  "GardenFence": {
+    "triangles": 264,
+    "vertices": 160
+  },
+  "MeadowFlowers": {
+    "triangles": 336,
+    "vertices": 330
+  },
+  "StoneCourse": {
+    "triangles": 864,
+    "vertices": 448
+  },
+  "TimberBeam": {
+    "triangles": 108,
+    "vertices": 56
+  },
+  "TimberStore": {
+    "triangles": 3564,
+    "vertices": 1848
+  },
+  "WindowPlanter": {
+    "triangles": 756,
+    "vertices": 392
+  },
+  "fence_source_sha256": "eddf77f93e9f65e284165dce448c173bf4d59eb1800f453b214220ccff9a911c"
+}

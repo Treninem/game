@@ -1,0 +1,3 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOUSE_NAVIGATION_OK layouts=2 furnishings=occupancy_scaled dynamic_obstacle=detour stationary_person=detour locked_door=unreachable unlocked_door=replanned

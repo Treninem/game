@@ -156,3 +156,14 @@ static func protected_infrastructure_near(pos: Vector2, radius: float = 90.0) ->
             result["pos"] = world_anchor
             return result
     return {}
+
+static func in_gate_approach(pos: Vector2, clearance: float = 0.0) -> bool:
+    var local := pos - CENTER
+    for gate: Dictionary in gates():
+        var offset: Vector2 = local - Vector2(gate.local_position)
+        var normal: Vector2 = gate.normal
+        var inward := -offset.dot(normal)
+        var across := absf(offset.cross(normal))
+        if inward >= -30.0 - clearance and inward <= 160.0 + clearance and across < GATE_OPENING * 0.5 + clearance:
+            return true
+    return false

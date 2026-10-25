@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-23",
+  "goal": "ACTIVE",
+  "previous_turn": "PROGRESS: rejected native weapon trial published at 0c73b3be75aeeb179ec305d42d8d376d72e17770",
+  "requirement": "docs/EQUIPMENT_DIVERSITY_REQUIREMENTS_2026-10-23.json",
+  "runtime_changed": false,
+  "forms_work": {
+    "builder": "tools/author_woodland_forms.py",
+    "candidate2": "Four GLBs and editable Blender sources generated privately under build/asset_work/woodland-forms-2026-10-23/candidate2",
+    "changes": "Continuous tapered handles and shaft, curved bow limbs; shared existing maps; stone blade and binding from preceding trial. Original mesh frames retained.",
+    "native_result": "FAILED: bow end-ring geometry exceeds the 1.1m length contract by 2.113mm; no threshold relaxed. Own stopped QA process terminated. New forms not integrated.",
+    "other_open_findings": "Axe head remains too dark in native frame. Bow-string endpoint/wood preservation, full action sweeps, projectile/world/UI/disk acceptance still required.",
+    "next": "Correct physical end geometry, then review complete forms and add distinct coherent item archetypes while implementing persistent per-instance systems. Do not expose rarity variants through identical visual fallbacks."
+  },
+  "source_tools_only": true,
+  "no_stable_release": true,
+  "percent": null
+}

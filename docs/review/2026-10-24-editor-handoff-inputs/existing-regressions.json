@@ -1,0 +1,36 @@
+{
+  "suite_status": "NOT PASSED; proposal stays unintegrated",
+  "first": [
+    {
+      "case": "smoke_binding_conflicts",
+      "returncode": 99,
+      "seconds": 62.60899999999674,
+      "errors": [],
+      "marker": false,
+      "stopped": false
+    }
+  ],
+  "traced_retry": [
+    {
+      "case": "smoke_binding_conflicts",
+      "returncode": 0,
+      "seconds": 25.14100000000326,
+      "errors": [],
+      "marker": true,
+      "stopped": false
+    },
+    {
+      "case": "smoke_inventory_unlimited",
+      "returncode": 1,
+      "seconds": 65.38999999999942,
+      "errors": [],
+      "marker": false,
+      "stopped": true
+    }
+  ],
+  "not_run": [
+    "smoke_ui_lifecycle"
+  ],
+  "test_bounds_assertions_unchanged": true,
+  "timeout_cause": "Not established; no resource-contention-only claim."
+}

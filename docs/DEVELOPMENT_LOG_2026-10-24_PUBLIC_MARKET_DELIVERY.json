@@ -1,0 +1,243 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "runtime_commit": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+  "runtime_journal": "docs/DEVELOPMENT_LOG_2026-10-24_PUBLIC_MARKET.json",
+  "ci_runtime_ref_only": {
+    "Build ImPuls Release Candidate": {
+      "run_id": 40031291953,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031291953"
+    },
+    "Build Windows Installer": {
+      "run_id": 40031291970,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031291970"
+    },
+    "Diagnose UI Smoke": {
+      "run_id": 40031291917,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031291917"
+    },
+    "Validate Delta Updater": {
+      "run_id": 40031291961,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031291961"
+    },
+    "Validate Magic Runtime": {
+      "run_id": 40031291924,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031291924"
+    },
+    "Validate Player Movement": {
+      "run_id": 40031291944,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031291944"
+    },
+    "Validate World Core": {
+      "run_id": 40031292074,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031292074"
+    },
+    "Validate World VFX": {
+      "run_id": 40031292098,
+      "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40031292098"
+    }
+  },
+  "actual_packaged_gameplay": {
+    "result": {
+      "sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+      "pck_sha256": "22aa2c5caed0a192bdfd216abdba48a8ec789eac7c296a4bc62fb7ca743ceade",
+      "actual_compiled_pck": true,
+      "engine": "Godot4.7.1 desktop debug engine with --main-pack; not exported EXE script execution",
+      "manual_play": false,
+      "returncode": 0,
+      "seconds": 210.46900000000096,
+      "stopped": false,
+      "errors": [],
+      "marker": "PUBLIC_MARKET_NATIVE_OK ordinary_walk_m=125.162855732953 player_position_assignments=0 arcade=true paid_trade=true finite_visible_stock=true npc_seats=true player_rest=true actual_scene_reload=true jump_wake=true npc_return_work=true gpu_boot_coverage=3530_per_actor manual_play=false"
+    },
+    "proof": {
+      "exclusive_seats": true,
+      "foot_samples": [
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00400043129920959,
+          "label": "trader-public-rest",
+          "minimum_y": 0.0290004312992096,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "artisan-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "hero-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        }
+      ],
+      "jump_wake_and_land": true,
+      "manual_play": false,
+      "paid_trade_and_visible_stock": true,
+      "player_position_assignments": 0,
+      "real_scene_disk_restore": true,
+      "residents_return_to_work": true,
+      "talk_to_visible_seated_resident": true,
+      "walked_m": 125.162855732953
+    }
+  },
+  "artifact": {
+    "sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+    "run_id": 40031291953,
+    "artifact": {
+      "id": 12535112010,
+      "node_id": "MDg6QXJ0aWZhY3QxMjUzNTExMjAxMA==",
+      "name": "game-windows",
+      "size_in_bytes": 809164577,
+      "url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12535112010",
+      "archive_download_url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12535112010/zip",
+      "expired": false,
+      "digest": "sha256:fca40fe618e6e8f888f14265ee1fa0d3468e94e8c388b7ce9fd4da1618fc084f",
+      "created_at": "2026-10-23T22:10:44Z",
+      "updated_at": "2026-10-23T22:10:44Z",
+      "expires_at": "2027-01-21T22:05:15Z",
+      "workflow_run": {
+        "id": 40031291953,
+        "repository_id": 1333892669,
+        "head_repository_id": 1333892669,
+        "head_branch": "codex/household-persistence-2026-10-19",
+        "head_sha": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9"
+      }
+    },
+    "download_digest_verified": true,
+    "inner_zip_sha256": "d533108ebd6f2a58c67a06d0e8ca19b59558c6932cf5af1e369dcc8c91755e24",
+    "exe_sha256": "630befc8c604d131d0d55db71e0bbaf82545749c73b3454484b550e259e38167",
+    "pck_sha256": "22aa2c5caed0a192bdfd216abdba48a8ec789eac7c296a4bc62fb7ca743ceade",
+    "profile_copied_from": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-20-airborne-actions\\userdata\\Godot\\app_userdata\\ImPuls",
+    "original_profile_modified": false,
+    "launcher": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-24-public-market\\ImPuls-review.cmd",
+    "stable_release": false
+  },
+  "additional_source_native": {
+    "returncode": 0,
+    "seconds": 161.59400000000096,
+    "stopped": false,
+    "errors": [],
+    "marker": "CAPITAL_CONCEPT_NATIVE_OK edge_houses=22 market_canopies=6 earned_checkpoint=true walked_m=189.609389984747 player_position_assignments=0 physical_rooms=3 reach_checked_front_door=true save_slot=4 disk_reload=true release_checks=true fountain_interaction=true fountain_disk_reload=true quality=Medium clock_fixture=09:00",
+    "source_qa_proposal": true,
+    "manual_play": false,
+    "driver_position_assignments": 0
+  },
+  "additional_source_native_scope": "189.609m ordinary automated input from earned checkpoint, physical front door and three home rooms, fountain and actual disk reload; zero driver position writes. No manual/fresh forest-to-city claim.",
+  "preview_launcher": "build/review-2026-10-24-public-market/ImPuls-capital-preview.cmd",
+  "ordinary_launcher": "build/review-2026-10-24-public-market/ImPuls-review.cmd",
+  "old_primary_launcher_updated": "build\\review-2026-10-20-airborne-actions\\ImPuls-editor.cmd",
+  "old_launcher_backup": "build\\review-2026-10-20-airborne-actions\\ImPuls-editor-before-public-market-2026-10-24.cmd",
+  "original_profile_json_cfg_hashes_unchanged": true,
+  "original_arrival_checkpoint_unchanged": true,
+  "documentation_followup_runtime_blobs_unchanged": true,
+  "performance_diagnostic": {
+    "scope": "Conservative AABB/frustum candidates, not exact GPU timings or per-object submissions",
+    "journal": "build/asset_work/market-arcade-2026-10-23/geometry-profile/APPDATA/Godot/app_userdata/ImPuls/market-geometry.json",
+    "finding": "CityDistrict dominates candidate geometry; actual frame had1415draws and3.221millionprimitives. This does not prove a single source bottleneck."
+  },
+  "four_preset_measurements": [
+    {
+      "draw_calls": 863.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 35.238,
+      "mean_frame_ms": 31.4548083333333,
+      "p95_frame_ms": 33.052,
+      "preset": 0,
+      "quality": "Low",
+      "scale_3d": 0.699999988079071,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 982985037.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1414.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 78.145,
+      "mean_frame_ms": 71.0502833333333,
+      "p95_frame_ms": 74.08,
+      "preset": 1,
+      "quality": "Medium",
+      "scale_3d": 0.850000023841858,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 984699213.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1542.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 88.698,
+      "mean_frame_ms": 78.9514833333333,
+      "p95_frame_ms": 81.614,
+      "preset": 2,
+      "quality": "High",
+      "scale_3d": 1.0,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 994380108.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    },
+    {
+      "draw_calls": 1561.0,
+      "driver_player_position_assignments": 0,
+      "frames": 120,
+      "hour": 9.0,
+      "max_frame_ms": 83.79,
+      "mean_frame_ms": 81.4047083333333,
+      "p95_frame_ms": 83.103,
+      "preset": 3,
+      "quality": "Ultra",
+      "scale_3d": 1.0,
+      "scope": "Stationary actual capital market arcade; warm cache, not a sustained traversal or a comparable prior-view speedup",
+      "video_memory_bytes": 1009125708.0,
+      "viewport": "(1280, 720)",
+      "warmup_frames": 45
+    }
+  ],
+  "rejected_followup_experiment": {
+    "parent": "b28fe5ca6439409d2b65fa52d9a2dcb82bc0f5d9",
+    "root_hash": "c837208d9f353c7bba768422668c5625b4d803cab526ccb2638671aa6d45d290",
+    "path": "scripts/modular_city_facades.gd",
+    "state": "REJECTED_NOT_INTEGRATED",
+    "reason": "Same-view structural merge reduced draw calls1414→1290 but worsened mean71.021→73.920ms and increased reported video memory984.7→1122.1MB; no useful weak-PC gain. Source LOD behavior and aggregate bounds need consideration before any later attempt.",
+    "mirror_baseline_restored": true,
+    "root_runtime_unchanged": true
+  },
+  "limits": [
+    "Current Medium stationary arcade view remains~14FPS on UHD610; no smooth/sustained performance acceptance",
+    "Full city/concept/human appearance and complete action/morph/age/clothing acceptance remain false",
+    "101 ObjectDB exit warning persists; no leak-free claim",
+    "All eight CI results name runtimeb28; this documentation-only follow-up requires its own current-head inspection, never represented as already green"
+  ],
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false
+}

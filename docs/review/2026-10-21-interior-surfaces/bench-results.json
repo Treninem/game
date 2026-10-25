@@ -1,0 +1,16 @@
+{
+  "baseline": {
+    "adapter": "Intel(R) UHD Graphics 610",
+    "frames": 120,
+    "seconds": 1.425486,
+    "static_bytes": 57097542.0,
+    "video_bytes": 446889397.0
+  },
+  "candidate": {
+    "adapter": "Intel(R) UHD Graphics 610",
+    "frames": 120,
+    "seconds": 1.91988,
+    "static_bytes": 57080644.0,
+    "video_bytes": 451835050.0
+  }
+}

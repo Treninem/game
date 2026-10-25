@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-24",
+  "goal": "ACTIVE",
+  "runtime_commit": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+  "runtime_journal": "docs/DEVELOPMENT_LOG_2026-10-24_CITY_SPATIAL_BATCHES.json",
+  "ci_runtime_ref_only": {
+    "Build ImPuls Release Candidate": {
+      "run_id": 40039415004,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415004"
+    },
+    "Build Windows Installer": {
+      "run_id": 40039415023,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415023"
+    },
+    "Diagnose UI Smoke": {
+      "run_id": 40039415112,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415112"
+    },
+    "Validate Delta Updater": {
+      "run_id": 40039415045,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415045"
+    },
+    "Validate Magic Runtime": {
+      "run_id": 40039415083,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415083"
+    },
+    "Validate Player Movement": {
+      "run_id": 40039415044,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415044"
+    },
+    "Validate World Core": {
+      "run_id": 40039415099,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415099"
+    },
+    "Validate World VFX": {
+      "run_id": 40039415062,
+      "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "conclusion": "success",
+      "url": "https://github.com/Treninem/game/actions/runs/40039415062"
+    }
+  },
+  "actual_packaged_gameplay": {
+    "result": {
+      "sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+      "pck_sha256": "bcd40709550ccef15d4642831f8f3948e17287250812b3605f0cfddcd8259470",
+      "actual_compiled_pck": true,
+      "engine": "Godot4.7.1 desktop debug engine with --main-pack; not exported EXE script execution",
+      "manual_play": false,
+      "returncode": 0,
+      "seconds": 205.35900000000038,
+      "stopped": false,
+      "errors": [],
+      "marker": "PUBLIC_MARKET_NATIVE_OK ordinary_walk_m=125.162855732953 player_position_assignments=0 arcade=true paid_trade=true finite_visible_stock=true npc_seats=true player_rest=true actual_scene_reload=true jump_wake=true npc_return_work=true gpu_boot_coverage=3530_per_actor manual_play=false"
+    },
+    "proof": {
+      "exclusive_seats": true,
+      "foot_samples": [
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00400043129920959,
+          "label": "trader-public-rest",
+          "minimum_y": 0.0290004312992096,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "artisan-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        },
+        {
+          "boot_vertices": 3530,
+          "gap": 0.00399971604347229,
+          "label": "hero-public-rest",
+          "minimum_y": 0.0289997160434723,
+          "paving_y": 0.025
+        }
+      ],
+      "jump_wake_and_land": true,
+      "manual_play": false,
+      "paid_trade_and_visible_stock": true,
+      "player_position_assignments": 0,
+      "real_scene_disk_restore": true,
+      "residents_return_to_work": true,
+      "talk_to_visible_seated_resident": true,
+      "walked_m": 125.162855732953
+    }
+  },
+  "artifact": {
+    "sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425",
+    "run_id": 40039415004,
+    "artifact": {
+      "id": 12538203442,
+      "node_id": "MDg6QXJ0aWZhY3QxMjUzODIwMzQ0Mg==",
+      "name": "game-windows",
+      "size_in_bytes": 809163464,
+      "url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12538203442",
+      "archive_download_url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12538203442/zip",
+      "expired": false,
+      "digest": "sha256:ba558f81ea060c5e975c3b4a355e469678fc4bd42b88c28defec5171b9bc2524",
+      "created_at": "2026-10-23T23:28:07Z",
+      "updated_at": "2026-10-23T23:28:07Z",
+      "expires_at": "2027-01-21T23:23:38Z",
+      "workflow_run": {
+        "id": 40039415004,
+        "repository_id": 1333892669,
+        "head_repository_id": 1333892669,
+        "head_branch": "codex/household-persistence-2026-10-19",
+        "head_sha": "0ffeb626a5987d48bf18f75e6c7b394acccc4425"
+      }
+    },
+    "download_digest_verified": true,
+    "inner_zip_sha256": "2a19875ceb7615105149bd48388949befb8bc7ca5d78a23cdde8d0693e55c502",
+    "exe_sha256": "630befc8c604d131d0d55db71e0bbaf82545749c73b3454484b550e259e38167",
+    "pck_sha256": "bcd40709550ccef15d4642831f8f3948e17287250812b3605f0cfddcd8259470",
+    "profile_copied_from": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-20-airborne-actions\\userdata\\Godot\\app_userdata\\ImPuls",
+    "original_profile_modified": false,
+    "launcher": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-24-city-spatial-batches\\ImPuls-review.cmd",
+    "stable_release": false
+  },
+  "preview_launcher": "build\\review-2026-10-24-city-spatial-batches\\ImPuls-capital-preview.cmd",
+  "ordinary_launcher": "build\\review-2026-10-24-city-spatial-batches\\ImPuls-review.cmd",
+  "old_primary_launcher_updated": "build\\review-2026-10-20-airborne-actions\\ImPuls-editor.cmd",
+  "old_launcher_backup": "build\\review-2026-10-20-airborne-actions\\ImPuls-editor-before-spatial-batches-2026-10-24.cmd",
+  "original_profile_json_cfg_hashes_unchanged": true,
+  "original_earned_checkpoint_unchanged": true,
+  "documentation_followup_runtime_blobs_unchanged": true,
+  "geometry_quality_preserved": "22house source mesh/material/UV/normal/transform coverage and12actual before/after pairs across4qualities pass; no asset bytes changed",
+  "limitations": [
+    "Full city/reference and human/art/action acceptance remain false",
+    "Cold 8-10second rendering/preparation stalls remain, despite faster ordinary and stationary frame samples; warm repeat does not isolate cache causality",
+    "101 ObjectDB exit warning and copied local QA human UID fallbacks persist",
+    "Not a sustained whole-world FPS or manual gameplay acceptance",
+    "Current documentation-only commit requires its own exact-head checks; green results here name runtime0ff only",
+    "Private street paving/planter/lantern Blender prototype is not included"
+  ],
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "stable_release": false
+}

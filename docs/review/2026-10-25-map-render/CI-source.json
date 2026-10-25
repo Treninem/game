@@ -1,0 +1,116 @@
+{
+  "conclusion": "failure",
+  "databaseId": 40177529922,
+  "headSha": "a97c4be6c5186923939bdb78c0ec5fc0fffdba0f",
+  "jobs": [
+    {
+      "completedAt": "2026-10-25T08:49:49Z",
+      "conclusion": "failure",
+      "databaseId": 121121356486,
+      "name": "map-render",
+      "startedAt": "2026-10-25T08:40:10Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-25T08:40:11Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-25T08:40:10Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:40:31Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v5",
+          "number": 2,
+          "startedAt": "2026-10-25T08:40:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:40:43Z",
+          "conclusion": "success",
+          "name": "Install Godot and a software rendering display",
+          "number": 3,
+          "startedAt": "2026-10-25T08:40:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:42:23Z",
+          "conclusion": "success",
+          "name": "Parse actual project and rendered diagnostic",
+          "number": 4,
+          "startedAt": "2026-10-25T08:40:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:42:24Z",
+          "conclusion": "success",
+          "name": "Preserve cartography discovered features and felled trees",
+          "number": 5,
+          "startedAt": "2026-10-25T08:42:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:42:32Z",
+          "conclusion": "success",
+          "name": "Verify 1011 rendered markers colors ordering save transitions and bounded drawing",
+          "number": 6,
+          "startedAt": "2026-10-25T08:42:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:42:33Z",
+          "conclusion": "success",
+          "name": "Preserve terrain fog and same-cell save restoration",
+          "number": 7,
+          "startedAt": "2026-10-25T08:42:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:45:45Z",
+          "conclusion": "success",
+          "name": "Render ordinary world input equipment magic UI and disk save",
+          "number": 8,
+          "startedAt": "2026-10-25T08:42:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:49:45Z",
+          "conclusion": "failure",
+          "name": "Render entry exit and full saved household lifecycle",
+          "number": 9,
+          "startedAt": "2026-10-25T08:45:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:49:47Z",
+          "conclusion": "success",
+          "name": "Upload actual map and world evidence including failures",
+          "number": 10,
+          "startedAt": "2026-10-25T08:49:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:49:47Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v5",
+          "number": 20,
+          "startedAt": "2026-10-25T08:49:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-25T08:49:47Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 21,
+          "startedAt": "2026-10-25T08:49:47Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Treninem/game/actions/runs/40177529922/job/121121356486"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/Treninem/game/actions/runs/40177529922"
+}

@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-21",
+  "tested_runtime": "494bf0575d312413f728b0d0d6a7c764b04858cb",
+  "runtime_ci": "8/8 passed exact SHA",
+  "runtime_changes": false,
+  "new_regression": "tests/smoke_rest_player_physics.tscn",
+  "scope": "Actual EnterableBuilding, integrated furniture, real player controller and collider. Initial fixture placement only; no claimed city journey or manual play.",
+  "sequence": [
+    "Settle on real approach floor",
+    "Interact with bed/bench",
+    "Save to isolated disk slot and reload occupied rest",
+    "Inject native InputEventAction jump and require immediate release",
+    "Observe actual ascent and landing",
+    "Save/load awake and require no resurrected rest"
+  ],
+  "cases": [
+    {
+      "profile": "male-160.0-Bed",
+      "ascent_m": 0.92397825419903,
+      "landing_error_m": 0.00564487278461
+    },
+    {
+      "profile": "male-160.0-Bench",
+      "ascent_m": 0.92351911962032,
+      "landing_error_m": 0.00518573820591
+    },
+    {
+      "profile": "male-180.0-Bed",
+      "ascent_m": 0.92397813498974,
+      "landing_error_m": 0.00564475357533
+    },
+    {
+      "profile": "male-180.0-Bench",
+      "ascent_m": 0.92351923882961,
+      "landing_error_m": 0.0051858574152
+    },
+    {
+      "profile": "male-195.0-Bed",
+      "ascent_m": 0.88731150329113,
+      "landing_error_m": 0.01486225426197
+    },
+    {
+      "profile": "male-195.0-Bench",
+      "ascent_m": 0.87562283873558,
+      "landing_error_m": 0.00147008895874
+    },
+    {
+      "profile": "female-160.0-Bed",
+      "ascent_m": 0.92397825419903,
+      "landing_error_m": 0.00564487278461
+    },
+    {
+      "profile": "female-160.0-Bench",
+      "ascent_m": 0.92351911962032,
+      "landing_error_m": 0.00518573820591
+    },
+    {
+      "profile": "female-180.0-Bed",
+      "ascent_m": 0.92397813498974,
+      "landing_error_m": 0.00564475357533
+    },
+    {
+      "profile": "female-180.0-Bench",
+      "ascent_m": 0.92351923882961,
+      "landing_error_m": 0.0051858574152
+    },
+    {
+      "profile": "female-195.0-Bed",
+      "ascent_m": 0.88731150329113,
+      "landing_error_m": 0.01486225426197
+    },
+    {
+      "profile": "female-195.0-Bench",
+      "ascent_m": 0.87562283873558,
+      "landing_error_m": 0.00147008895874
+    }
+  ],
+  "rendered_frames": 36,
+  "archived_frames": 9,
+  "results": {
+    "rest-physics-first": {
+      "exit_code": 0,
+      "seconds": 56.58,
+      "errors": [],
+      "marker": true
+    },
+    "rest-physics-render": {
+      "exit_code": 0,
+      "seconds": 73.44,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "coverage": "Both bodies, heights 160/180/195cm, bed/bench; real save files and floor collision",
+  "ci_integration": "New standalone test run locally; existing mandatory workflows unchanged. New test is not yet added to their explicit scene lists.",
+  "remaining": [
+    "Dedicated get-up/lie-down animation",
+    "Full visual acceptance of people, furniture and interior",
+    "Known threaded loader lifecycle defect",
+    "Broad region/city/animal gameplay acceptance"
+  ],
+  "release": false
+}

@@ -1,0 +1,125 @@
+{
+  "method": "AO: fitted rest geometry, Cycles CPU 16 samples. Normals: corresponding multires levels 0 to 2, no cross-layer ray projection.",
+  "maps": [
+    {
+      "sex": "male",
+      "material": "VikingTunic",
+      "kind": "AO",
+      "resolution": 1024,
+      "file": "male-vikingtunic-ao.png",
+      "sha256": "26af1425b85e663778f6d5e9ff0c3ec6090f16179370716c3af58634c89e73bf",
+      "bake_seconds": 33.3
+    },
+    {
+      "sex": "male",
+      "material": "VikingPants",
+      "kind": "AO",
+      "resolution": 1024,
+      "file": "male-vikingpants-ao.png",
+      "sha256": "c1ccc044e4115d5b9cb4f95c2bbaff7e9846d20269ecdc8f3fa171629d7e687a",
+      "bake_seconds": 33.4
+    },
+    {
+      "sex": "male",
+      "material": "VikingBoots",
+      "kind": "AO",
+      "resolution": 1024,
+      "file": "male-vikingboots-ao.png",
+      "sha256": "bc691b883b226f9df9970dc51106d733df87f03c07a202395757cad19f0e1e4b",
+      "bake_seconds": 15.46
+    },
+    {
+      "sex": "female",
+      "material": "VikingTunic",
+      "kind": "AO",
+      "resolution": 1024,
+      "file": "female-vikingtunic-ao.png",
+      "sha256": "09b993958b633e2b7176f4557a1f00bbda5af3763774685c5af5c056731ebd65",
+      "bake_seconds": 33.04
+    },
+    {
+      "sex": "female",
+      "material": "VikingPants",
+      "kind": "AO",
+      "resolution": 1024,
+      "file": "female-vikingpants-ao.png",
+      "sha256": "448b0450f5632064ef8b1a3f684cdb2766a252a7a611e2317930b54722ef0ac5",
+      "bake_seconds": 33.14
+    },
+    {
+      "sex": "female",
+      "material": "VikingBoots",
+      "kind": "AO",
+      "resolution": 1024,
+      "file": "female-vikingboots-ao.png",
+      "sha256": "c1f5467f071acb5bc1dcc2df48be1a949077d2b339e8e280c16cf0c6b1ddd89f",
+      "bake_seconds": 16.64
+    },
+    {
+      "sex": "male",
+      "material": "VikingTunic",
+      "kind": "NORMAL",
+      "resolution": 1024,
+      "file": "male-vikingtunic-normal.png",
+      "sha256": "99306d69d06a6c24fff5e174492202eb47c89dbfc646fc05783052ef1dde25f9",
+      "bake_seconds": 0.75,
+      "method": "Multires level 0 to 2; same UV/topology, no selected-to-active ray projection"
+    },
+    {
+      "sex": "male",
+      "material": "VikingPants",
+      "kind": "NORMAL",
+      "resolution": 1024,
+      "file": "male-vikingpants-normal.png",
+      "sha256": "8d0dd01f341951b25750dc846002123645df6edbcde5dc53b9a7027599507fca",
+      "bake_seconds": 0.85,
+      "method": "Multires level 0 to 2; same UV/topology, no selected-to-active ray projection"
+    },
+    {
+      "sex": "male",
+      "material": "VikingBoots",
+      "kind": "NORMAL",
+      "resolution": 1024,
+      "file": "male-vikingboots-normal.png",
+      "sha256": "ad165f9784674d5c0277b5109b7ca99e159a1ae224cb136cab51229346da3542",
+      "bake_seconds": 0.44,
+      "method": "Multires level 0 to 2; same UV/topology, no selected-to-active ray projection"
+    },
+    {
+      "sex": "female",
+      "material": "VikingTunic",
+      "kind": "NORMAL",
+      "resolution": 1024,
+      "file": "female-vikingtunic-normal.png",
+      "sha256": "ca6503343a51752bf77049465ec26898319a8d192e0cf23ba6d23f827c243ac4",
+      "bake_seconds": 0.73,
+      "method": "Multires level 0 to 2; same UV/topology, no selected-to-active ray projection"
+    },
+    {
+      "sex": "female",
+      "material": "VikingPants",
+      "kind": "NORMAL",
+      "resolution": 1024,
+      "file": "female-vikingpants-normal.png",
+      "sha256": "c28252150fbce262664c87579908054b3b0e83aa5a66aa093f24e854ecadbbde",
+      "bake_seconds": 0.93,
+      "method": "Multires level 0 to 2; same UV/topology, no selected-to-active ray projection"
+    },
+    {
+      "sex": "female",
+      "material": "VikingBoots",
+      "kind": "NORMAL",
+      "resolution": 1024,
+      "file": "female-vikingboots-normal.png",
+      "sha256": "fb6e9e59ad72578f30eca1ed946c6432f8ac0477279376feb1d1190e7a0ebe19",
+      "bake_seconds": 0.47,
+      "method": "Multires level 0 to 2; same UV/topology, no selected-to-active ray projection"
+    }
+  ],
+  "normal_method": "Multires level 0 to 2, tangent space, margin 8, same topology/UV, no cage rays",
+  "source": "Rehman Polanski CC0 Viking garments; see assets/staging/characters/makehuman_viking_selected/SOURCE.json",
+  "models": {
+    "male": "f1b7d1e44e4d45a5a6b7aa9c563096fd022035e2d60e7a83470dd233c3c34a4a",
+    "female": "82c382df4a39f540912b37be80ddf3a6eb76344a5d2565bf0294346319d70579"
+  }
+}

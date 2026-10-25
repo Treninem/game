@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-20",
+  "request": "Remember this master specification",
+  "source_attachment": "C:\\Users\\Dexp\\.codex\\attachments\\620be3fc-cad3-4306-b339-d3576abf5671\\Вставленный текст.txt",
+  "source_sha256": "10c91711e84a1d29ad32fc55551a41866fceb1f7fe7124ae7d58ba97092ccbc7",
+  "canonical_document": "docs/IMPULS_LIVING_WORLD_MASTER_2026-10-20.md",
+  "canonical_document_sha256": "0ea0e7cba39b07c9d109173b8196b00338960f32b96370a8a6e7f64b93541b62",
+  "lines": 2579,
+  "verification": "Entire normalized text equals the existing canonical master; full document already retained, no duplicate needed",
+  "companion_document": "docs/IMPULS_VISUAL_GAMEPLAY_REQUIREMENTS_2026-10-20.txt",
+  "relationship": "Retain both master systems requirements and companion visual/gameplay direction",
+  "differences_to_reconcile": [
+    "Master: unlimited inventory weight/slot count; companion proposes 48-slot base grid and capacity upgrades. Preserve items and unlimited-storage requirement; distinguish UI pagination from capacity.",
+    "Master: quick slots 1-9; companion: eight slots 1-8. Resolve explicitly before implementing a HUD change."
+  ],
+  "memory_update": "New note in memories/extensions/ad_hoc/notes; no existing memory files modified",
+  "runtime_modified": false,
+  "game_tests_run": false,
+  "readiness_percent_changed": false
+}

@@ -1,0 +1,315 @@
+{
+  "date": "2026-10-25",
+  "scope": "Complete shared minimap/local-map marker batching and actual rendered world/UI/save regressions. No character or environment geometry was changed.",
+  "package": {
+    "runtime_sha": "a97c4be6c5186923939bdb78c0ec5fc0fffdba0f",
+    "root_runtime_integrated": true,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_MAP_RENDER.json",
+    "dense_features": 1011,
+    "marker_draw_calls_before": 1017,
+    "marker_draw_calls_after": 3,
+    "world_draw_calls_before": 1104,
+    "world_draw_calls_after": 287,
+    "local_gameplay_seconds": 110.9690000000046,
+    "local_gameplay_120_frame_mean_ms": 52.135075,
+    "renderer": "Godot4.7.1 GL Compatibility, Intel UHD610, Windows8GB",
+    "manual_play": false,
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "changes": [
+    "Replace per-feature circle/polygon commands with one retained ArrayMesh canvas draw per map view. Preserve painter order, footprint rotation/clipping, colors, ring markers and actor overlay.",
+    "Reuse one mesh RID with cleared surfaces per refresh; retain all1011 test features. No save IDs, exploration rules, felling logic, terrain cache resolution, view ranges or graphical presets changed.",
+    "Add strict rendered-marker budget/colors/overlap/fog/save/JSON/felling/zoom/resize/resource-lifetime checks to required World Core. Existing coverage and240s graphical deadlines stay unchanged."
+  ],
+  "before_after_native_profile": {
+    "before": [
+      {
+        "cpu_ms": 127.931466666667,
+        "draw_calls": 1104,
+        "frames": 30,
+        "label": "baseline",
+        "mean_ms": 58.6818,
+        "p50_ms": 55.425,
+        "p95_ms": 111.125,
+        "physics_ms": 9.5643,
+        "primitives": 266909,
+        "video_bytes": 431269004
+      },
+      {
+        "cpu_ms": 303.154333333334,
+        "draw_calls": 276,
+        "frames": 30,
+        "label": "without-minimap",
+        "mean_ms": 47.1531666666667,
+        "p50_ms": 44.798,
+        "p95_ms": 80.72,
+        "physics_ms": 8.87803333333333,
+        "primitives": 213050,
+        "video_bytes": 430161560
+      },
+      {
+        "cpu_ms": 109.4991,
+        "draw_calls": 1103,
+        "frames": 30,
+        "label": "restored",
+        "mean_ms": 46.0323,
+        "p50_ms": 39.663,
+        "p95_ms": 100.271,
+        "physics_ms": 10.6105666666667,
+        "primitives": 265329,
+        "video_bytes": 431269004
+      }
+    ],
+    "after": [
+      {
+        "cpu_ms": 81.8882666666667,
+        "draw_calls": 287,
+        "frames": 30,
+        "label": "baseline",
+        "mean_ms": 43.7063666666667,
+        "p50_ms": 45.315,
+        "p95_ms": 74.17,
+        "physics_ms": 9.77103333333333,
+        "primitives": 233629,
+        "video_bytes": 432682604
+      },
+      {
+        "cpu_ms": 319.199733333333,
+        "draw_calls": 276,
+        "frames": 30,
+        "label": "without-minimap",
+        "mean_ms": 45.3962666666667,
+        "p50_ms": 43.405,
+        "p95_ms": 70.92,
+        "physics_ms": 10.4524,
+        "primitives": 213050,
+        "video_bytes": 432660824
+      },
+      {
+        "cpu_ms": 215.934066666667,
+        "draw_calls": 287,
+        "frames": 30,
+        "label": "restored",
+        "mean_ms": 45.2519333333333,
+        "p50_ms": 46.068,
+        "p95_ms": 81.984,
+        "physics_ms": 10.8853666666667,
+        "primitives": 233629,
+        "video_bytes": 432682604
+      }
+    ],
+    "caveat": "Short30-frame windows on a busy8GB PC are not sustained FPS. Cached Performance.TIME_PROCESS values include earlier work and are not used as isolated CPU timing. Compare stable draw-call counts; do not infer a guaranteed speedup from timing noise."
+  },
+  "local_checks": {
+    "markers-final": {
+      "exit_code": 0,
+      "seconds": 6.2810000000026776,
+      "scene": "tests/visual_map_batch.tscn",
+      "label": "markers-final"
+    },
+    "cartography": {
+      "exit_code": 0,
+      "seconds": 2.4840000000040163,
+      "scene": "tests/smoke_cartography.tscn",
+      "label": "cartography"
+    },
+    "map-state": {
+      "exit_code": 0,
+      "seconds": 5.421999999998661,
+      "scene": "tests/smoke_map_state_transition.tscn",
+      "label": "map-state"
+    },
+    "root-markers": {
+      "exit_code": 0,
+      "seconds": 8.014999999999418,
+      "scene": "tests/visual_map_batch.tscn",
+      "label": "root-markers"
+    },
+    "root-cartography": {
+      "exit_code": 0,
+      "seconds": 3.563000000001921,
+      "scene": "tests/smoke_cartography.tscn",
+      "label": "root-cartography"
+    },
+    "root-map-state": {
+      "exit_code": 0,
+      "seconds": 6.061999999998079,
+      "scene": "tests/smoke_map_state_transition.tscn",
+      "label": "root-map-state"
+    },
+    "native-world": {
+      "exit_code": 0,
+      "seconds": 110.9690000000046,
+      "scene": "tests/visual_bow_world.gd",
+      "label": "native-world"
+    },
+    "map-before": {
+      "code": 0,
+      "seconds": 67.76600000000326,
+      "label": "map-before",
+      "project": "D:\\Desktop\\GitHub\\game\\build\\projectile-contact-review",
+      "private_profile": true
+    },
+    "map-after": {
+      "code": 0,
+      "seconds": 65.32800000000134,
+      "label": "map-after",
+      "project": "D:\\Desktop\\GitHub\\game\\build\\projectile-contact-review",
+      "private_profile": true
+    }
+  },
+  "actual_gameplay_markers": [
+    "AIRBORNE_WORLD_POSE {\"airborne_candidate\":true,\"animation_time\":0.35,\"foot_pixel\":\"(667.4569, 522.275)\",\"frame\":1367,\"grounded\":false,\"head_pixel\":\"(639.8177, 190.7985)\",\"pending\":0.0866666666666667,\"pose\":\"Bow_Attack_Draw\",\"wrist_below_neck_m\":-0.024653434753418}",
+    "MAGIC_NATIVE_SAVE_OK action=cast_magic selected=heal cooldown=restored blocked_cast=no_mana_cost",
+    "UI_NATIVE_REOPEN_OK cycles=12 inventory+map gameplay_resumed=true",
+    "LIVE_BOW_BLEND_OK samples=23",
+    "OUTFIT_WORLD_FRAME_SAMPLE frames=120 mean_ms=52.135075 video_bytes=504677480 draw_calls=277",
+    "FACE_CONTROLS_NATIVE_OK {\"bow_arrow_consumed\":true,\"captures\":[\"user://head-size-walk.png\",\"user://head-size-run.png\",\"user://head-size-tall-jump.png\",\"user://head-size-starter_axe.png\",\"user://head-size-short_bow.png\",\"user://head-size-bow-released.png\",\"user://head-size-short-walk.png\",\"user://head-size-short-jump.png\",\"user://head-size-cast-free-hand.png\",\"user://head-size-magic-after-load.png\",\"user://head-size-inventory-lifecycle.png\",\"user://head-size-outfit-quality-0.png\",\"user://head-size-outfit-quality-1.png\",\"user://head-size-outfit-quality-2.png\",\"user://head-size-outfit-quality-3.png\"],\"game_save_roundtrip\":true,\"jump_both_heights\":true,\"look_roundtrip\":true,\"morphs\":9,\"physical_heights_cm\":[160,195],\"player_position_assignments\":0,\"walked_m\":28.5034812800586}",
+    "MENU_AUDIO_SHUTDOWN_OK stream=cleared mixer=drained"
+  ],
+  "CI": {
+    "conclusion": "failure",
+    "databaseId": 40177529922,
+    "headSha": "a97c4be6c5186923939bdb78c0ec5fc0fffdba0f",
+    "jobs": [
+      {
+        "completedAt": "2026-10-25T08:49:49Z",
+        "conclusion": "failure",
+        "databaseId": 121121356486,
+        "name": "map-render",
+        "startedAt": "2026-10-25T08:40:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-25T08:40:11Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-25T08:40:10Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:40:31Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v5",
+            "number": 2,
+            "startedAt": "2026-10-25T08:40:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:40:43Z",
+            "conclusion": "success",
+            "name": "Install Godot and a software rendering display",
+            "number": 3,
+            "startedAt": "2026-10-25T08:40:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:23Z",
+            "conclusion": "success",
+            "name": "Parse actual project and rendered diagnostic",
+            "number": 4,
+            "startedAt": "2026-10-25T08:40:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:24Z",
+            "conclusion": "success",
+            "name": "Preserve cartography discovered features and felled trees",
+            "number": 5,
+            "startedAt": "2026-10-25T08:42:23Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:32Z",
+            "conclusion": "success",
+            "name": "Verify 1011 rendered markers colors ordering save transitions and bounded drawing",
+            "number": 6,
+            "startedAt": "2026-10-25T08:42:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:42:33Z",
+            "conclusion": "success",
+            "name": "Preserve terrain fog and same-cell save restoration",
+            "number": 7,
+            "startedAt": "2026-10-25T08:42:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:45:45Z",
+            "conclusion": "success",
+            "name": "Render ordinary world input equipment magic UI and disk save",
+            "number": 8,
+            "startedAt": "2026-10-25T08:42:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:45Z",
+            "conclusion": "failure",
+            "name": "Render entry exit and full saved household lifecycle",
+            "number": 9,
+            "startedAt": "2026-10-25T08:45:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:47Z",
+            "conclusion": "success",
+            "name": "Upload actual map and world evidence including failures",
+            "number": 10,
+            "startedAt": "2026-10-25T08:49:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:47Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v5",
+            "number": 20,
+            "startedAt": "2026-10-25T08:49:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-25T08:49:47Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 21,
+            "startedAt": "2026-10-25T08:49:47Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Treninem/game/actions/runs/40177529922/job/121121356486"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Treninem/game/actions/runs/40177529922"
+  },
+  "previous_PR_core_final": {
+    "conclusion": "success",
+    "headSha": "aeb131016ba4f1f1af89c536f772348999e2c097",
+    "status": "completed",
+    "url": "https://github.com/Treninem/game/actions/runs/40175469845"
+  },
+  "evidence": "docs/review/2026-10-25-map-render/",
+  "limits": [
+    "Character hair, hands, garment seams and broader animation/art acceptance remain open. The actual final world frame still requires independent sole/terrain inspection; this package does not establish complete grounding acceptance.",
+    "The normal native world120-frame medium sample is52.135075ms, about19fps, below the30fps target. Rendering/CPU work remains; no stable weak-PC performance claim.",
+    "The native full-world test exits0 but retains an89 ObjectDB instances warning. Dense map fixture retained resource count48 across8 redraw/resize/zoom cycles; this does not clear the whole-world shutdown warning.",
+    "Initial fixture attempts failed because dynamic features were assigned before MapSystem synchronized its state revision, and JSON number arrays were compared with typed integer arrays. Corrected fixture ordering and position comparison; final baseline fails specifically at1017drawcalls, candidate passes3. These setup failures are preserved under build/asset_work/world-render-2026-10-25.",
+    "Previous focused world run40173982239 failed240s. Its result is retained; the new exact runtime was tested by the unchanged world script and limit. Read the separate household result from the recorded CI steps.",
+    "No manual full-world tour, new models, stable installer publication or merge. Main and normal user profiles remain unchanged."
+  ],
+  "next_connected_work": [
+    "Measure rendered boot soles against actual terrain in ordinary action frames; inspect clothing and hands across the same frames.",
+    "Continue profiling remaining3D/lighting/simulation cost without hiding objects or lowering required graphical settings.",
+    "Fix any remaining continuous-household failure from its actual trace; preserve door/furniture/save coverage."
+  ],
+  "overall_percent": null,
+  "goal_status": "active",
+  "CI_interpretation": {
+    "cartography_markers_and_save": "passed",
+    "actual_world_gameplay": "passed within unchanged240s;120-frame software-renderer mean408.783358ms and280drawcalls; not target-PC FPS",
+    "continuous_household": "FAILED240s; entry/exit frames exist, full furniture/resident/disk cycle did not complete. Last597-frame observation mean367.033ms; draw interval includes software-renderer CPU and observer overhead. Its fixture has no minimap; map batching does not resolve this separate bottleneck.",
+    "aggregate": "failure"
+  }
+}

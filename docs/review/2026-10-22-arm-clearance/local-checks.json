@@ -1,0 +1,152 @@
+{
+  "import": {
+    "case": "import",
+    "exit_code": 0,
+    "seconds": 32.77,
+    "errors": []
+  },
+  "arms": {
+    "case": "arms",
+    "exit_code": 0,
+    "seconds": 141.05,
+    "errors": []
+  },
+  "frames": {
+    "case": "frames",
+    "exit_code": 0,
+    "seconds": 13.94,
+    "errors": []
+  },
+  "coverage": {
+    "case": "coverage",
+    "exit_code": 0,
+    "seconds": 41.89,
+    "errors": []
+  },
+  "weapon_grip": {
+    "case": "weapon_grip",
+    "exit_code": 0,
+    "seconds": 14.3,
+    "errors": []
+  },
+  "cast_pose": {
+    "case": "cast_pose",
+    "exit_code": 0,
+    "seconds": 4.62,
+    "errors": []
+  },
+  "household_pose": {
+    "case": "household_pose",
+    "exit_code": 0,
+    "seconds": 15.86,
+    "errors": []
+  },
+  "working_pose": {
+    "case": "working_pose",
+    "exit_code": 0,
+    "seconds": 6.72,
+    "errors": []
+  },
+  "character_creator": {
+    "case": "character_creator",
+    "exit_code": 0,
+    "seconds": 18.69,
+    "errors": []
+  },
+  "character_dimensions": {
+    "case": "character_dimensions",
+    "exit_code": 0,
+    "seconds": 29.52,
+    "errors": []
+  },
+  "character_texture_filtering": {
+    "case": "character_texture_filtering",
+    "exit_code": 0,
+    "seconds": 6.77,
+    "errors": []
+  },
+  "player_movement": {
+    "case": "player_movement",
+    "exit_code": 0,
+    "seconds": 20.97,
+    "errors": []
+  },
+  "camera_input": {
+    "case": "camera_input",
+    "exit_code": 0,
+    "seconds": 48.64,
+    "errors": []
+  },
+  "world": {
+    "case": "world",
+    "exit_code": 0,
+    "seconds": 53.53,
+    "errors": []
+  },
+  "workshop": {
+    "case": "workshop",
+    "exit_code": 0,
+    "seconds": 117.14,
+    "errors": []
+  },
+  "motion": {
+    "case": "motion",
+    "exit_code": 0,
+    "seconds": 68.95,
+    "errors": []
+  },
+  "visual_grounding": {
+    "case": "visual_grounding",
+    "exit_code": 0,
+    "seconds": 22.31,
+    "errors": []
+  },
+  "step_grounding": {
+    "case": "step_grounding",
+    "exit_code": 0,
+    "seconds": 16.25,
+    "errors": []
+  },
+  "locomotion_facing": {
+    "case": "locomotion_facing",
+    "exit_code": 0,
+    "seconds": 52.08,
+    "errors": []
+  },
+  "household_aisle": {
+    "case": "household_aisle",
+    "exit_code": 0,
+    "seconds": 10.23,
+    "errors": []
+  },
+  "citizen_persistence": {
+    "case": "citizen_persistence",
+    "exit_code": 0,
+    "seconds": 10.33,
+    "errors": []
+  },
+  "square_home_life": {
+    "case": "square_home_life",
+    "exit_code": 0,
+    "seconds": 154.88,
+    "errors": []
+  },
+  "capital_square": {
+    "case": "capital_square",
+    "exit_code": 0,
+    "seconds": 75.66,
+    "errors": []
+  },
+  "blends": {
+    "case": "blends",
+    "exit_code": 0,
+    "seconds": 32.26,
+    "errors": []
+  },
+  "bow_transition_view": {
+    "case": "bow_transition_view",
+    "exit_code": 0,
+    "seconds": 15.39,
+    "errors": []
+  }
+}

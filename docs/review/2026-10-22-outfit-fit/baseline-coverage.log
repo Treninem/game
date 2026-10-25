@@ -1,0 +1,12 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.2140 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics 610
+
+WARDROBE_SKIN_DIAGNOSTIC {"hit":"(-0.083269, 0.886474, -0.251155)","pixel":"(355.0, 199.0)","triangle":[2326,4762,4759],"vertices":[{"dominant":"Spine2","neck_delta":[0.0754770211807898,-0.154229283332825,-0.0655658505856991],"rest":[0.0754770115017891,1.36880004405975,-0.0668777674436569]},{"dominant":"Spine2","neck_delta":[0.071149306737583,-0.172055959701538,-0.0618211589753628],"rest":[0.0711492970585823,1.35097336769104,-0.0631330758333206]},{"dominant":"Spine2","neck_delta":[0.0923071525923422,-0.173235297203064,-0.0583800710737705],"rest":[0.0923071429133415,1.34979403018951,-0.0596919879317284]}]}
+WARDROBE_SKIN_DIAGNOSTIC {"hit":"(0.204253, 0.879435, -0.23617)","pixel":"(268.0, 198.0)","triangle":[4469,5028,4468],"vertices":[{"dominant":"Spine2","neck_delta":[-0.158378606296379,-0.104181289672852,-0.0514175407588482],"rest":[-0.15837861597538,1.41884803771973,-0.052729457616806]},{"dominant":"RightArm","neck_delta":[-0.174860020733673,-0.115381956100464,-0.0472018830478191],"rest":[-0.174860030412674,1.40764737129211,-0.048513799905777]},{"dominant":"RightArm","neck_delta":[-0.166446035362084,-0.130145788192749,-0.0438593663275242],"rest":[-0.166446045041084,1.39288353919983,-0.045171283185482]}]}
+WARDROBE_SKIN_DIAGNOSTIC {"hit":"(0.131573, 0.611948, -0.147418)","pixel":"(347.0, 237.0)","triangle":[2716,1460,2723],"vertices":[{"dominant":"RightUpLeg","neck_delta":[-0.105067854381401,-0.749971747398376,0.151261378079653],"rest":[-0.105067864060402,0.773057579994202,0.149949461221695]},{"dominant":"RightUpLeg","neck_delta":[-0.128994306183655,-0.717311143875122,0.148379910737276],"rest":[-0.128994315862656,0.805718183517456,0.147067993879318]},{"dominant":"RightUpLeg","neck_delta":[-0.100112160302002,-0.726504981517792,0.149848658591509],"rest":[-0.100112169981003,0.796524345874786,0.148536741733551]}]}
+WARDROBE_COVERAGE views=756 failed_views=408 final_modifiers=true bodies=2 builds=3 angles=3
+ERROR: Actual rendered skin breaks through covered torso/limbs in 408 views
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/visual_wardrobe_coverage.gd:160)
+       [1] _red_pixels (res://tests/visual_wardrobe_coverage.gd:30)

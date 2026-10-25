@@ -8,6 +8,13 @@ func _ready() -> void:
     bus = "Music"
     _load_menu_music_if_available()
 
+func shutdown() -> void:
+    stop()
+    stream = null
+
+func _exit_tree() -> void:
+    shutdown()
+
 func _load_menu_music_if_available() -> void:
     if not ResourceLoader.exists(MENU_MUSIC_PATH, "AudioStream"):
         push_warning("Menu music is unavailable or invalid: %s" % MENU_MUSIC_PATH)

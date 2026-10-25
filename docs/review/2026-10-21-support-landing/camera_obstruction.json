@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 14.3,
+  "errors": [],
+  "markers": [
+    "CAMERA_OBSTRUCTION_OK walls=solid thin_wall=safe overlapping_origin=safe recovery=smooth zoom=persisted reach=bounded melee=no_back_hits no_wall_reach=true"
+  ]
+}

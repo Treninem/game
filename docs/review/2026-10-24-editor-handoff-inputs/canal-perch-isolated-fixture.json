@@ -1,0 +1,55 @@
+{
+  "actual_bridge_geometry": true,
+  "cases": [
+    {
+      "height_cm": 160.0,
+      "maximum_frame_drop_m": 0.0850000381469727,
+      "ordinary_speed": 1.45,
+      "setup_position_assignments": 1,
+      "side": 1.0,
+      "walked_m": 1.24186653969809
+    },
+    {
+      "height_cm": 160.0,
+      "maximum_frame_drop_m": 0.0850000381469727,
+      "ordinary_speed": 1.45,
+      "setup_position_assignments": 1,
+      "side": -1.0,
+      "walked_m": 1.01415432943031
+    },
+    {
+      "height_cm": 180.0,
+      "maximum_frame_drop_m": 0.0995047092437744,
+      "ordinary_speed": 1.45,
+      "setup_position_assignments": 1,
+      "side": 1.0,
+      "walked_m": 2.30866565322503
+    },
+    {
+      "height_cm": 180.0,
+      "maximum_frame_drop_m": 0.0850000381469727,
+      "ordinary_speed": 1.45,
+      "setup_position_assignments": 1,
+      "side": -1.0,
+      "walked_m": 1.26023602031637
+    },
+    {
+      "height_cm": 200.0,
+      "maximum_frame_drop_m": 0.0850000381469727,
+      "ordinary_speed": 1.45,
+      "setup_position_assignments": 1,
+      "side": 1.0,
+      "walked_m": 1.20786351209972
+    },
+    {
+      "height_cm": 200.0,
+      "maximum_frame_drop_m": 0.0850000381469727,
+      "ordinary_speed": 1.45,
+      "setup_position_assignments": 1,
+      "side": -1.0,
+      "walked_m": 1.2010320359841
+    }
+  ],
+  "controlled_physics_fixture": true,
+  "rendered_visual_acceptance": false
+}

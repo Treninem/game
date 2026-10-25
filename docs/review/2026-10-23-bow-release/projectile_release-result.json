@@ -1,0 +1,24 @@
+{
+  "case": "projectile_release",
+  "exit_code": 1,
+  "seconds": 217.28,
+  "errors": [
+    "SCRIPT ERROR: Assertion failed: Arrow left the old world-space pose instead of the moving hand"
+  ],
+  "sources": {
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+    "scripts/humanoid_motion_response.gd": "2df314be8f717f18d29b949cd083479567d492a241977908b089a604387ff366",
+    "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+    "tests/smoke_motion_response.gd": "54838ba2e46083dc8226265783e6560fc55b97f41a449fe8d3d4d55b9b3f980c",
+    "tests/gpu_skinned_vertex_probe.gd": "178a4b55f8ec03134e69ee4770fcfa7d0b77b3624fcb1e0bdf8ba59d184a6154",
+    "scripts/vfx_flipbook_3d.gd": "101c8629833f3f34d8b66f971fe555e36b7ce50fbe4200d20faea17f57936928",
+    "scripts/world_vfx.gd": "aac3e337a7e16cb5d989d9534e3f9cf21343780a42e6139f157395a53cc91be4",
+    "scripts/player_controller.gd": "0c071c459acf8f54e6881e406fe80f279704db102108864a5cf1091a30158cbb",
+    "scripts/enterable_building.gd": "9b35895ec02358746928289394a3f46eca39595b8b7a64bb226d5340cb22d4ec",
+    "tests/smoke_foot_contact.gd": "c929ffc3470d88d16cdc04ec7324f56ad432858f1c4aea241544537a7ff51e17",
+    "scripts/humanoid_visual.gd": "24d4f46f3ddfba387c1f44ae72114b1ce7347ce3c1d5455781856a4377163eb8",
+    "tests/visual_bow_world.gd": "ad182662f23bc23aeb889e3019cd1e3ff1bcd7418b70a0e6a2d086c14fafe6ee",
+    "tests/smoke_projectile_release.gd": "fe1808da2b95d051e405894f45038b8a5e4c57d629831013ec6691a9135fff54"
+  }
+}

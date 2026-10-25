@@ -1,0 +1,163 @@
+{
+  "date": "2026-10-23",
+  "goal": "ACTIVE",
+  "runtime_commit": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+  "runtime_journal": "docs/DEVELOPMENT_LOG_2026-10-23_CITY_CONCEPTS.json",
+  "documentation_followup_runtime_unchanged": true,
+  "ci_runtime_ref_only": {
+    "Build ImPuls Release Candidate": {
+      "run_id": 40014639146,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    },
+    "Build Windows Installer": {
+      "run_id": 40014639471,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    },
+    "Diagnose UI Smoke": {
+      "run_id": 40014639137,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    },
+    "Validate Delta Updater": {
+      "run_id": 40014639184,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    },
+    "Validate Magic Runtime": {
+      "run_id": 40014639200,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    },
+    "Validate Player Movement": {
+      "run_id": 40014639263,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    },
+    "Validate World Core": {
+      "run_id": 40014639158,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    },
+    "Validate World VFX": {
+      "run_id": 40014639218,
+      "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+      "conclusion": "success"
+    }
+  },
+  "world_core": {
+    "job_id": 120623433921,
+    "steps": 106,
+    "all_required_city_and_home_steps_passed": true
+  },
+  "actual_pack": {
+    "sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+    "run_id": 40014639146,
+    "artifact": {
+      "id": 12527762362,
+      "node_id": "MDg6QXJ0aWZhY3QxMjUyNzc2MjM2Mg==",
+      "name": "game-windows",
+      "size_in_bytes": 808007785,
+      "url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12527762362",
+      "archive_download_url": "https://api.github.com/repos/Treninem/game/actions/artifacts/12527762362/zip",
+      "expired": false,
+      "digest": "sha256:792ea0b26fe0ce75e8ad5e4b0318a369d8adcb040be57124ee0718a6e848e25c",
+      "created_at": "2026-10-23T19:55:24Z",
+      "updated_at": "2026-10-23T19:55:24Z",
+      "expires_at": "2027-01-21T19:50:59Z",
+      "workflow_run": {
+        "id": 40014639146,
+        "repository_id": 1333892669,
+        "head_repository_id": 1333892669,
+        "head_branch": "codex/household-persistence-2026-10-19",
+        "head_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e"
+      }
+    },
+    "download_digest_verified": true,
+    "inner_zip_sha256": "378ac8c5565648485a7044a9efc59b0a9c77d57fc6929ea934e19a9eb3f4d6cd",
+    "exe_sha256": "630befc8c604d131d0d55db71e0bbaf82545749c73b3454484b550e259e38167",
+    "pck_sha256": "532e2145d40e87621fe28d8bf97585647eca7d4a1c3f96dea5da91b509bffce4",
+    "profile_copied_from": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-23-region-surfaces\\userdata\\Godot\\app_userdata\\ImPuls",
+    "original_profile_modified": false,
+    "launcher": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-23-city-concepts\\ImPuls-review.cmd",
+    "stable_release": false
+  },
+  "native_pack_gameplay": {
+    "sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+    "actual_pck_native": {
+      "result": {
+        "sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+        "pck_sha256": "532e2145d40e87621fe28d8bf97585647eca7d4a1c3f96dea5da91b509bffce4",
+        "actual_compiled_pck": true,
+        "engine": "Godot4.7.1 desktop debug engine with --main-pack; not exported EXE script execution",
+        "manual_play": false,
+        "returncode": 0,
+        "seconds": 167.5,
+        "stopped": false,
+        "errors": [],
+        "marker": "CAPITAL_CONCEPT_NATIVE_OK edge_houses=22 market_canopies=6 earned_checkpoint=true walked_m=189.600287048845 player_position_assignments=0 physical_rooms=3 reach_checked_front_door=true save_slot=4 disk_reload=true release_checks=true fountain_interaction=true fountain_disk_reload=true quality=Medium clock_fixture=09:00"
+      },
+      "proof": {
+        "disk_reload": true,
+        "fountain_use_persisted": true,
+        "full_thirst_no_extra_use": true,
+        "inventory_and_coins_conserved": true,
+        "loaded_position": "(13456.89, 0.097055, -7031.04)",
+        "physical_rooms": 3,
+        "player_position_assignments": 0,
+        "release_checks": true,
+        "saved_position": "(13456.89, 0.097055, -7031.04)",
+        "walked_m": 189.600287048845
+      }
+    },
+    "preview_launcher": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-23-city-concepts\\ImPuls-capital-preview.cmd",
+    "preview_checkpoint_sha256": "cc960d236f554f116be273dfc275eccc73c514dc115df991999f817d254123c7",
+    "preview_checkpoint_original_version": 5,
+    "runtime_save_version": 6,
+    "source_profile_unchanged": true,
+    "ordinary_profile_separate": true,
+    "stable_release": false
+  },
+  "launcher_refresh": {
+    "current_launcher": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-20-airborne-actions\\ImPuls-editor.cmd",
+    "previous_launcher_backup": "D:\\Desktop\\GitHub\\game\\build\\review-2026-10-20-airborne-actions\\ImPuls-editor-before-city-2026-10-23.cmd",
+    "new_exe_sha": "630befc8c604d131d0d55db71e0bbaf82545749c73b3454484b550e259e38167",
+    "runtime_sha": "4f9071f90411aadc8afdc51ef36df5182c72664e",
+    "profile_files_before_after_equal": true,
+    "profile_hashes": {
+      "D:/Desktop/GitHub/game/build/review-2026-10-20-airborne-actions/userdata/Godot/app_userdata/ImPuls/save_slot_01.json": "75b2ece2e8626c35bdbdb8cae3aa7a108e74eac5bb012d2f28659f5e72acb368",
+      "D:/Desktop/GitHub/game/build/review-2026-10-20-airborne-actions/userdata/Godot/app_userdata/ImPuls/settings.cfg": "b6129ff31ebee1689c0c4ca47c2bf6b931a8c70836db38170d86cde16468bdf2",
+      "D:/Desktop/GitHub/game/build/review-2026-10-23-city-concepts/userdata/Godot/app_userdata/ImPuls/save_slot_01.json": "75b2ece2e8626c35bdbdb8cae3aa7a108e74eac5bb012d2f28659f5e72acb368",
+      "D:/Desktop/GitHub/game/build/review-2026-10-23-city-concepts/userdata/Godot/app_userdata/ImPuls/settings.cfg": "b6129ff31ebee1689c0c4ca47c2bf6b931a8c70836db38170d86cde16468bdf2",
+      "D:/Desktop/GitHub/game/build/review-2026-10-23-city-concepts/capital-preview-userdata/Godot/app_userdata/ImPuls/save_slot_01.json": "cc960d236f554f116be273dfc275eccc73c514dc115df991999f817d254123c7"
+    }
+  },
+  "performance": {
+    "draw_calls": 899.0,
+    "driver_player_position_assignments": 0,
+    "frames": 120,
+    "max_frame_ms": 51.718,
+    "mean_frame_ms": 44.3393166666666,
+    "median_frame_ms": 44.17,
+    "p95_frame_ms": 47.81,
+    "quality": "Medium",
+    "scale_3d": 0.850000023841858,
+    "scope": "Stationary capital market composition with 22 authored houses, four trees and fountain; actual earned arrival checkpoint, warm cache, no sustained traversal or cross-view speedup claim",
+    "video_memory_bytes": 977764125.0,
+    "viewport": "(1280, 720)",
+    "warmup_frames": 30
+  },
+  "manual_play": false,
+  "visual_acceptance": false,
+  "overall_percent": null,
+  "limitations": [
+    "Two repeated exterior shells; new homes are not yet new enterable households",
+    "Distant city blocks/terrain silhouette/terraces/river/citadel and distinct settlements remain OPEN",
+    "~22.6FPS stationary Medium sample is insufficient, no sustained performance or speedup claim",
+    "100 ObjectDB exit warning persists; no leak-free claim",
+    "No fresh complete forest-to-capital run, no manual play claim",
+    "All eight results above apply to the named runtime4f9071f9; the documentation-only follow-up must be inspected separately, never represented as already green"
+  ],
+  "stable_release": false
+}

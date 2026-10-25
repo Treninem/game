@@ -1,0 +1,79 @@
+{
+  "controlled_night_lighting": true,
+  "fixture_initial_player_position": true,
+  "manual_play": false,
+  "records": [
+    {
+      "draw_calls": 315,
+      "mode": "before",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "hall",
+      "room_count": 4,
+      "window_count": 6
+    },
+    {
+      "draw_calls": 181,
+      "mode": "before",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "dining",
+      "room_count": 4,
+      "window_count": 6
+    },
+    {
+      "draw_calls": 182,
+      "mode": "before",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "bedroom",
+      "room_count": 4,
+      "window_count": 6
+    },
+    {
+      "draw_calls": 151,
+      "mode": "before",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "kitchen",
+      "room_count": 4,
+      "window_count": 6
+    },
+    {
+      "draw_calls": 205,
+      "mode": "after",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "hall",
+      "room_count": 4,
+      "window_count": 6
+    },
+    {
+      "draw_calls": 123,
+      "mode": "after",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "dining",
+      "room_count": 4,
+      "window_count": 6
+    },
+    {
+      "draw_calls": 93,
+      "mode": "after",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "bedroom",
+      "room_count": 4,
+      "window_count": 6
+    },
+    {
+      "draw_calls": 93,
+      "mode": "after",
+      "player_grounded": true,
+      "real_furniture": true,
+      "room": "kitchen",
+      "room_count": 4,
+      "window_count": 6
+    }
+  ]
+}

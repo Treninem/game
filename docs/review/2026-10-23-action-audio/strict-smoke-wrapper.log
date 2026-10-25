@@ -1,0 +1,7 @@
+SMOKE_FILTER_CASE clean exit= 0
+SMOKE_FILTER_CASE ordinary exit= 1
+SMOKE_FILTER_CASE interleaved exit= 1
+SMOKE_FILTER_CASE script exit= 1
+SMOKE_FILTER_CASE annotation exit= 1
+SMOKE_FILTER_CASE engine_exit exit= 7
+SMOKE_ERROR_FILTER_OK cases=6 interleaved_errors_rejected=true engine_exit_preserved=true

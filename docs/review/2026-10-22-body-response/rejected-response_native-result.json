@@ -1,0 +1,15 @@
+{
+  "case": "response_native",
+  "exit_code": 1,
+  "seconds": 62.45,
+  "errors": [
+    "SCRIPT ERROR: Assertion failed: Torso did not respond to actual acceleration"
+  ],
+  "sources": {
+    "scripts/weapon_grip_modifier.gd": "a4c2c98a33335854f57d697022373b2e21936f4bd04f7e35bcd2974205c4b4a0",
+    "scripts/humanoid_arm_clearance_modifier.gd": "a848201409302bca05a55b51ef5dbcb672fbd9eab157572518610cd365078e8a",
+    "scripts/humanoid_motion_response.gd": "23623b5fcf2ba5d50522289bd2791b040c14cb410ef001475d227df36b9e8235",
+    "tests/physical_human_fixture.gd": "f1a5b606811898af3ed6bc3eb8aad4a40c8c2ba1fc8841f4ae48a7e2d1ca68f6",
+    "tests/smoke_motion_response.gd": "bdd43a1f09dba4f9de968c1525e6de71cb0f6e34c72802e321c09e4840a991fd"
+  }
+}

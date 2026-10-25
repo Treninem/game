@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-24",
+  "state": "INTEGRATED",
+  "branch": "codex/household-persistence-2026-10-19",
+  "main_integrated": false,
+  "authoring": [
+    {
+      "source": "assets/source/architecture/market_arcade/MarketArcade.blend",
+      "geometry_uv_sha256": "84273dfdab1adff91aef04c248be325391535c4bdff7fae71e2d6837f6ae25e9",
+      "all_images_relative_and_exist": true
+    }
+  ],
+  "model": {
+    "state": "INTEGRATED",
+    "roof_source": "assets/source/architecture/townhouse/Townhouse_2.blend",
+    "reused_roof_faces": 7808,
+    "triangles": {
+      "RoofLeft": 15384,
+      "RoofRight": 15384,
+      "MeasuredPostsAndTrusses": 1548,
+      "ValleyGutter": 6
+    },
+    "support_posts": 9,
+    "clear_headroom_m": 2.4,
+    "ground_y": 0,
+    "eaves_y": 3.6,
+    "bays": 2,
+    "bay_width_m": 9,
+    "width_between_posts_m": 18,
+    "length_between_posts_m": 13.6,
+    "lantern_mounts": 2,
+    "art_acceptance": false
+  },
+  "features": {
+    "functional_public_benches": 6,
+    "paired_public_tables": 2,
+    "measured_arcade_lantern_mounts": 2,
+    "finite_arrow_display_capacity": 60,
+    "navigation_cell_m": 0.75,
+    "navigation_bounds_m": [
+      76,
+      80
+    ],
+    "navigation_probe_budget_usec": 1800,
+    "navigation_max_samples_per_tick": 96
+  },
+  "runtime": [
+    "Open two-bay Blender arcade, shared photo/clay material family, real triangle collisions for arcade and eight normalized counters/canopies",
+    "Central plaza render top and physical top agree at terrain+.025",
+    "Public seat choice/exclusive reservations, obstacle-measured local A* and automatic add/remove geometry invalidation; routine goals preserved, no authored public patrol",
+    "Real finite merchant arrows displayed from shop stock; paid trade conserves player/shop money/items",
+    "Rest collision aligned with visible seated torso, restores original standing capsule on wake, camera follows seated hero",
+    "Final NPC seated modifier shares finite leg support with player; complete GPU boot vertices measured against physical paving",
+    "IDs/phase/seat/timers and actual shop/furniture state survive real scene/disk reload; ephemeral Nodes/RIDs/collider snapshots are not serialized"
+  ],
+  "no_new_third_party_pack": true,
+  "visual_acceptance": false,
+  "limitations": [
+    "One arcade and two public-seat pairs do not establish concept-wide city completeness",
+    "Existing far city, broad empty paving, repeated exterior-only shells, skyline, terrain/river/bridges remain open",
+    "Human mesh art, all ages/clothing and full animation/morph coverage remain open",
+    "Public rest is not resource-consuming eating; local navigation is not a complete world-wide AI",
+    "101 ObjectDB exit instances and copied QA human UID fallbacks persist; no leak-free claim",
+    "Sustained weak-PC performance and final visual acceptance are not accepted"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-20",
+  "version": "0.10.7.3",
+  "stage": "Control binding conflict guard",
+  "spec_attachment": "137c28be-3fdd-44e6-940b-1d4b29fe81b9; full canonical comparison differs only in Markdown trailing spaces",
+  "reproduced": "Settings accepted F9 for inventory despite quick_load already owning F9. Baseline strict smoke exits 2 with explicit duplicate-assignment error.",
+  "changes": [
+    "Reject a new keyboard/mouse type+code already assigned to another supported gameplay action before mutating bindings/InputMap/config or emitting bindings_changed",
+    "Accept keeping the same action on its own current key; ignore keyboard echo capture",
+    "Expose conflicting action ID for UI feedback; keep capture active with a Russian action name",
+    "Consume rejected/released capture events so focused GUI buttons cannot activate accidentally"
+  ],
+  "validation": {
+    "binding_conflicts": {
+      "case": "binding_conflicts",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 4.53
+    },
+    "inventory_unlimited": {
+      "case": "inventory_unlimited",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 18.67
+    },
+    "ui_responsive": {
+      "case": "ui_responsive",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 25.92
+    },
+    "visible_binding_UI": {
+      "exit_code": 0,
+      "errors": [],
+      "marker": true,
+      "seconds": 6.59
+    }
+  },
+  "coverage": [
+    "Keyboard F9/quick_load conflict and left-mouse attack/cast conflict",
+    "Rejected map, InputMap events, config bytes and changed-signal count stay unchanged",
+    "Own-key assignment succeeds; echo rejected",
+    "Actual menu input: conflict remains in capture mode, free F10 succeeds, Escape cancels",
+    "Rejected Space does not activate focused settings button",
+    "Accepted assignment survives config reload",
+    "Visible conflict message inspected at normal production menu layout; inventory and responsive regressions pass"
+  ],
+  "fixture_note": "Initial isolated menu missed the production game_menu group and rendered narrow; fixture now registers with UILayoutGuard like the real scene. Production layout code was not altered.",
+  "image": "build/acceptance/binding-visible/appdata/Godot/app_userdata/ImPuls/binding-conflict.png",
+  "limits": [
+    "Already duplicated saved profiles are not automatically repaired or reassigned",
+    "Detection compares supported encoded keyboard/mouse type+code; modifier chords, layout aliases, gamepad and mod actions not exhaustively accepted",
+    "No new full-world route, export or stable release",
+    "Historical intermittent native heal action observation remains open",
+    "Earlier 32/55 editor functional count unchanged; no overall percentage assigned"
+  ]
+}

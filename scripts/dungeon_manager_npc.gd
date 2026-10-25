@@ -28,36 +28,8 @@ func _build_visual() -> void:
         collision.position.y = 0.9
         add_child(collision)
 
-    var body := MeshInstance3D.new()
-    body.name = "ManagerBody"
-    var capsule := CapsuleMesh.new()
-    capsule.radius = 0.48
-    capsule.height = 1.8
-    var material := StandardMaterial3D.new()
-    material.albedo_color = Color(0.10, 0.16, 0.28)
-    material.roughness = 0.72
-    capsule.material = material
-    body.mesh = capsule
-    body.position.y = 0.9
-    add_child(body)
-
-    var head := MeshInstance3D.new()
-    head.name = "Head"
-    var sphere := SphereMesh.new()
-    sphere.radius = 0.34
-    sphere.height = 0.68
-    var skin := StandardMaterial3D.new()
-    skin.albedo_color = Color(0.61, 0.45, 0.34)
-    sphere.material = skin
-    head.mesh = sphere
-    head.position.y = 2.02
-    add_child(head)
-
-    var label := Label3D.new()
-    label.name = "Nameplate"
-    label.text = "Управляющий Вратами"
-    label.position = Vector3(0, 2.75, 0)
-    label.font_size = 26
-    label.outline_size = 6
-    label.modulate = Color(0.72, 0.90, 1.0)
-    add_child(label)
+    var human := preload("res://scripts/humanoid_visual.gd").new()
+    human.name = "ManagerHuman"
+    human.palette_variant = 2
+    human.has_guard_armor = true
+    add_child(human)

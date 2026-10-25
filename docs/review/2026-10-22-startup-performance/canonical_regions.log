@@ -1,0 +1,31 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CANONICAL_REGIONS_SMOKE_START
+CANONICAL_REGIONS_SMOKE_STAGE political
+CANONICAL_REGIONS_SMOKE_STAGE capital
+CANONICAL_REGIONS_PROBE start_spawn begin
+CANONICAL_REGIONS_PROBE start_spawn end biome=forest
+CANONICAL_REGIONS_PROBE vardheim.water begin
+CANONICAL_REGIONS_PROBE vardheim.water end kind=
+CANONICAL_REGIONS_PROBE vardheim.elevation begin
+CANONICAL_REGIONS_PROBE vardheim.elevation end value=7.0000
+CANONICAL_REGIONS_PROBE vardheim.temperature begin
+CANONICAL_REGIONS_PROBE vardheim.temperature end value=0.0000
+CANONICAL_REGIONS_PROBE vardheim.moisture begin
+CANONICAL_REGIONS_PROBE vardheim.moisture end value=0.6175
+CANONICAL_REGIONS_PROBE vardheim.biome begin
+CANONICAL_REGIONS_PROBE vardheim.biome end biome=taiga
+CANONICAL_REGIONS_PROBE liorel begin
+CANONICAL_REGIONS_PROBE liorel end biome=forest
+CANONICAL_REGIONS_PROBE dor_karn begin
+CANONICAL_REGIONS_PROBE dor_karn end biome=mountains
+CANONICAL_REGIONS_PROBE saharin begin
+CANONICAL_REGIONS_PROBE saharin end biome=drylands
+CANONICAL_REGIONS_PROBE ordan begin
+CANONICAL_REGIONS_PROBE ordan end biome=steppe
+CANONICAL_REGIONS_PROBE moisture begin
+CANONICAL_REGIONS_PROBE moisture end liorel=0.5291 saharin=0.2206
+CANONICAL_REGIONS_PROBE temperature begin
+CANONICAL_REGIONS_PROBE temperature end vardheim=0.0000 saharin=1.0000
+CANONICAL_REGIONS_SMOKE_STAGE climate
+CANONICAL_REGIONS_SMOKE_OK states=8 start=forest capital=anchored climates=locked river=stable

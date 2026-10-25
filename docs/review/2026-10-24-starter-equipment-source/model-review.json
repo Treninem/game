@@ -1,0 +1,58 @@
+{
+  "adapter": "Intel(R) UHD Graphics 610",
+  "explicit_offscreen_force_draw": true,
+  "gameplay_or_performance_acceptance": false,
+  "manual_play": false,
+  "production_integration": false,
+  "records": [
+    {
+      "bounds": "[P: (-0.128711, -0.325, -0.027295), S: (0.257421, 0.65, 0.054591)]",
+      "file": "before-Axe_small.png",
+      "name": "Axe_small",
+      "variant": "before"
+    },
+    {
+      "bounds": "[P: (-0.117009, -0.33527, -0.018745), S: (0.26387, 0.65027, 0.04)]",
+      "file": "candidate-Axe_small.png",
+      "name": "Axe_small",
+      "variant": "candidate"
+    },
+    {
+      "bounds": "[P: (-0.037435, -0.175, -0.013974), S: (0.07487, 0.35, 0.027948)]",
+      "file": "before-Dagger.png",
+      "name": "Dagger",
+      "variant": "before"
+    },
+    {
+      "bounds": "[P: (-0.024868, -0.18015, -0.0115), S: (0.049265, 0.35015, 0.023)]",
+      "file": "candidate-Dagger.png",
+      "name": "Dagger",
+      "variant": "candidate"
+    },
+    {
+      "bounds": "[P: (-0.148504, -0.55, -0.024624), S: (0.297008, 1.1, 0.049249)]",
+      "file": "before-Bow_Wooden.png",
+      "name": "Bow_Wooden",
+      "variant": "before"
+    },
+    {
+      "bounds": "[P: (-0.084708, -0.552602, -0.0103), S: (0.323275, 1.105203, 0.0206)]",
+      "file": "candidate-Bow_Wooden.png",
+      "name": "Bow_Wooden",
+      "variant": "candidate"
+    },
+    {
+      "bounds": "[P: (-0.030505, -0.35, -0.035098), S: (0.06101, 0.7, 0.070196)]",
+      "file": "before-Arrow.png",
+      "name": "Arrow",
+      "variant": "before"
+    },
+    {
+      "bounds": "[P: (-0.012, -0.35, -0.014535), S: (0.028, 0.7, 0.027791)]",
+      "file": "candidate-Arrow.png",
+      "name": "Arrow",
+      "variant": "candidate"
+    }
+  ],
+  "viewport": "(640, 640)"
+}

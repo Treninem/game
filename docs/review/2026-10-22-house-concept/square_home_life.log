@@ -1,0 +1,15 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HOME_PROGRESS frame=0 trader=(-16.00195, 0.000156, -8.501465) artisan=(-23.00195, -0.0, -10.30127)
+HOME_PROGRESS frame=600 trader=(-28.79395, 0.000847, -13.34619) artisan=(-35.51367, -0.0, -17.59375)
+HOME_PROGRESS frame=1200 trader=(-41.20703, 0.000838, -20.06689) artisan=(-44.37012, 0.054495, -26.70654)
+HOME_PROGRESS frame=1800 trader=(-42.2959, 0.054577, -29.08105) artisan=(-41.2168, 0.054495, -32.34668)
+HOME_PROGRESS frame=2400 trader=(-42.63281, 0.054577, -32.34619) artisan=(-42.10156, 0.054495, -31.54639)
+HOME_PROGRESS frame=3000 trader=(-42.1084, 0.054577, -29.29297) artisan=(-42.10156, 0.054495, -31.54639)
+HOME_PROGRESS frame=3600 trader=(-47.68652, 0.055927, -33.19531) artisan=(-48.13965, 0.054495, -30.34619)
+WORK_PROGRESS frame=0 trader=(-47.99219, 0.055927, -33.32568) artisan=(-48.1377, 0.054495, -30.34619)
+WORK_PROGRESS frame=600 trader=(-44.08301, -0.000128, -22.06055) artisan=(-44.54492, 0.054495, -28.5957)
+WORK_PROGRESS frame=1200 trader=(-37.6377, -0.000128, -9.169922) artisan=(-40.87793, 0.000235, -15.64795)
+WORK_PROGRESS frame=1800 trader=(-25.92773, 0.00081, -4.250977) artisan=(-33.29492, 0.000924, -4.353516)
+WORK_PROGRESS frame=2400 trader=(-16.07422, 0.00081, -7.917969) artisan=(-23.09668, 0.000924, -8.713379)
+SQUARE_HOME_LIFE_OK player_walk_m=70.8237020885572 door=physical_round_trip residents=home_and_work streaming=mid_door_resumed money=conserved memory=supply_and_real_spell

@@ -1,0 +1,12 @@
+[
+  {
+    "gap_to_visible_road_m": -0.00399933624267578,
+    "native_skinned_vertices": 1765,
+    "side": "Left"
+  },
+  {
+    "gap_to_visible_road_m": -0.004002197265625,
+    "native_skinned_vertices": 1765,
+    "side": "Right"
+  }
+]

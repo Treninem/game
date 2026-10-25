@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 7.42,
+  "errors": [],
+  "markers": [
+    "CHARACTER_DIMENSIONS_OK heights=160,195,180 grounded_root=stable low_roof=physical camera=scaled shared_shape=isolated"
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "date": "2026-10-21",
+  "parent": "a7462ff85553de3fc42c9107246b115ab5e3db20",
+  "changes": [
+    "Retain selected packed scenes per house and load them on house activation instead of adding three preloaded resources to the stage script dependency graph",
+    "Preserve background stage loading, models, materials, controls, saves and all release gates",
+    "Apply window/lantern quality synchronously from the ordinary settings-changed handler; test immediate state before awaiting renderer frames, without forcing a lighting update"
+  ],
+  "matched_source_world_runs": {
+    "preload": {
+      "exit_code": 0,
+      "seconds": 85.83,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 86,
+      "gameplay": {
+        "bow_arrow_consumed": true,
+        "captures": [
+          "user://head-size-walk.png",
+          "user://head-size-run.png",
+          "user://head-size-tall-jump.png",
+          "user://head-size-starter_axe.png",
+          "user://head-size-short_bow.png",
+          "user://head-size-bow-released.png",
+          "user://head-size-short-walk.png",
+          "user://head-size-short-jump.png",
+          "user://head-size-cast-free-hand.png",
+          "user://head-size-magic-after-load.png",
+          "user://head-size-inventory-lifecycle.png"
+        ],
+        "game_save_roundtrip": true,
+        "jump_both_heights": true,
+        "look_roundtrip": true,
+        "morphs": 9,
+        "physical_heights_cm": [
+          160,
+          195
+        ],
+        "player_position_assignments": 0,
+        "walked_m": 28.2283739568666
+      }
+    },
+    "activation": {
+      "exit_code": 0,
+      "seconds": 89.27,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 83,
+      "gameplay": {
+        "bow_arrow_consumed": true,
+        "captures": [
+          "user://head-size-walk.png",
+          "user://head-size-run.png",
+          "user://head-size-tall-jump.png",
+          "user://head-size-starter_axe.png",
+          "user://head-size-short_bow.png",
+          "user://head-size-bow-released.png",
+          "user://head-size-short-walk.png",
+          "user://head-size-short-jump.png",
+          "user://head-size-cast-free-hand.png",
+          "user://head-size-magic-after-load.png",
+          "user://head-size-inventory-lifecycle.png"
+        ],
+        "game_save_roundtrip": true,
+        "jump_both_heights": true,
+        "look_roundtrip": true,
+        "morphs": 9,
+        "physical_heights_cm": [
+          160,
+          195
+        ],
+        "player_position_assignments": 0,
+        "walked_m": 28.6436318582855
+      }
+    },
+    "parent76f745": {
+      "exit_code": 0,
+      "seconds": 82.67,
+      "errors": [],
+      "marker": true,
+      "exit_objects": 83,
+      "gameplay": {
+        "bow_arrow_consumed": true,
+        "captures": [
+          "user://head-size-walk.png",
+          "user://head-size-run.png",
+          "user://head-size-tall-jump.png",
+          "user://head-size-starter_axe.png",
+          "user://head-size-short_bow.png",
+          "user://head-size-bow-released.png",
+          "user://head-size-short-walk.png",
+          "user://head-size-short-jump.png",
+          "user://head-size-cast-free-hand.png",
+          "user://head-size-magic-after-load.png",
+          "user://head-size-inventory-lifecycle.png"
+        ],
+        "game_save_roundtrip": true,
+        "jump_both_heights": true,
+        "look_roundtrip": true,
+        "morphs": 9,
+        "physical_heights_cm": [
+          160,
+          195
+        ],
+        "player_position_assignments": 0,
+        "walked_m": 28.3847016151994
+      }
+    }
+  },
+  "conclusion": "Exact preceding 76f745 version reports 83 exit objects; new model preload version 86; per-house activation candidate 83. Removes the three-object increase in this bounded scenario. Does not fix the pre-existing loader-related shutdown leftovers. Historical 79 was an earlier runtime, not this exact parent.",
+  "limits": [
+    "Automated normal input, ~28m movement, no player position assignments; not manual play or a city journey",
+    "The precise engine internal cause of all remaining 83 objects is unproven",
+    "Per-house synchronous scene activation has not received a long-run startup/frame-spike benchmark",
+    "Artistic acceptance and the full supplied concept remain open"
+  ],
+  "evidence": "docs/review/2026-10-21-interior-activation",
+  "release": false,
+  "parent_exact_ci": "8/8 success a7462ff85553de3fc42c9107246b115ab5e3db20",
+  "local_regressions": {
+    "warm-physics-final": {
+      "exit_code": 0,
+      "seconds": 46.08,
+      "errors": [],
+      "marker": true
+    },
+    "warm-passages-final": {
+      "exit_code": 0,
+      "seconds": 4.06,
+      "errors": [],
+      "marker": true
+    },
+    "warm-quality-final": {
+      "exit_code": 0,
+      "seconds": 5.47,
+      "errors": [],
+      "marker": true
+    },
+    "warm-household-final": {
+      "exit_code": 0,
+      "seconds": 77.38,
+      "errors": [],
+      "marker": true
+    },
+    "activation-render-final": {
+      "exit_code": 0,
+      "seconds": 76.2,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "final_native_runtime": {
+    "exit_code": 0,
+    "seconds": 83.2,
+    "errors": [],
+    "marker": true,
+    "exit_objects": 83,
+    "gameplay": {
+      "bow_arrow_consumed": true,
+      "captures": [
+        "user://head-size-walk.png",
+        "user://head-size-run.png",
+        "user://head-size-tall-jump.png",
+        "user://head-size-starter_axe.png",
+        "user://head-size-short_bow.png",
+        "user://head-size-bow-released.png",
+        "user://head-size-short-walk.png",
+        "user://head-size-short-jump.png",
+        "user://head-size-cast-free-hand.png",
+        "user://head-size-magic-after-load.png",
+        "user://head-size-inventory-lifecycle.png"
+      ],
+      "game_save_roundtrip": true,
+      "jump_both_heights": true,
+      "look_roundtrip": true,
+      "morphs": 9,
+      "physical_heights_cm": [
+        160,
+        195
+      ],
+      "player_position_assignments": 0,
+      "walked_m": 28.6504781548865
+    }
+  }
+}

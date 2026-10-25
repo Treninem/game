@@ -1,0 +1,172 @@
+{
+  "date": "2026-10-22",
+  "parent_commit": "e0ed5f712c24ebdfe11909aa616767adab58607d",
+  "base_main": "0015b68c491271ea9e02c48881b1f496e1efea5b",
+  "branch": "codex/household-persistence-2026-10-19",
+  "pr": "https://github.com/Treninem/game/pull/12",
+  "delivery": "Unreleased review; full artistic/concept acceptance false",
+  "owner_direction": "Supplied cottage/settlement boards; connected usable yards, gardens, street access and worked house detail, while preserving the real game and saves",
+  "changes": [
+    "Blender-authored reusable worked timber, measured stone courses, window boxes, meadow flowers and open timber store; selected existing B47 CC0 fence geometry normalized with original source/license retained",
+    "Established village/town home exteriors gain measured framing and terrain-foot stone courses; actual window openings, entrance width, old room furniture and saved identities remain intact",
+    "Both villages gain 15 bounded 6x5m plots with physical fence/gate openings and computed terrain-conforming access avoiding houses, existing streets and other plots; no NPC route sequence added",
+    "Existing photographed wood/stone, actual temperate bushes, muted existing grass and shared environmental foliage wind are reused with batching and distance culling",
+    "Real player reach and physics line-of-sight guard finite berry harvest; three units then two game days to regrow; leaves remain and world-state save keys survive reload/streaming",
+    "Existing animated chest implementation provides usable yard storage under physical sloped timber roofs; actual gate state, inventory transfers and disk saves reuse established systems",
+    "Freed settlement dictionary entry now remains Variant until validity/type check, fixing a real recreation error caught by lifecycle test",
+    "World Core receives the bounded yard/save/streaming regression while all parent mandatory gates are preserved"
+  ],
+  "asset_geometry": {
+    "GardenFence": {
+      "triangles": 264,
+      "vertices": 160
+    },
+    "MeadowFlowers": {
+      "triangles": 336,
+      "vertices": 330
+    },
+    "StoneCourse": {
+      "triangles": 864,
+      "vertices": 448
+    },
+    "TimberBeam": {
+      "triangles": 108,
+      "vertices": 56
+    },
+    "TimberStore": {
+      "triangles": 3564,
+      "vertices": 1848
+    },
+    "WindowPlanter": {
+      "triangles": 756,
+      "vertices": 392
+    },
+    "fence_source_sha256": "eddf77f93e9f65e284165dce448c173bf4d59eb1800f453b214220ccff9a911c"
+  },
+  "local_checks": {
+    "import": {
+      "case": "import",
+      "exit_code": 0,
+      "seconds": 71.84,
+      "errors": []
+    },
+    "cottage_yards": {
+      "case": "cottage_yards",
+      "exit_code": 0,
+      "seconds": 18.8,
+      "errors": []
+    },
+    "world_settlements": {
+      "case": "world_settlements",
+      "exit_code": 0,
+      "seconds": 11.62,
+      "errors": []
+    },
+    "enterable_building": {
+      "case": "enterable_building",
+      "exit_code": 0,
+      "seconds": 6.56,
+      "errors": []
+    },
+    "household_furniture": {
+      "case": "household_furniture",
+      "exit_code": 0,
+      "seconds": 78.88,
+      "errors": []
+    },
+    "household_aisle": {
+      "case": "household_aisle",
+      "exit_code": 0,
+      "seconds": 9.8,
+      "errors": []
+    },
+    "settlement_streaming": {
+      "case": "settlement_streaming",
+      "exit_code": 0,
+      "seconds": 7.75,
+      "errors": []
+    },
+    "ui_and_save": {
+      "case": "ui_and_save",
+      "exit_code": 0,
+      "seconds": 10.62,
+      "errors": []
+    },
+    "terrain_paths": {
+      "case": "terrain_paths",
+      "exit_code": 0,
+      "seconds": 8.58,
+      "errors": []
+    },
+    "settlement_road_gate_overlay": {
+      "case": "settlement_road_gate_overlay",
+      "exit_code": 0,
+      "seconds": 9.5,
+      "errors": []
+    },
+    "settlement_public_works": {
+      "case": "settlement_public_works",
+      "exit_code": 0,
+      "seconds": 10.17,
+      "errors": []
+    },
+    "village_visual": {
+      "case": "village_visual",
+      "exit_code": 0,
+      "seconds": 122.31,
+      "errors": [],
+      "marker": true
+    }
+  },
+  "graphical_world": {
+    "walked_m": 292.521000537323,
+    "manual_play": false,
+    "driver_position_assignments": 0,
+    "checkpoint": "Copy of the prior genuinely walked 2065.82m forest-to-village slot4; long journey not rerun on this art revision",
+    "actions": [
+      "actual ray/reach front door",
+      "close/open two garden gates",
+      "walk actual street/access/fence openings",
+      "two finite harvests",
+      "real storage UI focus/accept button transfers one harvested berry",
+      "physical store roof jump and landing",
+      "four quality presets rendered",
+      "isolated disk slot5"
+    ],
+    "inspection_clock": "09:00; only inspection driver holds clock/survival",
+    "renderer": "Godot4.7.1 GL Compatibility Intel UHD610 1280x720",
+    "roof_jump_profile": "current default human/capsule only; full height/body matrix not claimed"
+  },
+  "short_stationary_sample": {
+    "frames": 120,
+    "mean_frame_ms": 36.85955,
+    "reported_video_memory_bytes": 546655729,
+    "draw_calls": 1433,
+    "scope": "Medium village view; not long-session FPS or total process RAM"
+  },
+  "correction_history": [
+    "Initial all-plot access failure: choose a genuinely walkable street node and safe rear setback, preserving inflated obstacle checks",
+    "Fixture type inference failure corrected with explicit Basis/Vector3; failed logs retained",
+    "Unload/recreate regression exposed typed access to freed settlement, fixed underlying manager guard and repeated test",
+    "First actual frames exposed missing Blender shader pigments and overly dark timber; Principled export/color regression and material tint corrected; before frames retained",
+    "One observer camera was inside an adjacent wall; candidate views now require an unobstructed physical ray",
+    "Rendered inspection caught soil ending 3m before a gate; added real opening coverage and 225 coverage samples across all 15 gate approaches, then repeated physical and graphical checks",
+    "Local command named a nonexistent household_persistence scene; orchestration corrected to existing household_furniture/aisle/UI/stream checks; missing-scene log retained separately"
+  ],
+  "save_safety": "All profiles and Blender factory startup isolated; user profiles, applications and preferences untouched. Existing homes not relocated; no item/currency reset or save schema migration.",
+  "ci": "Parent e0ed5f71 exact SHA: 8/8 SUCCESS verified and archived. Own exact-SHA CI pending push at journal creation. No stable release.",
+  "remaining": [
+    "Current buildings, landscape and people still fall well below the supplied visual concept; this packet is not owner art acceptance",
+    "Plots preserve existing scattered building positions; dense varied street blocks/estates, fences fitted to whole household boundaries, crop fields, barns and living livestock remain open",
+    "Berry harvest is finite and saved, but no NPC farming, planting, irrigation, private crop ownership or full agricultural economy is added",
+    "Vegetable/cereal source-pack look was rejected as too faceted; no claim of integrated realistic crops",
+    "Exterior kit decorates the established village/town EnterableBuilding family; capital townhouse types and all architecture are not replaced",
+    "Family/child/age/school links, outdoor NPC autonomous routing and real profession population remain open; no prescribed NPC route or external language-model dependency was added",
+    "Human clothing/shoulder/hand and animation quality remain open; this packet does not repair people",
+    "Landscape mountains/valleys and expanded connected river network remain open; existing geography and saved coordinates were preserved",
+    "Village-path cartography and softer path transitions remain open",
+    "Short stationary graphics sample does not establish long-session FPS or total RAM; plot construction adds streaming work",
+    "Native shutdown reports 100 ObjectDB leftovers versus the previous 83; exit resource cleanup remains unresolved, no crash-free soak claim"
+  ],
+  "next_related_stage": "Coherent street blocks/household parcels and occupation-specific yards, practical farm/store/barn use, compatible realistic crop/animal assets; retain people/clothing/animation and major landscape work as explicit parallel work groups, without pretending technical gates equal art acceptance."
+}

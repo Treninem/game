@@ -1,0 +1,110 @@
+[
+  {
+    "sex": "male",
+    "clip": "Axe_Chop",
+    "maximum_edge_m": 0.11972
+  },
+  {
+    "sex": "male",
+    "clip": "Bow_Attack_Draw",
+    "maximum_edge_m": 0.15031
+  },
+  {
+    "sex": "male",
+    "clip": "Bow_Attack_Shoot",
+    "maximum_edge_m": 0.14908
+  },
+  {
+    "sex": "male",
+    "clip": "Death",
+    "maximum_edge_m": 0.11972
+  },
+  {
+    "sex": "male",
+    "clip": "Idle",
+    "maximum_edge_m": 0.11972
+  },
+  {
+    "sex": "male",
+    "clip": "Jump",
+    "maximum_edge_m": 0.11972
+  },
+  {
+    "sex": "male",
+    "clip": "Punch",
+    "maximum_edge_m": 0.11972
+  },
+  {
+    "sex": "male",
+    "clip": "Run",
+    "maximum_edge_m": 0.11972,
+    "minimum_knee_angle_deg": 6.10356,
+    "minimum_forward_lean_deg": 12.4119
+  },
+  {
+    "sex": "male",
+    "clip": "Walk",
+    "maximum_edge_m": 0.11972,
+    "minimum_knee_angle_deg": 15.39012,
+    "minimum_forward_lean_deg": 0.60036
+  },
+  {
+    "sex": "male",
+    "clip": "Working",
+    "maximum_edge_m": 0.11972
+  },
+  {
+    "sex": "female",
+    "clip": "Axe_Chop",
+    "maximum_edge_m": 0.10031
+  },
+  {
+    "sex": "female",
+    "clip": "Bow_Attack_Draw",
+    "maximum_edge_m": 0.14064
+  },
+  {
+    "sex": "female",
+    "clip": "Bow_Attack_Shoot",
+    "maximum_edge_m": 0.14026
+  },
+  {
+    "sex": "female",
+    "clip": "Death",
+    "maximum_edge_m": 0.11005
+  },
+  {
+    "sex": "female",
+    "clip": "Idle",
+    "maximum_edge_m": 0.09884
+  },
+  {
+    "sex": "female",
+    "clip": "Jump",
+    "maximum_edge_m": 0.1036
+  },
+  {
+    "sex": "female",
+    "clip": "Punch",
+    "maximum_edge_m": 0.09884
+  },
+  {
+    "sex": "female",
+    "clip": "Run",
+    "maximum_edge_m": 0.09884,
+    "minimum_knee_angle_deg": 6.10242,
+    "minimum_forward_lean_deg": 13.28724
+  },
+  {
+    "sex": "female",
+    "clip": "Walk",
+    "maximum_edge_m": 0.09884,
+    "minimum_knee_angle_deg": 15.41776,
+    "minimum_forward_lean_deg": 1.72777
+  },
+  {
+    "sex": "female",
+    "clip": "Working",
+    "maximum_edge_m": 0.10352
+  }
+]

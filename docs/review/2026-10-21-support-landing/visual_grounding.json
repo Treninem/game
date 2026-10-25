@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "seconds": 20.95,
+  "errors": [],
+  "markers": [
+    "VISUAL_GROUNDING_SMOKE_OK human=skinned animations=responsive feet=grounded spawn_support=retired water=curved shore=joined"
+  ]
+}

@@ -1,0 +1,42 @@
+# Native human character family â€” 0.10.7.2 review
+
+INTEGRATED in the character review candidate: `assets/production/characters/realistic/male.glb` and `female.glb` are referenced by `scripts/humanoid_visual.gd`. This is an initial family, not a completed photorealistic wardrobe.
+
+Sources: official MakeHuman Community MPFB core graphics and MakeHuman system graphics, CC0. No MPFB GPL executable code is embedded. The selected source files and licenses live in `assets/staging/characters/makehuman_mpfb_core/` and `makehuman_system_selected/`, with SHA-256 manifests. These new selections await main confirmation; STAGED_PHYSICAL on main is not claimed.
+
+Native MakeHuman body weights and bone definitions are retained. Existing ten Quaternius-derived clips are reused from the previous citizen asset, retargeted with separate normalized bind and actor frames; Idle uses a relaxed native stance. Forward knee constraints preserve ankle contact. Garment weights are smoothed on connected topology; authored UV islands separate shirt and trousers. Author clothing/footwear masks remove hidden body faces. Cuffs end at the wrist. Hair tint uses a project shader with the CC0 strand textures.
+
+There are separate skin, eyes, brows, two hair meshes, clothing and footwear; eight synchronized morph targets, and ten presets, five per sex. The editor is reached from New Game and stores the selected appearance through the existing game-save world state. Old saves get a bounded default. Material caches depend on color choices, not every slider position.
+
+Reproduce with `tools/build_realistic_humans.py`; validate with `tools/validate_realistic_characters.py` and `tests/smoke_character_creator.tscn`. Full gameplay, native rendering and performance results belong to the character development journal. Body height is normalized near 1.8 m; morph ranges are bounded. Initial garments are generic long-sleeved shirts, trousers and plain shoes; full armor, garment swapping, age presets and advanced facial controls remain unfinished.
+
+## Weapon grip follow-up â€” 0.10.7.3
+
+INTEGRATED in the review runtime: native hand joints close around independently measured axe/bow handle points. The per-actor post-animation modifier preserves lower-body locomotion during attacks and follows camera pitch. Runtime arm clips replace the source bow/axe poses with a documented contact schedule. Existing B36 bow/arrow geometry is reused; a procedural cord follows the drawing fingers, and a wrapper preserves arrow normalization. Tests cover measured shaft contact, finger bend, arrow size/aim, paused equip, cancellation/load and physical damage. This is initial grip/animation refinement, not a claim of motion-capture quality or a complete combat system.
+
+## Surface follow-up — 2026-10-19
+
+INTEGRATED in the review runtime: existing CC0 garment AO/normal and footwear diffuse in `realistic/details`, anisotropic mipmapped materials, differentiated cloth/skin/eye roughness and 4x MSAA in the character editor. No new body geometry or photorealism claim. Both bodies received native editor captures and the bounded actual-world weapon pass; evidence: `docs/DEVELOPMENT_LOG_2026-10-19_CHARACTER_SURFACES.json`.
+
+## Character surfaces follow-up — 2026-10-19
+
+INTEGRATED in the review runtime: existing CC0 garment AO/normal and footwear diffuse in `realistic/details`, anisotropic materials and editor MSAA. No new body geometry. Evidence: `docs/DEVELOPMENT_LOG_2026-10-19_CHARACTER_SURFACES.json`.
+
+## Facial controls — 2026-10-20
+
+INTEGRATED in the review branch: existing CC0 head vertical/depth and nose horizontal/vertical targets add FaceHeight, FaceDepth, NoseWidth and NoseHeight. All seven parts carry the synchronized keys. Clothing opening weights retain their authored boundary and a 3 mm shell separates cloth from skin; full animation/wardrobe realism is not claimed. Reproduce with tools/build_realistic_humans.py.
+
+## Eye color selection — 2026-10-20 review
+- INTEGRATED in review: five existing MakeHuman CC0 eye atlases in `assets/production/characters/realistic/eyes/`; exact source hashes and license preserved there. Runtime choice and save compatibility verified on both bodies. No new download; STAGED_PHYSICAL on main is not claimed.
+
+## Head size — 2026-10-20
+INTEGRATED in review: ninth synchronized HeadSize shape on both bodies and seven fitted parts. Composed from the three existing CC0 authored head-axis targets at 0.6 strength each, exposed within -0.5..0.5. No new source pack/download. Build and animated geometry validation remain reproducible with the existing tools; full visual realism remains unaccepted.
+
+## Hair strand tone preservation — 2026-10-20
+INTEGRATED in review: existing shared hair/brow shader preserves authored medium/high strand contrast with smooth tonal compression and mipmapped anisotropic sampling. No source asset, model or license change. Lit-ramp baseline fails with the old shader and passes with the correction; both bodies, both hairstyles and all five colors receive before/after graphical views. Overall visual quality remains unaccepted.
+
+## Standalone texture mip chains — 2026-10-20
+INTEGRATED in review: explicit import sidecars generate physical mip chains for the three detail maps and five eye atlases. Original PNG pixels and rights are unchanged. Dynamic material filter settings alone did not create these levels. Both actual body materials and the exported package are probed; all 16 unique character textures retain mip chains. No global visual/performance acceptance is claimed.
+
+## Shoulder, cuff and free-hand refinement — 2026-10-20
+INTEGRATED in the review runtime: both existing CC0 bodies now use palm-space relaxed finger curves in Idle/Walk/Run. Weapon gripping still uses the measured runtime constraint. Garment weights use 24 anchored topology diffusion passes; sampled default-body shoulder stretch decreases in all six body/clip combinations. Cuff fitting compresses the distal sleeve smoothly instead of flattening its rings, and native wrist skin is retained underneath. Runtime cloth keeps its authored normal and AO in their proper material roles rather than painting AO into base color. No new source pack, texture download, complete wardrobe or full visual acceptance. Reproduction: tools/build_realistic_humans.py; geometry validation and native tests remain mandatory. Evidence: docs/DEVELOPMENT_LOG_2026-10-20_HUMAN_DEFORMATIONS.json.

@@ -185,5 +185,20 @@ func _run_test() -> void:
         return
 
     SaveManager.delete_slot(10)
+    # This fixture owns a second world outside current_scene. Retire its
+    # decoder while its emitter is still in the audio server/tree, not only
+    # from the parent's _exit_tree after its audio children have exited.
+    var world_audio := scene.get_node_or_null("World/WorldAudio")
+    if world_audio == null:
+        _fail(38, "owned world audio system is missing during teardown")
+        return
+    var river_emitter := world_audio.call("river_emitter") as AudioStreamPlayer3D
+    world_audio.call("shutdown")
+    if river_emitter == null or river_emitter.playing or river_emitter.stream != null:
+        _fail(39, "owned world teardown retains river playback")
+        return
+    await tree.create_timer(0.1, true).timeout
+    scene.queue_free()
+    await get_tree().create_timer(0.15, true).timeout
     print("OFFWORLD_STREAMING_SMOKE_OK realm=suspended dungeon=suspended mainland=resumed fall_recovery=realm rune_pause=stable save_load=resynced cancel_reward=blocked transition_guards=active")
     tree.quit(0)

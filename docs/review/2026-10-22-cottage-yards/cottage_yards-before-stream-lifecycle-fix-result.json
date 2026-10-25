@@ -1,0 +1,10 @@
+{
+  "case": "cottage_yards",
+  "exit_code": 1,
+  "seconds": 130.23,
+  "errors": [
+    "SCRIPT ERROR: Trying to assign invalid previously freed instance.",
+    "SCRIPT ERROR: Assertion failed: Streaming resets depleted harvest",
+    "ERROR: Cottage yards watchdog"
+  ]
+}
