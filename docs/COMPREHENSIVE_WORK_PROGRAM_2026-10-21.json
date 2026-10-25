@@ -67,7 +67,7 @@
         "Состояния паузы/диалога/сохранения не ломают ввод и магию",
         "Проверки на четырёх размерах экрана и пользовательское визуальное принятие"
       ],
-      "current": "Обструкция камеры и ограниченный цикл интерфейса проверены; визуальная приёмка и весь UX остаются открытыми."
+      "current": "Обструкция камеры и ограниченный цикл интерфейса проверены; визуальная приёмка и весь UX остаются открытыми. Пакет25октября: общая пакетная отрисовка всех значков карты,1017→3 вызова в плотной проверке; нормальный игровой прогон и загрузка подтверждены, общийFPS и художественная приёмка остаются открыты. См. docs/DEVELOPMENT_LOG_2026-10-25_MAP_RENDER.json."
     },
     {
       "group": "Надёжность и поставка",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-25_MAP_RENDER.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
@@ -687,6 +687,22 @@
         "updated_at": "2026-10-25T07:52:35Z"
       }
     },
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "latest_map_render_package": {
+    "runtime_sha": "a97c4be6c5186923939bdb78c0ec5fc0fffdba0f",
+    "root_runtime_integrated": true,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_MAP_RENDER.json",
+    "dense_features": 1011,
+    "marker_draw_calls_before": 1017,
+    "marker_draw_calls_after": 3,
+    "world_draw_calls_before": 1104,
+    "world_draw_calls_after": 287,
+    "local_gameplay_seconds": 110.9690000000046,
+    "local_gameplay_120_frame_mean_ms": 52.135075,
+    "renderer": "Godot4.7.1 GL Compatibility, Intel UHD610, Windows8GB",
+    "manual_play": false,
     "full_visual_acceptance": false,
     "stable_release": false
   }

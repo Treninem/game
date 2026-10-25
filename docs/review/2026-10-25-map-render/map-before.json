@@ -1,0 +1,392 @@
+{
+  "geometry": {
+    "@StaticBody3D@20": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "AshAbyssPortal": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "AuthoredFallenLog": {
+      "instances": 56,
+      "nodes": 56
+    },
+    "AuthoredStump": {
+      "instances": 56,
+      "nodes": 56
+    },
+    "CutStump_00": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "CutStump_01": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "CutStump_02": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "CutStump_03": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "CutStump_04": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "DetailCell_-1_-1": {
+      "instances": 1399,
+      "nodes": 24
+    },
+    "DetailCell_-1_-2": {
+      "instances": 1399,
+      "nodes": 23
+    },
+    "DetailCell_-1_0": {
+      "instances": 1380,
+      "nodes": 24
+    },
+    "DetailCell_-1_1": {
+      "instances": 1390,
+      "nodes": 23
+    },
+    "DetailCell_-1_2": {
+      "instances": 1353,
+      "nodes": 23
+    },
+    "DetailCell_-2_-1": {
+      "instances": 1440,
+      "nodes": 25
+    },
+    "DetailCell_-2_-2": {
+      "instances": 1363,
+      "nodes": 23
+    },
+    "DetailCell_-2_0": {
+      "instances": 1435,
+      "nodes": 22
+    },
+    "DetailCell_-2_1": {
+      "instances": 1415,
+      "nodes": 23
+    },
+    "DetailCell_-2_2": {
+      "instances": 1452,
+      "nodes": 23
+    },
+    "DetailCell_0_-1": {
+      "instances": 1051,
+      "nodes": 22
+    },
+    "DetailCell_0_-2": {
+      "instances": 135,
+      "nodes": 9
+    },
+    "DetailCell_0_0": {
+      "instances": 1382,
+      "nodes": 24
+    },
+    "DetailCell_0_1": {
+      "instances": 1394,
+      "nodes": 23
+    },
+    "DetailCell_0_2": {
+      "instances": 1362,
+      "nodes": 24
+    },
+    "DetailCell_1_-1": {
+      "instances": 1042,
+      "nodes": 20
+    },
+    "DetailCell_1_-2": {
+      "instances": 1359,
+      "nodes": 24
+    },
+    "DetailCell_1_0": {
+      "instances": 134,
+      "nodes": 10
+    },
+    "DetailCell_1_1": {
+      "instances": 136,
+      "nodes": 11
+    },
+    "DetailCell_1_2": {
+      "instances": 137,
+      "nodes": 10
+    },
+    "DetailCell_2_-1": {
+      "instances": 1400,
+      "nodes": 23
+    },
+    "DetailCell_2_-2": {
+      "instances": 1410,
+      "nodes": 24
+    },
+    "DetailCell_2_0": {
+      "instances": 1403,
+      "nodes": 23
+    },
+    "DetailCell_2_1": {
+      "instances": 1353,
+      "nodes": 23
+    },
+    "DetailCell_2_2": {
+      "instances": 1303,
+      "nodes": 24
+    },
+    "DungeonManagerPortal": {
+      "instances": 2,
+      "nodes": 2
+    },
+    "EchoEdgePortal": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_00": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_01": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_02": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_03": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_04": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_05": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_06": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_07": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_08": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_09": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "FordStone_10": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "GroundedModel": {
+      "instances": 13,
+      "nodes": 13
+    },
+    "GroundedTemperateTree": {
+      "instances": 56,
+      "nodes": 56
+    },
+    "LocalAmbientVFX": {
+      "instances": 4,
+      "nodes": 4
+    },
+    "LocalHailVFX": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "LocalNatureVFX": {
+      "instances": 3,
+      "nodes": 3
+    },
+    "LocalWeatherVFX": {
+      "instances": 4,
+      "nodes": 4
+    },
+    "Model": {
+      "instances": 3,
+      "nodes": 3
+    },
+    "OldCartTrack": {
+      "instances": 3,
+      "nodes": 3
+    },
+    "OldFishingPlace": {
+      "instances": 3,
+      "nodes": 3
+    },
+    "RackPost": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "RoadBridge": {
+      "instances": 7,
+      "nodes": 7
+    },
+    "Skeleton3D": {
+      "instances": 16,
+      "nodes": 16
+    },
+    "StartRiver": {
+      "instances": 34,
+      "nodes": 34
+    },
+    "StoryStartSurface": {
+      "instances": 1,
+      "nodes": 1
+    },
+    "Visual": {
+      "instances": 39,
+      "nodes": 39
+    },
+    "WorldChunk_-1_-1": {
+      "instances": 72,
+      "nodes": 10
+    },
+    "WorldChunk_-1_-2": {
+      "instances": 66,
+      "nodes": 10
+    },
+    "WorldChunk_-1_0": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_-1_1": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_-1_2": {
+      "instances": 64,
+      "nodes": 11
+    },
+    "WorldChunk_-2_-1": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_-2_-2": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_-2_0": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_-2_1": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_-2_2": {
+      "instances": 63,
+      "nodes": 11
+    },
+    "WorldChunk_0_-1": {
+      "instances": 2,
+      "nodes": 2
+    },
+    "WorldChunk_0_-2": {
+      "instances": 19,
+      "nodes": 4
+    },
+    "WorldChunk_0_0": {
+      "instances": 29,
+      "nodes": 6
+    },
+    "WorldChunk_0_1": {
+      "instances": 34,
+      "nodes": 8
+    },
+    "WorldChunk_0_2": {
+      "instances": 42,
+      "nodes": 8
+    },
+    "WorldChunk_1_-1": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_1_-2": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_1_0": {
+      "instances": 69,
+      "nodes": 10
+    },
+    "WorldChunk_1_1": {
+      "instances": 38,
+      "nodes": 9
+    },
+    "WorldChunk_1_2": {
+      "instances": 52,
+      "nodes": 9
+    },
+    "WorldChunk_2_-1": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_2_-2": {
+      "instances": 73,
+      "nodes": 10
+    },
+    "WorldChunk_2_0": {
+      "instances": 72,
+      "nodes": 11
+    },
+    "WorldChunk_2_1": {
+      "instances": 70,
+      "nodes": 11
+    },
+    "WorldChunk_2_2": {
+      "instances": 73,
+      "nodes": 10
+    }
+  },
+  "manual_play": false,
+  "quality": 1,
+  "samples": [
+    {
+      "cpu_ms": 127.931466666667,
+      "draw_calls": 1104,
+      "frames": 30,
+      "label": "baseline",
+      "mean_ms": 58.6818,
+      "p50_ms": 55.425,
+      "p95_ms": 111.125,
+      "physics_ms": 9.5643,
+      "primitives": 266909,
+      "video_bytes": 431269004
+    },
+    {
+      "cpu_ms": 303.154333333334,
+      "draw_calls": 276,
+      "frames": 30,
+      "label": "without-minimap",
+      "mean_ms": 47.1531666666667,
+      "p50_ms": 44.798,
+      "p95_ms": 80.72,
+      "physics_ms": 8.87803333333333,
+      "primitives": 213050,
+      "video_bytes": 430161560
+    },
+    {
+      "cpu_ms": 109.4991,
+      "draw_calls": 1103,
+      "frames": 30,
+      "label": "restored",
+      "mean_ms": 46.0323,
+      "p50_ms": 39.663,
+      "p95_ms": 100.271,
+      "physics_ms": 10.6105666666667,
+      "primitives": 265329,
+      "video_bytes": 431269004
+    }
+  ]
+}

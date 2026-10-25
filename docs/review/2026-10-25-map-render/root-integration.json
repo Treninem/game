@@ -1,0 +1,11 @@
+{
+  "sha": "a97c4be6c5186923939bdb78c0ec5fc0fffdba0f",
+  "files": {
+    "scripts/local_map_renderer.gd": "7cd0b127e5b3e4791ceb185694652a4afbce8eb53fe052005860684fbd57ba7e",
+    "scripts/map_marker_batch.gd": "bc4dd02e01b939c4de14bb2dd3d0bb97320e4dee34eea2d2cd8be67536436d93",
+    "tests/visual_map_batch.gd": "ead7bb7d334b65ea96b55db82e9750e6be5daaef8c55fa6f4e3d6a571eb259ef",
+    "tests/visual_map_batch.tscn": "5f708d5bef2efdd460b16ed6e4c8c3a278ba5e6e909c02a5be62cb6ee3901afa"
+  },
+  "HEAD_index_preserved": true,
+  "normal_profiles_saves_untouched": true
+}

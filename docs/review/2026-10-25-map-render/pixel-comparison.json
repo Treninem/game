@@ -1,0 +1,8 @@
+{
+  "reference": "build\\asset_work\\world-render-2026-10-25\\markers-baseline-r2\\APPDATA\\Godot\\app_userdata\\ImPuls\\map-batch-markers.png",
+  "candidate": "build\\asset_work\\world-render-2026-10-25\\markers-final\\APPDATA\\Godot\\app_userdata\\ImPuls\\map-batch-markers.png",
+  "pixels_total": 518400,
+  "pixels_changed": 30119,
+  "pixels_changed_over_12": 4,
+  "mean_absolute_channel_delta": 0.037840792181069956
+}
