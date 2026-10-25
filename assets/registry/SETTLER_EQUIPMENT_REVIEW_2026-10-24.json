@@ -1,11 +1,11 @@
 {
   "date": "2026-10-24",
-  "asset_status": "APPROVED",
-  "status_scope": "Source rights approved; real files and native renders verified on this validation branch, not yet main or live runtime.",
+  "asset_status": "INTEGRATED",
+  "status_scope": "Bow/arrow are INTEGRATED in validation/local runtime after selected model coupling/native checks. Axe/knife stay APPROVED source candidates. Whole art and performance acceptance are false.",
   "physical_source_on_main": false,
   "physical_source_on_validation_branch": true,
   "production_ready": false,
-  "runtime_referenced": false,
+  "runtime_referenced": true,
   "source_path": "assets/staging/project_owned/settler_equipment_2026_10_24/",
   "recommended_runtime_target": "assets/production/weapons/settler_equipment/",
   "geometry_reused_from_rejected_pack": false,
@@ -193,11 +193,27 @@
     "performance_acceptance": false
   },
   "remaining": [
-    "Knife stone flake/handle appearance needs another art pass.",
-    "Preserve all three imported bow Draw morph meshes and drive moving nocks/string together.",
-    "The old runtime cord cleanup replaces ArrayMesh objects and would strip new morphs.",
-    "Measure final hands, nocks and tool contact at both bodies/all heights/actions before connecting this family.",
-    "Use one catalog for held models, previews, workshop/market goods and projectiles.",
-    "Do not claim rarity, repair, upgrades or world art completion."
-  ]
+    "Whole character art is still rejected/open: hair, fingers, garment neck/back transitions and broader wardrobe need work. Native frames make these limits visible.",
+    "Axe and knife Blender candidates remain source-only; the original live axe/knife are retained until their geometry and actions pass review.",
+    "Rare/epic variants, upgrades and repairs are not implemented by this visual package.",
+    "Focused full graphical run failed external240s after bow/magic/save/UI markers and a medium-quality120-frame sample. Do not count it as passed or raise/skip its deadline.",
+    "World Core may pass on a different runner but does not erase the focused graphical timeout. Continuous household graphical cycle40091621698 remains FAILED240s.",
+    "Software-renderer medium mean526.375325ms,1101drawcalls,1121546250reported video bytes are CI observations, not target-PC FPS or a bow-caused performance regression.",
+    "Local studio/UI first attempts exposed diagnostic preload/font-cache setup errors; recovered by late-loading autoload-dependent scripts and matching existing font cache. They are not claimed as successful initial runs.",
+    "Native verification is automated. World input driver performs ordinary actions without assigning player position; local studio/UI probes are fixtures. No manual whole-world journey or full art acceptance.",
+    "Main is unchanged; no merge, stable installer or release publication."
+  ],
+  "selected_items": {
+    "Bow_Wooden": "INTEGRATED",
+    "Arrow": "INTEGRATED",
+    "Axe_small": "APPROVED",
+    "Dagger": "APPROVED"
+  },
+  "integration_2026_10_25": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
+    "runtime_path": "assets/production/weapons/settler_equipment/",
+    "runtime_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+    "full_visual_acceptance": false,
+    "stable_release": false
+  }
 }

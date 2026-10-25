@@ -1,0 +1,170 @@
+{
+  "date": "2026-10-25",
+  "scope": "Authored bow and arrow: complete morph/string/fingers/nock/projectile/UI/workshop coupling, retaining the remaining character systems.",
+  "runtime_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+  "test_contract_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+  "asset_status": "INTEGRATED in local runtime and validation branch; existing draft PR is fast-forwarded by this record; not main.",
+  "root_runtime_integrated": true,
+  "changes": [
+    "Selected existing project-owned Blender bow/arrow and CC0 material files; kept editable master and source rights.",
+    "Preserved all three imported Draw morph meshes and their immutable GPU buffers. Only the separate RestCord is hidden on held instances.",
+    "Bound string endpoints to imported horn morph displacement; per-instance weights leave inventory/other bows unchanged.",
+    "Fixed existing cylinder scaling order: length is applied in local shaft space before rotation, avoiding up to19.38cm endpoint displacement in the measured poses.",
+    "Aligned string seat(-.343m), tip(+.350m), held arrow roll, launch transform and continuous tip collision. The total arrow stays70cm; seat-to-tip is69.3cm.",
+    "One catalog now supplies held/flight/inventory/market/fletcher arrows; no inventory IDs, quantities, damage, speed, gravity or save schema changed.",
+    "Migrated model-specific test coordinates to the authored metre/Y-up geometry while retaining all numeric grip/size/aim/pose/body thresholds. Corrected obsolete UI .glb expectation to exact new asset path and added all-item catalog equality."
+  ],
+  "metrics": {
+    "bow_poses": 120,
+    "body_variants": 2,
+    "heights_cm": [
+      160,
+      180,
+      195,
+      200
+    ],
+    "pitch_radians": [
+      -0.55,
+      0,
+      0.55
+    ],
+    "max_cord_to_nearest_horn_vertex_m": 0.00136019545607269,
+    "before_max_cord_to_horn_vertex_m": 0.193774104118347,
+    "max_arrow_release_vertex_bounds_jump_m": 1.06624031559477e-06,
+    "existing_grip_poses": 180,
+    "existing_bow_body_sweeps": 900,
+    "existing_axe_sweeps": 150,
+    "existing_punch_fingers": 240,
+    "tip_contact_cases": 10,
+    "controller_release_transforms": 3,
+    "additional_arrow_centerline_triangle_probes": 24,
+    "centerline_bow_intersections": 0,
+    "native_studio_frames": 36,
+    "UI_sizes": [
+      "960x540",
+      "1280x720",
+      "1920x1080"
+    ],
+    "manual_play": false
+  },
+  "local_checks": {
+    "coupling": {
+      "seconds": 7.265999999995984,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\coupling.log"
+    },
+    "grip": {
+      "seconds": 16.5,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\grip.log"
+    },
+    "tip": {
+      "seconds": 4.655999999995402,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\tip.log"
+    },
+    "release": {
+      "seconds": 9.389999999999418,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\release.log"
+    },
+    "root-coupling": {
+      "seconds": 12.046999999998661,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\root-coupling.log"
+    },
+    "root-grip": {
+      "seconds": 15.828000000001339,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\root-grip.log"
+    },
+    "root-tip": {
+      "seconds": 3.3439999999973224,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\root-tip.log"
+    },
+    "root-release": {
+      "seconds": 9.01600000000326,
+      "exit_code": 0,
+      "log": "D:\\Desktop\\GitHub\\game\\build\\asset_work\\bow-integration-2026-10-25\\root-release.log"
+    }
+  },
+  "CI": {
+    "full_core": {
+      "id": 40173982420,
+      "name": "Validate World Core",
+      "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Treninem/game/actions/runs/40173982420",
+      "updated_at": "2026-10-25T07:45:34Z"
+    },
+    "movement": {
+      "id": 40173984655,
+      "name": "Validate Player Movement",
+      "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40173984655",
+      "updated_at": "2026-10-25T07:49:15Z"
+    },
+    "inventory": {
+      "id": 40174468923,
+      "name": "Verify Inventory Layout Models and Keyboard",
+      "head_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40174468923",
+      "updated_at": "2026-10-25T07:55:29Z"
+    },
+    "focused_graphical_world": {
+      "id": 40173982239,
+      "name": "Verify Arrow Contact and Combat",
+      "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40173982239",
+      "updated_at": "2026-10-25T07:52:35Z"
+    }
+  },
+  "evidence": "docs/review/2026-10-25-authored-bow/",
+  "observed_world_markers": [
+    "LIVE_BOW_BLEND_OK samples=20",
+    "MAGIC_NATIVE_SAVE_OK",
+    "UI_NATIVE_REOPEN_OK cycles=12",
+    "OUTFIT_WORLD_FRAME_SAMPLE frames=120 mean_ms=526.375325"
+  ],
+  "prior_pause_follow_up": {
+    "resumed_by_user": true,
+    "previous_root_runtime_89085d7b_was_already_integrated": true,
+    "core89085d7b_final_success_confirmed": {
+      "id": 40104686894,
+      "name": "Validate World Core",
+      "head_sha": "89085d7b40fbd5c4934bc63a99d2669519fcea6b",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Treninem/game/actions/runs/40104686894",
+      "updated_at": "2026-10-24T15:28:48Z"
+    },
+    "hourly_automation": "Remains PAUSED; this user message resumed active development, not a new hourly schedule."
+  },
+  "limits": [
+    "Whole character art is still rejected/open: hair, fingers, garment neck/back transitions and broader wardrobe need work. Native frames make these limits visible.",
+    "Axe and knife Blender candidates remain source-only; the original live axe/knife are retained until their geometry and actions pass review.",
+    "Rare/epic variants, upgrades and repairs are not implemented by this visual package.",
+    "Focused full graphical run failed external240s after bow/magic/save/UI markers and a medium-quality120-frame sample. Do not count it as passed or raise/skip its deadline.",
+    "World Core may pass on a different runner but does not erase the focused graphical timeout. Continuous household graphical cycle40091621698 remains FAILED240s.",
+    "Software-renderer medium mean526.375325ms,1101drawcalls,1121546250reported video bytes are CI observations, not target-PC FPS or a bow-caused performance regression.",
+    "Local studio/UI first attempts exposed diagnostic preload/font-cache setup errors; recovered by late-loading autoload-dependent scripts and matching existing font cache. They are not claimed as successful initial runs.",
+    "Native verification is automated. World input driver performs ordinary actions without assigning player position; local studio/UI probes are fixtures. No manual whole-world journey or full art acceptance.",
+    "Main is unchanged; no merge, stable installer or release publication."
+  ],
+  "next_connected_package": [
+    "Profile the normal rendered world and fix the slow high/ultra/household pass without reducing required coverage or altering the clock.",
+    "Improve the rejected hands/garment seam/hair and complete whole-character render evidence.",
+    "Refine and integrate the staged axe/knife with the same complete contact/UI/save checks."
+  ],
+  "overall_percent": null,
+  "full_visual_acceptance": false,
+  "stable_release": false
+}

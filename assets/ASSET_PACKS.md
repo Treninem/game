@@ -195,8 +195,12 @@ INTEGRATED in review: fifteen metre-scaled street materials using existing CC0 g
 
 ### Rubik gameplay-panel review selection (2026-10-24)
 
-The existing physically staged SIL OFL1.1 Roman Rubik font is selected without modification for the isolated inventory/panel candidate under `assets/production/ui/fonts/rubik/`. The production folder preserves OFL.txt and provenance. No new font download or source pack; this candidate is not yet integrated into the user-opened root project. Native Cyrillic/layout review is required before acceptance.
+The existing physically staged SIL OFL1.1 Roman Rubik font is selected without modification for the isolated inventory/panel candidate under `assets/production/ui/fonts/rubik/`. The production folder preserves OFL.txt and provenance. No new font download or source pack; this font is INTEGRATED in the validated review and reconciled root gameplay panels. Native Cyrillic/layout checks passed; whole UI art remains open.
 
 ## Blender starter equipment source review 2026-10-24
 
 Project-authored CC0 four-model source under `assets/staging/project_owned/settler_equipment_2026_10_24/`; selected existing physical CC0 cedar/leather and scratched-steel maps, packed editable Blender master and glTF candidates. Registry: `assets/registry/SETTLER_EQUIPMENT_REVIEW_2026-10-24.json`. Source rights APPROVED; physical files confirmed on the validation branch only, not main. Not PRODUCTION_READY and not INTEGRATED. The old live catalog remains until complete grip/morph/string/projectile/display/UI/save acceptance.
+
+## Authored bow and arrow runtime — 2026-10-25
+
+INTEGRATED in local runtime and review, not main: selected `Bow_Wooden` and `Arrow` under `assets/production/weapons/settler_equipment/`. Editable Blender master/source rights remain in the source pack above. Three immutable Draw morphs, moving nock/cord coupling, shared held/projectile/UI/fletcher/market catalog and70cm complete arrow; original inventory/save identities retained. Registry: `assets/registry/SETTLER_EQUIPMENT_REVIEW_2026-10-24.json`; evidence and explicit graphical timeout: `docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json`. Axe/knife remain source-only candidates; no whole-world, rarity or repair completion. This entry supersedes the earlier four-model unintegrated review statement only for the selected bow/arrow.

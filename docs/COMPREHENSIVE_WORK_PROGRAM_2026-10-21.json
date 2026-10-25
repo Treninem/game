@@ -84,7 +84,7 @@
   "latest_verified_package": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
   "owner_visual_concept": "docs/design/IMPULS_VISUAL_CONCEPT_2026-10-21.md",
   "blender_authoring": "Use supplied owner concept boards for a coherent family-home kit first; author/edit selected geometry in Blender, integrate in live Godot, preserve usable systems and verify actual rendered gameplay. All building/character/animal/world families remain active, not completed by windows or timber alone.",
-  "last_updated": "2026-10-23",
+  "last_updated": "2026-10-25",
   "owner_household_requirements": {
     "source": "Direct owner messages, 21–22 October 2026",
     "visual_target": "Owner-supplied house concept; current sparse rooms rejected",
@@ -95,7 +95,7 @@
     "implemented_scope": "Bounded interior geometry A*, two size-dependent household layouts, one/two place settings; existing trader/fletcher work verified separately",
     "open_scope": "Child models/school/family links, professional population and broader housing variants, cooking/fuel interaction, full visual acceptance; older outdoor workplace approach waypoints remain outside this interior A* package"
   },
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_SURFACES.json",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
   "owner_settlement_landscape_requirements": {
     "source": "Direct owner messages, 22 October 2026",
     "settlements": "Coherent streets/squares/paths/plots rather than scattered houses; gardens, flowerbeds, village fields, meadows, vegetable gardens, estates, barns and domestic livestock",
@@ -590,11 +590,11 @@
     "boats_docks_piers_horses_carts_still_open": true
   },
   "manual_editor_handoff": {
-    "mode": "USER_EDITOR_HANDOFF",
+    "mode": "DEVELOPMENT_RESUMED_AFTER_OWNER_REQUEST",
     "project": "D:/Desktop/GitHub/game/project.godot",
     "opened_scene": "res://scenes/stage1.tscn",
     "editor_process_id_observed": 15652,
-    "runtime_root_writes": "Do not change the user-opened runtime/scenes until the user asks to resume integration after manual edits. Re-read current files and reconcile their changes first.",
+    "runtime_root_writes": "Owner resumed development after pause. Reconcile every target, preserve manual edits and shared Git HEAD/index; no blanket runtime write prohibition remains.",
     "isolated_proposals_allowed": true,
     "goal_status": "ACTIVE; no completion or goal pause claimed",
     "unsaved_windows_closed": false
@@ -606,6 +606,88 @@
     "isolated_candidate_cases_passed": 10,
     "existing_regressions_passed": 1,
     "regression_suite": "NOT PASSED: binding first timeout; traced binding retry pass; unlimited inventory timeout; lifecycle not run",
-    "visual_acceptance": false
+    "visual_acceptance": false,
+    "historical": true,
+    "superseded_by": "Verified89085d7b root integration; see current journal. Historical failures retained."
+  },
+  "latest_authored_bow_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
+    "runtime_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+    "test_contract_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+    "root_runtime_integrated": true,
+    "PR12_runtime_integrated": true,
+    "metrics": {
+      "bow_poses": 120,
+      "body_variants": 2,
+      "heights_cm": [
+        160,
+        180,
+        195,
+        200
+      ],
+      "pitch_radians": [
+        -0.55,
+        0,
+        0.55
+      ],
+      "max_cord_to_nearest_horn_vertex_m": 0.00136019545607269,
+      "before_max_cord_to_horn_vertex_m": 0.193774104118347,
+      "max_arrow_release_vertex_bounds_jump_m": 1.06624031559477e-06,
+      "existing_grip_poses": 180,
+      "existing_bow_body_sweeps": 900,
+      "existing_axe_sweeps": 150,
+      "existing_punch_fingers": 240,
+      "tip_contact_cases": 10,
+      "controller_release_transforms": 3,
+      "additional_arrow_centerline_triangle_probes": 24,
+      "centerline_bow_intersections": 0,
+      "native_studio_frames": 36,
+      "UI_sizes": [
+        "960x540",
+        "1280x720",
+        "1920x1080"
+      ],
+      "manual_play": false
+    },
+    "CI": {
+      "full_core": {
+        "id": 40173982420,
+        "name": "Validate World Core",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173982420",
+        "updated_at": "2026-10-25T07:45:34Z"
+      },
+      "movement": {
+        "id": 40173984655,
+        "name": "Validate Player Movement",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173984655",
+        "updated_at": "2026-10-25T07:49:15Z"
+      },
+      "inventory": {
+        "id": 40174468923,
+        "name": "Verify Inventory Layout Models and Keyboard",
+        "head_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40174468923",
+        "updated_at": "2026-10-25T07:55:29Z"
+      },
+      "focused_graphical_world": {
+        "id": 40173982239,
+        "name": "Verify Arrow Contact and Combat",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173982239",
+        "updated_at": "2026-10-25T07:52:35Z"
+      }
+    },
+    "full_visual_acceptance": false,
+    "stable_release": false
   }
 }

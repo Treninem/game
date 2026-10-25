@@ -1,13 +1,13 @@
 {
-  "date": "2026-10-24",
+  "date": "2026-10-25",
   "project_version_label": "0.10.7.3",
   "engine_verified": "Godot 4.7.1.stable.official.a13da4feb",
   "renderer": "GL Compatibility",
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "В основной проверочной ветке PR12 объединён проверенный runtime56d6b895: новый инвентарь, восстановление управления I/Tab, физический сход жителей с парапетов, исправление входа/выхода семьи после загрузки и эквивалентные UV материалов домов. Точные Core56d6b895(124 шага), Movement56d6b895 и native UI56d6b895 SUCCESS. Новые проверки SHA текущего PR и installer/export ожидаются после переноса; стабильного релиза нет. Полный непрерывный графический бытовой тест остаётся FAIL240с. Корневые runtime/сцены пользователя и общий HEAD/index сохранены; новые модели оружия ещё не входят в runtime.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-24_EDITOR_HANDOFF_INPUT_AUDIT.json",
+  "current_stage": "В рабочую игру и проверочную ветку подключены новые Blender-лук и стрела. Сохранены3 формы натяжения; исправлены наклонная тетива, совмещение паз/пальцы и переход в полёт.120 поз+прежние180 хватов/900 проверок рук/150 топора/240 кулаков,10 попаданий и3 трансформации выстрела прошли повторно в корневом проекте. Локально отрисованы36 студийных кадров и инвентарь в3 размерах; это автоматизированные проверки. Графический мир40173982239 FAILED240с, несмотря на пройденные игровые действия/UI/диск; производительность, внешность людей и мировая художественная приёмка открыты. Стабильного выпуска нет.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -202,7 +202,7 @@
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
   "ci_followup_status": "Runtime6d3 passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-24_REVIEW_INTEGRATION_SYNC.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -747,7 +747,7 @@
       "html_url": "https://github.com/Treninem/game/actions/runs/40086445556",
       "updated_at": "2026-10-24T11:08:47Z"
     },
-    "root_runtime_integrated": false,
+    "root_runtime_integrated": true,
     "PR12_runtime_integrated": true,
     "manual_play": false,
     "full_visual_acceptance": false,
@@ -757,7 +757,7 @@
     "journal": "docs/DEVELOPMENT_LOG_2026-10-24_HOUSE_SURFACE_PERFORMANCE.json",
     "isolated_runtime_sha": "4f2f3097a561ea091a5303f7632b7a634f92e297",
     "branch": "codex/editor-handoff-validation-2026-10-24",
-    "root_runtime_integrated": false,
+    "root_runtime_integrated": true,
     "PR12_runtime_integrated": true,
     "material_review": {
       "id": 40091621762,
@@ -831,7 +831,7 @@
       "html_url": "https://github.com/Treninem/game/actions/runs/40096743716",
       "updated_at": "2026-10-24T13:40:36Z"
     },
-    "root_runtime_integrated": false,
+    "root_runtime_integrated": true,
     "PR12_runtime_integrated": true,
     "full_visual_acceptance": false,
     "stable_release": false
@@ -874,5 +874,91 @@
       "updated_at": "2026-10-24T13:07:46Z"
     },
     "stable_release": false
+  },
+  "latest_authored_bow_package": {
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_AUTHORED_BOW.json",
+    "runtime_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+    "test_contract_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+    "root_runtime_integrated": true,
+    "PR12_runtime_integrated": true,
+    "metrics": {
+      "bow_poses": 120,
+      "body_variants": 2,
+      "heights_cm": [
+        160,
+        180,
+        195,
+        200
+      ],
+      "pitch_radians": [
+        -0.55,
+        0,
+        0.55
+      ],
+      "max_cord_to_nearest_horn_vertex_m": 0.00136019545607269,
+      "before_max_cord_to_horn_vertex_m": 0.193774104118347,
+      "max_arrow_release_vertex_bounds_jump_m": 1.06624031559477e-06,
+      "existing_grip_poses": 180,
+      "existing_bow_body_sweeps": 900,
+      "existing_axe_sweeps": 150,
+      "existing_punch_fingers": 240,
+      "tip_contact_cases": 10,
+      "controller_release_transforms": 3,
+      "additional_arrow_centerline_triangle_probes": 24,
+      "centerline_bow_intersections": 0,
+      "native_studio_frames": 36,
+      "UI_sizes": [
+        "960x540",
+        "1280x720",
+        "1920x1080"
+      ],
+      "manual_play": false
+    },
+    "CI": {
+      "full_core": {
+        "id": 40173982420,
+        "name": "Validate World Core",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173982420",
+        "updated_at": "2026-10-25T07:45:34Z"
+      },
+      "movement": {
+        "id": 40173984655,
+        "name": "Validate Player Movement",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173984655",
+        "updated_at": "2026-10-25T07:49:15Z"
+      },
+      "inventory": {
+        "id": 40174468923,
+        "name": "Verify Inventory Layout Models and Keyboard",
+        "head_sha": "dbf6b6d893a75eeb06caf2a4812aeb11cc513392",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40174468923",
+        "updated_at": "2026-10-25T07:55:29Z"
+      },
+      "focused_graphical_world": {
+        "id": 40173982239,
+        "name": "Verify Arrow Contact and Combat",
+        "head_sha": "a0cfe7b81b83da7de7583430abba0689d7cd350b",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Treninem/game/actions/runs/40173982239",
+        "updated_at": "2026-10-25T07:52:35Z"
+      }
+    },
+    "full_visual_acceptance": false,
+    "stable_release": false
+  },
+  "root_integration_reconciliation": {
+    "previous_890_package_receipt": "build/asset_work/settler-weapons-2026-10-24/root-runtime-integration.json",
+    "current": "docs/review/2026-10-25-authored-bow/root-integration.json",
+    "shared_HEAD_index_unchanged": true,
+    "normal_saves_profiles_untouched": true
   }
 }
