@@ -321,6 +321,8 @@ jobs:
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_bow_transition.gd 90
       - name: Verify fitted outfit coverage in final rendered poses
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_wardrobe_coverage.gd 300
+      - name: Verify dense map rendering symbols and save transitions
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_map_batch.tscn 90
       - name: Verify map cache across load and new game
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_map_state_transition.tscn 90
       - name: Verify chopping removes real rendered forest instances
@@ -421,6 +423,8 @@ jobs:
             ~/.local/share/godot/app_userdata/ImPuls/public-rest-gpu.json
             ~/.local/share/godot/app_userdata/ImPuls/city-facade-batches.json
             ~/.local/share/godot/app_userdata/ImPuls/city-street-fixture.json
+            ~/.local/share/godot/app_userdata/ImPuls/map-batch*.png
+            ~/.local/share/godot/app_userdata/ImPuls/map-batch.json
 
       - name: Upload isolated keyboard and physical recovery evidence
         if: always()

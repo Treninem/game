@@ -1,5 +1,7 @@
 extends RefCounted
 
+const MARKER_BATCH := preload("res://scripts/map_marker_batch.gd")
+var marker_batch := MARKER_BATCH.new()
 var texture: ImageTexture
 var tile_center := Vector2(INF, INF)
 var tile_radius := 0.0
@@ -34,40 +36,41 @@ func draw_terrain(control: Control, rect: Rect2, center: Vector2, radius: float)
 
 func draw_features(control: Control, rect: Rect2, center: Vector2, radius: float) -> void:
     var features := MapSystem.features_near(center, radius)
+    marker_batch.clear()
     # Static terrain details first; living actors remain readable on top.
     for feature: Dictionary in features:
         if feature.kind in ["tree", "building", "fixture"]:
-            _draw_feature(control, rect, center, radius, feature)
+            _append_feature(rect, center, radius, feature)
     for feature: Dictionary in features:
         if feature.kind not in ["tree", "building", "fixture"]:
-            _draw_feature(control, rect, center, radius, feature)
+            _append_feature(rect, center, radius, feature)
+    marker_batch.draw(control)
 
-func _draw_feature(control: Control, rect: Rect2, center: Vector2, radius: float, feature: Dictionary) -> void:
+func _append_feature(rect: Rect2, center: Vector2, radius: float, feature: Dictionary) -> void:
     var world := Vector2(float(feature.pos[0]), float(feature.pos[1]))
     var position := project(rect, center, radius, world)
     if not rect.has_point(position):
         return
     match String(feature.kind):
         "rock":
-            control.draw_circle(position, clampf(2.0 / (radius * 2.0) * rect.size.x, 0.8, 2.2), Color(0.52, 0.54, 0.52))
+            marker_batch.circle(position, clampf(2.0 / (radius * 2.0) * rect.size.x, 0.8, 2.2), Color(0.52, 0.54, 0.52))
         "stump":
-            control.draw_circle(position, 1.1, Color(0.48, 0.30, 0.16))
+            marker_batch.circle(position, 1.1, Color(0.48, 0.30, 0.16))
         "tree":
-            control.draw_circle(position, clampf(3.5 / (radius * 2.0) * rect.size.x, 0.7, 3.0), Color(0.10, 0.26, 0.12, 0.90))
+            marker_batch.circle(position, clampf(3.5 / (radius * 2.0) * rect.size.x, 0.7, 3.0), Color(0.10, 0.26, 0.12, 0.90))
         "building", "fixture":
             var footprint := Vector2(float(feature.size[0]), float(feature.size[1])) * 0.5
             var polygon := PackedVector2Array()
             for corner in [Vector2(-1, -1), Vector2(1, -1), Vector2(1, 1), Vector2(-1, 1)]:
                 var point := project(rect, center, radius, world + (corner * footprint).rotated(-float(feature.yaw)))
                 polygon.append(point.clamp(rect.position, rect.end))
-            control.draw_colored_polygon(polygon, Color(0.48, 0.64, 0.69) if feature.kind == "fixture" else Color(0.68, 0.53, 0.36))
-            polygon.append(polygon[0])
-            control.draw_polyline(polygon, Color(0.22, 0.17, 0.12), 1.0)
+            marker_batch.polygon(polygon, Color(0.48, 0.64, 0.69) if feature.kind == "fixture" else Color(0.68, 0.53, 0.36))
+            marker_batch.outline(polygon, Color(0.22, 0.17, 0.12), 1.0)
         "hostile":
-            control.draw_colored_polygon(PackedVector2Array([position + Vector2(0, -4), position + Vector2(4, 0), position + Vector2(0, 4), position + Vector2(-4, 0)]), Color(0.95, 0.20, 0.16))
+            marker_batch.polygon(PackedVector2Array([position + Vector2(0, -4), position + Vector2(4, 0), position + Vector2(0, 4), position + Vector2(-4, 0)]), Color(0.95, 0.20, 0.16))
         "ally":
-            control.draw_circle(position, 3.0, Color(0.30, 0.95, 0.53))
+            marker_batch.circle(position, 3.0, Color(0.30, 0.95, 0.53))
         "npc":
-            control.draw_circle(position, 2.5, Color(0.95, 0.78, 0.30))
+            marker_batch.circle(position, 2.5, Color(0.95, 0.78, 0.30))
         "resource":
-            control.draw_circle(position, 2.6, Color(0.80, 0.68, 0.34), false, 1.1)
+            marker_batch.circle(position, 2.6, Color(0.80, 0.68, 0.34), 1.1)
