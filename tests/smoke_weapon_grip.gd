@@ -55,6 +55,11 @@ func _run() -> void:
             # Independent markers measured on the actual normalized source mesh.
             var marker := Vector3(0, 0, 0.30429) if visual.held_item == "starter_axe" else Vector3.ZERO
             data.gap = mesh.to_global(marker).distance_to(visual.grip_modifier.last_grip.origin)
+            if visual.held_item == "short_bow":
+                # New Blender bow uses metre/Y-up vertices; preserve the same
+                # 5mm palm criterion at its independently measured grip centre.
+                var bow_model := visual.held_weapon.get_child(0) as Node3D
+                data.gap = bow_model.to_global(Vector3(-0.070708, 0, 0)).distance_to(visual.grip_modifier.last_grip.origin)
             var shoulder := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftArm")).origin)
             var wrist := skeleton.to_global(skeleton.get_bone_global_pose(skeleton.find_bone("LeftHand")).origin)
             var aimed := -(actor.global_basis * Basis(Vector3.RIGHT, pivot.rotation.x)).z
@@ -146,9 +151,18 @@ func _run() -> void:
                             minimum_draw_alignment = minf(minimum_draw_alignment, float(data.arm_alignment))
                             if float(data.arm_alignment) < 0.9:
                                 failures.append("Bow arm leaves the aim line during release/hold: sex=%s time=%s dot=%s" % [sex, time, data.arm_alignment])
-                        var arrow_mesh := visual.nocked_arrow.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
-                        var size := arrow_mesh.get_aabb().size
-                        var shaft := arrow_mesh.global_basis * Vector3(0, 0, size.z)
+                        # Measure the new complete arrow across every mesh,
+                        # including its tip/nock, rather than the old single
+                        # donor mesh's Z-axis AABB. Same 68--72cm limit.
+                        var low := INF
+                        var high := -INF
+                        for part: MeshInstance3D in visual.nocked_arrow.find_children("*", "MeshInstance3D", true, false):
+                            for surface in range(part.mesh.get_surface_count()):
+                                for vertex: Vector3 in part.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
+                                    var point: Vector3 = visual.nocked_arrow.to_local(part.to_global(vertex))
+                                    low = minf(low, point.y)
+                                    high = maxf(high, point.y)
+                        var shaft: Vector3 = visual.nocked_arrow.global_basis * Vector3.UP * (high - low)
                         var aim := -(actor.global_basis * Basis(Vector3.RIGHT, pivot.rotation.x)).z
                         if absf(shaft.normalized().dot(aim)) < 0.99 or shaft.length() < 0.68 or shaft.length() > 0.72:
                             failures.append("Nocked arrow loses normalized size or pitched aim")

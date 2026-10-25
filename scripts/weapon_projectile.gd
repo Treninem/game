@@ -1,7 +1,8 @@
 extends Node3D
 
 const ARROW := preload("res://scripts/weapon_model_catalog.gd").ARROW
-const SHAFT_LENGTH := 0.70
+const CATALOG = preload("res://scripts/weapon_model_catalog.gd")
+const SHAFT_LENGTH := CATALOG.ARROW_TIP_Y - CATALOG.ARROW_NOCK_Y
 var source: CharacterBody3D
 var velocity := Vector3.ZERO
 var elapsed := 0.0
@@ -18,15 +19,14 @@ func setup(caster: CharacterBody3D, direction: Vector3) -> void:
     var visual := Node3D.new()
     visual.name = "ArrowVisual"
     visual.rotation.x = -PI * 0.5
-    visual.position.z = -SHAFT_LENGTH * 0.5
+    visual.position.z = CATALOG.ARROW_NOCK_Y
     visual.add_child(ARROW.instantiate())
     add_child(visual)
     global_basis = _flight_basis(heading)
 
 func _flight_basis(heading: Vector3) -> Basis:
     # Exact vertical shots need an up axis distinct from the flight axis.
-    var up := Vector3.FORWARD if absf(heading.dot(Vector3.UP)) > 0.999 else Vector3.UP
-    return Basis.looking_at(heading, up)
+    return CATALOG.flight_basis(heading)
 
 func _physics_process(delta: float) -> void:
     elapsed += delta

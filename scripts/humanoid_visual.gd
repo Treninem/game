@@ -44,6 +44,7 @@ var weapon_socket: BoneAttachment3D
 var held_weapon: Node3D
 var held_item := ""
 var grip_modifier: SkeletonModifier3D
+var bow_rig = preload("res://scripts/bow_visual_rig.gd").new()
 var bow_cords: Array[MeshInstance3D] = []
 var nocked_arrow: Node3D
 var last_draw_point := Vector3.ZERO
@@ -287,8 +288,9 @@ func _place_weapon_at_grip(grip: Transform3D, draw_point: Vector3 = Vector3.ZERO
         frame = aim * Basis(Vector3.UP, -PI * 0.5)
     held_weapon.global_transform = Transform3D(frame, grip.origin)
     if held_item == "short_bow" and bow_cords.size() == 2:
-        var top := held_weapon.to_global(Vector3(0.2055, 0.5157, 0))
-        var bottom := held_weapon.to_global(Vector3(0.2055, -0.5157, 0))
+        bow_rig.apply_draw(draw_point, drawing)
+        var top: Vector3 = bow_rig.top_world()
+        var bottom: Vector3 = bow_rig.bottom_world()
         last_draw_point = draw_point if drawing else held_weapon.to_global(Vector3(0.2055, 0, 0))
         # Several physical ticks can occur before the next rendered rig pose.
         # Keep the last corrected hand point attached to the moving actor,
@@ -305,36 +307,11 @@ func _place_weapon_at_grip(grip: Transform3D, draw_point: Vector3 = Vector3.ZERO
             if pivot != null:
                 aim_basis = aim_basis * Basis(Vector3.RIGHT, pivot.rotation.x)
             var aim := -aim_basis.z
-            nocked_arrow.global_transform = Transform3D(Basis(Quaternion(Vector3.UP, aim)), last_draw_point + aim * 0.35)
+            nocked_arrow.global_transform = Transform3D(MODEL_CATALOG.flight_basis(aim) * Basis(Vector3.RIGHT, -PI * 0.5), last_draw_point - aim * MODEL_CATALOG.ARROW_NOCK_Y)
 
 
 func _prepare_bow_cord(weapon_model: Node3D) -> void:
-    # This authored bow has its original straight cord in a thin isolated strip.
-    # Replace only that strip; keep the original wood, UVs and material surfaces.
-    for instance: MeshInstance3D in weapon_model.find_children("*", "MeshInstance3D", true, false):
-        var source := instance.mesh as ArrayMesh
-        if source == null:
-            continue
-        var cleaned := ArrayMesh.new()
-        for surface in range(source.get_surface_count()):
-            var arrays := source.surface_get_arrays(surface)
-            var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
-            var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
-            var kept := PackedInt32Array()
-            for i in range(0, indices.size(), 3):
-                var cord := true
-                for j in range(3):
-                    var point := vertices[indices[i + j]]
-                    cord = cord and point.x > 0.35 and absf(point.y) < 0.006 and absf(point.z) < 0.94
-                if not cord:
-                    kept.append_array(indices.slice(i, i + 3))
-            if kept.is_empty():
-                continue
-            arrays[Mesh.ARRAY_INDEX] = kept
-            var new_surface := cleaned.get_surface_count()
-            cleaned.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-            cleaned.surface_set_material(new_surface, source.surface_get_material(surface))
-        instance.mesh = cleaned
+    bow_rig.bind_model(weapon_model)
     var material := StandardMaterial3D.new()
     material.albedo_color = Color(0.73, 0.68, 0.56)
     material.roughness = 0.85
@@ -364,7 +341,9 @@ func _cord_between(cord: MeshInstance3D, a: Vector3, b: Vector3) -> void:
         cord.visible = false
         return
     cord.visible = true
-    cord.global_transform = Transform3D(Basis(Quaternion(Vector3.UP, (b - a).normalized())).scaled(Vector3(1, distance, 1)), (a + b) * 0.5)
+    # Scale the cylinder along its LOCAL shaft before rotating it. Basis.scaled
+    # stretches world axes, so angled strings miss their endpoints by centimetres.
+    cord.global_transform = Transform3D(Basis(Quaternion(Vector3.UP, (b - a).normalized())) * Basis.from_scale(Vector3(1, distance, 1)), (a + b) * 0.5)
 
 func arrow_release_point() -> Vector3:
     if not has_draw_point or held_item != "short_bow":

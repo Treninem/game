@@ -1,6 +1,6 @@
 extends Node3D
 
-const ARROW := preload("res://assets/production/weapons/woodland/Arrow.glb")
+const ARROW := preload("res://scripts/weapon_model_catalog.gd").ARROW
 var merchant:Node
 var piles:Array[MultiMeshInstance3D]=[]
 var displayed:=-1

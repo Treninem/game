@@ -5,6 +5,11 @@ on:
     branches: [codex/editor-handoff-validation-2026-10-24]
     paths:
       - scripts/weapon_projectile.gd
+      - scripts/bow_visual_rig.gd
+      - scripts/humanoid_visual.gd
+      - scripts/weapon_model_catalog.gd
+      - assets/production/weapons/settler_equipment/**
+      - tests/smoke_authored_bow.gd
       - tests/smoke_arrow_tip_contact.gd
       - .github/workflows/verify-arrow-contact.yml
   workflow_dispatch:
@@ -50,6 +55,8 @@ jobs:
           sudo apt-get install -y xvfb libgl1-mesa-dri
       - name: Parse actual project and rendered diagnostic
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
+      - name: Verify authored bow morph nock cord and release coupling
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-bow-coupling" bash tools/run_godot_smoke.sh tests/smoke_authored_bow.gd 90
       - name: Verify actual rendered arrow endpoint contact at ten distances angles and tick rates
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-arrow-tip" bash tools/run_godot_smoke.sh tests/smoke_arrow_tip_contact.gd 90
       - name: Preserve actual moving and jumping controller release origins
@@ -68,5 +75,6 @@ jobs:
           if-no-files-found: error
           retention-days: 7
           path: |
+            ${{ runner.temp }}/impuls-bow-coupling/godot/app_userdata/ImPuls/authored-bow.json
             ${{ runner.temp }}/impuls-arrow-tip/godot/app_userdata/ImPuls/arrow-tip-contact.json
             ${{ runner.temp }}/impuls-arrow-world/godot/app_userdata/ImPuls/head-size-*.png

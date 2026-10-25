@@ -297,6 +297,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_arm_blends.gd 210
       - name: Verify actual arrow release follows physics transforms between rendered poses
         run: bash tools/run_godot_smoke.sh tests/smoke_projectile_release.gd 180
+      - name: Verify authored bow morph nock cord and release coupling
+        run: bash tools/run_godot_smoke.sh tests/smoke_authored_bow.gd 90
       - name: Verify rendered arrow tips hit thin nearby walls exactly once
         run: bash tools/run_godot_smoke.sh tests/smoke_arrow_tip_contact.gd 90
       - name: Verify real raised airborne bow pose before release at low render rate

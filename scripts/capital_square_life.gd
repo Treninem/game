@@ -5,7 +5,7 @@ const NPC := preload("res://scripts/settlement_npc.gd")
 const PROP_ROOT := "res://assets/production/medieval/capital_square/"
 const STALL := preload("res://assets/production/medieval/quaternius_market/Stall_Empty.gltf")
 const SHOP_ID := "capital:square:provisions"
-const ARROW := preload("res://assets/production/weapons/woodland/Arrow.glb")
+const ARROW := preload("res://scripts/weapon_model_catalog.gd").ARROW
 var lamps: Array[OmniLight3D] = []
 var light_elapsed := 1.0
 var indoor_light: OmniLight3D
@@ -15,7 +15,7 @@ var working_artisan: CharacterBody3D
 func _ready() -> void:
     var home := preload("res://scripts/enterable_building.gd").new()
     home.name = "SquareHome"
-    home.configure(Vector3(12, 3.2, 10), 1, "Дом Марты и Марека")
+    home.configure(Vector3(12, 3.2, 10), 1, "Ð”Ð¾Ð¼ ÐœÐ°Ñ€Ñ‚Ñ‹ Ð¸ ÐœÐ°Ñ€ÐµÐºÐ°")
     # A small physical threshold separates the floor from the plaza mesh;
     # coplanar surfaces flicker badly at the capital's large coordinates.
     home.position = Vector3(-45, _ground_y(Vector3(-45, 0, -30)) + 0.03 - home.floor_thickness, -30)
@@ -66,11 +66,11 @@ func _ready() -> void:
         _prop("Bench",Vector3(side*10,0,15.8),.47,0)
         _place(preload("res://assets/production/interiors/quaternius_furniture/Table.fbx"),"PublicMealTable",Vector3(side*10,0,13.9),.72,0,true)
     var workbench := _prop("Workbench", Vector3(-23, 0, -12), 0.95)
-    _resident("Марта", "trader", "SquareTrader", SHOP_ID, Vector3(-16, 0, -8.5), Vector3(-16, 0, -12), 1)
+    _resident("ÐœÐ°Ñ€Ñ‚Ð°", "trader", "SquareTrader", SHOP_ID, Vector3(-16, 0, -8.5), Vector3(-16, 0, -12), 1)
     # Stand just outside the measured bench footprint, within arm's reach.
     var work_depth: Vector2 = workbench.get_meta("map_footprint")
     var workplace := Vector3(-23, 0, -12 + work_depth.y * 0.5 + 0.42)
-    var artisan := _resident("Марек", "craftsman", "SquareArtisan", "capital:square:fletcher", workplace, Vector3(-23, 0, -12), 0)
+    var artisan := _resident("ÐœÐ°Ñ€ÐµÐº", "craftsman", "SquareArtisan", "capital:square:fletcher", workplace, Vector3(-23, 0, -12), 0)
     artisan.set_meta("work_shop_id", SHOP_ID)
     artisan.set_meta("work_recipe", "arrow")
     working_artisan = artisan
