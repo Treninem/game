@@ -3,6 +3,22 @@ extends Node3D
 var home: EnterableBuilding
 var decorator: SettlementInteriorVisuals
 var materials: Dictionary = {}
+const FABRIC_NORMAL := preload("res://assets/production/interiors/materials/household_cloth_Normal.png")
+const FABRIC_ORM := preload("res://assets/production/interiors/materials/household_cloth_ORM.png")
+const FABRIC_LABELS := ["Sheets", "Pillow", "Curtain", "Rug", "Border"]
+
+func _ready() -> void:
+    SettingsManager.settings_changed.connect(_apply_material_quality)
+
+func _apply_material_quality() -> void:
+    var detailed := int(SettingsManager.get_value("graphics", "quality_preset")) >= 2
+    for label: String in FABRIC_LABELS:
+        if not materials.has(label):continue
+        var fabric: StandardMaterial3D = materials[label]
+        fabric.normal_enabled = detailed
+        fabric.ao_enabled = detailed
+        fabric.roughness_texture = FABRIC_ORM if detailed else null
+
 
 func build(building: EnterableBuilding, visuals: SettlementInteriorVisuals) -> void:
     home = building
@@ -184,12 +200,21 @@ func _material(label: String) -> StandardMaterial3D:
         material.uv1_triplanar = true
         material.uv1_world_triplanar = true
         material.uv1_scale = Vector3.ONE * 1.5
-    elif label in ["Sheets", "Pillow", "Curtain", "Rug", "Border"]:
+    elif label in FABRIC_LABELS:
         material.albedo_texture = load("res://assets/production/interiors/materials/household_cloth_BaseColor.png")
         material.albedo_color = Color(0.43, 0.22, 0.15) if label == "Sheets" else Color(0.34, 0.21, 0.12) if label == "Rug" else Color(0.66, 0.49, 0.28) if label == "Border" else Color(0.85, 0.8, 0.65)
         material.cull_mode = BaseMaterial3D.CULL_DISABLED
+        # Reuse the same licensed swatch UVs for all PBR channels. These maps
+        # have shipped beside the albedo; keep the cloth nonmetallic.
+        material.normal_texture = FABRIC_NORMAL
+        material.normal_scale = 0.35
+        material.ao_texture = FABRIC_ORM
+        material.ao_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_RED
+        material.ao_light_affect = 0.15
+        material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GREEN
     else:
         material.albedo_color = Color(0.09, 0.065, 0.045)
     material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
     materials[label] = material
+    _apply_material_quality()
     return material

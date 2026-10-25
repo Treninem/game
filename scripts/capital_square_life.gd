@@ -8,7 +8,7 @@ const SHOP_ID := "capital:square:provisions"
 const ARROW := preload("res://scripts/weapon_model_catalog.gd").ARROW
 var lamps: Array[OmniLight3D] = []
 var light_elapsed := 1.0
-var indoor_light: OmniLight3D
+var indoor_light: SpotLight3D
 var workpieces: Node3D
 var working_artisan: CharacterBody3D
 
@@ -33,12 +33,12 @@ func _ready() -> void:
     var indoor_lantern := _prop("Lantern_Wall", Vector3.ZERO, 0.42, 0, false)
     indoor_lantern.name = "HomeWallLantern"
     indoor_lantern.position = home.position + Vector3(0, 2.35, -4.64)
-    indoor_light = OmniLight3D.new()
+    indoor_light = preload("res://scripts/wall_lantern_light.gd").new()
     indoor_light.name = "HomeLanternLight"
     indoor_light.position = home.position + Vector3(0, 2.5, -4.1)
     indoor_light.light_color = Color(1.0, 0.78, 0.53)
     indoor_light.light_energy = 2.5
-    indoor_light.omni_range = 11.0
+    indoor_light.spot_range = 11.0
     _apply_indoor_quality()
     SettingsManager.settings_changed.connect(_apply_indoor_quality)
     add_child(indoor_light)

@@ -8,7 +8,7 @@ func _run() -> void:
     position = Vector3(CapitalData.CENTER.x, 0, CapitalData.CENTER.y)
     var square := preload("res://scripts/capital_square_life.gd").new()
     add_child(square)
-    var light := square.get_node("HomeLanternLight") as OmniLight3D
+    var light := square.get_node("HomeLanternLight") as SpotLight3D
     assert(light != null)
     var trader := square.get_node("SquareTrader") as SettlementNPC
     var artisan := square.get_node("SquareArtisan") as SettlementNPC

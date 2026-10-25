@@ -38,7 +38,7 @@ var bedding_material: StandardMaterial3D
 var cloth_material: StandardMaterial3D
 var iron_material: StandardMaterial3D
 var window_lights: Array[SpotLight3D] = []
-var room_lantern: OmniLight3D
+var room_lantern: SpotLight3D
 var interior_scenes: Dictionary = {}
 var projected_materials: Dictionary = {}
 var light_elapsed := 0.0
@@ -154,11 +154,11 @@ func _build_room_lantern() -> void:
     var factor := 0.42 / maxf(bounds.size.y, 0.001)
     lantern.scale = Vector3.ONE * factor
     lantern.position = Vector3(1.8, 2.25, -footprint.y * 0.5 + 0.45) - Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z) * factor
-    room_lantern = OmniLight3D.new()
+    room_lantern = preload("res://scripts/wall_lantern_light.gd").new()
     room_lantern.name = "RoomLanternLight"
     room_lantern.position = Vector3(1.8, 2.4, -footprint.y * 0.5 + 0.8)
     room_lantern.light_color = Color(1.0, 0.73, 0.44)
-    room_lantern.omni_range = 7.5
+    room_lantern.spot_range = 7.5
     add_child(room_lantern)
 
 func _build_timberwork() -> void:

@@ -5,7 +5,10 @@ on:
     paths:
       - tests/profile_house_render_cost.gd
       - scripts/capital_square_life.gd
-      - scripts/interior_light_budget.gd
+      - scripts/wall_lantern_light.gd
+      - scripts/enterable_building.gd
+      - scripts/house_living_details.gd
+      - tests/visual_wall_lighting.gd
       - .github/workflows/verify-house-render-cost.yml
   workflow_dispatch:
 permissions:
@@ -49,6 +52,10 @@ jobs:
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
       - name: Measure reversible diagnostic ablations without changing production settings
         run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-house-cost" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/profile_house_render_cost.gd 180
+      - name: Verify live shadow quality switching
+        run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-house-quality" bash tools/run_godot_smoke.sh tests/smoke_household_quality.tscn 90
+      - name: Render furnished rooms with a grounded player and all cloth quality modes
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-house-rooms" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/visual_wall_lighting.gd 180
       - name: Render the unchanged full household lifecycle
         if: success() || failure()
         run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-house-complete" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/profile_continuous_home_door.gd 240
@@ -66,3 +73,5 @@ jobs:
             ${{ runner.temp }}/impuls-house-complete/godot/app_userdata/ImPuls/door-*.png
             ${{ runner.temp }}/impuls-house-complete/godot/app_userdata/ImPuls/home-door-rendered.json
             ${{ runner.temp }}/impuls-house-complete/godot/app_userdata/ImPuls/streamed-home-door.json
+            ${{ runner.temp }}/impuls-house-rooms/godot/app_userdata/ImPuls/wall-light-*.png
+            ${{ runner.temp }}/impuls-house-rooms/godot/app_userdata/ImPuls/wall-light-rooms.json
