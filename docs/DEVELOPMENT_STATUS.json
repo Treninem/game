@@ -6,8 +6,8 @@
   "branch": "codex/household-persistence-2026-10-19",
   "base_commit": "0015b68c491271ea9e02c48881b1f496e1efea5b",
   "delivery": "Unreleased review; no stable publication",
-  "current_stage": "Общая карта отрисовывает все1011 значков одним пакетом:3 вызова вместо1017 в проверочной сцене,287 вместо1104 в стартовом мире. В рабочем проекте повторены проверки карты/загрузки; локальный обычный игровой прогон110.969с прошёл с28.5м движения, оружием, магией, диском и4 уровнями графики. Средний120-кадровый замер52.135мс не достигает30FPS. Внешность людей и цельность мира остаются открыты; стабильного выпуска нет. Отдельный непрерывный домашний сценарий40177529922 по-прежнему FAILED240с; его кадры и профиль сохранены, ошибка не скрыта.",
-  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-25_MAP_RENDER.json",
+  "current_stage": "Комнатный свет и ткань: сохранены тёплое освещение у фонарей, тени и4 режима графики; существующие карты рельефа/ORM подключены к домашнему текстилю. В обставленном холле315→205 вызовов отрисовки, но прирост общегоFPS не подтверждён. Локальный полный цикл жителей/дверей/сохранения178.219с PASS; два повторных графических запуска рабочего проекта завершились0 после одного сбоя Intel OpenGL при выходе. Серверный непрерывный домашний сценарий по-прежнему FAILED240с; итоговая стабильность и художественная приёмка открыты.",
+  "last_acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
   "review_launcher": "build\\review-2026-10-24-city-streetscape-r3\\ImPuls-review.cmd",
   "systems": [
     {
@@ -202,7 +202,7 @@
   "next_stage": "Согласованная композиция стартового поселения/ландшафта и насыщение разнообразных помещений; бюджет растительности/крыш и производительности. Полные люди/анимации и каталог предметов остаются открытыми.",
   "ci_followup_journal": "docs/DEVELOPMENT_LOG_2026-10-23_REGION_CI_CONTRACT.json",
   "ci_followup_status": "Runtime6d3 passed all8 exact-SHA workflows. Documentation-only follow-up must be inspected separately; runtime blobs identical.",
-  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-25_MAP_RENDER.json",
+  "last_journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
   "review_launcher_revision": "Current build/stability source contains the tested path-support package and unchanged 8282 character GLBs. Rejected clothing prototypes are not connected. Previous exported PCK/installer is not locally updated.",
   "readiness_report": "docs/READINESS_2026-10-20.json",
   "readiness_percent": null,
@@ -1092,5 +1092,17 @@
     ],
     "status": "completed",
     "url": "https://github.com/Treninem/game/actions/runs/40177529922"
+  },
+  "latest_room_lighting_package": {
+    "runtime_sha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+    "test_sha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+    "root_selected_files_integrated": true,
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
+    "native_complete_household_seconds": 178.2190000000046,
+    "hall_draw_calls_before": 315,
+    "hall_draw_calls_after": 205,
+    "manual_play": false,
+    "full_art_acceptance": false,
+    "stable_release": false
   }
 }

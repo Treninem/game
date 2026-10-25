@@ -1,0 +1,28 @@
+{
+  "initial_integration": {
+    "source_sha": "debbeba2a0d5b7b55e80b604f88a5ba30dbc9ef1",
+    "files": [
+      "scripts/capital_square_life.gd",
+      "scripts/enterable_building.gd",
+      "scripts/wall_lantern_light.gd",
+      "scripts/house_living_details.gd",
+      "tests/smoke_household_quality.gd",
+      "tests/visual_wall_lighting.gd"
+    ],
+    "shared_head": "fd61e21fc1eceefc4af09f4b2f630115a3fe0e90",
+    "shared_index_sha256": "dbfb092d48be354063de27697f18139afb58c8ea1cb23565c148c7e9e1120c91",
+    "whole_checkout_clean": false
+  },
+  "current_test_sha": "7a4229d0aa346cab85e8281ca50e4bbc61812690",
+  "selected_root_files_match_source": true,
+  "first_root_exit_failed": {
+    "exit_code": 3221225477,
+    "seconds": 76.2809999999954,
+    "actor_positions_assigned": false,
+    "private_profile": true
+  },
+  "two_repeated_root_exits": [
+    0,
+    0
+  ]
+}

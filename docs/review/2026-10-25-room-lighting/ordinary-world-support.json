@@ -1,0 +1,1723 @@
+{
+  "actor_positions_assigned": false,
+  "actual_collision_rays": true,
+  "independent_full_boot_vertices": true,
+  "samples": [
+    {
+      "actor": "(65.0, 4.737128, 48.0)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/WorldLoading/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442647933959961,
+          "hit": true,
+          "lowest": "(64.83115, 4.705445, 47.86522)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/WorldLoading/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00397729873657227,
+          "hit": true,
+          "lowest": "(65.17464, 4.687625, 47.86884)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1060,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0549919181674367,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399908482927469,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00397764504737932,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.0, 4.737128, 48.0)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442600250244141,
+          "hit": true,
+          "lowest": "(64.83227, 4.705481, 47.86908)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00400018692016602,
+          "hit": true,
+          "lowest": "(65.17287, 4.687741, 47.86897)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1080,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0557121949871194,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399946447604671,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.0039999700498807,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.0, 4.737128, 48.0)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00444602966308594,
+          "hit": true,
+          "lowest": "(64.8326, 4.705375, 47.86456)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399971008300781,
+          "hit": true,
+          "lowest": "(65.1754, 4.687529, 47.86549)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1100,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0563182492886296,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399908716125732,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00399996678510502,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.0, 4.737128, 48.0)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442743301391602,
+          "hit": true,
+          "lowest": "(64.83264, 4.705479, 47.86973)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00391149520874023,
+          "hit": true,
+          "lowest": "(65.1761, 4.687531, 47.87077)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1120,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0557828866589046,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399985764831798,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00391136730268129,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.00179, 4.725787, 47.66291)",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399875640869141,
+          "hit": true,
+          "lowest": "(64.81011, 4.697453, 47.50584)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399971008300781,
+          "hit": true,
+          "lowest": "(65.12741, 4.682823, 47.5681)",
+          "normal": "(0.050745, 0.998424, -0.023987)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1140,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0416407767393113,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399848271135986,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400001762232633,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -3.666666)"
+    },
+    {
+      "actor": "(65.00986, 4.694352, 45.69221)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399875640869141,
+          "hit": true,
+          "lowest": "(64.98519, 4.662683, 46.03064)",
+          "normal": "(0.060433, 0.99807, -0.014272)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.317089557647705,
+          "hit": true,
+          "lowest": "(65.16004, 4.961155, 45.7487)",
+          "normal": "(0.060433, 0.99807, -0.014272)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1160,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0280406646199874,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399899335039968,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -5.0)"
+    },
+    {
+      "actor": "(65.0189, 4.638519, 42.76916)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00343894958496094,
+          "hit": true,
+          "lowest": "(64.89368, 4.602388, 42.43701)",
+          "normal": "(0.069396, 0.997427, -0.017979)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.434298515319824,
+          "hit": true,
+          "lowest": "(65.13317, 5.041912, 43.5167)",
+          "normal": "(0.060417, 0.997808, -0.026991)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1180,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0495595718166014,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399930665697744,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -5.0)"
+    },
+    {
+      "actor": "(65.02634, 4.605861, 40.93331)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.492518424987793,
+          "hit": true,
+          "lowest": "(64.97517, 5.066448, 41.36352)",
+          "normal": "(0.069396, 0.997427, -0.017979)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399971008300781,
+          "hit": true,
+          "lowest": "(65.09616, 4.551797, 40.38076)",
+          "normal": "(0.069396, 0.997427, -0.017979)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1197,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0667440588924218,
+      "support_contacts": {
+        "Right": {
+          "gap": 0.00399948173039511,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -5.0)"
+    },
+    {
+      "actor": "(65.03084, 4.574605, 39.37553)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.230328559875488,
+          "hit": true,
+          "lowest": "(64.92219, 4.769173, 39.52449)",
+          "normal": "(0.069376, 0.997146, -0.029765)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00593948364257813,
+          "hit": true,
+          "lowest": "(65.13854, 4.535175, 39.70684)",
+          "normal": "(0.069376, 0.997146, -0.029765)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1200,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0406549668187188,
+      "support_contacts": {
+        "Right": {
+          "gap": 0.00399994975519358,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -8.0)"
+    },
+    {
+      "actor": "(65.04742, 4.492703, 36.03875)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.575993061065674,
+          "hit": true,
+          "lowest": "(64.94007, 5.037368, 36.17298)",
+          "normal": "(0.077572, 0.996754, -0.02153)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0109014511108398,
+          "hit": true,
+          "lowest": "(65.1432, 4.44986, 35.91135)",
+          "normal": "(0.07755, 0.996466, -0.032285)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1220,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0339356037336707,
+      "support_contacts": {
+        "Right": {
+          "gap": 0.00400053086006284,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -8.0)"
+    },
+    {
+      "actor": "(65.06677, 4.394088, 32.43078)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.601980686187744,
+          "hit": true,
+          "lowest": "(64.98779, 4.967416, 32.74371)",
+          "normal": "(0.08499, 0.996073, -0.024802)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00805759429931641,
+          "hit": true,
+          "lowest": "(65.16006, 4.34035, 32.00297)",
+          "normal": "(0.08499, 0.996073, -0.024802)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1240,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0575371769854845,
+      "support_contacts": {
+        "Right": {
+          "gap": 0.00399974941782026,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -8.0)"
+    },
+    {
+      "actor": "(65.07786, 4.332829, 30.42403)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00523567199707031,
+          "hit": true,
+          "lowest": "(65.03299, 4.286974, 30.05539)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.531907081604004,
+          "hit": true,
+          "lowest": "(65.21809, 4.813143, 30.64629)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1244,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0738347475781455,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399864299839055,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -8.0)"
+    },
+    {
+      "actor": "(65.08733, 5.066634, 28.89699)",
+      "clip": "Airborne",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 1.03228902816772,
+          "hit": true,
+          "lowest": "(64.92422, 5.293682, 28.9703)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 1.02517461776733,
+          "hit": true,
+          "lowest": "(65.2457, 5.256735, 28.96142)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1256,
+      "grounded": false,
+      "physical_height": 1.95000004768372,
+      "root_offset": 0.0,
+      "support_contacts": {},
+      "velocity": "(0.0, 2.2, 0.0)"
+    },
+    {
+      "actor": "(65.08733, 5.0883, 28.89699)",
+      "clip": "Airborne",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.994322299957275,
+          "hit": true,
+          "lowest": "(64.94166, 5.252817, 28.92405)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 1.02316236495972,
+          "hit": true,
+          "lowest": "(65.24026, 5.254158, 28.92333)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1260,
+      "grounded": false,
+      "physical_height": 1.95000004768372,
+      "root_offset": 0.0,
+      "support_contacts": {},
+      "velocity": "(0.0, -1.7, 0.0)"
+    },
+    {
+      "actor": "(65.08733, 4.264967, 28.89699)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00445795059204102,
+          "hit": true,
+          "lowest": "(64.91416, 4.26103, 28.76489)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00400066375732422,
+          "hit": true,
+          "lowest": "(65.25654, 4.229143, 28.76765)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1280,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0447026521366499,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.0040000366052189,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400042114527023,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.08733, 4.264967, 28.89699)",
+      "clip": "Axe_Chop",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0044560432434082,
+          "hit": true,
+          "lowest": "(64.91346, 4.261082, 28.76451)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00358438491821289,
+          "hit": true,
+          "lowest": "(65.25525, 4.228825, 28.76694)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1299,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0423187175427854,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.0040002882871503,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00358436752214621,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.08733, 4.264967, 28.89699)",
+      "clip": "Axe_Chop",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00445461273193359,
+          "hit": true,
+          "lowest": "(64.91354, 4.261073, 28.76448)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00386333465576172,
+          "hit": true,
+          "lowest": "(65.25555, 4.229076, 28.76691)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1300,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0421388101063114,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399891105368181,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00386351553079237,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.08733, 4.264967, 28.89699)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442838668823242,
+          "hit": true,
+          "lowest": "(64.91414, 4.261129, 28.76941)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00370121002197266,
+          "hit": true,
+          "lowest": "(65.25578, 4.228973, 28.76978)",
+          "normal": "(0.091602, 0.995406, -0.027847)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1320,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0426590876281911,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399947944317373,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00370132664184493,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.08733, 4.671094, 26.67279)",
+      "clip": "Bow_Attack_Shoot",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.535650730133057,
+          "hit": true,
+          "lowest": "(64.94201, 4.721757, 26.66762)",
+          "normal": "(0.097389, 0.994776, -0.030589)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.5670485496521,
+          "hit": true,
+          "lowest": "(65.24393, 4.723577, 26.66698)",
+          "normal": "(0.097389, 0.994776, -0.030589)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1340,
+      "grounded": false,
+      "physical_height": 1.95000004768372,
+      "root_offset": 0.0,
+      "support_contacts": {},
+      "velocity": "(0.0, -4.1, -5.0)"
+    },
+    {
+      "actor": "(65.11102, 4.118572, 23.6701)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00407075881958008,
+          "hit": true,
+          "lowest": "(65.06805, 4.070115, 23.32916)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.559840679168701,
+          "hit": true,
+          "lowest": "(65.25252, 4.628632, 23.87239)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1359,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0463265776652261,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00400041542248065,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -4.633333)"
+    },
+    {
+      "actor": "(65.11102, 4.118572, 23.59892)",
+      "clip": "Bow_Attack_Draw",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00407123565673828,
+          "hit": true,
+          "lowest": "(65.06714, 4.067482, 23.25807)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.559974193572998,
+          "hit": true,
+          "lowest": "(65.25305, 4.625972, 23.80083)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1360,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0489860449391508,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00400008485402067,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -4.266666)"
+    },
+    {
+      "actor": "(65.1143, 4.105593, 23.21839)",
+      "clip": "Bow_Attack_Draw",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0044560432434082,
+          "hit": true,
+          "lowest": "(64.93966, 4.073798, 23.08706)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.010124683380127,
+          "hit": true,
+          "lowest": "(65.32104, 4.039351, 23.0145)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1380,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0714047387258571,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.0039993113425534,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00351895767790254,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.1143, 4.105593, 23.21839)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00445365905761719,
+          "hit": true,
+          "lowest": "(64.94003, 4.073767, 23.08727)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0105938911437988,
+          "hit": true,
+          "lowest": "(65.32206, 4.039726, 23.01468)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1400,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.071215640762965,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00400040090743496,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400001321524676,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(62.82637, 4.306046, 23.21146)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00400114059448242,
+          "hit": true,
+          "lowest": "(63.23113, 4.23609, 23.25245)",
+          "normal": "(0.078612, 0.996354, -0.033154)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.103942394256592,
+          "hit": true,
+          "lowest": "(62.75989, 4.368097, 23.09873)",
+          "normal": "(0.078612, 0.996354, -0.033154)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1420,
+      "grounded": true,
+      "physical_height": 1.60000002384186,
+      "root_offset": -0.0674240088743485,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00400114152681699,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(-5.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(60.5261, 4.489577, 23.20566)",
+      "clip": "Run",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399875640869141,
+          "hit": true,
+          "lowest": "(60.26633, 4.475332, 23.31929)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.429754257202148,
+          "hit": true,
+          "lowest": "(60.7892, 4.85015, 23.09547)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1440,
+      "grounded": true,
+      "physical_height": 1.60000002384186,
+      "root_offset": -0.0528685650377041,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399857863458313,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(-4.266666, 0.0, 0.0)"
+    },
+    {
+      "actor": "(60.15007, 4.52249, 23.20482)",
+      "clip": "Walk",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399923324584961,
+          "hit": true,
+          "lowest": "(60.33733, 4.467147, 23.23975)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.205143451690674,
+          "hit": true,
+          "lowest": "(60.22125, 4.674, 23.07238)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1449,
+      "grounded": true,
+      "physical_height": 1.60000002384186,
+      "root_offset": -0.0645842888648533,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399907376949502,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(-0.233334, 0.0, 0.0)"
+    },
+    {
+      "actor": "(60.15007, 5.407901, 23.20482)",
+      "clip": "Airborne",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 1.13548183441162,
+          "hit": true,
+          "lowest": "(60.17474, 5.615008, 23.33019)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 1.14187812805176,
+          "hit": true,
+          "lowest": "(60.18128, 5.61437, 23.07946)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1458,
+      "grounded": false,
+      "physical_height": 1.60000002384186,
+      "root_offset": 0.0,
+      "support_contacts": {},
+      "velocity": "(0.0, 0.4, 0.0)"
+    },
+    {
+      "actor": "(60.15007, 5.242901, 23.20482)",
+      "clip": "Airborne",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.869943618774414,
+          "hit": true,
+          "lowest": "(60.16607, 5.35005, 23.32368)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.877449989318848,
+          "hit": true,
+          "lowest": "(60.16566, 5.351278, 23.07897)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1460,
+      "grounded": false,
+      "physical_height": 1.60000002384186,
+      "root_offset": 0.0,
+      "support_contacts": {},
+      "velocity": "(0.0, -2.3, 0.0)"
+    },
+    {
+      "actor": "(60.15007, 4.491234, 23.20482)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399971008300781,
+          "hit": true,
+          "lowest": "(60.03416, 4.496218, 23.35149)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00400066375732422,
+          "hit": true,
+          "lowest": "(60.03475, 4.488647, 23.05999)",
+          "normal": "(0.086026, 0.995961, -0.025696)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1480,
+      "grounded": true,
+      "physical_height": 1.60000002384186,
+      "root_offset": -0.0169449773713567,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.0039996731679436,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400041657163567,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.1143, 4.060903, 23.21839)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442647933959961,
+          "hit": true,
+          "lowest": "(64.94137, 4.07381, 23.0925)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0106201171875,
+          "hit": true,
+          "lowest": "(65.32287, 4.039803, 23.01806)",
+          "normal": "(0.097364, 0.99452, -0.03809)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1500,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0671346934195052,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399952064014775,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400098244571725,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.050838, 21.73575)",
+      "clip": "Cast_Left",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00248861312866211,
+          "hit": true,
+          "lowest": "(64.98714, 4.011056, 21.41154)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.361009120941162,
+          "hit": true,
+          "lowest": "(65.25371, 4.378371, 22.50035)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1517,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0480780949976007,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00400003279018312,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, -5.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00445079803466797,
+          "hit": true,
+          "lowest": "(64.95799, 4.016985, 21.44061)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0039985179901123,
+          "hit": true,
+          "lowest": "(65.3023, 3.981079, 21.4401)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1520,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.039446017801125,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.0039990782365151,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00399869697710108,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0044093132019043,
+          "hit": true,
+          "lowest": "(64.95863, 4.017055, 21.4459)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00364923477172852,
+          "hit": true,
+          "lowest": "(65.30061, 3.981029, 21.44389)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1533,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0278630318063612,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399980656377406,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00364905797299879,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442218780517578,
+          "hit": true,
+          "lowest": "(64.95917, 4.016851, 21.44106)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0138232707977295,
+          "hit": true,
+          "lowest": "(65.37471, 3.981182, 21.37191)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1540,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0273837160902816,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399829323555946,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00394484291392714,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0044403076171875,
+          "hit": true,
+          "lowest": "(64.95821, 4.016762, 21.43488)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0104897022247314,
+          "hit": true,
+          "lowest": "(65.34219, 3.980919, 21.36359)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1560,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0275214754378859,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.0039998637058484,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00396409791946794,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00443267822265625,
+          "hit": true,
+          "lowest": "(64.95792, 4.016777, 21.43465)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0135724544525146,
+          "hit": true,
+          "lowest": "(65.37624, 3.980668, 21.36877)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1564,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0273592470211277,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399992740520995,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00389237548281118,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00440168380737305,
+          "hit": true,
+          "lowest": "(64.95741, 4.017217, 21.44721)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0137536525726318,
+          "hit": true,
+          "lowest": "(65.36874, 3.981767, 21.37313)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1580,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0266090211932991,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399883749039863,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00398872755863998,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442409515380859,
+          "hit": true,
+          "lowest": "(64.95913, 4.016837, 21.44046)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0138924121856689,
+          "hit": true,
+          "lowest": "(65.37334, 3.981313, 21.36955)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1594,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0275831701430631,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399937097255166,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400005152528946,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00445556640625,
+          "hit": true,
+          "lowest": "(64.95985, 4.016635, 21.43569)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "lowest": "(65.30122, 3.981086, 21.43695)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1600,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0282452950302627,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399887496061131,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400008618523618,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00442981719970703,
+          "hit": true,
+          "lowest": "(64.9595, 4.016849, 21.4418)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.013718843460083,
+          "hit": true,
+          "lowest": "(65.37547, 3.980981, 21.37137)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1620,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0277006951429178,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399911992212671,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00383094236655628,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00446844100952148,
+          "hit": true,
+          "lowest": "(64.95792, 4.016969, 21.43934)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0138936042785645,
+          "hit": true,
+          "lowest": "(65.3715, 3.981511, 21.36975)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1640,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0264936270850653,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399910071864271,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00399085774023083,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00447893142700195,
+          "hit": true,
+          "lowest": "(64.95508, 4.017397, 21.44312)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0103771686553955,
+          "hit": true,
+          "lowest": "(65.33544, 3.981699, 21.36957)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1660,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0253960665810369,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399922483872221,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00387431928988731,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00443553924560547,
+          "hit": true,
+          "lowest": "(64.95435, 4.01751, 21.44554)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399994850158691,
+          "hit": true,
+          "lowest": "(65.2935, 3.982103, 21.44363)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1680,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0248832801975741,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399976487816246,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00400001030805551,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00448083877563477,
+          "hit": true,
+          "lowest": "(64.95744, 4.016996, 21.43831)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0134572982788086,
+          "hit": true,
+          "lowest": "(65.37541, 3.980744, 21.37192)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1700,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0264651202286148,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399955504497145,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00392399355083683,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00444412231445313,
+          "hit": true,
+          "lowest": "(64.95833, 4.01716, 21.4471)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00397491455078125,
+          "hit": true,
+          "lowest": "(65.30192, 3.981323, 21.44699)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1720,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0265480236681048,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.0039994505967536,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00397501767619813,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00445652008056641,
+          "hit": true,
+          "lowest": "(64.95743, 4.016936, 21.43719)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00399971008300781,
+          "hit": true,
+          "lowest": "(65.29916, 3.981387, 21.4396)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1740,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0265023662139546,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399955504497145,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00399975597898694,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00445938110351563,
+          "hit": true,
+          "lowest": "(64.95843, 4.016869, 21.43818)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0105812549591064,
+          "hit": true,
+          "lowest": "(65.34065, 3.981255, 21.36621)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1744,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0269070964825775,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399910071864271,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00399836677085184,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00441598892211914,
+          "hit": true,
+          "lowest": "(64.95896, 4.017003, 21.44518)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0037837028503418,
+          "hit": true,
+          "lowest": "(65.29972, 3.981254, 21.44384)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1760,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0274868524196172,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00399980656377406,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00378365940774222,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    },
+    {
+      "actor": "(65.13252, 4.001857, 21.56908)",
+      "clip": "Idle",
+      "feet": {
+        "Left": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.00444126129150391,
+          "hit": true,
+          "lowest": "(64.95824, 4.016769, 21.43513)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        },
+        "Right": {
+          "collider": "/root/Bootstrap/World/WorldStreamer/WorldChunk_0_0/TerrainCollision",
+          "gap": 0.0105612277984619,
+          "hit": true,
+          "lowest": "(65.34223, 3.980985, 21.36358)",
+          "normal": "(0.102328, 0.9942, -0.033082)",
+          "vertices": 1765
+        }
+      },
+      "frame": 1774,
+      "grounded": true,
+      "physical_height": 1.95000004768372,
+      "root_offset": -0.0275170717593785,
+      "support_contacts": {
+        "Left": {
+          "gap": 0.00400015878377325,
+          "weight": 1.0
+        },
+        "Right": {
+          "gap": 0.00399843000183574,
+          "weight": 1.0
+        }
+      },
+      "velocity": "(0.0, 0.0, 0.0)"
+    }
+  ]
+}

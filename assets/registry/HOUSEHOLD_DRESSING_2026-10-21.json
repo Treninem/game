@@ -70,5 +70,25 @@
   "navigation": "Local cached A* derived from actual collision shapes, capsule clearance, oriented door leaves and locked-door state; geometric detour test, not prescribed room-center route. Goals still use existing local routine/needs state. Stationary nearby people are temporary collision-aware obstacles; their occupied cells are restored after each solve.",
   "persistence": "Existing furniture IDs and chest inventories unchanged; new room doors use stable home-coordinate/name keys. Benches moved to dining zone; old resting positions safely wake in place when unreachable.",
   "scope": "Decorative cupboards, shelving, tableware, rugs and hearth. Existing beds/benches/chests remain functional. Cooking, hearth fuel/state interaction, child models/school/family graph, full professional work and full artistic acceptance are unfinished.",
-  "acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json"
+  "acceptance_journal": "docs/DEVELOPMENT_LOG_2026-10-22_HOUSE_CONCEPT.json",
+  "material_channels_2026_10_25": {
+    "status": "INTEGRATED",
+    "review_only": true,
+    "existing_source": "CC0 B46 cloth512px derivatives already present in review",
+    "labels": [
+      "Sheets",
+      "Pillow",
+      "Curtain",
+      "Rug",
+      "Border"
+    ],
+    "high_ultra": [
+      "OpenGL normal0.35",
+      "ORM red AO",
+      "ORM green roughness"
+    ],
+    "low_medium": "Original albedo response; extra channels disabled",
+    "journal": "docs/DEVELOPMENT_LOG_2026-10-25_ROOM_LIGHTING.json",
+    "full_art_acceptance": false
+  }
 }
