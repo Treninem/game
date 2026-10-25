@@ -311,6 +311,8 @@ jobs:
         run: bash tools/run_godot_smoke.sh tests/smoke_slope_motion.gd 180
       - name: Verify inclined terrain poses with complete GPU boots and clothing
         run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/smoke_slope_motion.gd 300
+      - name: Verify final citizen soles across slopes steps stature and work including GPU vertices
+        run: xvfb-run -a env GODOT_SMOKE_GRAPHICAL=1 LIBGL_ALWAYS_SOFTWARE=1 bash tools/run_godot_smoke.sh tests/visual_citizen_support.gd 180
       - name: Verify whole-body acceleration turn landing and pause response
         run: bash tools/run_godot_smoke.sh tests/smoke_motion_response.gd 180
       - name: Verify live GPU clothing and boot vertices during physical actions

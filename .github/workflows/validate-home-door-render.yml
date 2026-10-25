@@ -5,6 +5,8 @@ on:
     branches: [codex/editor-handoff-validation-2026-10-24]
     paths:
       - tests/capture_streamed_home_door.gd
+      - tests/visual_citizen_support.gd
+      - scripts/humanoid_arm_clearance_modifier.gd
       - scripts/enterable_building.gd
       - scripts/box_surface_projection.gd
       - .github/workflows/validate-home-door-render.yml
@@ -53,7 +55,10 @@ jobs:
         run: timeout --signal=TERM --kill-after=15s 180s ./Godot_v4.7.1-stable_linux.x86_64 --headless --editor --path . --quit
       - name: Verify metric box geometry and retained texture objects
         run: env XDG_DATA_HOME="${RUNNER_TEMP}/impuls-metric-unit" bash tools/run_godot_smoke.sh tests/check_box_surface_projection.gd 30
+      - name: Verify grounded citizen work and locomotion with actual GPU vertices
+        run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-citizen-support" GODOT_SMOKE_GRAPHICAL=1 bash tools/run_godot_smoke.sh tests/visual_citizen_support.gd 180
       - name: Render actual entry exit and full saved household lifecycle
+        if: success() || failure()
         run: xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 XDG_DATA_HOME="${RUNNER_TEMP}/impuls-home-render" GODOT_SMOKE_GRAPHICAL=1 IMPULS_DOOR_HEIGHT_MODE=default bash tools/run_godot_smoke.sh tests/capture_streamed_home_door.gd 240
       - name: Upload actual rendered doorway and disk restoration evidence
         if: always()
@@ -67,3 +72,5 @@ jobs:
             ${{ runner.temp }}/impuls-home-render/godot/app_userdata/ImPuls/door-exit.png
             ${{ runner.temp }}/impuls-home-render/godot/app_userdata/ImPuls/home-door-rendered.json
             ${{ runner.temp }}/impuls-home-render/godot/app_userdata/ImPuls/streamed-home-door.json
+            ${{ runner.temp }}/impuls-citizen-support/godot/app_userdata/ImPuls/npc-support-*.png
+            ${{ runner.temp }}/impuls-citizen-support/godot/app_userdata/ImPuls/npc-support-surfaces.json
